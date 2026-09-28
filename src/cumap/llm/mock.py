@@ -14,13 +14,21 @@ class FixtureNotFoundError(FileNotFoundError):
     pass
 
 
+def fixture_path(fixtures_dir: Path, task: str, fixture_name: str) -> Path:
+    return fixtures_dir / task / f"{fixture_name}.json"
+
+
+def fixture_exists(fixtures_dir: Path, task: str, fixture_name: str) -> bool:
+    return fixture_path(fixtures_dir, task, fixture_name).exists()
+
+
 def load_fixture(fixtures_dir: Path, task: str, fixture_name: str = "default") -> dict:
     """Read tests/fixtures/llm/<task>/<fixture_name>.json and return the parsed dict.
 
     The fixture holds the raw JSON that would sit in `response.output_parsed`
     (i.e. the schema's fields), plus an optional "_usage" block for token counts.
     """
-    path = fixtures_dir / task / f"{fixture_name}.json"
+    path = fixture_path(fixtures_dir, task, fixture_name)
     if not path.exists():
         raise FixtureNotFoundError(
             f"No mock fixture at {path}. Add one under tests/fixtures/llm/{task}/."

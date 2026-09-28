@@ -15,6 +15,12 @@ def canonical_input_hash(model: str, prompt_version: str, messages: Any, schema_
 
     Canonical = json.dumps with sorted keys, so key order in caller-built message dicts
     never causes spurious cache misses.
+
+    CR-001 §8.3: this signature has no "how the call was made" parameter (batch vs
+    live) by design — a future Batch API submission path (deferred until M4/M6 have a
+    real bulk workload to run it against; see docs/DECISIONS.md) MUST compute its cache
+    key through this same function, which structurally guarantees identical results are
+    cached under the same key regardless of which path produced them.
     """
     payload = json.dumps(
         {"model": model, "prompt_version": prompt_version, "messages": messages, "schema": schema_name},

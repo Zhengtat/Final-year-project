@@ -26,11 +26,19 @@ relation_registry: configs/relations_v1.yaml
 registry_version_supported: [0, 1]
 
 llm:
-  # Model names default here but are read from OPENAI_MODEL_STRONG / OPENAI_MODEL_BULK if set.
-  model_strong: gpt-6-astra
-  model_bulk: gpt-6-luna
-  # gpt-6-astra does not support reasoning effort "none"; use "low" as its floor.
-  reasoning_effort:
+  # CR-001 §8: strong tier changed gpt-6-astra -> gpt-6-sol (verified working at
+  # low/medium reasoning effort, 2026-09-28 — see DECISIONS.md). gpt-6-astra is now
+  # a "ceiling" tier: opt-in only (e.g. a model bake-off), never a default model_tier
+  # anywhere in the code. Models are read from OPENAI_MODEL_STRONG / _BULK / _CEILING
+  # if those env vars are set.
+  tiers:
+    strong:  {model: gpt-6-sol,   reasoning_effort: medium}
+    bulk:    {model: gpt-6-luna,  reasoning_effort: low}
+    ceiling: {model: gpt-6-astra, reasoning_effort: low}  # gpt-6-astra can't do effort "none"; "low" is its floor.
+  # Per-task effort overrides the task's tier default above (e.g. expert_subgraph
+  # warrants more care than the average strong-tier call). Unlisted tasks use their
+  # tier's default effort.
+  reasoning_effort_overrides:
     concept_extraction: low
     relation_extraction: low
     propositions: medium
@@ -39,12 +47,19 @@ llm:
     student_extraction: low
     expert_subgraph: medium
     student_graph_draft: low
+  escalation:
+    enabled: true
+    from_tier: bulk
+    to_tier: strong
+    when: [schema_error, evidence_check_failed, low_confidence]
+    confidence_threshold: 0.6
   max_usd_per_command: 5
-  # PLACEHOLDER pricing for --dry-run cost estimates: gpt-6-astra/gpt-6-luna have no
-  # published per-token price we know of. Confirm real pricing before trusting these
-  # numbers for anything but a rough order-of-magnitude check.
+  # PLACEHOLDER pricing for --dry-run cost estimates: none of gpt-6-sol/luna/astra
+  # have a published per-token price we know of. Confirm real pricing before trusting
+  # these numbers for anything but a rough order-of-magnitude check.
   assumed_usd_per_1k_input_tokens: 0.002
   assumed_usd_per_1k_output_tokens: 0.008
+  assumed_batch_discount: 0.5  # CR-003 §13's rough note: "--batch roughly halves the cost"
 
 embeddings:
   model: sentence-transformers/all-MiniLM-L6-v2

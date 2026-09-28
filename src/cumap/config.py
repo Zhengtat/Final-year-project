@@ -31,13 +31,31 @@ class TextbookConfig(BaseModel):
     pinned_commit: str | None = None
 
 
+class TierConfig(BaseModel):
+    model: str
+    reasoning_effort: str
+
+
+class EscalationConfig(BaseModel):
+    enabled: bool
+    from_tier: str
+    to_tier: str
+    when: list[str]  # "schema_error" | "evidence_check_failed" | "low_confidence"
+    confidence_threshold: float
+
+
 class LLMConfig(BaseModel):
-    model_strong: str
-    model_bulk: str
-    reasoning_effort: dict[str, str]
+    # CR-001 §8: strong/bulk/ceiling. "ceiling" is never a default model_tier anywhere
+    # in the codebase — opt-in only, e.g. for a model bake-off.
+    tiers: dict[str, TierConfig]
+    # Per-task effort wins over its tier's default (e.g. expert_subgraph needs more
+    # care than the average strong-tier call); unlisted tasks use the tier default.
+    reasoning_effort_overrides: dict[str, str]
+    escalation: EscalationConfig
     max_usd_per_command: float
     assumed_usd_per_1k_input_tokens: float
     assumed_usd_per_1k_output_tokens: float
+    assumed_batch_discount: float  # CR-003 §13: "--batch roughly halves the cost"
 
 
 class EmbeddingsConfig(BaseModel):
@@ -77,8 +95,12 @@ def load_settings(config_path: Path | None = None, *, env_file: Path | None = No
     raw = yaml.safe_load((config_path or DEFAULT_CONFIG_PATH).read_text())
 
     llm_raw = dict(raw["llm"])
-    llm_raw["model_strong"] = os.environ.get("OPENAI_MODEL_STRONG", llm_raw["model_strong"])
-    llm_raw["model_bulk"] = os.environ.get("OPENAI_MODEL_BULK", llm_raw["model_bulk"])
+    tiers_raw = dict(llm_raw["tiers"])
+    env_override = {"strong": "OPENAI_MODEL_STRONG", "bulk": "OPENAI_MODEL_BULK", "ceiling": "OPENAI_MODEL_CEILING"}
+    for tier_name, env_var in env_override.items():
+        if tier_name in tiers_raw and os.environ.get(env_var):
+            tiers_raw[tier_name] = {**tiers_raw[tier_name], "model": os.environ[env_var]}
+    llm_raw["tiers"] = tiers_raw
     raw = {**raw, "llm": llm_raw}
 
     return Settings(
