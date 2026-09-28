@@ -41,5 +41,12 @@ llm:
 embeddings:
   model: sentence-transformers/all-MiniLM-L6-v2
 
-# Populated by the 👤 HUMAN after M1's coverage review.
-pilot_questions: []
+# Approved 2026-09-28 by the 👤 HUMAN after M1's coverage review (see docs/DECISIONS.md
+# for the selection criteria: direct textbook verification + train-split label spread,
+# not a literature-based selection).
+pilot_questions:
+  - q_ad9ae0e3  # Piggybacking requirement (sliding window) -> 2.5 Reliable Transmission
+  - q_57a5b057  # Transparent bridges / bridge table -> 3.2 Switched Ethernet (§3.2.1 Learning Bridges)
+  - q_cc7ede94  # IPv6 extension headers -> 4.2 IP Version 6
+  - q_58c81db9  # Reverse Path Forwarding/Broadcast -> 4.3 Multicast
+  - q_582d0a1c  # TCP congestion control phases -> 6.3 TCP Congestion Control + 6.4 Advanced Congestion Control

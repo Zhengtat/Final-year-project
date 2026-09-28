@@ -15,7 +15,8 @@ def test_load_settings_from_default_yaml(tmp_path, monkeypatch):
     assert settings.llm.model_strong == "gpt-6-astra"
     assert settings.llm.model_bulk == "gpt-6-luna"
     assert settings.llm_backend == "mock"
-    assert settings.pilot_questions == []
+    assert len(settings.pilot_questions) == 5
+    assert all(qid.startswith("q_") for qid in settings.pilot_questions)
 
 
 def test_env_overrides_model_names(tmp_path, monkeypatch):
