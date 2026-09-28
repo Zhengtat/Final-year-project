@@ -20,7 +20,9 @@ import yaml
 
 from cumap.config import get_settings
 from cumap.gold.sections import section_ids_for_question
+from cumap.gold.suggest_expert import relation_guideline_block
 from cumap.gold.validate import verify_quote
+from cumap.schemas.chain_links import ChainLink
 from cumap.schemas.edges import Evidence, ExpertEdge, QuestionLink, Validation
 from cumap.schemas.enums import MatchType
 from cumap.schemas.nodes import Concept, ConceptMention
@@ -60,9 +62,49 @@ def reviewer_name() -> str:
     return st.sidebar.text_input("Reviewer name (for validation.reviewer)", value="ZT")
 
 
+def relation_options() -> list[str]:
+    """CR-001 §7.1: relation names sorted by family, so the SelectboxColumn groups
+    visually even though Streamlit has no native "grouped dropdown" widget. Definitions
+    and near-misses are in the "Relation guide" expander below, not per-cell help text
+    (a data_editor cell can't show rich per-row help), so both mode panels show it.
+    """
+    return sorted((r.name for r in registry.all_relations()), key=lambda name: registry.family_of(name) if registry.get(name).family else "zzz")
+
+
+def render_chain_links_editor(chain_link_rows: list[dict], edge_ids: list[str], key: str) -> pd.DataFrame:
+    df = pd.DataFrame(
+        [
+            {
+                "link_id": cl.get("link_id", ""),
+                "from_edge_id": cl.get("from_edge_id", ""),
+                "to_edge_id": cl.get("to_edge_id", ""),
+                "type": cl.get("type", ""),
+                "statement": cl.get("statement", ""),
+                "surface_phrase": cl.get("surface_phrase") or "",
+                "evidence_quote": cl["evidence"][0]["quote"] if cl.get("evidence") else "",
+                "delete": False,
+            }
+            for cl in chain_link_rows
+        ]
+    )
+    return st.data_editor(
+        df,
+        num_rows="dynamic",
+        key=key,
+        use_container_width=True,
+        column_config={
+            "from_edge_id": st.column_config.SelectboxColumn(options=edge_ids),
+            "to_edge_id": st.column_config.SelectboxColumn(options=edge_ids),
+            "type": st.column_config.SelectboxColumn(options=list(registry.chain_link_types.keys())),
+        },
+    )
+
+
 st.sidebar.title("cumap gold editor")
 mode = st.sidebar.radio("Mode", ["Expert graphs", "Student graphs"])
 reviewer = reviewer_name()
+with st.sidebar.expander("Relation guide (definitions, templates, near-misses)"):
+    st.text(relation_guideline_block(registry))
 
 # ---------------------------------------------------------------------------
 if mode == "Expert graphs":
@@ -80,6 +122,7 @@ if mode == "Expert graphs":
     data = load_yaml_dict(source_path)
     concepts = data.get("concepts", [])
     edges = data.get("edges", [])
+    chain_link_rows = data.get("chain_links", [])
     rejected = data.get("rejected", [])
 
     left, right = st.columns([1, 1])
@@ -125,16 +168,34 @@ if mode == "Expert graphs":
                     "statement": e["statement"],
                     "evidence_quote": e["evidence"][0]["quote"] if e.get("evidence") else "",
                     "chain_id": e.get("chain_id") or "",
+                    "part_type": e.get("part_type") or "",  # shown for every row; only meaningful on part_of
+                    "dimension": e.get("dimension") or "",  # only meaningful on contrasts_with
+                    "surface_phrase": e.get("surface_phrase") or e.get("_suggested_part_type", "") or "",
                     "delete": False,
                 }
                 for e in edges
             ]
         )
-        edited_edges = st.data_editor(edges_df, num_rows="dynamic", key="edges_editor", use_container_width=True)
+        edited_edges = st.data_editor(
+            edges_df,
+            num_rows="dynamic",
+            key="edges_editor",
+            use_container_width=True,
+            column_config={
+                "relation": st.column_config.SelectboxColumn(options=relation_options()),
+                "part_type": st.column_config.SelectboxColumn(options=["", "component", "member", "phase"]),
+            },
+        )
 
         if rejected:
             with st.expander(f"⚠️ {len(rejected)} rejected by the drafter (evidence not verified / unknown concept)"):
                 st.json(rejected)
+
+        st.subheader(f"Chain links ({len(chain_link_rows)})")
+        st.caption("Links one edge to another with a reason (cause/purpose/condition/sequence/contrast).")
+        edited_chain_links = render_chain_links_editor(
+            chain_link_rows, [e["edge_id"] for e in edges], key="expert_chain_links_editor"
+        )
 
     if st.button("Validate + Save to data/gold/expert_pilot/", type="primary"):
         errors = []
@@ -169,6 +230,17 @@ if mode == "Expert graphs":
             if not verify_quote(row["evidence_quote"], combined_text):
                 errors.append(f"Edge {row['edge_id']}: evidence quote not found in section text")
                 continue
+            part_type = row["part_type"] or None
+            if part_type and row["relation"] != "part_of":
+                errors.append(f"Edge {row['edge_id']}: part_type set but relation is {row['relation']!r}, not part_of")
+                continue
+            if row["relation"] == "part_of" and not part_type:
+                errors.append(f"Edge {row['edge_id']}: relation is part_of but part_type is empty (required under v1)")
+                continue
+            dimension = row["dimension"] or None
+            if dimension and row["relation"] != "contrasts_with":
+                errors.append(f"Edge {row['edge_id']}: dimension set but relation is {row['relation']!r}, not contrasts_with")
+                continue
             final_edges.append(
                 ExpertEdge(
                     edge_id=row["edge_id"],
@@ -179,6 +251,11 @@ if mode == "Expert graphs":
                     polarity=row["polarity"],
                     modality=row["modality"],
                     conditions=[c.strip() for c in row["conditions"].split(",") if c.strip()],
+                    part_type=part_type,
+                    dimension=dimension,
+                    surface_phrase=row["surface_phrase"] or None,
+                    relation_family=registry.family_of(row["relation"]),
+                    registry_version=registry.version,
                     statement=row["statement"],
                     criticality=row["criticality"],
                     question_links=[QuestionLink(question_id=qid, role="required", weight=1.0, source="reference_answer")],
@@ -189,6 +266,32 @@ if mode == "Expert graphs":
                 )
             )
 
+        final_edge_ids = {e.edge_id for e in final_edges}
+        final_chain_links = []
+        for _, row in edited_chain_links.iterrows():
+            if row["delete"]:
+                continue
+            if row["from_edge_id"] not in final_edge_ids or row["to_edge_id"] not in final_edge_ids:
+                errors.append(f"Chain link {row['link_id']}: from/to edge not among the saved edges")
+                continue
+            if not verify_quote(row["evidence_quote"], combined_text):
+                errors.append(f"Chain link {row['link_id']}: evidence quote not found in section text")
+                continue
+            final_chain_links.append(
+                ChainLink(
+                    link_id=row["link_id"] or f"CL-{row['from_edge_id']}-{row['to_edge_id']}",
+                    from_edge_id=row["from_edge_id"],
+                    to_edge_id=row["to_edge_id"],
+                    type=row["type"],
+                    statement=row["statement"],
+                    surface_phrase=row["surface_phrase"] or None,
+                    evidence=[Evidence(source="Peterson & Davie 6e", section_id=section_ids[0], quote=row["evidence_quote"])],
+                    origin="textbook",
+                    question_ids=[qid],
+                    validation=Validation(status="accepted", reviewer=reviewer),
+                )
+            )
+
         if errors:
             st.error("Not saved. Fix these first:\n\n" + "\n".join(f"- {e}" for e in errors))
         else:
@@ -196,14 +299,16 @@ if mode == "Expert graphs":
             gold_path.write_text(
                 yaml.safe_dump(
                     {
+                        "registry_version": registry.version,
                         "concepts": [c.model_dump(mode="json") for c in final_concepts],
                         "edges": [e.model_dump(mode="json") for e in final_edges],
+                        "chain_links": [c.model_dump(mode="json") for c in final_chain_links],
                     },
                     sort_keys=False,
                     allow_unicode=True,
                 )
             )
-            st.success(f"Saved {len(final_concepts)} concepts, {len(final_edges)} edges -> {gold_path}")
+            st.success(f"Saved {len(final_concepts)} concepts, {len(final_edges)} edges, {len(final_chain_links)} chain links -> {gold_path}")
 
 # ---------------------------------------------------------------------------
 else:
@@ -240,6 +345,7 @@ else:
 
     data = load_yaml_dict(source_path)
     edges = data.get("edges", [])
+    chain_link_rows = data.get("chain_links", [])
     rejected = data.get("rejected", [])
     prior_missing = set(data.get("missing_expected_edges", []))
 
@@ -268,6 +374,9 @@ else:
                     "modality": e["modality"],
                     "stance": e["stance"],
                     "evidence_quote": e["evidence_span"]["text"],
+                    "part_type": e.get("part_type") or "",
+                    "dimension": e.get("dimension") or "",
+                    "surface_phrase": e.get("surface_phrase") or "",
                     "match_type": e.get("match_type") or "",
                     "delete": False,
                 }
@@ -280,6 +389,8 @@ else:
             key="student_edges_editor",
             use_container_width=True,
             column_config={
+                "relation": st.column_config.SelectboxColumn(options=relation_options() + ["other"]),
+                "part_type": st.column_config.SelectboxColumn(options=["", "component", "member", "phase"]),
                 "match_type": st.column_config.SelectboxColumn(options=[""] + [m.value for m in MatchType]),
             },
         )
@@ -287,6 +398,15 @@ else:
         if rejected:
             with st.expander(f"⚠️ {len(rejected)} rejected by the drafter (evidence not verified)"):
                 st.json(rejected)
+
+        n_edges_for_chain_links = len(edges_df) - int(edges_df["delete"].sum()) if len(edges_df) else 0
+        synthetic_edge_ids = [f"SE-{i}" for i in range(n_edges_for_chain_links)]
+        st.subheader(f"Chain links ({len(chain_link_rows)})")
+        st.caption(
+            "Links reference edges by position (SE-0, SE-1, ...) since student edges have no id of their own — "
+            "matches the order of the Student edges table above, after deletions."
+        )
+        edited_chain_links = render_chain_links_editor(chain_link_rows, synthetic_edge_ids, key="student_chain_links_editor")
 
         st.subheader("Missing expected edges")
         missing = st.multiselect(
@@ -305,6 +425,17 @@ else:
             if not verify_quote(row["evidence_quote"], answer_text):
                 errors.append(f"Edge {row['source_id']}->{row['target_id']}: evidence quote not found in answer text")
                 continue
+            part_type = row["part_type"] or None
+            if part_type and row["relation"] != "part_of":
+                errors.append(f"Edge {row['source_id']}->{row['target_id']}: part_type set but relation is {row['relation']!r}, not part_of")
+                continue
+            dimension = row["dimension"] or None
+            if dimension and row["relation"] != "contrasts_with":
+                errors.append(f"Edge {row['source_id']}->{row['target_id']}: dimension set but relation is {row['relation']!r}, not contrasts_with")
+                continue
+            if not row["surface_phrase"]:
+                errors.append(f"Edge {row['source_id']}->{row['target_id']}: surface_phrase is empty (required under v1)")
+                continue
             start = answer_text.find(row["evidence_quote"])
             final_edges.append(
                 StudentEdge(
@@ -313,6 +444,11 @@ else:
                     target_id=row["target_id"],
                     polarity=row["polarity"],
                     modality=row["modality"],
+                    part_type=part_type,
+                    dimension=dimension,
+                    surface_phrase=row["surface_phrase"] or None,
+                    relation_family=registry.family_of(row["relation"]) if row["relation"] in registry else None,
+                    registry_version=registry.version,
                     response_id=answer_id,
                     question_id=qid,
                     evidence_span=EvidenceSpan(
@@ -325,6 +461,32 @@ else:
                 )
             )
 
+        final_synthetic_ids = {f"SE-{i}" for i in range(len(final_edges))}
+        final_chain_links = []
+        for _, row in edited_chain_links.iterrows():
+            if row["delete"]:
+                continue
+            if row["from_edge_id"] not in final_synthetic_ids or row["to_edge_id"] not in final_synthetic_ids:
+                errors.append(f"Chain link {row['link_id']}: from/to edge (SE-index) not among the saved edges")
+                continue
+            if not verify_quote(row["evidence_quote"], answer_text):
+                errors.append(f"Chain link {row['link_id']}: evidence quote not found in answer text")
+                continue
+            final_chain_links.append(
+                ChainLink(
+                    link_id=row["link_id"] or f"CL-{answer_id}-{row['from_edge_id']}-{row['to_edge_id']}",
+                    from_edge_id=row["from_edge_id"],
+                    to_edge_id=row["to_edge_id"],
+                    type=row["type"],
+                    statement=row["statement"],
+                    surface_phrase=row["surface_phrase"] or None,
+                    evidence=[Evidence(source="student answer", answer_id=answer_id, quote=row["evidence_quote"])],
+                    origin="student",
+                    question_ids=[qid],
+                    validation=Validation(status="accepted", reviewer=reviewer),
+                )
+            )
+
         if errors:
             st.error("Not saved. Fix these first:\n\n" + "\n".join(f"- {e}" for e in errors))
         else:
@@ -332,11 +494,16 @@ else:
             gold_path.write_text(
                 yaml.safe_dump(
                     {
+                        "registry_version": registry.version,
                         "edges": [e.model_dump(mode="json") for e in final_edges],
+                        "chain_links": [c.model_dump(mode="json") for c in final_chain_links],
                         "missing_expected_edges": missing,
                     },
                     sort_keys=False,
                     allow_unicode=True,
                 )
             )
-            st.success(f"Saved {len(final_edges)} edges, {len(missing)} missing-expected -> {gold_path}")
+            st.success(
+                f"Saved {len(final_edges)} edges, {len(final_chain_links)} chain links, "
+                f"{len(missing)} missing-expected -> {gold_path}"
+            )
