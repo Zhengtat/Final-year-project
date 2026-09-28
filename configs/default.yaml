@@ -58,7 +58,10 @@ llm:
     to_tier: strong
     when: [schema_error, evidence_check_failed, low_confidence]
     confidence_threshold: 0.6
-  max_usd_per_command: 5
+  # CR-005 §2 step 5: raised from $5 after the owner's scope-reduction decision
+  # (P&D cut to ch2-3; see configs/demo_slice.yaml, DECISIONS.md) brought the
+  # measured re-estimate for the demo slice to ~$24.99, comfortably under this cap.
+  max_usd_per_command: 15
   # PLACEHOLDER pricing for --dry-run cost estimates: none of gpt-6-sol/luna/astra
   # have a published per-token price we know of. Confirm real pricing before trusting
   # these numbers for anything but a rough order-of-magnitude check.

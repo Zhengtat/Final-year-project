@@ -5,7 +5,14 @@ assumption all actually flow through to the totals, not just that it runs.
 
 from __future__ import annotations
 
-from cumap.expert_kg.cost_estimate import CallAssumptions, SectionGroupStats, estimate_slice_cost
+import json
+
+from cumap.expert_kg.cost_estimate import (
+    CallAssumptions,
+    SectionGroupStats,
+    estimate_slice_cost,
+    spend_for_run,
+)
 
 
 def test_estimate_slice_cost_toy_scenario(tmp_settings):
@@ -93,3 +100,64 @@ def test_estimate_slice_cost_raises_on_unpriced_tier(tmp_settings):
     except ValueError:
         raised = True
     assert raised
+
+
+def _write_log(path, rows):
+    with path.open("w") as f:
+        for row in rows:
+            f.write(json.dumps(row) + "\n")
+
+
+def test_spend_for_run_sums_only_this_runs_cache_misses(tmp_settings, tmp_path):
+    tmp_settings.llm.tiers["bulk"].usd_per_1m_input_tokens = 1.0
+    tmp_settings.llm.tiers["bulk"].usd_per_1m_output_tokens = 2.0
+    log_path = tmp_path / "llm_calls.jsonl"
+    _write_log(
+        log_path,
+        [
+            {
+                "run_id": "run_a",
+                "cache_hit": False,
+                "model_tier": "bulk",
+                "usage": {"input_tokens": 1000, "output_tokens": 500},
+            },
+            {
+                "run_id": "run_a",
+                "cache_hit": True,
+                "model_tier": "bulk",
+                "usage": {"input_tokens": 999999, "output_tokens": 999999},
+            },
+            {
+                "run_id": "run_b",
+                "cache_hit": False,
+                "model_tier": "bulk",
+                "usage": {"input_tokens": 1000, "output_tokens": 500},
+            },
+        ],
+    )
+
+    spend = spend_for_run(tmp_settings, "run_a", log_path=log_path)
+    # 1000/1e6*1 + 500/1e6*2 = 0.001 + 0.001
+    assert abs(spend - 0.002) < 1e-9
+
+
+def test_spend_for_run_zero_when_log_missing(tmp_settings, tmp_path):
+    spend = spend_for_run(tmp_settings, "run_a", log_path=tmp_path / "nonexistent.jsonl")
+    assert spend == 0.0
+
+
+def test_spend_for_run_skips_unpriced_tiers(tmp_settings, tmp_path):
+    tmp_settings.llm.tiers["ceiling"].usd_per_1m_input_tokens = None
+    log_path = tmp_path / "llm_calls.jsonl"
+    _write_log(
+        log_path,
+        [
+            {
+                "run_id": "run_a",
+                "cache_hit": False,
+                "model_tier": "ceiling",
+                "usage": {"input_tokens": 1000, "output_tokens": 500},
+            }
+        ],
+    )
+    assert spend_for_run(tmp_settings, "run_a", log_path=log_path) == 0.0

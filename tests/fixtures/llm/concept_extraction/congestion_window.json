@@ -1,0 +1,12 @@
+{
+  "concepts": [
+    {
+      "canonical_name": "congestion window",
+      "node_type": "Mechanism",
+      "role": "used",
+      "definition": null,
+      "evidence_quote": "Congestion window differs from sliding window"
+    }
+  ],
+  "_usage": {"input_tokens": 180, "output_tokens": 40}
+}

@@ -1,0 +1,24 @@
+# CR-005 §1: expert-KG demo slice definition. Finalised 2026-09-29 after the real
+# calibration run (docs/DECISIONS.md, CR-005 §2 step 4) showed candidate pairs/section
+# running well above the step-3 assumption -- P&D was cut from chapters 1-3 to 2-3.
+
+pd:
+  source_jsonl: data/interim/textbook_sections.jsonl
+  chapters: [2, 3] # "Direct Links", "Internetworking"
+  domain: computer networking
+  # ch1 "Foundation" (7 sections, 16,983 words) was dropped: a direct text search
+  # found zero occurrences of any of the 4 pilot-topic keywords (encoding, piggyback,
+  # csma/carrier sense, bridge/spanning tree) anywhere in it -- all four live in ch2
+  # (encoding, piggybacking, CSMA/CD) and ch3 (bridges/spanning tree), so dropping ch1
+  # loses no pilot-topic coverage while cutting the slice from 24 to 17 sections.
+
+iir_face:
+  source_jsonl: data/interim/external/iir_sections.jsonl
+  chapters: [1, 2, 3] # B1 dev split, CR-003 §4 -- kept at all 3 (unlike P&D, IIR dev
+  # chapters aren't tied to specific pilot topics; narrowing them would be a scope
+  # change to the FACE-benchmark comparison itself, not a free cut).
+  domain: information retrieval
+
+# CR-005 §2 step 5 backstop, set once the scope-reduction decision above was made
+# (was $5 before this; see configs/default.yaml llm.max_usd_per_command).
+max_usd_per_command: 15
