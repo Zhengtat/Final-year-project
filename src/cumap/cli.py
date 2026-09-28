@@ -20,6 +20,7 @@ student_app = typer.Typer(help="Student answer -> graph extraction (M6).")
 diagnose_app = typer.Typer(help="Alignment and diagnosis of student graphs against the expert KG (M7).")
 eval_app = typer.Typer(help="Evaluation, baselines and ablations (M7).")
 app_app = typer.Typer(help="Streamlit review/demo apps.")
+external_app = typer.Typer(help="External benchmark datasets (CR-003 §3) — iir_face only for now.")
 
 app.add_typer(data_app, name="data")
 app.add_typer(textbook_app, name="textbook")
@@ -30,6 +31,7 @@ app.add_typer(student_app, name="student")
 app.add_typer(diagnose_app, name="diagnose")
 app.add_typer(eval_app, name="eval")
 app.add_typer(app_app, name="app")
+app.add_typer(external_app, name="external")
 
 
 def _not_implemented(command: str, milestone: str) -> None:
@@ -563,6 +565,86 @@ def app_review() -> None:
     settings = get_settings()
     app_path = settings.repo_root / "src" / "cumap" / "app" / "gold_editor.py"
     subprocess.run([sys.executable, "-m", "streamlit", "run", str(app_path)], check=True)
+
+
+@external_app.command("fetch")
+def external_fetch(name: str = typer.Argument(..., help="Dataset name. Only 'iir_face' is implemented.")) -> None:
+    """Clone an external dataset's source repo into data/raw/external/<name>/."""
+    if name != "iir_face":
+        typer.echo(f"'{name}' is not implemented (CR-003's other external sources are out of scope for now).")
+        raise typer.Exit(code=1)
+
+    from cumap.data.iir_face import fetch_iir_face
+
+    settings = get_settings()
+    dest_dir = settings.resolve(settings.paths.data_raw) / "external" / "iir_face"
+    commit = fetch_iir_face(dest_dir)
+    typer.echo(f"Fetched iir_face -> {dest_dir} at commit {commit}")
+
+
+@external_app.command("load")
+def external_load(name: str = typer.Argument(..., help="Dataset name. Only 'iir_face' is implemented.")) -> None:
+    """Parse a fetched external dataset into data/interim/external/ (gitignored — third-party text)."""
+    if name != "iir_face":
+        typer.echo(f"'{name}' is not implemented (CR-003's other external sources are out of scope for now).")
+        raise typer.Exit(code=1)
+
+    import dataclasses as _dc
+
+    from cumap.data.iir_face import load_iir_face
+
+    settings = get_settings()
+    raw_dir = settings.resolve(settings.paths.data_raw) / "external" / "iir_face"
+    out_dir = settings.resolve(settings.paths.data_interim) / "external"
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    sections, gold = load_iir_face(raw_dir)
+
+    sections_path = out_dir / "iir_sections.jsonl"
+    with sections_path.open("w") as f:
+        for section in sections:
+            f.write(json.dumps(_dc.asdict(section)) + "\n")
+    gold_path = out_dir / "iir_gold_concepts.csv"
+    gold.to_csv(gold_path, index=False)
+
+    n_gold = int(gold["is_gold"].sum())
+    typer.echo(f"{len(sections)} sections -> {sections_path}")
+    typer.echo(f"{len(gold)} candidate concepts ({n_gold} gold, majority vote) -> {gold_path}")
+
+
+@external_app.command("stats")
+def external_stats(name: str = typer.Argument(..., help="Dataset name. Only 'iir_face' is implemented.")) -> None:
+    """Print summary stats for a loaded external dataset."""
+    if name != "iir_face":
+        typer.echo(f"'{name}' is not implemented (CR-003's other external sources are out of scope for now).")
+        raise typer.Exit(code=1)
+
+    import pandas as pd
+
+    settings = get_settings()
+    out_dir = settings.resolve(settings.paths.data_interim) / "external"
+    sections_path = out_dir / "iir_sections.jsonl"
+    gold_path = out_dir / "iir_gold_concepts.csv"
+    if not sections_path.exists() or not gold_path.exists():
+        typer.echo("Run `cumap external load iir_face` first.")
+        raise typer.Exit(code=1)
+
+    sections = [json.loads(line) for line in sections_path.read_text().splitlines()]
+    gold = pd.read_csv(gold_path)
+
+    by_chapter: dict[int, list[dict]] = {}
+    for s in sections:
+        by_chapter.setdefault(s["chapter_num"], []).append(s)
+
+    typer.echo(f"{len(sections)} sections across {len(by_chapter)} chapters, {sum(s['word_count'] for s in sections)} words total")
+    for chapter_num in sorted(by_chapter):
+        chapter_sections = by_chapter[chapter_num]
+        chapter_gold = gold[gold["section_id"].isin(s["section_id"] for s in chapter_sections)]
+        n_gold = int(chapter_gold["is_gold"].sum())
+        typer.echo(
+            f"  ch{chapter_num} ({chapter_sections[0]['chapter_title']}): {len(chapter_sections)} sections, "
+            f"{sum(s['word_count'] for s in chapter_sections)} words, {len(chapter_gold)} candidate / {n_gold} gold concepts"
+        )
 
 
 if __name__ == "__main__":

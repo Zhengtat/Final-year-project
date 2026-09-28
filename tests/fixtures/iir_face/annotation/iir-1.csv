@@ -1,0 +1,5 @@
+Concepts,Annotator 1,Annotator 2,Annotator 3
+['information retrieval'],1,1,1
+"['grepping', 'grep']",1,1,1
+['linearly scanning'],0,0,0
+['pattern matching'],0,1,1

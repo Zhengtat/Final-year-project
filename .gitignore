@@ -3,10 +3,19 @@
 
 # data (raw/processed/cache/logs are regenerated; data/gold/ and data/interim/ ARE committed —
 # interim holds model drafts for human review, gold is human-owned)
-data/raw/
+# data/raw/ is ignored EXCEPT each external dataset's own SOURCE.md (provenance/licence
+# notes, no dataset content) — git needs directories un-ignored too for the file-level
+# negation to take effect.
+data/raw/**
+!data/raw/**/
+!data/raw/**/SOURCE.md
 data/processed/
 data/cache/
 data/logs/
+# Exception within data/interim/: third-party copyrighted text (e.g. IIR/FACE section
+# content, CR-003 §3) must never be redistributed via this repo's git history, even
+# though data/interim/ is otherwise committed.
+data/interim/external/
 
 # python / uv
 .venv/
