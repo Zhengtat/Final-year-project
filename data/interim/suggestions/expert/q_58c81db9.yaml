@@ -1,0 +1,1293 @@
+registry_version: 1
+concepts:
+- concept_id: c_reverse_path_broadcast_rpb_reverse_path_forwarding_rpf
+  canonical_name: Reverse Path Broadcast (RPB) / Reverse Path Forwarding (RPF)
+  aliases: []
+  node_type: Mechanism
+  definition: A shortest-path broadcast mechanism that makes forwarding decisions
+    using the shortest path toward the source. This section uses both names for the
+    mechanism including the parent-router refinement.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: The resulting mechanism is sometimes called Reverse Path Broadcast (RPB)
+      or Reverse Path Forwarding (RPF).
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_shortest_path_broadcast
+  canonical_name: Shortest-path broadcast
+  aliases: []
+  node_type: Mechanism
+  definition: Broadcast that forwards packets to all networks using shortest paths
+    rooted at the source.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: The RPB mechanism just described implements shortest-path broadcast.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_duplicate_broadcast_elimination
+  canonical_name: Duplicate broadcast elimination
+  aliases: []
+  node_type: Concept
+  definition: Elimination of duplicate broadcast packets generated when more than
+    one router is connected to a LAN.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: The solution to this second limitation is to eliminate the duplicate broadcast
+      packets that are generated when more than one router is connected to a given
+      LAN.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_duplicate_broadcast_packets
+  canonical_name: Duplicate broadcast packets
+  aliases: []
+  node_type: DataUnit
+  definition: Copies of a given packet forwarded over a LAN by multiple routers connected
+    to that LAN.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: The second limitation is that a given packet will be forwarded over a LAN
+      by each of the routers connected to that LAN.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_unicast_routing_table
+  canonical_name: Unicast routing table
+  aliases: []
+  node_type: Component
+  definition: A table containing Destination, Cost, and NextHop information used to
+    identify the current shortest path to a destination.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: Recall that, in the distance-vector algorithm, each router maintains a
+      table of Destination, Cost, NextHop tuples, and exchanges a list of (Destination,
+      Cost) pairs with its directly connected neighbors.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_nexthop_toward_the_source
+  canonical_name: NextHop toward the source
+  aliases: []
+  node_type: Parameter
+  definition: The next-hop neighbor associated with source S in the routing table,
+    identifying the link on the shortest path to S.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: the packet came from the NextHop associated with S in the routing table
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_reverse_path_arrival_test
+  canonical_name: Reverse-path arrival test
+  aliases: []
+  node_type: Mechanism
+  definition: Testing whether a packet arrived over the link that is on the shortest
+    path toward its source.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: the router forwards the packet on all outgoing links (except the one on
+      which the packet arrived) if and only if the packet arrived over the link that
+      is on the shortest path to S
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_arrival_from_the_source_s_nexthop
+  canonical_name: Arrival from the source's NextHop
+  aliases: []
+  node_type: Event
+  definition: Receipt of a packet from S over the link associated with the routing-table
+    NextHop toward S.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: the packet arrived over the link that is on the shortest path to S (i.e.,
+      the packet came from the NextHop associated with S in the routing table)
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_forwarding_on_all_other_links
+  canonical_name: Forwarding on all other links
+  aliases: []
+  node_type: Mechanism
+  definition: Forwarding a received packet on all outgoing links except its incoming
+    link.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: the router forwards the packet on all outgoing links (except the one on
+      which the packet arrived)
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_packet_looping_toward_the_source
+  canonical_name: Packet looping toward the source
+  aliases: []
+  node_type: Event
+  definition: Packets looping back toward their source rather than continuing outward.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: This strategy effectively floods packets outward from S but does not loop
+      packets back toward S.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_parent_router_forwarding_restriction
+  canonical_name: Parent-router forwarding restriction
+  aliases: []
+  node_type: Mechanism
+  definition: A source-relative restriction allowing only the designated parent router
+    to forward packets over a given LAN.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: One way to do this is to designate one router as the parent router for
+      each link, relative to the source, where only the parent router is allowed to
+      forward multicast packets from that source over the LAN.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_parent_router
+  canonical_name: Parent router
+  aliases: []
+  node_type: Component
+  definition: The router designated to forward packets from a particular source over
+    a particular link.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: only the parent router is allowed to forward multicast packets from that
+      source over the LAN
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_parent_router_selection_criterion
+  canonical_name: Parent-router selection criterion
+  aliases: []
+  node_type: Property
+  definition: Shortest path to source S, with a tie broken in favor of the router
+    with the smallest address.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: The router that has the shortest path to source S is selected as the parent;
+      a tie between two routers would be broken according to which router has the
+      smallest address.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_distance_vector_messages
+  canonical_name: Distance-vector messages
+  aliases: []
+  node_type: DataUnit
+  definition: Routing information exchanged with neighbors that lets a router learn
+    whether it is the parent for a LAN relative to a source.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: A given router can learn if it is the parent for the LAN (again relative
+      to each possible source) based upon the distance-vector messages it exchanges
+      with its neighbors.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_per_source_per_link_parent_bit
+  canonical_name: Per-source per-link parent bit
+  aliases: []
+  node_type: Parameter
+  definition: A bit recording whether a router is the parent for a particular source
+    and incident link.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: Notice that this refinement requires that each router keep, for each source,
+      a bit for each of its incident links indicating whether or not it is the parent
+      for that source/link pair.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_source_rooted_shortest_path_tree
+  canonical_name: Source-rooted shortest-path tree
+  aliases: []
+  node_type: Concept
+  definition: The shortest-path tree rooted at the packet source, whose links distinguish
+    tree-based forwarding from forwarding on every nonincoming link.
+  first_introduced: '4.3'
+  mentions:
+  - section_id: '4.3'
+    role: defined
+    quote: without regard to whether or not those links are part of the shortest-path
+      tree rooted at the source
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+edges:
+- edge_id: E-58c81db9-000
+  source_id: c_reverse_path_broadcast_rpb_reverse_path_forwarding_rpf
+  target_id: c_shortest_path_broadcast
+  relation: has_purpose
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions: []
+  statement: RPB/RPF provides shortest-path broadcast by making forwarding decisions
+    relative to the source.
+  part_type: null
+  dimension: null
+  surface_phrase: implements
+  relation_family: function_means
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_58c81db9
+    role: required
+    weight: 0.0667
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: The RPB mechanism just described implements shortest-path broadcast.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-58c81db9-001
+  source_id: c_reverse_path_broadcast_rpb_reverse_path_forwarding_rpf
+  target_id: c_duplicate_broadcast_elimination
+  relation: has_purpose
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The mechanism includes the parent-router refinement.
+  statement: The parent-router refinement of RPB/RPF is intended to eliminate duplicate
+    broadcast packets on LANs with multiple attached routers.
+  part_type: null
+  dimension: null
+  surface_phrase: is to eliminate
+  relation_family: function_means
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_58c81db9
+    role: required
+    weight: 0.0667
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: The solution to this second limitation is to eliminate the duplicate broadcast
+      packets that are generated when more than one router is connected to a given
+      LAN.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-58c81db9-002
+  source_id: c_reverse_path_broadcast_rpb_reverse_path_forwarding_rpf
+  target_id: c_unicast_routing_table
+  relation: uses
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions: []
+  statement: RPB/RPF uses unicast routing information to identify the shortest-path
+    next hop toward the packet source.
+  part_type: null
+  dimension: null
+  surface_phrase: Given a unicast routing table
+  relation_family: function_means
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_58c81db9
+    role: required
+    weight: 0.0667
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: reverse_path_forwarding
+  chain_position: 0
+  depends_on_edges: []
+  introduced_in: '4.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: Given a unicast routing table, each router knows that the current shortest
+      path to a given destination goes through NextHop.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-58c81db9-003
+  source_id: c_nexthop_toward_the_source
+  target_id: c_unicast_routing_table
+  relation: part_of
+  layer: taxonomy
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The routing-table entry is for source S.
+  statement: The unicast routing-table entry for S contains the NextHop used to reach
+    S.
+  part_type: component
+  dimension: null
+  surface_phrase: in the routing table
+  relation_family: classification_structure
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_58c81db9
+    role: required
+    weight: 0.0667
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: the packet came from the NextHop associated with S in the routing table
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-58c81db9-004
+  source_id: c_reverse_path_broadcast_rpb_reverse_path_forwarding_rpf
+  target_id: c_reverse_path_arrival_test
+  relation: performs
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - A router receives a packet from source S.
+  statement: The reverse-path mechanism tests whether the packet arrived from the
+    neighbor that the router would use to reach S.
+  part_type: null
+  dimension: null
+  surface_phrase: if and only if
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_58c81db9
+    role: required
+    weight: 0.0667
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: reverse_path_forwarding
+  chain_position: 1
+  depends_on_edges: []
+  introduced_in: '4.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: Thus, whenever it receives a multicast packet from source S, the router
+      forwards the packet on all outgoing links (except the one on which the packet
+      arrived) if and only if the packet arrived over the link that is on the shortest
+      path to S (i.e., the packet came from the NextHop associated with S in the routing
+      table).
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-58c81db9-005
+  source_id: c_reverse_path_arrival_test
+  target_id: c_nexthop_toward_the_source
+  relation: uses
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions: []
+  statement: The reverse-path arrival test compares the incoming neighbor with the
+    NextHop associated with source S.
+  part_type: null
+  dimension: null
+  surface_phrase: the packet came from the NextHop associated with S
+  relation_family: function_means
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_58c81db9
+    role: required
+    weight: 0.0667
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: if and only if the packet arrived over the link that is on the shortest
+      path to S (i.e., the packet came from the NextHop associated with S in the routing
+      table)
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-58c81db9-006
+  source_id: c_arrival_from_the_source_s_nexthop
+  target_id: c_forwarding_on_all_other_links
+  relation: triggers
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The basic reverse-path forwarding rule is being applied before the parent-router
+    refinement.
+  - The packet is from source S.
+  statement: Under the basic rule, arrival from S's NextHop triggers forwarding on
+    every link except the incoming link; arrival on any other link does not.
+  part_type: null
+  dimension: null
+  surface_phrase: if and only if
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_58c81db9
+    role: required
+    weight: 0.0667
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: reverse_path_forwarding
+  chain_position: 2
+  depends_on_edges: []
+  introduced_in: '4.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: Thus, whenever it receives a multicast packet from source S, the router
+      forwards the packet on all outgoing links (except the one on which the packet
+      arrived) if and only if the packet arrived over the link that is on the shortest
+      path to S (i.e., the packet came from the NextHop associated with S in the routing
+      table).
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-58c81db9-007
+  source_id: c_reverse_path_arrival_test
+  target_id: c_packet_looping_toward_the_source
+  relation: prevents
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - Forwarding is permitted only when the reverse-path arrival test succeeds.
+  statement: Applying the reverse-path arrival test allows outward flooding without
+    looping packets back toward S.
+  part_type: null
+  dimension: null
+  surface_phrase: does not loop packets back toward S
+  relation_family: cause_effect
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_58c81db9
+    role: required
+    weight: 0.0667
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: This strategy effectively floods packets outward from S but does not loop
+      packets back toward S.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-58c81db9-008
+  source_id: c_forwarding_on_all_other_links
+  target_id: c_duplicate_broadcast_packets
+  relation: causes
+  layer: semantic
+  polarity: affirmed
+  modality: possible
+  conditions:
+  - Multiple routers connected to the same LAN forward the packet onto that LAN.
+  - Forwarding is not restricted to source-rooted shortest-path-tree links.
+  statement: Forwarding on every nonincoming link can produce duplicate packets because
+    multiple routers may forward the same packet over a shared LAN.
+  part_type: null
+  dimension: null
+  surface_phrase: This is due to
+  relation_family: cause_effect
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_58c81db9
+    role: required
+    weight: 0.0667
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: The second limitation is that a given packet will be forwarded over a LAN
+      by each of the routers connected to that LAN. This is due to the forwarding
+      strategy of flooding packets on all links other than the one on which the packet
+      arrived, without regard to whether or not those links are part of the shortest-path
+      tree rooted at the source.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-58c81db9-009
+  source_id: c_reverse_path_broadcast_rpb_reverse_path_forwarding_rpf
+  target_id: c_parent_router_forwarding_restriction
+  relation: uses
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - RPB/RPF denotes the refined mechanism named in this section.
+  statement: The refined RPB/RPF mechanism restricts forwarding on each LAN to its
+    designated parent router relative to the source, rather than forwarding on every
+    nonincoming link.
+  part_type: null
+  dimension: null
+  surface_phrase: only the parent router is allowed to forward
+  relation_family: function_means
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_58c81db9
+    role: required
+    weight: 0.0667
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: One way to do this is to designate one router as the parent router for
+      each link, relative to the source, where only the parent router is allowed to
+      forward multicast packets from that source over the LAN.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-58c81db9-010
+  source_id: c_parent_router_forwarding_restriction
+  target_id: c_duplicate_broadcast_packets
+  relation: prevents
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - Duplicates would otherwise be generated by multiple routers forwarding a packet
+    from the same source onto the same LAN.
+  statement: Allowing only the source-relative parent router to forward onto a LAN
+    eliminates duplicates generated by multiple forwarding routers on that LAN.
+  part_type: null
+  dimension: null
+  surface_phrase: One way to do this is
+  relation_family: cause_effect
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_58c81db9
+    role: required
+    weight: 0.0667
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: The solution to this second limitation is to eliminate the duplicate broadcast
+      packets that are generated when more than one router is connected to a given
+      LAN. One way to do this is to designate one router as the parent router for
+      each link, relative to the source, where only the parent router is allowed to
+      forward multicast packets from that source over the LAN.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-58c81db9-011
+  source_id: c_parent_router
+  target_id: c_parent_router_selection_criterion
+  relation: has_property
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - Selection is relative to a particular source S and LAN.
+  statement: The parent is the router with the shortest path to S, with equal-cost
+    ties broken by the smallest router address.
+  part_type: null
+  dimension: null
+  surface_phrase: is selected as the parent
+  relation_family: classification_structure
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_58c81db9
+    role: required
+    weight: 0.0667
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: The router that has the shortest path to source S is selected as the parent;
+      a tie between two routers would be broken according to which router has the
+      smallest address.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-58c81db9-012
+  source_id: c_parent_router_forwarding_restriction
+  target_id: c_distance_vector_messages
+  relation: uses
+  layer: semantic
+  polarity: affirmed
+  modality: possible
+  conditions:
+  - Routers exchange distance-vector messages with their neighbors.
+  statement: A router can determine its source-relative parent status from exchanged
+    distance-vector messages, rather than from observing ordinary unicast data packets.
+  part_type: null
+  dimension: null
+  surface_phrase: based upon
+  relation_family: function_means
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_58c81db9
+    role: required
+    weight: 0.0667
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: A given router can learn if it is the parent for the LAN (again relative
+      to each possible source) based upon the distance-vector messages it exchanges
+      with its neighbors.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-58c81db9-013
+  source_id: c_reverse_path_broadcast_rpb_reverse_path_forwarding_rpf
+  target_id: c_per_source_per_link_parent_bit
+  relation: requires
+  layer: semantic
+  polarity: affirmed
+  modality: necessary
+  conditions:
+  - The parent-router refinement is used.
+  statement: The refined mechanism requires each router to retain a parent-status
+    bit for every source and incident-link pair.
+  part_type: null
+  dimension: null
+  surface_phrase: requires that each router keep
+  relation_family: dependency
+  registry_version: 1
+  criticality: supporting
+  question_links:
+  - question_id: q_58c81db9
+    role: required
+    weight: 0.0667
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: Notice that this refinement requires that each router keep, for each source,
+      a bit for each of its incident links indicating whether or not it is the parent
+      for that source/link pair.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-58c81db9-014
+  source_id: c_forwarding_on_all_other_links
+  target_id: c_source_rooted_shortest_path_tree
+  relation: uses
+  layer: semantic
+  polarity: negated
+  modality: always
+  conditions:
+  - The basic forwarding strategy has not been refined with the parent-router restriction.
+  - The relation concerns selecting outgoing links, not checking the incoming link.
+  statement: The basic strategy does not use membership in the source-rooted shortest-path
+    tree to select outgoing links.
+  part_type: null
+  dimension: null
+  surface_phrase: without regard to whether or not
+  relation_family: function_means
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_58c81db9
+    role: required
+    weight: 0.0667
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: This is due to the forwarding strategy of flooding packets on all links
+      other than the one on which the packet arrived, without regard to whether or
+      not those links are part of the shortest-path tree rooted at the source.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+chain_links:
+- link_id: CL-58c81db9-000
+  from_edge_id: E-58c81db9-004
+  to_edge_id: E-58c81db9-002
+  type: cause
+  statement: The reverse-path arrival test is possible because unicast routing information
+    identifies the next hop on the shortest path toward S.
+  surface_phrase: Thus
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: Given a unicast routing table, each router knows that the current shortest
+      path to a given destination goes through NextHop. Thus, whenever it receives
+      a multicast packet from source S, the router forwards the packet on all outgoing
+      links (except the one on which the packet arrived) if and only if the packet
+      arrived over the link that is on the shortest path to S (i.e., the packet came
+      from the NextHop associated with S in the routing table).
+  origin: textbook
+  question_ids:
+  - q_58c81db9
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+- link_id: CL-58c81db9-001
+  from_edge_id: E-58c81db9-006
+  to_edge_id: E-58c81db9-005
+  type: condition
+  statement: Forwarding on all nonincoming links is permitted if and only if the incoming
+    neighbor matches the NextHop toward S.
+  surface_phrase: if and only if
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: Thus, whenever it receives a multicast packet from source S, the router
+      forwards the packet on all outgoing links (except the one on which the packet
+      arrived) if and only if the packet arrived over the link that is on the shortest
+      path to S (i.e., the packet came from the NextHop associated with S in the routing
+      table).
+  origin: textbook
+  question_ids:
+  - q_58c81db9
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+- link_id: CL-58c81db9-002
+  from_edge_id: E-58c81db9-008
+  to_edge_id: E-58c81db9-014
+  type: cause
+  statement: Duplicate forwarding over a LAN results from forwarding on every nonincoming
+    link without checking whether it belongs to the source-rooted shortest-path tree.
+  surface_phrase: This is due to
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: The second limitation is that a given packet will be forwarded over a LAN
+      by each of the routers connected to that LAN. This is due to the forwarding
+      strategy of flooding packets on all links other than the one on which the packet
+      arrived, without regard to whether or not those links are part of the shortest-path
+      tree rooted at the source.
+  origin: textbook
+  question_ids:
+  - q_58c81db9
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+- link_id: CL-58c81db9-003
+  from_edge_id: E-58c81db9-009
+  to_edge_id: E-58c81db9-010
+  type: purpose
+  statement: The mechanism designates a source-relative parent router for each link
+    in order to eliminate duplicates generated by multiple routers forwarding onto
+    the same LAN.
+  surface_phrase: One way to do this is
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.3'
+    answer_id: null
+    quote: The solution to this second limitation is to eliminate the duplicate broadcast
+      packets that are generated when more than one router is connected to a given
+      LAN. One way to do this is to designate one router as the parent router for
+      each link, relative to the source, where only the parent router is allowed to
+      forward multicast packets from that source over the LAN.
+  origin: textbook
+  question_ids:
+  - q_58c81db9
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+rejected: []

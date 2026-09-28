@@ -419,6 +419,68 @@ def gold_migrate_v1(
     typer.echo(f"Report -> {report_path}")
 
 
+@gold_app.command("sample-relation-items")
+def gold_sample_relation_items(
+    n: int = typer.Option(100, "--n"),
+    seed: int | None = typer.Option(None, "--seed"),
+    min_per_family: int = typer.Option(8, "--min-per-family"),
+) -> None:
+    """CR-001 §7.3: sample textbook sentences for the relation-set agreement test and
+    write two blank annotator sheets. No LLM call — reuses already-drafted concepts/edges.
+    """
+    import json as _json
+
+    import yaml as _yaml
+
+    from cumap.gold.sample_relation_items import (
+        find_candidate_items,
+        stratified_sample,
+        write_relation_agreement_files,
+    )
+    from cumap.gold.sections import section_ids_for_question
+    from cumap.schemas.relations import RelationRegistry
+
+    settings = get_settings()
+    interim_dir = settings.resolve(settings.paths.data_interim)
+    gold_dir = settings.resolve(settings.paths.data_gold)
+    registry = RelationRegistry.from_yaml(settings.resolve(settings.relation_registry))
+
+    sections_by_id = {}
+    for line in (interim_dir / "textbook_sections.jsonl").read_text().splitlines():
+        row = _json.loads(line)
+        sections_by_id[row["section_id"]] = row["text"]
+
+    all_candidates = []
+    for qid in settings.pilot_questions:
+        expert_gold = gold_dir / "expert_pilot" / f"{qid}.yaml"
+        expert_draft = interim_dir / "suggestions" / "expert" / f"{qid}.yaml"
+        source = expert_gold if expert_gold.exists() else expert_draft
+        if not source.exists():
+            typer.echo(f"skipping {qid}: no drafted/gold expert subgraph yet (run `cumap gold suggest-expert` first)")
+            continue
+        data = _yaml.safe_load(source.read_text()) or {}
+        concepts, edges = data.get("concepts", []), data.get("edges", [])
+
+        q_section_ids = section_ids_for_question(gold_dir, interim_dir, qid)
+        q_sections = {sid: sections_by_id[sid] for sid in q_section_ids if sid in sections_by_id}
+        all_candidates += find_candidate_items(qid, q_sections, concepts, edges, registry)
+
+    typer.echo(f"{len(all_candidates)} candidate sentence/concept-pair items found across {len(settings.pilot_questions)} pilot questions.")
+
+    selected = stratified_sample(all_candidates, registry, n=n, seed=seed if seed is not None else settings.seed, min_per_family=min_per_family)
+
+    from collections import Counter
+
+    family_counts = Counter(i.predicted_family or "unknown" for i in selected)
+    for family, count in sorted(family_counts.items()):
+        typer.echo(f"  {family}: {count}")
+
+    out_dir = interim_dir / "relation_agreement"
+    paths = write_relation_agreement_files(selected, out_dir, registry)
+    typer.echo(f"{len(selected)} items selected -> {paths['items']}")
+    typer.echo(f"Blank sheets -> {paths['annotator_A']}, {paths['annotator_B']}")
+
+
 @labels_app.command("propositions")
 def labels_propositions() -> None:
     """Split reference answers into atomic propositions."""
@@ -465,6 +527,31 @@ def eval_run() -> None:
 def eval_silver_agreement() -> None:
     """Agreement between silver labels and human-verified labels."""
     _not_implemented("cumap eval silver-agreement", "M4")
+
+
+@eval_app.command("relation-agreement")
+def eval_relation_agreement() -> None:
+    """CR-001 §7.3: score the two completed sheets in data/gold/relation_agreement/."""
+    import pandas as pd
+
+    from cumap.eval.relation_agreement import compute_agreement, write_agreement_report
+    from cumap.schemas.relations import RelationRegistry
+
+    settings = get_settings()
+    gold_dir = settings.resolve(settings.paths.data_gold) / "relation_agreement"
+    sheet_a_path = gold_dir / "annotator_A.csv"
+    sheet_b_path = gold_dir / "annotator_B.csv"
+    if not sheet_a_path.exists() or not sheet_b_path.exists():
+        typer.echo(f"Both {sheet_a_path} and {sheet_b_path} must exist (the human saves completed sheets there).")
+        raise typer.Exit(code=1)
+
+    registry = RelationRegistry.from_yaml(settings.resolve(settings.relation_registry))
+    sheet_a, sheet_b = pd.read_csv(sheet_a_path), pd.read_csv(sheet_b_path)
+    result = compute_agreement(sheet_a, sheet_b, registry)
+    report_path = write_agreement_report(result, settings.resolve(settings.paths.reports) / "m3_relation_agreement.md")
+
+    typer.echo(f"relation κ={result['relation_kappa']:.3f}, family κ={result['family_kappa']:.3f}")
+    typer.echo(f"Report -> {report_path}")
 
 
 @app_app.command("review")

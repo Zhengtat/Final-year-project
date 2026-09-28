@@ -1,0 +1,962 @@
+registry_version: 1
+concepts:
+- concept_id: c_ipv6_extension_headers
+  canonical_name: IPv6 extension headers
+  aliases: []
+  node_type: Component
+  definition: Special headers that carry IPv6 options following the IP header.
+  first_introduced: '4.2'
+  mentions:
+  - section_id: '4.2'
+    role: defined
+    quote: If options are required, then they are carried in one or more special headers
+      following the IP header, and this is indicated by the value of the NextHeader
+      field.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_ipv6_base_header
+  canonical_name: IPv6 base header
+  aliases: []
+  node_type: Component
+  definition: The IPv6 header, which is always 40 bytes long.
+  first_introduced: '4.2'
+  mentions:
+  - section_id: '4.2'
+    role: defined
+    quote: Thus, the IPv6 header is always 40 bytes long.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_optional_network_layer_functionality
+  canonical_name: Optional network-layer functionality
+  aliases: []
+  node_type: Concept
+  definition: Optional IP functionality carried in special headers rather than included
+    in the IPv6 base header.
+  first_introduced: '4.2'
+  mentions:
+  - section_id: '4.2'
+    role: defined
+    quote: Also, fragmentation is now handled as an optional header, which means that
+      the fragmentation-related fields of IPv4 are not included in the IPv6 header.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_placement_after_the_ipv6_base_header
+  canonical_name: Placement after the IPv6 base header
+  aliases: []
+  node_type: Property
+  definition: The placement of special option headers following the IP header.
+  first_introduced: '4.2'
+  mentions:
+  - section_id: '4.2'
+    role: defined
+    quote: If options are required, then they are carried in one or more special headers
+      following the IP header, and this is indicated by the value of the NextHeader
+      field.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_placement_before_the_transport_layer_header
+  canonical_name: Placement before the transport-layer header
+  aliases: []
+  node_type: Property
+  definition: The placement of the extension-header chain before a transport-layer
+    header such as TCP.
+  first_introduced: '4.2'
+  mentions:
+  - section_id: '4.2'
+    role: defined
+    quote: The last extension header will be followed by a transport-layer header
+      (e.g., TCP) and in this case the value of the NextHeader field is the same as
+      the value of the Protocol field would be in an IPv4 header.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_fixed_40_byte_header_length
+  canonical_name: Fixed 40-byte header length
+  aliases: []
+  node_type: Property
+  definition: The IPv6 base header's invariant length of 40 bytes.
+  first_introduced: '4.2'
+  mentions:
+  - section_id: '4.2'
+    role: defined
+    quote: Thus, the IPv6 header is always 40 bytes long.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_specific_extension_header_order
+  canonical_name: Specific extension-header order
+  aliases: []
+  node_type: Property
+  definition: The specific order in which IPv6 extension headers must appear when
+    present.
+  first_introduced: '4.2'
+  mentions:
+  - section_id: '4.2'
+    role: defined
+    quote: In contrast, IPv6 treats options as extension headers that must, if present,
+      appear in a specific order.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_nextheader_field
+  canonical_name: NextHeader field
+  aliases: []
+  node_type: Component
+  definition: A field identifying the following extension-header type or the higher-layer
+    protocol.
+  first_introduced: '4.2'
+  mentions:
+  - section_id: '4.2'
+    role: defined
+    quote: Thus, the NextHeader field does double duty; it may either identify the
+      type of extension header to follow, or, in the last extension header, it serves
+      as a demux key to identify the higher-layer protocol running over IPv6.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_router
+  canonical_name: Router
+  aliases: []
+  node_type: Component
+  definition: A network component that determines whether packet options are relevant
+    to it.
+  first_introduced: '4.2'
+  mentions:
+  - section_id: '4.2'
+    role: defined
+    quote: This means that each router can quickly determine if any of the options
+      are relevant to it; in most cases, they will not be.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_quick_option_relevance_determination
+  canonical_name: Quick option relevance determination
+  aliases: []
+  node_type: Mechanism
+  definition: Quickly determining whether any packet options are relevant to a router;
+    in most cases they are not.
+  first_introduced: '4.2'
+  mentions:
+  - section_id: '4.2'
+    role: defined
+    quote: This means that each router can quickly determine if any of the options
+      are relevant to it; in most cases, they will not be.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_option_processing_efficiency
+  canonical_name: Option-processing efficiency
+  aliases: []
+  node_type: Property
+  definition: The efficiency of processing IP options, an important factor in router
+    performance.
+  first_introduced: '4.2'
+  mentions:
+  - section_id: '4.2'
+    role: defined
+    quote: The end result is that option processing is much more efficient in IPv6,
+      which is an important factor in router performance.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_ipv4_options_field
+  canonical_name: IPv4 options field
+  aliases: []
+  node_type: Component
+  definition: Options buried at the end of the IPv4 header as an unordered collection
+    of type, length, value tuples.
+  first_introduced: '4.2'
+  mentions:
+  - section_id: '4.2'
+    role: defined
+    quote: This is because the options were all buried at the end of the IP header,
+      as an unordered collection of ‘(type, length, value)’ tuples.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_entire_options_field_parsing
+  canonical_name: Entire options-field parsing
+  aliases: []
+  node_type: Mechanism
+  definition: Parsing the entire IPv4 options field to determine whether any options
+    are relevant.
+  first_introduced: '4.2'
+  mentions:
+  - section_id: '4.2'
+    role: defined
+    quote: In IPv4, if any options were present, every router had to parse the entire
+      options field to see if any of the options were relevant.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+edges:
+- edge_id: E-cc7ede94-000
+  source_id: c_ipv6_extension_headers
+  target_id: c_optional_network_layer_functionality
+  relation: has_purpose
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions: []
+  statement: IPv6 extension headers provide additional optional network-layer functionality
+    outside the IPv6 base header.
+  part_type: null
+  dimension: null
+  surface_phrase: they are carried in
+  relation_family: function_means
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_cc7ede94
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.2'
+    answer_id: null
+    quote: If options are required, then they are carried in one or more special headers
+      following the IP header, and this is indicated by the value of the NextHeader
+      field.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-cc7ede94-001
+  source_id: c_ipv6_base_header
+  target_id: c_fixed_40_byte_header_length
+  relation: has_property
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions: []
+  statement: The IPv6 base header has a fixed length of 40 bytes.
+  part_type: null
+  dimension: null
+  surface_phrase: is always
+  relation_family: classification_structure
+  registry_version: 1
+  criticality: supporting
+  question_links:
+  - question_id: q_cc7ede94
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.2'
+    answer_id: null
+    quote: Thus, the IPv6 header is always 40 bytes long.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-cc7ede94-002
+  source_id: c_ipv6_extension_headers
+  target_id: c_placement_after_the_ipv6_base_header
+  relation: has_property
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - Extension headers are present.
+  statement: When present, IPv6 extension headers are located after the IPv6 base
+    header.
+  part_type: null
+  dimension: null
+  surface_phrase: following the IP header
+  relation_family: classification_structure
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_cc7ede94
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.2'
+    answer_id: null
+    quote: If options are required, then they are carried in one or more special headers
+      following the IP header, and this is indicated by the value of the NextHeader
+      field.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-cc7ede94-003
+  source_id: c_ipv6_extension_headers
+  target_id: c_placement_before_the_transport_layer_header
+  relation: has_property
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - Extension headers are present.
+  - The packet carries a transport-layer header.
+  statement: The IPv6 extension-header chain is located before the transport-layer
+    header, which follows the last extension header.
+  part_type: null
+  dimension: null
+  surface_phrase: will be followed by
+  relation_family: classification_structure
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_cc7ede94
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.2'
+    answer_id: null
+    quote: The last extension header will be followed by a transport-layer header
+      (e.g., TCP) and in this case the value of the NextHeader field is the same as
+      the value of the Protocol field would be in an IPv4 header.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-cc7ede94-004
+  source_id: c_ipv6_extension_headers
+  target_id: c_specific_extension_header_order
+  relation: requires
+  layer: semantic
+  polarity: affirmed
+  modality: necessary
+  conditions:
+  - Extension headers are present.
+  statement: IPv6 extension headers must appear in a specific order when present.
+  part_type: null
+  dimension: null
+  surface_phrase: must, if present, appear in a specific order
+  relation_family: dependency
+  registry_version: 1
+  criticality: supporting
+  question_links:
+  - question_id: q_cc7ede94
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.2'
+    answer_id: null
+    quote: In contrast, IPv6 treats options as extension headers that must, if present,
+      appear in a specific order.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-cc7ede94-005
+  source_id: c_router
+  target_id: c_quick_option_relevance_determination
+  relation: performs
+  layer: semantic
+  polarity: affirmed
+  modality: possible
+  conditions:
+  - The router is examining IPv6 options represented as ordered extension headers.
+  statement: A router can quickly determine whether IPv6 options are relevant to it,
+    and in most cases they are not.
+  part_type: null
+  dimension: null
+  surface_phrase: can quickly determine
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_cc7ede94
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.2'
+    answer_id: null
+    quote: This means that each router can quickly determine if any of the options
+      are relevant to it; in most cases, they will not be.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-cc7ede94-006
+  source_id: c_router
+  target_id: c_nextheader_field
+  relation: uses
+  layer: semantic
+  polarity: affirmed
+  modality: typically
+  conditions:
+  - Determining whether IPv6 options are relevant to the router.
+  statement: A router can usually determine whether IPv6 options are relevant by examining
+    just the NextHeader field.
+  part_type: null
+  dimension: null
+  surface_phrase: by just looking at
+  relation_family: function_means
+  registry_version: 1
+  criticality: supporting
+  question_links:
+  - question_id: q_cc7ede94
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.2'
+    answer_id: null
+    quote: This means that each router can quickly determine if any of the options
+      are relevant to it; in most cases, they will not be. Usually this can be determined
+      by just looking at the NextHeader field.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-cc7ede94-007
+  source_id: c_ipv6_extension_headers
+  target_id: c_option_processing_efficiency
+  relation: increases
+  layer: semantic
+  polarity: affirmed
+  modality: typically
+  conditions:
+  - Compared with IPv4 options processing by routers.
+  statement: Representing options as IPv6 extension headers makes router option processing
+    more efficient than in IPv4.
+  part_type: null
+  dimension: null
+  surface_phrase: is much more efficient
+  relation_family: cause_effect
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_cc7ede94
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.2'
+    answer_id: null
+    quote: The end result is that option processing is much more efficient in IPv6,
+      which is an important factor in router performance.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-cc7ede94-008
+  source_id: c_router
+  target_id: c_entire_options_field_parsing
+  relation: performs
+  layer: semantic
+  polarity: affirmed
+  modality: necessary
+  conditions:
+  - An IPv4 packet contains options.
+  statement: Every router handling an IPv4 packet containing options has to parse
+    the entire options field to determine relevance.
+  part_type: null
+  dimension: null
+  surface_phrase: had to parse
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_cc7ede94
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.2'
+    answer_id: null
+    quote: In IPv4, if any options were present, every router had to parse the entire
+      options field to see if any of the options were relevant.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-cc7ede94-009
+  source_id: c_ipv6_extension_headers
+  target_id: c_ipv4_options_field
+  relation: contrasts_with
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - Options are present.
+  statement: IPv6 uses specifically ordered extension headers, whereas IPv4 stores
+    options as an unordered collection at the end of its IP header.
+  part_type: null
+  dimension: Option placement and ordering
+  surface_phrase: In contrast
+  relation_family: comparison
+  registry_version: 1
+  criticality: supporting
+  question_links:
+  - question_id: q_cc7ede94
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.2'
+    answer_id: null
+    quote: This is because the options were all buried at the end of the IP header,
+      as an unordered collection of ‘(type, length, value)’ tuples. In contrast, IPv6
+      treats options as extension headers that must, if present, appear in a specific
+      order.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-cc7ede94-010
+  source_id: c_nextheader_field
+  target_id: c_ipv6_extension_headers
+  relation: part_of
+  layer: taxonomy
+  polarity: affirmed
+  modality: always
+  conditions: []
+  statement: Each IPv6 extension header contains a NextHeader field identifying the
+    following header.
+  part_type: component
+  dimension: null
+  surface_phrase: contains
+  relation_family: classification_structure
+  registry_version: 1
+  criticality: supporting
+  question_links:
+  - question_id: q_cc7ede94
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '4.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.2'
+    answer_id: null
+    quote: The type of each extension header is identified by the value of the NextHeader
+      field in the header that precedes it, and each extension header contains a NextHeader
+      field to identify the header following it.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+chain_links:
+- link_id: CL-cc7ede94-000
+  from_edge_id: E-cc7ede94-005
+  to_edge_id: E-cc7ede94-004
+  type: cause
+  statement: Routers can quickly determine option relevance because IPv6 extension
+    headers appear in a specific order.
+  surface_phrase: This means that
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.2'
+    answer_id: null
+    quote: In contrast, IPv6 treats options as extension headers that must, if present,
+      appear in a specific order. This means that each router can quickly determine
+      if any of the options are relevant to it; in most cases, they will not be.
+  origin: textbook
+  question_ids:
+  - q_cc7ede94
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+- link_id: CL-cc7ede94-001
+  from_edge_id: E-cc7ede94-007
+  to_edge_id: E-cc7ede94-005
+  type: cause
+  statement: IPv6 option processing is more efficient because routers can quickly
+    determine that options are usually irrelevant to them.
+  surface_phrase: The end result is that
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.2'
+    answer_id: null
+    quote: This means that each router can quickly determine if any of the options
+      are relevant to it; in most cases, they will not be. Usually this can be determined
+      by just looking at the NextHeader field. The end result is that option processing
+      is much more efficient in IPv6, which is an important factor in router performance.
+  origin: textbook
+  question_ids:
+  - q_cc7ede94
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+- link_id: CL-cc7ede94-002
+  from_edge_id: E-cc7ede94-005
+  to_edge_id: E-cc7ede94-008
+  type: contrast
+  statement: IPv6 routers can quickly determine option relevance, whereas IPv4 routers
+    must parse the entire options field when options are present.
+  surface_phrase: In contrast
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '4.2'
+    answer_id: null
+    quote: In IPv4, if any options were present, every router had to parse the entire
+      options field to see if any of the options were relevant. This is because the
+      options were all buried at the end of the IP header, as an unordered collection
+      of ‘(type, length, value)’ tuples. In contrast, IPv6 treats options as extension
+      headers that must, if present, appear in a specific order. This means that each
+      router can quickly determine if any of the options are relevant to it; in most
+      cases, they will not be.
+  origin: textbook
+  question_ids:
+  - q_cc7ede94
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+rejected: []

@@ -1,0 +1,962 @@
+registry_version: 1
+concepts:
+- concept_id: c_tcp_congestion_control
+  canonical_name: TCP congestion control
+  aliases: []
+  node_type: Mechanism
+  definition: TCP algorithms that adjust how much data a source can have in transit
+    based on perceived network congestion.
+  first_introduced: '6.3'
+  mentions:
+  - section_id: '6.3'
+    role: defined
+    quote: The answer is that the TCP source sets the CongestionWindow based on the
+      level of congestion it perceives to exist in the network.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_slow_start
+  canonical_name: Slow start
+  aliases: []
+  node_type: Mechanism
+  definition: A mechanism used to increase the congestion window rapidly from a cold
+    start, with exponential rather than linear growth.
+  first_introduced: '6.3'
+  mentions:
+  - section_id: '6.3'
+    role: defined
+    quote: TCP therefore provides a second mechanism, ironically called slow start,
+      which is used to increase the congestion window rapidly from a cold start. Slow
+      start effectively increases the congestion window exponentially, rather than
+      linearly.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_congestion_avoidance_additive_increase
+  canonical_name: Congestion avoidance (additive increase)
+  aliases: []
+  node_type: Mechanism
+  definition: 'The question''s name for the additive-increase phase described in Section
+    6.3: beyond the target congestion window, cwnd increases by one packet per RTT;
+    this is distinct from Section 6.4''s broader use of congestion avoidance.'
+  first_introduced: '6.3'
+  mentions:
+  - section_id: '6.3'
+    role: defined
+    quote: Slow start is used to rapidly increase the sending rate up to this value,
+      and then additive increase is used beyond this point.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_congestion_window_cwnd
+  canonical_name: Congestion window (cwnd)
+  aliases: []
+  node_type: Parameter
+  definition: A per-connection state variable used by the source to limit how much
+    data it is allowed to have in transit.
+  first_introduced: '6.3'
+  mentions:
+  - section_id: '6.3'
+    role: defined
+    quote: TCP maintains a new state variable for each connection, called CongestionWindow,
+      which is used by the source to limit how much data it is allowed to have in
+      transit at a given time.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_slow_start_threshold_ss_thresh
+  canonical_name: Slow start threshold (ss_thresh)
+  aliases: []
+  node_type: Parameter
+  definition: The variable called CongestionThreshold in the book, storing the target
+    window resulting from multiplicative decrease.
+  first_introduced: '6.3'
+  mentions:
+  - section_id: '6.3'
+    role: defined
+    quote: To address this problem, TCP introduces a temporary variable to store the
+      target window, typically called CongestionThreshold, that is set equal to the
+      CongestionWindow value that results from multiplicative decrease.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_ack_arrival
+  canonical_name: ACK arrival
+  aliases: []
+  node_type: Event
+  definition: Receipt of an acknowledgment that clocks transmission and contributes
+    to congestion-window growth.
+  first_introduced: '6.3'
+  mentions:
+  - section_id: '6.3'
+    role: defined
+    quote: When the ACK for this packet arrives, TCP adds 1 to CongestionWindow and
+      then sends two packets.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_round_trip_time_rtt
+  canonical_name: Round-trip time (RTT)
+  aliases: []
+  node_type: Parameter
+  definition: The round-trip interval over which successful acknowledgment of a window's
+    packets permits a one-packet additive increase.
+  first_introduced: '6.3'
+  mentions:
+  - section_id: '6.3'
+    role: defined
+    quote: each packet sent out during the last round-trip time (RTT) has been ACKed
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_timeout
+  canonical_name: Timeout
+  aliases: []
+  node_type: Event
+  definition: An event that TCP interprets as a sign of congestion and that triggers
+    a reduction in its transmitting rate.
+  first_introduced: '6.3'
+  mentions:
+  - section_id: '6.3'
+    role: defined
+    quote: Therefore, TCP interprets timeouts as a sign of congestion and reduces
+      the rate at which it is transmitting.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_threshold_update_to_half_the_pre_loss_cwnd
+  canonical_name: Threshold update to half the pre-loss cwnd
+  aliases: []
+  node_type: Event
+  definition: Setting CongestionThreshold to the congestion-window value resulting
+    from halving the pre-loss window.
+  first_introduced: '6.3'
+  mentions:
+  - section_id: '6.3'
+    role: defined
+    quote: Specifically, the source has a current (and useful) value of CongestionWindow;
+      this is the value of CongestionWindow that existed prior to the last packet
+      loss, divided by 2 as a result of the loss. We can think of this as the target
+      congestion window.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_cwnd_reset_to_one_packet
+  canonical_name: cwnd reset to one packet
+  aliases: []
+  node_type: Event
+  definition: Resetting the actual congestion window to one packet when the sender
+    enters slow start after a timeout.
+  first_introduced: '6.3'
+  mentions:
+  - section_id: '6.3'
+    role: defined
+    quote: CongestionWindow is reset to one packet, as the sender enters slow start.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_cwnd_reaches_ss_thresh
+  canonical_name: cwnd reaches ss_thresh
+  aliases: []
+  node_type: State
+  definition: The point at which the actual congestion window reaches the stored target
+    and growth changes to one packet per RTT.
+  first_introduced: '6.3'
+  mentions:
+  - section_id: '6.3'
+    role: defined
+    quote: it is incremented by one packet for every ACK that is received until it
+      reaches CongestionThreshold, at which point it is incremented by one packet
+      per RTT.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_constant_threshold_during_window_growth
+  canonical_name: Constant threshold during window growth
+  aliases: []
+  node_type: Property
+  definition: Retention of the stored target window while the actual congestion window
+    grows, inferred from the book's separation of target and actual windows.
+  first_introduced: '6.3'
+  mentions:
+  - section_id: '6.3'
+    role: defined
+    quote: Notice that we have a small bookkeeping problem to take care of, in that
+      we want to remember the target congestion window resulting from multiplicative
+      decrease as well as the actual congestion window being used by slow start.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+edges:
+- edge_id: E-582d0a1c-000
+  source_id: c_slow_start
+  target_id: c_tcp_congestion_control
+  relation: part_of
+  layer: taxonomy
+  polarity: affirmed
+  modality: always
+  conditions:
+  - Standard TCP as described in Section 6.3
+  statement: Slow start is a phase of standard TCP congestion control.
+  part_type: phase
+  dimension: null
+  surface_phrase: provides a second mechanism
+  relation_family: classification_structure
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_582d0a1c
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '6.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '6.3'
+    answer_id: null
+    quote: TCP therefore provides a second mechanism, ironically called slow start,
+      which is used to increase the congestion window rapidly from a cold start.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-582d0a1c-001
+  source_id: c_congestion_avoidance_additive_increase
+  target_id: c_tcp_congestion_control
+  relation: part_of
+  layer: taxonomy
+  polarity: affirmed
+  modality: always
+  conditions:
+  - Standard TCP as described in Section 6.3
+  - Congestion avoidance denotes the question's additive-increase phase
+  statement: Congestion avoidance, understood here as additive increase, is the window-growth
+    phase used beyond the slow-start target.
+  part_type: phase
+  dimension: null
+  surface_phrase: additive increase is used beyond this point
+  relation_family: classification_structure
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_582d0a1c
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '6.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '6.3'
+    answer_id: null
+    quote: Slow start is used to rapidly increase the sending rate up to this value,
+      and then additive increase is used beyond this point.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-582d0a1c-002
+  source_id: c_ack_arrival
+  target_id: c_congestion_window_cwnd
+  relation: increases
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The sender is in slow start
+  - cwnd has not yet reached ss_thresh
+  - Window size is expressed in packets
+  statement: During slow start, each received ACK increases cwnd by one packet until
+    cwnd reaches ss_thresh.
+  part_type: null
+  dimension: null
+  surface_phrase: incremented by one packet for every ACK
+  relation_family: cause_effect
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_582d0a1c
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: timeout_restart
+  chain_position: 3
+  depends_on_edges: []
+  introduced_in: '6.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '6.3'
+    answer_id: null
+    quote: The variable CongestionWindow is then reset to one packet, and it is incremented
+      by one packet for every ACK that is received until it reaches CongestionThreshold,
+      at which point it is incremented by one packet per RTT.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-582d0a1c-003
+  source_id: c_congestion_avoidance_additive_increase
+  target_id: c_congestion_window_cwnd
+  relation: increases
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - cwnd has reached ss_thresh
+  - Packets are successfully acknowledged
+  - No intervening congestion event changes the window-growth phase
+  statement: During congestion avoidance, cwnd grows linearly by approximately one
+    packet per RTT, implemented through smaller increments on individual ACKs.
+  part_type: null
+  dimension: null
+  surface_phrase: increments CongestionWindow by a little for each ACK
+  relation_family: cause_effect
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_582d0a1c
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: timeout_restart
+  chain_position: 5
+  depends_on_edges: []
+  introduced_in: '6.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '6.3'
+    answer_id: null
+    quote: Note that, in practice, TCP does not wait for an entire window’s worth
+      of ACKs to add 1 packet’s worth to the congestion window, but instead increments
+      CongestionWindow by a little for each ACK that arrives.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-582d0a1c-004
+  source_id: c_slow_start_threshold_ss_thresh
+  target_id: c_constant_threshold_during_window_growth
+  relation: has_property
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - Normal slow-start or additive-increase window growth
+  - No new loss response updates the stored target
+  - Constancy is inferred from the described target-window bookkeeping
+  statement: ss_thresh retains its stored target value during ordinary slow-start
+    and additive-increase growth rather than increasing with each ACK.
+  part_type: null
+  dimension: null
+  surface_phrase: store the target window
+  relation_family: classification_structure
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_582d0a1c
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '6.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '6.3'
+    answer_id: null
+    quote: Notice that we have a small bookkeeping problem to take care of, in that
+      we want to remember the target congestion window resulting from multiplicative
+      decrease as well as the actual congestion window being used by slow start. To
+      address this problem, TCP introduces a temporary variable to store the target
+      window, typically called CongestionThreshold, that is set equal to the CongestionWindow
+      value that results from multiplicative decrease.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-582d0a1c-005
+  source_id: c_cwnd_reaches_ss_thresh
+  target_id: c_congestion_avoidance_additive_increase
+  relation: triggers
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The sender is growing cwnd using slow start
+  statement: Reaching ss_thresh changes cwnd growth from one packet per ACK to additive
+    increase of one packet per RTT.
+  part_type: null
+  dimension: null
+  surface_phrase: at which point
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_582d0a1c
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: timeout_restart
+  chain_position: 4
+  depends_on_edges: []
+  introduced_in: '6.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '6.3'
+    answer_id: null
+    quote: The variable CongestionWindow is then reset to one packet, and it is incremented
+      by one packet for every ACK that is received until it reaches CongestionThreshold,
+      at which point it is incremented by one packet per RTT.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-582d0a1c-006
+  source_id: c_timeout
+  target_id: c_threshold_update_to_half_the_pre_loss_cwnd
+  relation: triggers
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The standard TCP timeout-and-restart procedure described in Section 6.3.2
+  statement: On a timeout, TCP sets ss_thresh to half the congestion window preceding
+    the loss, before resetting the actual cwnd.
+  part_type: null
+  dimension: null
+  surface_phrase: CongestionThreshold is set to this amount
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_582d0a1c
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: timeout_restart
+  chain_position: 1
+  depends_on_edges: []
+  introduced_in: '6.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '6.3'
+    answer_id: null
+    quote: A timeout happens, causing the congestion window to be divided by 2, dropping
+      it from approximately 22 KB to 11 KB, and CongestionThreshold is set to this
+      amount.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-582d0a1c-007
+  source_id: c_threshold_update_to_half_the_pre_loss_cwnd
+  target_id: c_cwnd_reset_to_one_packet
+  relation: precedes
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The standard TCP timeout-and-restart procedure described in Section 6.3.2
+  statement: TCP stores the halved congestion-window target in ss_thresh before resetting
+    cwnd to one packet.
+  part_type: null
+  dimension: null
+  surface_phrase: is then reset
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_582d0a1c
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '6.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '6.3'
+    answer_id: null
+    quote: To address this problem, TCP introduces a temporary variable to store the
+      target window, typically called CongestionThreshold, that is set equal to the
+      CongestionWindow value that results from multiplicative decrease. The variable
+      CongestionWindow is then reset to one packet, and it is incremented by one packet
+      for every ACK that is received until it reaches CongestionThreshold, at which
+      point it is incremented by one packet per RTT.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-582d0a1c-008
+  source_id: c_timeout
+  target_id: c_cwnd_reset_to_one_packet
+  relation: triggers
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The standard TCP timeout-and-restart procedure described in Section 6.3.2
+  - ss_thresh has first been set to the halved pre-loss cwnd
+  statement: Following a timeout and threshold adjustment, cwnd is reset to one packet;
+    this is a loss response, not ordinary congestion-avoidance growth.
+  part_type: null
+  dimension: null
+  surface_phrase: then causes CongestionWindow to be reset to one packet
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_582d0a1c
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: timeout_restart
+  chain_position: 2
+  depends_on_edges: []
+  introduced_in: '6.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '6.3'
+    answer_id: null
+    quote: A timeout eventually happens at approximately 2 seconds, at which time
+      the congestion window is divided by 2 (i.e., cut from approximately 34 KB to
+      around 17 KB) and CongestionThreshold is set to this value. Slow start then
+      causes CongestionWindow to be reset to one packet and to start ramping up from
+      there.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-582d0a1c-009
+  source_id: c_timeout
+  target_id: c_slow_start
+  relation: triggers
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - A coarse-grained timeout occurs in the standard TCP behavior described
+  statement: A coarse-grained timeout makes the sender re-enter slow start rather
+    than continue ordinary additive increase.
+  part_type: null
+  dimension: null
+  surface_phrase: whenever a coarse-grained timeout occurs
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: supporting
+  question_links:
+  - question_id: q_582d0a1c
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '6.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '6.3'
+    answer_id: null
+    quote: In other words, slow start is only used at the beginning of a connection
+      and whenever a coarse-grained timeout occurs.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-582d0a1c-010
+  source_id: c_slow_start
+  target_id: c_congestion_avoidance_additive_increase
+  relation: contrasts_with
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - Successful ACK-driven window growth in the described standard TCP model
+  statement: Slow start produces exponential cwnd growth, approximately doubling each
+    RTT, whereas additive increase produces linear growth.
+  part_type: null
+  dimension: cwnd growth rate
+  surface_phrase: exponentially, rather than linearly
+  relation_family: comparison
+  registry_version: 1
+  criticality: supporting
+  question_links:
+  - question_id: q_582d0a1c
+    role: required
+    weight: 0.0909
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '6.3'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '6.3'
+    answer_id: null
+    quote: Slow start effectively increases the congestion window exponentially, rather
+      than linearly.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+chain_links:
+- link_id: CL-582d0a1c-000
+  from_edge_id: E-582d0a1c-008
+  to_edge_id: E-582d0a1c-006
+  type: sequence
+  statement: The timeout-induced reset of cwnd follows the update of ss_thresh to
+    the halved pre-loss window.
+  surface_phrase: then
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '6.3'
+    answer_id: null
+    quote: A timeout eventually happens at approximately 2 seconds, at which time
+      the congestion window is divided by 2 (i.e., cut from approximately 34 KB to
+      around 17 KB) and CongestionThreshold is set to this value. Slow start then
+      causes CongestionWindow to be reset to one packet and to start ramping up from
+      there.
+  origin: textbook
+  question_ids:
+  - q_582d0a1c
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+- link_id: CL-582d0a1c-001
+  from_edge_id: E-582d0a1c-002
+  to_edge_id: E-582d0a1c-008
+  type: sequence
+  statement: After cwnd is reset to one packet, slow start increases it by one packet
+    for each received ACK until the threshold is reached.
+  surface_phrase: and
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '6.3'
+    answer_id: null
+    quote: The variable CongestionWindow is then reset to one packet, and it is incremented
+      by one packet for every ACK that is received until it reaches CongestionThreshold,
+      at which point it is incremented by one packet per RTT.
+  origin: textbook
+  question_ids:
+  - q_582d0a1c
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+- link_id: CL-582d0a1c-002
+  from_edge_id: E-582d0a1c-003
+  to_edge_id: E-582d0a1c-005
+  type: condition
+  statement: Once cwnd reaches ss_thresh, its growth changes to one packet per RTT.
+  surface_phrase: at which point
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '6.3'
+    answer_id: null
+    quote: The variable CongestionWindow is then reset to one packet, and it is incremented
+      by one packet for every ACK that is received until it reaches CongestionThreshold,
+      at which point it is incremented by one packet per RTT.
+  origin: textbook
+  question_ids:
+  - q_582d0a1c
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+rejected: []

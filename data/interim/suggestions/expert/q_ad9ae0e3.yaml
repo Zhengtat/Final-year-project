@@ -1,0 +1,259 @@
+registry_version: 1
+concepts:
+- concept_id: c_piggybacking
+  canonical_name: Piggybacking
+  aliases: []
+  node_type: Mechanism
+  definition: Carrying an ACK on a data frame being sent in the opposite direction.
+  first_introduced: '2.5'
+  mentions:
+  - section_id: '2.5'
+    role: defined
+    quote: By control frame we mean a header without any data, although a protocol
+      can piggyback an ACK on a data frame it just happens to be sending in the opposite
+      direction.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_bidirectional_data_flow
+  canonical_name: Bidirectional data flow
+  aliases: []
+  node_type: Property
+  definition: Data communication in both directions, allowing a data frame traveling
+    in the opposite direction to carry an ACK.
+  first_introduced: '2.5'
+  mentions:
+  - section_id: '2.5'
+    role: defined
+    quote: By control frame we mean a header without any data, although a protocol
+      can piggyback an ACK on a data frame it just happens to be sending in the opposite
+      direction.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_acknowledgment_ack
+  canonical_name: Acknowledgment (ACK)
+  aliases: []
+  node_type: DataUnit
+  definition: A small control frame that a protocol sends back to its peer saying
+    that it has received an earlier frame; it can also be piggybacked on a data frame.
+  first_introduced: '2.5'
+  mentions:
+  - section_id: '2.5'
+    role: defined
+    quote: An acknowledgment (ACK for short) is a small control frame that a protocol
+      sends back to its peer saying that it has received an earlier frame.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_data_frame
+  canonical_name: Data frame
+  aliases: []
+  node_type: DataUnit
+  definition: A frame carrying data that can also carry an ACK for a frame sent in
+    the opposite direction.
+  first_introduced: '2.5'
+  mentions:
+  - section_id: '2.5'
+    role: defined
+    quote: By control frame we mean a header without any data, although a protocol
+      can piggyback an ACK on a data frame it just happens to be sending in the opposite
+      direction.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+edges:
+- edge_id: E-ad9ae0e3-000
+  source_id: c_piggybacking
+  target_id: c_bidirectional_data_flow
+  relation: requires
+  layer: semantic
+  polarity: affirmed
+  modality: necessary
+  conditions: []
+  statement: Piggybacking requires two-way data communication so that an ACK can be
+    carried on a data frame traveling in the opposite direction.
+  part_type: null
+  dimension: null
+  surface_phrase: on a data frame it just happens to be sending in the opposite direction
+  relation_family: dependency
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_ad9ae0e3
+    role: required
+    weight: 0.3333
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '2.5'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '2.5'
+    answer_id: null
+    quote: By control frame we mean a header without any data, although a protocol
+      can piggyback an ACK on a data frame it just happens to be sending in the opposite
+      direction.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-ad9ae0e3-001
+  source_id: c_piggybacking
+  target_id: c_data_frame
+  relation: uses
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions: []
+  statement: Piggybacking uses an outgoing data frame to carry an acknowledgment.
+  part_type: null
+  dimension: null
+  surface_phrase: can piggyback an ACK on a data frame
+  relation_family: function_means
+  registry_version: 1
+  criticality: supporting
+  question_links:
+  - question_id: q_ad9ae0e3
+    role: required
+    weight: 0.3333
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '2.5'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '2.5'
+    answer_id: null
+    quote: a protocol can piggyback an ACK on a data frame it just happens to be sending
+      in the opposite direction.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-ad9ae0e3-002
+  source_id: c_acknowledgment_ack
+  target_id: c_data_frame
+  relation: part_of
+  layer: taxonomy
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The acknowledgment is piggybacked.
+  statement: When piggybacked, the ACK is carried as a component of a data frame rather
+    than as a separate control frame.
+  part_type: component
+  dimension: null
+  surface_phrase: piggyback an ACK on a data frame
+  relation_family: classification_structure
+  registry_version: 1
+  criticality: supporting
+  question_links:
+  - question_id: q_ad9ae0e3
+    role: required
+    weight: 0.3333
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '2.5'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '2.5'
+    answer_id: null
+    quote: By control frame we mean a header without any data, although a protocol
+      can piggyback an ACK on a data frame it just happens to be sending in the opposite
+      direction.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+chain_links: []
+rejected: []

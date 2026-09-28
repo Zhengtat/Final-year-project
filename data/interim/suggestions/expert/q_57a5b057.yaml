@@ -1,0 +1,1404 @@
+registry_version: 1
+concepts:
+- concept_id: c_transparent_bridge
+  canonical_name: Transparent bridge
+  aliases: []
+  node_type: Component
+  definition: A node that connects Ethernets and forwards frames from one Ethernet
+    to another.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: An alternative would be to put a node with a pair of Ethernet adaptors
+      between the two Ethernets and have the node forward frames from one Ethernet
+      to the other.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_bridge_forwarding_table
+  canonical_name: Bridge forwarding table
+  aliases: []
+  node_type: Component
+  definition: A table the bridge consults to decide which output to send a packet
+    on.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: Each packet carries a global address, and the bridge decides which output
+      to send a packet on by looking up that address in a table.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_mac_to_interface_mapping
+  canonical_name: MAC-to-interface mapping
+  aliases: []
+  node_type: Property
+  definition: An association between a station's MAC address and the interface on
+    which it can be reached.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: The arguments passed are the source media access control (MAC) address
+      contained in the packet and the interface number on which it was received.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_forwarding_table_entry
+  canonical_name: Forwarding-table entry
+  aliases: []
+  node_type: DataUnit
+  definition: A single entry in the bridge's forwarding table.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: Structure BridgeEntry defines a single entry in the bridge’s forwarding
+      table; these are stored in a Map structure (which supports mapCreate, mapBind,
+      and mapResolve operations) to enable entries to be efficiently located when
+      packets arrive from sources already in the table.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_entry_ttl
+  canonical_name: Entry TTL
+  aliases: []
+  node_type: Parameter
+  definition: The time-to-live field that determines how long a forwarding-table entry
+    remains before being discarded.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: Another routine, not shown here, is invoked at regular intervals, scans
+      the entries in the forwarding table, and decrements the TTL (time to live) field
+      of each entry, discarding any entries whose TTL has reached 0.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_empty_forwarding_table
+  canonical_name: Empty forwarding table
+  aliases: []
+  node_type: State
+  definition: The initial table state when a bridge first boots.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: When a bridge first boots, this table is empty; entries are added over
+      time.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_promiscuous_mode
+  canonical_name: Promiscuous mode
+  aliases: []
+  node_type: Property
+  definition: Accepting all frames transmitted on either of the connected Ethernets.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: This device operates in promiscuous mode, accepting all frames transmitted
+      on either of the Ethernets, and forwarding them to the other.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_backward_learning
+  canonical_name: Backward learning
+  aliases: []
+  node_type: Mechanism
+  definition: Inspecting received frames' source addresses and recording the ports
+    on which their senders were observed.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: The idea is for each bridge to inspect the source address in all the frames
+      it receives.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_source_mac_address
+  canonical_name: Source MAC address
+  aliases: []
+  node_type: Parameter
+  definition: The source media access control address contained in a received packet.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: The arguments passed are the source media access control (MAC) address
+      contained in the packet and the interface number on which it was received.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_incoming_interface
+  canonical_name: Incoming interface
+  aliases: []
+  node_type: Component
+  definition: The bridge interface on which a packet was received.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: The arguments passed are the source media access control (MAC) address
+      contained in the packet and the interface number on which it was received.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_frame_reception
+  canonical_name: Frame reception
+  aliases: []
+  node_type: Event
+  definition: The arrival of a frame at a bridge interface.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: The routine that updates the forwarding table when a new packet arrives
+      is given by updateTable.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_entry_refresh
+  canonical_name: Entry refresh
+  aliases: []
+  node_type: Mechanism
+  definition: Resetting an existing entry's TTL to MAX_TTL and updating its interface
+    to reflect the most recently received packet.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: Note that the TTL is reset to MAX_TTL every time a packet arrives to refresh
+      an existing table entry and that the interface on which the destination can
+      be reached is updated to reflect the most recently received packet.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_entry_expiration
+  canonical_name: Entry expiration
+  aliases: []
+  node_type: Event
+  definition: A forwarding-table entry's TTL reaching zero.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: Another routine, not shown here, is invoked at regular intervals, scans
+      the entries in the forwarding table, and decrements the TTL (time to live) field
+      of each entry, discarding any entries whose TTL has reached 0.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_entry_removal
+  canonical_name: Entry removal
+  aliases: []
+  node_type: Mechanism
+  definition: Discarding an expired forwarding-table entry.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: Also, a timeout is associated with each entry, and the bridge discards
+      the entry after a specified period of time.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_destination_address_lookup
+  canonical_name: Destination-address lookup
+  aliases: []
+  node_type: Mechanism
+  definition: Looking up a packet's destination address in the table to decide its
+    output.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: Each packet carries a global address, and the bridge decides which output
+      to send a packet on by looking up that address in a table.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_selective_forwarding
+  canonical_name: Selective forwarding
+  aliases: []
+  node_type: Mechanism
+  definition: Using the learned table to choose the output for a frame rather than
+    sending it on all other outputs.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: Each packet carries a global address, and the bridge decides which output
+      to send a packet on by looking up that address in a table.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_same_lan_frame_filtering
+  canonical_name: Same-LAN frame filtering
+  aliases: []
+  node_type: Mechanism
+  definition: Not forwarding a frame to another LAN when its destination has already
+    received it on the incoming LAN.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: Then, whenever the bridge receives a frame on port 1 that is addressed
+      to host A, it would not forward the frame out on port 2; there would be no need
+      because host A would have already directly received the frame on the LAN connected
+      to port 1.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_flooding
+  canonical_name: Flooding
+  aliases: []
+  node_type: Mechanism
+  definition: Forwarding a frame out on all ports other than its incoming port when
+    its destination is absent from the table.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: Should the bridge receive a frame that is addressed to a host not currently
+      in the table, it goes ahead and forwards the frame out on all the other ports.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+- concept_id: c_unnecessary_frame_forwarding
+  canonical_name: Unnecessary frame forwarding
+  aliases: []
+  node_type: Property
+  definition: Forwarding frames over outputs where forwarding is not needed.
+  first_introduced: '3.2'
+  mentions:
+  - section_id: '3.2'
+    role: defined
+    quote: The first optimization we can make to a bridge is to observe that it need
+      not forward all frames that it receives.
+  status: candidate
+  merged_into: null
+  confidence: 0.7
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  version: 1
+edges:
+- edge_id: E-57a5b057-000
+  source_id: c_transparent_bridge
+  target_id: c_bridge_forwarding_table
+  relation: uses
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - Learning-bridge operation
+  statement: A learning bridge uses a forwarding table to decide which output to send
+    a packet on.
+  part_type: null
+  dimension: null
+  surface_phrase: by looking up that address in a table
+  relation_family: function_means
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: Each packet carries a global address, and the bridge decides which output
+      to send a packet on by looking up that address in a table.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-001
+  source_id: c_bridge_forwarding_table
+  target_id: c_mac_to_interface_mapping
+  relation: has_property
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - For recorded stations
+  statement: The forwarding table maps station MAC addresses to the interfaces on
+    which those stations can be reached.
+  part_type: null
+  dimension: null
+  surface_phrase: the source media access control (MAC) address contained in the packet
+    and the interface number on which it was received
+  relation_family: classification_structure
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: learning
+  chain_position: 2
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: The routine that updates the forwarding table when a new packet arrives
+      is given by updateTable. The arguments passed are the source media access control
+      (MAC) address contained in the packet and the interface number on which it was
+      received.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-002
+  source_id: c_forwarding_table_entry
+  target_id: c_bridge_forwarding_table
+  relation: part_of
+  layer: taxonomy
+  polarity: affirmed
+  modality: always
+  conditions: []
+  statement: A forwarding-table entry is a member of the bridge's forwarding table.
+  part_type: member
+  dimension: null
+  surface_phrase: a single entry in
+  relation_family: classification_structure
+  registry_version: 1
+  criticality: supporting
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: Structure BridgeEntry defines a single entry in the bridge’s forwarding
+      table; these are stored in a Map structure (which supports mapCreate, mapBind,
+      and mapResolve operations) to enable entries to be efficiently located when
+      packets arrive from sources already in the table.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-003
+  source_id: c_entry_ttl
+  target_id: c_forwarding_table_entry
+  relation: part_of
+  layer: taxonomy
+  polarity: affirmed
+  modality: always
+  conditions: []
+  statement: Each forwarding-table entry contains a TTL field used to age the entry.
+  part_type: component
+  dimension: null
+  surface_phrase: field of each entry
+  relation_family: classification_structure
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: Another routine, not shown here, is invoked at regular intervals, scans
+      the entries in the forwarding table, and decrements the TTL (time to live) field
+      of each entry, discarding any entries whose TTL has reached 0.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-004
+  source_id: c_bridge_forwarding_table
+  target_id: c_empty_forwarding_table
+  relation: has_property
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The bridge first boots
+  statement: The bridge's forwarding table is initially empty.
+  part_type: null
+  dimension: null
+  surface_phrase: this table is empty
+  relation_family: classification_structure
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: When a bridge first boots, this table is empty; entries are added over
+      time.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-005
+  source_id: c_transparent_bridge
+  target_id: c_promiscuous_mode
+  relation: has_property
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The described bridge connecting Ethernet segments
+  statement: The bridge operates in promiscuous mode and accepts all frames arriving
+    on its connected Ethernets.
+  part_type: null
+  dimension: null
+  surface_phrase: operates in promiscuous mode
+  relation_family: classification_structure
+  registry_version: 1
+  criticality: supporting
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: This device operates in promiscuous mode, accepting all frames transmitted
+      on either of the Ethernets, and forwarding them to the other.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-006
+  source_id: c_transparent_bridge
+  target_id: c_backward_learning
+  relation: performs
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - Learning-bridge operation
+  statement: The bridge learns station locations by inspecting received frames' source
+    addresses and recording their incoming ports.
+  part_type: null
+  dimension: null
+  surface_phrase: inspect the source address in all the frames it receives
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: learning
+  chain_position: 1
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: The idea is for each bridge to inspect the source address in all the frames
+      it receives. Thus, when host A sends a frame to a host on either side of the
+      bridge, the bridge receives this frame and records the fact that a frame from
+      host A was just received on port 1. In this way, the bridge can build a table
+      just like Table.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-007
+  source_id: c_backward_learning
+  target_id: c_source_mac_address
+  relation: uses
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - A frame is received
+  statement: Backward learning uses the received frame's source MAC address as the
+    station address to learn.
+  part_type: null
+  dimension: null
+  surface_phrase: The arguments passed are the source media access control (MAC) address
+  relation_family: function_means
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: The routine that updates the forwarding table when a new packet arrives
+      is given by updateTable. The arguments passed are the source media access control
+      (MAC) address contained in the packet and the interface number on which it was
+      received.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-008
+  source_id: c_backward_learning
+  target_id: c_incoming_interface
+  relation: uses
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - A frame is received
+  statement: Backward learning records the incoming interface as the interface through
+    which the source station can be reached.
+  part_type: null
+  dimension: null
+  surface_phrase: the interface number on which it was received
+  relation_family: function_means
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: The arguments passed are the source media access control (MAC) address
+      contained in the packet and the interface number on which it was received.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-009
+  source_id: c_frame_reception
+  target_id: c_entry_refresh
+  relation: triggers
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The source MAC address already has a forwarding-table entry
+  statement: Receiving another frame from a recorded source resets its entry's TTL
+    to MAX_TTL and updates its interface to the most recently observed incoming interface.
+  part_type: null
+  dimension: null
+  surface_phrase: every time a packet arrives to refresh an existing table entry
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: Note that the TTL is reset to MAX_TTL every time a packet arrives to refresh
+      an existing table entry and that the interface on which the destination can
+      be reached is updated to reflect the most recently received packet.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-010
+  source_id: c_entry_expiration
+  target_id: c_entry_removal
+  relation: triggers
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The periodic table scan finds the entry's TTL has reached zero
+  statement: An entry whose TTL reaches zero is discarded from the forwarding table.
+  part_type: null
+  dimension: null
+  surface_phrase: discarding any entries whose TTL has reached 0
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: Another routine, not shown here, is invoked at regular intervals, scans
+      the entries in the forwarding table, and decrements the TTL (time to live) field
+      of each entry, discarding any entries whose TTL has reached 0.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-011
+  source_id: c_transparent_bridge
+  target_id: c_destination_address_lookup
+  relation: performs
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - Forwarding a unicast frame using the learning table
+  statement: The bridge looks up the frame's destination address to determine the
+    appropriate output.
+  part_type: null
+  dimension: null
+  surface_phrase: looking up that address in a table
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: forwarding
+  chain_position: 1
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: Each packet carries a global address, and the bridge decides which output
+      to send a packet on by looking up that address in a table.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-012
+  source_id: c_destination_address_lookup
+  target_id: c_bridge_forwarding_table
+  relation: uses
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions: []
+  statement: Destination-address lookup consults the bridge forwarding table.
+  part_type: null
+  dimension: null
+  surface_phrase: looking up that address in a table
+  relation_family: function_means
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: Each packet carries a global address, and the bridge decides which output
+      to send a packet on by looking up that address in a table.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-013
+  source_id: c_transparent_bridge
+  target_id: c_selective_forwarding
+  relation: performs
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The unicast destination is in the forwarding table
+  - Its recorded interface differs from the incoming interface
+  statement: For a known destination on another interface, the bridge forwards the
+    frame on the interface recorded for that destination.
+  part_type: null
+  dimension: null
+  surface_phrase: would forward the frame out on
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: forwarding
+  chain_position: 2
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: Anytime a frame addressed to host A was received on port 2, the bridge
+      would forward the frame out on port 1.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-014
+  source_id: c_transparent_bridge
+  target_id: c_same_lan_frame_filtering
+  relation: performs
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The destination's recorded interface is the incoming interface
+  statement: When the destination is on the incoming LAN, the bridge does not forward
+    the frame onto other LANs.
+  part_type: null
+  dimension: null
+  surface_phrase: would not forward the frame out on
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: supporting
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: Then, whenever the bridge receives a frame on port 1 that is addressed
+      to host A, it would not forward the frame out on port 2; there would be no need
+      because host A would have already directly received the frame on the LAN connected
+      to port 1.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-015
+  source_id: c_transparent_bridge
+  target_id: c_flooding
+  relation: performs
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - The unicast destination is not currently in the forwarding table
+  statement: For an unknown destination, including initially when the table is empty,
+    the bridge forwards the frame on all other ports, excluding the incoming port.
+  part_type: null
+  dimension: null
+  surface_phrase: forwards the frame out on all the other ports
+  relation_family: mechanism_process
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: When a bridge first boots, this table is empty; entries are added over
+      time. Also, a timeout is associated with each entry, and the bridge discards
+      the entry after a specified period of time. This is to protect against the situation
+      in which a host—and, as a consequence, its LAN address—is moved from one network
+      to another. Thus, this table is not necessarily complete. Should the bridge
+      receive a frame that is addressed to a host not currently in the table, it goes
+      ahead and forwards the frame out on all the other ports.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+- edge_id: E-57a5b057-016
+  source_id: c_selective_forwarding
+  target_id: c_unnecessary_frame_forwarding
+  relation: decreases
+  layer: semantic
+  polarity: affirmed
+  modality: always
+  conditions:
+  - Compared with flooding frames whose destination locations are known
+  statement: Table-based selective forwarding reduces unnecessary frame forwarding
+    compared with flooding.
+  part_type: null
+  dimension: null
+  surface_phrase: an optimization that filters out some frames
+  relation_family: cause_effect
+  registry_version: 1
+  criticality: core
+  question_links:
+  - question_id: q_57a5b057
+    role: required
+    weight: 0.0588
+    source: reference_answer
+  learning_objective_ids: []
+  cognitive_level: null
+  chain_id: null
+  chain_position: null
+  depends_on_edges: []
+  introduced_in: '3.2'
+  confusable_with: []
+  contradicted_by_misconceptions: []
+  diagnostic_power: null
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: In other words, this table is simply an optimization that filters out some
+      frames; it is not required for correctness.
+  extracted_by:
+    model: gpt-6-astra
+    prompt_version: v2
+    run_id: 83242a355a764f17a481243b8a575188
+  confidence: 0.7
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+  status: candidate
+  version: 1
+  superseded_by: null
+  origin: textbook
+chain_links:
+- link_id: CL-57a5b057-000
+  from_edge_id: E-57a5b057-001
+  to_edge_id: E-57a5b057-006
+  type: cause
+  statement: The bridge builds its station-to-interface mapping by inspecting source
+    addresses and recording the ports on which frames arrive.
+  surface_phrase: In this way
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: The idea is for each bridge to inspect the source address in all the frames
+      it receives. Thus, when host A sends a frame to a host on either side of the
+      bridge, the bridge receives this frame and records the fact that a frame from
+      host A was just received on port 1. In this way, the bridge can build a table
+      just like Table.
+  origin: textbook
+  question_ids:
+  - q_57a5b057
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+- link_id: CL-57a5b057-001
+  from_edge_id: E-57a5b057-013
+  to_edge_id: E-57a5b057-011
+  type: cause
+  statement: The bridge selects the output for a known destination by looking up that
+    destination's address in the table.
+  surface_phrase: by
+  evidence:
+  - source: Peterson & Davie 6e
+    section_id: '3.2'
+    answer_id: null
+    quote: Each packet carries a global address, and the bridge decides which output
+      to send a packet on by looking up that address in a table.
+  origin: textbook
+  question_ids:
+  - q_57a5b057
+  validation:
+    status: unreviewed
+    reviewer: null
+    date: null
+    note: null
+rejected: []
