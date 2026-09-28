@@ -34,6 +34,12 @@ class TextbookConfig(BaseModel):
 class TierConfig(BaseModel):
     model: str
     reasoning_effort: str
+    # CR-005 §2 step 3: per-tier pricing, replacing the flat placeholder rate for any
+    # cost estimate that knows which tier a call will run on. None on a tier that has
+    # no confirmed price yet (e.g. ceiling, opt-in only) — estimators must raise, not
+    # silently treat a missing price as free.
+    usd_per_1m_input_tokens: float | None = None
+    usd_per_1m_output_tokens: float | None = None
 
 
 class EscalationConfig(BaseModel):

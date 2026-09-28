@@ -265,9 +265,16 @@ class LLMClient:
             text_format=schema,
             reasoning={"effort": effort},
         )
+        # response.usage.output_tokens already includes reasoning tokens (OpenAI bills
+        # them as output); output_tokens_details.reasoning_tokens is the breakdown, kept
+        # separately so cost reports can show what share of output was invisible
+        # reasoning vs the structured response itself (CR-005 §2 step 3).
+        reasoning_tokens = getattr(response.usage, "output_tokens_details", None)
+        reasoning_tokens = getattr(reasoning_tokens, "reasoning_tokens", 0) or 0
         usage = {
             "input_tokens": response.usage.input_tokens,
             "output_tokens": response.usage.output_tokens,
+            "reasoning_tokens": reasoning_tokens,
         }
         return response.output_parsed, usage
 

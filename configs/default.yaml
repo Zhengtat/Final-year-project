@@ -31,10 +31,15 @@ llm:
   # a "ceiling" tier: opt-in only (e.g. a model bake-off), never a default model_tier
   # anywhere in the code. Models are read from OPENAI_MODEL_STRONG / _BULK / _CEILING
   # if those env vars are set.
+  # Per-tier pricing (CR-005 §2 step 3), USD per 1M tokens. Confirmed against OpenAI's
+  # current published pricing 2026-09-29 (see DECISIONS.md): Sol $2 in / $10 out, Luna
+  # $0.10 in / $0.50 out — exact match, no discrepancy. Cached input reads get a 90%
+  # discount ($0.20 Sol / $0.01 Luna) that this estimator doesn't yet account for.
+  # ceiling (gpt-6-astra) has no confirmed price — opt-in only, unused by the demo slice.
   tiers:
-    strong:  {model: gpt-6-sol,   reasoning_effort: medium}
-    bulk:    {model: gpt-6-luna,  reasoning_effort: low}
-    ceiling: {model: gpt-6-astra, reasoning_effort: low}  # gpt-6-astra can't do effort "none"; "low" is its floor.
+    strong:  {model: gpt-6-sol,   reasoning_effort: medium, usd_per_1m_input_tokens: 2.0,  usd_per_1m_output_tokens: 10.0}
+    bulk:    {model: gpt-6-luna,  reasoning_effort: low,    usd_per_1m_input_tokens: 0.10, usd_per_1m_output_tokens: 0.50}
+    ceiling: {model: gpt-6-astra, reasoning_effort: low}  # gpt-6-astra can't do effort "none"; "low" is its floor. No price yet.
   # Per-task effort overrides the task's tier default above (e.g. expert_subgraph
   # warrants more care than the average strong-tier call). Unlisted tasks use their
   # tier's default effort.
