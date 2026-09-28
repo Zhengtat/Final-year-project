@@ -211,6 +211,24 @@ Critical path: **M3 and M4**, because both depend on your annotation time. Start
 
 ---
 
+## M5.0 — Demo slice for the supervisor meeting (CR-005)
+
+**Goal:** show real, honest progress on the expert KG — no student answers — via a thin vertical slice of M5 plus CR-003's B1 (FACE) benchmark, packaged as one self-contained offline HTML report. This is an **early slice of M5, not throwaway demo code**: the same code paths M5 will use later.
+
+**Depends on:** CR-001 steps 1–3 (registry v1, schemas, validator, `choice_set`); the CR-003 §3 loader for `iir_face` only (built now, not the rest of CR-003).
+
+**Scope** (`configs/demo_slice.yaml`): FACE/IIR B1 dev chapters (3 chapters); P&D chapters 1–3 (Foundation, Direct Links, Internetworking — covers the pilot topics: encoding, sliding window/piggybacking, CSMA/CD, bridges/spanning tree), processed in book order with a snapshot saved after each chapter.
+
+**Pipeline pieces built now (the M5 subset)** — candidate terms/stats; concept extraction (defined/used/mentioned roles, evidence-verified); canonicalisation against the growing registry; relation extraction via CR-001's 4-stage method (Stage A candidates, Stage B family-first choice, qualifier pass); prerequisite candidates; structural checks; chapter snapshots (`data/processed/kg/<run_id>/snapshots/ch<N>/`).
+
+**Three stories / report tabs:** (1) concept extraction validated against FACE (borrowed human labels, exact + lenient P/R/F1 vs FACE's published numbers, with the supervised-vs-zero-shot caveat stated alongside every number); (2) relation extraction (worked-example panel showing the actual multiple-choice prompt; a 30-edge owner spot-check with a Wilson CI, or "unvalidated LLM output" if skipped); (3) growth through chapters 1→3 (cumulative/new/reused concepts, cross-chapter edges, merges, prerequisite candidates, forward references — an interactive graph with a chapter slider).
+
+**Stop points:** ⛔1 plan + dry-run cost (this entry). ⛔2 IIR concept metrics + FP/FN examples, one prompt revision allowed (dev only). ⛔3 the 30-edge spot-check sheet. ⛔4 the built report, screenshotted tab by tab.
+
+**Acceptance checks:** snapshot round-trip + growth metrics correct on a 2-chapter fixture; FACE scorer's exact/lenient matching correct on fixtures; the built HTML has zero external `http(s)://` references (offline guarantee); every chart requires a label-source tag (`Borrowed human labels (FACE)` / `Owner spot-check (n=30)` / `Unvalidated LLM output`) or raises; nothing writes to `data/gold/`.
+
+---
+
 ## M5 — Expert KG pipeline v1 (2.5 wk)
 
 **Goal:** textbook → validated expert KG, chapter by chapter, with cross-chapter linking.
