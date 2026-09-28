@@ -163,30 +163,32 @@ Critical path: **M3 and M4**, because both depend on your annotation time. Start
 
 **Goal:** a small, trustworthy gold set that every later component is scored against. The agent must **never** write into `data/gold/`; it only writes suggestions to `data/interim/suggestions/`.
 
+**🚫 Student-annotation half DEFERRED (2026-09-28, scope decision: expert KG only; see DECISIONS.md)** — tasks 2, 3 below, the `student_pilot` human task, and the relation-agreement test (superseded by CR-003 §6, also deferred). Expert-side annotation (task 1, and `expert_pilot`) stays in scope.
+
 **Tasks (agent)**
 1. `cumap gold suggest-expert --qid <id>`: from the covered sections, LLM-drafts an expert subgraph for the question (concepts + edges with evidence quotes, polarity, modality, conditions, criticality, chain IDs). Output is YAML in `data/interim/suggestions/expert/<qid>.yaml`, with every item marked `source: model_suggestion`.
-2. `cumap gold sample-answers`: picks 10 answers per pilot question from **train only**, stratified by label (≈3 Correct / 4 Partially correct / 3 Incorrect), with a fixed seed. Writes `data/interim/pilot_answers.csv`.
-3. `cumap gold suggest-student --answer-id <id>`: drafts a student graph (edges with `evidence_span` offsets) linked to the question's expert concepts. Output goes to `data/interim/suggestions/student/<answer_id>.yaml`.
-4. Streamlit `app/gold_editor.py` (or clearly templated YAML plus the validator, whichever is faster): shows the source text or answer side by side with the draft; supports accept / edit / delete / add; the human saves to `data/gold/...`. (CR-001: also has `part_type`/`dimension`/`surface_phrase` fields, a family-grouped relation dropdown, and a chain-links panel.)
-5. `cumap gold mismatch-report`: from the gold student graphs and the gold expert edges, tabulates `match_type` frequencies → `reports/m3_mismatch_types.md`. (CR-001: also tabulates `family_match`/`part_type_error` and chain-link types; reports agreement at both family and relation level.)
-6. **(CR-001) Relation-set agreement test:** `cumap gold sample-relation-items --n 100 --seed <seed>` picks textbook text mentioning ≥2 pilot-gold concepts, stratified across the 6 semantic families, and writes blank `annotator_A.csv`/`annotator_B.csv` sheets (never pre-filled). `cumap eval relation-agreement` scores the two completed sheets: Cohen's κ at relation and family level, direction agreement, per-relation κ, and >20%-confusion pairs, with a merge/split recommendation for the human to decide.
-7. **(CR-001) Chain-link annotation:** the gold editor's chain-links panel lets the human link two edges with a type (cause/purpose/condition/sequence/contrast) and a connective, for both expert and student graphs.
+2. 🚫 *(deferred)* `cumap gold sample-answers`: picks 10 answers per pilot question from **train only**, stratified by label (≈3 Correct / 4 Partially correct / 3 Incorrect), with a fixed seed. Writes `data/interim/pilot_answers.csv`.
+3. 🚫 *(deferred)* `cumap gold suggest-student --answer-id <id>`: drafts a student graph (edges with `evidence_span` offsets) linked to the question's expert concepts. Output goes to `data/interim/suggestions/student/<answer_id>.yaml`.
+4. Streamlit `app/gold_editor.py` (or clearly templated YAML plus the validator, whichever is faster): shows the source text or answer side by side with the draft; supports accept / edit / delete / add; the human saves to `data/gold/...`. (CR-001: also has `part_type`/`dimension`/`surface_phrase` fields, a family-grouped relation dropdown, and a chain-links panel. Expert-graph mode stays in scope; student-graph mode is built but unused while student annotation is deferred.)
+5. `cumap gold mismatch-report`: from the gold student graphs and the gold expert edges, tabulates `match_type` frequencies → `reports/m3_mismatch_types.md`. (CR-001: also tabulates `family_match`/`part_type_error` and chain-link types; reports agreement at both family and relation level. 🚫 *deferred* — needs student graphs.)
+6. 🚫 *(deferred — superseded by CR-003 §6, not just student-scope)* **(CR-001) Relation-set agreement test:** `cumap gold sample-relation-items --n 100 --seed <seed>` picks textbook text mentioning ≥2 pilot-gold concepts, stratified across the 6 semantic families, and writes blank `annotator_A.csv`/`annotator_B.csv` sheets (never pre-filled). `cumap eval relation-agreement` scores the two completed sheets: Cohen's κ at relation and family level, direction agreement, per-relation κ, and >20%-confusion pairs, with a merge/split recommendation for the human to decide. Real run produced 30/100 items (short of the ≥48 target) before being deferred — see `DECISIONS.md`.
+7. **(CR-001) Chain-link annotation:** the gold editor's chain-links panel lets the human link two edges with a type (cause/purpose/condition/sequence/contrast) and a connective. Expert-graph chain links stay in scope; student-graph chain links are deferred with the rest of student annotation.
 
 **Tasks (👤 HUMAN)**
 - Finalise `data/gold/expert_pilot/<qid>.yaml` for the 5 pilot questions (target ≥ 8 edges each, all with textbook evidence).
-- Finalise `data/gold/student_pilot/<answer_id>.yaml` for the 50 sampled answers, including a `match_type` per student edge and the list of missing expected edges.
+- 🚫 *(deferred)* Finalise `data/gold/student_pilot/<answer_id>.yaml` for the 50 sampled answers, including a `match_type` per student edge and the list of missing expected edges.
 - Note any schema problems → the agent updates the schema and `DECISIONS.md`.
-- **(CR-001)** Two annotators independently fill in the relation-agreement sheets and save them to `data/gold/relation_agreement/`.
+- 🚫 *(deferred)* **(CR-001)** Two annotators independently fill in the relation-agreement sheets and save them to `data/gold/relation_agreement/`.
 
 **Acceptance checks**
 - `cumap gold validate` passes on all gold files.
-- 5 expert subgraphs and 50 student graphs exist; the mismatch-type report exists.
+- 5 expert subgraphs exist. 🚫 *(deferred)* 50 student graphs exist; the mismatch-type report exists.
 - Schema changes are logged in `DECISIONS.md`.
-- **(CR-001)** The relation-agreement report exists (`reports/m3_relation_agreement.md`) and any merge/split decisions are logged in `DECISIONS.md`.
+- 🚫 *(deferred)* **(CR-001)** The relation-agreement report exists (`reports/m3_relation_agreement.md`) and any merge/split decisions are logged in `DECISIONS.md`.
 
 ---
 
-## M4 — Silver relation-level labels from SAF feedback (1.5 wk)
+## M4 — Silver relation-level labels from SAF feedback (1.5 wk) — 🚫 DEFERRED (2026-09-28, scope decision: expert KG only; see DECISIONS.md)
 
 **Goal:** turn SAF's human feedback into per-proposition labels (expressed / missing / contradicted), which separate *incomplete* from *contradictory* answers.
 
@@ -258,7 +260,7 @@ Run first on the chapters covering the pilot questions, then on the whole book.
 
 ---
 
-## M6 — Expected subgraphs + student-answer → graph (1.5 wk)
+## M6 — Expected subgraphs + student-answer → graph (1.5 wk) — 🚫 DEFERRED (2026-09-28, scope decision: expert KG only; see DECISIONS.md)
 
 **Tasks**
 1. `cumap kg expected-subgraphs`: map each gold proposition (M4) to KG edges (the LLM proposes matches; exact rules first).
@@ -277,7 +279,7 @@ Run first on the chapters covering the pilot questions, then on the whole book.
 
 ---
 
-## M7 — Alignment, diagnosis, evaluation (2 wk)
+## M7 — Alignment, diagnosis, evaluation (2 wk) — 🚫 DEFERRED (2026-09-28, scope decision: expert KG only; see DECISIONS.md)
 
 **Tasks**
 1. `align/rules.py`: a deterministic `match_type` classifier (see `ARCHITECTURE.md` §4c), applied in this order:
@@ -316,7 +318,7 @@ Run first on the chapters covering the pilot questions, then on the whole book.
 
 ---
 
-## M8 — Stretch: misconception layer, feedback generation, second domain (1.5–2 wk)
+## M8 — Stretch: misconception layer, feedback generation, second domain (1.5–2 wk) — 🚫 DEFERRED (2026-09-28, scope decision: expert KG only; see DECISIONS.md)
 
 1. `cumap misconceptions mine`: cluster contradicted propositions and extra errors across train + validation (embeddings + HDBSCAN or agglomerative clustering); the LLM names each cluster and proposes the expert edges it conflicts with. Output: `data/interim/suggestions/misconceptions.yaml`.
    👤 **HUMAN** curates → `data/gold/misconceptions_networking.yaml`. Wire into `confusable_with` / `contradicted_by_misconceptions`, then re-run M7 with and without the layer.
