@@ -153,7 +153,7 @@ def textbook_coverage(
             assumed_usd_per_1k_input_tokens=settings.llm.assumed_usd_per_1k_input_tokens,
             assumed_usd_per_1k_output_tokens=settings.llm.assumed_usd_per_1k_output_tokens,
         )
-        typer.echo(f"Planned coverage-guess LLM calls: {estimate['n_calls']}")
+        typer.echo(f"Planned coverage-guess LLM calls: {estimate['n_calls']} (tier: strong, model: {settings.llm.tiers['strong'].model})")
         typer.echo(f"Estimated input tokens: {estimate['est_input_tokens']}")
         typer.echo(f"Estimated output tokens: {estimate['est_output_tokens']}")
         typer.echo(f"Estimated cost (PLACEHOLDER pricing): ${estimate['est_usd']}")
@@ -267,7 +267,7 @@ def gold_suggest_expert(
     if limit is not None:
         qids = qids[:limit]
     if dry_run:
-        typer.echo(f"Planned expert_subgraph LLM calls: {len(qids)}")
+        typer.echo(f"Planned expert_subgraph LLM calls: {len(qids)} (tier: strong, model: {settings.llm.tiers['strong'].model})")
         raise typer.Exit(code=0)
 
     questions = pd.read_csv(interim_dir / "saf_questions.csv")
@@ -336,7 +336,7 @@ def gold_suggest_student(
             est_input_tokens / 1000 * settings.llm.assumed_usd_per_1k_input_tokens
             + est_output_tokens / 1000 * settings.llm.assumed_usd_per_1k_output_tokens
         )
-        typer.echo(f"Planned student_graph LLM calls: {len(answer_ids)}")
+        typer.echo(f"Planned student_graph LLM calls: {len(answer_ids)} (tier: strong, model: {settings.llm.tiers['strong'].model})")
         typer.echo(f"Estimated input tokens: {est_input_tokens}, output tokens: {est_output_tokens}")
         typer.echo(f"Estimated cost (PLACEHOLDER pricing): ${round(cost, 4)}")
         raise typer.Exit(code=0)
