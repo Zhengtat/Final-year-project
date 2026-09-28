@@ -384,6 +384,36 @@ def gold_mismatch_report() -> None:
     typer.echo(f"Mismatch report -> {out_path}")
 
 
+@gold_app.command("migrate-v1")
+def gold_migrate_v1(
+    dry_run: bool = typer.Option(False, "--dry-run", help="Print a summary only; don't write the proposed files or report."),
+) -> None:
+    """Propose v1 migrations for every data/gold/ file (read-only towards data/gold/)."""
+    from cumap.gold.migrate_v1 import run_migration, write_migration_report, write_migrations
+    from cumap.gold.validate import validate_gold_dir
+    from cumap.schemas.relations import RelationRegistry
+
+    settings = get_settings()
+    gold_dir = settings.resolve(settings.paths.data_gold)
+    out_dir = settings.resolve(settings.paths.data_interim) / "suggestions" / "migrations" / "v1"
+    registry = RelationRegistry.from_yaml(settings.resolve(settings.relation_registry))
+
+    migrations = run_migration(gold_dir, out_dir, registry)
+    validation_under_v1 = validate_gold_dir(gold_dir, force_version=1, registry=registry)
+
+    n_suggestions = sum(len(m.suggestions) for m in migrations)
+    typer.echo(f"{len(migrations)} gold file(s) examined, {n_suggestions} suggestion(s), {len(validation_under_v1.issues)} v1 validation issue(s) on the originals.")
+
+    if dry_run:
+        typer.echo("Dry run: did not write proposed files or the report.")
+        raise typer.Exit(code=0)
+
+    write_migrations(migrations)
+    report_path = write_migration_report(migrations, validation_under_v1, settings.resolve(settings.paths.reports) / "migration_v1.md")
+    typer.echo(f"Proposed files -> {out_dir}")
+    typer.echo(f"Report -> {report_path}")
+
+
 @labels_app.command("propositions")
 def labels_propositions() -> None:
     """Split reference answers into atomic propositions."""
