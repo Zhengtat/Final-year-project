@@ -209,16 +209,171 @@ def gold_validate() -> None:
     raise typer.Exit(code=1)
 
 
+@gold_app.command("sample-answers")
+def gold_sample_answers() -> None:
+    """Pick ~10 answers per pilot question from train, stratified by label, fixed seed."""
+    import pandas as pd
+
+    from cumap.data.saf import drop_privileged_columns
+    from cumap.gold.sample_answers import sample_pilot_answers
+
+    settings = get_settings()
+    interim_dir = settings.resolve(settings.paths.data_interim)
+    answers = pd.read_parquet(interim_dir / "saf_answers.parquet")
+    train = answers[answers["split"] == "train"]
+
+    sampled, notes = sample_pilot_answers(train, settings.pilot_questions, settings.seed)
+    sampled = drop_privileged_columns(sampled)  # student-graph drafting must not see feedback (rule 10)
+
+    out_path = interim_dir / "pilot_answers.csv"
+    sampled.to_csv(out_path, index=False)
+
+    typer.echo(f"{len(sampled)} answers sampled -> {out_path}")
+    for note in notes:
+        typer.echo(f"  note: {note}")
+
+
 @gold_app.command("suggest-expert")
-def gold_suggest_expert(qid: str = typer.Option(..., "--qid")) -> None:
+def gold_suggest_expert(
+    qid: str = typer.Option(None, "--qid"),
+    all_pilot: bool = typer.Option(False, "--all", help="Run for every pilot question."),
+    dry_run: bool = typer.Option(False, "--dry-run"),
+    limit: int | None = typer.Option(None, "--limit"),
+) -> None:
     """Draft an expert subgraph suggestion for a question into data/interim/suggestions/expert/."""
-    _not_implemented("cumap gold suggest-expert", "M3")
+    import json as _json
+
+    import pandas as pd
+
+    from cumap.gold.sections import section_ids_for_question
+    from cumap.gold.suggest_expert import suggest_expert_subgraph, write_expert_suggestion
+    from cumap.llm.client import LLMClient
+    from cumap.llm.prompts import load_prompt
+    from cumap.schemas.relations import RelationRegistry
+
+    settings = get_settings()
+    interim_dir = settings.resolve(settings.paths.data_interim)
+    gold_dir = settings.resolve(settings.paths.data_gold)
+
+    qids = settings.pilot_questions if all_pilot else [qid]
+    if limit is not None:
+        qids = qids[:limit]
+    if dry_run:
+        typer.echo(f"Planned expert_subgraph LLM calls: {len(qids)}")
+        raise typer.Exit(code=0)
+
+    questions = pd.read_csv(interim_dir / "saf_questions.csv")
+    sections_by_id = {}
+    for line in (interim_dir / "textbook_sections.jsonl").read_text().splitlines():
+        row = _json.loads(line)
+        sections_by_id[row["section_id"]] = row["text"]
+
+    client = LLMClient(settings)
+    registry = RelationRegistry.from_yaml(settings.repo_root / "configs" / "relations_v0.yaml")
+    prompt_template = load_prompt(settings.resolve(settings.paths.prompts), "expert_subgraph", "v1")
+
+    for q in qids:
+        qrow = questions[questions["question_id"] == q].iloc[0]
+        section_ids = section_ids_for_question(gold_dir, interim_dir, q)
+        draft = suggest_expert_subgraph(
+            client,
+            prompt_template,
+            registry,
+            question_id=q,
+            question=qrow["question"],
+            reference_answer=qrow["reference_answer"],
+            section_ids=section_ids,
+            sections_by_id=sections_by_id,
+        )
+        out_path = interim_dir / "suggestions" / "expert" / f"{q}.yaml"
+        write_expert_suggestion(draft, out_path)
+        typer.echo(
+            f"{q}: {len(draft['concepts'])} concepts, {len(draft['edges'])} edges, "
+            f"{len(draft['rejected'])} rejected -> {out_path}"
+        )
 
 
 @gold_app.command("suggest-student")
-def gold_suggest_student(answer_id: str = typer.Option(..., "--answer-id")) -> None:
+def gold_suggest_student(
+    answer_id: str = typer.Option(None, "--answer-id"),
+    all_sampled: bool = typer.Option(False, "--all", help="Run for every sampled pilot answer."),
+    dry_run: bool = typer.Option(False, "--dry-run"),
+    limit: int | None = typer.Option(None, "--limit"),
+) -> None:
     """Draft a student graph suggestion into data/interim/suggestions/student/."""
-    _not_implemented("cumap gold suggest-student", "M3")
+    import pandas as pd
+    import yaml as _yaml
+
+    from cumap.gold.suggest_student import suggest_student_graph, write_student_suggestion
+    from cumap.llm.client import LLMClient
+    from cumap.llm.prompts import load_prompt
+    from cumap.schemas.relations import RelationRegistry
+
+    settings = get_settings()
+    interim_dir = settings.resolve(settings.paths.data_interim)
+    gold_dir = settings.resolve(settings.paths.data_gold)
+
+    pilot_answers = pd.read_csv(interim_dir / "pilot_answers.csv")
+    answer_ids = pilot_answers["answer_id"].tolist() if all_sampled else [answer_id]
+    if limit is not None:
+        answer_ids = answer_ids[:limit]
+
+    if dry_run:
+        total_chars = pilot_answers[pilot_answers["answer_id"].isin(answer_ids)]["provided_answer"].str.len().sum()
+        est_input_tokens = int(total_chars // 4) + len(answer_ids) * 200  # + known-concepts/prompt overhead
+        est_output_tokens = len(answer_ids) * 250
+        cost = (
+            est_input_tokens / 1000 * settings.llm.assumed_usd_per_1k_input_tokens
+            + est_output_tokens / 1000 * settings.llm.assumed_usd_per_1k_output_tokens
+        )
+        typer.echo(f"Planned student_graph LLM calls: {len(answer_ids)}")
+        typer.echo(f"Estimated input tokens: {est_input_tokens}, output tokens: {est_output_tokens}")
+        typer.echo(f"Estimated cost (PLACEHOLDER pricing): ${round(cost, 4)}")
+        raise typer.Exit(code=0)
+
+    questions = pd.read_csv(interim_dir / "saf_questions.csv")
+    client = LLMClient(settings)
+    registry = RelationRegistry.from_yaml(settings.repo_root / "configs" / "relations_v0.yaml")
+    prompt_template = load_prompt(settings.resolve(settings.paths.prompts), "student_graph", "v1")
+
+    concepts_cache: dict[str, list[dict]] = {}
+
+    for aid in answer_ids:
+        arow = pilot_answers[pilot_answers["answer_id"] == aid].iloc[0]
+        qid = arow["question_id"]
+        qrow = questions[questions["question_id"] == qid].iloc[0]
+
+        if qid not in concepts_cache:
+            expert_gold = gold_dir / "expert_pilot" / f"{qid}.yaml"
+            expert_draft = interim_dir / "suggestions" / "expert" / f"{qid}.yaml"
+            source = expert_gold if expert_gold.exists() else expert_draft
+            concepts_cache[qid] = _yaml.safe_load(source.read_text())["concepts"] if source.exists() else []
+
+        draft = suggest_student_graph(
+            client,
+            prompt_template,
+            registry,
+            answer_id=aid,
+            question_id=qid,
+            question=qrow["question"],
+            answer_text=arow["provided_answer"],
+            known_concepts=concepts_cache[qid],
+        )
+        out_path = interim_dir / "suggestions" / "student" / f"{aid}.yaml"
+        write_student_suggestion(draft, out_path)
+        typer.echo(f"{aid}: {len(draft['edges'])} edges, {len(draft['rejected'])} rejected -> {out_path}")
+
+
+@gold_app.command("mismatch-report")
+def gold_mismatch_report() -> None:
+    """Tabulate match_type frequencies from data/gold/student_pilot/ -> reports/m3_mismatch_types.md."""
+    from cumap.gold.mismatch_report import generate_mismatch_report
+
+    settings = get_settings()
+    gold_dir = settings.resolve(settings.paths.data_gold)
+    out_path = settings.resolve(settings.paths.reports) / "m3_mismatch_types.md"
+    generate_mismatch_report(gold_dir / "student_pilot", out_path)
+    typer.echo(f"Mismatch report -> {out_path}")
 
 
 @labels_app.command("propositions")
@@ -271,8 +426,13 @@ def eval_silver_agreement() -> None:
 
 @app_app.command("review")
 def app_review() -> None:
-    """Launch the Streamlit gold/KG review app."""
-    _not_implemented("cumap app review", "M3")
+    """Launch the Streamlit gold review app (accept/edit/delete drafts, saves to data/gold/)."""
+    import subprocess
+    import sys
+
+    settings = get_settings()
+    app_path = settings.repo_root / "src" / "cumap" / "app" / "gold_editor.py"
+    subprocess.run([sys.executable, "-m", "streamlit", "run", str(app_path)], check=True)
 
 
 if __name__ == "__main__":

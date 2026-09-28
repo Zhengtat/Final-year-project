@@ -31,6 +31,8 @@ llm:
     judging: medium
     per_answer_labelling: low
     student_extraction: low
+    expert_subgraph: medium
+    student_graph_draft: low
   max_usd_per_command: 5
   # PLACEHOLDER pricing for --dry-run cost estimates: gpt-6-astra/gpt-6-luna have no
   # published per-token price we know of. Confirm real pricing before trusting these

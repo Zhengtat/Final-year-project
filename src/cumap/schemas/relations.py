@@ -59,6 +59,9 @@ class RelationRegistry:
     def __contains__(self, name: str) -> bool:
         return name in self._by_name
 
+    def all_relations(self) -> list[RelationType]:
+        return list(self._by_name.values())
+
     def get(self, name: str) -> RelationType:
         forward_name, _ = self._to_forward_name(name)
         try:
