@@ -36,6 +36,8 @@ class LLMConfig(BaseModel):
     model_bulk: str
     reasoning_effort: dict[str, str]
     max_usd_per_command: float
+    assumed_usd_per_1k_input_tokens: float
+    assumed_usd_per_1k_output_tokens: float
 
 
 class EmbeddingsConfig(BaseModel):

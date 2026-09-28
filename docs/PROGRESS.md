@@ -5,7 +5,7 @@ Update at the end of every milestone: what was done, which acceptance checks pas
 | Milestone | Status | Verified (numbers) | Notes |
 |---|---|---|---|
 | M0 Repo scaffold, LLM wrapper, CLI | done | 7/7 tests pass, 0 network calls; `ruff check` clean; `cumap --help` lists all 9 groups; cache-hit test shows 1 backend call across 2 identical `parse()` calls | |
-| M1 Data ingestion, textbook, EDA, coverage | not started | | |
+| M1 Data ingestion, textbook, EDA, coverage | in progress — paused at 👤 HUMAN step | SAF: 2981 rows across 4 splits, counts match plan exactly (train 1700, validation 427, UA 375, UQ 479); 31 distinct questions (26 seen + 5 unseen, no overlap). Textbook: 64 sections, 9 chapters + 3 front-matter, 0 empty sections, order_index strictly increasing, 0 real residual-markup issues in a full-book scan. EDA report + embedding top-5 coverage map generated; LLM coverage-guess step awaiting cost approval (31 calls, ~$0.08 est. under placeholder pricing). | Score scale finding, near-dup question finding — see DECISIONS.md |
 | M2 Schemas & relation registry | not started | | |
 | M3 Manual pilot gold | not started | | 👤 human annotation |
 | M4 Silver labels from feedback | not started | | 👤 verify 150–200 |

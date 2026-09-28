@@ -17,7 +17,7 @@ textbook:
   repo_url: "https://github.com/SystemsApproach/book"
   clone_dir: data/raw/textbook/pd6
   # Filled in by `cumap textbook fetch` (M1) and logged in DECISIONS.md.
-  pinned_commit: null
+  pinned_commit: 5deec5e741e2b8c0bc44566108a24cb783c2c7de
 
 llm:
   # Model names default here but are read from OPENAI_MODEL_STRONG / OPENAI_MODEL_BULK if set.
@@ -32,6 +32,11 @@ llm:
     per_answer_labelling: low
     student_extraction: low
   max_usd_per_command: 5
+  # PLACEHOLDER pricing for --dry-run cost estimates: gpt-6-astra/gpt-6-luna have no
+  # published per-token price we know of. Confirm real pricing before trusting these
+  # numbers for anything but a rough order-of-magnitude check.
+  assumed_usd_per_1k_input_tokens: 0.002
+  assumed_usd_per_1k_output_tokens: 0.008
 
 embeddings:
   model: sentence-transformers/all-MiniLM-L6-v2
