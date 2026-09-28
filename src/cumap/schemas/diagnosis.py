@@ -7,6 +7,7 @@ from __future__ import annotations
 
 from pydantic import BaseModel, ConfigDict
 
+from cumap.schemas.chain_links import ChainLinkAlignment
 from cumap.schemas.enums import AnswerLabel3Way
 
 
@@ -42,6 +43,11 @@ class DiagnosisRecord(BaseModel):
     broken_chains: list[str] = []
     upstream_gaps: list[str] = []  # edge_ids
     misconception_candidates: list[MisconceptionCandidateEvidence] = []
+
+    # CR-001 §4.4
+    chain_link_results: list[ChainLinkAlignment] = []
+    reasoning_errors: list[str] = []  # link_ids (wrong_link_type / reversed_link)
+    family_coverage: dict[str, float] = {}  # relation family -> weighted coverage of required edges
 
     label_3way: AnswerLabel3Way
     saf_label_pred: str | None = None

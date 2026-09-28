@@ -126,6 +126,9 @@ class MatchType(StrEnum):
     WRONG_TYPE = "wrong_type"
     UNSUPPORTED_EXTRA = "unsupported_extra"
     VALID_EXTRA = "valid_extra"
+    # CR-001 §4.3
+    FAMILY_MATCH = "family_match"  # same endpoints/family, different (non-compatible) relation
+    PART_TYPE_ERROR = "part_type_error"  # part_of, right endpoints, wrong part_type
 
 
 class Verdict(StrEnum):
@@ -133,6 +136,26 @@ class Verdict(StrEnum):
     INACCURATE = "inaccurate"
     CONTRADICTORY = "contradictory"
     IRRELEVANT = "irrelevant"
+
+
+class ChainLinkType(StrEnum):
+    """CR-001 §4.2 — the reasoning-layer edge-to-edge link types (PDTB-3 top classes)."""
+
+    CAUSE = "cause"
+    PURPOSE = "purpose"
+    CONDITION = "condition"
+    SEQUENCE = "sequence"
+    CONTRAST = "contrast"
+
+
+class ChainLinkMatchType(StrEnum):
+    """CR-001 §4.3 — StudentEdge chain links vs expert ChainLinks."""
+
+    EXACT = "exact"
+    WRONG_LINK_TYPE = "wrong_link_type"
+    REVERSED_LINK = "reversed_link"
+    MISSING_LINK = "missing_link"
+    UNSUPPORTED_LINK = "unsupported_link"
 
 
 class PropositionLabelValue(StrEnum):
