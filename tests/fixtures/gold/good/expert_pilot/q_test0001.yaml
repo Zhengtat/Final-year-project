@@ -1,15 +1,17 @@
-- edge_id: E-TEST-001
-  source_id: c_slow_start
-  target_id: c_exponential_cwnd_growth
-  relation: has_property
-  layer: semantic
-  statement: "During slow start, cwnd roughly doubles every RTT."
-  criticality: core
-  evidence:
-    - source: "Peterson & Davie 6e"
-      section_id: "6.3"
-      quote: "cwnd roughly doubles every RTT"
-  validation:
-    status: accepted
-    reviewer: ZT
-  origin: textbook
+concepts: []
+edges:
+  - edge_id: E-TEST-001
+    source_id: c_slow_start
+    target_id: c_exponential_cwnd_growth
+    relation: has_property
+    layer: semantic
+    statement: "During slow start, cwnd roughly doubles every RTT."
+    criticality: core
+    evidence:
+      - source: "Peterson & Davie 6e"
+        section_id: "6.3"
+        quote: "cwnd roughly doubles every RTT"
+    validation:
+      status: accepted
+      reviewer: ZT
+    origin: textbook

@@ -1,0 +1,27 @@
+registry_version: 1
+concepts: []
+edges:
+  - edge_id: E-V1BAD-001
+    source_id: c_ext_header
+    target_id: c_ipv6_packet
+    relation: part_of
+    layer: taxonomy
+    statement: "An extension header is a component of an IPv6 packet."
+    criticality: core
+    # part_type deliberately omitted -> should fail "missing required qualifier"
+    relation_family: taxonomy_wrong_on_purpose
+    evidence:
+      - source: "Peterson & Davie 6e"
+        section_id: "4.2"
+        quote: "extension header"
+    validation:
+      status: accepted
+      reviewer: ZT
+    origin: textbook
+chain_links:
+  - link_id: CL-BAD-1
+    from_edge_id: E-DOES-NOT-EXIST
+    to_edge_id: E-V1BAD-001
+    type: cause
+    statement: "dangling reference on purpose"
+    origin: textbook

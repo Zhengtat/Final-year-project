@@ -1,0 +1,51 @@
+registry_version: 1
+concepts: []
+edges:
+  - edge_id: E-V1-001
+    source_id: c_ext_header
+    target_id: c_ipv6_packet
+    relation: part_of
+    layer: taxonomy
+    statement: "An extension header is a component of an IPv6 packet."
+    criticality: core
+    part_type: component
+    relation_family: classification_structure
+    registry_version: 1
+    evidence:
+      - source: "Peterson & Davie 6e"
+        section_id: "4.2"
+        quote: "extension header"
+    validation:
+      status: accepted
+      reviewer: ZT
+    origin: textbook
+  - edge_id: E-V1-002
+    source_id: c_timeout
+    target_id: c_cwnd_reset
+    relation: triggers
+    layer: semantic
+    statement: "A timeout triggers cwnd reset to 1 MSS."
+    criticality: core
+    relation_family: mechanism_process
+    registry_version: 1
+    evidence:
+      - source: "Peterson & Davie 6e"
+        section_id: "6.3"
+        quote: "cwnd roughly doubles every RTT"
+    validation:
+      status: accepted
+      reviewer: ZT
+    origin: textbook
+chain_links:
+  - link_id: CL-1
+    from_edge_id: E-V1-002
+    to_edge_id: E-V1-001
+    type: cause
+    statement: "cwnd is reset because a timeout signals severe congestion"
+    surface_phrase: "because"
+    evidence:
+      - source: "Peterson & Davie 6e"
+        section_id: "6.3"
+        quote: "cwnd roughly doubles every RTT"
+    origin: textbook
+    question_ids: ["q_v1"]

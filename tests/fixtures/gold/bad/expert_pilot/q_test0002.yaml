@@ -1,29 +1,31 @@
-- edge_id: E-TEST-002
-  source_id: c_slow_start
-  target_id: c_exponential_cwnd_growth
-  relation: has_property
-  layer: semantic
-  statement: "During slow start, cwnd roughly doubles every RTT."
-  criticality: core
-  evidence:
-    - source: "Peterson & Davie 6e"
-      section_id: "6.3"
-      quote: "this sentence does not appear anywhere in the section"
-  validation:
-    status: accepted
-    reviewer: ZT
-  origin: textbook
-- edge_id: E-TEST-003
-  source_id: c_router
-  target_id: c_switch
-  relation: not_a_real_relation
-  layer: semantic
-  statement: "bogus"
-  criticality: core
-  evidence:
-    - source: "Peterson & Davie 6e"
-      section_id: "6.3"
-      quote: "cwnd roughly doubles every RTT"
-  validation:
-    status: unreviewed
-  origin: textbook
+concepts: []
+edges:
+  - edge_id: E-TEST-002
+    source_id: c_slow_start
+    target_id: c_exponential_cwnd_growth
+    relation: has_property
+    layer: semantic
+    statement: "During slow start, cwnd roughly doubles every RTT."
+    criticality: core
+    evidence:
+      - source: "Peterson & Davie 6e"
+        section_id: "6.3"
+        quote: "this sentence does not appear anywhere in the section"
+    validation:
+      status: accepted
+      reviewer: ZT
+    origin: textbook
+  - edge_id: E-TEST-003
+    source_id: c_router
+    target_id: c_switch
+    relation: not_a_real_relation
+    layer: semantic
+    statement: "bogus"
+    criticality: core
+    evidence:
+      - source: "Peterson & Davie 6e"
+        section_id: "6.3"
+        quote: "cwnd roughly doubles every RTT"
+    validation:
+      status: unreviewed
+    origin: textbook

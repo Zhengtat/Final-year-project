@@ -1,11 +1,13 @@
-- source_id: c_slow_start
-  relation: has_property
-  target_id: c_exponential_cwnd_growth
-  response_id: a_test0001
-  question_id: q_test0001
-  evidence_span:
-    start: 0
-    end: 27
-    text: "cwnd roughly doubles every RTT"
-  extraction_confidence: 0.9
-  link_confidence: 0.9
+edges:
+  - source_id: c_slow_start
+    relation: has_property
+    target_id: c_exponential_cwnd_growth
+    response_id: a_test0001
+    question_id: q_test0001
+    evidence_span:
+      start: 0
+      end: 27
+      text: "cwnd roughly doubles every RTT"
+    extraction_confidence: 0.9
+    link_confidence: 0.9
+missing_expected_edges: []

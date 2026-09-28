@@ -173,7 +173,11 @@ def textbook_coverage(
 
 
 @gold_app.command("validate")
-def gold_validate() -> None:
+def gold_validate(
+    registry_version: int | None = typer.Option(
+        None, "--registry", help="Force this registry version's rules on every file (e.g. 1). Default: detect per-file."
+    ),
+) -> None:
     """Validate every file under data/gold/ against the schemas and relation registry."""
     import json as _json
 
@@ -198,14 +202,18 @@ def gold_validate() -> None:
         answers_df = pd.read_parquet(answers_path, columns=["answer_id", "provided_answer"])
         answers_by_id = dict(zip(answers_df["answer_id"], answers_df["provided_answer"], strict=True))
 
-    issues = validate_gold_dir(gold_dir, sections_by_id=sections_by_id, answers_by_id=answers_by_id)
-    if not issues:
+    result = validate_gold_dir(
+        gold_dir, sections_by_id=sections_by_id, answers_by_id=answers_by_id, force_version=registry_version
+    )
+    for hint in result.hints:
+        typer.echo(hint)
+    if not result.issues:
         typer.echo("cumap gold validate: OK (no issues found)")
         raise typer.Exit(code=0)
 
-    for issue in issues:
+    for issue in result.issues:
         typer.echo(str(issue))
-    typer.echo(f"\n{len(issues)} issue(s) found.")
+    typer.echo(f"\n{len(result.issues)} issue(s) found.")
     raise typer.Exit(code=1)
 
 
