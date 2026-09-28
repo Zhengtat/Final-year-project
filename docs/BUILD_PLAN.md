@@ -136,6 +136,29 @@ Critical path: **M3 and M4**, because both depend on your annotation time. Start
 
 ---
 
+## M2.1 — CR-001: registry v1 migration (applied 2026-09-28, mid-M3)
+
+**Goal:** apply change request CR-001 (`docs/change-requests/CR-001-relations-v1.md`; rationale in `docs/research/relation-mapping-research.md`) — relation registry v1 (16 relations, 6 families + pedagogical, each with a template/examples/near-misses), core-edge qualifiers (`part_type`, `dimension`, `surface_phrase`, `relation_family`, `registry_version`), the `ChainLink` reasoning layer, a version-aware validator, a gold migration tool, and LLM tiers/escalation. `relations_v0.yaml` stays loadable; nothing already in `data/gold/` is touched without the human's say-so.
+
+**Steps and stop points** (one commit per step, prefix `CR-001:`):
+1. Registry v1 (`schemas/relations.py`, `configs/relations_v1.yaml`; v1-only fields optional so v0 files still load).
+2. Schema changes (core-edge qualifiers, `ChainLink`/`ChainLinkAlignment`, extended match types, `DiagnosisRecord` additions).
+3. Version-aware validator (`cumap gold validate --registry v1`; missing `registry_version` = v0).
+4. Gold migration tool (`cumap gold migrate-v1`, proposes v1 upgrades under `data/interim/suggestions/migrations/v1/`, never writes to `data/gold/`). **⛔ STOP 1:** human reviews `reports/migration_v1.md`.
+5. M3 tooling: gold editor v1 fields + chain-links panel; `suggest-expert`/`suggest-student` switched to v2 prompts; relation-agreement sampler (`cumap gold sample-relation-items`) + scorer (`cumap eval relation-agreement`, Cohen's κ); mismatch report extended. **⛔ STOP 2:** human confirms the agreement sheets.
+6. LLM client tiers (`strong`=`gpt-6-sol`, `bulk`=`gpt-6-luna`, `ceiling`=`gpt-6-astra`, opt-in only) and escalation (bulk → strong on schema error / low confidence / failed evidence check).
+7. Docs (this update).
+8. Acceptance checks.
+
+**Acceptance checks**
+- All tests pass with no network/key; `ruff check` clean.
+- `cumap gold validate` passes on fixtures for both v0 and v1 rules.
+- `reports/migration_v1.md` exists; a test proves the migration tool never writes to `data/gold/`.
+- Relation-agreement sheets exist (real run: 30 items on the pilot sections — short of the ≥48-item, 6-families-×-8 target; open decision for the human, see `docs/PROGRESS.md`).
+- `docs/ARCHITECTURE.md`, `docs/BUILD_PLAN.md` (this file), `CLAUDE.md`, `docs/DECISIONS.md`, `docs/PROGRESS.md` updated.
+
+---
+
 ## M3 — Manual pilot gold (1.5 wk; mostly 👤 HUMAN, agent builds the tooling)
 
 **Goal:** a small, trustworthy gold set that every later component is scored against. The agent must **never** write into `data/gold/`; it only writes suggestions to `data/interim/suggestions/`.
@@ -144,18 +167,22 @@ Critical path: **M3 and M4**, because both depend on your annotation time. Start
 1. `cumap gold suggest-expert --qid <id>`: from the covered sections, LLM-drafts an expert subgraph for the question (concepts + edges with evidence quotes, polarity, modality, conditions, criticality, chain IDs). Output is YAML in `data/interim/suggestions/expert/<qid>.yaml`, with every item marked `source: model_suggestion`.
 2. `cumap gold sample-answers`: picks 10 answers per pilot question from **train only**, stratified by label (≈3 Correct / 4 Partially correct / 3 Incorrect), with a fixed seed. Writes `data/interim/pilot_answers.csv`.
 3. `cumap gold suggest-student --answer-id <id>`: drafts a student graph (edges with `evidence_span` offsets) linked to the question's expert concepts. Output goes to `data/interim/suggestions/student/<answer_id>.yaml`.
-4. Streamlit `app/gold_editor.py` (or clearly templated YAML plus the validator, whichever is faster): shows the source text or answer side by side with the draft; supports accept / edit / delete / add; the human saves to `data/gold/...`.
-5. `cumap gold mismatch-report`: from the gold student graphs and the gold expert edges, tabulates `match_type` frequencies → `reports/m3_mismatch_types.md`.
+4. Streamlit `app/gold_editor.py` (or clearly templated YAML plus the validator, whichever is faster): shows the source text or answer side by side with the draft; supports accept / edit / delete / add; the human saves to `data/gold/...`. (CR-001: also has `part_type`/`dimension`/`surface_phrase` fields, a family-grouped relation dropdown, and a chain-links panel.)
+5. `cumap gold mismatch-report`: from the gold student graphs and the gold expert edges, tabulates `match_type` frequencies → `reports/m3_mismatch_types.md`. (CR-001: also tabulates `family_match`/`part_type_error` and chain-link types; reports agreement at both family and relation level.)
+6. **(CR-001) Relation-set agreement test:** `cumap gold sample-relation-items --n 100 --seed <seed>` picks textbook text mentioning ≥2 pilot-gold concepts, stratified across the 6 semantic families, and writes blank `annotator_A.csv`/`annotator_B.csv` sheets (never pre-filled). `cumap eval relation-agreement` scores the two completed sheets: Cohen's κ at relation and family level, direction agreement, per-relation κ, and >20%-confusion pairs, with a merge/split recommendation for the human to decide.
+7. **(CR-001) Chain-link annotation:** the gold editor's chain-links panel lets the human link two edges with a type (cause/purpose/condition/sequence/contrast) and a connective, for both expert and student graphs.
 
 **Tasks (👤 HUMAN)**
 - Finalise `data/gold/expert_pilot/<qid>.yaml` for the 5 pilot questions (target ≥ 8 edges each, all with textbook evidence).
 - Finalise `data/gold/student_pilot/<answer_id>.yaml` for the 50 sampled answers, including a `match_type` per student edge and the list of missing expected edges.
 - Note any schema problems → the agent updates the schema and `DECISIONS.md`.
+- **(CR-001)** Two annotators independently fill in the relation-agreement sheets and save them to `data/gold/relation_agreement/`.
 
 **Acceptance checks**
 - `cumap gold validate` passes on all gold files.
 - 5 expert subgraphs and 50 student graphs exist; the mismatch-type report exists.
 - Schema changes are logged in `DECISIONS.md`.
+- **(CR-001)** The relation-agreement report exists (`reports/m3_relation_agreement.md`) and any merge/split decisions are logged in `DECISIONS.md`.
 
 ---
 
@@ -196,7 +223,12 @@ Run first on the chapters covering the pilot questions, then on the whole book.
    Saved per section as `data/processed/candidates/<section_id>.json`.
 2. `expert_kg/concepts.py` (strong model, prompt `concept_extraction/v1`), run per section. Inputs: section text, heading path, candidate list with stats, and the **top-k existing concepts retrieved from the global registry** (by embedding). Outputs `ConceptMention`s: canonical name, aliases, node_type, short definition in the book's words, `role` (defined / used / mentioned), evidence quote. Then run a **gleaning pass** ("list concepts you missed") once.
 3. `expert_kg/canonicalize.py`: for each new mention, retrieve the top-5 similar existing concepts (name + definition embedding). If the similarity is above a threshold, the LLM decides `same | broader | narrower | different`. `same` → merge (add alias and mention); `broader`/`narrower` → propose an `is_a` edge; `different` → create a new concept.
-4. `expert_kg/relations.py` (strong model, prompt `relation_extraction/v1`), run per section. Inputs: that section's concepts + earlier concepts *mentioned in this section* + the relation registry (definitions and examples). Output: `ExpertEdge` candidates with evidence quote, polarity, modality, conditions and a `statement`. Anything outside the registry goes to `relation: other` and is logged for schema review.
+4. **(CR-001) `expert_kg/relations.py` relation extraction, four passes** (`ARCHITECTURE.md` §6), not one prompt:
+   - (a) Stage A: candidate concept pairs + supporting evidence quote (per section, from the concepts + earlier concepts mentioned in this section);
+   - (b) Stage B: **family-first multiple-choice verification** via `registry.choice_set(x, y, families=...)` — filled templates, the reversed template for directional relations, `NO_RELATION`, `OTHER`;
+   - (c) a separate **qualifier pass**: polarity, modality, conditions, `part_type`/`dimension`/`surface_phrase` (tested on a small negation/hedge fixture set — this pass exists because a single extraction pass tends to miss negated cases);
+   - (d) a **chain-link pass**: given two accepted edges, ask whether the text connects them with a reason and what type;
+   - (e) an **`other`-relation review report** each run — logged for schema review, clustered periodically to decide whether a new registry relation is warranted.
 5. Cross-chapter prerequisite links: concept *defined* in section A and *used* in a later section B → `prerequisite_of` candidate (A's concept → the concept B introduces), with confidence. **Do not** derive prerequisites from book order alone.
 6. `expert_kg/hierarchy.py`: for new concepts without an `is_a`/`part_of` parent, retrieve the top-5 candidate parents and let the LLM pick one or `none`.
 7. `expert_kg/checks.py`:
@@ -207,13 +239,15 @@ Run first on the chapters covering the pilot questions, then on the whole book.
    - transitive reduction for `is_a`/`prerequisite_of`;
    - orphan report.
    Rejected items go to `data/processed/kg/<run_id>/rejected.jsonl` with a reason.
-8. `graph/store.py`: save and load a KG as `nodes.jsonl` + `edges.jsonl` + `manifest.json` (run_id, commit, prompt versions, models, counts, cost). Load into NetworkX.
+8. `graph/store.py`: save and load a KG as `nodes.jsonl` + `edges.jsonl` + `chain_links.jsonl` + `manifest.json` (run_id, commit, prompt versions, models, counts, cost, **escalation rate and cost split by tier** — CR-001 §8.2). Load into NetworkX.
 9. Streamlit `app/review_app.py`: review a random sample of edges (accept / edit / reject → `validation.status`). Also add a `cumap kg export-neo4j` stub (CSV for `neo4j-admin import`), deferred.
+10. **(CR-001)** Before the full run: `cumap eval model-bakeoff --tiers bulk,strong,ceiling --task <task> --items <gold subset>` — runs the same prompt on each tier over a gold subset, reports F1/κ/cost/latency; cheapest tier within 0.05 of the best score is the recommendation, human decides, logged in `DECISIONS.md`.
 
 **Evaluation** (`reports/m5_expert_kg.md`)
 - Concept recall/precision vs the concepts in `data/gold/expert_pilot/*` (lenient match: canonical or alias, or embedding ≥ threshold, then manual check).
 - Edge precision on a **100-edge 👤 HUMAN-reviewed** stratified sample.
 - Evidence-substring pass rate; counts by relation type, layer and node type; cost and tokens.
+- **(CR-001)** Ontology conformance rate (domain/range respected), unsupported-by-text rate, direction accuracy, polarity accuracy — reported separately, not folded into one aggregate score.
 
 **Acceptance checks (targets)**
 - Evidence-substring pass rate ≥ 95% before rejection.
@@ -232,13 +266,14 @@ Run first on the chapters covering the pilot questions, then on the whole book.
    - A proposition with **no** KG edge becomes a question-specific expert edge (`source: reference_answer`, `layer: semantic`) and is logged as a **textbook coverage gap**.
    - Add `role=bonus` links for 1-hop KG edges relevant to the question.
    - Output: `data/processed/expected/<qid>.json`.
-2. `student/extract.py` (bulk model, prompt `student_extraction/v1`). Inputs: question, answer, and the question's concept neighbourhood (expected subgraph + 1 hop) with aliases. Output: `StudentEdge`s linked to concept IDs (or `unlinked:<surface>`), with polarity, modality, conditions, `stance`, `evidence_span` (char offsets; verified), `extraction_confidence` and `link_confidence`.
+2. `student/extract.py` (bulk model, prompt `student_extraction/v1`). Inputs: question, answer, and the question's concept neighbourhood (expected subgraph + 1 hop) with aliases. Output: `StudentEdge`s linked to concept IDs (or `unlinked:<surface>`), with polarity, modality, conditions, `stance`, `evidence_span` (char offsets; verified), `extraction_confidence`, `link_confidence`, and **(CR-001)** `surface_phrase` plus proposed `ChainLink`s from connectives ("because", "so that", "if...then", ...).
 3. `cumap student extract --split <name>`: runs over a split with caching.
 
 **Acceptance checks** (`reports/m6_student_extraction.md`)
 - Against the 50 gold student graphs: edge P/R/F1 (a triple matches after linking), polarity accuracy, link accuracy.
 - Evidence-span verification pass rate ≥ 95%.
 - Coverage-gap log produced; the number of reference propositions missing from the KG is reported.
+- **(CR-001)** Chain-link P/R against the M3 gold chain links.
 
 ---
 
@@ -255,21 +290,24 @@ Run first on the chapters covering the pilot questions, then on the whole book.
    7. `modality_error`
    8. `wrong_type` (conflicting relation, or a domain/range violation)
    9. `partial_relation` (right endpoints, compatible = partial)
-   10. `unsupported_extra` or `valid_extra` (the edge exists in the KG but isn't expected)
+   10. **(CR-001)** `family_match` (same endpoints/family, incompatible relation) and `part_type_error` (`part_of`, right endpoints, wrong `part_type`)
+   11. `unsupported_extra` or `valid_extra` (the edge exists in the KG but isn't expected)
 2. `align/judge.py`: an LLM fallback only for ambiguous cases (several candidates, or low link confidence). It returns match_type + rationale. Log whether the rule path or the LLM path decided.
-3. `align/diagnose.py` → `DiagnosisRecord`: matched / missing / contradicted / extra, each weighted by criticality and weight; required coverage; broken chains; upstream gaps (a missing edge whose `depends_on_edges` are also missing); misconception candidates; derived labels (correct / incomplete / contradictory; SAF 3-way; predicted score = weighted required coverage minus a penalty for contradictions).
+3. **(CR-001)** Chain-link alignment: for each student `ChainLink`, compare against the matching expert `ChainLink` (if any) → `ChainLinkAlignment` with `match_type` (exact/wrong_link_type/reversed_link/missing_link/unsupported_link — `ARCHITECTURE.md` §4f).
+4. `align/diagnose.py` → `DiagnosisRecord`: matched / missing / contradicted / extra, each weighted by criticality and weight; required coverage; broken chains; upstream gaps (a missing edge whose `depends_on_edges` are also missing); misconception candidates; derived labels (correct / incomplete / contradictory; SAF 3-way; predicted score = weighted required coverage minus a penalty for contradictions); **(CR-001)** `chain_link_results`, `reasoning_errors` (link_ids with `wrong_link_type`/`reversed_link`), `family_coverage` (weighted required-edge coverage per relation family).
    **Rules:** missing never produces "contradictory"; a misconception candidate needs an explicit contradiction of a core edge or a confusable substitution.
-4. Baselines (`eval/baselines/`):
+5. Baselines (`eval/baselines/`):
    - `sbert.py`: cosine(reference, answer) with thresholds tuned on train+validation;
    - `classifier.py`: fine-tuned DeBERTa-v3-base (or small) on the SAF 3-way label and on the silver 3-way label; train on train, early-stop on validation. MPS on an Apple-silicon Mac is fine; document a Colab option if it's too slow;
    - `llm_zero_shot.py`: same strong model, grading the answer from question + reference only (no feedback);
    - `embedding_only.py`: our pipeline but with edge matching by embedding similarity instead of rules.
-5. Ablations (flags on the diagnoser): `--no-relation-types` (concept overlap only), `--no-polarity`, `--no-conditions`, `--no-criticality`, `--no-confusables`.
-6. `cumap eval run` → `reports/m7_results.md`:
+6. Ablations (flags on the diagnoser): `--no-relation-types` (concept overlap only), `--no-polarity`, `--no-conditions`, `--no-criticality`, `--no-confusables`. **(CR-001)** Progressive relation-detail ablation to isolate which level drives diagnosis: concept overlap only → **+ family** → **+ fine relation** → **+ qualifiers** → **+ chain links**.
+7. `cumap eval run` → `reports/m7_results.md`:
    - **Primary:** macro-F1 on correct / incomplete / contradictory against **human-verified labels** (M4 sample), reported separately for UA and UQ.
    - **Secondary:** against silver labels (all items); SAF 3-way macro-F1; score Spearman ρ and RMSE.
    - Edge-level (M3 gold): match_type accuracy.
    - McNemar tests vs the best baseline; confusion matrices; 20 annotated error cases.
+   - **(CR-001)** `family_coverage` per relation family; reasoning-error counts; the progressive ablation table; single- vs two-threshold results if CR-002 has landed by then.
 
 **Acceptance checks**
 - The full pipeline runs end to end on UA and UQ from cache.
@@ -299,6 +337,7 @@ Run first on the chapters covering the pilot questions, then on the whole book.
 ## Cost & safety rails (all milestones)
 
 - Always run `--dry-run`, then `--limit 20`, then the full split.
-- Use the bulk model for per-answer tasks (M4 labelling, M6 extraction) and the strong model for KG building, propositions and judging.
-- Record tokens and estimated cost per run in the manifest; stop and ask if a single command would exceed the budget in `configs/default.yaml` (`max_usd_per_command`, default 5).
+- Use the bulk tier (`gpt-6-luna`) for per-answer tasks (M4 labelling, M6 extraction) and the strong tier (`gpt-6-sol`, CR-001) for KG building, propositions and judging. The `ceiling` tier (`gpt-6-astra`) is opt-in only — a model bake-off, never a default.
+- **(CR-001)** Run a model bake-off (`cumap eval model-bakeoff`) before the M4 and M5 full runs; log the tier decision in `DECISIONS.md`. Bulk-tier calls escalate to strong once on a schema error, low confidence, or a failed evidence check — the run manifest reports the escalation rate and the cost split by tier.
+- Record tokens and estimated cost per run in the manifest; stop and ask if a single command would exceed the budget in `configs/default.yaml` (`max_usd_per_command`, default 5). Cost estimates use Sol/Luna list prices (placeholder — unconfirmed, see `DECISIONS.md`); `--batch` estimates apply `assumed_batch_discount`.
 - Cached results are the source of truth for reproducibility; never delete `data/cache/` without asking.
