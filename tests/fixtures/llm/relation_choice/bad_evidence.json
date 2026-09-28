@@ -1,0 +1,1 @@
+{"relation": "uses", "direction": "forward", "evidence_quote": "this quote is not actually in the passage", "statement": "TCP uses the congestion window.", "_usage": {"input_tokens": 110, "output_tokens": 25}}

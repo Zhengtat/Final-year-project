@@ -1,0 +1,1 @@
+{"decision": "same", "matched_candidate_index": 0, "reason": "cwnd is the standard abbreviation for congestion window", "_usage": {"input_tokens": 80, "output_tokens": 20}}

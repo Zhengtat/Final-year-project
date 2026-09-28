@@ -1,0 +1,1 @@
+{"relation": "uses", "direction": "forward", "evidence_quote": "TCP uses the congestion window to limit how much unacknowledged data can be in flight", "statement": "TCP uses the congestion window to limit unacknowledged in-flight data.", "_usage": {"input_tokens": 110, "output_tokens": 30}}

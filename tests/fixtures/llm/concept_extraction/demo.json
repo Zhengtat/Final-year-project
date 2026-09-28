@@ -1,0 +1,19 @@
+{
+  "concepts": [
+    {
+      "canonical_name": "TCP",
+      "node_type": "Protocol",
+      "role": "used",
+      "definition": null,
+      "evidence_quote": "TCP uses sliding window"
+    },
+    {
+      "canonical_name": "sliding window",
+      "node_type": "Mechanism",
+      "role": "used",
+      "definition": null,
+      "evidence_quote": "TCP uses sliding window"
+    }
+  ],
+  "_usage": {"input_tokens": 200, "output_tokens": 80}
+}

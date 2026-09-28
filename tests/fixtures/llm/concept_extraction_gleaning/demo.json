@@ -1,0 +1,19 @@
+{
+  "concepts": [
+    {
+      "canonical_name": "TCP",
+      "node_type": "Protocol",
+      "role": "used",
+      "definition": null,
+      "evidence_quote": "TCP uses sliding window"
+    },
+    {
+      "canonical_name": "slow start",
+      "node_type": "Mechanism",
+      "role": "mentioned",
+      "definition": null,
+      "evidence_quote": "It also performs slow start"
+    }
+  ],
+  "_usage": {"input_tokens": 250, "output_tokens": 60}
+}

@@ -1,0 +1,1 @@
+{"decision": "different", "matched_candidate_index": null, "reason": "slow start is a distinct mechanism from the candidates shown", "_usage": {"input_tokens": 80, "output_tokens": 20}}

@@ -1,0 +1,12 @@
+{
+  "concepts": [
+    {
+      "canonical_name": "made up thing",
+      "node_type": "Concept",
+      "role": "mentioned",
+      "definition": null,
+      "evidence_quote": "this text is not in the section at all"
+    }
+  ],
+  "_usage": {"input_tokens": 100, "output_tokens": 30}
+}
