@@ -1,0 +1,45 @@
+{
+  "concepts": [
+    {"canonical_name": "TCP", "node_type": "Protocol", "definition": "a transport protocol", "evidence_quote": "TCP performs slow start"},
+    {"canonical_name": "slow start", "node_type": "Mechanism", "definition": "a congestion-control phase", "evidence_quote": "TCP performs slow start"},
+    {"canonical_name": "TCP congestion control", "node_type": "Mechanism", "definition": "the overall congestion-control process", "evidence_quote": "Slow start is part of TCP congestion control"},
+    {"canonical_name": "timeout", "node_type": "Event", "definition": "an expired retransmission timer", "evidence_quote": "A timeout triggers cwnd reset"},
+    {"canonical_name": "cwnd reset", "node_type": "Mechanism", "definition": "resetting the congestion window", "evidence_quote": "A timeout triggers cwnd reset"}
+  ],
+  "edges": [
+    {
+      "source_concept_name": "TCP", "relation": "performs", "target_concept_name": "slow start",
+      "polarity": "affirmed", "modality": "always", "conditions": [],
+      "statement": "TCP performs slow start", "criticality": "core",
+      "evidence_quote": "TCP performs slow start",
+      "chain_id": null, "chain_position": null,
+      "part_type": null, "dimension": null, "surface_phrase": "performs"
+    },
+    {
+      "source_concept_name": "slow start", "relation": "part_of", "target_concept_name": "TCP congestion control",
+      "polarity": "affirmed", "modality": "always", "conditions": [],
+      "statement": "Slow start is part of TCP congestion control", "criticality": "core",
+      "evidence_quote": "Slow start is part of TCP congestion control",
+      "chain_id": null, "chain_position": null,
+      "part_type": "phase", "dimension": null, "surface_phrase": "is part of"
+    },
+    {
+      "source_concept_name": "timeout", "relation": "triggers", "target_concept_name": "cwnd reset",
+      "polarity": "affirmed", "modality": "always", "conditions": [],
+      "statement": "A timeout triggers cwnd reset", "criticality": "core",
+      "evidence_quote": "A timeout triggers cwnd reset",
+      "chain_id": null, "chain_position": null,
+      "part_type": null, "dimension": null, "surface_phrase": "triggers"
+    }
+  ],
+  "chain_links": [
+    {
+      "from_edge_index": 2, "to_edge_index": 0,
+      "type": "cause",
+      "statement": "cwnd reset happens because a timeout signals severe congestion",
+      "surface_phrase": "because",
+      "evidence_quote": "because a timeout signals severe congestion"
+    }
+  ],
+  "_usage": {"input_tokens": 500, "output_tokens": 200}
+}

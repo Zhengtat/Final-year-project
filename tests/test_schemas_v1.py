@@ -310,8 +310,28 @@ def test_expert_subgraph_suggestion_v2_nests_the_v2_edge_schema(registry):
                 "surface_phrase": "causes",
             }
         ],
+        chain_links=[],
     )
     assert instance.edges[0].relation == "causes"
+
+
+def test_expert_subgraph_suggestion_v2_chain_link_type_is_registry_enum(registry):
+    schema = build_expert_subgraph_suggestion_v2(registry)
+    with pytest.raises(ValidationError):
+        schema(
+            concepts=[],
+            edges=[],
+            chain_links=[
+                {
+                    "from_edge_index": 0,
+                    "to_edge_index": 1,
+                    "type": "not_a_real_chain_link_type",
+                    "statement": "x",
+                    "surface_phrase": None,
+                    "evidence_quote": "x",
+                }
+            ],
+        )
 
 
 def test_student_edge_suggestion_v2_relation_enum(registry):

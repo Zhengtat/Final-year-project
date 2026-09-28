@@ -80,6 +80,29 @@ def _relation_literal(registry) -> type:  # registry: RelationRegistry (avoid im
     return Literal[*names]
 
 
+def _chain_link_type_literal(registry) -> type:
+    names = tuple(registry.chain_link_types.keys())
+    return Literal[*names]
+
+
+def build_chain_link_suggestion_v2(registry) -> type[BaseModel]:
+    """CR-001 §7.2: the LLM proposes chain links alongside edges in the same call.
+    Edges have no id yet at suggestion time, so links address them by list position
+    (0-based index into the `edges` list of the same response); the calling code
+    resolves these to real edge_ids after assigning them.
+    """
+    return create_model(
+        "ChainLinkSuggestionLLMv2",
+        __config__=ConfigDict(extra="forbid"),
+        from_edge_index=(int, ...),
+        to_edge_index=(int, ...),
+        type=(_chain_link_type_literal(registry), ...),
+        statement=(str, ...),
+        surface_phrase=(str | None, ...),
+        evidence_quote=(str, ...),
+    )
+
+
 def build_edge_suggestion_v2(registry) -> type[BaseModel]:
     """CR-001 §4.5: EdgeSuggestionLLM + part_type/dimension/surface_phrase + a true
     relation enum (registry names + "other"), built fresh per registry.
@@ -106,11 +129,13 @@ def build_edge_suggestion_v2(registry) -> type[BaseModel]:
 
 def build_expert_subgraph_suggestion_v2(registry) -> type[BaseModel]:
     edge_model = build_edge_suggestion_v2(registry)
+    chain_link_model = build_chain_link_suggestion_v2(registry)
     return create_model(
         "ExpertSubgraphSuggestionLLMv2",
         __config__=ConfigDict(extra="forbid"),
         concepts=(list[ConceptSuggestionLLM], ...),
         edges=(list[edge_model], ...),
+        chain_links=(list[chain_link_model], ...),
     )
 
 
@@ -138,8 +163,10 @@ def build_student_edge_suggestion_v2(registry) -> type[BaseModel]:
 
 def build_student_graph_suggestion_v2(registry) -> type[BaseModel]:
     edge_model = build_student_edge_suggestion_v2(registry)
+    chain_link_model = build_chain_link_suggestion_v2(registry)
     return create_model(
         "StudentGraphSuggestionLLMv2",
         __config__=ConfigDict(extra="forbid"),
         edges=(list[edge_model], ...),
+        chain_links=(list[chain_link_model], ...),
     )

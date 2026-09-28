@@ -254,7 +254,7 @@ def gold_suggest_expert(
     import pandas as pd
 
     from cumap.gold.sections import section_ids_for_question
-    from cumap.gold.suggest_expert import suggest_expert_subgraph, write_expert_suggestion
+    from cumap.gold.suggest_expert import suggest_expert_subgraph_v2, write_expert_suggestion
     from cumap.llm.client import LLMClient
     from cumap.llm.prompts import load_prompt
     from cumap.schemas.relations import RelationRegistry
@@ -278,12 +278,14 @@ def gold_suggest_expert(
 
     client = LLMClient(settings)
     registry = RelationRegistry.from_yaml(settings.resolve(settings.relation_registry))
-    prompt_template = load_prompt(settings.resolve(settings.paths.prompts), "expert_subgraph", "v1")
+    # CR-001 §7.2: switched from v1 to v2 (uses the v1 registry's families/templates/
+    # near-misses, outputs part_type/dimension/surface_phrase, proposes chain links).
+    prompt_template = load_prompt(settings.resolve(settings.paths.prompts), "expert_subgraph", "v2")
 
     for q in qids:
         qrow = questions[questions["question_id"] == q].iloc[0]
         section_ids = section_ids_for_question(gold_dir, interim_dir, q)
-        draft = suggest_expert_subgraph(
+        draft = suggest_expert_subgraph_v2(
             client,
             prompt_template,
             registry,
@@ -297,7 +299,7 @@ def gold_suggest_expert(
         write_expert_suggestion(draft, out_path)
         typer.echo(
             f"{q}: {len(draft['concepts'])} concepts, {len(draft['edges'])} edges, "
-            f"{len(draft['rejected'])} rejected -> {out_path}"
+            f"{len(draft['chain_links'])} chain links, {len(draft['rejected'])} rejected -> {out_path}"
         )
 
 
@@ -312,7 +314,7 @@ def gold_suggest_student(
     import pandas as pd
     import yaml as _yaml
 
-    from cumap.gold.suggest_student import suggest_student_graph, write_student_suggestion
+    from cumap.gold.suggest_student import suggest_student_graph_v2, write_student_suggestion
     from cumap.llm.client import LLMClient
     from cumap.llm.prompts import load_prompt
     from cumap.schemas.relations import RelationRegistry
@@ -342,7 +344,7 @@ def gold_suggest_student(
     questions = pd.read_csv(interim_dir / "saf_questions.csv")
     client = LLMClient(settings)
     registry = RelationRegistry.from_yaml(settings.resolve(settings.relation_registry))
-    prompt_template = load_prompt(settings.resolve(settings.paths.prompts), "student_graph", "v1")
+    prompt_template = load_prompt(settings.resolve(settings.paths.prompts), "student_graph", "v2")  # CR-001 §7.2
 
     concepts_cache: dict[str, list[dict]] = {}
 
@@ -357,7 +359,7 @@ def gold_suggest_student(
             source = expert_gold if expert_gold.exists() else expert_draft
             concepts_cache[qid] = _yaml.safe_load(source.read_text())["concepts"] if source.exists() else []
 
-        draft = suggest_student_graph(
+        draft = suggest_student_graph_v2(
             client,
             prompt_template,
             registry,
@@ -369,7 +371,10 @@ def gold_suggest_student(
         )
         out_path = interim_dir / "suggestions" / "student" / f"{aid}.yaml"
         write_student_suggestion(draft, out_path)
-        typer.echo(f"{aid}: {len(draft['edges'])} edges, {len(draft['rejected'])} rejected -> {out_path}")
+        typer.echo(
+            f"{aid}: {len(draft['edges'])} edges, {len(draft['chain_links'])} chain links, "
+            f"{len(draft['rejected'])} rejected -> {out_path}"
+        )
 
 
 @gold_app.command("mismatch-report")

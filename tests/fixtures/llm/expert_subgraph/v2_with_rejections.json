@@ -1,0 +1,25 @@
+{
+  "concepts": [
+    {"canonical_name": "TCP", "node_type": "Protocol", "definition": "a transport protocol", "evidence_quote": "TCP performs slow start"}
+  ],
+  "edges": [
+    {
+      "source_concept_name": "TCP", "relation": "performs", "target_concept_name": "TCP",
+      "polarity": "affirmed", "modality": "always", "conditions": [],
+      "statement": "made up", "criticality": "core",
+      "evidence_quote": "this text does not appear in the section at all",
+      "chain_id": null, "chain_position": null,
+      "part_type": null, "dimension": null, "surface_phrase": "performs"
+    }
+  ],
+  "chain_links": [
+    {
+      "from_edge_index": 0, "to_edge_index": 99,
+      "type": "cause",
+      "statement": "dangling reference on purpose",
+      "surface_phrase": null,
+      "evidence_quote": "TCP performs slow start"
+    }
+  ],
+  "_usage": {"input_tokens": 100, "output_tokens": 50}
+}

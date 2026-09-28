@@ -1,0 +1,30 @@
+{
+  "edges": [
+    {
+      "source_concept_name": "TCP", "source_surface": "TCP",
+      "relation": "performs", "target_concept_name": null, "target_surface": "slow start",
+      "polarity": "affirmed", "modality": "always", "conditions": [],
+      "stance": "asserted", "evidence_quote": "TCP performs slow start",
+      "extraction_confidence": 0.9, "link_confidence": 0.6,
+      "part_type": null, "dimension": null, "surface_phrase": "performs"
+    },
+    {
+      "source_concept_name": null, "source_surface": "it",
+      "relation": "has_purpose", "target_concept_name": null, "target_surface": "probe available bandwidth",
+      "polarity": "affirmed", "modality": "always", "conditions": [],
+      "stance": "asserted", "evidence_quote": "it wants to probe available bandwidth",
+      "extraction_confidence": 0.7, "link_confidence": 0.0,
+      "part_type": null, "dimension": null, "surface_phrase": "wants to"
+    }
+  ],
+  "chain_links": [
+    {
+      "from_edge_index": 0, "to_edge_index": 1,
+      "type": "purpose",
+      "statement": "TCP performs slow start in order to probe available bandwidth",
+      "surface_phrase": "because",
+      "evidence_quote": "TCP performs slow start because it wants to probe available bandwidth"
+    }
+  ],
+  "_usage": {"input_tokens": 300, "output_tokens": 150}
+}
