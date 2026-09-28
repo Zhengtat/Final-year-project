@@ -94,7 +94,7 @@ def estimate_coverage_guess_cost(
         top_sections = [m for m in matches if m.question_id == qrow["question_id"]][:3]
         prompt_chars = len(qrow["question"]) + len(qrow["reference_answer"])
         for m in top_sections:
-            prompt_chars += len(sections_by_id[m.section_id].text[:800])
+            prompt_chars += len(sections_by_id[m.section_id].text)  # full text, not truncated
         total_input_chars += prompt_chars
 
     n_calls = questions["question_id"].nunique()
@@ -130,7 +130,7 @@ def run_coverage_guess(
         qrow = questions[questions["question_id"] == qid].iloc[0]
         top_sections = [m for m in matches if m.question_id == qid][:3]
         sections_block = "\n\n".join(
-            f"[{m.section_id}] {m.section_title}\n{sections_by_id[m.section_id].text[:800]}"
+            f"[{m.section_id}] {m.section_title}\n{sections_by_id[m.section_id].text}"
             for m in top_sections
         )
         rendered = prompt_template.render(
