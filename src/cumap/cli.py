@@ -269,7 +269,7 @@ def gold_suggest_expert(
         sections_by_id[row["section_id"]] = row["text"]
 
     client = LLMClient(settings)
-    registry = RelationRegistry.from_yaml(settings.repo_root / "configs" / "relations_v0.yaml")
+    registry = RelationRegistry.from_yaml(settings.resolve(settings.relation_registry))
     prompt_template = load_prompt(settings.resolve(settings.paths.prompts), "expert_subgraph", "v1")
 
     for q in qids:
@@ -333,7 +333,7 @@ def gold_suggest_student(
 
     questions = pd.read_csv(interim_dir / "saf_questions.csv")
     client = LLMClient(settings)
-    registry = RelationRegistry.from_yaml(settings.repo_root / "configs" / "relations_v0.yaml")
+    registry = RelationRegistry.from_yaml(settings.resolve(settings.relation_registry))
     prompt_template = load_prompt(settings.resolve(settings.paths.prompts), "student_graph", "v1")
 
     concepts_cache: dict[str, list[dict]] = {}

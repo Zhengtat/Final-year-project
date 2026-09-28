@@ -1,0 +1,341 @@
+# Relation registry v1 — introduced by CR-001 (2026-09-28). Supersedes relations_v0.yaml (keep v0 for history).
+# Domain: computer networking (Peterson & Davie 6e / SAF).
+# Rationale and sources: docs/research/relation-mapping-research.md
+#
+# Design:
+#   - 16 relations: 6 semantic families + 1 pedagogical relation. Context goes in QUALIFIERS, not new relations.
+#   - Each relation doubles as an annotation guideline (definition, template, examples, near-miss negatives),
+#     because LLMs choose among well-defined options far better than they invent labels (QA4RE 2023; GoLLIE 2024).
+#   - "template" is used for multiple-choice verification: fill {X},{Y}; for directional relations also offer {Y},{X}.
+#   - Every LLM choice set must also include "no relation stated" and "other (give phrase)".
+#   - "Any" in domain/range is a wildcard.
+
+version: 1
+supersedes: 0
+
+node_types: [Protocol, Mechanism, Component, DataUnit, Parameter, Property, Event, State, Layer, Concept]
+
+qualifiers:
+  polarity:       {values: [affirmed, negated], applies_to: all, required: true}
+  modality:       {values: [necessary, always, typically, possible, never], applies_to: all, required: true}
+  conditions:     {type: "list[concept_id | str]", applies_to: all, required: false}
+  surface_phrase: {type: str, applies_to: all, required: "student edges: yes; expert edges: when LLM-extracted", note: "the linking words exactly as written in the source (e.g. 'is used to', 'doubles')"}
+  part_type:      {values: [component, member, phase], applies_to: [part_of], required: true, note: "transitive inference only within the same part_type (Winston et al. 1987)"}
+  dimension:      {type: str, applies_to: [contrasts_with], required: "recommended", note: "what differs, e.g. 'clock recovery', 'cwnd growth rate'"}
+
+families:
+  - {name: mechanism_process,        label: "Mechanism & process",        diagnostic_prior: 1.0, grounding: "SBF behaviour; mechanistic reasoning; PDTB Temporal"}
+  - {name: cause_effect,             label: "Cause & quantitative effect", diagnostic_prior: 1.0, grounding: "PDTB Contingency.Cause; SemEval Cause-Effect; Qualitative Process Theory"}
+  - {name: function_means,           label: "Function & means",           diagnostic_prior: 0.8, grounding: "Qualia telic; SBF function; ConceptNet UsedFor"}
+  - {name: dependency,               label: "Dependency & constraint",    diagnostic_prior: 0.8, grounding: "PDTB Condition; ConceptNet HasPrerequisite"}
+  - {name: comparison,               label: "Comparison",                 diagnostic_prior: 0.7, grounding: "Chaffin & Herrmann contrast family; PDTB Comparison"}
+  - {name: classification_structure, label: "Classification & structure", diagnostic_prior: 0.6, grounding: "WordNet; Winston et al.; qualia formal/constitutive; SBF structure"}
+  - {name: pedagogical,              label: "Pedagogical",                diagnostic_prior: 0.0, grounding: "PREAP; prerequisite literature (not used for correctness)"}
+# diagnostic_prior = initial weight for diagnosis; M7 re-estimates it from data (diagnostic_power).
+
+relations:
+
+  # ---------------- 1. Mechanism & process ----------------
+  - name: performs
+    family: mechanism_process
+    layer: semantic
+    status: new_in_v1
+    definition: "Actor/component/protocol source carries out activity target (an operation, procedure or algorithm step)."
+    template: "{X} performs {Y}"
+    examples: ["transparent bridge performs backward learning of source addresses", "TCP sender performs fast retransmit"]
+    near_misses:
+      - {relation: uses, example: "TCP uses sliding window", why: "sliding window is a means/structure, not an activity the actor carries out"}
+      - {relation: triggers, example: "three duplicate ACKs triggers fast retransmit", why: "the source is an event, not an actor"}
+    domain_types: [Protocol, Component, Mechanism]
+    range_types: [Mechanism, Event]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: performed_by
+    conflicts_with: []
+    compatible_with: {uses: partial}
+
+  - name: triggers
+    family: mechanism_process
+    layer: semantic
+    definition: "By protocol rule, event/state source initiates action or state change target. Put the context in conditions."
+    template: "{X} triggers {Y}"
+    examples: ["timeout triggers cwnd reset to 1 MSS", "three duplicate ACKs triggers fast retransmit"]
+    near_misses:
+      - {relation: causes, example: "simultaneous transmission causes a collision", why: "a physical/logical consequence, not a designed protocol rule"}
+      - {relation: precedes, example: "slow start precedes congestion avoidance", why: "ordering only; the first does not initiate the second by rule"}
+    domain_types: [Event, State]
+    range_types: [Mechanism, State, Event, Parameter]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: triggered_by
+    conflicts_with: []
+    compatible_with: {causes: partial}
+
+  - name: precedes
+    family: mechanism_process
+    layer: semantic
+    definition: "In a process or protocol, step/phase source happens before step/phase target."
+    template: "{X} happens before {Y}"
+    examples: ["slow start precedes congestion avoidance", "SYN precedes SYN-ACK"]
+    near_misses:
+      - {relation: triggers, example: "timeout triggers retransmission", why: "the first initiates the second; use triggers"}
+      - {relation: part_of, example: "slow start part_of[phase] TCP congestion control", why: "membership of a phase in a process, not order"}
+    domain_types: [State, Event, Mechanism]
+    range_types: [State, Event, Mechanism]
+    directional: true
+    symmetric: false
+    transitive: true
+    inverse_of: follows
+    conflicts_with: []
+    compatible_with: {}
+
+  # ---------------- 2. Cause & quantitative effect ----------------
+  - name: causes
+    family: cause_effect
+    layer: semantic
+    definition: "Source brings about target as a consequence (not a designed protocol rule)."
+    template: "{X} causes {Y}"
+    examples: ["simultaneous transmission causes a collision", "packet loss causes throughput drop"]
+    near_misses:
+      - {relation: triggers, example: "timeout triggers cwnd reset", why: "designed protocol rule; use triggers"}
+      - {relation: has_purpose, example: "carrier extension has_purpose reliable collision detection", why: "intended goal, not a side-effect"}
+    domain_types: [Any]
+    range_types: [Event, State, Property]
+    directional: true
+    symmetric: false
+    transitive: true
+    inverse_of: caused_by
+    conflicts_with: [prevents]
+    compatible_with: {triggers: partial, has_purpose: partial}
+
+  - name: prevents
+    family: cause_effect
+    layer: semantic
+    definition: "Source stops or avoids target from happening."
+    template: "{X} prevents {Y}"
+    examples: ["spanning tree prevents forwarding loops", "sequence numbers prevent duplicate delivery"]
+    near_misses:
+      - {relation: decreases, example: "frame bursting decreases per-frame overhead", why: "reduces a quantity rather than stopping an event"}
+    domain_types: [Any]
+    range_types: [Event, State, Property]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: null
+    conflicts_with: [causes]
+    compatible_with: {decreases: partial}
+
+  - name: increases
+    family: cause_effect
+    layer: semantic
+    definition: "More/activation of source raises the value of target (qualitative proportionality +). Advantages/disadvantages = increases/decreases on quality attributes (throughput, delay, overhead, efficiency)."
+    template: "{X} increases {Y}"
+    examples: ["each ACK during slow start increases cwnd", "frame bursting increases channel efficiency", "longer cable increases propagation delay"]
+    near_misses:
+      - {relation: causes, example: "packet loss causes throughput drop", why: "an event outcome rather than a monotonic quantity relation"}
+    domain_types: [Any]
+    range_types: [Parameter, Property]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: null
+    conflicts_with: [decreases]
+    compatible_with: {}
+
+  - name: decreases
+    family: cause_effect
+    layer: semantic
+    definition: "More/activation of source lowers the value of target (qualitative proportionality −)."
+    template: "{X} decreases {Y}"
+    examples: ["triple duplicate ACK decreases cwnd (halves it in Reno)", "frame bursting decreases per-frame overhead"]
+    near_misses:
+      - {relation: prevents, example: "spanning tree prevents loops", why: "stops an event entirely"}
+    domain_types: [Any]
+    range_types: [Parameter, Property]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: null
+    conflicts_with: [increases]
+    compatible_with: {prevents: partial}
+
+  # ---------------- 3. Function & means ----------------
+  - name: has_purpose
+    family: function_means
+    layer: semantic
+    status: new_in_v1
+    definition: "Source (a designed mechanism, protocol, field or component) exists or is used in order to achieve goal target."
+    template: "{X} exists in order to achieve {Y}"
+    examples: ["carrier extension has_purpose reliable collision detection at gigabit speed", "spanning tree algorithm has_purpose loop-free forwarding topology", "IPv6 extension headers has_purpose optional functionality without enlarging the base header"]
+    near_misses:
+      - {relation: uses, example: "TCP uses sliding window", why: "the target is the means, not the goal"}
+      - {relation: causes, example: "packet loss causes throughput drop", why: "unintended consequence, not a designed goal"}
+    domain_types: [Protocol, Mechanism, Component, DataUnit, Parameter]
+    range_types: [Property, State, Concept, Event]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: achieved_by
+    conflicts_with: []
+    compatible_with: {causes: partial}
+
+  - name: uses
+    family: function_means
+    layer: semantic
+    definition: "Source employs target as a means, mechanism or data structure to do its job."
+    template: "{X} uses {Y}"
+    examples: ["TCP uses sliding window", "transparent bridge uses a forwarding table"]
+    near_misses:
+      - {relation: requires, example: "CSMA/CD requires a minimum frame length", why: "a constraint that must hold, not a tool employed"}
+      - {relation: performs, example: "bridge performs backward learning", why: "an activity carried out, not a means"}
+    domain_types: [Protocol, Mechanism, Component]
+    range_types: [Any]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: used_by
+    conflicts_with: []
+    compatible_with: {requires: partial, performs: partial}
+
+  # ---------------- 4. Dependency & constraint ----------------
+  - name: requires
+    family: dependency
+    layer: semantic
+    definition: "Source cannot work or be valid unless target holds (a technical dependency or constraint). Put the context in conditions."
+    template: "{X} cannot work unless {Y}"
+    examples: ["CSMA/CD collision detection requires a minimum frame length", "piggybacking requires bidirectional data flow"]
+    near_misses:
+      - {relation: uses, example: "TCP uses sliding window", why: "a means employed, not a precondition"}
+      - {relation: prerequisite_of, example: "sliding window prerequisite_of TCP flow control", why: "a learning dependency, not a technical one"}
+    domain_types: [Any]
+    range_types: [Any]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: null
+    conflicts_with: []
+    compatible_with: {uses: partial}
+
+  # ---------------- 5. Classification & structure ----------------
+  - name: is_a
+    family: classification_structure
+    layer: taxonomy
+    definition: "Source is a kind/subtype of target."
+    template: "{X} is a kind of {Y}"
+    examples: ["CSMA/CD is_a medium access protocol", "Manchester encoding is_a line encoding scheme"]
+    near_misses:
+      - {relation: part_of, example: "extension header part_of IPv6 packet", why: "a component, not a subtype"}
+      - {relation: has_property, example: "Manchester encoding has_property self-clocking", why: "an attribute, not a category"}
+    domain_types: [Any]
+    range_types: [Any]
+    directional: true
+    symmetric: false
+    transitive: true
+    inverse_of: has_subtype
+    conflicts_with: []
+    compatible_with: {}
+
+  - name: part_of
+    family: classification_structure
+    layer: taxonomy
+    definition: "Source is a part of target. REQUIRED qualifier part_type: component (field/module of a structured whole), member (element of a collection/group), phase (step/stage of a process)."
+    template: "{X} is part of {Y}"
+    examples: ["extension header part_of[component] IPv6 packet", "host part_of[member] collision domain", "slow start part_of[phase] TCP congestion control"]
+    near_misses:
+      - {relation: is_a, example: "CSMA/CD is_a MAC protocol", why: "a subtype, not a part"}
+      - {relation: precedes, example: "slow start precedes congestion avoidance", why: "ordering between phases, not membership"}
+    domain_types: [Any]
+    range_types: [Any]
+    directional: true
+    symmetric: false
+    transitive: "within_same_part_type"
+    inverse_of: has_part
+    conflicts_with: []
+    compatible_with: {}
+
+  - name: has_property
+    family: classification_structure
+    layer: semantic
+    definition: "Source has the characteristic, behaviour, value or constraint named by target."
+    template: "{X} has the property {Y}"
+    examples: ["slow start has_property exponential cwnd growth", "Manchester encoding has_property self-clocking", "reserved Class A address 127.0.0.0/8 has_property loopback"]
+    near_misses:
+      - {relation: has_purpose, example: "carrier extension has_purpose collision detection", why: "a designed goal, not an attribute"}
+      - {relation: increases, example: "frame bursting increases efficiency", why: "an effect on a quantity, not a static attribute"}
+    domain_types: [Any]
+    range_types: [Property, Parameter]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: null
+    conflicts_with: []
+    compatible_with: {}
+
+  # ---------------- 6. Comparison ----------------
+  - name: contrasts_with
+    family: comparison
+    layer: semantic
+    definition: "Source and target are commonly compared and differ; name what differs in the dimension qualifier and state it in the statement. Use for confusable pairs."
+    template: "{X} differs from {Y}"
+    examples: ["slow start contrasts_with congestion avoidance [dimension: cwnd growth rate]", "synchronous transmission contrasts_with asynchronous transmission [dimension: clock sharing]"]
+    near_misses:
+      - {relation: equivalent_to, example: "carrier extension equivalent_to slot-time extension", why: "same thing, not different"}
+    domain_types: [Any]
+    range_types: [Any]
+    directional: false
+    symmetric: true
+    transitive: false
+    inverse_of: null
+    conflicts_with: [equivalent_to]
+    compatible_with: {}
+
+  - name: equivalent_to
+    family: comparison
+    layer: semantic
+    definition: "Source and target denote the same thing under different names/framings (true synonyms go in aliases instead)."
+    template: "{X} is the same as {Y}"
+    examples: ["Gigabit Ethernet carrier extension equivalent_to extending the slot time to 512 bytes"]
+    near_misses:
+      - {relation: is_a, example: "CSMA/CD is_a MAC protocol", why: "a subtype, not the same thing"}
+    domain_types: [Any]
+    range_types: [Any]
+    directional: false
+    symmetric: true
+    transitive: true
+    inverse_of: null
+    conflicts_with: [contrasts_with]
+    compatible_with: {}
+
+  # ---------------- Pedagogical (separate layer; not used to judge correctness) ----------------
+  - name: prerequisite_of
+    family: pedagogical
+    layer: prerequisite
+    definition: "Understanding source is needed to understand target (educational dependency; NOT book order)."
+    template: "understanding {X} is needed to understand {Y}"
+    examples: ["sliding window prerequisite_of TCP flow control"]
+    near_misses:
+      - {relation: requires, example: "CSMA/CD requires minimum frame length", why: "technical dependency, not a learning dependency"}
+    domain_types: [Any]
+    range_types: [Any]
+    directional: true
+    symmetric: false
+    transitive: true          # irreflexive + asymmetric enforced by checks
+    inverse_of: null
+    conflicts_with: []
+    compatible_with: {}
+
+# ---------------- Reasoning layer: links BETWEEN edges (propositions) — new in v1 ----------------
+# Modelled on the Penn Discourse Treebank 3.0 top-level senses. A chain link says how one proposition supports another.
+chain_link_types:
+  - {name: cause,     template: "{A} because {B}",          cues: [because, since, as a result, therefore, so, hence, due to]}
+  - {name: purpose,   template: "{A} in order that {B}",    cues: [in order to, so that, to ensure, to avoid, for]}
+  - {name: condition, template: "if {B} then {A}",          cues: [if, when, unless, only if, as long as, whenever]}
+  - {name: sequence,  template: "{A} then {B}",             cues: [then, after, before, once, next, until, afterwards]}
+  - {name: contrast,  template: "{A} whereas {B}",          cues: [whereas, but, however, unlike, while, in contrast]}
+
+# Structure layer (created by parser/mentions, not by the relation LLM):
+#   introduced_in (Concept -> Section), mentioned_in (Concept -> Section)
+# Misconception layer (M8): asserts (Misconception -> edge pattern), conflicts_with (Misconception -> ExpertEdge)
+# Escape valve: relation "other" + surface_phrase, logged and reviewed each run (EDC "define" step).

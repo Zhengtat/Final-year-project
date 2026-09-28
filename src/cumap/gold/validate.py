@@ -172,9 +172,11 @@ def validate_gold_dir(
     """
     sections_by_id = sections_by_id or {}
     answers_by_id = answers_by_id or {}
-    registry = registry or RelationRegistry.from_yaml(
-        Path(__file__).parents[3] / "configs" / "relations_v0.yaml"
-    )
+    if registry is None:
+        from cumap.config import get_settings
+
+        settings = get_settings()
+        registry = RelationRegistry.from_yaml(settings.resolve(settings.relation_registry))
 
     issues: list[ValidationIssue] = []
     if not gold_dir.exists():

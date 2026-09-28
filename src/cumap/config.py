@@ -49,6 +49,8 @@ class Settings(BaseModel):
     seed: int
     paths: PathsConfig
     textbook: TextbookConfig
+    relation_registry: Path
+    registry_version_supported: list[int]
     llm: LLMConfig
     embeddings: EmbeddingsConfig
     pilot_questions: list[str]

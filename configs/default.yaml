@@ -19,6 +19,12 @@ textbook:
   # Filled in by `cumap textbook fetch` (M1) and logged in DECISIONS.md.
   pinned_commit: 5deec5e741e2b8c0bc44566108a24cb783c2c7de
 
+# CR-001: default registry is now v1 (16 relations, 6 families + pedagogical).
+# relations_v0.yaml stays loadable (RelationRegistry.from_yaml accepts either file);
+# registry_version_supported documents which versions cumap gold validate accepts.
+relation_registry: configs/relations_v1.yaml
+registry_version_supported: [0, 1]
+
 llm:
   # Model names default here but are read from OPENAI_MODEL_STRONG / OPENAI_MODEL_BULK if set.
   model_strong: gpt-6-astra

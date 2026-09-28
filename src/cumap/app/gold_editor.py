@@ -32,7 +32,7 @@ st.set_page_config(page_title="cumap gold editor", layout="wide")
 settings = get_settings()
 interim_dir = settings.resolve(settings.paths.data_interim)
 gold_dir = settings.resolve(settings.paths.data_gold)
-registry = RelationRegistry.from_yaml(settings.repo_root / "configs" / "relations_v0.yaml")
+registry = RelationRegistry.from_yaml(settings.resolve(settings.relation_registry))
 
 
 @st.cache_data
