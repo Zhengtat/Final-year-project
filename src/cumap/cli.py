@@ -175,7 +175,38 @@ def textbook_coverage(
 @gold_app.command("validate")
 def gold_validate() -> None:
     """Validate every file under data/gold/ against the schemas and relation registry."""
-    _not_implemented("cumap gold validate", "M2")
+    import json as _json
+
+    from cumap.gold.validate import validate_gold_dir
+
+    settings = get_settings()
+    gold_dir = settings.resolve(settings.paths.data_gold)
+    interim_dir = settings.resolve(settings.paths.data_interim)
+
+    sections_by_id = {}
+    sections_path = interim_dir / "textbook_sections.jsonl"
+    if sections_path.exists():
+        for line in sections_path.read_text().splitlines():
+            row = _json.loads(line)
+            sections_by_id[row["section_id"]] = row["text"]
+
+    answers_by_id = {}
+    answers_path = interim_dir / "saf_answers.parquet"
+    if answers_path.exists():
+        import pandas as pd
+
+        answers_df = pd.read_parquet(answers_path, columns=["answer_id", "provided_answer"])
+        answers_by_id = dict(zip(answers_df["answer_id"], answers_df["provided_answer"], strict=True))
+
+    issues = validate_gold_dir(gold_dir, sections_by_id=sections_by_id, answers_by_id=answers_by_id)
+    if not issues:
+        typer.echo("cumap gold validate: OK (no issues found)")
+        raise typer.Exit(code=0)
+
+    for issue in issues:
+        typer.echo(str(issue))
+    typer.echo(f"\n{len(issues)} issue(s) found.")
+    raise typer.Exit(code=1)
 
 
 @gold_app.command("suggest-expert")
