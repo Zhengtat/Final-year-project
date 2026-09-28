@@ -1,0 +1,40 @@
+# Default configuration for cumap. Values here are overridden by environment variables
+# where noted (model names, API key, backend).
+version: 0
+seed: 42
+
+paths:
+  data_raw: data/raw
+  data_interim: data/interim
+  data_gold: data/gold
+  data_processed: data/processed
+  data_cache: data/cache
+  data_logs: data/logs
+  reports: reports
+  prompts: prompts
+
+textbook:
+  repo_url: "https://github.com/SystemsApproach/book"
+  clone_dir: data/raw/textbook/pd6
+  # Filled in by `cumap textbook fetch` (M1) and logged in DECISIONS.md.
+  pinned_commit: null
+
+llm:
+  # Model names default here but are read from OPENAI_MODEL_STRONG / OPENAI_MODEL_BULK if set.
+  model_strong: gpt-6-astra
+  model_bulk: gpt-6-luna
+  # gpt-6-astra does not support reasoning effort "none"; use "low" as its floor.
+  reasoning_effort:
+    concept_extraction: low
+    relation_extraction: low
+    propositions: medium
+    judging: medium
+    per_answer_labelling: low
+    student_extraction: low
+  max_usd_per_command: 5
+
+embeddings:
+  model: sentence-transformers/all-MiniLM-L6-v2
+
+# Populated by the 👤 HUMAN after M1's coverage review.
+pilot_questions: []

@@ -1,0 +1,20 @@
+# secrets
+.env
+
+# data (raw/processed/cache/logs are regenerated; data/gold/ and data/interim/ ARE committed —
+# interim holds model drafts for human review, gold is human-owned)
+data/raw/
+data/processed/
+data/cache/
+data/logs/
+
+# python / uv
+.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# os
+.DS_Store

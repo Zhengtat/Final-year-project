@@ -1,0 +1,199 @@
+# Relation registry v0 — DRAFT for human approval (BUILD_PLAN M2)
+# Domain: computer networking (Peterson & Davie 6e / SAF).
+# Diagnosis logic reads this file: directional/symmetric/inverse/conflicts/compatible drive match_type rules.
+# node types: Protocol, Mechanism, Component, DataUnit, Parameter, Property, Event, State, Layer, Concept, Any
+
+version: 0
+node_types: [Protocol, Mechanism, Component, DataUnit, Parameter, Property, Event, State, Layer, Concept]
+
+relations:
+
+  # ---------- taxonomy layer ----------
+  - name: is_a
+    layer: taxonomy
+    definition: "Source is a kind/subtype of target."
+    examples: ["CSMA/CD is_a medium access protocol", "Manchester encoding is_a line encoding scheme"]
+    domain_types: [Any]
+    range_types: [Any]
+    directional: true
+    symmetric: false
+    transitive: true
+    inverse_of: has_subtype
+    conflicts_with: []
+    compatible_with: {}
+
+  - name: part_of
+    layer: taxonomy
+    definition: "Source is a component, field or sub-part of target."
+    examples: ["extension header part_of IPv6 packet", "congestion window part_of TCP sender state"]
+    domain_types: [Any]
+    range_types: [Any]
+    directional: true
+    symmetric: false
+    transitive: true
+    inverse_of: has_part
+    conflicts_with: []
+    compatible_with: {}
+
+  # ---------- prerequisite layer ----------
+  - name: prerequisite_of
+    layer: prerequisite
+    definition: "Understanding source is needed to understand target (educational dependency; NOT book order)."
+    examples: ["sliding window prerequisite_of TCP flow control"]
+    domain_types: [Any]
+    range_types: [Any]
+    directional: true
+    symmetric: false
+    transitive: true          # irreflexive + asymmetric enforced by checks
+    inverse_of: null
+    conflicts_with: []
+    compatible_with: {}
+
+  # ---------- semantic layer ----------
+  - name: has_property
+    layer: semantic
+    definition: "Source has the characteristic, behaviour, value or constraint named by target."
+    examples: ["slow start has_property exponential cwnd growth", "Manchester encoding has_property self-clocking"]
+    domain_types: [Any]
+    range_types: [Property, Parameter]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: null
+    conflicts_with: []
+    compatible_with: {}
+
+  - name: uses
+    layer: semantic
+    definition: "Source employs target as a means/mechanism/data structure to do its job."
+    examples: ["TCP uses sliding window", "transparent bridge uses forwarding table"]
+    domain_types: [Protocol, Mechanism, Component]
+    range_types: [Any]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: used_by
+    conflicts_with: []
+    compatible_with: {requires: partial}
+
+  - name: requires
+    layer: semantic
+    definition: "Source cannot work or be valid without target (a functional/technical dependency or constraint)."
+    examples: ["CSMA/CD collision detection requires minimum frame length", "piggybacking requires bidirectional data flow"]
+    domain_types: [Any]
+    range_types: [Any]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: null
+    conflicts_with: []
+    compatible_with: {uses: partial}
+
+  - name: triggers
+    layer: semantic
+    definition: "By protocol rule, event/state source initiates action or state change target (use conditions for the context)."
+    examples: ["timeout triggers cwnd reset to 1 MSS", "three duplicate ACKs triggers fast retransmit"]
+    domain_types: [Event, State]
+    range_types: [Mechanism, State, Event, Parameter]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: triggered_by
+    conflicts_with: []
+    compatible_with: {causes: partial}
+
+  - name: causes
+    layer: semantic
+    definition: "Source brings about target as a consequence (not a protocol rule; a causal/physical/logical effect)."
+    examples: ["simultaneous transmission causes collision", "packet loss causes throughput drop"]
+    domain_types: [Any]
+    range_types: [Event, State, Property]
+    directional: true
+    symmetric: false
+    transitive: true
+    inverse_of: caused_by
+    conflicts_with: [prevents]
+    compatible_with: {triggers: partial}
+
+  - name: prevents
+    layer: semantic
+    definition: "Source stops or avoids target from happening."
+    examples: ["spanning tree prevents forwarding loops", "sequence numbers prevents duplicate delivery"]
+    domain_types: [Any]
+    range_types: [Event, State, Property]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: null
+    conflicts_with: [causes]
+    compatible_with: {}
+
+  - name: increases
+    layer: semantic
+    definition: "More/activation of source raises the value of target."
+    examples: ["each ACK in slow start increases cwnd", "longer cable increases propagation delay"]
+    domain_types: [Any]
+    range_types: [Parameter, Property]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: null
+    conflicts_with: [decreases]
+    compatible_with: {}
+
+  - name: decreases
+    layer: semantic
+    definition: "More/activation of source lowers the value of target."
+    examples: ["triple duplicate ACK decreases cwnd (halves it in Reno)", "frame bursting decreases per-frame overhead"]
+    domain_types: [Any]
+    range_types: [Parameter, Property]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: null
+    conflicts_with: [increases]
+    compatible_with: {}
+
+  - name: precedes
+    layer: semantic
+    definition: "In a process/protocol, step or phase source happens before target."
+    examples: ["slow start precedes congestion avoidance", "SYN precedes SYN-ACK"]
+    domain_types: [State, Event, Mechanism]
+    range_types: [State, Event, Mechanism]
+    directional: true
+    symmetric: false
+    transitive: true
+    inverse_of: follows
+    conflicts_with: []
+    compatible_with: {}
+
+  - name: contrasts_with
+    layer: semantic
+    definition: "Source and target are commonly compared and differ in a way stated in the edge statement (use for confusable pairs)."
+    examples: ["slow start contrasts_with congestion avoidance", "synchronous transmission contrasts_with asynchronous transmission"]
+    domain_types: [Any]
+    range_types: [Any]
+    directional: false
+    symmetric: true
+    transitive: false
+    inverse_of: null
+    conflicts_with: [equivalent_to]
+    compatible_with: {}
+
+  - name: equivalent_to
+    layer: semantic
+    definition: "Source and target denote the same thing under different names/framings (true synonyms go in aliases instead)."
+    examples: ["Gigabit Ethernet carrier extension equivalent_to extending the slot time to 512 bytes"]
+    domain_types: [Any]
+    range_types: [Any]
+    directional: false
+    symmetric: true
+    transitive: true
+    inverse_of: null
+    conflicts_with: [contrasts_with]
+    compatible_with: {}
+
+# Structure layer (not LLM-extracted as relations; created by the parser / mentions):
+#   introduced_in (Concept -> Section), mentioned_in (Concept -> Section)
+# Misconception layer (M8): asserts (Misconception -> edge pattern), conflicts_with (Misconception -> ExpertEdge)
+# Anything the relation LLM cannot fit goes to relation "other" and is logged for review (EDC "define" step).
