@@ -1,0 +1,17 @@
+# CR-005 §9 follow-up (2026-09-30): human-judged canonicalisation overrides, checked
+# by canonicalize_mention before any prompt version gets a chance to decide. Pairs
+# here are case-insensitive, unordered (order within a pair doesn't matter).
+#
+# never_merge: the two names must NEVER be treated as "same" (a kind, instance, part,
+#   version, predecessor/successor, or standardised variant collapsed into its
+#   category is exactly the error class this exists to block -- see DECISIONS.md for
+#   the three real merges that prompted this).
+# force_merge: the two names must ALWAYS be treated as "same", no LLM call needed
+#   (not used yet -- empty until a real case needs it).
+
+never_merge:
+  - [High-Level Data Link Control (HDLC), Synchronous Data Link Control (SDLC)]
+  - [Internet, internetworking]
+  - [cyclic redundancy check, error-detecting code]
+
+force_merge: []

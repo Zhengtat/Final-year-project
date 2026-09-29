@@ -219,6 +219,64 @@ def test_budget_exceeded_stops_mid_run_and_checkpoints(
     assert saved.stage == "concepts"  # never advanced
 
 
+def test_run_canonicalize_stage_persists_taxonomy_candidates_without_merging(
+    tmp_settings, fixtures_dir, tmp_path, monkeypatch
+):
+    """CR-005 §9 follow-up: narrower/broader decisions must never merge, but the
+    kind/instance relationship they found must not be silently discarded either.
+    """
+    from cumap.expert_kg.canonicalize import CanonicalizationOutcome
+
+    call_count = 0
+
+    def patched(client_, prompt_, registry_, mention, **kwargs):
+        nonlocal call_count
+        call_count += 1
+        concept = registry_.add_new(mention)
+        return CanonicalizationOutcome(
+            decision="broader",
+            concept_id=concept.concept_id,
+            llm_called=True,
+            matched_concept_id="c_existing",
+            reason="the new mention is a kind of the existing concept",
+        )
+
+    monkeypatch.setattr(pipeline_module, "canonicalize_mention", patched)
+
+    client = LLMClient(tmp_settings, fixtures_dir=fixtures_dir)
+    prompts = _prompts()
+    sections = _sections()
+    run_dir = tmp_path / "run"
+
+    checkpoint = Checkpoint(run_id=client.run_id, stage="canonicalize")
+    checkpoint.mentions_by_section = {
+        "ch1_s1": [
+            {
+                "canonical_name": "TCP",
+                "node_type": "Protocol",
+                "role": "used",
+                "definition": None,
+                "evidence_quote": "q",
+                "section_id": "ch1_s1",
+                "run_index": 0,
+            }
+        ],
+        "ch2_s1": [],
+    }
+
+    checkpoint, _registry = run_canonicalize_stage(
+        client, prompts, sections, _fake_embed, run_dir, checkpoint
+    )
+
+    assert call_count == 1
+    assert len(checkpoint.merges) == 0  # broader must never merge
+    assert len(checkpoint.taxonomy_candidates) == 1
+    candidate = checkpoint.taxonomy_candidates[0]
+    assert candidate["decision"] == "broader"
+    assert candidate["matched_concept_id"] == "c_existing"
+    assert candidate["section_id"] == "ch1_s1"
+
+
 def test_demo_slice_iir_face_has_no_relation_stage():
     demo_slice = load_demo_slice()
     assert demo_slice.iir_face.relations_enabled is False

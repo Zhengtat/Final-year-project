@@ -25,6 +25,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
 from cumap.expert_kg.canonicalize import (
+    CanonicalOverrides,
     ConceptRegistry,
     Mention,
     RegisteredConcept,
@@ -79,11 +80,13 @@ class PromptSet:
         prompts_dir: Path,
         *,
         concept_extraction_version: str = "v2",
+        canonicalize_version: str = "v2",
         relation_prompt_version: str = "v2",
     ) -> PromptSet:
         """concept_extraction defaults to v2 (CR-005 §9's STOP-2 dev ablation winner,
-        selected over v1/v2+g -- see DECISIONS.md); same prompt family for both
-        P&D and IIR, only the {domain} string changes.
+        selected over v1/v2+g); canonicalize defaults to v2 (tightened "same" rule
+        after a manual review found kind/instance merges -- see DECISIONS.md for
+        both). Same prompt family for both P&D and IIR, only {domain} changes.
         """
         return cls(
             concept_extraction=load_prompt(
@@ -92,7 +95,7 @@ class PromptSet:
             concept_extraction_gleaning=load_prompt(
                 prompts_dir, "concept_extraction_gleaning", "v1"
             ),
-            canonicalize=load_prompt(prompts_dir, "canonicalize", "v1"),
+            canonicalize=load_prompt(prompts_dir, "canonicalize", canonicalize_version),
             relation_family=load_prompt(prompts_dir, "relation_family", relation_prompt_version),
             relation_choice=load_prompt(prompts_dir, "relation_choice", relation_prompt_version),
             relation_qualifiers=load_prompt(
@@ -120,6 +123,11 @@ class Checkpoint:
     concepts: list[dict] = field(default_factory=list)  # stage b's ConceptRegistry state
     concept_first_chapter: dict[str, int] = field(default_factory=dict)
     merges: list[dict] = field(default_factory=list)
+    # CR-005 §9 follow-up: narrower/broader canonicalisation decisions never merge --
+    # each mints a new concept, but the kind/instance relationship it stands in to the
+    # matched candidate is logged here rather than discarded, for the taxonomy layer
+    # (is_a / broader candidates) to consume later.
+    taxonomy_candidates: list[dict] = field(default_factory=list)
     pair_registry: list[dict] = field(default_factory=list)  # stage d's PairRegistry state
     rejected_relations: list[dict] = field(default_factory=list)
 
@@ -284,10 +292,13 @@ def run_canonicalize_stage(
     embed_fn,
     run_dir: Path,
     checkpoint: Checkpoint,
+    *,
+    overrides: CanonicalOverrides | None = None,
 ) -> tuple[Checkpoint, ConceptRegistry]:
     concept_registry = _restore_concept_registry(checkpoint, embed_fn)
     concept_first_chapter: dict[str, int] = dict(checkpoint.concept_first_chapter)
     merges = list(checkpoint.merges)
+    taxonomy_candidates = list(checkpoint.taxonomy_candidates)
 
     for section in sections:
         if section.section_id in checkpoint.completed_section_ids:
@@ -299,13 +310,27 @@ def run_canonicalize_stage(
         try:
             for mention in mentions:
                 outcome = canonicalize_mention(
-                    client, prompts.canonicalize, concept_registry, mention
+                    client, prompts.canonicalize, concept_registry, mention, overrides=overrides
                 )
-                if outcome.decision == "same" and outcome.llm_called:
+                if outcome.decision == "same":
                     merges.append(
                         {
                             "concept_id": outcome.concept_id,
                             "alias": mention.canonical_name,
+                            "section_id": section.section_id,
+                            "llm_called": outcome.llm_called,
+                            "auto_merged": outcome.auto_merged,
+                            "overridden": outcome.overridden,
+                            "reason": outcome.reason,
+                        }
+                    )
+                elif outcome.decision in ("narrower", "broader") and outcome.matched_concept_id:
+                    taxonomy_candidates.append(
+                        {
+                            "concept_id": outcome.concept_id,
+                            "matched_concept_id": outcome.matched_concept_id,
+                            "decision": outcome.decision,
+                            "reason": outcome.reason,
                             "section_id": section.section_id,
                         }
                     )
@@ -314,6 +339,7 @@ def run_canonicalize_stage(
             checkpoint.concepts = [_concept_to_dict(c) for c in concept_registry.all()]
             checkpoint.concept_first_chapter = concept_first_chapter
             checkpoint.merges = merges
+            checkpoint.taxonomy_candidates = taxonomy_candidates
             save_checkpoint(checkpoint, run_dir)
             raise
 
@@ -321,6 +347,7 @@ def run_canonicalize_stage(
         checkpoint.concepts = [_concept_to_dict(c) for c in concept_registry.all()]
         checkpoint.concept_first_chapter = concept_first_chapter
         checkpoint.merges = merges
+        checkpoint.taxonomy_candidates = taxonomy_candidates
         save_checkpoint(checkpoint, run_dir)
 
     checkpoint.stage = "pairs_enumerated"

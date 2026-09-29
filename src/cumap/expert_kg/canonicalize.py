@@ -1,15 +1,30 @@
 """M5 task 3: canonicalisation against the growing global concept registry. For each
-new mention, retrieve the top-5 similar existing concepts (name+definition embedding);
-above a similarity threshold, the LLM decides same/broader/narrower/different. Below
-threshold, no LLM call is needed — it's automatically a new concept.
+new mention: (1) an exact-string match against an existing concept's name/aliases
+auto-merges with no LLM call; (2) otherwise, retrieve the top-5 similar existing
+concepts (name+definition embedding) -- above a similarity threshold, the LLM decides
+same/broader/narrower/different (a `configs/canonical_overrides.yaml` never_merge/
+force_merge list can override or pre-empt this); below threshold, no LLM call is
+needed, it's automatically a new concept.
+
+CR-005 §9 follow-up (2026-09-30): three "same" merges from a manual review turned out
+wrong (a kind or instance collapsed into its category -- e.g. HDLC into SDLC, the
+Internet into "internetworking", CRC into "error-detecting code"). Fixed three ways:
+exact-string duplicates no longer need an LLM call at all (removes one source of
+LLM-decision noise for the trivial case); canonicalize/v2.md tightens what "same"
+means (interchangeable in any sentence -- never a kind/instance/part/version/
+predecessor-successor/standardised-variant of the other); and the three flagged pairs
+are now hard-blocked via canonical_overrides.yaml regardless of what any prompt
+version would say.
 """
 
 from __future__ import annotations
 
 import re
 from dataclasses import dataclass, field
+from pathlib import Path
 
 import numpy as np
+import yaml
 
 from cumap.expert_kg.concepts import ConceptMentionCandidate
 from cumap.expert_kg.llm_schemas import CanonicalizeDecisionLLM
@@ -49,6 +64,40 @@ class CanonicalizationOutcome:
     llm_called: bool
     matched_concept_id: str | None = None  # the existing concept it was compared against, if any
     reason: str | None = None
+    auto_merged: bool = False  # exact-string match to an existing name/alias, no LLM call
+    overridden: bool = False  # canonical_overrides.yaml forced or blocked this decision
+
+
+@dataclass
+class CanonicalOverrides:
+    """configs/canonical_overrides.yaml: name pairs a human has already judged, so no
+    prompt version gets another chance to get them wrong. never_merge pre-empts the
+    LLM entirely (the candidate is dropped before the prompt is even built);
+    force_merge short-circuits straight to a merge, no LLM call.
+    """
+
+    never_merge: set[frozenset[str]] = field(default_factory=set)
+    force_merge: set[frozenset[str]] = field(default_factory=set)
+
+    @classmethod
+    def load(cls, path: Path) -> CanonicalOverrides:
+        if not path.exists():
+            return cls()
+        raw = yaml.safe_load(path.read_text()) or {}
+        return cls(
+            never_merge={
+                frozenset((a.lower(), b.lower())) for a, b in raw.get("never_merge") or []
+            },
+            force_merge={
+                frozenset((a.lower(), b.lower())) for a, b in raw.get("force_merge") or []
+            },
+        )
+
+    def is_never_merge(self, name_a: str, name_b: str) -> bool:
+        return frozenset((name_a.lower(), name_b.lower())) in self.never_merge
+
+    def is_force_merge(self, name_a: str, name_b: str) -> bool:
+        return frozenset((name_a.lower(), name_b.lower())) in self.force_merge
 
 
 class ConceptRegistry:
@@ -76,6 +125,19 @@ class ConceptRegistry:
         """
         for concept in concepts:
             self._concepts[concept.concept_id] = concept
+
+    def find_exact_match(self, name: str) -> RegisteredConcept | None:
+        """Case-insensitive exact match against an existing concept's canonical_name
+        or any alias -- O(n) over the registry, fine at this scale (hundreds, not
+        millions, of concepts). Used to auto-merge trivial duplicates with no LLM call.
+        """
+        name_lower = name.lower()
+        for concept in self._concepts.values():
+            if name_lower == concept.canonical_name.lower():
+                return concept
+            if name_lower in {a.lower() for a in concept.aliases}:
+                return concept
+        return None
 
     def _text_for_embedding(self, name: str, definition: str | None) -> str:
         return f"{name}. {definition}" if definition else name
@@ -138,12 +200,61 @@ def canonicalize_mention(
     similarity_threshold: float = DEFAULT_SIMILARITY_THRESHOLD,
     k: int = 5,
     fixture_name: str = "default",
+    overrides: CanonicalOverrides | None = None,
 ) -> CanonicalizationOutcome:
+    overrides = overrides or CanonicalOverrides()
+
+    # Exact-string duplicate: auto-merge, no LLM call (unless a human has specifically
+    # blocked this exact pair via never_merge).
+    exact_match = registry.find_exact_match(mention.canonical_name)
+    if exact_match is not None and not overrides.is_never_merge(
+        mention.canonical_name, exact_match.canonical_name
+    ):
+        registry.merge_alias(exact_match.concept_id, mention)
+        return CanonicalizationOutcome(
+            decision="same",
+            concept_id=exact_match.concept_id,
+            llm_called=False,
+            matched_concept_id=exact_match.concept_id,
+            auto_merged=True,
+        )
+
     candidates = registry.top_k_similar(mention.canonical_name, mention.definition, k=k)
+
+    for candidate, _sim in candidates:
+        if overrides.is_force_merge(mention.canonical_name, candidate.canonical_name):
+            registry.merge_alias(candidate.concept_id, mention)
+            return CanonicalizationOutcome(
+                decision="same",
+                concept_id=candidate.concept_id,
+                llm_called=False,
+                matched_concept_id=candidate.concept_id,
+                overridden=True,
+            )
+
     if not candidates or candidates[0][1] < similarity_threshold:
         new_concept = registry.add_new(mention)
         return CanonicalizationOutcome(
             decision="different", concept_id=new_concept.concept_id, llm_called=False
+        )
+
+    # never_merge: drop these candidates before the LLM ever sees them, so it can't
+    # choose an option a human has already ruled out.
+    blocked_any = False
+    filtered = []
+    for candidate, sim in candidates:
+        if overrides.is_never_merge(mention.canonical_name, candidate.canonical_name):
+            blocked_any = True
+        else:
+            filtered.append((candidate, sim))
+    candidates = filtered
+    if not candidates:
+        new_concept = registry.add_new(mention)
+        return CanonicalizationOutcome(
+            decision="different",
+            concept_id=new_concept.concept_id,
+            llm_called=False,
+            overridden=blocked_any,
         )
 
     candidates_block = "\n".join(
