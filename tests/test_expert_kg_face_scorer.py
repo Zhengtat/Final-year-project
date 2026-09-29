@@ -18,7 +18,7 @@ from cumap.expert_kg.face_scorer import (
     match_predictions,
     micro_prf1,
     precision_by_role,
-    prf1_by_ngram_length,
+    recall_by_ngram_length,
     sample_errors,
 )
 
@@ -139,14 +139,16 @@ def test_micro_and_macro_prf1_known_values():
     assert macro.recall == pytest.approx(0.75)
 
 
-def test_prf1_by_ngram_length_groups_by_gold_length():
+def test_recall_by_ngram_length_groups_by_gold_length():
     gold = [GoldConcept("s1", "index"), GoldConcept("s1", "inverted index list")]
     predicted = [PredictedConcept("s1", "index", role="used")]  # matches the 1-gram gold only
     results = match_predictions(predicted, gold, lenient=False)
 
-    by_length = prf1_by_ngram_length(results, gold)
+    by_length = recall_by_ngram_length(results, gold)
     assert by_length[1].tp == 1
+    assert by_length[1].recall == 1.0
     assert by_length[3].fn == 1  # "inverted index list" never matched
+    assert by_length[3].recall == 0.0
 
 
 def test_precision_by_role_has_no_recall_meaning():

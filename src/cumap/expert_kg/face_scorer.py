@@ -206,22 +206,38 @@ def macro_prf1(results: list[MatchResult], gold: list[GoldConcept]) -> PRF1:
     )
 
 
-def prf1_by_ngram_length(results: list[MatchResult], gold: list[GoldConcept]) -> dict[int, PRF1]:
+@dataclass
+class RecallByLength:
+    tp: int
+    fn: int
+    recall: float
+
+
+def recall_by_ngram_length(
+    results: list[MatchResult], gold: list[GoldConcept]
+) -> dict[int, RecallByLength]:
     """Recall broken down by the GOLD concept's own n-gram length (1-4) -- the
     standard breakdown for a keyphrase-style task: does the system systematically
-    miss longer phrases? Precision/F1 are reported for completeness but attributed to
-    the *matched* gold concept's length (an unmatched prediction has no gold length,
-    so it's excluded from this breakdown, not silently dropped from micro/macro).
+    miss longer phrases? Precision/F1 aren't reported here (deliberately, not an
+    oversight): an unmatched prediction has no gold length to attribute a false
+    positive to, so a precision computed only from this breakdown's TPs would show a
+    meaningless 1.0 in every bucket. Use `precision_by_role` or micro/macro precision
+    for that question instead.
     """
-    by_length: dict[int, dict[str, int]] = defaultdict(lambda: {"tp": 0, "fp": 0, "fn": 0})
+    by_length: dict[int, dict[str, int]] = defaultdict(lambda: {"tp": 0, "fn": 0})
     for r in results:
         if r.matched_gold is not None:
             by_length[ngram_len(r.matched_gold.concept)]["tp"] += 1
-    fns = _false_negatives(results, gold)
-    for g in fns:
+    for g in _false_negatives(results, gold):
         by_length[ngram_len(g.concept)]["fn"] += 1
     return {
-        length: _prf1(counts["tp"], counts["fp"], counts["fn"])
+        length: RecallByLength(
+            tp=counts["tp"],
+            fn=counts["fn"],
+            recall=counts["tp"] / (counts["tp"] + counts["fn"])
+            if (counts["tp"] + counts["fn"])
+            else 0.0,
+        )
         for length, counts in by_length.items()
     }
 
