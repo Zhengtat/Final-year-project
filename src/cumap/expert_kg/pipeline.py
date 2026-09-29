@@ -74,9 +74,21 @@ class PromptSet:
     relation_qualifiers: PromptTemplate
 
     @classmethod
-    def load(cls, prompts_dir: Path, *, relation_prompt_version: str = "v2") -> PromptSet:
+    def load(
+        cls,
+        prompts_dir: Path,
+        *,
+        concept_extraction_version: str = "v2",
+        relation_prompt_version: str = "v2",
+    ) -> PromptSet:
+        """concept_extraction defaults to v2 (CR-005 §9's STOP-2 dev ablation winner,
+        selected over v1/v2+g -- see DECISIONS.md); same prompt family for both
+        P&D and IIR, only the {domain} string changes.
+        """
         return cls(
-            concept_extraction=load_prompt(prompts_dir, "concept_extraction", "v1"),
+            concept_extraction=load_prompt(
+                prompts_dir, "concept_extraction", concept_extraction_version
+            ),
             concept_extraction_gleaning=load_prompt(
                 prompts_dir, "concept_extraction_gleaning", "v1"
             ),
@@ -220,7 +232,13 @@ def run_concepts_stage(
     nlp,
     run_dir: Path,
     checkpoint: Checkpoint,
+    *,
+    include_gleaning: bool = False,
 ) -> Checkpoint:
+    """include_gleaning defaults to False: CR-005 §9's STOP-2 ablation chose "v2"
+    (main pass only) over "v2+g" (v2 + targeted gleaning) -- the gleaning call wasn't
+    earning its cost once v2's main prompt fixed the generic-word problem.
+    """
     for section in sections:
         if section.section_id in checkpoint.completed_section_ids:
             continue
@@ -236,6 +254,7 @@ def run_concepts_stage(
                 heading_path=section.heading_path,
                 candidate_terms=candidate_terms,
                 domain=section.domain,
+                include_gleaning=include_gleaning,
             )
         except BudgetExceededError:
             save_checkpoint(checkpoint, run_dir)

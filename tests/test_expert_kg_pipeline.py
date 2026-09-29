@@ -110,7 +110,9 @@ def test_full_stage_pipeline_end_to_end(tmp_settings, fixtures_dir, tmp_path, nl
     run_dir = tmp_path / "run"
 
     checkpoint = Checkpoint(run_id=client.run_id, stage="concepts")
-    checkpoint = run_concepts_stage(client, prompts, registry, sections, nlp, run_dir, checkpoint)
+    checkpoint = run_concepts_stage(
+        client, prompts, registry, sections, nlp, run_dir, checkpoint, include_gleaning=True
+    )
     assert checkpoint.stage == "canonicalize"
     assert set(checkpoint.mentions_by_section) == {"ch1_s1", "ch2_s1"}
 
@@ -156,7 +158,7 @@ def test_concepts_stage_checkpoint_resume_skips_completed_sections(
 
     checkpoint = Checkpoint(run_id=client.run_id, stage="concepts")
     checkpoint = run_concepts_stage(
-        client, prompts, registry, sections[:1], nlp, run_dir, checkpoint
+        client, prompts, registry, sections[:1], nlp, run_dir, checkpoint, include_gleaning=True
     )
     calls_after_first_section = client.backend_call_count
 
@@ -165,11 +167,35 @@ def test_concepts_stage_checkpoint_resume_skips_completed_sections(
         "concepts"  # run_concepts_stage advances it to "canonicalize"; reset for resume
     )
     checkpoint.completed_section_ids = ["ch1_s1"]
-    checkpoint = run_concepts_stage(client, prompts, registry, sections, nlp, run_dir, checkpoint)
+    checkpoint = run_concepts_stage(
+        client, prompts, registry, sections, nlp, run_dir, checkpoint, include_gleaning=True
+    )
 
     # ch1_s1 must not be re-processed (no new calls for it, only ch2_s1's).
     assert client.backend_call_count == calls_after_first_section + 2  # ch2_s1: main + gleaning
     assert set(checkpoint.mentions_by_section) == {"ch1_s1", "ch2_s1"}
+
+
+def test_run_concepts_stage_defaults_to_no_gleaning(
+    tmp_settings, fixtures_dir, tmp_path, nlp, monkeypatch
+):
+    """CR-005 §9's STOP-2 ablation chose "v2" (no gleaning) over "v2+g" -- confirms
+    run_concepts_stage's default matches that decision.
+    """
+    _patch_concepts(monkeypatch)
+    client = LLMClient(tmp_settings, fixtures_dir=fixtures_dir)
+    registry = _registry()
+    prompts = _prompts()
+    run_dir = tmp_path / "run"
+
+    checkpoint = Checkpoint(run_id=client.run_id, stage="concepts")
+    checkpoint = run_concepts_stage(
+        client, prompts, registry, _sections()[:1], nlp, run_dir, checkpoint
+    )
+
+    assert client.backend_call_count == 1  # main pass only, no gleaning call
+    names = {m["canonical_name"] for m in checkpoint.mentions_by_section["ch1_s1"]}
+    assert "slow start" not in names  # only found by the (skipped) gleaning fixture
 
 
 def test_budget_exceeded_stops_mid_run_and_checkpoints(
