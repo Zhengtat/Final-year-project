@@ -85,8 +85,12 @@ llm:
   # averages (concept_extraction ~964, canonicalize ~145, relation_family ~172,
   # relation_choice ~310, relation_qualifiers ~307 incl. reasoning) so legitimate
   # longer answers aren't truncated, but bounded so nothing is open-ended.
+  # concept_extraction raised 2000 -> 3500 on 2026-09-29: v2's prompt (STOP-2 dev
+  # ablation) deliberately extracts more concepts (keeps short domain terms, splits
+  # coordinations), which hit the 2000 ceiling mid-JSON-string on a real call --
+  # caught immediately (invalid-JSON error, not a silent bad result), $0.03 wasted.
   max_output_tokens:
-    concept_extraction: 2000
+    concept_extraction: 3500
     concept_extraction_gleaning: 1500
     canonicalize: 300
     relation_family: 400
