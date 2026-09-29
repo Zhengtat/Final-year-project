@@ -13,11 +13,10 @@ as final. Reasoning tokens are counted as output tokens throughout (CR-005 step 
 
 from __future__ import annotations
 
-import json
 from dataclasses import dataclass, field
-from pathlib import Path
 
 from cumap.config import Settings
+from cumap.llm.cost import spend_from_log
 
 WORDS_TO_TOKENS = 1.3  # rough ratio for English technical prose
 
@@ -91,34 +90,12 @@ class SliceCostEstimate:
         return sum(t.usd for t in self.by_task)
 
 
-def spend_for_run(settings: Settings, run_id: str, log_path: Path | None = None) -> float:
-    """Real USD spent so far by `run_id`, read from the LLM call log (never the
-    estimator) -- the enforcement primitive behind `max_usd_per_command` as an actual
-    runtime stop, not just a pre-run prediction (CR-005 §2 step 5). Cache hits cost
-    nothing extra and are skipped; a tier with no configured price is skipped too
-    (can't cost what has no price -- estimate_slice_cost raises instead, since a
-    *plan* against an unpriced tier is a real error, but a *log* may contain calls
-    from before pricing existed).
-    """
-    path = log_path or (settings.resolve(settings.paths.data_logs) / "llm_calls.jsonl")
-    if not path.exists():
-        return 0.0
-
-    total_usd = 0.0
-    with path.open() as f:
-        for line in f:
-            row = json.loads(line)
-            if row["run_id"] != run_id or row["cache_hit"]:
-                continue
-            tier_cfg = settings.llm.tiers.get(row["model_tier"])
-            if tier_cfg is None or tier_cfg.usd_per_1m_input_tokens is None:
-                continue
-            usage = row["usage"]
-            total_usd += usage.get("input_tokens", 0) / 1_000_000 * tier_cfg.usd_per_1m_input_tokens
-            total_usd += (
-                usage.get("output_tokens", 0) / 1_000_000 * tier_cfg.usd_per_1m_output_tokens
-            )
-    return total_usd
+# Re-exported (not duplicated): CR-005 §9 moved the real implementation to llm/cost.py
+# so LLMClient's own live budget enforcement can use it without expert_kg/ depending
+# on llm/, or llm/ depending on expert_kg/ (the wrong direction -- llm/client.py is a
+# shared foundation, expert_kg/ is one of its callers). Existing callers/tests of
+# `spend_for_run` from this module are unaffected.
+spend_for_run = spend_from_log
 
 
 def _tier_price(settings: Settings, tier: str) -> tuple[float, float]:

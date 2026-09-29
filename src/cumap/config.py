@@ -62,6 +62,14 @@ class LLMConfig(BaseModel):
     assumed_usd_per_1k_input_tokens: float
     assumed_usd_per_1k_output_tokens: float
     assumed_batch_discount: float  # CR-003 §13: "--batch roughly halves the cost"
+    # CR-005 §9: per-stage budgets, enforced inside LLMClient.parse itself (not just
+    # a pre-run estimate) -- a stage with no entry here, or an entry of null, falls
+    # back to max_usd_per_command only. Stage names match TASK_TO_STAGE in llm/client.py.
+    stage_budgets_usd: dict[str, float | None] = {}
+    # Worst-case output-token bound used for the pre-call budget check, and passed to
+    # the real API as max_output_tokens (bounds actual generation, not just the
+    # estimate) -- per task, falling back to "default" when a task has no entry.
+    max_output_tokens: dict[str, int] = {}
 
 
 class EmbeddingsConfig(BaseModel):
@@ -102,7 +110,11 @@ def load_settings(config_path: Path | None = None, *, env_file: Path | None = No
 
     llm_raw = dict(raw["llm"])
     tiers_raw = dict(llm_raw["tiers"])
-    env_override = {"strong": "OPENAI_MODEL_STRONG", "bulk": "OPENAI_MODEL_BULK", "ceiling": "OPENAI_MODEL_CEILING"}
+    env_override = {
+        "strong": "OPENAI_MODEL_STRONG",
+        "bulk": "OPENAI_MODEL_BULK",
+        "ceiling": "OPENAI_MODEL_CEILING",
+    }
     for tier_name, env_var in env_override.items():
         if tier_name in tiers_raw and os.environ.get(env_var):
             tiers_raw[tier_name] = {**tiers_raw[tier_name], "model": os.environ[env_var]}
@@ -119,3 +131,25 @@ def load_settings(config_path: Path | None = None, *, env_file: Path | None = No
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
     return load_settings()
+
+
+class CorpusSliceConfig(BaseModel):
+    """One corpus's slice definition within configs/demo_slice.yaml (CR-005 §1,
+    §9 relations_enabled).
+    """
+
+    source_jsonl: Path
+    chapters: list[int]
+    domain: str
+    relations_enabled: bool
+
+
+class DemoSliceConfig(BaseModel):
+    pd: CorpusSliceConfig
+    iir_face: CorpusSliceConfig
+    max_usd_per_command: float
+
+
+def load_demo_slice(path: Path | None = None) -> DemoSliceConfig:
+    raw = yaml.safe_load((path or (REPO_ROOT / "configs" / "demo_slice.yaml")).read_text())
+    return DemoSliceConfig(**raw)

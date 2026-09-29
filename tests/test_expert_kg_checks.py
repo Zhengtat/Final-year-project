@@ -39,7 +39,7 @@ def _edge(
         section_id="s1",
         concept_x_id=concept_x_id,
         concept_y_id=concept_y_id,
-        paragraph="p",
+        sentence="p",
     )
     registry = _registry()
     family = registry.family_of(relation)

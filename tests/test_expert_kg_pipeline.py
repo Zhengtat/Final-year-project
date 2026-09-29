@@ -1,7 +1,6 @@
-"""CR-005 §2 pipeline orchestration smoke tests: multi-section, multi-chapter
-end-to-end wiring (growing registry, snapshot writing) and the live budget-cap
-enforcement added before the real calibration/IIR-dev run (spend_for_run-based hard
-stop, not just the pre-run cost_estimate.py prediction).
+"""CR-005 §2 pipeline tests, redesigned by §9: stage-by-stage orchestration
+(concepts -> canonicalize -> offline pair enumeration -> relations -> snapshots),
+checkpoint/resume, and the regression tests §9 item 6 explicitly asks for.
 """
 
 from __future__ import annotations
@@ -11,27 +10,26 @@ from pathlib import Path
 import numpy as np
 import pytest
 
-from cumap.expert_kg.pipeline import PromptSet, SectionInput, run_slice
-from cumap.llm.client import LLMClient
+from cumap.config import load_demo_slice
+from cumap.expert_kg import pipeline as pipeline_module
+from cumap.expert_kg.pipeline import (
+    Checkpoint,
+    PromptSet,
+    SectionInput,
+    build_snapshots_stage,
+    enumerate_pairs_stage,
+    load_checkpoint,
+    run_canonicalize_stage,
+    run_concepts_stage,
+    run_relations_stage,
+)
+from cumap.llm.client import BudgetExceededError, LLMClient
 from cumap.schemas.relations import RelationRegistry
 
 REPO_ROOT = Path(__file__).parents[1]
 
 
-@pytest.fixture(scope="module")
-def nlp():
-    import spacy
-
-    return spacy.load("en_core_web_sm")
-
-
 def _fake_embed(text: str) -> np.ndarray:
-    """Distinct vocab per concept name used in this test, so no two *different*
-    concepts are similar enough to trigger a canonicalize LLM call, but the *same*
-    name re-embeds identically (similarity 1.0) so a genuine re-mention across
-    chapters does trigger one (tested indirectly via chapter grouping, not asserted
-    on directly here -- kept simple to avoid needing extra canonicalize fixtures).
-    """
     vocab = ["tcp", "sliding", "window", "slow", "start", "congestion"]
     text_lower = text.lower()
     return np.array([1.0 if w in text_lower else 0.0 for w in vocab])
@@ -64,124 +62,138 @@ def _sections() -> list[SectionInput]:
     ]
 
 
-def _no_relation_fixtures(pair):
-    return "no_relation", "default", "default"
+@pytest.fixture(scope="module")
+def nlp():
+    import spacy
+
+    return spacy.load("en_core_web_sm")
 
 
-def test_run_slice_processes_both_chapters_and_writes_snapshots(
-    tmp_settings, fixtures_dir, tmp_path, nlp
+def _patch_concepts(monkeypatch):
+    original = pipeline_module.extract_concepts_for_section
+
+    def patched(client_, main_prompt, gleaning_prompt, registry_, *, section_id, **kwargs):
+        fixture_name = "demo" if section_id == "ch1_s1" else "congestion_window"
+        gleaning_fixture = "demo" if section_id == "ch1_s1" else "empty"
+        return original(
+            client_,
+            main_prompt,
+            gleaning_prompt,
+            registry_,
+            section_id=section_id,
+            fixture_name=fixture_name,
+            gleaning_fixture_name=gleaning_fixture,
+            **kwargs,
+        )
+
+    monkeypatch.setattr(pipeline_module, "extract_concepts_for_section", patched)
+
+
+def _patch_relations_no_relation(monkeypatch):
+    original = pipeline_module.extract_relations_for_section
+
+    def patched(*args, **kwargs):
+        kwargs["fixture_for_pair"] = lambda pair: ("no_relation", "default", "default")
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(pipeline_module, "extract_relations_for_section", patched)
+
+
+def test_full_stage_pipeline_end_to_end(tmp_settings, fixtures_dir, tmp_path, nlp, monkeypatch):
+    _patch_concepts(monkeypatch)
+    _patch_relations_no_relation(monkeypatch)
+
+    client = LLMClient(tmp_settings, fixtures_dir=fixtures_dir)
+    registry = _registry()
+    prompts = _prompts()
+    sections = _sections()
+    run_dir = tmp_path / "run"
+
+    checkpoint = Checkpoint(run_id=client.run_id, stage="concepts")
+    checkpoint = run_concepts_stage(client, prompts, registry, sections, nlp, run_dir, checkpoint)
+    assert checkpoint.stage == "canonicalize"
+    assert set(checkpoint.mentions_by_section) == {"ch1_s1", "ch2_s1"}
+
+    checkpoint, concept_registry = run_canonicalize_stage(
+        client, prompts, sections, _fake_embed, run_dir, checkpoint
+    )
+    assert checkpoint.stage == "pairs_enumerated"
+    names = {c.canonical_name for c in concept_registry.all()}
+    assert {"TCP", "sliding window", "slow start", "congestion window"} <= names
+
+    enumeration = enumerate_pairs_stage(registry, sections, concept_registry)
+    assert len(enumeration.per_section) == 2
+    assert enumeration.total_new_pairs >= 0
+
+    checkpoint, pair_registry = run_relations_stage(
+        client, prompts, registry, sections, concept_registry, run_dir, checkpoint
+    )
+    assert checkpoint.stage == "snapshots"
+
+    results = build_snapshots_stage(
+        registry,
+        sections,
+        concept_registry,
+        pair_registry,
+        run_dir / "snapshots",
+        client.run_id,
+        merges=checkpoint.merges,
+    )
+    assert [r.chapter_num for r in results] == [1, 2]
+    assert (run_dir / "snapshots" / "ch1" / "manifest.json").exists()
+    assert (run_dir / "snapshots" / "ch2" / "manifest.json").exists()
+
+
+def test_concepts_stage_checkpoint_resume_skips_completed_sections(
+    tmp_settings, fixtures_dir, tmp_path, nlp, monkeypatch
 ):
+    _patch_concepts(monkeypatch)
     client = LLMClient(tmp_settings, fixtures_dir=fixtures_dir)
     registry = _registry()
     prompts = _prompts()
-    from cumap.expert_kg import pipeline as pipeline_module
+    sections = _sections()
+    run_dir = tmp_path / "run"
 
-    original_extract = pipeline_module.extract_relations_for_section
-    original_concepts = pipeline_module.extract_concepts_for_section
+    checkpoint = Checkpoint(run_id=client.run_id, stage="concepts")
+    checkpoint = run_concepts_stage(
+        client, prompts, registry, sections[:1], nlp, run_dir, checkpoint
+    )
+    calls_after_first_section = client.backend_call_count
 
-    def patched_extract(*args, **kwargs):
-        kwargs["fixture_for_pair"] = _no_relation_fixtures
-        return original_extract(*args, **kwargs)
+    # "Resume": load the checkpoint back and continue with the full section list.
+    checkpoint.stage = (
+        "concepts"  # run_concepts_stage advances it to "canonicalize"; reset for resume
+    )
+    checkpoint.completed_section_ids = ["ch1_s1"]
+    checkpoint = run_concepts_stage(client, prompts, registry, sections, nlp, run_dir, checkpoint)
 
-    def patched_concepts(client_, main_prompt, gleaning_prompt, registry_, *, section_id, **kwargs):
-        # extract_concepts_for_section has no per-section fixture hook, so route by
-        # section_id here instead -- the real pipeline routes by real content, not a
-        # fixture name, so this indirection is test-only.
-        fixture_name = "demo" if section_id == "ch1_s1" else "congestion_window"
-        gleaning_fixture = "demo" if section_id == "ch1_s1" else "empty"
-        return original_concepts(
-            client_,
-            main_prompt,
-            gleaning_prompt,
-            registry_,
-            section_id=section_id,
-            fixture_name=fixture_name,
-            gleaning_fixture_name=gleaning_fixture,
-            **kwargs,
-        )
-
-    pipeline_module.extract_relations_for_section = patched_extract
-    pipeline_module.extract_concepts_for_section = patched_concepts
-    try:
-        result = run_slice(
-            client,
-            tmp_settings,
-            registry,
-            prompts,
-            _fake_embed,
-            _sections(),
-            nlp,
-            snapshots_dir=tmp_path / "snapshots",
-        )
-    finally:
-        pipeline_module.extract_relations_for_section = original_extract
-        pipeline_module.extract_concepts_for_section = original_concepts
-
-    assert result.stopped_early is False
-    assert [c.chapter_num for c in result.chapters] == [1, 2]
-
-    ch1 = result.chapters[0].snapshot
-    ch1_names = {n.canonical_name for n in ch1.nodes}
-    assert {"TCP", "sliding window", "slow start"} <= ch1_names
-
-    ch2 = result.chapters[1].snapshot
-    ch2_names = {n.canonical_name for n in ch2.nodes}
-    assert "congestion window" in ch2_names
-
-    assert (tmp_path / "snapshots" / "ch1" / "manifest.json").exists()
-    assert (tmp_path / "snapshots" / "ch2" / "manifest.json").exists()
+    # ch1_s1 must not be re-processed (no new calls for it, only ch2_s1's).
+    assert client.backend_call_count == calls_after_first_section + 2  # ch2_s1: main + gleaning
+    assert set(checkpoint.mentions_by_section) == {"ch1_s1", "ch2_s1"}
 
 
-def test_run_slice_stops_before_exceeding_budget(tmp_settings, fixtures_dir, tmp_path, nlp):
+def test_budget_exceeded_stops_mid_run_and_checkpoints(
+    tmp_settings, fixtures_dir, tmp_path, nlp, monkeypatch
+):
+    _patch_concepts(monkeypatch)
+    tmp_settings.llm.max_usd_per_command = 0.0000001  # any real call exceeds this
     client = LLMClient(tmp_settings, fixtures_dir=fixtures_dir)
     registry = _registry()
     prompts = _prompts()
-    from cumap.expert_kg import pipeline as pipeline_module
+    sections = _sections()
+    run_dir = tmp_path / "run"
 
-    original_extract = pipeline_module.extract_relations_for_section
-    original_concepts = pipeline_module.extract_concepts_for_section
+    checkpoint = Checkpoint(run_id=client.run_id, stage="concepts")
+    with pytest.raises(BudgetExceededError):
+        run_concepts_stage(client, prompts, registry, sections, nlp, run_dir, checkpoint)
 
-    def patched_extract(*args, **kwargs):
-        kwargs["fixture_for_pair"] = _no_relation_fixtures
-        return original_extract(*args, **kwargs)
+    assert checkpoint.completed_section_ids == []  # never got past the very first call
+    saved = load_checkpoint(run_dir)
+    assert saved is not None
+    assert saved.stage == "concepts"  # never advanced
 
-    def patched_concepts(client_, main_prompt, gleaning_prompt, registry_, *, section_id, **kwargs):
-        fixture_name = "demo" if section_id == "ch1_s1" else "congestion_window"
-        gleaning_fixture = "demo" if section_id == "ch1_s1" else "empty"
-        return original_concepts(
-            client_,
-            main_prompt,
-            gleaning_prompt,
-            registry_,
-            section_id=section_id,
-            fixture_name=fixture_name,
-            gleaning_fixture_name=gleaning_fixture,
-            **kwargs,
-        )
 
-    pipeline_module.extract_relations_for_section = patched_extract
-    pipeline_module.extract_concepts_for_section = patched_concepts
-    try:
-        # Any real spend at all (chapter 1's mock calls still log nonzero token usage,
-        # costed at tmp_settings' real tier prices) exceeds this near-zero cap, so
-        # chapter 2 must never be processed.
-        result = run_slice(
-            client,
-            tmp_settings,
-            registry,
-            prompts,
-            _fake_embed,
-            _sections(),
-            nlp,
-            snapshots_dir=tmp_path / "snapshots",
-            max_usd_per_command=1e-9,
-        )
-    finally:
-        pipeline_module.extract_relations_for_section = original_extract
-        pipeline_module.extract_concepts_for_section = original_concepts
-
-    assert (
-        len(result.chapters) == 1
-    )  # chapter 1 always runs; the cap is checked *before* each chapter
-    assert result.stopped_early is True
-    assert "cap" in result.stop_reason
+def test_demo_slice_iir_face_has_no_relation_stage():
+    demo_slice = load_demo_slice()
+    assert demo_slice.iir_face.relations_enabled is False
+    assert demo_slice.pd.relations_enabled is True

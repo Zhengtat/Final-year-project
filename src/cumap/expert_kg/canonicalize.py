@@ -70,18 +70,32 @@ class ConceptRegistry:
     def get(self, concept_id: str) -> RegisteredConcept:
         return self._concepts[concept_id]
 
+    def restore(self, concepts: list[RegisteredConcept]) -> None:
+        """Reinstates previously-saved concepts as-is (e.g. from a checkpoint), unlike
+        `add_new`, which mints a fresh id/collision-handling for a *new* mention.
+        """
+        for concept in concepts:
+            self._concepts[concept.concept_id] = concept
+
     def _text_for_embedding(self, name: str, definition: str | None) -> str:
         return f"{name}. {definition}" if definition else name
 
-    def top_k_similar(self, name: str, definition: str | None, k: int = 5) -> list[tuple[RegisteredConcept, float]]:
+    def top_k_similar(
+        self, name: str, definition: str | None, k: int = 5
+    ) -> list[tuple[RegisteredConcept, float]]:
         if not self._concepts:
             return []
         query = self._embed_fn(self._text_for_embedding(name, definition))
         scored = []
         for concept in self._concepts.values():
             if concept.embedding is None:
-                concept.embedding = self._embed_fn(self._text_for_embedding(concept.canonical_name, concept.definition))
-            sim = float(np.dot(query, concept.embedding) / (np.linalg.norm(query) * np.linalg.norm(concept.embedding) + 1e-9))
+                concept.embedding = self._embed_fn(
+                    self._text_for_embedding(concept.canonical_name, concept.definition)
+                )
+            sim = float(
+                np.dot(query, concept.embedding)
+                / (np.linalg.norm(query) * np.linalg.norm(concept.embedding) + 1e-9)
+            )
             scored.append((concept, sim))
         scored.sort(key=lambda x: -x[1])
         return scored[:k]
@@ -89,7 +103,9 @@ class ConceptRegistry:
     def add_new(self, mention: ConceptMentionCandidate) -> RegisteredConcept:
         concept_id = "c_" + slugify(mention.canonical_name)
         base_id, i = concept_id, 2
-        while concept_id in self._concepts:  # extremely unlikely name collision with a *different* concept
+        while (
+            concept_id in self._concepts
+        ):  # extremely unlikely name collision with a *different* concept
             concept_id = f"{base_id}_{i}"
             i += 1
         concept = RegisteredConcept(
@@ -105,7 +121,10 @@ class ConceptRegistry:
 
     def merge_alias(self, concept_id: str, mention: ConceptMentionCandidate) -> None:
         concept = self._concepts[concept_id]
-        if mention.canonical_name != concept.canonical_name and mention.canonical_name not in concept.aliases:
+        if (
+            mention.canonical_name != concept.canonical_name
+            and mention.canonical_name not in concept.aliases
+        ):
             concept.aliases.append(mention.canonical_name)
         concept.mentions.append(Mention(mention.section_id, mention.role, mention.evidence_quote))
 
@@ -123,7 +142,9 @@ def canonicalize_mention(
     candidates = registry.top_k_similar(mention.canonical_name, mention.definition, k=k)
     if not candidates or candidates[0][1] < similarity_threshold:
         new_concept = registry.add_new(mention)
-        return CanonicalizationOutcome(decision="different", concept_id=new_concept.concept_id, llm_called=False)
+        return CanonicalizationOutcome(
+            decision="different", concept_id=new_concept.concept_id, llm_called=False
+        )
 
     candidates_block = "\n".join(
         f"{i}. {c.canonical_name} ({c.node_type}) — {c.definition or '(no definition)'}"
@@ -146,19 +167,27 @@ def canonicalize_mention(
     )
     decision = result.output.decision
     idx = result.output.matched_candidate_index
-    matched_concept_id = candidates[idx][0].concept_id if idx is not None and 0 <= idx < len(candidates) else None
+    matched_concept_id = (
+        candidates[idx][0].concept_id if idx is not None and 0 <= idx < len(candidates) else None
+    )
 
     if decision == "same" and matched_concept_id:
         registry.merge_alias(matched_concept_id, mention)
         return CanonicalizationOutcome(
-            decision="same", concept_id=matched_concept_id, llm_called=True,
-            matched_concept_id=matched_concept_id, reason=result.output.reason,
+            decision="same",
+            concept_id=matched_concept_id,
+            llm_called=True,
+            matched_concept_id=matched_concept_id,
+            reason=result.output.reason,
         )
 
     # broader / narrower / different (or "same" with a missing index, treated as new
     # rather than silently discarding a real mention): all create a new concept node.
     new_concept = registry.add_new(mention)
     return CanonicalizationOutcome(
-        decision=decision, concept_id=new_concept.concept_id, llm_called=True,
-        matched_concept_id=matched_concept_id, reason=result.output.reason,
+        decision=decision,
+        concept_id=new_concept.concept_id,
+        llm_called=True,
+        matched_concept_id=matched_concept_id,
+        reason=result.output.reason,
     )

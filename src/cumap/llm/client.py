@@ -29,9 +29,35 @@ from tenacity import retry, retry_if_exception, stop_after_attempt, wait_exponen
 
 from cumap.config import Settings
 from cumap.llm.cache import LLMCache, canonical_input_hash
+from cumap.llm.cost import spend_from_log
 from cumap.llm.mock import load_fixture
 
 SchemaT = TypeVar("SchemaT", bound=BaseModel)
+
+# CR-005 §9: which budget stage a task belongs to, for `stage_budgets_usd`. A task not
+# listed here has no stage-specific cap (max_usd_per_command still applies).
+TASK_TO_STAGE = {
+    "concept_extraction": "concepts",
+    "concept_extraction_gleaning": "concepts",
+    "canonicalize": "canonicalize",
+    "relation_family": "relations",
+    "relation_choice": "relations",
+    "relation_qualifiers": "relations",
+}
+
+# Rough chars-per-token ratio for English prose, used only for the pre-call worst-case
+# budget check (not billing) -- deliberately conservative (an overestimate is safe
+# here; an underestimate would let a call through that shouldn't be).
+_CHARS_PER_TOKEN = 3.5
+
+
+class BudgetExceededError(RuntimeError):
+    """Raised by LLMClient.parse before making a call whose worst case (spend so far +
+    estimated input tokens + this task's max_output_tokens) would exceed the
+    applicable stage or overall budget. Callers (pipeline stages) catch this, stop
+    cleanly, and write a checkpoint -- CR-005 §9, direct response to the $14.03
+    IIR-dev overrun where nothing enforced the cap before every call.
+    """
 
 
 @dataclass
@@ -47,7 +73,9 @@ class ParsedResult(Generic[SchemaT]):
     cache_hit: bool
     latency_ms: float
     escalated: bool = False
-    escalation_reason: str | None = None  # "schema_error" | "low_confidence" | "evidence_check_failed"
+    escalation_reason: str | None = (
+        None  # "schema_error" | "low_confidence" | "evidence_check_failed"
+    )
 
 
 def _is_retryable(exc: BaseException) -> bool:
@@ -83,6 +111,15 @@ class LLMClient:
         self._backend_call_count = 0
         self._escalation_count = 0
         self._calls_by_tier: dict[str, int] = defaultdict(int)
+        # CR-005 §9: seeded from any spend already logged under this run_id (so a
+        # --resume run doesn't forget what it already spent), then kept in memory and
+        # incremented after every real call -- avoids re-scanning the whole log file
+        # on every single .parse() call.
+        self._spent_usd = spend_from_log(settings, self.run_id)
+
+    @property
+    def spent_usd(self) -> float:
+        return self._spent_usd
 
     @property
     def backend_call_count(self) -> int:
@@ -111,6 +148,53 @@ class LLMClient:
             return "low"
         return effort
 
+    def _max_output_tokens_for(self, task: str) -> int:
+        overrides = self._settings.llm.max_output_tokens
+        return overrides.get(task, overrides.get("default", 1000))
+
+    @staticmethod
+    def _estimate_input_tokens(messages: list[dict]) -> int:
+        total_chars = sum(len(m.get("content", "")) for m in messages)
+        return int(total_chars / _CHARS_PER_TOKEN) + 1
+
+    def _check_budget(
+        self, task: str, model_tier: str, messages: list[dict], max_output_tokens: int
+    ) -> None:
+        tier_cfg = self._settings.llm.tiers[model_tier]
+        if tier_cfg.usd_per_1m_input_tokens is None or tier_cfg.usd_per_1m_output_tokens is None:
+            return  # no price configured for this tier -- can't check, consistent with spend_from_log's skip
+
+        input_tokens = self._estimate_input_tokens(messages)
+        worst_case = (
+            input_tokens / 1_000_000 * tier_cfg.usd_per_1m_input_tokens
+            + max_output_tokens / 1_000_000 * tier_cfg.usd_per_1m_output_tokens
+        )
+        projected = self._spent_usd + worst_case
+
+        stage = TASK_TO_STAGE.get(task)
+        stage_cap = self._settings.llm.stage_budgets_usd.get(stage) if stage else None
+        overall_cap = self._settings.llm.max_usd_per_command
+        applicable_cap = min(c for c in (stage_cap, overall_cap) if c is not None)
+
+        if projected > applicable_cap:
+            raise BudgetExceededError(
+                f"task {task!r} (stage {stage!r}, tier {model_tier!r}): spent ${self._spent_usd:.4f} "
+                f"+ worst-case ${worst_case:.4f} = ${projected:.4f} would exceed the "
+                f"{'stage' if stage_cap is not None and applicable_cap == stage_cap else 'overall'} "
+                f"cap ${applicable_cap:.4f}"
+            )
+
+    def _record_spend(self, model_tier: str, usage: dict) -> None:
+        tier_cfg = self._settings.llm.tiers[model_tier]
+        if tier_cfg.usd_per_1m_input_tokens is None or tier_cfg.usd_per_1m_output_tokens is None:
+            return
+        self._spent_usd += (
+            usage.get("input_tokens", 0) / 1_000_000 * tier_cfg.usd_per_1m_input_tokens
+        )
+        self._spent_usd += (
+            usage.get("output_tokens", 0) / 1_000_000 * tier_cfg.usd_per_1m_output_tokens
+        )
+
     def parse(
         self,
         *,
@@ -132,12 +216,18 @@ class LLMClient:
 
         try:
             result = self._parse_single_tier(
-                task=task, prompt_version=prompt_version, messages=messages, schema=schema,
-                model_tier=model_tier, fixture_name=fixture_name,
+                task=task,
+                prompt_version=prompt_version,
+                messages=messages,
+                schema=schema,
+                model_tier=model_tier,
+                fixture_name=fixture_name,
             )
         except ValidationError:
             if can_escalate and "schema_error" in escalation.when:
-                return self._escalate(task, prompt_version, messages, schema, fixture_name, "schema_error")
+                return self._escalate(
+                    task, prompt_version, messages, schema, fixture_name, "schema_error"
+                )
             raise
 
         if can_escalate:
@@ -158,11 +248,17 @@ class LLMClient:
             confidence = getattr(result.output, "confidence", None)
             if confidence is not None and confidence < escalation.confidence_threshold:
                 return "low_confidence"
-        if "evidence_check_failed" in escalation.when and escalate_check is not None and escalate_check(result.output):
+        if (
+            "evidence_check_failed" in escalation.when
+            and escalate_check is not None
+            and escalate_check(result.output)
+        ):
             return "evidence_check_failed"
         return None
 
-    def _escalate(self, task, prompt_version, messages, schema, fixture_name, reason: str) -> ParsedResult[SchemaT]:
+    def _escalate(
+        self, task, prompt_version, messages, schema, fixture_name, reason: str
+    ) -> ParsedResult[SchemaT]:
         self._escalation_count += 1
         to_tier = self._settings.llm.escalation.to_tier
 
@@ -179,8 +275,13 @@ class LLMClient:
                 fixture_name = escalated_variant
 
         return self._parse_single_tier(
-            task=task, prompt_version=prompt_version, messages=messages, schema=schema,
-            model_tier=to_tier, fixture_name=fixture_name, escalated_reason=reason,
+            task=task,
+            prompt_version=prompt_version,
+            messages=messages,
+            schema=schema,
+            model_tier=to_tier,
+            fixture_name=fixture_name,
+            escalated_reason=reason,
         )
 
     def _parse_single_tier(
@@ -217,14 +318,22 @@ class LLMClient:
             self._log(result)
             return result
 
+        max_output_tokens = self._max_output_tokens_for(task)
+        self._check_budget(task, model_tier, messages, max_output_tokens)
+
         if self._settings.llm_backend == "mock":
             raw = dict(load_fixture(self._fixtures_dir, task, fixture_name))
             usage = raw.pop("_usage", {"input_tokens": 0, "output_tokens": 0})
-            output = schema.model_validate(raw)  # raises pydantic.ValidationError on schema mismatch
+            output = schema.model_validate(
+                raw
+            )  # raises pydantic.ValidationError on schema mismatch
         else:
-            output, usage = self._call_openai(model, messages, schema, task, model_tier)
+            output, usage = self._call_openai(
+                model, messages, schema, task, model_tier, max_output_tokens
+            )
         self._backend_call_count += 1
         self._calls_by_tier[model_tier] += 1
+        self._record_spend(model_tier, usage)
 
         self._cache.set(input_hash, {"output": output.model_dump(mode="json"), "usage": usage})
         result = ParsedResult(
@@ -251,7 +360,13 @@ class LLMClient:
         reraise=True,
     )
     def _call_openai(
-        self, model: str, messages: list[dict], schema: type[SchemaT], task: str, model_tier: str
+        self,
+        model: str,
+        messages: list[dict],
+        schema: type[SchemaT],
+        task: str,
+        model_tier: str,
+        max_output_tokens: int,
     ) -> tuple[SchemaT, dict]:
         from openai import OpenAI  # lazy: mock backend / tests never need this installed-and-keyed
 
@@ -264,6 +379,10 @@ class LLMClient:
             input=messages,
             text_format=schema,
             reasoning={"effort": effort},
+            # CR-005 §9: bounds real generation, not just the pre-call estimate -- the
+            # direct fix for the $14.03 IIR-dev overrun, where a single section's
+            # relation calls ran unbounded.
+            max_output_tokens=max_output_tokens,
         )
         # response.usage.output_tokens already includes reasoning tokens (OpenAI bills
         # them as output); output_tokens_details.reasoning_tokens is the breakdown, kept
