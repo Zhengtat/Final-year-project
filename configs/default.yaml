@@ -91,10 +91,13 @@ llm:
   # IIR (dense short sections), then on P&D (some sections up to 11,700 words, e.g.
   # 3.3 -- far longer than any IIR dev/test section). Both caught immediately
   # (invalid-JSON error, not a silent bad result); $0.03 + $0.01 wasted, not a lot.
+  # canonicalize raised 300 -> 800 on 2026-09-29: a "narrower"/"broader" decision's
+  # free-text `reason` field routinely needs more than 300 tokens' worth of JSON;
+  # caught on a real P&D call (truncated at ~159 chars into the response).
   max_output_tokens:
     concept_extraction: 8000
     concept_extraction_gleaning: 1500
-    canonicalize: 300
+    canonicalize: 800
     relation_family: 400
     relation_choice: 500
     relation_qualifiers: 400
