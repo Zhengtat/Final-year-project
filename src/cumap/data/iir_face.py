@@ -63,7 +63,10 @@ def fetch_iir_face(dest_dir: Path) -> str:
     git_dir = dest_dir / ".git"
     if git_dir.exists():
         result = subprocess.run(
-            ["git", "-C", str(dest_dir), "rev-parse", "HEAD"], check=True, capture_output=True, text=True
+            ["git", "-C", str(dest_dir), "rev-parse", "HEAD"],
+            check=True,
+            capture_output=True,
+            text=True,
         )
         commit = result.stdout.strip()
         import shutil
@@ -109,7 +112,7 @@ def parse_iir_sections(tsv_path: Path) -> list[Section]:
 
 
 def _annotation_filename(section_id: str) -> str:
-    """"iir_1" -> "iir-1.csv"; "iir_1_1" -> "iir-1.1.csv"."""
+    """ "iir_1" -> "iir-1.csv"; "iir_1_1" -> "iir-1.1.csv"."""
     match = _SECTION_ID_RE.match(section_id)
     if not match:
         raise ValueError(f"Unrecognised IIR section_id format: {section_id!r}")
@@ -117,7 +120,25 @@ def _annotation_filename(section_id: str) -> str:
     return f"iir-{chapter}.{sub}.csv" if sub else f"iir-{chapter}.csv"
 
 
-def parse_gold_concepts(annotation_dir: Path, section_ids: list[str], *, min_annotators_agree: int = 2) -> pd.DataFrame:
+def _parse_concept_list(raw: str) -> list[str]:
+    """Most rows are a valid Python-list-repr string. A handful in the real dataset
+    (chapters beyond the dev split; confirmed exactly 1 of 86 files as of the commit
+    pinned in SOURCE.md) have an unescaped apostrophe inside a single-quoted item,
+    e.g. "['nonrelevant document's vector']", which breaks ast.literal_eval. Falls
+    back to treating the whole bracket content as one alias string in that case --
+    correct for the confirmed single-item case; a multi-item row with the same defect
+    would be mis-split, but none exist in the data as fetched.
+    """
+    try:
+        return ast.literal_eval(raw)
+    except (ValueError, SyntaxError):
+        inner = raw.strip().removeprefix("[").removesuffix("]").strip()
+        return [inner.strip("'\"")]
+
+
+def parse_gold_concepts(
+    annotation_dir: Path, section_ids: list[str], *, min_annotators_agree: int = 2
+) -> pd.DataFrame:
     """Reads one annotation CSV per section_id. Each row: a Python-list-repr string of
     concept surface forms (aliases) + 3 annotator 0/1 columns. Gold = majority vote
     (>= min_annotators_agree of 3 say "yes"). Returns one row per (section_id, concept),
@@ -132,7 +153,7 @@ def parse_gold_concepts(annotation_dir: Path, section_ids: list[str], *, min_ann
         with path.open(encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for record in reader:
-                aliases = ast.literal_eval(record["Concepts"])
+                aliases = _parse_concept_list(record["Concepts"])
                 votes = [
                     int(float(record[col]))  # some rows use "1.0" rather than "1"
                     for col in ("Annotator 1", "Annotator 2", "Annotator 3")
@@ -154,6 +175,10 @@ def parse_gold_concepts(annotation_dir: Path, section_ids: list[str], *, min_ann
 
 def load_iir_face(raw_dir: Path) -> tuple[list[Section], pd.DataFrame]:
     """raw_dir is the cloned repo root (e.g. data/raw/external/iir_face)."""
-    sections = parse_iir_sections(raw_dir / "IIR-dataset" / "book_section_samples" / "iir.sections.txt")
-    gold = parse_gold_concepts(raw_dir / "IIR-dataset" / "annotation", [s.section_id for s in sections])
+    sections = parse_iir_sections(
+        raw_dir / "IIR-dataset" / "book_section_samples" / "iir.sections.txt"
+    )
+    gold = parse_gold_concepts(
+        raw_dir / "IIR-dataset" / "annotation", [s.section_id for s in sections]
+    )
     return sections, gold

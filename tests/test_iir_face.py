@@ -86,6 +86,23 @@ def test_parse_gold_concepts_handles_float_formatted_votes(tmp_path):
     assert df.iloc[0]["n_annotators_yes"] == 2
 
 
+def test_parse_gold_concepts_handles_unescaped_apostrophe(tmp_path):
+    """Real data (iir-9.1.csv, chapter 9) has one row with an unescaped apostrophe
+    inside a single-quoted item -- "['nonrelevant document's vector']" -- which
+    breaks ast.literal_eval outright. Confirmed the only such row across all 86
+    annotation files as fetched; falls back to treating the bracket content as one
+    alias string, which is correct for this (single-item) case.
+    """
+    annotation_dir = tmp_path / "annotation"
+    annotation_dir.mkdir()
+    (annotation_dir / "iir-9.1.csv").write_text(
+        "Concepts,Annotator 1,Annotator 2,Annotator 3\n['nonrelevant document's vector'],1,1,0.0\n"
+    )
+    df = parse_gold_concepts(annotation_dir, ["iir_9_1"])
+    assert df.iloc[0]["concept"] == "nonrelevant document's vector"
+    assert df.iloc[0]["aliases"] == []
+
+
 def test_parse_gold_concepts_missing_annotation_file_raises(tmp_path):
     with pytest.raises(FileNotFoundError):
         parse_gold_concepts(tmp_path, ["iir_99"])
