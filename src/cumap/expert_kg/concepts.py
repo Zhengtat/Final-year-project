@@ -45,12 +45,22 @@ def _run_pass(
     fixture_name: str,
     already_found: list[str] | None = None,
 ) -> ExtractionResult:
+    already_found_lower = {n.lower() for n in (already_found or [])}
+    unselected_candidate_terms = [
+        t for t in candidate_terms if t.lower() not in already_found_lower
+    ]
     rendered = prompt_template.render(
         domain=domain,
         heading_path=" > ".join(heading_path),
         section_text=section_text,
         candidate_terms=", ".join(candidate_terms) if candidate_terms else "(none)",
         already_found=", ".join(already_found) if already_found else "(none yet)",
+        # Only used by concept_extraction_gleaning/v2.md's targeted gleaning (CR-005
+        # §9's STOP-2 ablation); harmless extra kwarg for every other template
+        # (str.format_map ignores unused keys).
+        unselected_candidate_terms=", ".join(unselected_candidate_terms)
+        if unselected_candidate_terms
+        else "(none)",
     )
     schema = build_concept_extraction_llm(registry)
     result = client.parse(
@@ -66,7 +76,12 @@ def _run_pass(
     for m in result.output.concepts:
         if not verify_quote(m.evidence_quote, section_text):
             out.rejected.append(
-                {"section_id": section_id, "name": m.canonical_name, "reason": "evidence_quote not found in section text", "quote": m.evidence_quote}
+                {
+                    "section_id": section_id,
+                    "name": m.canonical_name,
+                    "reason": "evidence_quote not found in section text",
+                    "quote": m.evidence_quote,
+                }
             )
             continue
         out.mentions.append(
@@ -86,7 +101,7 @@ def _run_pass(
 def extract_concepts_for_section(
     client: LLMClient,
     main_prompt: PromptTemplate,
-    gleaning_prompt: PromptTemplate,
+    gleaning_prompt: PromptTemplate | None,
     registry: RelationRegistry,
     *,
     section_id: str,
@@ -96,21 +111,44 @@ def extract_concepts_for_section(
     domain: str,
     fixture_name: str = "default",
     gleaning_fixture_name: str = "default",
+    include_gleaning: bool = True,
 ) -> ExtractionResult:
-    """Main pass + one gleaning pass ("list concepts you missed"), merged. Duplicate
-    canonical_name (case-insensitive) mentions from the gleaning pass are dropped —
-    canonicalisation (across sections) happens separately in canonicalize.py.
+    """Main pass + an optional gleaning pass ("list concepts you missed"), merged.
+    Duplicate canonical_name (case-insensitive) mentions from the gleaning pass are
+    dropped — canonicalisation (across sections) happens separately in
+    canonicalize.py. `include_gleaning=False` (CR-005 §9's STOP-2 ablation's "v2",
+    as distinct from "v2+g") skips the gleaning pass and its LLM call entirely —
+    `gleaning_prompt` is then unused and may be `None`.
     """
     main = _run_pass(
-        client, main_prompt, registry, task="concept_extraction",
-        section_id=section_id, section_text=section_text, heading_path=heading_path,
-        candidate_terms=candidate_terms, domain=domain, run_index=0, fixture_name=fixture_name,
+        client,
+        main_prompt,
+        registry,
+        task="concept_extraction",
+        section_id=section_id,
+        section_text=section_text,
+        heading_path=heading_path,
+        candidate_terms=candidate_terms,
+        domain=domain,
+        run_index=0,
+        fixture_name=fixture_name,
     )
+    if not include_gleaning:
+        return main
+
     already_found = [m.canonical_name for m in main.mentions]
     gleaning = _run_pass(
-        client, gleaning_prompt, registry, task="concept_extraction_gleaning",
-        section_id=section_id, section_text=section_text, heading_path=heading_path,
-        candidate_terms=candidate_terms, domain=domain, run_index=1, fixture_name=gleaning_fixture_name,
+        client,
+        gleaning_prompt,
+        registry,
+        task="concept_extraction_gleaning",
+        section_id=section_id,
+        section_text=section_text,
+        heading_path=heading_path,
+        candidate_terms=candidate_terms,
+        domain=domain,
+        run_index=1,
+        fixture_name=gleaning_fixture_name,
         already_found=already_found,
     )
 
