@@ -1,0 +1,77 @@
+# CR-006: knowledge sphere (per-chapter core–periphery organisation).
+# Structure only: no API calls. Reads content snapshots; writes only under organisation/.
+version: 1
+
+graph:
+  layers: [semantic, taxonomy]
+  include_prerequisite_layer: false     # ablation only; defined→used candidates are heuristic
+  node_filter: checked                  # 'checked' = passed M5 structural checks (slice); switch to 'anchored' once CR-002 exists
+  edge_weight: family_prior_x_confidence  # registry diagnostic_prior × edge.confidence (1.0 if absent)
+
+importance:
+  components:                           # fixed before the face-validity check; never tuned on it
+    pagerank: {weight: 0.35, damping: 0.85}
+    coreness: {weight: 0.20}            # k-shell on the undirected, unweighted projection
+    spread:   {weight: 0.25, roles: [defined, used]}   # 'mentioned' ignored
+    bridging: {weight: 0.20, community_level: fine}    # participation coefficient
+  pagerank_direction:                   # importance flows to what others depend on, belong to or serve
+    toward_target: [is_a, part_of, requires, uses, has_purpose, instantiates]
+    toward_source: [has_property]
+    default: both
+  exposure_correction:
+    enabled: true
+    covariate: log1p_sections_since_first_seen
+  radius_basis: adjusted                # 'raw' | 'adjusted': owner confirms at STOP 2 (log in DECISIONS)
+
+generic_guard:                          # background vocabulary ("data", "network", ...)
+  enabled: true
+  min_section_share: 0.5                # appears in ≥ 50% of sections in G_N
+  require_never_defined: true
+  max_edges_per_appearance_quantile: 0.25   # bottom quartile of typed edges per appearance
+  overrides_keep: []                    # concept_ids the owner says are NOT generic
+  overrides_generic: []                 # concept_ids the owner says ARE generic
+
+rings:
+  method: quantile                      # 'quantile' | 'kshell'
+  shares:                               # of linked, non-background nodes, from the centre outwards (sum = 1.0)
+    centre: 0.05
+    inner: 0.15
+    middle: 0.30
+    outer: 0.50
+  core_for_fit: [centre, inner]
+
+communities:
+  algorithm: leiden                     # leidenalg + python-igraph; shared with CR-004 §4
+  resolution: {coarse: 0.5, fine: 1.0}  # placeholders: use CR-004 §4's values if that config exists
+  seed: 42
+  match_jaccard: 0.3                    # Greene et al. 2010
+  changed_below_jaccard: 0.7
+
+null_model:
+  primary: same_density_random          # G(n, m): "is there a core at all?" (gates the banner)
+  secondary: degree_preserving_rewire   # "more than a few hubs?" (reported, not gated; Kojaku & Masuda 2018)
+  iterations: 200
+  present_if: {z_at_least: 2.0, delta_rho_at_least: 0.10}   # z ≥ 2 but Δρ < 0.10 → "weak core"
+  seed: 42
+
+layout:
+  shape: disc                           # 2D concentric rings; 3D is a non-goal
+  r_min: 0.08
+  r_max: 1.0
+  sector_by: community_coarse
+  max_angle_shift_deg: 20
+  default_visible_rings: [centre, inner, middle]
+  seed: 42
+
+events:
+  late_centraliser_gap_chapters: 1      # 1 for the 3-chapter slice; set 2 for the full book
+  persistent_periphery_min_snapshots: 2
+  persistent_periphery_max_edges: 1
+
+validation:
+  face_validity:
+    n_centre_inner: 20
+    n_outer: 20
+    stratify_by: first_chapter
+    bootstrap_resamples: 2000
+    seed: 42
