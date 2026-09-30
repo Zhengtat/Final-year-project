@@ -640,6 +640,24 @@ def external_fetch(name: str = typer.Argument(..., help="Dataset name. Only 'iir
     typer.echo(f"Fetched iir_face -> {dest_dir} at commit {commit}")
 
 
+@external_app.command("scrape-iir")
+def external_scrape_iir(
+    gate: float = typer.Option(0.90, "--gate", help="minimum gold-presence per section"),
+) -> None:
+    """CR-007 §3.1: rebuild the IIR test-split text from the book's public HTML edition (local use only),
+    apply the gold-presence gate and write the sections that pass under data/interim/external/."""
+    from cumap.config import REPO_ROOT
+    from cumap.data.iir_scrape import build_test_split, make_fetcher
+
+    ext = REPO_ROOT / "data" / "interim" / "external"
+    report = build_test_split(
+        REPO_ROOT / "data" / "raw" / "external" / "iir_face", ext,
+        make_fetcher(ext / "iir_html_cache"), gate=gate)
+    typer.echo(f"{report['n_kept']} of {report['n_sections']} sections passed the {gate:.0%} gate")
+    for e in report["excluded"]:
+        typer.echo(f"  EXCLUDED {e['section_id']}: {e['reason']}")
+
+
 @external_app.command("load")
 def external_load(name: str = typer.Argument(..., help="Dataset name. Only 'iir_face' is implemented.")) -> None:
     """Parse a fetched external dataset into data/interim/external/ (gitignored — third-party text)."""

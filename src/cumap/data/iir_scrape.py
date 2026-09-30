@@ -295,3 +295,108 @@ def scrape_iir(
             gate=gate,
         )
     return out
+
+
+def build_test_split(
+    raw_dir: Path,
+    out_dir: Path,
+    fetch: Fetch,
+    *,
+    dev_chapters: tuple[int, ...] = (1, 2, 3),
+    gate: float = GATE,
+) -> dict:
+    """Scrape every annotated chapter outside the dev split, apply the gold-presence gate and write
+    (all under out_dir, gitignored): iir_test_sections_v3.jsonl (sections that passed),
+    iir_test_gold_concepts_v3.csv (gold of the sections that passed) and iir_scrape_report.json
+    (per-section presence and variant, plus the excluded sections with reasons)."""
+    import json
+
+    from cumap.data.iir_face import _SECTION_ID_RE, parse_gold_concepts
+
+    ann_dir = raw_dir / "IIR-dataset" / "annotation"
+    ids_by_ch: dict[int, list[str]] = {}
+    for f in sorted(ann_dir.glob("iir-*.csv")):
+        sid = "iir_" + f.stem.removeprefix("iir-").replace(".", "_")
+        m = _SECTION_ID_RE.match(sid)
+        ch = int(m.group(1))
+        if ch not in dev_chapters:
+            ids_by_ch.setdefault(ch, []).append(sid)
+    all_ids = [s for ids in ids_by_ch.values() for s in ids]
+    gold_df = parse_gold_concepts(ann_dir, all_ids)
+    gold_df = gold_df[gold_df["is_gold"]]
+    gold_by_section: dict[str, list[tuple[str, list[str]]]] = {}
+    for _, r in gold_df.iterrows():
+        gold_by_section.setdefault(r["section_id"], []).append((r["concept"], list(r["aliases"])))
+
+    toc_html = fetch("irbook.html")
+    titles = dict(
+        re.findall(r'<LI><A[^>]*HREF="([^"]+)"[^>]*>(.*?)</A>', toc_html, re.IGNORECASE | re.DOTALL)
+    )
+    toc = parse_toc(toc_html)
+    scraped = scrape_iir(
+        {
+            c: [a.replace("_", "-", 1).replace("_", ".") for a in ids]
+            for c, ids in ids_by_ch.items()
+        },
+        gold_by_section,
+        fetch,
+        gate=gate,
+    )
+    kept = [s for s in scraped if s.excluded_reason is None]
+    out_dir.mkdir(parents=True, exist_ok=True)
+    with (out_dir / "iir_test_sections_v3.jsonl").open("w", encoding="utf-8") as f:
+        for i, s in enumerate(sorted(kept, key=lambda s: s.path)):
+            ch = s.path[0]
+            ct = _TAG.sub("", titles.get(toc[ch], f"Chapter {ch}")).strip()
+            f.write(
+                json.dumps(
+                    {
+                        "section_id": s.section_id,
+                        "chapter_num": ch,
+                        "chapter_title": ct,
+                        "section_title": s.title or ct,
+                        "heading_path": [ct] + ([s.title] if s.title else []),
+                        "order_index": 1000 + i,
+                        "text": s.text,
+                        "n_pages": s.n_pages,
+                        "variant": s.variant,
+                    }
+                )
+                + "\n"
+            )
+    keep_ids = {s.section_id for s in kept}
+    gold_df[gold_df["section_id"].isin(keep_ids)].to_csv(
+        out_dir / "iir_test_gold_concepts_v3.csv", index=False
+    )
+    report = {
+        "gate": gate,
+        "n_sections": len(scraped),
+        "n_kept": len(kept),
+        "kept": [
+            {
+                "section_id": s.section_id,
+                "words": s.words,
+                "presence": s.presence,
+                "variant": s.variant,
+                "presence_a": s.presence_a,
+                "presence_b": s.presence_b,
+                "n_gold": s.n_gold,
+                "pages": s.n_pages,
+            }
+            for s in scraped
+            if s.excluded_reason is None
+        ],
+        "excluded": [
+            {
+                "section_id": s.section_id,
+                "reason": s.excluded_reason,
+                "presence_a": s.presence_a,
+                "presence_b": s.presence_b,
+                "n_gold": s.n_gold,
+            }
+            for s in scraped
+            if s.excluded_reason
+        ],
+    }
+    (out_dir / "iir_scrape_report.json").write_text(json.dumps(report, indent=2), encoding="utf-8")
+    return report
