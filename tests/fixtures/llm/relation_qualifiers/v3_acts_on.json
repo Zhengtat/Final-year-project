@@ -1,0 +1,1 @@
+{"polarity": "affirmed", "modality": "necessary", "conditions": [], "part_type": null, "dimension": null, "action_type": "forward", "surface_phrase": "forwards", "corrects_intuition": false, "intuition": null, "_usage": {"input_tokens": 100, "output_tokens": 30}}
