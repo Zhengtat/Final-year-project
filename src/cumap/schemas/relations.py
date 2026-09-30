@@ -60,6 +60,9 @@ class RelationType(BaseModel):
     status: str | None = None
     template: str | None = None
     near_misses: list[NearMiss] = []
+    # CR-007 (registry v1.1): 'core' relations are added unconditionally; 'gated' ones are kept only
+    # if the slice re-run yields >= 5 instances and the owner marks >= 80% of up to 8 correct.
+    gate: str | None = None
 
 
 class FamilyDef(BaseModel):
@@ -69,6 +72,7 @@ class FamilyDef(BaseModel):
     label: str
     diagnostic_prior: float
     grounding: str
+    gloss: str | None = None  # CR-007: one-line gloss shown in the family step of relation prompt v3
 
 
 class QualifierDef(BaseModel):
@@ -111,7 +115,11 @@ class RelationRegistry:
         families: list[FamilyDef] | None = None,
         qualifiers: dict[str, QualifierDef] | None = None,
         chain_link_types: list[ChainLinkTypeDef] | None = None,
+        minor: int = 0,
+        output_fields: dict | None = None,
     ):
+        self.minor = minor  # registry version is `version.minor` (v1.1 = 1, 1)
+        self.output_fields: dict = output_fields or {}  # extra relation-choice output fields (v1.1)
         self._by_name: dict[str, RelationType] = {r.name: r for r in relations}
         self.node_types = node_types
         self.version = version
@@ -135,7 +143,13 @@ class RelationRegistry:
             families=[FamilyDef(**f) for f in raw.get("families", [])],
             qualifiers={k: QualifierDef(**v) for k, v in raw.get("qualifiers", {}).items()},
             chain_link_types=[ChainLinkTypeDef(**c) for c in raw.get("chain_link_types", [])],
+            minor=raw.get("minor", 0),
+            output_fields=raw.get("output_fields") or {},
         )
+
+    @property
+    def version_label(self) -> str:
+        return f"{self.version}.{self.minor}"
 
     def __contains__(self, name: str) -> bool:
         return name in self._by_name

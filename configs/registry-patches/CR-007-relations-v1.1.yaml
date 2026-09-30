@@ -15,6 +15,16 @@
 patch_for_registry_version: 1
 new_version: "1.1"
 
+# Claude Code, STOP 3 (CR-007 §5): one-line glosses for the family step of relation prompt v3, so an
+# 'actor handles a thing' sentence routes to mechanism_process (-> acts_on). Wording only; no relation added.
+family_gloss:
+  mechanism_process: "something acts or happens: an actor performs, triggers or precedes an activity, or handles a data unit (send, receive, forward, transform, check, store, drop)"
+  cause_effect: "one thing brings about, prevents or changes the amount of another"
+  function_means: "what something is for, or what it uses to achieve its purpose"
+  dependency: "one thing needs, requires or is constrained by another (including a stated absence of that need)"
+  comparison: "two things are alike, different or in tension along a stated dimension"
+  classification_structure: "what kind of thing something is, what it is made of, what it is attached or connected to, what carries or names it"
+
 adds:
 
   node_types: [Identifier]   # addresses, IDs, port numbers, names that select an entity
