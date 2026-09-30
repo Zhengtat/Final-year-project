@@ -44,6 +44,7 @@ def _run_pass(
     run_index: int,
     fixture_name: str,
     already_found: list[str] | None = None,
+    extra_vars: dict[str, str] | None = None,
 ) -> ExtractionResult:
     already_found_lower = {n.lower() for n in (already_found or [])}
     unselected_candidate_terms = [
@@ -61,6 +62,9 @@ def _run_pass(
         unselected_candidate_terms=", ".join(unselected_candidate_terms)
         if unselected_candidate_terms
         else "(none)",
+        # CR-007 v3x experiment blocks ({codebook_block}, {few_shot_block}, ...); ignored by
+        # templates that do not use them.
+        **(extra_vars or {}),
     )
     schema = build_concept_extraction_llm(registry)
     result = client.parse(
@@ -112,6 +116,7 @@ def extract_concepts_for_section(
     fixture_name: str = "default",
     gleaning_fixture_name: str = "default",
     include_gleaning: bool = True,
+    extra_vars: dict[str, str] | None = None,
 ) -> ExtractionResult:
     """Main pass + an optional gleaning pass ("list concepts you missed"), merged.
     Duplicate canonical_name (case-insensitive) mentions from the gleaning pass are
@@ -132,6 +137,7 @@ def extract_concepts_for_section(
         domain=domain,
         run_index=0,
         fixture_name=fixture_name,
+        extra_vars=extra_vars,
     )
     if not include_gleaning:
         return main
