@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import csv
 import json
+import math
 import re
 from pathlib import Path
 
@@ -360,6 +361,37 @@ def test_growth_only_page_has_graph_and_no_other_tabs(built):
     assert 'id="timebar"' in html and 'id="growth"' in html and 'id="steps-data"' in html
     assert 'id="t1"' not in html and 'id="t2"' not in html and "Concept extraction" not in html
     assert not re.search(r'(?:src|href)\s*=\s*["\']?(?:https?:)?//', html)
+
+
+def test_growth3d_page_is_self_contained_and_has_clickable_concept_data(built):
+    html = (built[0].parent / "growth3d.html").read_text(encoding="utf-8")
+    assert '<canvas id="cv"' in html and 'id="timebar"' in html and 'id="panel"' in html
+    assert not re.search(r'(?:src|href)\s*=\s*["\']?(?:https?:)?//', html)
+    assert re.findall(r"<script[^>]*>", html) == [
+        '<script type="application/json" id="d3d">',
+        "<script>",
+    ]
+    d = json.loads(re.search(r'id="d3d">(.*?)</script>', html, re.DOTALL).group(1))
+    assert {n["i"] for n in d["nodes"]} == set(d["concepts"]) == {"c_network", "c_link", "c_frame"}
+    assert all(isinstance(n[k], float | int) for n in d["nodes"] for k in ("x", "y", "z"))
+    link = d["concepts"]["c_link"]
+    assert link["aliases"] == ["links"] and {m["sec"] for m in link["mentions"]} == {"2.1", "3.1"}
+    assert d["edges"][0]["quote"] == "consist of links" and d["radius"] > 0
+
+
+def test_layout3d_is_deterministic_finite_and_not_flat():
+    from cumap.report.graph3d import layout3d
+
+    ids = [f"n{i}" for i in range(20)]
+    edges = [(f"n{i}", f"n{i + 1}") for i in range(9)] + [
+        ("n0", "n5"),
+        ("n10", "n11"),
+        ("n12", "n13"),
+    ]
+    a = layout3d(ids, edges)
+    assert a == layout3d(ids, edges) and set(a) == set(ids)
+    assert all(math.isfinite(c) for p in a.values() for c in p)
+    assert max(abs(a[f"n{i}"][2]) for i in range(10)) > 1.0  # main component uses the z axis
 
 
 def test_animated_figure_reveals_nodes_at_their_section(built):

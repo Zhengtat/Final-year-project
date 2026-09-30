@@ -6,6 +6,7 @@ with its provenance footer). Deterministic for a fixed run: layouts use a fixed 
 from __future__ import annotations
 
 import json
+import math
 from collections import Counter
 from datetime import UTC, datetime
 from html import escape
@@ -17,10 +18,12 @@ from cumap.report import data as D
 from cumap.report.graph import (
     FAMILY_ORDER,
     GNode,
+    chapter_slot,
     family_slot,
     render_growth_graph,
     render_section_graph,
 )
+from cumap.report.graph3d import growth3d_page, layout3d
 from cumap.report.provenance import LABEL_SOURCES, Provenance
 from cumap.report.svg import grouped_bar_svg, hbar_svg, slot, theme_css
 from cumap.report.viewer import Span, find_span, highlight_html
@@ -762,7 +765,85 @@ Contains IIR (Â© Cambridge University Press) text for local research use only â€
     (out / "growth.html").write_text(
         _growth_only_page(html, edge_json, steps_json, footer), encoding="utf-8"
     )
+    _write_growth3d(out, growth, checkpoint, cfg, prov, footer)
     return out / "index.html"
+
+
+def _write_growth3d(
+    out: Path, growth, checkpoint: dict, cfg, prov: Provenance, footer: str
+) -> None:
+    """growth3d.html: the growth graph as an interactive 3D scene (spin, zoom, click a concept)."""
+    pos = layout3d([n.id for n in growth.nodes], [(e.source, e.target) for e in growth.edges])
+    top = [n for n in growth.nodes if n.rank < cfg.growth_top_n]
+    radius = 1.05 * max(math.dist(pos[n.id], (0, 0, 0)) for n in top)
+    concepts = {c["concept_id"]: c for c in checkpoint["concepts"]}
+    captions = {}
+    for st, sec in zip(growth.steps, growth.section_labels, strict=True):
+        captions[sec["id"]] = st["caption"]
+    data = {
+        "radius": round(radius, 1),
+        "topn": cfg.growth_top_n,
+        "labelTop": 30,
+        "nodes": [
+            {
+                "i": n.id,
+                "l": n.label,
+                "ch": n.chapter,
+                "col": chapter_slot(n.chapter),
+                "sec": n.section,
+                "rank": n.rank,
+                "size": n.size,
+                "prereq": n.prereq,
+                "type": concepts[n.id]["node_type"],
+                "x": round(pos[n.id][0], 1),
+                "y": round(pos[n.id][1], 1),
+                "z": round(pos[n.id][2], 1),
+            }
+            for n in growth.nodes
+        ],
+        "edges": [
+            {
+                "id": e.id,
+                "s": e.source,
+                "t": e.target,
+                "rel": e.relation,
+                "fam": e.family,
+                "slot": family_slot(e.family),
+                "sec": e.section,
+                "cross": e.cross,
+                "neg": e.negated,
+                "statement": growth.edge_details[e.id]["statement"],
+                "quote": growth.edge_details[e.id]["quote"],
+                "polarity": growth.edge_details[e.id]["polarity"],
+                "modality": growth.edge_details[e.id]["modality"],
+                "section": growth.edge_details[e.id]["section"],
+            }
+            for e in growth.edges
+        ],
+        "concepts": {
+            cid: {
+                "def": c.get("definition"),
+                "aliases": c["aliases"],
+                "mentions": [
+                    {"sec": m["section_id"], "role": m["role"], "quote": m["quote"]}
+                    for m in c["mentions"]
+                ],
+            }
+            for cid, c in concepts.items()
+        },
+        "steps": growth.steps,
+        "secCaption": captions,
+        "families": [
+            {"name": f, "slot": family_slot(f)}
+            for f in FAMILY_ORDER
+            if any(e.family == f for e in growth.edges)
+        ],
+        "chapters": [{"ch": c, "slot": chapter_slot(c)} for c in growth.chapters],
+    }
+    (out / "growth3d.html").write_text(
+        growth3d_page(data, css=CSS, banner=BANNER, footer=footer, top_n=cfg.growth_top_n),
+        encoding="utf-8",
+    )
 
 
 def _growth_only_page(full_html: str, edge_json: str, steps_json: str, footer: str) -> str:
