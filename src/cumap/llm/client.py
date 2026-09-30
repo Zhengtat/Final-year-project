@@ -102,6 +102,10 @@ class LLMClient:
         self._cache = LLMCache(settings.resolve(settings.paths.data_cache) / "llm")
         self._log_path = settings.resolve(settings.paths.data_logs) / "llm_calls.jsonl"
         self._log_path.parent.mkdir(parents=True, exist_ok=True)
+        # CR-007 §5.2: the exact prompt text of every call, once per input hash, so report examples
+        # are rendered from what was really sent ("Report examples are rendered from logged prompts").
+        self._prompt_log_path = self._log_path.parent / "llm_prompts.jsonl"
+        self._logged_prompt_hashes: set[str] | None = None
         self.run_id = run_id or uuid.uuid4().hex
         self._fixtures_dir = fixtures_dir or (settings.repo_root / "tests" / "fixtures" / "llm")
         self._client = None  # lazy OpenAI client; never constructed by mock-backend tests
@@ -316,6 +320,7 @@ class LLMClient:
                 escalation_reason=escalated_reason,
             )
             self._log(result)
+            self._log_prompt(input_hash, task, prompt_version, model, model_tier, messages)
             return result
 
         max_output_tokens = self._max_output_tokens_for(task)
@@ -351,7 +356,23 @@ class LLMClient:
             escalation_reason=escalated_reason,
         )
         self._log(result)
+        self._log_prompt(input_hash, task, prompt_version, model, model_tier, messages)
         return result
+
+    def _log_prompt(self, input_hash, task, prompt_version, model, model_tier, messages) -> None:
+        if self._logged_prompt_hashes is None:
+            self._logged_prompt_hashes = set()
+            if self._prompt_log_path.exists():
+                with self._prompt_log_path.open() as f:
+                    for line in f:
+                        self._logged_prompt_hashes.add(json.loads(line)["input_hash"])
+        if input_hash in self._logged_prompt_hashes:
+            return
+        self._logged_prompt_hashes.add(input_hash)
+        record = {"input_hash": input_hash, "task": task, "prompt_version": prompt_version,
+                  "model": model, "model_tier": model_tier, "messages": messages}
+        with self._prompt_log_path.open("a") as f:
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
     @retry(
         retry=retry_if_exception(_is_retryable),
