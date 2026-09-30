@@ -296,6 +296,7 @@ def test_html_is_self_contained(built):
     assert not re.search(r"url\(\s*[\"']?https?:", html)
     assert re.findall(r"<script[^>]*>", html) == [
         '<script type="application/json" id="edge-data">',
+        '<script type="application/json" id="steps-data">',
         "<script>",
     ]
 
@@ -345,7 +346,19 @@ def test_growth_graph_uses_directed_edges_and_marks_cross_chapter(built):
     assert edges["RP-1"]["source"] == "link" and edges["RP-1"]["target"] == "network"
     # network is defined in 2.1 and used in 3.1 -> prerequisite candidate; link is never defined
     assert html.count('data-prereq="1"') == 1
-    assert 'id="chslider"' in html and 'id="showall"' in html and 'id="showprereq"' in html
+    assert 'id="timebar"' in html and 'id="play"' in html and 'id="speed"' in html
+    assert 'id="showall"' in html and 'id="showprereq"' in html
+    steps = json.loads(re.search(r'id="steps-data">(.*?)</script>', html, re.DOTALL).group(1))
+    assert [st["chapter"] for st in steps] == [2, 3]
+    assert 'max="1"' in html  # two sections -> steps 0..1
+    # link is first mentioned in section 0; frame first appears in section 1
+    assert 'data-sec="1"' in html and 'data-sec="0"' in html
+
+
+def test_animated_figure_reveals_nodes_at_their_section(built):
+    svg = (built[0].parent / "figures" / "growth-animation.svg").read_text(encoding="utf-8")
+    assert svg.count('attributeName="opacity"') >= 6 and "<script" not in svg
+    assert 'begin="0.00s"' in svg and 'begin="1.20s"' in svg
 
 
 def test_find_span_is_whitespace_tolerant_whole_word_and_case_insensitive():

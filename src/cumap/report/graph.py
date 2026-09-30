@@ -47,6 +47,7 @@ class GNode:
     aliases: list[str] = field(default_factory=list)
     prereq: bool = False
     rank: int = 0
+    section: int = 0  # index (book order) of the first section that mentions it
 
 
 @dataclass
@@ -59,6 +60,7 @@ class GEdge:
     negated: bool = False
     chapter: int = 0
     cross: bool = False
+    section: int = 0  # index (book order) of the section it was extracted from
 
 
 def layout(
@@ -211,10 +213,23 @@ def render_growth_graph(
     width: int = 1300,
     height: int = 1000,
     label_top: int = 35,
+    animate_steps: list[str] | None = None,
+    step_seconds: float = 1.2,
 ) -> str:
     """One SVG holding every node/edge with data-* attributes; ranked by `GNode.rank`
-    (0 = most important). JS filters on data-ch / data-rank / data-cross / data-prereq.
+    (0 = most important). JS filters on data-sec / data-rank / data-cross / data-prereq.
+    With `animate_steps` (one caption per section, book order) the SVG animates itself with
+    SMIL <set> elements -- nodes/edges appear at their section's step, no script needed --
+    for use as a standalone figure.
     """
+
+    def appear(sec: int) -> tuple[str, str]:
+        if animate_steps is None:
+            return "", ""
+        return ' opacity="0"', (
+            f'<set attributeName="opacity" to="1" begin="{sec * step_seconds:.2f}s" fill="freeze"/>'
+        )
+
     footer = provenance.footer(label_source)
     ordered = sorted(nodes, key=lambda n: n.rank)
     pos = layout(
@@ -234,8 +249,10 @@ def render_growth_graph(
         sw = 2.4 if e.cross else 1.2
         body.append(
             f'<g class="edge {cls}" data-edge="{escape(e.id)}" data-ch="{e.chapter}" '
-            f'data-cross="{int(e.cross)}" data-s="{escape(e.source)}" data-t="{escape(e.target)}" '
-            f'style="cursor:pointer"><title>{escape(e.source)} —[{escape(e.relation)}]→ {escape(e.target)}</title>'
+            f'data-sec="{e.section}" data-cross="{int(e.cross)}" data-s="{escape(e.source)}" '
+            f'data-t="{escape(e.target)}" style="cursor:pointer"{appear(e.section)[0]}>'
+            f"{appear(e.section)[1]}"
+            f"<title>{escape(e.source)} —[{escape(e.relation)}]→ {escape(e.target)}</title>"
             f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="{stroke}" '
             f'stroke-width="{sw}" opacity="0.8"/>'
             f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" stroke="transparent" '
@@ -264,8 +281,9 @@ def render_growth_graph(
             else ""
         )
         body.append(
-            f'<g class="node" data-id="{escape(n.id)}" data-ch="{n.chapter}" data-rank="{n.rank}" '
-            f'data-prereq="{int(n.prereq)}"><title>{tip}</title>{halo}'
+            f'<g class="node" data-id="{escape(n.id)}" data-ch="{n.chapter}" data-sec="{n.section}" '
+            f'data-rank="{n.rank}" data-prereq="{int(n.prereq)}"{appear(n.section)[0]}>'
+            f"{appear(n.section)[1]}<title>{tip}</title>{halo}"
             f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}" fill="{slot(chapter_slot(n.chapter))}" '
             f'stroke="var(--bg)" stroke-width="2"/>{label}</g>'
         )
@@ -273,4 +291,12 @@ def render_growth_graph(
     body.append(
         _legend_row([(f"first introduced ch{c}", slot(chapter_slot(c))) for c in chapters], 36)
     )
+    if animate_steps is not None:
+        for i, caption in enumerate(animate_steps):
+            end = "" if i == len(animate_steps) - 1 else f' end="{(i + 1) * step_seconds:.2f}s"'
+            body.append(
+                f'<text class="ttl" x="{width - 12}" y="24" text-anchor="end" opacity="0">'
+                f'<set attributeName="opacity" to="1" begin="{i * step_seconds:.2f}s"{end}/>'
+                f"{escape(caption)}</text>"
+            )
     return wrap_svg(width, height, "".join(body), title, footer)

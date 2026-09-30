@@ -242,6 +242,15 @@ mark{color:inherit;border-radius:2px;cursor:help}
 .foot{font-size:12px;color:var(--ink2);margin-top:32px}
 #detail{border:1px solid var(--grid);border-radius:6px;padding:8px 12px;min-height:56px;margin:8px 0;font-size:13px}
 g.edge:hover line{stroke-width:4}
+#growth .node,#growth .edge{transition:opacity .5s}
+#growth .off{opacity:0;pointer-events:none}
+#timebar{width:min(560px,90%)}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+@keyframes flash{50%{stroke:var(--ink);stroke-width:6}}
+#growth .node.new circle{transform-box:fill-box;transform-origin:center;animation:pop .6s ease-out}
+#growth .node.pulse circle{animation:flash .7s}
+#growth .edge.new line{animation:flash .9s}
+@media (prefers-reduced-motion:reduce){#growth .node circle,#growth .edge line{animation:none!important}}
 """
 )
 
@@ -262,16 +271,28 @@ function showEdge(id){const e=EDGES[id];if(!e)return;
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
 document.addEventListener('click',ev=>{const g=ev.target.closest('[data-edge]');if(g)showEdge(g.dataset.edge);});
 const gr=$('#growth');
-if(gr){const slider=$('#chslider'),all=$('#showall'),pre=$('#showprereq'),topn=+gr.dataset.topn;
- function apply(){const ch=+slider.value;$('#chval').textContent=ch;
-  const vis=new Set();
-  $$('.node',gr).forEach(n=>{const show=+n.dataset.ch<=ch&&(all.checked||+n.dataset.rank<topn);
-   n.style.display=show?'':'none';if(show)vis.add(n.dataset.id);
+if(gr){const bar=$('#timebar'),all=$('#showall'),pre=$('#showprereq'),play=$('#play'),speed=$('#speed'),
+ topn=+gr.dataset.topn,STEPS=JSON.parse($('#steps-data').textContent),last=STEPS.length-1;
+ let timer=null,prev=-1;
+ function flash(el,cls){el.classList.remove(cls);void el.getBoundingClientRect();el.classList.add(cls);}
+ function apply(){const t=+bar.value,st=STEPS[t],ment=new Set(st.mentioned),vis=new Set();
+  $('#stepname').textContent='Section '+st.caption+' (ch'+st.chapter+')';
+  $$('.node',gr).forEach(n=>{const show=+n.dataset.sec<=t&&(all.checked||+n.dataset.rank<topn);
+   n.classList.toggle('off',!show);if(show)vis.add(n.dataset.id);
+   n.classList.remove('new','pulse');
+   if(show&&t!==prev){if(+n.dataset.sec===t)flash(n,'new');else if(ment.has(n.dataset.id))flash(n,'pulse');}
    const h=$('.halo',n);if(h)h.style.display=pre.checked?'':'none';});
-  let ne=0;$$('.edge',gr).forEach(e=>{const show=+e.dataset.ch<=ch&&vis.has(e.dataset.s)&&vis.has(e.dataset.t);
-   e.style.display=show?'':'none';if(show)ne++;});
-  $('#counts').textContent=vis.size+' concepts, '+ne+' edges shown';}
- [slider,all,pre].forEach(x=>x.addEventListener('input',apply));apply();}
+  let ne=0;$$('.edge',gr).forEach(e=>{const show=+e.dataset.sec<=t&&vis.has(e.dataset.s)&&vis.has(e.dataset.t);
+   e.classList.toggle('off',!show);e.classList.remove('new');if(show){ne++;if(+e.dataset.sec===t&&t!==prev)flash(e,'new');}});
+  let m=0;for(let i=0;i<=t;i++)m+=STEPS[i].merges;
+  $('#counts').textContent=vis.size+' concepts, '+ne+' edges, '+m+' alias merges so far';prev=t;}
+ function stop(){clearInterval(timer);timer=null;play.textContent='▶ Play';}
+ function start(){if(+bar.value>=last){bar.value=0;prev=-1;}play.textContent='⏸ Pause';
+  timer=setInterval(()=>{if(+bar.value>=last){stop();return;}bar.value=+bar.value+1;apply();},1400/+speed.value);apply();}
+ play.addEventListener('click',()=>timer?stop():start());
+ speed.addEventListener('change',()=>{if(timer){stop();start();}});
+ bar.addEventListener('input',()=>{stop();apply();});
+ [all,pre].forEach(x=>x.addEventListener('input',apply));apply();}
 })();
 """
 
@@ -550,6 +571,22 @@ def build_report(
             label_source="model_output",
         ),
     )
+    figs.emit(
+        "growth-animation",
+        render_growth_graph(
+            f"Expert KG built section by section (animated; top {cfg.growth_top_n} concepts)",
+            [n for n in growth.nodes if n.rank < cfg.growth_top_n],
+            [
+                e
+                for e in growth.edges
+                if by_id_node[e.source].rank < cfg.growth_top_n
+                and by_id_node[e.target].rank < cfg.growth_top_n
+            ],
+            provenance=prov,
+            label_source="model_output",
+            animate_steps=[st["caption"] for st in growth.steps],
+        ),
+    )
     for ch in growth.chapters:
         sub_nodes = [n for n in growth.nodes if n.chapter <= ch and n.rank < cfg.growth_top_n]
         keep = {n.id for n in sub_nodes}
@@ -639,10 +676,10 @@ def build_report(
     )
 
     edge_json = json.dumps(growth.edge_details).replace("</", "<\\/")
+    steps_json = json.dumps(growth.steps).replace("</", "<\\/")
     n_merges = sum(len(s.merges) for s in snaps)
     footer = prov.footer("model_output").rsplit(" · labels:", 1)[0]
     label_legend = "".join(f"<li>{escape(v)}</li>" for v in LABEL_SOURCES.values())
-    ch_lo, ch_hi = growth.chapters[0], growth.chapters[-1]
     legend_growth = (
         f'<span class="chip" style="background:{slot(0)};color:#fff">first introduced ch2</span>'
         f'<span class="chip" style="background:{slot(1)};color:#fff">first introduced ch3</span>'
@@ -699,11 +736,15 @@ ones ({", ".join(escape(w["alias"] + " → " + w["into"]) for w in merge["wrong"
 </section>
 
 <section class="tab" id="t3" hidden><h2>Growth through chapters</h2>
+<p class="small">The graph is built in book order, one section per step (press Play or drag the bar). New concepts pop in, concepts mentioned again flash, new edges flash. This is the order of the book, not a learner's path; book order is not prerequisite truth.</p>
 <p>{legend_growth}</p>
-<div class="controls"><label>Chapter ≤ <input type="range" id="chslider" min="{ch_lo}" max="{ch_hi}" value="{ch_hi}" step="1">
-<b id="chval">{ch_hi}</b></label><label><input type="checkbox" id="showall"> show all concepts
-(default: top {cfg.growth_top_n} by connections)</label><label><input type="checkbox" id="showprereq" checked>
-prerequisite layer</label><span class="small" id="counts"></span></div>
+<div class="controls"><button id="play" type="button">▶ Play</button>
+<label>Time <input type="range" id="timebar" min="0" max="{len(growth.steps) - 1}" value="{len(growth.steps) - 1}" step="1"></label>
+<label>Speed <select id="speed"><option value="0.5">0.5×</option><option value="1" selected>1×</option>
+<option value="2">2×</option><option value="4">4×</option></select></label></div>
+<div class="controls"><b id="stepname"></b><span class="small" id="counts"></span></div>
+<div class="controls"><label><input type="checkbox" id="showall"> show all concepts (default: top {cfg.growth_top_n} by connections)</label>
+<label><input type="checkbox" id="showprereq" checked> prerequisite layer</label></div>
 <div id="detail" class="small">Click an edge to see its evidence.</div>
 <div class="svgbox" id="growth" data-topn="{cfg.growth_top_n}">{growth_svg}</div>
 <p class="small">Prerequisite candidates are rule-based (defined in one section, used in a later one;
@@ -715,6 +756,7 @@ book order is <b>not</b> prerequisite truth). {n_merges} alias merges across cha
 
 <div class="foot"><b>Label sources used on this page</b><ul>{label_legend}</ul>
 Contains IIR (© Cambridge University Press) text for local research use only — do not redistribute this file.</div>
-</main><script type="application/json" id="edge-data">{edge_json}</script><script>{JS}</script></body></html>"""
+</main><script type="application/json" id="edge-data">{edge_json}</script>
+<script type="application/json" id="steps-data">{steps_json}</script><script>{JS}</script></body></html>"""
     (out / "index.html").write_text(html, encoding="utf-8")
     return out / "index.html"

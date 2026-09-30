@@ -88,6 +88,7 @@ class GrowthData:
     snapshots: list[ChapterSnapshot]
     key_concepts: list[dict]  # name + per-section role grid
     section_labels: list[dict]  # ordered sections: id, chapter, label
+    steps: list[dict]  # one per section, book order: caption + what the time bar reveals
 
 
 def _section_order(sections: list[dict]) -> list[dict]:
@@ -98,6 +99,10 @@ def build_growth(
     checkpoint: dict, snapshots: list[ChapterSnapshot], sections: list[dict], *, key_n: int
 ) -> GrowthData:
     order = {s["section_id"]: i for i, s in enumerate(_section_order(sections))}
+    ordered_secs = [
+        s for s in _section_order(sections) if s["section_id"] in checkpoint["mentions_by_section"]
+    ]
+    sec_idx = {s["section_id"]: i for i, s in enumerate(ordered_secs)}
     concepts = {c["concept_id"]: c for c in checkpoint["concepts"]}
 
     # prerequisite candidate = defined in section D, used in some later section
@@ -116,6 +121,11 @@ def build_growth(
         if defined and any(u > min(defined) for u in used):
             prereq.add(cid)
 
+    first_sec = {
+        cid: min(sec_idx[m["section_id"]] for m in c["mentions"] if m["section_id"] in sec_idx)
+        for cid, c in concepts.items()
+        if any(m["section_id"] in sec_idx for m in c["mentions"])
+    }
     node_by_id: dict = {}
     for snap in sorted(snapshots, key=lambda s: s.chapter_num):
         for n in snap.nodes:
@@ -145,6 +155,7 @@ def build_growth(
                     negated=negated,
                     chapter=snap.chapter_num,
                     cross=e.source_chapter != e.target_chapter,
+                    section=sec_idx[e.section_id],
                 )
             )
             details[e.edge_id] = {
@@ -180,6 +191,7 @@ def build_growth(
             size=n.mention_section_count,
             aliases=list(n.aliases),
             prereq=n.concept_id in prereq,
+            section=first_sec[n.concept_id],
             rank=rank[n.concept_id],
         )
         for n in ranked
@@ -217,7 +229,29 @@ def build_growth(
                 "aliases": len(concepts[cid]["aliases"]),
             }
         )
+    steps = []
+    merges_by_sec = Counter(
+        sec_idx[m["section_id"]] for m in checkpoint["merges"] if m["section_id"] in sec_idx
+    )
+    for i, sec in enumerate(ordered_secs):
+        sid = sec["section_id"]
+        title = sec.get("section_title", "")
+        steps.append(
+            {
+                "caption": f"{sid} {title}".strip()
+                if sid[0].isdigit() and "." in sid
+                else title or sid,
+                "chapter": sec["chapter_num"],
+                "mentioned": sorted(
+                    cid
+                    for cid, c in concepts.items()
+                    if any(m["section_id"] == sid for m in c["mentions"])
+                ),
+                "merges": merges_by_sec.get(i, 0),
+            }
+        )
     return GrowthData(
+        steps=steps,
         nodes=nodes,
         edges=edges,
         edge_details=details,
