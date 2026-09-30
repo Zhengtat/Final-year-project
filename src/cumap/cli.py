@@ -577,6 +577,63 @@ def diagnose_run() -> None:
     _not_implemented("cumap diagnose run", "M7")
 
 
+@eval_app.command("concept-ablation")
+def eval_concept_ablation(
+    split: str = typer.Option("dev", "--split", help="dev (ablation) | test (once per prompt version)"),
+    variants: str = typer.Option("all", "--variants", help="comma list of v2,E1,E2-union,E2-vote2,E3,E4,E5 or 'all'"),
+    limit: int | None = typer.Option(None, "--limit", help="only the first N sections"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="print the planned calls and cost, call nothing"),
+    max_usd: float = typer.Option(1.0, "--max-usd", help="hard cap for this command (concepts stage)"),
+) -> None:
+    """CR-007 §3.2: IIR concept-extraction ablation. Every call goes through LLMClient (cache, budget)."""
+    from cumap.config import REPO_ROOT, get_settings
+    from cumap.expert_kg.concept_ablation import (
+        default_variants,
+        load_split,
+        plan_variant,
+        run_ablation,
+    )
+    from cumap.expert_kg.concept_experiments import BASELINE, SINGLES
+    from cumap.schemas.relations import RelationRegistry
+
+    pool = {v.name: v for v in [BASELINE, *SINGLES]}
+    chosen = default_variants() if variants == "all" else [pool[n.strip()] for n in variants.split(",")]
+    sections, gold = load_split(REPO_ROOT, split)
+    if limit:
+        sections = sections[:limit]
+    typer.echo(f"{split}: {len(sections)} sections, {len(gold)} gold concepts")
+    total = 0.0
+    for v in chosen:
+        p = plan_variant(v, sections)
+        total += p.est_usd
+        typer.echo(f"  {v.name:10s} {p.calls:4d} calls  ~{p.est_input_tokens:>8d} input tokens  ~${p.est_usd:.4f} (upper bound; cache hits are free)")
+    typer.echo(f"  total upper bound ${total:.4f}; cap ${max_usd:.2f}")
+    if dry_run:
+        return
+    if total > max_usd:
+        raise typer.BadParameter(f"estimate ${total:.2f} exceeds --max-usd {max_usd}")
+    import spacy
+    from sentence_transformers import SentenceTransformer
+
+    from cumap.expert_kg.concept_ablation import new_run_id
+    from cumap.llm.client import LLMClient
+
+    settings = get_settings()
+    settings.llm.stage_budgets_usd["concepts"] = max_usd
+    client = LLMClient(settings, run_id=new_run_id("abl" if split == "dev" else "test"))
+    model = SentenceTransformer(settings.embeddings.model)
+    registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
+    scores = run_ablation(
+        client, chosen, sections, gold, root=REPO_ROOT, registry=registry,
+        nlp=spacy.load("en_core_web_sm"), embed_fn=lambda t: model.encode(t),
+        prompts_dir=REPO_ROOT / "prompts", progress=typer.echo,
+        fewshot_source=load_split(REPO_ROOT, "dev") if split != "dev" else None)
+    typer.echo(f"run {client.run_id}: spend ${client.spent_usd:.4f}, backend calls {client.backend_call_count}")
+    for n, s in scores.items():
+        typer.echo(f"  {n:10s} exact F1 {s['exact_micro']['f1']:.3f}  lenient F1 {s['lenient_micro']['f1']:.3f}  "
+                   f"P {s['lenient_micro']['precision']:.3f} R {s['lenient_micro']['recall']:.3f}")
+
+
 @eval_app.command("run")
 def eval_run() -> None:
     """Run the full evaluation report against baselines and ablations."""
