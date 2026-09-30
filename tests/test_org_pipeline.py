@@ -165,6 +165,16 @@ def test_rings_bands_and_guard_on_the_fixture(world):
     assert 0.0 <= ch3["H"].radius <= 1.0 and ch3["lonely"].radius > 1.0
 
 
+def test_dual_basis_rings_and_split_flags_are_written(world):
+    org = _run(world)
+    ch3 = {n.concept_id: n for n in org.chapters[1].nodes}
+    for n in ch3.values():
+        assert n.ring == n.ring_adj  # config default basis is adjusted
+        assert n.radius == n.radius_adj
+    assert ch3["lonely"].persistent_unlinked is False  # unlinked in only one snapshot (born in ch3)
+    assert all(not n.persistent_periphery for n in ch3.values() if n.n_typed_edges == 0)
+
+
 def test_events_point_at_the_new_edges_of_the_chapter(world):
     org = _run(world)
     ch3_events = org.chapters[1].events

@@ -30,6 +30,13 @@ from cumap.organisation.importance import (
 )
 from cumap.organisation.rings import assign_rings
 
+# Reference range for the report chart (owner request, STOP 2): delta-rho of hub-dominated
+# Barabasi-Albert random graphs (n=300, m=2..4, seed 5, primary null) measured with THIS
+# implementation on the test fixtures: 0.081 (m=2), 0.109 (m=3), 0.138 (m=4). It shows how far an
+# observed delta-rho is above what a hub-heavy random graph gives. Not a threshold; the 0.10
+# label threshold in configs/organisation.yaml is unchanged.
+BA_REFERENCE_DELTA_RHO = (0.08, 0.14)
+
 LABEL_PRESENT = "core-periphery structure present"
 LABEL_WEAK = "weak core"
 LABEL_NONE = "no clear core"

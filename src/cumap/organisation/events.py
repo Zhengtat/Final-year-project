@@ -106,22 +106,27 @@ def node_events(
     return out
 
 
-def update_persistent_periphery(
-    streaks: dict[str, int], cur: dict[str, NodeSnap], cfg: OrgConfig
-) -> set[str]:
-    """Outer or unlinked with <= max typed edges for >= min consecutive snapshots."""
-    flagged = set()
+def update_persistence(
+    streak_unlinked: dict[str, int],
+    streak_periphery: dict[str, int],
+    cur: dict[str, NodeSnap],
+    cfg: OrgConfig,
+) -> tuple[set[str], set[str]]:
+    """Two review flags (never a deletion or demotion):
+    - persistent_unlinked: no typed edges for >= N consecutive snapshots (a relation-recall signal);
+    - persistent_periphery: linked (>= 1 typed edge) but in the outer ring for >= N consecutive
+      snapshots (the real review list: a detail, or missing edges)."""
+    unl, per = set(), set()
     for cid, n in cur.items():
-        if (
-            n.ring in {"outer", "unlinked"}
-            and n.n_edges <= cfg.events.persistent_periphery_max_edges
-        ):
-            streaks[cid] = streaks.get(cid, 0) + 1
-        else:
-            streaks[cid] = 0
-        if streaks[cid] >= cfg.events.persistent_periphery_min_snapshots:
-            flagged.add(cid)
-    return flagged
+        streak_unlinked[cid] = streak_unlinked.get(cid, 0) + 1 if n.ring == "unlinked" else 0
+        streak_periphery[cid] = (
+            streak_periphery.get(cid, 0) + 1 if (n.ring == "outer" and n.n_edges >= 1) else 0
+        )
+        if streak_unlinked[cid] >= cfg.events.persistent_unlinked_min_snapshots:
+            unl.add(cid)
+        if streak_periphery[cid] >= cfg.events.persistent_periphery_min_snapshots:
+            per.add(cid)
+    return unl, per
 
 
 def stability(

@@ -65,8 +65,9 @@ layout:
 
 events:
   late_centraliser_gap_chapters: 1      # 1 for the 3-chapter slice; set 2 for the full book
-  persistent_periphery_min_snapshots: 2
-  persistent_periphery_max_edges: 1
+  # Review flags (owner decision at STOP 2, 2026-09-30): split in two.
+  persistent_unlinked_min_snapshots: 2    # no typed edges in >= N consecutive snapshots: a relation-recall signal
+  persistent_periphery_min_snapshots: 2   # linked (>= 1 typed edge) but in the outer ring for >= N consecutive snapshots: the real review list
 
 validation:
   face_validity:

@@ -4,7 +4,7 @@ from cumap.organisation.events import (
     mean_displacement,
     node_events,
     stability,
-    update_persistent_periphery,
+    update_persistence,
 )
 from cumap.organisation.inputs import OrgEdge
 
@@ -67,20 +67,26 @@ def test_fading_and_first_snapshot_all_new():
     assert {e.type for e in first} == {"node_new"}
 
 
-def test_persistent_periphery_needs_consecutive_snapshots_with_at_most_one_edge():
-    streaks: dict[str, int] = {}
+def test_persistent_flags_are_split_unlinked_vs_linked_outer():
+    su: dict[str, int] = {}
+    sp: dict[str, int] = {}
     s2 = {
-        "p": snap("p", "outer", edges=1),
-        "q": snap("q", "outer", edges=3),
-        "r": snap("r", "unlinked", edges=0),
+        "u": snap("u", "unlinked", edges=0),
+        "o": snap("o", "outer", edges=3),
+        "e": snap("e", "outer", edges=1),
+        "m": snap("m", "middle", edges=2),
     }
-    assert update_persistent_periphery(streaks, s2, CFG) == set()
+    assert update_persistence(su, sp, s2, CFG) == (set(), set())  # one snapshot is not persistent
     s3 = {
-        "p": snap("p", "outer", edges=1),
-        "q": snap("q", "outer", edges=3),
-        "r": snap("r", "middle", edges=2),
+        "u": snap("u", "unlinked", edges=0),
+        "o": snap("o", "outer", edges=3),
+        "e": snap("e", "middle", edges=1),
+        "m": snap("m", "outer", edges=2),
     }
-    assert update_persistent_periphery(streaks, s3, CFG) == {"p"}  # q has > 1 edge; r recovered
+    unl, per = update_persistence(su, sp, s3, CFG)
+    assert unl == {"u"}  # unlinked twice: a relation-recall signal, NOT a periphery-review item
+    assert per == {"o"}  # linked and outer twice; 'e' recovered, 'm' was outer only once
+    assert "u" not in per
 
 
 def test_stability_metrics_and_displacement():

@@ -38,7 +38,16 @@ class OrgNodeState(BaseModel):
     community_id_coarse: str | None
     community_id_fine: str | None
     background_flag: bool
-    persistent_periphery: bool
+    persistent_unlinked: bool = (
+        False  # no typed edges in >= 2 consecutive snapshots (relation-recall signal)
+    )
+    persistent_periphery: bool = (
+        False  # linked but outer for >= 2 consecutive snapshots (the review list)
+    )
+    ring_raw: Ring = "outer"
+    ring_adj: Ring = "outer"
+    radius_raw: float = 1.0
+    radius_adj: float = 1.0
     name: str = ""  # display convenience; not part of the CR's minimal schema
 
 

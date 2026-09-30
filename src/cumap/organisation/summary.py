@@ -157,13 +157,18 @@ def build_summary(org_dir: Path, inp: OrgInputs) -> str:
                     f"| {_cell(name[c])} | {p['ring']} -> {r['ring']} | {change:+.3f} | {_cell(why)} |"
                 )
             out.append("")
-        flagged = sum(1 for r in nodes[ch].values() if r["persistent_periphery"])
+        n_unl = sum(1 for r in nodes[ch].values() if r["persistent_unlinked"])
+        n_per = sum(1 for r in nodes[ch].values() if r["persistent_periphery"])
         out += [
-            "### Review flags",
+            "### Review flags (a flag is never a deletion or demotion)",
             "",
             (
-                f"Persistent periphery: {flagged} concepts (outer or unlinked with <= 1 typed edge "
-                "for >= 2 snapshots; a flag for review, never a deletion)."
+                f"- **persistent_unlinked: {n_unl}** concepts with no typed edge in >= 2 "
+                "consecutive snapshots (a relation-recall signal)."
+            ),
+            (
+                f"- **persistent_periphery: {n_per}** concepts that are linked but in the outer "
+                "ring in >= 2 consecutive snapshots (the real review list)."
             ),
             "",
         ]

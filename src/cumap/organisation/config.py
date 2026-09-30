@@ -121,8 +121,8 @@ class LayoutCfg(_Strict):
 
 class EventsCfg(_Strict):
     late_centraliser_gap_chapters: int = 1
+    persistent_unlinked_min_snapshots: int = 2
     persistent_periphery_min_snapshots: int = 2
-    persistent_periphery_max_edges: int = 1
 
 
 class FaceValidityCfg(_Strict):

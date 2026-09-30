@@ -20,7 +20,7 @@ from cumap.organisation.events import (
     mean_displacement,
     node_events,
     stability,
-    update_persistent_periphery,
+    update_persistence,
 )
 from cumap.organisation.importance import build_snap_graph, compute_importance
 from cumap.organisation.inputs import OrgInputs, load_inputs
@@ -97,7 +97,8 @@ def organise(
     prev_groups: dict[str, dict[str, frozenset[str]]] = {"coarse": {}, "fine": {}}
     counters = {"coarse": [0], "fine": [0]}
     ever_central: set[str] = set()
-    streaks: dict[str, int] = {}
+    streak_unl: dict[str, int] = {}
+    streak_per: dict[str, int] = {}
     prev_xy: dict[str, tuple[float, float]] = {}
     use_adj = cfg.importance.radius_basis == "adjusted"
 
@@ -110,8 +111,16 @@ def organise(
         names = [inp.concepts[c].name for c in sg.ids]
         linked = sg.n_edges_per_node > 0
         basis = imp.adj if use_adj else imp.raw
-        rings = assign_rings(basis, imp.eligible, linked, imp.background, imp.coreness, names, cfg)
-        rad = radii(basis, imp.eligible, rings, cfg)
+        rings_by = {
+            k: assign_rings(v, imp.eligible, linked, imp.background, imp.coreness, names, cfg)
+            for k, v in (("raw", imp.raw), ("adj", imp.adj))
+        }
+        rad_by = {
+            k: radii(v, imp.eligible, rings_by[k], cfg)
+            for k, v in (("raw", imp.raw), ("adj", imp.adj))
+        }
+        chosen = "adj" if use_adj else "raw"
+        rings, rad = rings_by[chosen], rad_by[chosen]
 
         # communities (persistent ids) over linked nodes
         linked_ids = {c for c, k in zip(sg.ids, linked, strict=True) if k}
@@ -186,7 +195,7 @@ def organise(
                         to_state=ce.to_state,
                     )
                 )
-        flagged = update_persistent_periphery(streaks, cur, cfg)
+        flag_unl, flag_per = update_persistence(streak_unl, streak_per, cur, cfg)
         ever_central |= {c for c, s in cur.items() if s.ring in {"centre", "inner"}}
 
         # core-periphery test on the eligible subgraph
@@ -238,7 +247,12 @@ def organise(
                     community_id_coarse=comm_coarse.get(c),
                     community_id_fine=comm_fine.get(c),
                     background_flag=bool(imp.background[i]),
-                    persistent_periphery=c in flagged,
+                    persistent_unlinked=c in flag_unl,
+                    persistent_periphery=c in flag_per,
+                    ring_raw=rings_by["raw"][i],
+                    ring_adj=rings_by["adj"][i],
+                    radius_raw=float(rad_by["raw"][i]),
+                    radius_adj=float(rad_by["adj"][i]),
                     name=names[i],
                 )
             )

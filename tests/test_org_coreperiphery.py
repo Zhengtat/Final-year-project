@@ -72,13 +72,13 @@ def test_labels_planted_er_and_barabasi_albert():
         and abs(r_er.primary.delta_rho) < 0.10
     )
 
-    # NOTE: BA graphs sit close to the fixed 0.10 effect-size line. Measured here (seed 5, 60 samples):
-    # m=2 -> delta 0.081 (weak), m=3 -> 0.109 (just over), m=4 -> 0.138. CR-006's own prototype
-    # reported ~0.09 for its BA graph; the threshold is NOT tuned, the fixture uses m=2.
-    ba = nx.barabasi_albert_graph(n, 2, seed=5)
+    # A Barabasi-Albert TREE (m=1) is hub-dominated but clearly below the 0.10 effect line
+    # (measured: delta 0.043, z 4.7 -> "weak core"). BA graphs with m=2..4 sit at 0.08-0.14, i.e.
+    # on the line (see BA_REFERENCE_DELTA_RHO); the 0.10 threshold is not tuned.
+    ba = nx.barabasi_albert_graph(n, 1, seed=5)
     r_ba = assess(spec_from(ba), spread, expo, cfg)
     assert r_ba.label == LABEL_WEAK  # hub-dominated: z large, effect small
-    assert r_ba.primary.z >= 2 and r_ba.primary.delta_rho < 0.10
+    assert r_ba.primary.z >= 2 and r_ba.primary.delta_rho < 0.07  # clearly below 0.10
     # degree-preserving null is reported, and a planted core is mostly explained by degrees there
     assert r_planted.secondary.delta_rho < r_planted.primary.delta_rho
     assert r_planted.to_dict()["primary"]["n"] == 40
