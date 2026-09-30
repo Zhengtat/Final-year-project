@@ -20,9 +20,11 @@ student_app = typer.Typer(help="Student answer -> graph extraction (M6).")
 diagnose_app = typer.Typer(help="Alignment and diagnosis of student graphs against the expert KG (M7).")
 eval_app = typer.Typer(help="Evaluation, baselines and ablations (M7).")
 app_app = typer.Typer(help="Streamlit review/demo apps.")
+demo_app = typer.Typer(help="CR-005 demo report (expert KG only).")
 external_app = typer.Typer(help="External benchmark datasets (CR-003 §3) — iir_face only for now.")
 
 app.add_typer(data_app, name="data")
+app.add_typer(demo_app, name="demo")
 app.add_typer(textbook_app, name="textbook")
 app.add_typer(gold_app, name="gold")
 app.add_typer(labels_app, name="labels")
@@ -649,3 +651,26 @@ def external_stats(name: str = typer.Argument(..., help="Dataset name. Only 'iir
 
 if __name__ == "__main__":
     app()
+
+
+@demo_app.command("build")
+def demo_build(
+    run: str = typer.Option(..., "--run", help="P&D run_id under data/processed/kg/"),
+    refresh_eval: bool = typer.Option(False, "--refresh-eval", help="Recompute FACE metrics"),
+) -> None:
+    """Build reports/demo/index.html + figures/ from saved artefacts. No LLM calls."""
+    from cumap.config import load_demo_slice
+    from cumap.report.build import build_report
+
+    nlp = embed_fn = None
+    if refresh_eval:
+        import spacy
+        from sentence_transformers import SentenceTransformer
+
+        nlp = spacy.load("en_core_web_sm")
+        model = SentenceTransformer(get_settings().embeddings.model)
+        embed_fn = lambda t: model.encode(t)
+    path = build_report(
+        run, get_settings(), load_demo_slice(), nlp=nlp, embed_fn=embed_fn, refresh_eval=refresh_eval
+    )
+    typer.echo(f"wrote {path}")

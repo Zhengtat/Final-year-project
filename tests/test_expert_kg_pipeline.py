@@ -287,8 +287,8 @@ def test_snapshot_edge_direction_follows_reversed_flag(tmp_path):
     """Regression (CR-005 STOP 4): snapshots used to store every edge as X -> Y and ignore
     direction == "reversed", flipping ~a third of the edges and skewing domain/range checks."""
     from cumap.expert_kg.canonicalize import ConceptMentionCandidate, ConceptRegistry
-    from cumap.expert_kg.relations import CandidatePair, PairRegistry, RelationEdgeCandidate
     from cumap.expert_kg.llm_schemas import QualifiersLLM
+    from cumap.expert_kg.relations import CandidatePair, PairRegistry, RelationEdgeCandidate
 
     def embed(_text):
         return np.array([1.0, 0.0])

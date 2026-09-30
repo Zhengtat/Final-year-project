@@ -144,9 +144,28 @@ class CorpusSliceConfig(BaseModel):
     relations_enabled: bool
 
 
+class ReportConfig(BaseModel):
+    """CR-005 §4: which frozen eval runs and owner-review files the demo report reads.
+    Paths are repo-relative. Defaults match the runs recorded in docs/PROGRESS.md.
+    """
+
+    iir_dev_run: str = "iirdev_v2"
+    iir_test_run: str = "iirtest_v2"
+    iir_dev_gold: Path = Path("data/interim/external/iir_gold_concepts.csv")
+    iir_dev_sections: Path = Path("data/interim/external/iir_sections.jsonl")
+    iir_test_gold: Path = Path("data/interim/external/iir_test_gold_concepts.csv")
+    iir_test_sections: Path = Path("data/interim/external/iir_test_sections_v2.jsonl")
+    merge_marks: Path = Path("data/interim/review/canonical_merge_marks.csv")
+    edge_sheet: Path = Path("data/interim/review/edge_spotcheck_sheet.csv")
+    edge_key: Path = Path("data/interim/review/edge_spotcheck_key.csv")
+    key_concepts: int = 15
+    growth_top_n: int = 100
+
+
 class DemoSliceConfig(BaseModel):
     pd: CorpusSliceConfig
     iir_face: CorpusSliceConfig
+    report: ReportConfig = ReportConfig()
     max_usd_per_command: float
 
 
