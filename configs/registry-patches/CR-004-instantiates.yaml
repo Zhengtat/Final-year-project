@@ -1,0 +1,43 @@
+# Registry patch from CR-004 (2026-09-28).
+# Merge into the NEXT minor registry version (relations_v1.1.yaml, or v1.2 if CR-003's agreement test already produced v1.1).
+# Log the version bump in DECISIONS.md.
+#
+# The patch adds a principle (big-idea) layer.
+# `instantiates` is NOT part of the normal family-first choice set. It is produced only by the principle-linking step
+# (CR-004 §5.3 / §5.10), which offers the approved principle statements + NONE as options.
+
+patch_for_registry_version: 1
+adds:
+
+  node_types: [Principle]
+
+  layers:
+    - {name: principle, description: "Big ideas stated as full sentences, linked from core concepts via instantiates"}
+
+  families:
+    - {name: organisation, label: "Organisation (principle layer)", diagnostic_prior: 0.8,
+       include_in_default_choice_set: false,
+       grounding: "Ausubel subsumption; How People Learn (knowledge organised around core concepts/big ideas); Chi, Feltovich & Glaser 1981"}
+
+  relations:
+    - name: instantiates
+      family: organisation
+      layer: principle
+      status: new_in_v1_x
+      definition: "Core concept or mechanism source is a concrete case of the general principle (big idea) target. The target must be an approved Principle node."
+      template: "{X} is an instance of the principle: {Y}"
+      examples:
+        - "TCP congestion control instantiates 'Senders must infer congestion from indirect feedback and adapt their rate, because no single node sees the whole network.'"
+        - "Encapsulation of an IP packet in an Ethernet frame instantiates 'Layering lets each protocol rely on the service below it through an interface, so layers can change independently.'"
+      near_misses:
+        - {relation: is_a, example: "CSMA/CD is_a medium access protocol", why: "a subtype of another concept, not a case of a general principle"}
+        - {relation: has_purpose, example: "spanning tree has_purpose loop-free forwarding", why: "a specific goal of one mechanism, not a discipline-wide principle"}
+      domain_types: [Protocol, Mechanism, Component, DataUnit, Concept, State, Event, Parameter, Property, Layer]
+      range_types: [Principle]
+      directional: true
+      symmetric: false
+      transitive: false
+      inverse_of: instantiated_by
+      conflicts_with: []
+      compatible_with: {}
+      max_per_source: 2
