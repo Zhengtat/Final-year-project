@@ -258,3 +258,22 @@ Plain-prompted relation extraction underperforms; turning it into **multiple-cho
 5. **`other`-relation review.** Anything routed to `OTHER` is logged and reviewed each run — cluster and decide whether it becomes a new registry relation (a new version + `DECISIONS.md` entry) or maps onto an existing one.
 
 **Evaluation additions:** ontology conformance rate (domain/range respected), unsupported-by-text rate (Text2KGBench-style hallucination check), direction accuracy, polarity accuracy — reported separately, not folded into one aggregate F1, since each targets a distinct known LLM failure mode (reversal curse; negation).
+
+
+## Organisation snapshots (CR-006): per-chapter core-periphery view
+
+`cumap kg organise` reorganises the *presentation* of a chapter snapshot; it never rewrites content (rules 13-15 in CLAUDE.md). Code: `src/cumap/organisation/`; config: `configs/organisation.yaml`; outputs under `data/processed/kg/<run_id>/organisation/<org_id>/ch<N>/{org_nodes,communities,events}.jsonl` + `manifest.json`; `org_id = "org_" + sha1(kg_run_id | mode | config_hash | code_version)[:8]`.
+
+**Graph G_N** = nodes and typed edges of chapters <= N (an edge exists only once both endpoints do; semantic + taxonomy layers, prerequisite layer excluded). Edge weight = registry `diagnostic_prior` of the family x edge confidence (1.0 while absent). Co-occurrence never counts.
+
+**Importance** (each component becomes a percentile rank among the *eligible* nodes, i.e. linked and not background; weighted mean; weights fixed in config, 0.35 / 0.20 / 0.25 / 0.20):
+`pagerank` (weighted, damping 0.85, on a directed projection), `coreness` (k-shell on the undirected unweighted projection), `spread` (share of the snapshot's sections where the concept is `defined` or `used`), `bridging` (participation coefficient over fine Leiden communities).
+*PageRank direction rule* (importance flows to what others depend on, belong to or serve): toward the target for `is_a, part_of, requires, uses, has_purpose, instantiates`; toward the source for `has_property`; both ways otherwise.
+`importance_raw` = the weighted mean; `importance_adj` = percentile of the residual of `importance_raw ~ log1p(sections since first seen)` within the snapshot (removes only the average age effect).
+*Background-vocabulary guard*: appears in >= 50% of sections, never `defined`, and typed edges per appearance in the bottom quartile -> `background` band (excluded from rings and the core fit); owner overrides live in config.
+
+**Rings** are quantile bands of the chosen basis over eligible nodes (centre 5%, inner 15%, middle 30%, outer 50%), plus `unlinked` (no typed edges; a large count points to relation-extraction recall gaps) and `background`. **Rings are not CR-004 tiers.** Radius = r_min + (1 - importance)(r_max - r_min) with importance the percentile rank of the chosen basis.
+
+**Is there really a core?** Borgatti-Everett discrete fit on the eligible subgraph (core = centre + inner) against (1) same-density random graphs (gates the label: z >= 2 and delta-rho >= 0.10 -> present; z >= 2 only -> weak core; else the banner "No clear core at this chapter: ring positions are weakly supported.") and (2) degree-preserving rewires (reported, not gated: a single core is largely explained by degrees). 200 samples each, seeds fixed; every sample recomputes the core with the same importance procedure, holding `spread` and exposure fixed.
+
+**Communities** (Leiden, fixed seed, coarse 0.5 / fine 1.0) get persistent IDs by Jaccard >= 0.3 matching across snapshots and lifecycle events (continue, grow, shrink, merge, split, birth, death; "changed" below Jaccard 0.7). **Events** (`ring_in/out`, `enter/leave_centre`, `late_centraliser`, `fading`, `node_new`) carry the new edge and section IDs behind them; `persistent_periphery` is a review flag only. **Layout**: 2D disc, angle = coarse-community sector (centres fixed once born, an existing node keeps its angle while in the same community, relaxation capped at 20 degrees per chapter). Principle mode (replay with approved principles) waits for CR-004 STOP C.

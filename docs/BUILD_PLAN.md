@@ -236,6 +236,18 @@ Critical path: **M3 and M4**, because both depend on your annotation time. Start
 
 ---
 
+## M5.0b — Knowledge sphere (CR-006)
+
+**Goal:** after each chapter the graph reorganises so important concepts sit towards the centre; structure only, **$0, no API calls**. Provisional mode (no principles) on the CR-005 slice; M5 (full book) reruns it per chapter; M5.5 (CR-004) runs principle mode after STOP C.
+
+**Branch:** `cr-006-knowledge-sphere` (from `main`); tag `cr-006-complete` on merge.
+
+**Built (tested tooling):** config + schemas, importance components with exposure correction and background guard, rings, Leiden community tracking, core-periphery test with two null models, restructuring events + stability, stable layout, `cumap kg organise` / `organise-summary`, time-aware principle activation. **Stop points:** ⛔1 plan (done) · ⛔2 numbers on the P&D ch2-3 snapshots, owner picks the radius basis (raw or adjusted) and confirms generic overrides · ⛔3 sphere view + charts + static figures in the demo report · ⛔4 (optional) blind 40-concept face-validity sheet.
+
+**Acceptance checks:** snapshot files byte-identical before/after `kg organise`; direction rule, exposure correction, guard and ring shares tested; planted / random / hub-dominated graphs give "present" / "no clear core" / "weak core"; community events on 3-snapshot fixtures; layout cap and fixed sector centres; events carry edge IDs; report charts require a label-source tag (two new tags) and the HTML stays offline; nothing writes to `data/gold/`.
+
+---
+
 ## M5 — Expert KG pipeline v1 (2.5 wk)
 
 **Goal:** textbook → validated expert KG, chapter by chapter, with cross-chapter linking.
