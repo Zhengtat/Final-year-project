@@ -128,6 +128,10 @@ class Checkpoint:
     # matched candidate is logged here rather than discarded, for the taxonomy layer
     # (is_a / broader candidates) to consume later.
     taxonomy_candidates: list[dict] = field(default_factory=list)
+    # CR-007 §4.3: LLM "same" verdicts under the similarity band (not merged; for the review sheet) and
+    # different-type near-duplicates (never `same`; `related` candidates for the taxonomy layer).
+    merge_review: list[dict] = field(default_factory=list)
+    related_candidates: list[dict] = field(default_factory=list)
     pair_registry: list[dict] = field(default_factory=list)  # stage d's PairRegistry state
     rejected_relations: list[dict] = field(default_factory=list)
 
@@ -294,11 +298,15 @@ def run_canonicalize_stage(
     checkpoint: Checkpoint,
     *,
     overrides: CanonicalOverrides | None = None,
+    type_aware: bool = True,
+    review_below: float | None = 0.70,
 ) -> tuple[Checkpoint, ConceptRegistry]:
     concept_registry = _restore_concept_registry(checkpoint, embed_fn)
     concept_first_chapter: dict[str, int] = dict(checkpoint.concept_first_chapter)
     merges = list(checkpoint.merges)
     taxonomy_candidates = list(checkpoint.taxonomy_candidates)
+    merge_review = list(checkpoint.merge_review)
+    related_candidates = list(checkpoint.related_candidates)
 
     for section in sections:
         if section.section_id in checkpoint.completed_section_ids:
@@ -310,7 +318,8 @@ def run_canonicalize_stage(
         try:
             for mention in mentions:
                 outcome = canonicalize_mention(
-                    client, prompts.canonicalize, concept_registry, mention, overrides=overrides
+                    client, prompts.canonicalize, concept_registry, mention, overrides=overrides,
+                    type_aware=type_aware, review_below=review_below,
                 )
                 if outcome.decision == "same":
                     merges.append(
@@ -324,6 +333,23 @@ def run_canonicalize_stage(
                             "reason": outcome.reason,
                         }
                     )
+                elif outcome.decision == "review":
+                    cand = concept_registry.get(outcome.matched_concept_id)
+                    merge_review.append(
+                        {
+                            "concept_id": outcome.concept_id,
+                            "candidate_id": cand.concept_id,
+                            "candidate_name": cand.canonical_name,
+                            "candidate_type": cand.node_type,
+                            "candidate_definition": cand.definition,
+                            "alias": mention.canonical_name,
+                            "mention_type": mention.node_type,
+                            "quote": mention.evidence_quote,
+                            "section_id": section.section_id,
+                            "similarity": outcome.similarity,
+                            "llm_reason": outcome.reason,
+                        }
+                    )
                 elif outcome.decision in ("narrower", "broader") and outcome.matched_concept_id:
                     taxonomy_candidates.append(
                         {
@@ -334,12 +360,19 @@ def run_canonicalize_stage(
                             "section_id": section.section_id,
                         }
                     )
+                for rid in outcome.related_ids:
+                    related_candidates.append(
+                        {"concept_id": outcome.concept_id, "related_concept_id": rid,
+                         "section_id": section.section_id}
+                    )
                 concept_first_chapter.setdefault(outcome.concept_id, section.chapter_num)
         except BudgetExceededError:
             checkpoint.concepts = [_concept_to_dict(c) for c in concept_registry.all()]
             checkpoint.concept_first_chapter = concept_first_chapter
             checkpoint.merges = merges
             checkpoint.taxonomy_candidates = taxonomy_candidates
+            checkpoint.merge_review = merge_review
+            checkpoint.related_candidates = related_candidates
             save_checkpoint(checkpoint, run_dir)
             raise
 
@@ -348,6 +381,8 @@ def run_canonicalize_stage(
         checkpoint.concept_first_chapter = concept_first_chapter
         checkpoint.merges = merges
         checkpoint.taxonomy_candidates = taxonomy_candidates
+        checkpoint.merge_review = merge_review
+        checkpoint.related_candidates = related_candidates
         save_checkpoint(checkpoint, run_dir)
 
     checkpoint.stage = "pairs_enumerated"

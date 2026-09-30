@@ -259,3 +259,85 @@ def test_canonical_overrides_load_missing_file_returns_empty(tmp_path):
     overrides = CanonicalOverrides.load(tmp_path / "does-not-exist.yaml")
     assert overrides.is_never_merge("a", "b") is False
     assert overrides.is_force_merge("a", "b") is False
+
+
+def _registry_with(name, node_type):
+    registry = ConceptRegistry(_fake_embed)
+    concept = registry.add_new(_mention(name, node_type=node_type))
+    return registry, concept
+
+
+def _canon(tmp_settings, fixtures_dir, registry, mention, **kw):
+    prompt = load_prompt(REPO_ROOT / "prompts", "canonicalize", "v2")
+    return canonicalize_mention(
+        _client(tmp_settings, fixtures_dir), prompt, registry, mention, fixture_name="same", **kw
+    )
+
+
+def test_type_mismatch_is_never_same_and_is_logged_as_a_related_candidate(
+    tmp_settings, fixtures_dir
+):
+    """CR-007 §4.3: even if the model would say 'same', a different node_type blocks the merge."""
+    registry, existing = _registry_with("congestion window", "Parameter")
+    m = _mention("cwnd", node_type="Mechanism", definition="congestion window size")
+    out = _canon(tmp_settings, fixtures_dir, registry, m, type_aware=True)
+    assert out.decision == "different" and out.llm_called is False
+    assert out.related_ids == [existing.concept_id] and out.concept_id != existing.concept_id
+    assert len(registry) == 2
+    registry2, existing2 = _registry_with("congestion window", "Parameter")
+    merged = _canon(tmp_settings, fixtures_dir, registry2, m)  # type_aware off (old behaviour)
+    assert merged.decision == "same" and merged.concept_id == existing2.concept_id
+
+
+def test_low_similarity_same_verdict_goes_to_review_instead_of_merging(tmp_settings, fixtures_dir):
+    registry, existing = _registry_with("congestion window", "Mechanism")
+    m = _mention("sliding window", node_type="Mechanism")  # cosine 0.5 with the fake embedding
+    out = _canon(
+        tmp_settings, fixtures_dir, registry, m, similarity_threshold=0.4, review_below=0.70
+    )
+    assert out.decision == "review" and out.review and out.llm_called
+    assert out.matched_concept_id == existing.concept_id and abs(out.similarity - 0.5) < 1e-6
+    assert (
+        out.concept_id != existing.concept_id and len(registry) == 2
+    )  # a new concept, nothing merged or lost
+    assert "sliding window" not in registry.get(existing.concept_id).aliases
+    old = _canon(
+        tmp_settings,
+        fixtures_dir,
+        _registry_with("congestion window", "Mechanism")[0],
+        m,
+        similarity_threshold=0.4,
+    )
+    assert old.decision == "same"  # band off: the previous behaviour
+
+
+def test_high_similarity_same_verdict_still_merges_under_the_band(tmp_settings, fixtures_dir):
+    registry, existing = _registry_with("congestion window", "Mechanism")
+    m = _mention("cwnd", node_type="Mechanism", definition="congestion window")
+    out = _canon(tmp_settings, fixtures_dir, registry, m, type_aware=True, review_below=0.70)
+    assert (
+        out.decision == "same" and out.concept_id == existing.concept_id and out.similarity >= 0.7
+    )
+
+
+def test_review_sheet_is_blind(tmp_path):
+    from cumap.expert_kg.canonicalize import write_merge_review_sheet
+
+    row = {
+        "section_id": "2.1",
+        "alias": "sliding window",
+        "mention_type": "Mechanism",
+        "quote": "q",
+        "candidate_name": "congestion window",
+        "candidate_type": "Mechanism",
+        "candidate_definition": "d",
+        "similarity": 0.5,
+        "llm_reason": "secret model reason",
+    }
+    path = tmp_path / "review.csv"
+    write_merge_review_sheet([row], path)
+    text = path.read_text()
+    assert "sliding window" in text and "congestion window" in text
+    assert (
+        "similarity" not in text.lower() and "secret model reason" not in text and "0.5" not in text
+    )
