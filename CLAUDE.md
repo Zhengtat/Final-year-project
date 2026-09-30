@@ -18,6 +18,7 @@ Final-year project (FYP H420020) by Zheng Tat Wong. The system:
 - At the end of each milestone: run its acceptance checks, write what was verified (with numbers) and any open issues in `docs/PROGRESS.md`, then commit.
 - Log every design or schema change in `docs/DECISIONS.md` (date · decision · reason · alternatives).
 - Keep commits small, with clear messages. Don't push unless asked.
+- **Git workflow (from 2026-09-30):** one branch per change request (`cr-NNN-<slug>`), created from the mainline (the default branch, currently `master`). Doc updates for a CR (PROGRESS, DECISIONS, BUILD_PLAN, ARCHITECTURE, CLAUDE.md) live on the CR's branch with its code. When all of the CR's stop points are signed off and tests pass, open a PR to the mainline (or merge with `--no-ff` if there is no PR workflow) and tag the merge `cr-NNN-complete`. Don't start the next CR until the previous one is merged; it branches from the updated mainline. Every run writes to a new `run_id`, so runs from different branches never overwrite each other.
 
 ## Commands
 ```bash

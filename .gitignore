@@ -35,3 +35,6 @@ reports/demo/
 .agents/
 .aider-desk/
 .codex/
+
+# full (unredacted) local copies of generated reports
+reports/*.local.md
