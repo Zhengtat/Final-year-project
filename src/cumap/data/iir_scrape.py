@@ -254,7 +254,7 @@ def scrape_chapter(
         if pres is None:
             reason = "no gold concepts to check the text against"
         elif pres < gate:
-            reason = f"gold presence {pres:.0%} below the {gate:.0%} gate"
+            reason = f"gold presence {pres:.1%} below the {gate:.0%} gate"
         out.append(
             Scraped(
                 sid,
