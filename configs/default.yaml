@@ -98,9 +98,11 @@ llm:
     concept_extraction: 8000
     concept_extraction_gleaning: 1500
     canonicalize: 800
-    relation_family: 400
-    relation_choice: 500
-    relation_qualifiers: 400
+    # relation_* raised 400/500/400 -> 800/1000/800 on 2026-09-30, pre-emptively: three earlier
+    # tasks hit their ceilings mid-JSON on real calls, and these sat close to measured averages.
+    relation_family: 800
+    relation_choice: 1000
+    relation_qualifiers: 800
     default: 1000
 
 embeddings:

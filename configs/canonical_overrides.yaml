@@ -13,5 +13,8 @@ never_merge:
   - [High-Level Data Link Control (HDLC), Synchronous Data Link Control (SDLC)]
   - [Internet, internetworking]
   - [cyclic redundancy check, error-detecting code]
+  # Added 2026-09-30 from the owner's review of the 43 non-trivial v2 merges (2 marked wrong):
+  - [routing table, forwarding table]
+  - [destination address, DestinationAddr]
 
 force_merge: []
