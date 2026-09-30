@@ -281,3 +281,42 @@ def test_demo_slice_iir_face_has_no_relation_stage():
     demo_slice = load_demo_slice()
     assert demo_slice.iir_face.relations_enabled is False
     assert demo_slice.pd.relations_enabled is True
+
+
+def test_snapshot_edge_direction_follows_reversed_flag(tmp_path):
+    """Regression (CR-005 STOP 4): snapshots used to store every edge as X -> Y and ignore
+    direction == "reversed", flipping ~a third of the edges and skewing domain/range checks."""
+    from cumap.expert_kg.canonicalize import ConceptMentionCandidate, ConceptRegistry
+    from cumap.expert_kg.relations import CandidatePair, PairRegistry, RelationEdgeCandidate
+    from cumap.expert_kg.llm_schemas import QualifiersLLM
+
+    def embed(_text):
+        return np.array([1.0, 0.0])
+
+    concepts = ConceptRegistry(embed)
+    ids = {}
+    for name, ch in [("link", "ch1_s1"), ("network", "ch2_s1")]:
+        ids[name] = concepts.add_new(
+            ConceptMentionCandidate(
+                canonical_name=name, node_type="Concept", role="used", definition=None,
+                evidence_quote="q", section_id=ch,
+            )
+        ).concept_id
+    pair = CandidatePair(
+        pair_id="RP-1", section_id="ch2_s1", concept_x_id=ids["network"],
+        concept_y_id=ids["link"], sentence="networks consist of links",
+    )
+    quals = QualifiersLLM(polarity="affirmed", modality="necessary", conditions=[],
+                          part_type="component", dimension=None, surface_phrase="consist of")
+    pairs = PairRegistry()
+    pairs.resolve(ids["network"], ids["link"], edge=RelationEdgeCandidate(
+        pair=pair, family="classification_structure", relation="part_of", direction="reversed",
+        statement="s", evidence_quote="consist of", qualifiers=quals))
+    sections = [
+        SectionInput(section_id="ch1_s1", chapter_num=1, text="link", heading_path=["a"], domain="d"),
+        SectionInput(section_id="ch2_s1", chapter_num=2, text="network", heading_path=["b"], domain="d"),
+    ]
+    results = build_snapshots_stage(_registry(), sections, concepts, pairs, tmp_path, "r")
+    (edge,) = results[1].snapshot.edges
+    assert (edge.source_concept_id, edge.target_concept_id) == (ids["link"], ids["network"])
+    assert (edge.source_chapter, edge.target_chapter) == (1, 2)

@@ -516,17 +516,21 @@ def build_snapshots_stage(
         for resolution in pair_registry.all():
             if resolution.edge is None:
                 continue
-            x_chapter = concept_first_chapter.get(resolution.concept_x_id, 0)
-            y_chapter = concept_first_chapter.get(resolution.concept_y_id, 0)
+            # The LLM judged the relation on the pair (X, Y) as stated; direction "reversed"
+            # means it actually runs Y -> X. Snapshots store the directed edge.
+            if resolution.edge.direction == "reversed":
+                source_id, target_id = resolution.concept_y_id, resolution.concept_x_id
+            else:
+                source_id, target_id = resolution.concept_x_id, resolution.concept_y_id
             edges.append(
                 SnapshotEdge(
                     edge_id=resolution.edge.pair.pair_id,
-                    source_concept_id=resolution.concept_x_id,
+                    source_concept_id=source_id,
                     relation=resolution.edge.relation,
-                    target_concept_id=resolution.concept_y_id,
+                    target_concept_id=target_id,
                     family=resolution.edge.family,
-                    source_chapter=x_chapter,
-                    target_chapter=y_chapter,
+                    source_chapter=concept_first_chapter.get(source_id, 0),
+                    target_chapter=concept_first_chapter.get(target_id, 0),
                     section_id=resolution.edge.pair.section_id,
                 )
             )

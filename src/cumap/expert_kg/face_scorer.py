@@ -163,6 +163,9 @@ def _false_negatives(results: list[MatchResult], gold: list[GoldConcept]) -> lis
     return [g for g in gold if (g.section_id, normalize(g.concept)) not in matched_gold_keys]
 
 
+false_negatives = _false_negatives  # public name for callers outside this module
+
+
 def micro_prf1(results: list[MatchResult], gold: list[GoldConcept]) -> PRF1:
     tp = sum(1 for r in results if r.matched_gold is not None)
     fp = sum(1 for r in results if r.matched_gold is None)
