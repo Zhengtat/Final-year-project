@@ -43,6 +43,7 @@ class Mention:
     section_id: str
     role: str
     quote: str
+    definition: str | None = None  # CR-007 §4.2: kept so a later `refined` mention can be traced
 
 
 @dataclass
@@ -55,6 +56,8 @@ class RegisteredConcept:
     aliases: list[str] = field(default_factory=list)
     mentions: list[Mention] = field(default_factory=list)
     embedding: np.ndarray | None = None
+    # CR-007 §4.2: append-only refinements (later `defined` mentions): {section_id, quote, definition}
+    description_history: list[dict] = field(default_factory=list)
 
 
 @dataclass
@@ -176,7 +179,11 @@ class ConceptRegistry:
             node_type=mention.node_type,
             definition=mention.definition,
             first_introduced=mention.section_id,
-            mentions=[Mention(mention.section_id, mention.role, mention.evidence_quote)],
+            mentions=[
+                Mention(
+                    mention.section_id, mention.role, mention.evidence_quote, mention.definition
+                )
+            ],
         )
         self._concepts[concept_id] = concept
         return concept
@@ -188,7 +195,9 @@ class ConceptRegistry:
             and mention.canonical_name not in concept.aliases
         ):
             concept.aliases.append(mention.canonical_name)
-        concept.mentions.append(Mention(mention.section_id, mention.role, mention.evidence_quote))
+        concept.mentions.append(
+            Mention(mention.section_id, mention.role, mention.evidence_quote, mention.definition)
+        )
 
 
 def canonicalize_mention(
