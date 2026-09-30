@@ -356,13 +356,6 @@ def test_growth_graph_uses_directed_edges_and_marks_cross_chapter(built):
     assert 'data-sec="1"' in html and 'data-sec="0"' in html
 
 
-def test_growth_only_page_has_graph_and_no_other_tabs(built):
-    html = (built[0].parent / "growth.html").read_text(encoding="utf-8")
-    assert 'id="timebar"' in html and 'id="growth"' in html and 'id="steps-data"' in html
-    assert 'id="t1"' not in html and 'id="t2"' not in html and "Concept extraction" not in html
-    assert not re.search(r'(?:src|href)\s*=\s*["\']?(?:https?:)?//', html)
-
-
 def test_growth3d_page_is_self_contained_and_has_clickable_concept_data(built):
     html = (built[0].parent / "growth3d.html").read_text(encoding="utf-8")
     assert '<canvas id="cv"' in html and 'id="timebar"' in html and 'id="panel"' in html

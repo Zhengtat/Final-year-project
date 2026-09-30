@@ -762,9 +762,6 @@ Contains IIR (© Cambridge University Press) text for local research use only �
 </main><script type="application/json" id="edge-data">{edge_json}</script>
 <script type="application/json" id="steps-data">{steps_json}</script><script>{JS}</script></body></html>"""
     (out / "index.html").write_text(html, encoding="utf-8")
-    (out / "growth.html").write_text(
-        _growth_only_page(html, edge_json, steps_json, footer), encoding="utf-8"
-    )
     _write_growth3d(out, growth, checkpoint, cfg, prov, footer)
     return out / "index.html"
 
@@ -853,22 +850,4 @@ def _write_growth3d(
             data, css=theme_css(":root"), banner=BANNER, footer=footer, top_n=cfg.growth_top_n
         ),
         encoding="utf-8",
-    )
-
-
-def _growth_only_page(full_html: str, edge_json: str, steps_json: str, footer: str) -> str:
-    """growth.html: just the growth graph (tab 3), same controls and script, no other tabs.
-    Contains only Peterson & Davie material (no IIR text)."""
-    start = full_html.index('<section class="tab" id="t3" hidden>')
-    end = full_html.index("</section>", start) + len("</section>")
-    section = full_html[start:end].replace(' id="t3" hidden>', ' id="t3">', 1)
-    return (
-        '<!doctype html><html lang="en"><head><meta charset="utf-8">'
-        '<meta name="viewport" content="width=device-width,initial-scale=1">'
-        f"<title>Expert KG Growth</title><style>{CSS}</style></head><body>"
-        f'<header><h1>Expert knowledge graph — growth</h1><div class="small">{escape(footer)}</div>'
-        f'<div class="banner">{escape(BANNER)}</div></header><main>{section}</main>'
-        f'<script type="application/json" id="edge-data">{edge_json}</script>'
-        f'<script type="application/json" id="steps-data">{steps_json}</script>'
-        f"<script>{JS}</script></body></html>"
     )

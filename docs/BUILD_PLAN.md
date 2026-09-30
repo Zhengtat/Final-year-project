@@ -217,7 +217,7 @@ Critical path: **M3 and M4**, because both depend on your annotation time. Start
 
 **Depends on:** CR-001 steps 1–3 (registry v1, schemas, validator, `choice_set`); the CR-003 §3 loader for `iir_face` only (built now, not the rest of CR-003).
 
-**Scope** (`configs/demo_slice.yaml`): FACE/IIR B1 dev chapters (3 chapters); P&D chapters 1–3 (Foundation, Direct Links, Internetworking — covers the pilot topics: encoding, sliding window/piggybacking, CSMA/CD, bridges/spanning tree), processed in book order with a snapshot saved after each chapter.
+**Scope** (`configs/demo_slice.yaml`, as built): FACE/IIR B1 dev chapters 1–3 (concepts only, scored against FACE gold) plus the IIR test chapters 4, 6, 9 (run once, reporting only); **P&D chapters 2–3** (Direct Links, Internetworking), processed in book order with a snapshot saved after each chapter. P&D was cut from chapters 1–3 to 2–3 after the calibration run (chapter 1 contains none of the four pilot-topic keywords; all four live in chapters 2–3) — see `DECISIONS.md`. Relations run on P&D only (FACE has no relation labels).
 
 **Pipeline pieces built now (the M5 subset)** — candidate terms/stats; concept extraction (defined/used/mentioned roles, evidence-verified); canonicalisation against the growing registry; relation extraction via CR-001's 4-stage method (Stage A candidates, Stage B family-first choice, qualifier pass); prerequisite candidates; structural checks; chapter snapshots (`data/processed/kg/<run_id>/snapshots/ch<N>/`).
 
@@ -225,7 +225,14 @@ Critical path: **M3 and M4**, because both depend on your annotation time. Start
 
 **Stop points:** ⛔1 plan + dry-run cost (this entry). ⛔2 IIR concept metrics + FP/FN examples, one prompt revision allowed (dev only). ⛔3 the 30-edge spot-check sheet. ⛔4 the built report, screenshotted tab by tab.
 
-**Acceptance checks:** snapshot round-trip + growth metrics correct on a 2-chapter fixture; FACE scorer's exact/lenient matching correct on fixtures; the built HTML has zero external `http(s)://` references (offline guarantee); every chart requires a label-source tag (`Borrowed human labels (FACE)` / `Owner spot-check (n=30)` / `Unvalidated LLM output`) or raises; nothing writes to `data/gold/`.
+**Status (2026-09-30): built; all four stop points cleared by the owner.** Nothing student-side was touched (M4/M6/M7/M8 remain deferred).
+
+- **Results** (numbers in `PROGRESS.md`, choices in `DECISIONS.md`): IIR concept extraction, prompt v2, lenient micro F1 0.612 dev / 0.568 test (exact 0.486 / 0.474) — FACE's published 0.76 is supervised, so not like-for-like; P&D ch2–3: 736 concepts, 121 accepted relation edges (of 381 candidate pairs); owner check of 43 merges 41 ok (Wilson 95% CI [0.845, 0.987]); owner spot-check of 30 edges, strict precision 0.767 [0.591, 0.882]. Total LLM spend since the §9 amendment ≈ $4.55 of the fresh $15 cap.
+- **Report** (`uv run cumap demo build --run <run_id>`, no LLM calls, `reports/demo/` gitignored because it embeds IIR text): `index.html` (three tabs: concepts + FACE validation, relations, growth), `growth3d.html` (interactive growth graph: section-by-section time bar with play/pause, 2D/3D toggle, drag to spin or move, wheel zoom at the cursor, click a concept to read its definition, evidence quotes and relations), and standalone SVGs in `figures/` incl. a scriptless animated growth figure. Every chart and graph carries a provenance footer and a required label-source tag.
+- **Bug found on the way and fixed:** snapshots ignored an edge's `reversed` direction (`DECISIONS.md`, 2026-09-30).
+- **Not done / open follow-ups:** recover the `relation_other` phrases from cache ($0); only 2 `mechanism_process` edges; concept-granularity errors dominate the spot-check failures; the IIR scraper still lives in a scratch script, not `src/`. The report's JavaScript has been exercised headlessly against a stub DOM but not in a real browser by the assistant.
+
+**Acceptance checks:** snapshot round-trip + growth metrics correct on a 2-chapter fixture; FACE scorer's exact/lenient matching correct on fixtures; the built HTML has zero external `http(s)://` references (offline guarantee); every chart requires a label-source tag (built set: FACE gold / Owner spot-check (n=30) / Owner check of 43 merges / Model output, not validated) or raises; nothing writes to `data/gold/`.
 
 ---
 
