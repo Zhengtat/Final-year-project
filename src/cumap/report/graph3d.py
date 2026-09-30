@@ -208,10 +208,9 @@ function setHint(){$('#hint').innerHTML=HINTS[mode].map(t=>'<span>'+t+'</span>')
 function setMode(m){if(m===mode)return;mode=m;mixFrom=mix;mixTo=m===2?1:0;mixT0=performance.now();
  $('.seg').dataset.v=m;$('#v2').setAttribute('aria-pressed',m===2);$('#v3').setAttribute('aria-pressed',m===3);
  setHint();if(reduce){mix=mixTo;}need=1;}
-function visibleTargets(){const t=+bar.value,st=STEPS[t],ment=new Set(st.mentioned);
+function visibleTargets(){const t=+bar.value,st=STEPS[t];
  $('#stepname').textContent='Section '+st.caption;$('#stepch').textContent='Chapter '+st.chapter+', step '+(t+1)+' of '+STEPS.length;
- N.forEach(n=>{n.ta=(n.sec<=t&&(all.checked||n.rank<D.topn))?1:0;
-  if(t!==prev&&n.ta&&!reduce){if(n.sec===t)n.pop=1;else if(ment.has(n.i))n.pop=0.55;}});
+ N.forEach(n=>{n.ta=(n.sec<=t&&(all.checked||n.rank<D.topn))?1:0;});
  let ne=0,nn=0;N.forEach(n=>{if(n.ta)nn++;});
  E.forEach(e=>{e.ta=(e.sec<=t&&e.S.ta&&e.T.ta)?1:0;if(e.ta)ne++;if(t!==prev&&e.ta&&e.sec===t&&!reduce)e.pop=1;});
  let m=0;for(let i=0;i<=t;i++)m+=STEPS[i].merges;
@@ -252,13 +251,11 @@ function draw(){
   if(d>tr+12)arrow(e.S.sx,e.S.sy,x2,y2,6+2*e.T.p);}
  const vis=N.filter(n=>n.a>0.03).sort((a,b)=>b.z2-a.z2);
  for(const n of vis){const dim=sel&&!nbr(n)?0.15:1;ctx.globalAlpha=n.a*dim*depthA(n);
-  const r=n.r*(1+0.4*n.pop);
+  const r=n.r;
   if(n.prereq&&pre.checked){ctx.strokeStyle=C.ink;ctx.lineWidth=1.5;ctx.setLineDash([3,3]);
    ctx.beginPath();ctx.arc(n.sx,n.sy,r+4,0,6.283);ctx.stroke();ctx.setLineDash([]);}
   ctx.fillStyle=C.s[n.col];ctx.beginPath();ctx.arc(n.sx,n.sy,r,0,6.283);ctx.fill();
   ctx.strokeStyle=C.bg;ctx.lineWidth=1.5;ctx.stroke();
-  if(n.pop>0.05){ctx.strokeStyle=C.ink;ctx.lineWidth=2;ctx.globalAlpha=n.a*Math.min(1,n.pop);
-   ctx.beginPath();ctx.arc(n.sx,n.sy,r+4+10*(1-n.pop),0,6.283);ctx.stroke();}
   if(n===sel||n===hover){ctx.globalAlpha=1;ctx.strokeStyle=C.ink;ctx.lineWidth=2.5;
    ctx.beginPath();ctx.arc(n.sx,n.sy,r+3,0,6.283);ctx.stroke();}}
  ctx.font='12px system-ui,sans-serif';ctx.textAlign='center';ctx.lineJoin='round';
