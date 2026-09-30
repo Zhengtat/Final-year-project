@@ -48,6 +48,9 @@ uv run streamlit run src/cumap/app/review_app.py
 10. **The SAF feedback is privileged.** Only the silver-label builder (M4) may read `answer_feedback`. The diagnosis pipeline and the baselines must never see it.
 11. **(CR-001) Relations change only through a new registry version** (`configs/relations_vX.Y.yaml`) plus a `DECISIONS.md` entry. Never add or rename a relation inside code or prompts.
 12. **(CR-001) Relation classification is always a choice among registry options** (including reversed, none and other), never free-text labels — use `RelationRegistry.choice_set`/the dynamic v2 LLM schemas (`build_edge_suggestion_v2` and friends), not a plain `relation: str` field, for any new extraction prompt.
+13. **(CR-006) `kg organise` never modifies content snapshots.** It reads snapshots (and the run checkpoint, read-only) and writes only under `data/processed/kg/<run_id>/organisation/<org_id>/`. It makes no API call.
+14. **(CR-006) Rings are a structural view, not tiers.** Never delete or demote a concept because of its ring; a persistently peripheral concept is a review flag (it may be a detail, or an extraction recall gap). Rings are named centre / inner / middle / outer (never "core", which CR-004 tiers use).
+15. **(CR-006) Principles are never pinned to the centre**; they earn their position like any node. Importance weights are fixed before any face-validity check and never tuned on it. Always show the "no clear core" banner when the null check fails.
 
 ## OpenAI usage
 - Use the Responses API with Structured Outputs:
