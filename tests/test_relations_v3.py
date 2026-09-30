@@ -184,26 +184,31 @@ def test_comparison_without_a_grounded_dimension_is_recorded_as_no_relation(
     sentence = "The medium may be a shielded wire, fiber or air."
     r = run(tmp_settings, fixtures_dir, WIRE, AIR, sentence, "v3_comparison", "v3_contrast_nodim")
     assert r.outcome == "no_relation" and r.reason == "comparison_no_grounded_dimension"
+    sent = "A shielded wire has a lower cost than fiber."
     ok = run(
         tmp_settings,
         fixtures_dir,
         WIRE,
         FIBER,
-        "In practice a shielded wire is cheaper than fiber.",
+        sent,
         "v3_comparison",
         "v3_contrast_dim",
+        qual="v3_contrast_q",
     )
     assert (
-        ok.outcome == "edge" and ok.comparison_dimension == "cost" or ok.reason
-    )  # 'cost' is not in the sentence:
+        ok.outcome == "edge"
+        and ok.comparison_dimension == "cost"
+        and ok.qualifiers["dimension"] == "cost"
+    )
     bad = run(
         tmp_settings,
         fixtures_dir,
         WIRE,
         FIBER,
-        "In practice a shielded wire is cheaper than fiber.",
+        sent + " ",
         "v3_comparison",
         "v3_contrast_baddim",
+        qual="v3_contrast_q",
     )
     assert bad.outcome == "no_relation" and bad.reason == "comparison_no_grounded_dimension"
 
