@@ -44,6 +44,7 @@ class Mention:
     role: str
     quote: str
     definition: str | None = None  # CR-007 §4.2: kept so a later `refined` mention can be traced
+    source: str = "llm"  # "llm" | "propagation" (CR-007 E3)
 
 
 @dataclass
@@ -200,7 +201,13 @@ class ConceptRegistry:
         ):
             concept.aliases.append(mention.canonical_name)
         concept.mentions.append(
-            Mention(mention.section_id, mention.role, mention.evidence_quote, mention.definition)
+            Mention(
+                mention.section_id,
+                mention.role,
+                mention.evidence_quote,
+                mention.definition,
+                mention.source,
+            )
         )
 
 

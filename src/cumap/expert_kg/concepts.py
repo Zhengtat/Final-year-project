@@ -22,6 +22,7 @@ class ConceptMentionCandidate:
     evidence_quote: str
     section_id: str
     run_index: int = 0  # which extraction pass found it: 0 = main, 1 = gleaning
+    source: str = "llm"  # CR-007 E3: "propagation" for a mention tagged by consistency propagation
 
 
 @dataclass

@@ -559,6 +559,110 @@ def kg_organise_summary(
     typer.echo(f"wrote {path}")
 
 
+@kg_app.command("rerun")
+def kg_rerun(
+    stage: str = typer.Option(..., "--stage", help="concepts | propagate | canonicalize | select | relations | snapshots"),
+    run: str | None = typer.Option(None, "--run", help="existing CR-007 slice run_id; omit with --new"),
+    new: bool = typer.Option(False, "--new", help="start a new run_id (slice3_<id>)"),
+    chapters: str = typer.Option("1,2,3", "--chapters"),
+    budget_pairs: int = typer.Option(700, "--budget-pairs", help="global pair budget for the select stage"),
+    max_usd: float = typer.Option(3.0, "--max-usd", help="hard cap for THIS stage"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="preflight cost check only"),
+) -> None:
+    """CR-007 §6 slice re-run, one stage at a time, each with a preflight cost check."""
+    import uuid
+    from pathlib import Path
+
+    import spacy
+    from sentence_transformers import SentenceTransformer
+
+    from cumap.config import REPO_ROOT, get_settings, load_demo_slice
+    from cumap.expert_kg import slice_rerun as sr
+    from cumap.expert_kg.canonicalize import CanonicalOverrides
+    from cumap.expert_kg.pipeline import (
+        Checkpoint,
+        PromptSet,
+        load_checkpoint,
+        run_canonicalize_stage,
+        run_concepts_stage,
+        save_checkpoint,
+    )
+    from cumap.llm.client import LLMClient
+    from cumap.schemas.relations import RelationRegistry
+
+    settings = get_settings()
+    run_id = run or (f"slice3_{uuid.uuid4().hex[:8]}" if new else None)
+    if run_id is None:
+        raise typer.BadParameter("pass --run <id> or --new")
+    run_dir = REPO_ROOT / "data" / "processed" / "kg" / run_id
+    chs = [int(x) for x in chapters.split(",")]
+    sections = sr.load_sections(REPO_ROOT / load_demo_slice().pd.source_jsonl, chs)
+    cp = load_checkpoint(run_dir) or Checkpoint(run_id=run_id, stage="concepts")
+    registry = RelationRegistry.from_yaml(REPO_ROOT / "configs" / "relations_v1.1.yaml")
+    prompts = PromptSet.load(REPO_ROOT / "prompts")
+    model = SentenceTransformer(settings.embeddings.model)
+    embed_fn = lambda t: model.encode(t)
+    stage_key = {"concepts": "concepts", "canonicalize": "canonicalize", "relations": "relations"}.get(stage)
+    if stage_key:
+        settings.llm.stage_budgets_usd[stage_key] = max_usd
+    client = LLMClient(settings, run_id=run_id)
+    typer.echo(f"run {run_id}, stage {stage}, {len(sections)} sections (chapters {chs})")
+
+    if stage == "concepts":
+        typer.echo(f"preflight: v2 prompt is cached for unchanged text; only new sections cost (~$0.003 each); cap ${max_usd}")
+        if dry_run:
+            return
+        nlp = spacy.load("en_core_web_sm")
+        cp = run_concepts_stage(client, prompts, registry, sections, nlp, run_dir, cp)
+        cp.stage = "concepts"
+        cp.completed_section_ids = []
+        save_checkpoint(cp, run_dir)
+        typer.echo(f"mentions: {sum(len(v) for v in cp.mentions_by_section.values())}; spend ${client.spent_usd:.4f}; backend calls {client.backend_call_count}")
+    elif stage == "propagate":
+        added = sr.propagate_stage(cp, sections) if not dry_run else 0
+        typer.echo(f"propagation adds {added} `mentioned` mentions ($0)")
+        if not dry_run:
+            cp.stage = "canonicalize"
+            cp.completed_section_ids = []
+            save_checkpoint(cp, run_dir)
+    elif stage == "canonicalize":
+        overrides = CanonicalOverrides.load(REPO_ROOT / "configs" / "canonical_overrides.yaml")
+        pre = sr.preflight_canonicalize(cp, sections, prompts, embed_fn, overrides, Path("/tmp") / f"pre_{run_id}")
+        typer.echo(f"preflight: {pre['mentions']} mentions, at most about {pre['llm_calls']} LLM calls, ~${pre['est_usd']:.2f} (cap ${max_usd})")
+        if dry_run:
+            return
+        if pre["est_usd"] > max_usd:
+            raise typer.BadParameter("preflight estimate exceeds --max-usd")
+        cp.completed_section_ids = []
+        cp, _ = run_canonicalize_stage(client, prompts, sections, embed_fn, run_dir, cp, overrides=overrides)
+        chapters_map = sr.finish_concepts(cp, sections, embed_fn)
+        save_checkpoint(cp, run_dir)
+        typer.echo(f"concepts {len(cp.concepts)}, merges {len(cp.merges)}, review {len(cp.merge_review)}, related {len(cp.related_candidates)}, taxonomy {len(cp.taxonomy_candidates)}; first-occurrence chapters set for {len(chapters_map)}; spend ${client.spent_usd:.4f}")
+    elif stage == "select":
+        stats = sr.select_stage(cp, sections, registry, embed_fn, budget=budget_pairs)
+        typer.echo(json.dumps(stats, indent=1))
+        if not dry_run:
+            cp.stage = "relations"
+            save_checkpoint(cp, run_dir)
+        typer.echo(json.dumps(sr.preflight_relations(cp)))
+    elif stage == "relations":
+        pre = sr.preflight_relations(cp)
+        typer.echo(f"preflight: {pre}")
+        if dry_run:
+            return
+        if pre["est_usd_upper"] > max_usd:
+            raise typer.BadParameter(f"preflight upper bound ${pre['est_usd_upper']:.2f} exceeds --max-usd {max_usd}")
+        cp = sr.relations_stage(client, cp, run_dir, registry, REPO_ROOT / "prompts", embed_fn, progress=typer.echo)
+        typer.echo(f"relation results {len(cp.relation_results_v3)}; spend ${client.spent_usd:.4f}; backend calls {client.backend_call_count}")
+    elif stage == "snapshots":
+        results = sr.snapshots_stage(cp, run_dir, sections, registry, embed_fn)
+        save_checkpoint(cp, run_dir)
+        for r in results:
+            typer.echo(f"ch{r.chapter_num}: nodes {len(r.snapshot.nodes)}, edges {len(r.snapshot.edges)}, domain/range {len(r.structural_check.domain_range_errors)}")
+    else:
+        raise typer.BadParameter(f"unknown stage {stage!r}")
+
+
 @kg_app.command("relation-pilot")
 def kg_relation_pilot(
     run: str = typer.Option(..., "--run", help="P&D run_id whose OTHER pairs are re-classified"),

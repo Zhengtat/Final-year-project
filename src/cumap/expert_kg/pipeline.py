@@ -132,6 +132,11 @@ class Checkpoint:
     # different-type near-duplicates (never `same`; `related` candidates for the taxonomy layer).
     merge_review: list[dict] = field(default_factory=list)
     related_candidates: list[dict] = field(default_factory=list)
+    # CR-007 §6 (slice re-run): pair selection and v3 relation results
+    selected_pairs: list[dict] = field(default_factory=list)
+    sample_pairs: list[dict] = field(default_factory=list)  # unselected sample, for the missed-relation rate
+    selection_stats: dict = field(default_factory=dict)
+    relation_results_v3: list[dict] = field(default_factory=list)
     pair_registry: list[dict] = field(default_factory=list)  # stage d's PairRegistry state
     rejected_relations: list[dict] = field(default_factory=list)
 
