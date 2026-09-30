@@ -597,7 +597,13 @@ def eval_concept_ablation(
     from cumap.schemas.relations import RelationRegistry
 
     pool = {v.name: v for v in [BASELINE, *SINGLES]}
-    chosen = default_variants() if variants == "all" else [pool[n.strip()] for n in variants.split(",")]
+    from cumap.expert_kg.concept_experiments import combine_variants
+
+    def _pick(n: str):
+        n = n.strip()
+        return combine_variants(n, [pool[x] for x in n.split("+")]) if "+" in n else pool[n]
+
+    chosen = default_variants() if variants == "all" else [_pick(n) for n in variants.split(",")]
     sections, gold = load_split(REPO_ROOT, split)
     if limit:
         sections = sections[:limit]
