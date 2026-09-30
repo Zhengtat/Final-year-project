@@ -150,7 +150,8 @@ def organise(
             if ca in elig_set and cb in elig_set and ca != cb:
                 key = (ca, cb) if ca < cb else (cb, ca)
                 adj[key] = adj.get(key, 0.0) + w
-        angles, prev_layout = layout_angles(prev_layout, groups_layout, adj, cfg)
+        radius_by_id = {c: float(rad[idx0]) for idx0, c in enumerate(sg.ids) if c in elig_set}
+        angles, prev_layout = layout_angles(prev_layout, groups_layout, adj, cfg, radius_by_id)
 
         idx = {c: i for i, c in enumerate(sg.ids)}
         xy: dict[str, tuple[float, float]] = {}

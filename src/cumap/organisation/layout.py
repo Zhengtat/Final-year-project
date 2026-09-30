@@ -15,6 +15,7 @@ from dataclasses import dataclass, field
 from cumap.organisation.config import OrgConfig
 
 MIN_HALF_WIDTH = 4.0
+MIN_ARC = 14.0  # smallest arc (degrees) a newly placed community is allotted
 
 
 @dataclass
@@ -74,9 +75,16 @@ def _place_communities(
             nxt = max(new, key=lambda c: (w(chain[-1], c), len(groups[c]), c))
             new.remove(nxt)
             chain.append(nxt)
-        step = 360.0 / len(chain)
+        # arcs proportional to community size (with a floor), so a big community gets room
+        raw = [
+            max(360.0 * len(groups[c]) / sum(len(groups[x]) for x in chain), MIN_ARC) for c in chain
+        ]
+        arcs = [a * 360.0 / sum(raw) for a in raw]
         state.order = chain
-        state.centres = {c: -180.0 + step * (i + 0.5) for i, c in enumerate(chain)}
+        cum = 0.0
+        for c, a in zip(chain, arcs, strict=True):
+            state.centres[c] = wrap(-180.0 + cum + a / 2.0)
+            cum += a
         return
     for c in new:
         k = len(state.order)
@@ -117,6 +125,7 @@ def layout_angles(
     groups: dict[str, list[str]],  # persistent coarse community id -> eligible member concept ids
     adj: dict[tuple[str, str], float],  # eligible-eligible edge weights
     cfg: OrgConfig,
+    radius: dict[str, float] | None = None,  # concept id -> radius (enables the declutter pass)
 ) -> tuple[dict[str, float], LayoutState]:
     """Returns concept angles (degrees) and the state to carry to the next chapter."""
     cap = cfg.layout.max_angle_shift_deg
@@ -167,9 +176,59 @@ def layout_angles(
         else:
             a1 = sector_clamp(c, a1)
         angles[c] = a1
+    if radius:
+        angles = _declutter(angles, radius, where, state, half, stay, prev_ang, cap)
     state.angles = dict(angles)
     state.comm_of = dict(where)
     return angles, state
+
+
+MIN_SEPARATION = 0.05  # unit-disc distance below which two nodes push apart
+DECLUTTER_ITERS = 40
+
+
+def _declutter(
+    angles: dict[str, float],
+    radius: dict[str, float],
+    where: dict[str, str],
+    state: LayoutState,
+    half: dict[str, float],
+    stay: set[str],
+    prev_ang: dict[str, float],
+    cap: float,
+) -> dict[str, float]:
+    """Deterministic repulsion in the angular direction so nodes at similar radii do not pile up.
+    Nodes that stayed in their community remain within the angular cap of their previous angle,
+    and every node stays inside its sector (Misue et al. 1995: keep the mental map)."""
+    ids = sorted(angles)
+    ang = dict(angles)
+    for _ in range(DECLUTTER_ITERS):
+        moved = False
+        for i, a in enumerate(ids):
+            ra = max(radius.get(a, 1.0), 0.15)
+            for b in ids[i + 1 :]:
+                rb = max(radius.get(b, 1.0), 0.15)
+                dr = radius.get(a, 1.0) - radius.get(b, 1.0)
+                if abs(dr) >= MIN_SEPARATION:
+                    continue
+                dth = wrap(ang[b] - ang[a])
+                arc = math.radians(abs(dth)) * (ra + rb) / 2
+                if arc >= MIN_SEPARATION:
+                    continue
+                push = math.degrees((MIN_SEPARATION - arc) / max((ra + rb) / 2, 0.15)) / 2
+                sign = 1.0 if dth >= 0 else (-1.0 if dth < 0 else (1.0 if a < b else -1.0))
+                ang[a] = wrap(ang[a] - sign * push)
+                ang[b] = wrap(ang[b] + sign * push)
+                moved = True
+        for c in ids:
+            g = where[c]
+            d = wrap(ang[c] - state.centres[g])
+            ang[c] = wrap(state.centres[g] + max(-half[g], min(half[g], d)))
+            if c in stay:
+                ang[c] = wrap(prev_ang[c] + max(-cap, min(cap, wrap(ang[c] - prev_ang[c]))))
+        if not moved:
+            break
+    return ang
 
 
 def to_xy(radius: float, angle_deg: float) -> tuple[float, float]:

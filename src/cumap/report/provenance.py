@@ -14,6 +14,9 @@ LABEL_SOURCES: dict[str, str] = {
     "owner_merge_check": "Owner check of 43 merges",
     "owner_spotcheck": "Owner spot-check (n=30)",
     "model_output": "Model output, not validated",
+    # CR-006 (knowledge sphere): two additional allowed tags
+    "structural_metric": "Structural metric (no human labels)",
+    "owner_importance_check": "Owner importance check (n=40)",
 }
 
 

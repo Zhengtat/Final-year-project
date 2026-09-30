@@ -84,3 +84,27 @@ def test_nodes_stay_inside_or_near_their_sector_and_bands_are_stable():
             assert abs(wrap(a1[c] - s1.centres[k])) <= 180.0 * len(ms) / 18 + 30  # loose sanity
     assert band_angle("x") == band_angle("x") and 0 <= band_angle("x") < 360
     assert math.isclose(to_xy(1.0, 0)[0], 1.0)
+
+
+def test_declutter_separates_nodes_at_the_same_radius_but_respects_cap_and_sector():
+    ids = [f"n{i}" for i in range(12)]
+    groups = {"k1": ids}
+    adj = clique_edges(ids)
+    radius = {c: 0.4 for c in ids}  # a full ring of identical radii would otherwise pile up
+    a1, s1 = layout_angles(None, groups, adj, CFG, radius)
+    pts = sorted(a1.values())
+    assert len({round(a, 1) for a in pts}) == len(pts)  # no two nodes on the same angle
+    plain, _ = layout_angles(None, groups, adj, CFG)
+    assert max(pts) - min(pts) > max(plain.values()) - min(
+        plain.values()
+    )  # spread wider than without
+    # second chapter: staying nodes move at most the cap even though declutter pushes
+    a2, _ = layout_angles(
+        s1,
+        groups | {"k1": ids + ["n12", "n13"]},
+        adj | clique_edges(ids + ["n12", "n13"]),
+        CFG,
+        radius | {"n12": 0.4, "n13": 0.4},
+    )
+    assert max(abs(wrap(a2[c] - a1[c])) for c in ids) <= CFG.layout.max_angle_shift_deg + 1e-9
+    assert a1 == layout_angles(None, groups, adj, CFG, radius)[0]  # deterministic
