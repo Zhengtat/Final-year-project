@@ -51,6 +51,9 @@ uv run streamlit run src/cumap/app/review_app.py
 13. **(CR-006) `kg organise` never modifies content snapshots.** It reads snapshots (and the run checkpoint, read-only) and writes only under `data/processed/kg/<run_id>/organisation/<org_id>/`. It makes no API call.
 14. **(CR-006) Rings are a structural view, not tiers.** Never delete or demote a concept because of its ring; a persistently peripheral concept is a review flag (it may be a detail, or an extraction recall gap). Rings are named centre / inner / middle / outer (never "core", which CR-004 tiers use).
 15. **(CR-006) Principles are never pinned to the centre**; they earn their position like any node. Importance weights are fixed before any face-validity check and never tuned on it. Always show the "no clear core" banner when the null check fails.
+16. **(CR-007) Report examples are rendered from logged prompts.** The exact prompt text of every LLM call is in `data/logs/llm_prompts.jsonl` (by input hash); a worked example in a report is read from there, never re-rendered from a template.
+17. **(CR-007) Concept mentions use longest-match spans** (`expert_kg/mentions.py`): "bit rate" beats "bit"; spans are non-overlapping at token boundaries over all names and aliases. Candidate pairs, propagation, spread and first occurrence all use it.
+18. **(CR-007) `defined` marks only the first definition in book order.** Later `defined` tags become `refined` (evidence kept, appended to `description_history`); `first_chapter` is the first longest-match occurrence, not the first extraction.
 
 ## OpenAI usage
 - Use the Responses API with Structured Outputs:
