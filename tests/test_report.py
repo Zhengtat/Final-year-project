@@ -379,6 +379,16 @@ def test_growth3d_page_is_self_contained_and_has_clickable_concept_data(built):
     assert d["edges"][0]["quote"] == "consist of links" and d["radius"] > 0
 
 
+def test_growth3d_has_2d_toggle_no_autospin_and_faster_zoom(built):
+    html = (built[0].parent / "growth3d.html").read_text(encoding="utf-8")
+    assert 'id="v2"' in html and 'id="v3"' in html
+    assert "autorot" not in html and "yaw+=0.004" not in html  # never spins on its own
+    assert "deltaY*0.0015" in html  # 1.5x the original 0.001 zoom rate
+    d = json.loads(re.search(r'id="d3d">(.*?)</script>', html, re.DOTALL).group(1))
+    assert all(isinstance(n[k], float | int) for n in d["nodes"] for k in ("x2", "y2"))
+    assert "prefers-reduced-motion" in html
+
+
 def test_layout3d_is_deterministic_finite_and_not_flat():
     from cumap.report.graph3d import layout3d
 

@@ -23,7 +23,7 @@ from cumap.report.graph import (
     render_growth_graph,
     render_section_graph,
 )
-from cumap.report.graph3d import growth3d_page, layout3d
+from cumap.report.graph3d import growth3d_page, layout2d_matching, layout3d
 from cumap.report.provenance import LABEL_SOURCES, Provenance
 from cumap.report.svg import grouped_bar_svg, hbar_svg, slot, theme_css
 from cumap.report.viewer import Span, find_span, highlight_html
@@ -776,6 +776,12 @@ def _write_growth3d(
     pos = layout3d([n.id for n in growth.nodes], [(e.source, e.target) for e in growth.edges])
     top = [n for n in growth.nodes if n.rank < cfg.growth_top_n]
     radius = 1.05 * max(math.dist(pos[n.id], (0, 0, 0)) for n in top)
+    pos2 = layout2d_matching(
+        [n.id for n in growth.nodes],
+        [(e.source, e.target) for e in growth.edges],
+        {n.id for n in top},
+        radius,
+    )
     concepts = {c["concept_id"]: c for c in checkpoint["concepts"]}
     captions = {}
     for st, sec in zip(growth.steps, growth.section_labels, strict=True):
@@ -795,6 +801,8 @@ def _write_growth3d(
                 "size": n.size,
                 "prereq": n.prereq,
                 "type": concepts[n.id]["node_type"],
+                "x2": round(pos2[n.id][0], 1),
+                "y2": round(pos2[n.id][1], 1),
                 "x": round(pos[n.id][0], 1),
                 "y": round(pos[n.id][1], 1),
                 "z": round(pos[n.id][2], 1),
@@ -841,7 +849,9 @@ def _write_growth3d(
         "chapters": [{"ch": c, "slot": chapter_slot(c)} for c in growth.chapters],
     }
     (out / "growth3d.html").write_text(
-        growth3d_page(data, css=CSS, banner=BANNER, footer=footer, top_n=cfg.growth_top_n),
+        growth3d_page(
+            data, css=theme_css(":root"), banner=BANNER, footer=footer, top_n=cfg.growth_top_n
+        ),
         encoding="utf-8",
     )
 
