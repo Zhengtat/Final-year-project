@@ -310,6 +310,7 @@ def build_report(
     embed_fn=None,
     refresh_eval: bool = False,
     root: Path | None = None,
+    org_id: str | None = None,
 ) -> Path:
     """`root` is the data root (default: the repo); registry and prompts always come from the repo."""
     cfg = demo.report
@@ -678,6 +679,11 @@ def build_report(
         ),
     )
 
+    sphere_html, sphere_pack = "", None
+    if org_id:
+        sphere_html, sphere_pack = _sphere_section(
+            org_id, run_id, run_dir, root, registry, demo, figs, growth
+        )
     edge_json = json.dumps(growth.edge_details).replace("</", "<\\/")
     steps_json = json.dumps(growth.steps).replace("</", "<\\/")
     n_merges = sum(len(s.merges) for s in snaps)
@@ -755,6 +761,7 @@ book order is <b>not</b> prerequisite truth). {n_merges} alias merges across cha
 <div class="svgbox">{chart_g1}</div><div class="svgbox">{chart_g2}</div><div class="svgbox">{chart_g3}</div>
 <div class="svgbox">{chart_g4}</div>
 <h3>When key concepts appear</h3>{_key_concept_grid(growth)}
+{sphere_html}
 </section>
 
 <div class="foot"><b>Label sources used on this page</b><ul>{label_legend}</ul>
@@ -762,12 +769,95 @@ Contains IIR (© Cambridge University Press) text for local research use only �
 </main><script type="application/json" id="edge-data">{edge_json}</script>
 <script type="application/json" id="steps-data">{steps_json}</script><script>{JS}</script></body></html>"""
     (out / "index.html").write_text(html, encoding="utf-8")
-    _write_growth3d(out, growth, checkpoint, cfg, prov, footer)
+    _write_growth3d(out, growth, checkpoint, cfg, prov, footer, sphere_pack)
     return out / "index.html"
 
 
+def _sphere_section(org_id, run_id, run_dir, root, registry, demo, figs, growth):
+    """CR-006 §10: sphere figures + charts for tab 3 and the payload for the interactive Sphere
+    mode. Returns (html, payload). Reads the organisation run only."""
+    from cumap.organisation.config import load_config as load_org_config
+    from cumap.organisation.inputs import load_inputs
+    from cumap.report import sphere as S
+
+    ocfg = load_org_config()
+    org = S.load_org(run_dir / "organisation" / org_id)
+    inp = load_inputs(run_dir, root / demo.pd.source_jsonl, registry, ocfg)
+    prov = Provenance(
+        run_id=run_id,
+        prompt_versions={"organisation": org_id},
+        model_tier="none",
+        model="graph algorithms, no LLM",
+        date=datetime.now(UTC).date().isoformat(),
+    )
+    parts: dict[str, str] = {}
+    for ch in (0, *org.chapters):
+        parts[f"sphere_ch{ch}"] = figs.emit(
+            f"sphere_ch{ch}", S.sphere_svg(org, inp, ch, ocfg, prov)
+        )
+    for ch in org.chapters:
+        parts[f"top_ch{ch}"] = figs.emit(f"org-top15-ch{ch}", S.topk_svg(org, ch, prov))
+        parts[f"rings_ch{ch}"] = figs.emit(
+            f"org-ring-composition-ch{ch}", S.ring_composition_svg(org, ch, prov)
+        )
+    stab = S.stability_svg(org, prov)
+    if stab:
+        parts["stab"] = figs.emit("org-stability", stab)
+    parts["cp"] = figs.emit("org-core-periphery-fit", S.cp_fit_svg(org, prov))
+    parts["events"] = figs.emit("org-community-events", S.events_svg(org, prov))
+    key_names = [c["name"] for c in growth.key_concepts]
+    parts["traj"] = figs.emit("org-importance-trajectories", S.trajectory_svg(org, key_names, prov))
+    last = org.chapters[-1]
+    banners = "".join(
+        f'<p class="banner">Chapter {ch}: {escape(b)}</p>'
+        for ch in org.chapters
+        if (b := S.banner_for(org, ch))
+    )
+    counts = "".join(
+        f"<li>Chapter {ch}: {escape(S.unlinked_text(org, ch))} Review flags: "
+        f"{sum(1 for r in org.nodes[ch] if r['persistent_unlinked'])} persistent unlinked (no typed edge in two snapshots; a relation-recall signal), "
+        f"{sum(1 for r in org.nodes[ch] if r['persistent_periphery'])} persistent periphery (linked but outer for two snapshots; the review list).</li>"
+        for ch in org.chapters
+    )
+
+    def boxes(keys):
+        return "".join(f'<div class="svgbox">{parts[k]}</div>' for k in keys if k in parts)
+
+    html = (
+        '<h3 id="sphere">Sphere view: the graph reorganised after each chapter</h3>'
+        "<p>Same content, reorganised: concepts that many others depend on, belong to or serve, that recur across sections and "
+        "that bridge topics move towards the centre. It is a structural view (label: <b>Structural metric (no human labels)</b>); "
+        "rings are not tiers and nothing is removed or demoted because of its ring. Radius basis: "
+        f"<b>{escape(org.manifest['radius_basis'])}</b> importance (adjusted for how many sections a concept has been around; "
+        "toggle raw in the interactive view; to be revisited after the full-book run). Open <code>growth3d.html</code> and choose "
+        "<b>Sphere</b> for the interactive version (chapter slider, hover for the four components, click for why it moved).</p>"
+        f"{banners}<ul>{counts}</ul>"
+        f'<p class="small">{escape(S.LATE_NOTE)}</p>'
+        + boxes(["sphere_ch0", *[f"sphere_ch{c}" for c in org.chapters]])
+        + "<h3>Is there really a core?</h3>"
+        + boxes(["cp"])
+        + "<h3>Who is central</h3>"
+        + boxes([f"top_ch{c}" for c in org.chapters])
+        + "<h3>Do new chapters reach the centre?</h3>"
+        + boxes([f"rings_ch{c}" for c in org.chapters])
+        + "<h3>Stability and communities</h3>"
+        + boxes(["stab", "events"])
+        + "<h3>Key concepts across chapters</h3>"
+        + boxes(["traj"])
+        + f'<p class="small">Organisation run {escape(org_id)}; chapters shown: {", ".join(str(c) for c in org.chapters)} '
+        f"(chapter 1 is not in this slice, so the sphere has a start view, chapter {org.chapters[0]} and chapter {last}).</p>"
+    )
+    return html, S.sphere_payload(org, inp, ocfg)
+
+
 def _write_growth3d(
-    out: Path, growth, checkpoint: dict, cfg, prov: Provenance, footer: str
+    out: Path,
+    growth,
+    checkpoint: dict,
+    cfg,
+    prov: Provenance,
+    footer: str,
+    sphere: dict | None = None,
 ) -> None:
     """growth3d.html: the growth graph as an interactive 3D scene (spin, zoom, click a concept)."""
     pos = layout3d([n.id for n in growth.nodes], [(e.source, e.target) for e in growth.edges])
@@ -844,6 +934,7 @@ def _write_growth3d(
             if any(e.family == f for e in growth.edges)
         ],
         "chapters": [{"ch": c, "slot": chapter_slot(c)} for c in growth.chapters],
+        **({"sphere": sphere} if sphere else {}),
     }
     (out / "growth3d.html").write_text(
         growth3d_page(

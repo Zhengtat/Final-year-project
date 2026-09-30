@@ -713,6 +713,7 @@ if __name__ == "__main__":
 def demo_build(
     run: str = typer.Option(..., "--run", help="P&D run_id under data/processed/kg/"),
     refresh_eval: bool = typer.Option(False, "--refresh-eval", help="Recompute FACE metrics"),
+    org: str | None = typer.Option(None, "--org", help="CR-006 org_id: adds the sphere view"),
 ) -> None:
     """Build reports/demo/index.html + figures/ from saved artefacts. No LLM calls."""
     from cumap.config import load_demo_slice
@@ -727,6 +728,7 @@ def demo_build(
         model = SentenceTransformer(get_settings().embeddings.model)
         embed_fn = lambda t: model.encode(t)
     path = build_report(
-        run, get_settings(), load_demo_slice(), nlp=nlp, embed_fn=embed_fn, refresh_eval=refresh_eval
+        run, get_settings(), load_demo_slice(), nlp=nlp, embed_fn=embed_fn, refresh_eval=refresh_eval,
+        org_id=org,
     )
     typer.echo(f"wrote {path}")
