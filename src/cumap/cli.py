@@ -559,6 +559,44 @@ def kg_organise_summary(
     typer.echo(f"wrote {path}")
 
 
+@kg_app.command("relation-pilot")
+def kg_relation_pilot(
+    run: str = typer.Option(..., "--run", help="P&D run_id whose OTHER pairs are re-classified"),
+    limit: int | None = typer.Option(None, "--limit"),
+    dry_run: bool = typer.Option(False, "--dry-run"),
+    max_usd: float = typer.Option(2.0, "--max-usd", help="hard cap (CR-007 STOP 3 pilot: <= $2 pre-approved)"),
+) -> None:
+    """CR-007 STOP 3 pilot: re-classify the CR-005 relation_other pairs with registry v1.1 + prompts v3."""
+
+    from cumap.config import REPO_ROOT, get_settings, load_demo_slice
+    from cumap.expert_kg.relation_pilot import estimate_usd, load_other_pairs, run_pilot, summarise
+    from cumap.llm.client import LLMClient
+    from cumap.schemas.relations import RelationRegistry
+
+    settings = get_settings()
+    run_dir = REPO_ROOT / "data" / "processed" / "kg" / run
+    pairs = load_other_pairs(run_dir, REPO_ROOT / load_demo_slice().pd.source_jsonl)
+    if limit:
+        pairs = pairs[:limit]
+    est = estimate_usd(len(pairs))
+    typer.echo(f"{len(pairs)} pairs; estimated ${est:.2f} (cap ${max_usd:.2f})")
+    if dry_run:
+        return
+    if est > max_usd:
+        raise typer.BadParameter(f"estimate ${est:.2f} exceeds the ${max_usd:.2f} cap")
+    import uuid
+
+    settings.llm.stage_budgets_usd["relations"] = max_usd
+    client = LLMClient(settings, run_id=f"pilot_{uuid.uuid4().hex[:8]}")
+    registry = RelationRegistry.from_yaml(REPO_ROOT / "configs" / "relations_v1.1.yaml")
+    results = run_pilot(client, run_dir, pairs, registry, REPO_ROOT / "prompts", progress=typer.echo)
+    out = REPO_ROOT / "data" / "processed" / "pilot" / client.run_id
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "results.json").write_text(json.dumps([r.to_dict() for r in results], indent=1, default=str), encoding="utf-8")
+    typer.echo(f"run {client.run_id}: spend ${client.spent_usd:.4f}, backend calls {client.backend_call_count} -> {out}")
+    typer.echo(json.dumps(summarise(results, {}) | {"names": None}, indent=1, default=str)[:1500])
+
+
 @kg_app.command("expected-subgraphs")
 def kg_expected_subgraphs() -> None:
     """Map gold propositions to KG edges to build per-question expected subgraphs."""
