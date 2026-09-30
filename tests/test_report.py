@@ -382,6 +382,20 @@ def test_growth3d_has_2d_toggle_no_autospin_and_faster_zoom(built):
     assert "prefers-reduced-motion" in html
 
 
+def test_growth3d_ui_polish_guards(built):
+    html = (built[0].parent / "growth3d.html").read_text(encoding="utf-8")
+    assert 'id="find"' in html and 'id="findlist"' in html and "<noscript>" in html
+    assert (
+        'tabindex="0"' in html and "keydown" in html and "pointercancel" in html
+    )  # keyboard + touch
+    assert "backdrop-filter" not in html  # blur was decoration
+    assert re.search(r"border-left:\s*[2-9]px", html) is None  # no thick coloured side borders
+    assert "▶" not in html and "❚" not in html  # drawn icons, not glyphs
+    assert "--ink:#ecebe6" in html  # dark-mode text is off-white, not pure white
+    chrome = re.sub(r"<script.*?</script>", "", html, flags=re.DOTALL)
+    assert "—" not in chrome
+
+
 def test_layout3d_is_deterministic_finite_and_not_flat():
     from cumap.report.graph3d import layout3d
 
