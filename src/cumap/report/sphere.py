@@ -124,14 +124,18 @@ def topk_svg(org: OrgData, ch: int, prov: Provenance, k: int = 15) -> str:
 
 
 def ring_composition_svg(org: OrgData, ch: int, prov: Provenance) -> str:
+    """Ring composition of the placed concepts by chapter of introduction. Unlinked and background
+    concepts are excluded from the bars (there are far more of them than everything else combined,
+    which would hide the rings) and counted in the title instead."""
     counts: dict[int, Counter] = {}
     for r in org.nodes[ch]:
         counts.setdefault(r["first_chapter"], Counter())[r["ring"]] += 1
     intro = sorted(counts)
-    series = {f"introduced ch{c}": [counts[c][ring] for ring in RINGS] for c in intro}
+    series = {f"introduced ch{c}": [counts[c][ring] for ring in DISC_RINGS] for c in intro}
+    hidden = sum(1 for r in org.nodes[ch] if r["ring"] in ("unlinked", "background"))
     return stacked_bar_svg(
-        f"Ring composition at chapter {ch}, by chapter of introduction",
-        RINGS,
+        f"Placed concepts by ring at chapter {ch}, by chapter of introduction ({hidden} unlinked or background not shown)",
+        DISC_RINGS,
         series,
         provenance=prov,
         label_source=TAG,
