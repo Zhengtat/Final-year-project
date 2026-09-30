@@ -503,6 +503,62 @@ def kg_build() -> None:
     _not_implemented("cumap kg build", "M5")
 
 
+@kg_app.command("organise")
+def kg_organise(
+    run: str = typer.Option(..., "--run", help="KG run_id under data/processed/kg/"),
+    mode: str = typer.Option("provisional", "--mode", help="provisional | principles (later)"),
+    through_chapter: int | None = typer.Option(None, "--through-chapter"),
+    config: str | None = typer.Option(None, "--config", help="default: configs/organisation.yaml"),
+) -> None:
+    """CR-006: per-chapter core-periphery organisation. Reads snapshots, writes only under
+    organisation/. No API calls, so no dry run is needed."""
+    from pathlib import Path
+
+    from cumap.config import REPO_ROOT, get_settings, load_demo_slice
+    from cumap.organisation.config import load_config
+    from cumap.organisation.pipeline import run_organisation
+    from cumap.schemas.relations import RelationRegistry
+
+    settings = get_settings()
+    cfg = load_config(Path(config) if config else None)
+    registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
+    run_dir = REPO_ROOT / "data" / "processed" / "kg" / run
+    sections = REPO_ROOT / load_demo_slice().pd.source_jsonl
+    org = run_organisation(run_dir, sections, registry, cfg, mode=mode,
+                           through_chapter=through_chapter, progress=typer.echo)
+    typer.echo(f"org_id {org.org_id} -> {org.org_dir}")
+    for r in org.chapters:
+        cp = r.summary["core_periphery"]
+        typer.echo(f"  ch{r.chapter}: {r.summary['n_nodes']} concepts, {r.summary['n_edges']} edges, "
+                   f"core-periphery: {cp['label']} (rho {cp['rho_obs']:.3f}, z {cp['primary']['z']:.1f}, "
+                   f"delta {cp['primary']['delta_rho']:.3f})")
+
+
+@kg_app.command("organise-summary")
+def kg_organise_summary(
+    run: str = typer.Option(..., "--run"),
+    org: str = typer.Option(..., "--org", help="org_id"),
+    out: str | None = typer.Option(None, "--out", help="default: reports/organisation_<org>.md"),
+) -> None:
+    """Write the STOP 2 markdown summary for an organisation run (read-only)."""
+    from pathlib import Path
+
+    from cumap.config import REPO_ROOT, get_settings, load_demo_slice
+    from cumap.organisation.config import load_config
+    from cumap.organisation.inputs import load_inputs
+    from cumap.organisation.summary import build_summary
+    from cumap.schemas.relations import RelationRegistry
+
+    settings = get_settings()
+    registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
+    run_dir = REPO_ROOT / "data" / "processed" / "kg" / run
+    inp = load_inputs(run_dir, REPO_ROOT / load_demo_slice().pd.source_jsonl, registry, load_config())
+    text = build_summary(run_dir / "organisation" / org, inp)
+    path = Path(out) if out else REPO_ROOT / "reports" / f"organisation_{org}.md"
+    path.write_text(text, encoding="utf-8")
+    typer.echo(f"wrote {path}")
+
+
 @kg_app.command("expected-subgraphs")
 def kg_expected_subgraphs() -> None:
     """Map gold propositions to KG edges to build per-question expected subgraphs."""
