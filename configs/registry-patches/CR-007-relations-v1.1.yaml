@@ -1,0 +1,169 @@
+# Registry patch from CR-007 (2026-09-30). Becomes relations_v1.1.yaml.
+# CR-004's `instantiates` patch therefore becomes v1.2. Log both version bumps in DECISIONS.md.
+#
+# Evidence: CR-005 relation coverage audit (reports/talking_points_facts.md §5, docs/DECISIONS.md).
+#   - 114 of 361 pairs ended as OTHER. 56 of them came from the mechanism_process family.
+#   - Themes: actor–thing handled 27; topology/connectivity 22; encoding/spreading/encapsulation 13;
+#     possession/naming/identification 9; lists/scoping 8; negated dependency 8; trade-off/conflict 6; uncategorised 21.
+#
+# Status of each addition:
+#   - core:  added in v1.1 unconditionally.
+#   - gated: kept only if the ch1–3 re-run produces >= 5 instances AND the owner marks >= 80% of up to 8 sampled
+#            instances correct (CR-007 §8). Otherwise it is removed in the next version and its instances go back to OTHER.
+# Claude Code refines wording at STOP 3. The owner approves the final text before any re-run.
+
+patch_for_registry_version: 1
+new_version: "1.1"
+
+# Claude Code, STOP 3 (CR-007 §5): one-line glosses for the family step of relation prompt v3, so an
+# 'actor handles a thing' sentence routes to mechanism_process (-> acts_on). Wording only; no relation added.
+family_gloss:
+  mechanism_process: "something acts or happens: an actor performs, triggers or precedes an activity, or handles a data unit (send, receive, forward, transform, check, store, drop)"
+  cause_effect: "one thing brings about, prevents or changes the amount of another"
+  function_means: "what something is for, or what it uses to achieve its purpose"
+  dependency: "one thing needs, requires or is constrained by another (including a stated absence of that need)"
+  comparison: "two things are alike, different or in tension along a stated dimension"
+  classification_structure: "what kind of thing something is, what it is made of, what it is attached or connected to, what carries or names it"
+
+adds:
+
+  node_types: [Identifier]   # addresses, IDs, port numbers, names that select an entity
+
+  qualifiers:
+    action_type:
+      values: [send, receive, forward, transform, check, store, drop, generate, other]
+      applies_to: [acts_on]
+      required: true
+      note: "Closed list for the verb class. Keep the exact verb in surface_phrase (e.g. 'retransmits' -> send)."
+    corrects_intuition:
+      type: bool
+      applies_to: all
+      required: false
+      note: "True only when the text explicitly warns against a belief ('a common misconception', 'it is tempting to think', 'note that X does not'). Store the belief as text in `intuition`."
+    intuition:
+      type: "str | None"
+      applies_to: all
+      required: false
+
+  output_fields:   # added to the relation-choice schema (structured outputs: required, nullable)
+    other_description:     {type: "str | None", note: "Required when the answer is OTHER: one sentence saying what the sentence expresses."}
+    other_suggested_label: {type: "str | None", note: "Required when the answer is OTHER: a 1–3 word verb phrase, e.g. 'connects', 'is carried in'."}
+
+  relations:
+
+    # ---------------- core ----------------
+    - name: acts_on
+      family: mechanism_process
+      layer: semantic
+      status: new_in_v1_1
+      gate: core
+      definition: "Component, protocol or mechanism source does something to data unit target: sends, receives, forwards, transforms, checks, stores, drops or generates it. The verb class goes in action_type; the exact verb in surface_phrase."
+      template: "{X} handles {Y} (sends, receives, forwards, transforms, checks, stores or drops it)"
+      examples:
+        - "the switch forwards the frame out of one port -> switch acts_on frame (forward)"
+        - "the sender retransmits the frame after a timeout -> sender acts_on frame (send; conditions: timeout)"
+        - "the adaptor encodes the bits using Manchester encoding -> adaptor acts_on bit (transform)"
+        - "the receiver discards corrupted frames -> receiver acts_on frame (drop; conditions: CRC error)"
+      near_misses:
+        - {relation: performs, example: "transparent bridge performs backward learning", why: "the target is an activity, not a thing being handled"}
+        - {relation: uses, example: "TCP uses sequence numbers", why: "a means the actor relies on, not an object it acts on"}
+        - {relation: encapsulates, example: "an Ethernet frame carries an IP packet", why: "containment between two data units; no actor"}
+      domain_types: [Component, Protocol, Mechanism, Layer]
+      range_types: [DataUnit, Concept]
+      directional: true
+      symmetric: false
+      transitive: false
+      inverse_of: acted_on_by
+      conflicts_with: []
+      compatible_with: {performs: partial}
+
+    - name: connected_to
+      family: classification_structure
+      layer: semantic
+      status: new_in_v1_1
+      gate: core
+      definition: "Component source is physically or logically linked to component target so the two can exchange data directly (network topology)."
+      template: "{X} is directly connected to {Y}"
+      examples:
+        - "hosts are connected to the switch by point-to-point links -> host connected_to switch"
+        - "a bridge connects two LAN segments -> bridge connected_to LAN segment"
+      near_misses:
+        - {relation: part_of, example: "the link is part of the network", why: "membership in a whole, not adjacency between peers"}
+        - {relation: uses, example: "the host uses the link", why: "use of a resource, not a topological connection"}
+      domain_types: [Component, Concept]
+      range_types: [Component, Concept]
+      directional: false
+      symmetric: true
+      transitive: false
+      inverse_of: connected_to
+      conflicts_with: []
+      compatible_with: {}
+
+    # ---------------- gated ----------------
+    - name: identifies
+      family: classification_structure
+      layer: semantic
+      status: new_in_v1_1
+      gate: gated
+      definition: "Identifier source (address, ID, number or name) uniquely names or selects entity target within some scope."
+      template: "{X} identifies {Y}"
+      examples:
+        - "each adaptor has a unique Ethernet address -> Ethernet address identifies adaptor"
+        - "the VCI identifies the virtual circuit on that link -> VCI identifies virtual circuit"
+      near_misses:
+        - {relation: has_property, example: "a frame has a length", why: "an attribute of the thing, not a name that picks it out"}
+      domain_types: [Identifier, Parameter, Property]
+      range_types: [Component, Protocol, Mechanism, DataUnit, Concept, Layer]
+      directional: true
+      symmetric: false
+      transitive: false
+      inverse_of: identified_by
+      conflicts_with: []
+      compatible_with: {has_property: partial}
+
+    - name: encapsulates
+      family: classification_structure
+      layer: semantic
+      status: new_in_v1_1
+      gate: gated
+      definition: "Data unit source carries data unit target as its payload (layering and encapsulation)."
+      template: "{X} carries {Y} as its payload"
+      examples:
+        - "an Ethernet frame carries an IP datagram in its body -> Ethernet frame encapsulates IP datagram"
+        - "the IP datagram carries a TCP segment -> IP datagram encapsulates TCP segment"
+      near_misses:
+        - {relation: part_of, example: "the header is part of the frame", why: "a component of one data unit, not the payload from another layer"}
+        - {relation: acts_on, example: "the host encapsulates the packet", why: "an actor doing the encapsulation; use acts_on (transform)"}
+      domain_types: [DataUnit]
+      range_types: [DataUnit]
+      directional: true
+      symmetric: false
+      transitive: true
+      inverse_of: carried_in
+      conflicts_with: [part_of]
+      compatible_with: {}
+
+    - name: trades_off_with
+      family: comparison
+      layer: semantic
+      status: new_in_v1_1
+      gate: gated
+      definition: "Improving property or parameter source tends to worsen target, so a design must balance them. Put the design choice that sets the balance in `dimension`."
+      template: "there is a trade-off between {X} and {Y}"
+      examples:
+        - "a larger window improves throughput but needs more buffer space -> throughput trades_off_with buffer space (dimension: window size)"
+        - "smaller frames reduce latency but add header overhead -> latency trades_off_with header overhead (dimension: frame size)"
+      near_misses:
+        - {relation: contrasts_with, example: "CSMA/CD contrasts with token passing", why: "two alternatives that differ, not a see-saw between two qualities"}
+        - {relation: increases, example: "a larger window increases throughput", why: "a one-way effect with no opposing cost stated"}
+      domain_types: [Property, Parameter, Concept]
+      range_types: [Property, Parameter, Concept]
+      directional: false
+      symmetric: true
+      transitive: false
+      inverse_of: trades_off_with
+      conflicts_with: []
+      compatible_with: {contrasts_with: partial}
+
+  qualifier_applies_to_updates:
+    dimension: {applies_to: [contrasts_with, trades_off_with]}

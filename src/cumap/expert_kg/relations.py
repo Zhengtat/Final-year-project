@@ -25,6 +25,7 @@ from cumap.expert_kg.llm_schemas import (
     build_family_choice_llm,
     build_relation_choice_llm,
 )
+from cumap.expert_kg.mentions import MentionMatcher
 from cumap.gold.validate import verify_quote
 from cumap.llm.client import LLMClient
 from cumap.llm.prompts import PromptTemplate
@@ -77,9 +78,27 @@ def split_sentences(text: str) -> list[str]:
     return [s.strip() for s in re.split(r"(?<=[.!?])\s+", text) if s.strip()]
 
 
-def _mentioned_sentence_indices(sentences: list[str], concept: RegisteredConcept) -> list[int]:
-    names = [n.lower() for n in {concept.canonical_name, *concept.aliases} if n]
-    return [i for i, s in enumerate(sentences) if any(name in s.lower() for name in names)]
+def concept_vocab(concepts: list[RegisteredConcept]) -> dict[str, str]:
+    """{surface(lower): concept_id} over canonical names and aliases (first concept wins)."""
+    vocab: dict[str, str] = {}
+    for c in concepts:
+        for name in {c.canonical_name, *c.aliases}:
+            if name:
+                vocab.setdefault(name.lower(), c.concept_id)
+    return vocab
+
+
+def sentence_mentions(
+    sentences: list[str], concepts: list[RegisteredConcept]
+) -> dict[str, list[int]]:
+    """CR-007 §4.1: concept id -> indices of the sentences containing a LONGEST-MATCH mention
+    (so 'bit rate' is not also a mention of 'bit')."""
+    matcher = MentionMatcher(concept_vocab(concepts))
+    out: dict[str, list[int]] = {}
+    for i, sentence in enumerate(sentences):
+        for cid in {m.concept_id for m in matcher.find(sentence)}:
+            out.setdefault(cid, []).append(i)
+    return out
 
 
 def _pair_key(concept_x_id: str, concept_y_id: str) -> frozenset[str]:
@@ -106,16 +125,28 @@ def find_candidate_pairs(
     window: int = DEFAULT_SENTENCE_WINDOW,
     max_pairs: int = DEFAULT_MAX_PAIRS_PER_SECTION,
 ) -> tuple[list[CandidatePair], list[CandidatePair]]:
+    all_pairs = enumerate_candidates(section_id, section_text, concepts, registry, window=window)
+    return all_pairs[:max_pairs], all_pairs[max_pairs:]
+
+
+def enumerate_candidates(
+    section_id: str,
+    section_text: str,
+    concepts: list[RegisteredConcept],
+    registry: RelationRegistry,
+    *,
+    window: int = DEFAULT_SENTENCE_WINDOW,
+) -> list[CandidatePair]:
     """Stage A: rule-based, no LLM call. Two concepts are a candidate pair if they're
     mentioned in the same sentence (window=0) or within `window` sentences of each
     other. Ranked by (has a relational cue word, co-occurrence count, earliest
-    position), then capped at `max_pairs`. Returns (kept, overflow) -- `overflow` is
-    for logging only and must never be sent for classification (CR-005 §9 item 3).
+    position). `find_candidate_pairs` caps at `max_pairs` and returns (kept, overflow);
+    `enumerate_candidates` returns every ranked pair (CR-007 §5.3 selects globally).
     """
     sentences = split_sentences(section_text)
     cue_words = _cue_words(registry)
-    mentions = {c.concept_id: _mentioned_sentence_indices(sentences, c) for c in concepts}
-    mentioned = [c for c in concepts if mentions[c.concept_id]]
+    mentions = sentence_mentions(sentences, concepts)
+    mentioned = [c for c in concepts if mentions.get(c.concept_id)]
 
     stats: dict[frozenset[str], dict] = {}
     for i in range(len(mentioned)):
@@ -156,7 +187,7 @@ def find_candidate_pairs(
         )
         for i, e in enumerate(ranked)
     ]
-    return all_pairs[:max_pairs], all_pairs[max_pairs:]
+    return all_pairs
 
 
 @dataclass

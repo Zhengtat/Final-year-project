@@ -22,7 +22,7 @@ textbook:
 # CR-001: default registry is now v1 (16 relations, 6 families + pedagogical).
 # relations_v0.yaml stays loadable (RelationRegistry.from_yaml accepts either file);
 # registry_version_supported documents which versions cumap gold validate accepts.
-relation_registry: configs/relations_v1.yaml
+relation_registry: configs/relations_v1.1.1.yaml  # CR-007: v1.1 minus the relations that failed their gate (identifies, encapsulates, trades_off_with)
 registry_version_supported: [0, 1]
 
 llm:

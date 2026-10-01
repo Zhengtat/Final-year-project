@@ -319,3 +319,22 @@ def test_pair_registry_records_no_relation_as_resolved_terminal():
     assert registry.is_resolved("c_a", "c_b") is True
     assert registry.get("c_a", "c_b").edge is None
     assert registry.get("c_a", "c_b").reason == "family_no_relation"
+
+
+def test_candidate_pairs_use_longest_match_mentions_so_bit_is_not_paired_inside_bit_rate():
+    """CR-007 §4.1: 'bit' inside 'bit rate' is not a mention of the concept 'bit'."""
+    from cumap.expert_kg.canonicalize import RegisteredConcept
+    from cumap.expert_kg.relations import enumerate_candidates
+
+    def rc(cid, name):
+        return RegisteredConcept(cid, name, "Parameter", None, "s1")
+
+    concepts = [rc("c_bit", "bit"), rc("c_rate", "bit rate"), rc("c_baud", "baud rate")]
+    pairs = enumerate_candidates("s1", "The bit rate is half the baud rate.", concepts, _registry())
+    assert {frozenset((p.concept_x_id, p.concept_y_id)) for p in pairs} == {
+        frozenset(("c_rate", "c_baud"))
+    }
+    both = enumerate_candidates("s1", "A bit is not a bit rate.", concepts, _registry())
+    assert {frozenset((p.concept_x_id, p.concept_y_id)) for p in both} == {
+        frozenset(("c_bit", "c_rate"))
+    }

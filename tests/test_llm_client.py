@@ -161,3 +161,25 @@ def test_cache_hit_does_not_trigger_budget_check(tmp_settings, fixtures_dir):
     )
     assert result.cache_hit is True
     assert client.spent_usd == spent_after_first_call  # unchanged
+
+
+def test_exact_prompt_text_is_logged_once_per_input_hash(tmp_settings, fixtures_dir):
+    """CR-007 §5.2: report examples are rendered from the logged prompt, byte for byte."""
+    import json
+
+    from cumap.expert_kg.llm_schemas import CanonicalizeDecisionLLM
+    from cumap.llm.client import LLMClient
+
+    client = LLMClient(tmp_settings, fixtures_dir=fixtures_dir)
+    messages = [{"role": "user", "content": "Concept X: switch\nUnique prompt text 42"}]
+    for _ in range(2):  # second call is a cache hit; still one log line
+        r = client.parse(task="canonicalize", prompt_version="v2", messages=messages,
+                         schema=CanonicalizeDecisionLLM, model_tier="strong", fixture_name="same")
+    path = tmp_settings.resolve(tmp_settings.paths.data_logs) / "llm_prompts.jsonl"
+    lines = [json.loads(x) for x in path.read_text().splitlines()]
+    assert len(lines) == 1 and lines[0]["input_hash"] == r.input_hash
+    assert lines[0]["messages"] == messages and lines[0]["task"] == "canonicalize"
+    again = LLMClient(tmp_settings, fixtures_dir=fixtures_dir)  # a new client does not re-log the same hash
+    again.parse(task="canonicalize", prompt_version="v2", messages=messages,
+                schema=CanonicalizeDecisionLLM, model_tier="strong", fixture_name="same")
+    assert len(path.read_text().splitlines()) == 1

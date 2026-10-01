@@ -218,7 +218,7 @@ def build_growth(
     key_concepts = []
     for cid in key_ids:
         by_section: dict[str, str] = {}
-        rank_role = {"defined": 3, "used": 2, "mentioned": 1}
+        rank_role = {"defined": 3, "refined": 3, "used": 2, "mentioned": 1}  # CR-007: refined shows as defined
         for m in concepts[cid]["mentions"]:
             if rank_role[m["role"]] > rank_role.get(by_section.get(m["section_id"], ""), 0):
                 by_section[m["section_id"]] = m["role"]
@@ -262,8 +262,32 @@ def build_growth(
     )
 
 
+def load_logged_prompts(log_path: Path | None, hashes: set[str]) -> dict[str, str]:
+    """CR-007 rule 16: exact prompt text of an LLM call, read from the prompt log by input hash
+    (never re-rendered from a template). Returns {input_hash: user message text}."""
+    import ast
+
+    out: dict[str, str] = {}
+    if log_path is None or not log_path.exists():
+        return out
+    with log_path.open(encoding="utf-8") as f:
+        for line in f:
+            r = json.loads(line)
+            if r["input_hash"] in hashes and r["input_hash"] not in out:
+                msgs = r["messages"]
+                if isinstance(msgs, str):
+                    msgs = ast.literal_eval(msgs)
+                out[r["input_hash"]] = "\n\n".join(m["content"] for m in msgs)
+    return out
+
+
 def worked_examples(
-    checkpoint: dict, registry: RelationRegistry, growth: GrowthData, *, n: int = 3
+    checkpoint: dict,
+    registry: RelationRegistry,
+    growth: GrowthData,
+    *,
+    n: int = 3,
+    prompt_log: Path | None = None,
 ) -> list[dict]:
     """Three sections with the most families among their accepted edges (ties: more edges,
     then section id); one representative edge each, families kept distinct where possible.
@@ -278,6 +302,15 @@ def worked_examples(
     pair_edges = {
         d["edge"]["pair"]["pair_id"]: d for d in checkpoint["pair_registry"] if d.get("edge")
     }
+    v3_by_pair = {
+        r["pair"]["pair_id"]: r
+        for r in checkpoint.get("relation_results_v3", [])
+        if r.get("outcome") == "edge"
+    }
+    logged = load_logged_prompts(
+        prompt_log,
+        {h for r in v3_by_pair.values() for h in (r.get("prompt_hashes") or {}).values()},
+    )
     used_families: set[str] = set()
     out = []
     for sid in ranked:
@@ -343,6 +376,11 @@ def worked_examples(
                 ],
                 "source": concepts[edge.source],
                 "target": concepts[edge.target],
+                "logged_prompts": {
+                    step: logged[h]
+                    for step, h in ((v3_by_pair.get(edge.id) or {}).get("prompt_hashes") or {}).items()
+                    if h in logged
+                },
             }
         )
     return out

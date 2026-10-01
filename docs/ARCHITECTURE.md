@@ -119,6 +119,17 @@ See `BUILD_PLAN.md` M1 task 4.
 | `qualifiers` (registry-level, not per-relation) | `part_type` (required on `part_of`), `dimension` (recommended on `contrasts_with`), `surface_phrase`, `polarity`, `modality`, `conditions` — which relations each applies to and whether it's required |
 | `chain_link_types` (registry-level) | `{name, template, cues}` for the 5 `ChainLink` types (§4e), modelled on PDTB-3's top-level senses |
 
+### 4a-bis. Registry v1.1 and extraction v3 (CR-007)
+
+- **Registry v1.1** (`configs/relations_v1.1.yaml`, generated from v1 + `configs/registry-patches/CR-007-relations-v1.1.yaml`; a superset of v1, now the default): adds `acts_on` (source acts on a data unit; requires the `action_type` qualifier: send, receive, forward, transform, check, store, drop, generate, other), `connected_to` (symmetric topology), and the **gated** `identifies`, `encapsulates`, `trades_off_with` (kept only if the re-run yields >= 5 instances and >= 80% of the sampled instances are owner-marked correct; outcome in DECISIONS). New node type `Identifier`; new qualifiers `action_type`, `corrects_intuition`, `intuition`; `dimension` now also applies to `trades_off_with`. v1.2 stays reserved for CR-004 `instantiates`. **Outcome (STOP 5):** none of the three gated relations passed, so the default registry is `relations_v1.1.1.yaml` (v1.1 minus them); edges they produced stay in run data flagged `gated_dropped` and are not in the graph.
+- **Generic type:** the node type `Concept` is a wildcard in the domain/range check (`RelationRegistry.check_types`): extraction types are coarse, specific wrong types are still rejected.
+- **Mention matching:** `expert_kg/mentions.py` finds concept mentions by longest-match, non-overlapping spans at token boundaries over all names and aliases ("bit rate" beats "bit"). Candidate pairs, propagation, spread and first occurrence all use it.
+- **First occurrence and roles:** `first_chapter` is the first longest-match occurrence in book order, not the first extraction. `defined` marks only the first definition; later `defined` tags become `refined` (evidence kept in the append-only `description_history`).
+- **Concept extraction "v3"** = prompt v2 + consistency propagation (a concept accepted in any section is tagged `mentioned`, source `propagation`, wherever it occurs as a longest-match mention).
+- **Canonicalisation v2:** type-aware (different node types are never `same`; logged as `related` candidates) with a review band: an LLM "same" with similarity < 0.70 is not merged and goes to the merge review sheet (provisional).
+- **Relation classification v3:** family step, then a filled-option relation step (every option rendered with the two concept names; includes no_relation and other with a description and suggested label), then checks: comparison relations need a `dimension` grounded in the sentence; the evidence quote must be a substring of the sentence; **endpoint grounding** (each endpoint must be a longest-match mention inside the evidence quote, else `endpoint_not_grounded`); domain/range; then the qualifier step.
+- **Pair selection:** a global budget (~700 pairs for ch1-3) with a per-section minimum; defined/used concepts' best-cue pair first, mentioned-only concepts only in the fill phase; a random sample of unselected pairs is classified but kept out of the graph, to estimate the missed-relation rate.
+
 ### 4b. ExpertEdge
 
 | Group | Field | Type / values | Diagnostic purpose |

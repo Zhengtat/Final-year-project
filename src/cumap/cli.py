@@ -559,6 +559,195 @@ def kg_organise_summary(
     typer.echo(f"wrote {path}")
 
 
+@kg_app.command("rerun")
+def kg_rerun(
+    stage: str = typer.Option(..., "--stage", help="concepts | propagate | canonicalize | select | relations | snapshots"),
+    run: str | None = typer.Option(None, "--run", help="existing CR-007 slice run_id; omit with --new"),
+    new: bool = typer.Option(False, "--new", help="start a new run_id (slice3_<id>)"),
+    chapters: str = typer.Option("1,2,3", "--chapters"),
+    budget_pairs: int = typer.Option(700, "--budget-pairs", help="global pair budget for the select stage"),
+    max_usd: float = typer.Option(3.0, "--max-usd", help="hard cap for THIS stage"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="preflight cost check only"),
+) -> None:
+    """CR-007 §6 slice re-run, one stage at a time, each with a preflight cost check."""
+    import uuid
+    from pathlib import Path
+
+    import spacy
+    from sentence_transformers import SentenceTransformer
+
+    from cumap.config import REPO_ROOT, get_settings, load_demo_slice
+    from cumap.expert_kg import slice_rerun as sr
+    from cumap.expert_kg.canonicalize import CanonicalOverrides
+    from cumap.expert_kg.pipeline import (
+        Checkpoint,
+        PromptSet,
+        load_checkpoint,
+        run_canonicalize_stage,
+        run_concepts_stage,
+        save_checkpoint,
+    )
+    from cumap.llm.client import LLMClient
+    from cumap.schemas.relations import RelationRegistry
+
+    settings = get_settings()
+    run_id = run or (f"slice3_{uuid.uuid4().hex[:8]}" if new else None)
+    if run_id is None:
+        raise typer.BadParameter("pass --run <id> or --new")
+    run_dir = REPO_ROOT / "data" / "processed" / "kg" / run_id
+    chs = [int(x) for x in chapters.split(",")]
+    sections = sr.load_sections(REPO_ROOT / load_demo_slice().pd.source_jsonl, chs)
+    cp = load_checkpoint(run_dir) or Checkpoint(run_id=run_id, stage="concepts")
+    registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
+    prompts = PromptSet.load(REPO_ROOT / "prompts")
+    model = SentenceTransformer(settings.embeddings.model)
+    embed_fn = lambda t: model.encode(t)
+    stage_key = {"concepts": "concepts", "canonicalize": "canonicalize", "relations": "relations"}.get(stage)
+    if stage_key:
+        settings.llm.stage_budgets_usd[stage_key] = max_usd
+    client = LLMClient(settings, run_id=run_id)
+    typer.echo(f"run {run_id}, stage {stage}, {len(sections)} sections (chapters {chs})")
+
+    if stage == "concepts":
+        typer.echo(f"preflight: v2 prompt is cached for unchanged text; only new sections cost (~$0.003 each); cap ${max_usd}")
+        if dry_run:
+            return
+        nlp = spacy.load("en_core_web_sm")
+        cp = run_concepts_stage(client, prompts, registry, sections, nlp, run_dir, cp)
+        cp.stage = "concepts"
+        cp.completed_section_ids = []
+        save_checkpoint(cp, run_dir)
+        typer.echo(f"mentions: {sum(len(v) for v in cp.mentions_by_section.values())}; spend ${client.spent_usd:.4f}; backend calls {client.backend_call_count}")
+    elif stage == "propagate":
+        added = sr.propagate_stage(cp, sections) if not dry_run else 0
+        typer.echo(f"propagation adds {added} `mentioned` mentions ($0)")
+        if not dry_run:
+            cp.stage = "canonicalize"
+            cp.completed_section_ids = []
+            save_checkpoint(cp, run_dir)
+    elif stage == "canonicalize":
+        overrides = CanonicalOverrides.load(REPO_ROOT / "configs" / "canonical_overrides.yaml")
+        pre = sr.preflight_canonicalize(cp, sections, prompts, embed_fn, overrides, Path("/tmp") / f"pre_{run_id}")
+        typer.echo(f"preflight: {pre['mentions']} mentions, at most about {pre['llm_calls']} LLM calls, ~${pre['est_usd']:.2f} (cap ${max_usd})")
+        if dry_run:
+            return
+        if pre["est_usd"] > max_usd:
+            raise typer.BadParameter("preflight estimate exceeds --max-usd")
+        cp.completed_section_ids = []
+        cp, _ = run_canonicalize_stage(client, prompts, sections, embed_fn, run_dir, cp, overrides=overrides)
+        chapters_map = sr.finish_concepts(cp, sections, embed_fn)
+        save_checkpoint(cp, run_dir)
+        typer.echo(f"concepts {len(cp.concepts)}, merges {len(cp.merges)}, review {len(cp.merge_review)}, related {len(cp.related_candidates)}, taxonomy {len(cp.taxonomy_candidates)}; first-occurrence chapters set for {len(chapters_map)}; spend ${client.spent_usd:.4f}")
+    elif stage == "select":
+        stats = sr.select_stage(cp, sections, registry, embed_fn, budget=budget_pairs)
+        typer.echo(json.dumps(stats, indent=1))
+        if not dry_run:
+            cp.stage = "relations"
+            save_checkpoint(cp, run_dir)
+        typer.echo(json.dumps(sr.preflight_relations(cp)))
+    elif stage == "relations":
+        pre = sr.preflight_relations(cp)
+        typer.echo(f"preflight: {pre}")
+        if dry_run:
+            return
+        if pre["est_usd_upper"] > max_usd:
+            raise typer.BadParameter(f"preflight upper bound ${pre['est_usd_upper']:.2f} exceeds --max-usd {max_usd}")
+        cp = sr.relations_stage(client, cp, run_dir, registry, REPO_ROOT / "prompts", embed_fn, progress=typer.echo)
+        typer.echo(f"relation results {len(cp.relation_results_v3)}; spend ${client.spent_usd:.4f}; backend calls {client.backend_call_count}")
+    elif stage == "snapshots":
+        dropped = sr.mark_gated_dropped(cp, registry)
+        if dropped:
+            typer.echo(f"{dropped} edges of relations missing from {registry.version_label} flagged gated_dropped (kept out of the graph)")
+        results = sr.snapshots_stage(cp, run_dir, sections, registry, embed_fn)
+        save_checkpoint(cp, run_dir)
+        for r in results:
+            typer.echo(f"ch{r.chapter_num}: nodes {len(r.snapshot.nodes)}, edges {len(r.snapshot.edges)}, domain/range {len(r.structural_check.domain_range_errors)}")
+    else:
+        raise typer.BadParameter(f"unknown stage {stage!r}")
+
+
+@kg_app.command("stop4")
+def kg_stop4(
+    run: str = typer.Option(..., "--run"),
+    org: str | None = typer.Option(None, "--org", help="org_id for the core-periphery section"),
+) -> None:
+    """CR-007 STOP 4: CR-005 vs CR-007 comparison report + blind review sheets (read-only, no API)."""
+    from cumap.config import REPO_ROOT, get_settings, load_demo_slice
+    from cumap.expert_kg.stop4 import build
+    from cumap.schemas.relations import RelationRegistry
+
+    registry = RelationRegistry.from_yaml(REPO_ROOT / get_settings().relation_registry)
+    run_dir = REPO_ROOT / "data" / "processed" / "kg" / run
+    out = build(run_dir, REPO_ROOT / load_demo_slice().pd.source_jsonl, registry,
+                REPO_ROOT / "reports" / "cr007_stop4.md", REPO_ROOT / "data" / "interim" / "checks",
+                run_dir / "organisation" / org if org else None)
+    typer.echo(json.dumps(out, indent=1))
+
+
+@kg_app.command("stop5")
+def kg_stop5(
+    run: str = typer.Option(..., "--run"),
+    sheets_dir: str = typer.Option(..., "--sheets-dir", help="folder with the owner-filled cr007_*_sheet.csv and keys"),
+    org: str | None = typer.Option(None, "--org"),
+    gated_relations: str = typer.Option(
+        "identifies,encapsulates,trades_off_with", "--gated", help="the relations that were gated in v1.1"
+    ),
+) -> None:
+    """CR-007 STOP 5: gate table, precision CIs, merge errors by similarity, spend by stage ($0)."""
+    from pathlib import Path
+
+    from cumap.config import REPO_ROOT, get_settings
+    from cumap.expert_kg.stop5 import build_report
+
+    settings = get_settings()
+    gated = gated_relations.split(",")
+    path = build_report(
+        REPO_ROOT / "data" / "processed" / "kg" / run, Path(sheets_dir), gated=gated,
+        tiers=settings.llm.tiers, log_path=REPO_ROOT / "data" / "logs" / "llm_calls.jsonl",
+        out_md=REPO_ROOT / "reports" / "cr007_stop5.md", org_id=org,
+        preflight={"canonicalize": 1.54, "relations": 5.175},
+    )
+    typer.echo(f"wrote {path}")
+
+
+@kg_app.command("relation-pilot")
+def kg_relation_pilot(
+    run: str = typer.Option(..., "--run", help="P&D run_id whose OTHER pairs are re-classified"),
+    limit: int | None = typer.Option(None, "--limit"),
+    dry_run: bool = typer.Option(False, "--dry-run"),
+    max_usd: float = typer.Option(2.0, "--max-usd", help="hard cap (CR-007 STOP 3 pilot: <= $2 pre-approved)"),
+) -> None:
+    """CR-007 STOP 3 pilot: re-classify the CR-005 relation_other pairs with registry v1.1 + prompts v3."""
+
+    from cumap.config import REPO_ROOT, get_settings, load_demo_slice
+    from cumap.expert_kg.relation_pilot import estimate_usd, load_other_pairs, run_pilot, summarise
+    from cumap.llm.client import LLMClient
+    from cumap.schemas.relations import RelationRegistry
+
+    settings = get_settings()
+    run_dir = REPO_ROOT / "data" / "processed" / "kg" / run
+    pairs = load_other_pairs(run_dir, REPO_ROOT / load_demo_slice().pd.source_jsonl)
+    if limit:
+        pairs = pairs[:limit]
+    est = estimate_usd(len(pairs))
+    typer.echo(f"{len(pairs)} pairs; estimated ${est:.2f} (cap ${max_usd:.2f})")
+    if dry_run:
+        return
+    if est > max_usd:
+        raise typer.BadParameter(f"estimate ${est:.2f} exceeds the ${max_usd:.2f} cap")
+    import uuid
+
+    settings.llm.stage_budgets_usd["relations"] = max_usd
+    client = LLMClient(settings, run_id=f"pilot_{uuid.uuid4().hex[:8]}")
+    registry = RelationRegistry.from_yaml(REPO_ROOT / "configs" / "relations_v1.1.yaml")
+    results = run_pilot(client, run_dir, pairs, registry, REPO_ROOT / "prompts", progress=typer.echo)
+    out = REPO_ROOT / "data" / "processed" / "pilot" / client.run_id
+    out.mkdir(parents=True, exist_ok=True)
+    (out / "results.json").write_text(json.dumps([r.to_dict() for r in results], indent=1, default=str), encoding="utf-8")
+    typer.echo(f"run {client.run_id}: spend ${client.spent_usd:.4f}, backend calls {client.backend_call_count} -> {out}")
+    typer.echo(json.dumps(summarise(results, {}) | {"names": None}, indent=1, default=str)[:1500])
+
+
 @kg_app.command("expected-subgraphs")
 def kg_expected_subgraphs() -> None:
     """Map gold propositions to KG edges to build per-question expected subgraphs."""
@@ -575,6 +764,69 @@ def student_extract(split: str = typer.Option(..., "--split")) -> None:
 def diagnose_run() -> None:
     """Align student graphs to expected subgraphs and produce DiagnosisRecords."""
     _not_implemented("cumap diagnose run", "M7")
+
+
+@eval_app.command("concept-ablation")
+def eval_concept_ablation(
+    split: str = typer.Option("dev", "--split", help="dev (ablation) | test (once per prompt version)"),
+    variants: str = typer.Option("all", "--variants", help="comma list of v2,E1,E2-union,E2-vote2,E3,E4,E5 or 'all'"),
+    limit: int | None = typer.Option(None, "--limit", help="only the first N sections"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="print the planned calls and cost, call nothing"),
+    max_usd: float = typer.Option(1.0, "--max-usd", help="hard cap for this command (concepts stage)"),
+) -> None:
+    """CR-007 §3.2: IIR concept-extraction ablation. Every call goes through LLMClient (cache, budget)."""
+    from cumap.config import REPO_ROOT, get_settings
+    from cumap.expert_kg.concept_ablation import (
+        default_variants,
+        load_split,
+        plan_variant,
+        run_ablation,
+    )
+    from cumap.expert_kg.concept_experiments import BASELINE, SINGLES
+    from cumap.schemas.relations import RelationRegistry
+
+    pool = {v.name: v for v in [BASELINE, *SINGLES]}
+    from cumap.expert_kg.concept_experiments import combine_variants
+
+    def _pick(n: str):
+        n = n.strip()
+        return combine_variants(n, [pool[x] for x in n.split("+")]) if "+" in n else pool[n]
+
+    chosen = default_variants() if variants == "all" else [_pick(n) for n in variants.split(",")]
+    sections, gold = load_split(REPO_ROOT, split)
+    if limit:
+        sections = sections[:limit]
+    typer.echo(f"{split}: {len(sections)} sections, {len(gold)} gold concepts")
+    total = 0.0
+    for v in chosen:
+        p = plan_variant(v, sections)
+        total += p.est_usd
+        typer.echo(f"  {v.name:10s} {p.calls:4d} calls  ~{p.est_input_tokens:>8d} input tokens  ~${p.est_usd:.4f} (upper bound; cache hits are free)")
+    typer.echo(f"  total upper bound ${total:.4f}; cap ${max_usd:.2f}")
+    if dry_run:
+        return
+    if total > max_usd:
+        raise typer.BadParameter(f"estimate ${total:.2f} exceeds --max-usd {max_usd}")
+    import spacy
+    from sentence_transformers import SentenceTransformer
+
+    from cumap.expert_kg.concept_ablation import new_run_id
+    from cumap.llm.client import LLMClient
+
+    settings = get_settings()
+    settings.llm.stage_budgets_usd["concepts"] = max_usd
+    client = LLMClient(settings, run_id=new_run_id("abl" if split == "dev" else "test"))
+    model = SentenceTransformer(settings.embeddings.model)
+    registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
+    scores = run_ablation(
+        client, chosen, sections, gold, root=REPO_ROOT, registry=registry,
+        nlp=spacy.load("en_core_web_sm"), embed_fn=lambda t: model.encode(t),
+        prompts_dir=REPO_ROOT / "prompts", progress=typer.echo,
+        fewshot_source=load_split(REPO_ROOT, "dev") if split != "dev" else None)
+    typer.echo(f"run {client.run_id}: spend ${client.spent_usd:.4f}, backend calls {client.backend_call_count}")
+    for n, s in scores.items():
+        typer.echo(f"  {n:10s} exact F1 {s['exact_micro']['f1']:.3f}  lenient F1 {s['lenient_micro']['f1']:.3f}  "
+                   f"P {s['lenient_micro']['precision']:.3f} R {s['lenient_micro']['recall']:.3f}")
 
 
 @eval_app.command("run")
@@ -638,6 +890,24 @@ def external_fetch(name: str = typer.Argument(..., help="Dataset name. Only 'iir
     dest_dir = settings.resolve(settings.paths.data_raw) / "external" / "iir_face"
     commit = fetch_iir_face(dest_dir)
     typer.echo(f"Fetched iir_face -> {dest_dir} at commit {commit}")
+
+
+@external_app.command("scrape-iir")
+def external_scrape_iir(
+    gate: float = typer.Option(0.90, "--gate", help="minimum gold-presence per section"),
+) -> None:
+    """CR-007 §3.1: rebuild the IIR test-split text from the book's public HTML edition (local use only),
+    apply the gold-presence gate and write the sections that pass under data/interim/external/."""
+    from cumap.config import REPO_ROOT
+    from cumap.data.iir_scrape import build_test_split, make_fetcher
+
+    ext = REPO_ROOT / "data" / "interim" / "external"
+    report = build_test_split(
+        REPO_ROOT / "data" / "raw" / "external" / "iir_face", ext,
+        make_fetcher(ext / "iir_html_cache"), gate=gate)
+    typer.echo(f"{report['n_kept']} of {report['n_sections']} sections passed the {gate:.0%} gate")
+    for e in report["excluded"]:
+        typer.echo(f"  EXCLUDED {e['section_id']}: {e['reason']}")
 
 
 @external_app.command("load")

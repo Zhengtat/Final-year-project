@@ -43,6 +43,8 @@ class Mention:
     section_id: str
     role: str
     quote: str
+    definition: str | None = None  # CR-007 §4.2: kept so a later `refined` mention can be traced
+    source: str = "llm"  # "llm" | "propagation" (CR-007 E3)
 
 
 @dataclass
@@ -55,6 +57,8 @@ class RegisteredConcept:
     aliases: list[str] = field(default_factory=list)
     mentions: list[Mention] = field(default_factory=list)
     embedding: np.ndarray | None = None
+    # CR-007 §4.2: append-only refinements (later `defined` mentions): {section_id, quote, definition}
+    description_history: list[dict] = field(default_factory=list)
 
 
 @dataclass
@@ -66,6 +70,10 @@ class CanonicalizationOutcome:
     reason: str | None = None
     auto_merged: bool = False  # exact-string match to an existing name/alias, no LLM call
     overridden: bool = False  # canonical_overrides.yaml forced or blocked this decision
+    # CR-007 §4.3
+    review: bool = False  # the LLM said "same" but similarity is below the review band: not merged
+    similarity: float | None = None  # similarity to `matched_concept_id`
+    related_ids: list[str] = field(default_factory=list)  # different node_type: never `same`
 
 
 @dataclass
@@ -176,7 +184,11 @@ class ConceptRegistry:
             node_type=mention.node_type,
             definition=mention.definition,
             first_introduced=mention.section_id,
-            mentions=[Mention(mention.section_id, mention.role, mention.evidence_quote)],
+            mentions=[
+                Mention(
+                    mention.section_id, mention.role, mention.evidence_quote, mention.definition
+                )
+            ],
         )
         self._concepts[concept_id] = concept
         return concept
@@ -188,7 +200,15 @@ class ConceptRegistry:
             and mention.canonical_name not in concept.aliases
         ):
             concept.aliases.append(mention.canonical_name)
-        concept.mentions.append(Mention(mention.section_id, mention.role, mention.evidence_quote))
+        concept.mentions.append(
+            Mention(
+                mention.section_id,
+                mention.role,
+                mention.evidence_quote,
+                mention.definition,
+                mention.source,
+            )
+        )
 
 
 def canonicalize_mention(
@@ -201,7 +221,14 @@ def canonicalize_mention(
     k: int = 5,
     fixture_name: str = "default",
     overrides: CanonicalOverrides | None = None,
+    type_aware: bool = False,
+    review_below: float | None = None,
 ) -> CanonicalizationOutcome:
+    """CR-007 §4.3 (off by default; the CR-007 pipeline turns both on): with `type_aware`, a
+    candidate with a different `node_type` is never offered as `same` (it is logged as a `related`
+    candidate for the taxonomy layer); with `review_below`, an LLM "same" whose similarity is under
+    the band is NOT merged but routed to the review sheet (decision "review", a new concept is
+    created, nothing is lost). Exact-string auto-merge and the overrides are unchanged."""
     overrides = overrides or CanonicalOverrides()
 
     # Exact-string duplicate: auto-merge, no LLM call (unless a human has specifically
@@ -248,6 +275,10 @@ def canonicalize_mention(
         else:
             filtered.append((candidate, sim))
     candidates = filtered
+    related_ids: list[str] = []
+    if type_aware:
+        related_ids = [c.concept_id for c, _ in candidates if c.node_type != mention.node_type]
+        candidates = [(c, sim) for c, sim in candidates if c.node_type == mention.node_type]
     if not candidates:
         new_concept = registry.add_new(mention)
         return CanonicalizationOutcome(
@@ -255,6 +286,7 @@ def canonicalize_mention(
             concept_id=new_concept.concept_id,
             llm_called=False,
             overridden=blocked_any,
+            related_ids=related_ids,
         )
 
     candidates_block = "\n".join(
@@ -282,6 +314,23 @@ def canonicalize_mention(
         candidates[idx][0].concept_id if idx is not None and 0 <= idx < len(candidates) else None
     )
 
+    matched_sim = candidates[idx][1] if idx is not None and 0 <= idx < len(candidates) else None
+    if (
+        decision == "same"
+        and matched_concept_id
+        and (review_below is not None and matched_sim is not None and matched_sim < review_below)
+    ):
+        new_concept = registry.add_new(mention)
+        return CanonicalizationOutcome(
+            decision="review",
+            concept_id=new_concept.concept_id,
+            llm_called=True,
+            matched_concept_id=matched_concept_id,
+            reason=result.output.reason,
+            review=True,
+            similarity=matched_sim,
+            related_ids=related_ids,
+        )
     if decision == "same" and matched_concept_id:
         registry.merge_alias(matched_concept_id, mention)
         return CanonicalizationOutcome(
@@ -290,6 +339,8 @@ def canonicalize_mention(
             llm_called=True,
             matched_concept_id=matched_concept_id,
             reason=result.output.reason,
+            similarity=matched_sim,
+            related_ids=related_ids,
         )
 
     # broader / narrower / different (or "same" with a missing index, treated as new
@@ -302,3 +353,42 @@ def canonicalize_mention(
         matched_concept_id=matched_concept_id,
         reason=result.output.reason,
     )
+
+
+def write_merge_review_sheet(rows: list[dict], path: Path) -> None:
+    """Blind review sheet for merges routed to review (CR-003 sheet rules): the two names, their
+    node types and evidence quotes only. No model reason, similarity or decision is shown."""
+    import csv
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(
+            [
+                "id",
+                "section",
+                "mention",
+                "mention_type",
+                "mention_evidence",
+                "existing_concept",
+                "existing_type",
+                "existing_definition",
+                "mark (same/different)",
+                "note",
+            ]
+        )
+        for i, r in enumerate(rows, 1):
+            w.writerow(
+                [
+                    i,
+                    r["section_id"],
+                    r["alias"],
+                    r["mention_type"],
+                    r["quote"],
+                    r["candidate_name"],
+                    r["candidate_type"],
+                    r["candidate_definition"] or "",
+                    "",
+                    "",
+                ]
+            )

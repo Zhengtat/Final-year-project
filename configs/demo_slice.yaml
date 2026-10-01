@@ -7,7 +7,7 @@
 
 pd:
   source_jsonl: data/interim/textbook_sections.jsonl
-  chapters: [2, 3] # "Direct Links", "Internetworking"
+  chapters: [1, 2, 3] # CR-007: ch1 ("Foundation") re-included; CR-005 had cut the slice to [2, 3] (DECISIONS 2026-09-29)
   domain: computer networking
   relations_enabled: true
   # ch1 "Foundation" (7 sections, 16,983 words) was dropped: a direct text search

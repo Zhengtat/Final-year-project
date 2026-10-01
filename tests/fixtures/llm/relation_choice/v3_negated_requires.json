@@ -1,0 +1,1 @@
+{"direction": "forward", "comparison_dimension": null, "other_description": null, "other_suggested_label": null, "relation": "requires", "evidence_quote": "hosts need not require a repeater", "statement": "A host does not require a repeater.", "_usage": {"input_tokens": 100, "output_tokens": 30}}

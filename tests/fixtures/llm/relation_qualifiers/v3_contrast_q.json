@@ -1,0 +1,1 @@
+{"polarity": "affirmed", "modality": "necessary", "conditions": [], "part_type": null, "dimension": "cost", "action_type": null, "surface_phrase": "lower cost than", "corrects_intuition": false, "intuition": null, "_usage": {"input_tokens": 100, "output_tokens": 30}}

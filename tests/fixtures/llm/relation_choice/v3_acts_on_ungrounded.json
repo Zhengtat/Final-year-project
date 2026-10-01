@@ -1,0 +1,1 @@
+{"direction": "forward", "comparison_dimension": null, "other_description": null, "other_suggested_label": null, "relation": "acts_on", "evidence_quote": "forwards each frame", "statement": "The switch forwards the frame.", "_usage": {"input_tokens": 100, "output_tokens": 30}}
