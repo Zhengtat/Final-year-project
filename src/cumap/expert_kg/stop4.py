@@ -46,8 +46,15 @@ def _ci(n: int, d: int) -> str:
     return f"{100 * n / d:.1f}% (95% Wilson {100 * w.low:.1f}-{100 * w.high:.1f}%, n={d})"
 
 
+def _is_edge(r: dict) -> bool:
+    """An accepted edge that is in the graph (not one whose relation failed its gate)."""
+    return r["outcome"] == "edge" and not r.get("gated_dropped")
+
+
 def _outcome_bucket(r: dict) -> str:
-    return "edge" if r["outcome"] == "edge" else r["outcome"]
+    if r.get("gated_dropped"):
+        return "gated_dropped"
+    return r["outcome"]
 
 
 def build(
@@ -84,6 +91,8 @@ def build(
         f"| OTHER | {_pct(BASE['other'], BASE['pairs'])} | {_pct(oc['other'], n)} |",
         f"| NO_RELATION | {_pct(BASE['no_relation'], BASE['pairs'])} | {_pct(oc['no_relation'], n)} |",
         f"| rejected by a check | - | {_pct(oc['rejected'], n)} |",
+        "| edge of a relation dropped at its gate (`gated_dropped`: kept in run data, not in the graph) | - "
+        f"| {_pct(oc['gated_dropped'], n)} |",
         "",
     ]
     rej = Counter(r["reason"] for r in sel if r["outcome"] == "rejected")
@@ -147,8 +156,8 @@ def build(
     ]
 
     # ---- relations
-    ec = Counter(r["relation"] for r in sel if r["outcome"] == "edge")
-    fam = Counter(r["family"] for r in sel if r["outcome"] == "edge")
+    ec = Counter(r["relation"] for r in sel if _is_edge(r))
+    fam = Counter(r["family"] for r in sel if _is_edge(r))
     dr = Counter(
         r["relation"] for r in sel if r["outcome"] == "rejected" and r["reason"] == "domain_range"
     )
@@ -262,7 +271,10 @@ def build(
 
     out_md.write_text("\n".join(lines), encoding="utf-8")
 
-    sheets = write_sheets(cp, sel, concepts, registry, edges, checks_dir, seed)
+    try:
+        sheets = write_sheets(cp, sel, concepts, registry, edges, checks_dir, seed)
+    except FileExistsError as exc:  # the owner has marked these sheets: leave them alone
+        sheets = {"sheets": f"kept: {exc}"}
     return {"report": str(out_md), **sheets}
 
 
@@ -422,21 +434,37 @@ def panel_rows(run_dir: Path, sections_jsonl: Path) -> dict:
     rej = Counter(r["reason"] for r in sel if r["outcome"] == "rejected")
     concepts = {c["concept_id"]: c for c in cp["concepts"]}
     attempted = {r["pair"][k] for r in sel for k in ("concept_x_id", "concept_y_id")}
-    edges = [e for ch in (1, 2, 3) for e in _jsonl(run_dir / "snapshots" / f"ch{ch}" / "edges.jsonl")]
+    edges = [
+        e for ch in (1, 2, 3) for e in _jsonl(run_dir / "snapshots" / f"ch{ch}" / "edges.jsonl")
+    ]
     linked = {e["source_concept_id"] for e in edges} | {e["target_concept_id"] for e in edges}
-    defined = [cid for cid, c in concepts.items() if any(m["role"] in ("defined", "refined") for m in c["mentions"])]
-    fam = Counter(r["family"] for r in sel if r["outcome"] == "edge")
+    defined = [
+        cid
+        for cid, c in concepts.items()
+        if any(m["role"] in ("defined", "refined") for m in c["mentions"])
+    ]
+    fam = Counter(r["family"] for r in sel if _is_edge(r))
     fcs = cp["concept_first_chapter"]
     late = sum(
-        max(fcs.get(e["source_concept_id"], 0), fcs.get(e["target_concept_id"], 0)) > sec_ch.get(e["section_id"], 0) > 0
+        max(fcs.get(e["source_concept_id"], 0), fcs.get(e["target_concept_id"], 0))
+        > sec_ch.get(e["section_id"], 0)
+        > 0
         for e in edges
     )
     se = sum(r["outcome"] == "edge" for r in smp)
     b = BASE
     return {
         "selection": [
-            ("Concepts with at least one classified pair", "152 of 736", f"{len(attempted)} of {len(concepts)}"),
-            ("Concepts with at least one typed edge (all)", _pct(*b["linked"]["all"]), _pct(sum(c in linked for c in concepts), len(concepts))),
+            (
+                "Concepts with at least one classified pair",
+                "152 of 736",
+                f"{len(attempted)} of {len(concepts)}",
+            ),
+            (
+                "Concepts with at least one typed edge (all)",
+                _pct(*b["linked"]["all"]),
+                _pct(sum(c in linked for c in concepts), len(concepts)),
+            ),
             (
                 "Defined concepts with at least one typed edge",
                 _pct(*b["linked"]["defined"]),
@@ -448,8 +476,17 @@ def panel_rows(run_dir: Path, sections_jsonl: Path) -> dict:
             ("Accepted edge", _pct(b["edge"], b["pairs"]), _pct(oc["edge"], n)),
             ("OTHER", _pct(b["other"], b["pairs"]), _pct(oc["other"], n)),
             ("NO_RELATION", _pct(b["no_relation"], b["pairs"]), _pct(oc["no_relation"], n)),
-            ("Rejected by a check", "-", f"{_pct(oc['rejected'], n)} (domain/range {rej.get('domain_range', 0)}, endpoint not grounded {rej.get('endpoint_not_grounded', 0)})"),
-            ("mechanism_process edges", str(b["mechanism_process_edges"]), str(fam["mechanism_process"])),
+            ("Edges of relations dropped at their gate", "-", str(oc["gated_dropped"])),
+            (
+                "Rejected by a check",
+                "-",
+                f"{_pct(oc['rejected'], n)} (domain/range {rej.get('domain_range', 0)}, endpoint not grounded {rej.get('endpoint_not_grounded', 0)})",
+            ),
+            (
+                "mechanism_process edges",
+                str(b["mechanism_process_edges"]),
+                str(fam["mechanism_process"]),
+            ),
             ("Late-counted edges", "15 of 87 (ch2)", f"{late} of {len(edges)}"),
         ],
         "missed": f"{se} of {len(smp)} unselected sample pairs classify as edges: {_ci(se, len(smp))}",

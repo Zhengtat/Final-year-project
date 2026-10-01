@@ -234,6 +234,17 @@ def relations_stage(
     return cp
 
 
+def mark_gated_dropped(cp: Checkpoint, registry: RelationRegistry) -> int:
+    """Edges of a relation the registry no longer has (it failed its gate) stay in the run data,
+    flagged `gated_dropped`, and are kept out of the graph. Never deleted. Returns how many."""
+    n = 0
+    for r in cp.relation_results_v3:
+        if r["outcome"] == "edge" and r["relation"] not in registry:
+            r["gated_dropped"] = True
+            n += 1
+    return n
+
+
 def build_pair_registry(cp: Checkpoint) -> PairRegistry:
     """Adapter: v3 results of the SELECTED group -> the PairRegistry the snapshot writer expects. (The
     unselected sample is measurement only and is kept out of the graph.)"""
@@ -243,7 +254,7 @@ def build_pair_registry(cp: Checkpoint) -> PairRegistry:
             continue
         pair = CandidatePair(**r["pair"])
         edge = None
-        if r["outcome"] == "edge":
+        if r["outcome"] == "edge" and not r.get("gated_dropped"):
             q = r["qualifiers"]
             edge = RelationEdgeCandidate(
                 pair=pair,
@@ -268,7 +279,7 @@ def build_pair_registry(cp: Checkpoint) -> PairRegistry:
                     pair.concept_y_id,
                     True,
                     edge,
-                    None if edge else (r["reason"] or r["outcome"]),
+                    None if edge else ("gated_dropped" if r.get("gated_dropped") else (r["reason"] or r["outcome"])),
                     [pair.sentence],
                 )
             ]

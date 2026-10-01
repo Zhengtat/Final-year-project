@@ -218,9 +218,11 @@ def test_marked_sheets_are_never_overwritten(tmp_path):
     with sheet.open("w", newline="") as f:
         csv.writer(f).writerows(rows)
     before = sheet.read_text()
+    out = stop4.build(run, sections(tmp_path), REG, tmp_path / "r2.md", checks)
+    assert out["sheets"].startswith("kept")  # the report is rebuilt, the marked sheet is untouched
+    assert sheet.read_text() == before
     try:
-        stop4.build(run, sections(tmp_path), REG, tmp_path / "r2.md", checks)
+        stop4.guard_marked_sheets(checks)
         raise AssertionError("expected a refusal")
     except FileExistsError:
         pass
-    assert sheet.read_text() == before

@@ -120,7 +120,9 @@ class RelationRegistry:
         chain_link_types: list[ChainLinkTypeDef] | None = None,
         minor: int = 0,
         output_fields: dict | None = None,
+        patch: int = 0,
     ):
+        self.patch = patch  # v1.1.1 = (1, 1, 1): v1.1 minus the relations that failed their gate
         self.minor = minor  # registry version is `version.minor` (v1.1 = 1, 1)
         self.output_fields: dict = output_fields or {}  # extra relation-choice output fields (v1.1)
         self._by_name: dict[str, RelationType] = {r.name: r for r in relations}
@@ -148,11 +150,12 @@ class RelationRegistry:
             chain_link_types=[ChainLinkTypeDef(**c) for c in raw.get("chain_link_types", [])],
             minor=raw.get("minor", 0),
             output_fields=raw.get("output_fields") or {},
+            patch=raw.get("patch", 0),
         )
 
     @property
     def version_label(self) -> str:
-        return f"{self.version}.{self.minor}"
+        return f"{self.version}.{self.minor}" + (f".{self.patch}" if self.patch else "")
 
     def __contains__(self, name: str) -> bool:
         return name in self._by_name

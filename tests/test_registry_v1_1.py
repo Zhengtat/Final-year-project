@@ -99,3 +99,21 @@ def test_patch_for_the_wrong_base_version_is_refused():
                 "adds": {"relations": [{"name": "is_a", "family": "x"}]},
             },
         )
+
+
+def test_v1_1_1_is_v1_1_minus_the_failed_gated_relations(tmp_path):
+    from cumap.schemas.registry_patch import drop_relations
+
+    base = yaml.safe_load((V11).read_text())
+    out = drop_relations(base, ["identifies", "encapsulates", "trades_off_with"], patch=1)
+    names = {r["name"] for r in out["relations"]}
+    assert not names & {"identifies", "encapsulates", "trades_off_with"}
+    assert {"acts_on", "connected_to", "part_of"} <= names
+    for r in out["relations"]:  # no dangling references to a dropped relation
+        assert "encapsulates" not in r.get("conflicts_with", [])
+        assert all(m["relation"] != "identifies" for m in r.get("near_misses", []))
+    p = tmp_path / "r.yaml"
+    p.write_text(yaml.safe_dump(out, sort_keys=False))
+    reg = RelationRegistry.from_yaml(p)
+    assert reg.version_label == "1.1.1" and "identifies" not in reg
+    assert len(base["relations"]) == 21  # the input is not mutated

@@ -598,7 +598,7 @@ def kg_rerun(
     chs = [int(x) for x in chapters.split(",")]
     sections = sr.load_sections(REPO_ROOT / load_demo_slice().pd.source_jsonl, chs)
     cp = load_checkpoint(run_dir) or Checkpoint(run_id=run_id, stage="concepts")
-    registry = RelationRegistry.from_yaml(REPO_ROOT / "configs" / "relations_v1.1.yaml")
+    registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
     prompts = PromptSet.load(REPO_ROOT / "prompts")
     model = SentenceTransformer(settings.embeddings.model)
     embed_fn = lambda t: model.encode(t)
@@ -655,6 +655,9 @@ def kg_rerun(
         cp = sr.relations_stage(client, cp, run_dir, registry, REPO_ROOT / "prompts", embed_fn, progress=typer.echo)
         typer.echo(f"relation results {len(cp.relation_results_v3)}; spend ${client.spent_usd:.4f}; backend calls {client.backend_call_count}")
     elif stage == "snapshots":
+        dropped = sr.mark_gated_dropped(cp, registry)
+        if dropped:
+            typer.echo(f"{dropped} edges of relations missing from {registry.version_label} flagged gated_dropped (kept out of the graph)")
         results = sr.snapshots_stage(cp, run_dir, sections, registry, embed_fn)
         save_checkpoint(cp, run_dir)
         for r in results:
@@ -686,17 +689,18 @@ def kg_stop5(
     run: str = typer.Option(..., "--run"),
     sheets_dir: str = typer.Option(..., "--sheets-dir", help="folder with the owner-filled cr007_*_sheet.csv and keys"),
     org: str | None = typer.Option(None, "--org"),
+    gated_relations: str = typer.Option(
+        "identifies,encapsulates,trades_off_with", "--gated", help="the relations that were gated in v1.1"
+    ),
 ) -> None:
     """CR-007 STOP 5: gate table, precision CIs, merge errors by similarity, spend by stage ($0)."""
     from pathlib import Path
 
     from cumap.config import REPO_ROOT, get_settings
     from cumap.expert_kg.stop5 import build_report
-    from cumap.schemas.relations import RelationRegistry
 
     settings = get_settings()
-    registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
-    gated = [r.name for r in registry.all_relations() if getattr(r, "gate", None) == "gated"]
+    gated = gated_relations.split(",")
     path = build_report(
         REPO_ROOT / "data" / "processed" / "kg" / run, Path(sheets_dir), gated=gated,
         tiers=settings.llm.tiers, log_path=REPO_ROOT / "data" / "logs" / "llm_calls.jsonl",

@@ -1,4 +1,4 @@
-# CR-007 STOP 5: gate table and precision (run `slice3_a1`, org `org_71d17994`)
+# CR-007 STOP 5: gate table and precision (run `slice3_a1`, org `org_baa0d058`)
 
 Marks read from `data/gold` (owner copies). $0, read-only.
 
