@@ -336,6 +336,7 @@ def run_canonicalize_stage(
                             "auto_merged": outcome.auto_merged,
                             "overridden": outcome.overridden,
                             "reason": outcome.reason,
+                            "similarity": outcome.similarity,
                         }
                     )
                 elif outcome.decision == "review":

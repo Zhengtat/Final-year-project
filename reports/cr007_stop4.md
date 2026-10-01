@@ -50,11 +50,11 @@ Target in the CR: OTHER <= 15%. Measured 20.9% of all pairs (23.0% of pairs not 
 | contrasts_with | legacy | 3 | 0 |
 | equivalent_to | legacy | 3 | 0 |
 | encapsulates | gated | 2 | 0 |
-| prevents | legacy | 1 | 0 |
 | trades_off_with | gated | 1 | 0 |
-| precedes | legacy | 0 | 1 |
+| prevents | legacy | 1 | 0 |
 | triggers | legacy | 0 | 2 |
 | decreases | legacy | 0 | 1 |
+| precedes | legacy | 0 | 1 |
 
 By family: {'classification_structure': 164, 'mechanism_process': 42, 'function_means': 58, 'dependency': 28, 'comparison': 7, 'cause_effect': 14}. **mechanism_process edges: 42** (CR-005: 2; target >= 20).
 Endpoint-grounding rejections: 20. Domain/range rejections: 45.
@@ -75,22 +75,16 @@ Generic `Concept` is a wildcard in the domain/range check (owner decision, 2026-
 
 Edges whose evidence section is in an earlier chapter than an endpoint's first chapter: 0 of 313 (CR-005: 15 of 87 in ch2; target ~0).
 
-## 7. corrects_intuition edges
-
-- 3.3: network -[has_property]-> maximum transmission unit; intuition: The maximum transmission unit is the largest packet size on the network.; quote: "every network type has a maximum transmission unit (MTU)"
-- 1.2: application -[causes]-> network; intuition: Understanding how networks work today is sufficient without understanding the underlying concepts.; quote: "networks are constantly changing as technology evolves and new applications are invented"
-- 2.5: implementation -[performs]-> Piggybacking; intuition: This particular implementation supports piggybacking ACKs on data frames.; quote: "implementation does not support piggybacking ACKs on data frames"
-
-## 8. Merges
+## 7. Merges
 
 1027 merge records; 24 needed an LLM call (non-trivial); 16 routed to review (similarity < 0.70, not merged); 521 different-type near-duplicates kept as `related`. Merge precision awaits the owner sheet.
 
-## 9. Core-periphery (CR-006 check on the new graph)
+## 8. Core-periphery (CR-006 check on the new graph)
 
 - ch1: no clear core, rho 0.167; primary null delta 0.042 (z 1.2); second null delta 0.064 (z 2.5)
 - ch2: no clear core, rho 0.083; primary null delta 0.003 (z 0.2); second null delta 0.011 (z 1.6)
 - ch3: weak core, rho 0.094; primary null delta 0.029 (z 4.2); second null delta 0.013 (z 2.9)
 
-## 10. Concept extraction (IIR, from STOP 2)
+## 9. Concept extraction (IIR, from STOP 2)
 
 v2: lenient micro F1 0.433/0.444 (two executions of the test split); v3 (v2 + E3): 0.485 (see `reports/cr007_stop2_concepts.md`).

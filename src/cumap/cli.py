@@ -681,6 +681,31 @@ def kg_stop4(
     typer.echo(json.dumps(out, indent=1))
 
 
+@kg_app.command("stop5")
+def kg_stop5(
+    run: str = typer.Option(..., "--run"),
+    sheets_dir: str = typer.Option(..., "--sheets-dir", help="folder with the owner-filled cr007_*_sheet.csv and keys"),
+    org: str | None = typer.Option(None, "--org"),
+) -> None:
+    """CR-007 STOP 5: gate table, precision CIs, merge errors by similarity, spend by stage ($0)."""
+    from pathlib import Path
+
+    from cumap.config import REPO_ROOT, get_settings
+    from cumap.expert_kg.stop5 import build_report
+    from cumap.schemas.relations import RelationRegistry
+
+    settings = get_settings()
+    registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
+    gated = [r.name for r in registry.all_relations() if getattr(r, "gate", None) == "gated"]
+    path = build_report(
+        REPO_ROOT / "data" / "processed" / "kg" / run, Path(sheets_dir), gated=gated,
+        tiers=settings.llm.tiers, log_path=REPO_ROOT / "data" / "logs" / "llm_calls.jsonl",
+        out_md=REPO_ROOT / "reports" / "cr007_stop5.md", org_id=org,
+        preflight={"canonicalize": 1.54, "relations": 5.175},
+    )
+    typer.echo(f"wrote {path}")
+
+
 @kg_app.command("relation-pilot")
 def kg_relation_pilot(
     run: str = typer.Option(..., "--run", help="P&D run_id whose OTHER pairs are re-classified"),

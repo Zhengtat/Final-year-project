@@ -220,24 +220,10 @@ def build(
         "",
     ]
 
-    # ---- corrects_intuition
-    ci = [r for r in sel if r["outcome"] == "edge" and r["qualifiers"].get("corrects_intuition")]
-    lines += ["## 7. corrects_intuition edges", ""]
-    for r in ci:
-        p = r["pair"]
-        lines.append(
-            f"- {p['section_id']}: {concepts[p['concept_x_id']]['canonical_name']} "
-            f"-[{r['relation']}]-> {concepts[p['concept_y_id']]['canonical_name']}; "
-            f'intuition: {r["qualifiers"].get("intuition")}; quote: "{r["evidence_quote"]}"'
-        )
-    if not ci:
-        lines.append("None.")
-    lines.append("")
-
     # ---- merges
     mrg = [m for m in cp["merges"] if m.get("llm_called") and not m.get("overridden")]
     lines += [
-        "## 8. Merges",
+        "## 7. Merges",
         "",
         f"{len(cp['merges'])} merge records; {len(mrg)} needed an LLM call (non-trivial); "
         f"{len(cp['merge_review'])} routed to review (similarity < 0.70, not merged); "
@@ -248,7 +234,7 @@ def build(
 
     # ---- core-periphery
     if org_dir and (org_dir / "manifest.json").exists():
-        lines += ["## 9. Core-periphery (CR-006 check on the new graph)", ""]
+        lines += ["## 8. Core-periphery (CR-006 check on the new graph)", ""]
         chs = json.loads((org_dir / "manifest.json").read_text())["chapters"]
         for ch in (1, 2, 3):
             if str(ch) in chs:
@@ -267,7 +253,7 @@ def build(
         lines.append("")
 
     lines += [
-        "## 10. Concept extraction (IIR, from STOP 2)",
+        "## 9. Concept extraction (IIR, from STOP 2)",
         "",
         "v2: lenient micro F1 0.433/0.444 (two executions of the test split); v3 (v2 + E3): 0.485 "
         "(see `reports/cr007_stop2_concepts.md`).",
