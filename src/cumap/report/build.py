@@ -110,7 +110,7 @@ def _iir_section_html(sec_eval: dict, text: str) -> str:
 
 def _pd_section_html(mentions: list[dict], text: str) -> str:
     spans: list[Span] = []
-    rank = {"defined": 0, "used": 1, "mentioned": 2}
+    rank = {"defined": 0, "refined": 0, "used": 1, "mentioned": 2}
     for m in sorted(mentions, key=lambda m: rank[m["role"]]):
         loc = find_span(text, m["evidence_quote"], ignore_case=False) or find_span(
             text, m["evidence_quote"]
@@ -184,7 +184,7 @@ def _worked_example_html(ex: dict, registry: RelationRegistry, graph_svg: str) -
 def _key_concept_grid(growth: D.GrowthData) -> str:
     secs = growth.section_labels
     head = "".join(f'<th title="{escape(s["id"])}">{escape(s["label"][:12])}</th>' for s in secs)
-    glyph = {"defined": "●", "used": "◐", "mentioned": "○"}
+    glyph = {"defined": "●", "refined": "●", "used": "◐", "mentioned": "○"}
     rows = []
     for c in growth.key_concepts:
         cells = "".join(

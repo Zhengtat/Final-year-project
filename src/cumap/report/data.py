@@ -218,7 +218,7 @@ def build_growth(
     key_concepts = []
     for cid in key_ids:
         by_section: dict[str, str] = {}
-        rank_role = {"defined": 3, "used": 2, "mentioned": 1}
+        rank_role = {"defined": 3, "refined": 3, "used": 2, "mentioned": 1}  # CR-007: refined shows as defined
         for m in concepts[cid]["mentions"]:
             if rank_role[m["role"]] > rank_role.get(by_section.get(m["section_id"], ""), 0):
                 by_section[m["section_id"]] = m["role"]
