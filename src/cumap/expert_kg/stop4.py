@@ -284,6 +284,7 @@ def write_sheets(
     seed: int,
 ) -> dict:
     checks_dir.mkdir(parents=True, exist_ok=True)
+    guard_marked_sheets(checks_dir)
     rng = random.Random(seed)
 
     # merges: all non-trivial LLM-approved merges + band-routed (blind: names and evidence only)
@@ -454,3 +455,19 @@ def panel_rows(run_dir: Path, sections_jsonl: Path) -> dict:
         "missed": f"{se} of {len(smp)} unselected sample pairs classify as edges: {_ci(se, len(smp))}",
         "run_id": cp["run_id"],
     }
+
+
+SHEETS = ("cr007_merge_sheet.csv", "cr007_edge_sheet.csv")
+
+
+def guard_marked_sheets(checks_dir: Path) -> None:
+    """Never overwrite a sheet the owner has started marking (a regenerated sheet wiped the owner's
+    marks once, 2026-10-01). Delete the file by hand to regenerate it on purpose."""
+    for name in SHEETS:
+        path = checks_dir / name
+        if not path.exists():
+            continue
+        with path.open(newline="", encoding="utf-8") as f:
+            rows = list(csv.DictReader(f))
+        if any((r.get(k) or "").strip() for r in rows for k in r if k.startswith("mark")):
+            raise FileExistsError(f"{path} already has owner marks; refusing to overwrite it")

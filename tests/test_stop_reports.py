@@ -206,3 +206,21 @@ def test_stop5_report_flags_provisional_marks_and_lists_flagged_edges(tmp_path):
     assert "PROVISIONAL" in text  # not under data/gold
     assert "1 flagged of 4" in text and "| identifies | 0 | 0 | 0 | n/a | drop" in text
     assert "<0.70 | band | same | 1" in text
+
+
+def test_marked_sheets_are_never_overwritten(tmp_path):
+    run = make_run(tmp_path)
+    checks = tmp_path / "checks"
+    stop4.build(run, sections(tmp_path), REG, tmp_path / "r.md", checks)
+    sheet = checks / "cr007_edge_sheet.csv"
+    rows = list(csv.reader(sheet.open()))
+    rows[1][-2] = "correct"  # the owner marks one edge
+    with sheet.open("w", newline="") as f:
+        csv.writer(f).writerows(rows)
+    before = sheet.read_text()
+    try:
+        stop4.build(run, sections(tmp_path), REG, tmp_path / "r2.md", checks)
+        raise AssertionError("expected a refusal")
+    except FileExistsError:
+        pass
+    assert sheet.read_text() == before
