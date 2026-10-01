@@ -248,6 +248,18 @@ Critical path: **M3 and M4**, because both depend on your annotation time. Start
 
 ---
 
+## M5.0c — Extraction v3 (CR-007)
+
+**Goal:** raise relation recall and granularity on the ch1-3 slice before the full-book run; the M5 full-book run uses this v3 pipeline.
+
+**Branch:** `cr-007-extraction-v3` (from `main`); tag `cr-007-complete` on merge (after the owner signs off STOP 5).
+
+**Built:** IIR scraper promoted to `src/` with a gold-presence gate; concept ablation (E1-E5, rule pre-registered, test run once); longest-match mentions; first-occurrence and role rules; coverage-aware global pair selection; canonicalisation v2 (type-aware, review band); registry v1.1; relation prompts v3 and a v3 classifier with endpoint grounding; prompt logging; slice re-run driver (`cumap kg rerun`), STOP 4/5 report builders (`cumap kg stop4|stop5`).
+
+**Acceptance checks:** tests pass with no network; STOP 4 comparison table (CR-005 vs CR-007, selection and classifier effects reported separately); blind merge and edge sheets marked by the owner; STOP 5 gate table and Wilson CIs; $0 report refresh from logged outputs.
+
+---
+
 ## M5 — Expert KG pipeline v1 (2.5 wk)
 
 **Goal:** textbook → validated expert KG, chapter by chapter, with cross-chapter linking.
