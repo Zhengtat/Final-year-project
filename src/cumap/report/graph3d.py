@@ -218,7 +218,7 @@ let yaw=0.6,pitch=0.3,zoom=1,panX=0,panY=0,sel=null,hover=null,drag=false,moved=
 let goX=null,goY=null;
 let mode=3,mix=0,mixFrom=0,mixTo=0,mixT0=0,chIdx=P?P.chapters.length-1:0;const MIX_MS=360;
 const bar=$('#timebar'),all=$('#showall'),pre=$('#showprereq'),fam=$('#famcolor'),play=$('#play'),speed=$('#speed');
-const chbar=$('#chbar'),rawrad=$('#rawrad'),showOuter=$('#showouter'),showBand=$('#showband'),crossOnly=$('#crossonly'),tip=$('#tip');
+const chbar=$('#chbar'),rawrad=$('#rawrad'),showOuter=$('#showouter'),showBand=$('#showband'),crossOnly=$('#crossonly'),tip=$('#tip'),inf=$('#showinf'),conf=$('#showconf');
 const easeOut=t=>1-Math.pow(1-t,5);
 const HINTS={2:['Drag to move','Scroll to zoom','Click a concept'],3:['Drag to spin','Scroll to zoom','Shift-drag to move','Click a concept'],4:['Drag to move','Scroll to zoom','Click a concept to see why it moved']};
 function setHint(){$('#hint').innerHTML=HINTS[mode].map(t=>'<span>'+t+'</span>').join('');}
@@ -231,7 +231,7 @@ function visibleTargets(){const t=+bar.value,st=STEPS[t];
  $('#stepname').textContent='Section '+st.caption;$('#stepch').textContent='Chapter '+st.chapter+', step '+(t+1)+' of '+STEPS.length;
  N.forEach(n=>{n.ta=(n.sec<=t&&(all.checked||n.rank<D.topn))?1:0;});
  let ne=0,nn=0;N.forEach(n=>{if(n.ta)nn++;});
- E.forEach(e=>{e.ta=(e.sec<=t&&e.S.ta&&e.T.ta)?1:0;if(e.ta)ne++;if(t!==prev&&e.ta&&e.sec===t&&!reduce)e.pop=1;});
+ E.forEach(e=>{e.ta=(e.sec<=t&&e.S.ta&&e.T.ta&&(!e.inf||inf.checked))?1:0;if(e.ta)ne++;if(t!==prev&&e.ta&&e.sec===t&&!reduce)e.pop=1;});
  let m=0;for(let i=0;i<=t;i++)m+=STEPS[i].merges;
  $('#cn').textContent=nn+' concepts';$('#ce').textContent=ne+' relations';$('#cm').textContent=m+' merged names';prev=t;need=1;}
 function fitR(){return (showBand.checked?(P.r_max+0.2):(showOuter.checked?P.r_max:P.ring_radii[2]))*1.08;}
@@ -242,7 +242,7 @@ function sphereTargets(){const ch=P.chapters[chIdx],vr=new Set(P.visible_rings);
  N.forEach(n=>{const s=(P.sph[n.i]||{})[String(ch)];n.ss=s||null;n.ta=0;if(!s||ch===0)return;
   n.sring=s[ri];n.imp=s[imI];const rr=s[rdI]*R/fit,a=s[4]*Math.PI/180;n.tx=rr*Math.cos(a);n.ty=rr*Math.sin(a);
   if(vr.has(n.sring)){n.ta=1;nn++;}});
- let ne=0;E.forEach(e=>{const ec=P.edge_chapter[e.id];e.ta=(ch>0&&ec!==undefined&&ec<=ch&&e.S.ta&&e.T.ta&&(!crossOnly.checked||e.cross))?1:0;if(e.ta)ne++;});
+ let ne=0;E.forEach(e=>{const ec=P.edge_chapter[e.id];e.ta=(ch>0&&ec!==undefined&&ec<=ch&&e.S.ta&&e.T.ta&&(!e.inf||inf.checked)&&(!crossOnly.checked||e.cross))?1:0;if(e.ta)ne++;});
  const c=P.counts[String(ch)],cp=P.cp[String(ch)];
  $('#stepname').textContent=ch===0?'Start: the book only':'Sphere after chapter '+ch;
  $('#stepch').textContent=ch===0?'no concepts yet':'radius basis: '+(raw?'raw':'adjusted')+' importance';
@@ -296,7 +296,8 @@ function draw(){
   ctx.globalAlpha=al*dim*(hi?1:0.5*(depthA(e.S)+depthA(e.T)));
   const col=e.cross?C.ink:(fam.checked?C.s[e.slot]:C.ref);
   ctx.strokeStyle=col;ctx.fillStyle=col;ctx.lineWidth=(e.cross?2:1.1)+(hi?1.2:0)+e.pop*3;
-  ctx.setLineDash(e.neg?[6,4]:[]);
+  ctx.setLineDash(e.inf?[2,4]:(e.neg?[6,4]:[]));
+  if(conf.checked&&e.conf){ctx.strokeStyle='#c0392b';ctx.lineWidth+=2;}
   const dx=e.T.sx-e.S.sx,dy=e.T.sy-e.S.sy,d=Math.hypot(dx,dy)||1,tr=e.T.r+2;
   const x2=e.T.sx-dx/d*tr,y2=e.T.sy-dy/d*tr;
   ctx.beginPath();ctx.moveTo(e.S.sx,e.S.sy);ctx.lineTo(x2,y2);ctx.stroke();ctx.setLineDash([]);
@@ -402,8 +403,8 @@ play.addEventListener('click',()=>timer?stop():start());
 speed.addEventListener('change',()=>{if(timer){stop();start();}});
 bar.addEventListener('input',()=>{stop();visibleTargets();});
 if(chbar)chbar.addEventListener('input',()=>{stop();chIdx=+chbar.value;sphereTargets();if(sel)show(sel);});
-[all,pre,fam].forEach(x=>x.addEventListener('input',()=>{retarget();legend();}));
-[rawrad,showOuter,showBand,crossOnly].forEach(x=>{if(x)x.addEventListener('input',()=>{if(mode===4){sphereTargets();if(sel)show(sel);}});});
+[all,pre,fam,inf,conf].forEach(x=>x.addEventListener('input',()=>{retarget();legend();}));
+[rawrad,showOuter,showBand,crossOnly,inf,conf].forEach(x=>{if(x)x.addEventListener('input',()=>{if(mode===4){sphereTargets();if(sel)show(sel);}});});
 const fl=$('#famlegend');
 function legend(){fl.innerHTML=fam.checked?D.families.map(f=>'<span class="chip"><i class="dot" style="background:var(--s'+(f.slot+1)+')"></i>'+esc(f.name)+'</span>').join(''):'';need=1;}
 visibleTargets();N.forEach(n=>{n.a=n.ta;n.pop=0;});E.forEach(e=>{e.a=e.ta;e.pop=0;});
@@ -482,6 +483,8 @@ def growth3d_page(data: dict, *, css: str, banner: str, footer: str, top_n: int)
         '<label class="pill not-sphere"><input type="checkbox" id="showall">Show all concepts</label>'
         '<label class="pill not-sphere"><input type="checkbox" id="showprereq" checked>Show prerequisite rings</label>'
         '<label class="pill"><input type="checkbox" id="famcolor">Colour edges by relation</label>'
+        '<label class="pill"><input type="checkbox" id="showinf">Show inferred layer (transitive, no evidence)</label>'
+        '<label class="pill"><input type="checkbox" id="showconf">Flag conflicting relations</label>'
         '<label class="pill mode-sphere-only"><input type="checkbox" id="rawrad">Use raw importance for radius</label>'
         '<label class="pill mode-sphere-only"><input type="checkbox" id="showouter">Show outer ring</label>'
         '<label class="pill mode-sphere-only"><input type="checkbox" id="showband">Show unlinked and background</label>'

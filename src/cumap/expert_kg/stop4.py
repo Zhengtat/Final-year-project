@@ -407,3 +407,50 @@ def write_sheets(
         "edge_rows": len(rows),
         "edge_rows_by_relation": dict(Counter(r["relation"] for r in rows)),
     }
+
+
+def panel_rows(run_dir: Path, sections_jsonl: Path) -> dict:
+    """Numbers for the report's 'CR-005 vs CR-007' panel, from the saved run only ($0).
+    Selection effect and classifier effect are kept in separate groups (CR-007 §7)."""
+    cp = _load(run_dir)
+    sec_ch = {r["section_id"]: r["chapter_num"] for r in _jsonl(sections_jsonl)}
+    sel = [r for r in cp["relation_results_v3"] if r["group"] == "selected"]
+    smp = [r for r in cp["relation_results_v3"] if r["group"] == "sample"]
+    n = len(sel)
+    oc = Counter(_outcome_bucket(r) for r in sel)
+    rej = Counter(r["reason"] for r in sel if r["outcome"] == "rejected")
+    concepts = {c["concept_id"]: c for c in cp["concepts"]}
+    attempted = {r["pair"][k] for r in sel for k in ("concept_x_id", "concept_y_id")}
+    edges = [e for ch in (1, 2, 3) for e in _jsonl(run_dir / "snapshots" / f"ch{ch}" / "edges.jsonl")]
+    linked = {e["source_concept_id"] for e in edges} | {e["target_concept_id"] for e in edges}
+    defined = [cid for cid, c in concepts.items() if any(m["role"] in ("defined", "refined") for m in c["mentions"])]
+    fam = Counter(r["family"] for r in sel if r["outcome"] == "edge")
+    fcs = cp["concept_first_chapter"]
+    late = sum(
+        max(fcs.get(e["source_concept_id"], 0), fcs.get(e["target_concept_id"], 0)) > sec_ch.get(e["section_id"], 0) > 0
+        for e in edges
+    )
+    se = sum(r["outcome"] == "edge" for r in smp)
+    b = BASE
+    return {
+        "selection": [
+            ("Concepts with at least one classified pair", "152 of 736", f"{len(attempted)} of {len(concepts)}"),
+            ("Concepts with at least one typed edge (all)", _pct(*b["linked"]["all"]), _pct(sum(c in linked for c in concepts), len(concepts))),
+            (
+                "Defined concepts with at least one typed edge",
+                _pct(*b["linked"]["defined"]),
+                _pct(sum(c in linked for c in defined), len(defined)),
+            ),
+        ],
+        "classifier": [
+            ("Pairs classified", str(b["pairs"]), str(n)),
+            ("Accepted edge", _pct(b["edge"], b["pairs"]), _pct(oc["edge"], n)),
+            ("OTHER", _pct(b["other"], b["pairs"]), _pct(oc["other"], n)),
+            ("NO_RELATION", _pct(b["no_relation"], b["pairs"]), _pct(oc["no_relation"], n)),
+            ("Rejected by a check", "-", f"{_pct(oc['rejected'], n)} (domain/range {rej.get('domain_range', 0)}, endpoint not grounded {rej.get('endpoint_not_grounded', 0)})"),
+            ("mechanism_process edges", str(b["mechanism_process_edges"]), str(fam["mechanism_process"])),
+            ("Late-counted edges", "15 of 87 (ch2)", f"{late} of {len(edges)}"),
+        ],
+        "missed": f"{se} of {len(smp)} unselected sample pairs classify as edges: {_ci(se, len(smp))}",
+        "run_id": cp["run_id"],
+    }

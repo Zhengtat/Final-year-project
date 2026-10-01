@@ -161,6 +161,24 @@ def _worked_example_html(ex: dict, registry: RelationRegistry, graph_svg: str) -
         f"{' ← chosen' if o['chosen'] else ''}</li>"
         for o in ex["relation_options"]
     )
+    if ex.get("logged_prompts"):
+        # CR-007 rule 16: the exact text the model saw, from data/logs/llm_prompts.jsonl
+        labels = {
+            "family": "Step 1: which family?",
+            "choice": "Step 2: which relation, and which direction?",
+            "qualifiers": "Step 3 prompt: qualifiers",
+        }
+        steps_html = "".join(
+            f"<li><b>{labels.get(step, step)}</b> <span class=\"small\">(exact prompt text, read from the prompt log)</span>"
+            f"<details><summary>show the prompt</summary><pre class=\"prompt\">{escape(text)}</pre></details></li>"
+            for step, text in ex["logged_prompts"].items()
+        )
+    else:
+        steps_html = (
+            f'<li><b>Step 1: which family?</b> The model picks one option:<ul class="opts">{fam}</ul></li>'
+            f"<li><b>Step 2: which relation, and which direction?</b> Options for the chosen family, "
+            f'filled with these two concepts:<ul class="opts">{rel}</ul></li>'
+        )
     q = ex["qualifiers"]
     quals = ", ".join(f"{k}: {v}" for k, v in q.items() if v not in (None, [], ""))
     arrow = f"{escape(ex['source'])} —[{escape(ex['relation'])}]→ {escape(ex['target'])}"
@@ -169,15 +187,38 @@ def _worked_example_html(ex: dict, registry: RelationRegistry, graph_svg: str) -
         f'<ol class="steps"><li><b>Sentence</b><blockquote>{escape(ex["sentence"])}</blockquote></li>'
         f"<li><b>Candidate pair</b> (found by co-occurrence, no LLM): <i>{escape(ex['x'])}</i> and "
         f"<i>{escape(ex['y'])}</i> — {ex['cooccurrence']} co-occurring sentence(s), cue score {ex['cue_score']}</li>"
-        f'<li><b>Step 1: which family?</b> The model picks one option:<ul class="opts">{fam}</ul></li>'
-        f"<li><b>Step 2: which relation, and which direction?</b> Options for the chosen family, "
-        f'filled with these two concepts:<ul class="opts">{rel}</ul></li>'
+        f"{steps_html}"
         f"<li><b>Step 3: qualifiers and evidence</b><br>Qualifiers: {escape(quals)}<br>"
         f"Evidence quote (verified as an exact substring of the sentence): “{escape(ex['quote'])}”<br>"
         f"Model’s statement: {escape(ex['statement'])}</li>"
         f"<li><b>Resulting edge</b>: {arrow}</li></ol>"
         f"<details open><summary>All accepted edges in this section</summary>"
         f'<div class="svgbox">{graph_svg}</div></details></div>'
+    )
+
+
+def _cr7_panel_html(panel: dict) -> str:
+    def table(rows: list[tuple[str, str, str]]) -> str:
+        body = "".join(
+            f"<tr><td>{escape(a)}</td><td>{escape(b)}</td><td>{escape(c)}</td></tr>" for a, b, c in rows
+        )
+        return (
+            "<table><thead><tr><th>measure</th><th>CR-005 (ch2–3)</th><th>CR-007 (ch1–3)</th></tr></thead>"
+            f"<tbody>{body}</tbody></table>"
+        )
+
+    return (
+        f"<p>Same extraction pipeline, two generations. CR-005 numbers are the measured baselines on chapters 2–3; "
+        f"CR-007 is run <code>{escape(panel['run_id'])}</code> on chapters 1–3 (the slice grew, so read the groups below "
+        f"separately). All numbers come from saved run files; no model was called to build this page.</p>"
+        "<h3>Selection effect: which concepts were attempted at all</h3>"
+        f"{table(panel['selection'])}"
+        "<h3>Classifier effect: what happened to the pairs that were attempted</h3>"
+        f"{table(panel['classifier'])}"
+        f"<h3>Pairs the budget left out</h3><p>{escape(panel['missed'])}. This is an estimate of edges missing "
+        "from the graph because only the best-ranked pairs were classified.</p>"
+        "<p class=\"small\">Human-checked precision, gate decisions for the new relations and merge errors are in "
+        "<code>reports/cr007_stop5.md</code> (owner marks).</p>"
     )
 
 
@@ -223,7 +264,7 @@ font:inherit;cursor:pointer}nav button[aria-selected=true]{color:var(--ink);bord
 main{padding:8px 24px 48px;max-width:1100px}.tab[hidden]{display:none}
 table{border-collapse:collapse;margin:8px 0;font-size:13px}th,td{border:1px solid var(--grid);padding:4px 8px;
 text-align:left;vertical-align:top}th{background:color-mix(in srgb,var(--grid) 50%,transparent)}
-.small{font-size:12px;color:var(--ink2)}.card{border:1px solid var(--grid);border-radius:8px;padding:12px 16px;
+.small{font-size:12px;color:var(--ink2)}pre.prompt{white-space:pre-wrap;font-size:12px;border:1px solid var(--grid);border-radius:6px;padding:8px 10px;max-height:360px;overflow:auto}.card{border:1px solid var(--grid);border-radius:8px;padding:12px 16px;
 margin:14px 0;background:var(--card)}
 .svgbox,.scroll{overflow-x:auto;max-width:100%}.svgbox svg{max-width:100%;height:auto}
 .doc{white-space:pre-wrap;max-height:420px;overflow:auto;border:1px solid var(--grid);padding:10px;
@@ -464,7 +505,9 @@ def build_report(
     snaps = D.load_snapshots(run_dir)
     growth = D.build_growth(checkpoint, snaps, pd_sections, key_n=cfg.key_concepts)
     fam_counts, rel_counts = D.edge_counts(growth)
-    examples = D.worked_examples(checkpoint, registry, growth)
+    examples = D.worked_examples(
+        checkpoint, registry, growth, prompt_log=root / "data" / "logs" / "llm_prompts.jsonl"
+    )
     by_id_node = {n.id: n for n in growth.nodes}
     ex_html = []
     for ex in examples:
@@ -679,6 +722,16 @@ def build_report(
         ),
     )
 
+    from cumap.expert_kg.stop4 import panel_rows
+
+    cr7_tab = cr7_tab_button = ""
+    if checkpoint.get("relation_results_v3"):
+        cr7_tab = (
+            '<section class="tab" id="t4" hidden><h2>CR-005 vs CR-007</h2>'
+            + _cr7_panel_html(panel_rows(run_dir, root / demo.pd.source_jsonl))
+            + "</section>"
+        )
+        cr7_tab_button = '<button data-tab="t4" aria-selected="false">4 · CR-005 vs CR-007</button>'
     sphere_html, sphere_pack = "", None
     if org_id:
         sphere_html, sphere_pack = _sphere_section(
@@ -701,7 +754,7 @@ def build_report(
 <div class="small">{escape(footer)}</div><div class="banner">{escape(BANNER)}</div></header>
 <nav role="tablist"><button data-tab="t1" aria-selected="true">1 · Concepts &amp; FACE validation</button>
 <button data-tab="t2" aria-selected="false">2 · Relations</button>
-<button data-tab="t3" aria-selected="false">3 · Growth through chapters</button></nav><main>
+<button data-tab="t3" aria-selected="false">3 · Growth through chapters</button>{cr7_tab_button}</nav><main>
 
 <section class="tab" id="t1"><h2>Concept extraction, validated against FACE gold</h2>
 <p>Concepts are extracted per section with an evidence quote checked verbatim against the text. To
@@ -734,7 +787,7 @@ FP {escape(json.dumps(evals["dev"]["cause_counts"]["false_positive"]))} · FN {e
 <h3>Three worked examples</h3>{"".join(ex_html)}
 <h3>What was extracted</h3><div class="svgbox">{chart_fam}</div><div class="svgbox">{chart_rel}</div>
 <div class="svgbox">{chart_rej}</div>
-<h3>Checks against humans</h3>
+<h3>Checks against humans (CR-005 run: its own 30-edge spot-check and merge check)</h3>
 <p>Owner spot-check of 30 accepted edges (blind: only the sentence and triple shown): strict precision
 {_ci_text(spot["strict"])}; counting wrong-direction as right {_ci_text(spot["lenient"])}. Marks:
 {escape(json.dumps(spot["counts"]))}. Small sample — read the interval, not the point.</p>
@@ -744,6 +797,7 @@ ones ({", ".join(escape(w["alias"] + " → " + w["into"]) for w in merge["wrong"
 <code>configs/canonical_overrides.yaml</code>.</p><div class="svgbox">{chart_merge}</div>
 </section>
 
+{cr7_tab}
 <section class="tab" id="t3" hidden><h2>Growth through chapters</h2>
 <p class="small">The graph is built in book order, one section per step (press Play or drag the bar). New concepts pop in, concepts mentioned again flash, new edges flash. This is the order of the book, not a learner's path; book order is not prerequisite truth.</p>
 <p>{legend_growth}</p>
@@ -769,7 +823,7 @@ Contains IIR (© Cambridge University Press) text for local research use only �
 </main><script type="application/json" id="edge-data">{edge_json}</script>
 <script type="application/json" id="steps-data">{steps_json}</script><script>{JS}</script></body></html>"""
     (out / "index.html").write_text(html, encoding="utf-8")
-    _write_growth3d(out, growth, checkpoint, cfg, prov, footer, sphere_pack)
+    _write_growth3d(out, growth, checkpoint, cfg, prov, footer, sphere_pack, registry)
     return out / "index.html"
 
 
@@ -858,6 +912,7 @@ def _write_growth3d(
     prov: Provenance,
     footer: str,
     sphere: dict | None = None,
+    registry: RelationRegistry | None = None,
 ) -> None:
     """growth3d.html: the growth graph as an interactive 3D scene (spin, zoom, click a concept)."""
     pos = layout3d([n.id for n in growth.nodes], [(e.source, e.target) for e in growth.edges])
@@ -870,6 +925,11 @@ def _write_growth3d(
         radius,
     )
     concepts = {c["concept_id"]: c for c in checkpoint["concepts"]}
+    from cumap.report.derived import conflicting_edge_ids, inferred_edges
+
+    conflicts = conflicting_edge_ids(growth.edges, registry) if registry else set()
+    inferred = inferred_edges(growth.edges, registry) if registry else []
+    by_edge = {e.id: e for e in growth.edges}
     captions = {}
     for st, sec in zip(growth.steps, growth.section_labels, strict=True):
         captions[sec["id"]] = st["caption"]
@@ -912,8 +972,30 @@ def _write_growth3d(
                 "polarity": growth.edge_details[e.id]["polarity"],
                 "modality": growth.edge_details[e.id]["modality"],
                 "section": growth.edge_details[e.id]["section"],
+                "conf": e.id in conflicts,
             }
             for e in growth.edges
+        ]
+        + [
+            {
+                "id": f"INF-{k}",
+                "s": d["source"],
+                "t": d["target"],
+                "rel": d["relation"],
+                "fam": registry.family_of(d["relation"]),
+                "slot": family_slot(registry.family_of(d["relation"])),
+                "sec": max(by_edge[v].section for v in d["via"]),
+                "cross": any(by_edge[v].cross for v in d["via"]),
+                "neg": False,
+                "inf": True,
+                "conf": False,
+                "statement": "Inferred by transitivity from two extracted edges; no evidence sentence of its own.",
+                "quote": "",
+                "polarity": "",
+                "modality": "",
+                "section": growth.edge_details[max(d["via"], key=lambda v: by_edge[v].section)]["section"],
+            }
+            for k, d in enumerate(inferred)
         ],
         "concepts": {
             cid: {
@@ -934,7 +1016,7 @@ def _write_growth3d(
             if any(e.family == f for e in growth.edges)
         ],
         "chapters": [{"ch": c, "slot": chapter_slot(c)} for c in growth.chapters],
-        **({"sphere": sphere} if sphere else {}),
+        **({"sphere": _with_inferred_chapters(sphere, inferred, by_edge)} if sphere else {}),
     }
     (out / "growth3d.html").write_text(
         growth3d_page(
@@ -942,3 +1024,13 @@ def _write_growth3d(
         ),
         encoding="utf-8",
     )
+
+
+def _with_inferred_chapters(sphere: dict, inferred: list[dict], by_edge: dict) -> dict:
+    """Inferred edges appear in the sphere view from the chapter in which both parents exist."""
+    ec = dict(sphere["edge_chapter"])
+    for k, d in enumerate(inferred):
+        chs = [sphere["edge_chapter"].get(v) for v in d["via"]]
+        if all(x is not None for x in chs):
+            ec[f"INF-{k}"] = max(chs)
+    return {**sphere, "edge_chapter": ec}
