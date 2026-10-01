@@ -318,3 +318,17 @@ def test_acts_on_without_action_type_is_rejected(tmp_settings, fixtures_dir):
         qual="v3_acts_on_noaction",
     )
     assert r.outcome == "rejected" and r.reason == "acts_on_without_action_type"
+
+
+def test_generic_concept_type_never_blocks_an_edge(tmp_settings, fixtures_dir):
+    generic_switch = rc("c_sw", "switch", "Concept")  # same id as SWITCH so the matcher grounds it
+    r = run(
+        tmp_settings,
+        fixtures_dir,
+        generic_switch,
+        FRAME,
+        "The switch forwards the frame.",
+        "v3_mechanism",
+        "v3_acts_on",
+    )
+    assert r.outcome == "edge" and not r.type_errors  # CR-007: Concept is a wildcard

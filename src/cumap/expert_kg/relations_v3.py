@@ -30,6 +30,9 @@ from cumap.llm.client import LLMClient
 from cumap.llm.prompts import PromptTemplate
 from cumap.schemas.relations import EdgeRef, RelationRegistry
 
+# CR-007 (2026-10-01): the generic fallback type never blocks an edge (owner decision at STOP 4);
+# specific wrong types still do. check_types skips endpoints whose type is not supplied.
+GENERIC_TYPE = "Concept"
 DIMENSION_RELATIONS = {"contrasts_with", "trades_off_with"}
 _STOP = {
     "the",
@@ -281,7 +284,7 @@ def classify_pair_v3(
     src, tgt = (cy, cx) if o.direction == "reversed" else (cx, cy)
     res.type_errors = registry.check_types(
         EdgeRef(source_id=src.concept_id, relation=o.relation, target_id=tgt.concept_id),
-        {cx.concept_id: cx.node_type, cy.concept_id: cy.node_type},
+        {c.concept_id: c.node_type for c in (cx, cy) if c.node_type != GENERIC_TYPE},
     )
     if res.type_errors:
         res.reason = "domain_range"

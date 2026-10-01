@@ -104,6 +104,9 @@ class Choice(NamedTuple):
     text: str
 
 
+GENERIC_NODE_TYPE = "Concept"
+
+
 class RelationRegistry:
     def __init__(
         self,
@@ -220,11 +223,17 @@ class RelationRegistry:
     def check_types(self, edge: EdgeRef, concept_types: dict[str, str]) -> list[str]:
         """Domain/range violations, given a concept_id -> node_type lookup. "Any" matches
         every type. Concepts missing from `concept_types` are not flagged (unknown, not wrong).
+        CR-007 (2026-10-01, owner decision at STOP 4): the generic fallback type "Concept" is a
+        wildcard too, since extraction types are coarse; specific wrong types are still flagged.
         """
         rel = self.get(edge.relation)
         errors = []
         source_type = concept_types.get(edge.source_id)
         target_type = concept_types.get(edge.target_id)
+        if source_type == GENERIC_NODE_TYPE:
+            source_type = None
+        if target_type == GENERIC_NODE_TYPE:
+            target_type = None
         if source_type is not None and "Any" not in rel.domain_types and source_type not in rel.domain_types:
             errors.append(
                 f"{edge.source_id} has type {source_type!r}, not in domain_types {rel.domain_types} of {rel.name!r}"

@@ -169,20 +169,9 @@ def build(
         f"Domain/range rejections: {rej.get('domain_range', 0)}.",
         "",
     ]
-    ty_err = Counter()
-    for r in sel:
-        if r["outcome"] == "rejected" and r["reason"] == "domain_range":
-            ty_err[
-                (
-                    concepts[r["pair"]["concept_x_id"]]["node_type"] == "Concept",
-                    concepts[r["pair"]["concept_y_id"]]["node_type"] == "Concept",
-                )
-            ] += 1
-    wild = sum(v for (a, b), v in ty_err.items() if a or b)
     lines.append(
-        f"Finding: {wild} of {rej.get('domain_range', 0)} domain/range rejections have an endpoint "
-        "typed generic `Concept`, which most v1.1 domains/ranges exclude. Owner decision needed "
-        "(see STOP 4 questions), not changed here.\n"
+        "Generic `Concept` is a wildcard in the domain/range check (owner decision, 2026-10-01); "
+        "the rejections above are specific wrong types only.\n"
     )
 
     # ---- linked share
