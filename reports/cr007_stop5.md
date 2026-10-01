@@ -1,32 +1,40 @@
 # CR-007 STOP 5: gate table and precision (run `slice3_a1`, org `org_71d17994`)
 
-Marks read from `data/interim/checks` -- **PROVISIONAL: not yet from data/gold/**. $0, read-only.
+Marks read from `data/gold` (owner copies). $0, read-only.
 
 ## 1. Gate table (CR-007 §5.1; rule applied as written: >=5 instances AND >=80% of the sampled correct)
 
 | relation | instances in re-run | sampled (owner-marked) | correct | % correct | decision |
 |---|---|---|---|---|---|
-| identifies | 13 | 0 | 0 | n/a | drop (correct 0/0 < 80%) |
-| encapsulates | 2 | 0 | 0 | n/a | drop (instances 2 < 5) |
-| trades_off_with | 1 | 0 | 0 | n/a | drop (instances 1 < 5) |
-| acts_on | 35 | 0 | 0 | n/a | report only |
-| connected_to | 10 | 0 | 0 | n/a | report only |
+| identifies | 13 | 8 | 5 | 62% | drop (correct 5/8 < 80%) |
+| encapsulates | 2 | 2 | 2 | 100% | drop (instances 2 < 5) |
+| trades_off_with | 1 | 1 | 1 | 100% | drop (instances 1 < 5) |
+| acts_on | 35 | 5 | 5 | 100% | report only |
+| connected_to | 10 | 5 | 4 | 80% | report only |
 
 ## 2. Precision (Wilson 95%)
 
-- Edges overall: 0/0 = **n/a** (CR-005 spot-check: 23/30 = 77% (59-88%)).
+- Edges overall: 29/39 = **74% (59-85%)** (CR-005 spot-check: 23/30 = 77% (59-88%)).
 
 | family | correct / sampled | Wilson |
 |---|---|---|
+| cause_effect | 1/3 | 33% (6-79%) |
+| classification_structure | 14/18 | 78% (55-91%) |
+| comparison | 4/4 | 100% (51-100%) |
+| dependency | 1/3 | 33% (6-79%) |
+| function_means | 3/3 | 100% (44-100%) |
+| mechanism_process | 6/8 | 75% (41-93%) |
 
-- Pipeline merges: 0/0 = **n/a** (CR-005: 41/43).
+- Pipeline merges: 23/24 = **96% (80-99%)** (CR-005: 41/43).
 
 ## 3. Merge errors by similarity bucket (review band stays at 0.70, provisional)
 
 | bucket | source | owner mark | rows |
 |---|---|---|---|
-| <0.70 | band | unmarked | 16 |
-| >=0.70 | merged | unmarked | 24 |
+| <0.70 | band | different | 1 |
+| <0.70 | band | same | 15 |
+| >=0.70 | merged | different | 1 |
+| >=0.70 | merged | same | 23 |
 
 `merged` rows were merged by the pipeline (similarity >= 0.70 by construction, so wrong merges can only fall in the upper bucket); `band` rows were held back for review, so a `same` mark there is a missed merge, not a wrong one.
 
