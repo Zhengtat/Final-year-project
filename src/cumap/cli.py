@@ -663,6 +663,24 @@ def kg_rerun(
         raise typer.BadParameter(f"unknown stage {stage!r}")
 
 
+@kg_app.command("stop4")
+def kg_stop4(
+    run: str = typer.Option(..., "--run"),
+    org: str | None = typer.Option(None, "--org", help="org_id for the core-periphery section"),
+) -> None:
+    """CR-007 STOP 4: CR-005 vs CR-007 comparison report + blind review sheets (read-only, no API)."""
+    from cumap.config import REPO_ROOT, get_settings, load_demo_slice
+    from cumap.expert_kg.stop4 import build
+    from cumap.schemas.relations import RelationRegistry
+
+    registry = RelationRegistry.from_yaml(REPO_ROOT / get_settings().relation_registry)
+    run_dir = REPO_ROOT / "data" / "processed" / "kg" / run
+    out = build(run_dir, REPO_ROOT / load_demo_slice().pd.source_jsonl, registry,
+                REPO_ROOT / "reports" / "cr007_stop4.md", REPO_ROOT / "data" / "interim" / "checks",
+                run_dir / "organisation" / org if org else None)
+    typer.echo(json.dumps(out, indent=1))
+
+
 @kg_app.command("relation-pilot")
 def kg_relation_pilot(
     run: str = typer.Option(..., "--run", help="P&D run_id whose OTHER pairs are re-classified"),
