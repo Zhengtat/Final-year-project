@@ -83,9 +83,10 @@ def _plain(item: dict, registry: RelationRegistry) -> str:
 
 
 def write_misconception_sheet(
-    cp: dict, registry: RelationRegistry, edges: dict[str, dict], out_dir: Path, cap: int = 40
+    cp: dict, registry: RelationRegistry, edges: dict[str, dict], out_dir: Path, cap: int = 40, lexicon=None
 ) -> dict:
     layer = cp["misconceptions"]
+    lex = {f"L:{e.id}": e for e in (lexicon.entries if lexicon else [])}
     items = layer["items"]
     if len(items) > cap:  # stratified by perturbation type
         buckets: dict[str, list] = defaultdict(list)
@@ -101,7 +102,13 @@ def write_misconception_sheet(
     i = 0
     for it in items:
         i += 1
-        correct = "; ".join(edges[e]["statement"] for e in it["contradicts"] if e in edges)
+        correct = "; ".join(
+            edges[e]["statement"]
+            if e in edges
+            else f"{lex[e].forms[0]} and {lex[e].forms[1]} are different things ({lex[e].why})"
+            for e in it["contradicts"]
+            if e in edges or e in lex
+        )
         rows.append(
             [
                 i,

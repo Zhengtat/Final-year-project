@@ -159,7 +159,11 @@ def misconception_stage(run: str, *, dry_run: bool, limit: int | None, max_usd: 
     save_checkpoint(cp, run_dir)
     edges = mc.expert_edges(cp.relation_results_v3)
     sheet = write_misconception_sheet(
-        {"misconceptions": layer}, registry, edges, REPO_ROOT / "data" / "interim" / "checks"
+        {"misconceptions": layer},
+        registry,
+        edges,
+        REPO_ROOT / "data" / "interim" / "checks",
+        lexicon=lexicon,
     )
     (run_dir / "misconceptions.jsonl").write_text(
         "\n".join(json.dumps(i) for i in layer["items"]) + "\n", encoding="utf-8"

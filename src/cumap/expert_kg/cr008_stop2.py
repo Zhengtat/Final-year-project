@@ -75,7 +75,7 @@ def misconception_cost(run: str) -> float:
         for x in (REPO_ROOT / "data" / "logs" / "llm_calls.jsonl").read_text().splitlines()
         if x
     ]
-    rows = [r for r in rows if r.get("run_id") == run and not r["cache_hit"]]
+    rows = [r for r in rows if str(r.get("run_id", "")).startswith(run) and not r["cache_hit"]]
     start = min((r["ts"] for r in rows if r["task"] == "misconception_structuring"), default=None)
     total = 0.0
     for r in rows:
@@ -117,7 +117,7 @@ def build(before: str, after: str, org_before: str, org_after: str) -> str:
     lex_same = [e for e in lexicon.entries if e.list == "same"]
     lex_diff = [e for e in lexicon.entries if e.list == "different"]
     un_a, un_p = unexplained(cpb, lexicon, "approved"), unexplained(cpb, lexicon, "proposed")
-    cost = misconception_cost(after)
+    cost = misconception_cost("slice3_b")
     n_accepted = sum(
         1 for r in cpb["relation_results_v3"] if r.get("found_by") == "misconception_stage"
     )
@@ -128,7 +128,7 @@ def build(before: str, after: str, org_before: str, org_after: str) -> str:
         f"# CR-008 STOP 2 — before/after ({before} → {after})",
         "",
         "Re-keying and the lexicon cost $0. The misconception stage cost "
-        f"**${cost:.2f}** (preflight $0.77, hard cap $3). No marks from you yet, so every precision "
+        f"**${cost:.2f}** in total across all attempts (preflight $0.77, hard cap $3). No marks from you yet, so every precision "
         "figure below is pending.",
         "",
         "## §6 metrics",
@@ -211,6 +211,12 @@ def build(before: str, after: str, org_before: str, org_after: str) -> str:
             f"**{i['item_id']}** — {i['perturbation_type']} / {i['prevalence_cue']}: {i['intuition']}",
             f"  - wrong edge: {i['source_name']} —{i['relation']}→ {i['target_name']} ({i['polarity']}); contradicts {i['contradicts']}",
             f"  - quote: “{i['misconception_quote']['quote']}”",
+            "",
+        ]
+    for n in ms.get("needs_review", []):
+        L += [
+            f"**Owner review (checks failed twice)** §{n['section_id']}: {n['sentence'][:160]}",
+            f"  - failed: {'; '.join(n['errors'])}",
             "",
         ]
     L += [
