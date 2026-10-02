@@ -416,6 +416,12 @@ class LLMClient:
             "output_tokens": response.usage.output_tokens,
             "reasoning_tokens": reasoning_tokens,
         }
+        if response.output_parsed is None:
+            raise ValueError(
+                f"{task}: no parsed output (status={getattr(response, 'status', '?')}, "
+                f"output_tokens={usage['output_tokens']} of max {max_output_tokens}); raise "
+                "llm.max_output_tokens for this task if it was truncated"
+            )
         return response.output_parsed, usage
 
     def _log(self, result: ParsedResult) -> None:

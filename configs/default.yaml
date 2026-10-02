@@ -103,6 +103,9 @@ llm:
     relation_family: 800
     relation_choice: 1000
     relation_qualifiers: 800
+    # CR-008 2026-10-02: the default 1000 truncated a warning answer (quotes + intuition + reasoning) mid-JSON
+    # on the first real call (output_parsed None). Measured 180-711 tokens on non-truncated calls.
+    misconception_structuring: 3000
     default: 1000
 
 embeddings:

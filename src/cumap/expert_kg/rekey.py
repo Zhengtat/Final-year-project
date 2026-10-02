@@ -290,6 +290,9 @@ def rekey_results(
     """Re-key selected pairs and relation results; consolidate edges; migrate equivalent_to."""
     log: dict = defaultdict(list)
     cnt: Counter = Counter()
+    old_names = {c["concept_id"]: c["canonical_name"] for c in cp["concepts_before"]}
+    for r in cp["relation_results_v3"]:
+        r["pair_orig"] = [r["pair"]["concept_x_id"], r["pair"]["concept_y_id"]]
     for key in ("selected_pairs", "sample_pairs"):
         for p in cp[key]:
             p["concept_x_id"], p["concept_y_id"] = (
@@ -312,12 +315,11 @@ def rekey_results(
             if r["outcome"] == "edge" and r["relation"] == "equivalent_to":
                 cnt["equivalent_to_seen"] += 1
                 cnt["equiv_merged_by_rule"] += 1
-                name = by_new[x]["canonical_name"]
                 log["equivalence"].append(
                     {
                         "pair_id": r["pair"]["pair_id"],
-                        "x": name,
-                        "y": name,
+                        "x": old_names[r["pair_orig"][0]],
+                        "y": old_names[r["pair_orig"][1]],
                         "x_id": x,
                         "y_id": x,
                         "section_id": r["pair"]["section_id"],
@@ -545,7 +547,9 @@ def rekey_run(
     }
     cp["concepts"] = new_concepts
 
+    cp["concepts_before"] = concepts
     res = rekey_results(cp, id_map, by_new, registry, ctx, {})
+    del cp["concepts_before"]
     # merges log: the new rule-based merges, with provenance
     for r in records:
         cp["merges"].append(

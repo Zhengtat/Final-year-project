@@ -202,6 +202,7 @@ def classify_pair_v3(
     *,
     grounding_scope: str = "quote",  # "quote" (CR-007 §5.3) | "sentence"
     same_concept: bool = False,  # CR-008: offer the `same_concept` outcome (relation_choice v4)
+    model_tier: str = "strong",
     fixtures: tuple[str, str, str] = ("default", "default", "default"),
 ) -> V3Result:
     x, y = cx.canonical_name, cy.canonical_name
@@ -222,7 +223,7 @@ def classify_pair_v3(
             }
         ],
         schema=build_family_choice_llm(registry),
-        model_tier="strong",
+        model_tier=model_tier,
         fixture_name=fixtures[0],
     )
     res.prompt_hashes["family"] = fam.input_hash
@@ -253,7 +254,7 @@ def classify_pair_v3(
                 }
             ],
             schema=schema,
-            model_tier="strong",
+            model_tier=model_tier,
             fixture_name=fixtures[1],
         )
     except ValidationError as e:  # e.g. OTHER without its description fields
@@ -325,7 +326,7 @@ def classify_pair_v3(
             }
         ],
         schema=build_qualifiers_v3(registry),
-        model_tier="strong",
+        model_tier=model_tier,
         fixture_name=fixtures[2],
     )
     res.prompt_hashes["qualifiers"] = q.input_hash

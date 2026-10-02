@@ -115,6 +115,11 @@ def _ordered_subsequence(short: str, long_form: str) -> bool:
     return all(ch in it for ch in short.lower() if ch.isalnum())
 
 
+def short_not_in(short: str, long_form: str) -> bool:
+    """A long form never contains its own short form as a word ("SWP would call send" is not one)."""
+    return short.lower() not in re.findall(r"[a-z0-9/]+", long_form.lower())
+
+
 def find_abbreviations(text: str, cfg: AliasConfig | None = None) -> list[AbbrevPair]:
     """'long form (SF)' and 'SF (long form)' pairs, after Schwartz & Hearst (2003)."""
     cfg = cfg or AliasConfig.load()
@@ -134,6 +139,7 @@ def find_abbreviations(text: str, cfg: AliasConfig | None = None) -> list[Abbrev
                     and len(lf.split()) <= len(re.sub(r"\W", "", inner)) + 5
                     and len(lf) > len(inner)
                     and not re.search(r"[=\d—]", lf)
+                    and short_not_in(inner, lf)
                 ):
                     out.append(AbbrevPair(lf, inner, sent))
                     continue
@@ -141,7 +147,12 @@ def find_abbreviations(text: str, cfg: AliasConfig | None = None) -> list[Abbrev
             after_words = before.split()
             if after_words and _valid_short(after_words[-1]) and len(inner.split()) >= 2:
                 lf = _best_long_form(after_words[-1], inner)
-                if lf == inner and len(lf) > len(after_words[-1]) and not re.search(r"[=\d—]", lf):
+                if (
+                    lf == inner
+                    and len(lf) > len(after_words[-1])
+                    and not re.search(r"[=\d—]", lf)
+                    and short_not_in(after_words[-1], lf)
+                ):
                     out.append(AbbrevPair(lf, after_words[-1], sent))
     return out
 
