@@ -290,7 +290,6 @@ def test_proposed_correct_edge_goes_through_the_verifier(tmp_path):
 
     def verifier(out, cand):
         seen.append(out.pce_relation)
-        return None
 
     layer = run_stage(
         Fake(prop), PROMPT, REG, cp(), SECTIONS, lex(tmp_path), limit=1, verify=verifier
