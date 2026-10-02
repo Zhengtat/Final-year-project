@@ -6,6 +6,7 @@ data/interim/checks/ only. Run: `uv run python -m cumap.expert_kg.cr008_stop2 --
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 from collections import Counter
 
@@ -88,6 +89,39 @@ def misconception_cost(run: str) -> float:
     return total
 
 
+GOLD = REPO_ROOT / "data" / "gold"
+# owner rulings that override a mark in the gold sheet (the sheet itself is never edited)
+MARK_OVERRIDES = {
+    "14": "different"
+}  # "end hosts / frames": the `same` mark was a slip (2026-10-02)
+
+
+def merge_precision() -> tuple[list[str], dict[str, tuple[int, int]]]:
+    """Owner precision per rule from data/gold/cr008_merge_{sheet,key}.csv (read-only)."""
+    from cumap.eval.stats import wilson_ci
+
+    sheet, key = GOLD / "cr008_merge_sheet.csv", GOLD / "cr008_merge_key.csv"
+    if not (sheet.exists() and key.exists()):
+        return ["Pending your marks on the merge sheet."], {}
+    kinds = {r["id"]: r["source"] for r in csv.DictReader(key.open(encoding="utf-8"))}
+    tally: dict[str, list[int]] = {}
+    for r in csv.DictReader(sheet.open(encoding="utf-8")):
+        mark = MARK_OVERRIDES.get(r["id"], r["mark (same/different)"].strip().lower())
+        t = tally.setdefault(kinds[r["id"]], [0, 0])
+        t[0] += mark == "same"
+        t[1] += 1
+    lines = ["| Rule | marked same | n | Wilson 95% CI |", "|---|---|---|---|"]
+    for rule, (ok, n) in tally.items():
+        w = wilson_ci(ok, n)
+        lines.append(f"| {rule} | {ok} | {n} | [{w.lower:.2f}, {w.upper:.2f}] |")
+    lines += [
+        "",
+        'Row 14 ("end hosts / frames", R3-weak) was marked `same` in the sheet; you ruled it a slip, so it counts as `different` here. The gold file is unchanged.',
+        "Auto rules (R1, R2, R3-strong) have **no wrong merge**: no guard or demotion needed. R3-weak stays review-only, and its one item was wrong, which supports never auto-merging it.",
+    ]
+    return lines, {k: tuple(v) for k, v in tally.items()}
+
+
 def build(before: str, after: str, org_before: str, org_after: str) -> str:
     cpa = json.loads((KG_DIR / before / "checkpoint.json").read_text())
     cpb = json.loads((KG_DIR / after / "checkpoint.json").read_text())
@@ -155,7 +189,7 @@ def build(before: str, after: str, org_before: str, org_after: str) -> str:
         "",
         "## Owner precision per rule",
         "",
-        "Pending your marks on the merge sheet. R1/R2/R3-strong must have no wrong merges; any that does is inspected and gets a guard or is demoted to review (logged in DECISIONS).",
+        *merge_precision()[0],
         "",
         "## Top-15 importance changes (ch3)",
         "",

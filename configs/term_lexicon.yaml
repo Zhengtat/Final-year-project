@@ -1,10 +1,12 @@
-version: '0.2'
+version: '0.3'
 changelog:
 - '0.1-draft 2026-10-02: research-chat seeds D101-D116 added as proposed'
 - '0.2 2026-10-02: owner-derived entries from the CR-005 and CR-007 merge sheets and never_merge added as approved
   (learning loop); "Telco Central Office / Central Office" and "data link protocol / Link-level protocol" left out
   by owner ruling (neither list, leave to R4); routing/forwarding table recorded as book_distinguishes with the
   P&D §3.4 quote'
+- '0.3 2026-10-02: owner marks on the CR-008 merge sheet (rows 1-13, 15 same -> same entries; row 14 slip -> different)
+  and seed sheet (all seeds approved; D103, D104, D116 edited to same)'
 same:
 - id: S-CR-005-1
   canonical: Internet Service Provider
@@ -614,6 +616,178 @@ same:
   source: 'owner mark: CR-007 sheet row 40'
   quote: network designers, application developers, end users, and network operators
   section: 1-perspective-feature-velocity
+- id: S-D103
+  canonical: bandwidth
+  forms:
+  - bandwidth
+  - throughput
+  scope: book:pd6e
+  status: approved
+  source: 'owner seed-sheet edit 2026-10-02 (list changed from different to same): research-chat seed D103'
+  quote: 'Network performance is measured in two fundamental ways: bandwidth (also called throughput) and latency
+    (also called delay).'
+  section: '1.5'
+- id: S-D104
+  canonical: latency
+  forms:
+  - latency
+  - round-trip time
+  scope: book:pd6e
+  status: approved
+  source: 'owner seed-sheet edit 2026-10-02 (list changed from different to same): research-chat seed D104'
+  quote: Also, we make it clear in the context of the discussion whether we are referring to the one-way latency
+    or the round-trip time.
+  section: '1.5'
+- id: S-D116
+  canonical: VLAN ID
+  forms:
+  - VLAN ID
+  - VXLAN network identifier
+  scope: book:pd6e
+  status: approved
+  source: 'owner seed-sheet edit 2026-10-02 (list changed from different to same): research-chat seed D116'
+  quote: null
+  section: null
+- id: S-CR-008-1
+  canonical: computer networks
+  forms:
+  - computer network
+  - computer networks
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-008 merge sheet row 1'
+  quote: computer network = computer networks (same normalisation key)
+- id: S-CR-008-2
+  canonical: ARP
+  forms:
+  - ARP
+  - Address Resolution Protocol
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-008 merge sheet row 2'
+  quote: This can be accomplished using the Address Resolution Protocol (ARP).
+- id: S-CR-008-3
+  canonical: Broadband Network Gateway (BNG)
+  forms:
+  - Broadband Network Gateway (BNG)
+  - BNG
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-008 merge sheet row 3'
+  quote: Broadband Network Gateway (BNG)
+- id: S-CR-008-4
+  canonical: Carrier Sense Multiple Access
+  forms:
+  - Carrier Sense Multiple Access
+  - CSMA
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-008 merge sheet row 4'
+  quote: 'This chapter considers these issues in the context of specific network technologies: point-to-point fiber
+    links (for which SONET is the prevalent example); Carrier Sense Multiple Access (CSMA) networks (of which classical
+    Ethernet and Wi-Fi are the most famous examples); fiber-to-the home (for which PON is the dominant standard);
+    and mobile wireless (where 4G is rapidly morphing into 5G).'
+- id: S-CR-008-5
+  canonical: cyclic redundancy check (CRC)
+  forms:
+  - cyclic redundancy check (CRC)
+  - CRC
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-008 merge sheet row 5'
+  quote: cyclic redundancy check (CRC)
+- id: S-CR-008-6
+  canonical: direct memory access
+  forms:
+  - direct memory access
+  - DMA
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-008 merge sheet row 6'
+  quote: 'The path for a typical packet that arrives on, say, NIC 1 and is forwarded out on NIC 2 is straightforward:
+    as NIC 1 receives the packet it copies its bytes directly into the main memory over the I/O bus (PCIe in this
+    example) using a technique called direct memory access (DMA).'
+- id: S-CR-008-7
+  canonical: DSL
+  forms:
+  - DSL
+  - Digital Subscriber Line
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-008 merge sheet row 7'
+  quote: DSL (Digital Subscriber Line), for example, is an older technology that was deployed over the existing
+    twisted pair copper wires that already existed for plain old telephone services; G.Fast is a copper-based technology
+    typically used within multi-dwelling apartment buildings, and PON (Passive Optical Network) is a newer technology
+    that is commonly used to connect homes and businesses over recently deployed fiber.
+- id: S-CR-008-8
+  canonical: first-in, first-out
+  forms:
+  - first-in, first-out
+  - FIFO
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-008 merge sheet row 8'
+  quote: For example, a switch could be designed to service packets on a first-in, first-out (FIFO) basis.
+- id: S-CR-008-9
+  canonical: forward error correction
+  forms:
+  - forward error correction
+  - FEC
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-008 merge sheet row 9'
+  quote: The use of error-correcting codes in networking is sometimes referred to as forward error correction (FEC)
+    because the correction of errors is handled “in advance” by sending extra information, rather than waiting for
+    errors to happen and dealing with them later by retransmission.
+- id: S-CR-008-10
+  canonical: High-level protocol
+  forms:
+  - High-level protocol
+  - HLP
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-008 merge sheet row 10'
+  quote: So as not to concern ourselves with the adjacent protocols in the protocol graph, we denote the protocol
+    sitting above SWP as the high-level protocol (HLP) and the protocol sitting below SWP as the link-level protocol
+    (LLP).
+- id: S-CR-008-11
+  canonical: Hypertext Transfer Protocol (HTTP)
+  forms:
+  - Hypertext Transfer Protocol (HTTP)
+  - HTTP
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-008 merge sheet row 11'
+  quote: Hypertext Transfer Protocol (HTTP)
+- id: S-CR-008-12
+  canonical: Automatic repeat request
+  forms:
+  - Automatic repeat request
+  - ARQ
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-008 merge sheet row 12'
+  quote: and timeouts to implement reliable delivery is sometimes called automatic repeat request (abbreviated ARQ).
+    This section describes three different ARQ algorithms using generic language; that i
+- id: S-CR-008-13
+  canonical: delay
+  forms:
+  - delay
+  - latency
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-008 merge sheet row 13'
+  quote: 'mance is measured in two fundamental ways: bandwidth (also called throughput) and latency (also called
+    delay). The bandwidth of a network is given by the number of bits that can be transmitted'
+- id: S-CR-008-15
+  canonical: cloudification
+  forms:
+  - cloudification
+  - softwarization
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-008 merge sheet row 15'
+  quote: called the “cloudification” or “softwarization” of the network
 different:
 - id: D-CR-005-29
   forms:
@@ -676,8 +850,8 @@ different:
   why: A switch is a device (Component); switching is the forwarding technique (Mechanism).
   distinction_dimension: device vs process
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D101
+  status: approved
+  source: research-chat seed D101 (owner approved on the seed sheet 2026-10-02)
   quote: 'The switching function is then very simple: For each packet that arrives on an input, the switch would
     read the port number in the header and transmit the packet on that output.'
   section: '3.1'
@@ -689,8 +863,8 @@ different:
   why: A bit is a unit of data; bit rate is a property (bits per second); a bit stream is a sequence of bits.
   distinction_dimension: unit vs rate vs sequence
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D102
+  status: approved
+  source: research-chat seed D102 (owner approved on the seed sheet 2026-10-02)
   quote: In the case of the Manchester encoding, the bit rate is half the baud rate, so the encoding is considered
     only 50% efficient.
   section: '2.2'
@@ -702,8 +876,8 @@ different:
   why: A bit is a unit of data; bit rate is a property (bits per second); a bit stream is a sequence of bits.
   distinction_dimension: unit vs rate vs sequence
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D102
+  status: approved
+  source: research-chat seed D102 (owner approved on the seed sheet 2026-10-02)
   quote: The idea of 4B/5B is to insert extra bits into the bit stream so as to break up long sequences of 0s or
     1s.
   section: '2.2'
@@ -715,35 +889,8 @@ different:
   why: A bit is a unit of data; bit rate is a property (bits per second); a bit stream is a sequence of bits.
   distinction_dimension: unit vs rate vs sequence
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D102
-- id: D103:bandwidth|throughput
-  forms:
-  - bandwidth
-  - throughput
-  kind: confusable
-  why: Bandwidth is what a link can carry; throughput is what is measured end to end in practice.
-  distinction_dimension: nominal capacity vs achieved rate
-  scope: book:pd6e
-  status: proposed
-  source: research-chat seed D103
-  quote: 'Network performance is measured in two fundamental ways: bandwidth (also called throughput) and latency
-    (also called delay).'
-  section: '1.5'
-  note: 'CONFLICT: P&D §1.5 says bandwidth is "also called throughput"; the seed says different'
-- id: D104:latency|round-trip time
-  forms:
-  - latency
-  - round-trip time
-  kind: confusable
-  why: Latency (delay) is one-way; RTT is there and back.
-  distinction_dimension: one-way vs round trip
-  scope: book:pd6e
-  status: proposed
-  source: research-chat seed D104
-  quote: Also, we make it clear in the context of the discussion whether we are referring to the one-way latency
-    or the round-trip time.
-  section: '1.5'
+  status: approved
+  source: research-chat seed D102 (owner approved on the seed sheet 2026-10-02)
 - id: D105:bandwidth|data rate
   forms:
   - bandwidth
@@ -754,8 +901,8 @@ different:
     scope may fit better than a book-wide entry.
   distinction_dimension: bits per second vs hertz
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D105
+  status: approved
+  source: research-chat seed D105 (owner approved on the seed sheet 2026-10-02)
   quote: You may recall that bandwidth sometimes means the width of a frequency band in hertz and sometimes the
     data rate of a link.
   section: '2.7'
@@ -769,8 +916,8 @@ different:
     the network.
   distinction_dimension: protects the receiver vs protects the network
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D106
+  status: approved
+  source: research-chat seed D106 (owner approved on the seed sheet 2026-10-02)
 - id: D107:frame|packet
   forms:
   - frame
@@ -779,8 +926,8 @@ different:
   why: The book uses frame for the link-level data unit and packet for the network-level one (and generically).
   distinction_dimension: layer of the data unit
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D107
+  status: approved
+  source: research-chat seed D107 (owner approved on the seed sheet 2026-10-02)
   quote: At this layer, the unit of data exchanged among nodes is typically called a packet rather than a frame,
     although they are fundamentally the same thing.
   section: '1.3'
@@ -793,8 +940,8 @@ different:
   why: A MAC address is a flat link-layer hardware address; an IP address is a hierarchical network-layer address.
   distinction_dimension: layer and structure of the address
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D108
+  status: approved
+  source: research-chat seed D108 (owner approved on the seed sheet 2026-10-02)
 - id: D109:hub|switch
   forms:
   - hub
@@ -804,8 +951,8 @@ different:
     that leads to its destination.
   distinction_dimension: repeats to all ports vs forwards per destination
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D109
+  status: approved
+  source: research-chat seed D109 (owner approved on the seed sheet 2026-10-02)
   quote: The switch-based variant of Ethernet did eventually succeed in replacing multi-access Ethernet, but this
     is primarily because it could be deployed incrementally—with some hosts connected by point-to-point links to
     switches while others remained tapped into coax and connected to repeaters or hubs—all the while retaining the
@@ -820,8 +967,8 @@ different:
     check: if the book presents a router as a network-layer kind of switch, change kind to kind_of.'
   distinction_dimension: layer at which forwarding happens
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D110
+  status: approved
+  source: research-chat seed D110 (owner approved on the seed sheet 2026-10-02)
   quote: A node that is connected to two or more networks is commonly called a router or gateway, and it plays much
     the same role as a switch—it forwards messages from one network to another.
   section: '1.2'
@@ -835,8 +982,8 @@ different:
     them.
   distinction_dimension: collision detection vs collision avoidance
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D111
+  status: approved
+  source: research-chat seed D111 (owner approved on the seed sheet 2026-10-02)
   quote: 802.11 addresses these problems by using CSMA/CA, where the CA stands for collision avoidance, in contrast
     to the collision detection of CSMA/CD used on Ethernets.
   section: '2.7'
@@ -848,8 +995,8 @@ different:
   why: Detection only finds that a frame is corrupted; correction repairs it from redundant bits.
   distinction_dimension: find vs repair
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D112
+  status: approved
+  source: research-chat seed D112 (owner approved on the seed sheet 2026-10-02)
   quote: Thus, while error detection requires more bits to be sent when errors occur, error correction requires
     more bits to be sent all the time.
   section: '2.4'
@@ -861,8 +1008,8 @@ different:
   why: NRZ maps a bit to a signal level; NRZI marks a 1 with a transition.
   distinction_dimension: level encodes the bit vs transition encodes the bit
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D113
+  status: approved
+  source: research-chat seed D113 (owner approved on the seed sheet 2026-10-02)
   quote: Keep in mind that if the receiver had been able to keep up with the faster baud rate required by the Manchester
     encoding in Figure, then both NRZ and NRZI could have been able to transmit twice as many bits in the same time
     period.
@@ -875,8 +1022,8 @@ different:
   why: Two different block codes with different group sizes; the book calls 8B/10B 'similar', not the same.
   distinction_dimension: code group size
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D114
+  status: approved
+  source: research-chat seed D114 (owner approved on the seed sheet 2026-10-02)
   quote: The original Ethernet specifications used the Manchester encoding scheme described in an earlier section,
     while 4B/5B encoding (or the similar 8B/10B) scheme is used today on higher speed Ethernets.
   section: '2.6'
@@ -889,20 +1036,20 @@ different:
     network over layer 3.
   distinction_dimension: tag within a LAN vs overlay across an IP network
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D115
+  status: approved
+  source: research-chat seed D115 (owner approved on the seed sheet 2026-10-02)
   quote: This means a VXLAN-based virtual network (which is often referred to as an overlay network) runs on top
     of an IP-based network, which in turn runs on an underlying ethernet (or perhaps in just one VLAN of the underlying
     ethernet).
   section: 3-perspective-virtual-networks-all-the-way-down
-- id: D116:VLAN ID|VXLAN network identifier
+- id: D-CR-008-14
   forms:
-  - VLAN ID
-  - VXLAN network identifier
+  - end hosts
+  - frames
   kind: confusable
-  why: 'Different identifiers for different technologies: a 12-bit VLAN ID in the 802.1Q tag vs a 24-bit VNI in
-    the VXLAN header.'
-  distinction_dimension: which header, and identifier size
+  why: 'owner ruling 2026-10-02: the R3-weak "often called" match is not an alias (mark was a slip, treated as different)'
   scope: book:pd6e
-  status: proposed
-  source: research-chat seed D116
+  status: approved
+  source: 'owner mark: CR-008 merge sheet row 14'
+  quote: to the end node. This is the framing problem, and the messages delivered to the end hosts are often called
+    frames (or sometimes packets). Third, because frames are sometimes corrupted during transm
