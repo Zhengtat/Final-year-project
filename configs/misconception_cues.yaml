@@ -1,0 +1,33 @@
+# CR-008 §5.2: misconception cue scan. Cues only propose candidates; the structuring step decides.
+# Family 5 (existing signals) is computed from the run, not from text patterns.
+version: 0.1-draft
+
+families:
+  explicit_error:
+    - "a common (?:mistake|misconception|error|pitfall)"
+    - "it is a mistake to"
+    - "it is incorrect to"
+    - "contrary to popular belief"
+    - "is a myth"
+    - "\\bmisleading\\b"
+    - "\\bmisnomer\\b"
+  tempting_belief:
+    - "it is tempting to (?:think|assume)"
+    - "(?:one|you|we) (?:might|may|could) (?:think|assume|expect)"
+    - "\\bnaively\\b"
+    - "at first glance"
+    - "it may seem"
+    - "one would expect"
+    - "\\bsurprisingly\\b"
+    - "counter-?intuitive"
+    - "it is easy to (?:forget|overlook|assume)"
+  confusion:
+    - "(?:should )?not (?:to )?be confused with"
+    - "is (?:often|easily|commonly) confused with"
+    - "do not confuse"
+  negated_identity:
+    - "\\b(?:is|are) not (?:a|an|the|just|simply|merely) "
+    - "\\bis not the same as\\b"
+    - "\\bdoes not (?:mean|imply|guarantee)\\b"
+    - "it is not the case that"
+    - "\\bnot [^.;]{1,60}\\bbut rather\\b"

@@ -1,0 +1,27 @@
+# CR-008 §3: deterministic alias rules (R1-R3). Version bumps are logged in DECISIONS.md.
+version: 0.1-draft
+
+# R1 acronym-collision guard: an all-caps acronym (>= 2 letters) never auto-merges with its own
+# lower-cased form when that form is one of these common English words.
+common_words: ["as", "can", "is", "it", "or", "be", "do", "so", "no", "an", "at", "by", "in", "on", "to", "up", "us", "we", "he", "me", "my", "if", "am", "are", "was", "will", "may", "mac", "pan", "lan", "ram", "sip", "tap", "bus"]
+
+# R1 British/American spelling map (applied token-wise before the key is built).
+spelling: {adaptor: adapter, adaptors: adapters, behaviour: behavior, colour: color, centre: center, neighbour: neighbor, labelled: labeled, modelling: modeling, favour: favor}
+
+# R2: a parenthetical or neighbouring text containing one of these is an example or hedge, not an alias.
+r2_example_cues: [e.g., such as, for example, or the similar, see, like, cf., i.e.]
+
+# R3 patterns. `{X}` and `{Y}` are matched against known concept surface forms.
+# strong -> auto-merge (evidence required); weak -> review sheet only.
+r3:
+  strong:
+    - {id: also_known_as, cue: "(?:,|\\()?\\s*(?:also|sometimes)? ?known as\\s+"}
+    - {id: also_called, cue: "(?:,|\\()\\s*also (?:called|termed|named)\\s+"}
+    - {id: abbreviated, cue: ",?\\s*(?:often |commonly )?abbreviated\\s+"}
+    - {id: or_simply, cue: ",\\s*or simply\\s+"}
+  weak:
+    - {id: sometimes_called, cue: "(?:,|\\()?\\s*sometimes (?:also )?(?:called|referred to as)\\s+"}
+    - {id: often_referred, cue: "\\s+(?:is|are) (?:often|also) (?:referred to as|called)\\s+"}
+    - {id: or_alternatively, cue: "\\(or alternatively,?\\s+"}
+    - {id: or_called, cue: "\\s+or\\s+(?:also )?(?:called|referred to as)\\s+"}
+    - {id: officially_goes_by, cue: "\\s+officially go(?:es)? by (?:another name|the name)[^A-Za-z]+"}
