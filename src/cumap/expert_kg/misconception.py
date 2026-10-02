@@ -24,7 +24,7 @@ from cumap.expert_kg.alias_rules import r1_key
 from cumap.expert_kg.canonicalize import RegisteredConcept
 from cumap.expert_kg.lexicon import Lexicon
 from cumap.expert_kg.mentions import MentionMatcher
-from cumap.expert_kg.relations import CandidatePair, concept_vocab
+from cumap.expert_kg.relations import concept_vocab
 from cumap.gold.validate import verify_quote
 from cumap.llm.client import LLMClient
 from cumap.llm.prompts import PromptTemplate
@@ -84,10 +84,10 @@ def scan_cues(
                         (a, b)
                         for a, b in pairs
                         if re.search(
-                            rf"(?<![A-Za-z0-9]){re.escape(a)}s?(?![A-Za-z0-9])", sent, re.I
+                            rf"(?<![A-Za-z0-9]){re.escape(a)}s?(?![A-Za-z0-9])", sent, re.IGNORECASE
                         )
                         and re.search(
-                            rf"(?<![A-Za-z0-9]){re.escape(b)}s?(?![A-Za-z0-9])", sent, re.I
+                            rf"(?<![A-Za-z0-9]){re.escape(b)}s?(?![A-Za-z0-9])", sent, re.IGNORECASE
                         )
                     ),
                     None,

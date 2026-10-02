@@ -127,9 +127,11 @@ def build(before: str, after: str, org_before: str, org_after: str) -> str:
     L = [
         f"# CR-008 STOP 2 — before/after ({before} → {after})",
         "",
-        "Re-keying and the lexicon cost $0. The misconception stage cost "
-        f"**${cost:.2f}** in total across all attempts (preflight $0.77, hard cap $3). No marks from you yet, so every precision "
-        "figure below is pending.",
+        (
+            "Re-keying and the lexicon cost $0. The misconception stage cost "
+            f"**${cost:.2f}** in total across all attempts (preflight $0.77, hard cap $3). No marks from you yet, so every precision "
+            "figure below is pending."
+        ),
         "",
         "## §6 metrics",
         "",
@@ -201,8 +203,10 @@ def build(before: str, after: str, org_before: str, org_after: str) -> str:
         "",
         f"- Cue scan: {st.get('candidates', 0)} candidate sentences ⇒ `is_warning` = yes: {st.get('warnings', 0) + st.get('needs_correct_edge', 0) + st.get('needs_review', 0)} ⇒ in the layer: **{st.get('warnings', 0)}**, held as `needs_correct_edge`: {st.get('needs_correct_edge', 0)}, owner review after failed checks: {st.get('needs_review', 0)}; dismissed as plain facts: {st.get('not_warning', 0)}.",
         f"- By perturbation type: {dict(by_type) or '–'}; by prevalence cue: {dict(by_prev) or '–'}.",
-        f"- Proposed correct edges accepted by the verifier (bulk tier): {n_accepted}; rejected: "
-        f"{st.get('needs_correct_edge', 0)}.",
+        (
+            f"- Proposed correct edges accepted by the verifier (bulk tier): {n_accepted}; rejected: "
+            f"{st.get('needs_correct_edge', 0)}."
+        ),
         f"- Cost ${cost:.2f} vs preflight $0.77.",
         "",
     ]
