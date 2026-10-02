@@ -1,0 +1,283 @@
+version: 0.1-draft
+changelog:
+- '0.1-draft 2026-10-02: research-chat seeds D101-D116 added as proposed (ignored by the pipeline until approved)'
+same: []
+different:
+- id: D101:switch|switching
+  list: different
+  forms:
+  - switch
+  - switching
+  kind: different_type
+  why: A switch is a device (Component); switching is the forwarding technique (Mechanism).
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D101
+  quote: 'The switching function is then very simple: For each packet that arrives on an input, the switch would
+    read the port number in the header and transmit the packet on that output.'
+  quote_section: '3.1'
+  book_distinguishes: false
+  note: null
+- id: D102:bit|bit rate
+  list: different
+  forms:
+  - bit
+  - bit rate
+  kind: different_type
+  why: A bit is a unit of data; bit rate is a property (bits per second); a bit stream is a sequence of bits.
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D102
+  quote: In the case of the Manchester encoding, the bit rate is half the baud rate, so the encoding is considered
+    only 50% efficient.
+  quote_section: '2.2'
+  book_distinguishes: false
+  note: null
+- id: D102:bit|bit stream
+  list: different
+  forms:
+  - bit
+  - bit stream
+  kind: different_type
+  why: A bit is a unit of data; bit rate is a property (bits per second); a bit stream is a sequence of bits.
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D102
+  quote: The idea of 4B/5B is to insert extra bits into the bit stream so as to break up long sequences of 0s or
+    1s.
+  quote_section: '2.2'
+  book_distinguishes: false
+  note: null
+- id: D102:bit rate|bit stream
+  list: different
+  forms:
+  - bit rate
+  - bit stream
+  kind: different_type
+  why: A bit is a unit of data; bit rate is a property (bits per second); a bit stream is a sequence of bits.
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D102
+  quote: null
+  quote_section: null
+  book_distinguishes: false
+  note: null
+- id: D103:bandwidth|throughput
+  list: different
+  forms:
+  - bandwidth
+  - throughput
+  kind: confusable
+  why: Bandwidth is what a link can carry; throughput is what is measured end to end in practice.
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D103
+  quote: 'Network performance is measured in two fundamental ways: bandwidth (also called throughput) and latency
+    (also called delay).'
+  quote_section: '1.5'
+  book_distinguishes: false
+  note: 'CONFLICT: P&D §1.5 says bandwidth is "also called throughput" (a strong R3 alias); the seed says different'
+- id: D104:latency|round-trip time
+  list: different
+  forms:
+  - latency
+  - round-trip time
+  kind: confusable
+  why: Latency (delay) is one-way; RTT is there and back.
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D104
+  quote: Also, we make it clear in the context of the discussion whether we are referring to the one-way latency
+    or the round-trip time.
+  quote_section: '1.5'
+  book_distinguishes: false
+  note: null
+- id: D105:bandwidth|data rate
+  list: different
+  forms:
+  - bandwidth
+  - data rate
+  kind: confusable
+  why: OWNER DECISION NEEDED. Ch. 1 uses bandwidth to mean bits per second (close to data rate); Ch. 2 also uses
+    bandwidth for a range of frequencies in hertz. May be same in one chapter and different in another; a chapter
+    scope may fit better than a book-wide entry.
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D105
+  quote: You may recall that bandwidth sometimes means the width of a frequency band in hertz and sometimes the
+    data rate of a link.
+  quote_section: '2.7'
+  book_distinguishes: false
+  note: 'OWNER DECISION: consider scope chapter:2 for the frequency sense (book §2.7 states both senses)'
+- id: D106:flow control|congestion control
+  list: different
+  forms:
+  - flow control
+  - congestion control
+  kind: confusable
+  why: Flow control keeps a sender from overrunning the receiver; congestion control keeps senders from overloading
+    the network.
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D106
+  quote: null
+  quote_section: null
+  book_distinguishes: false
+  note: null
+- id: D107:frame|packet
+  list: different
+  forms:
+  - frame
+  - packet
+  kind: confusable
+  why: The book uses frame for the link-level data unit and packet for the network-level one (and generically).
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D107
+  quote: At this layer, the unit of data exchanged among nodes is typically called a packet rather than a frame,
+    although they are fundamentally the same thing.
+  quote_section: '1.3'
+  book_distinguishes: true
+  note: 'CONFLICT: P&D §1.3 says packet and frame are "fundamentally the same thing"; the seed says different'
+- id: D108:MAC address|IP address
+  list: different
+  forms:
+  - MAC address
+  - IP address
+  kind: confusable
+  why: A MAC address is a flat link-layer hardware address; an IP address is a hierarchical network-layer address.
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D108
+  quote: null
+  quote_section: null
+  book_distinguishes: false
+  note: null
+- id: D109:hub|switch
+  list: different
+  forms:
+  - hub
+  - switch
+  kind: confusable
+  why: A hub (multiway repeater) sends every frame out of every port; a switch forwards each frame only to the port
+    that leads to its destination.
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D109
+  quote: The switch-based variant of Ethernet did eventually succeed in replacing multi-access Ethernet, but this
+    is primarily because it could be deployed incrementally—with some hosts connected by point-to-point links to
+    switches while others remained tapped into coax and connected to repeaters or hubs—all the while retaining the
+    simplicity of network administration.
+  quote_section: '2.6'
+  book_distinguishes: false
+  note: null
+- id: D110:router|switch
+  list: different
+  forms:
+  - router
+  - switch
+  kind: confusable
+  why: 'A switch forwards within one network (link layer); a router forwards between networks (network layer). Owner
+    check: if the book presents a router as a network-layer kind of switch, change kind to kind_of.'
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D110
+  quote: A node that is connected to two or more networks is commonly called a router or gateway, and it plays much
+    the same role as a switch—it forwards messages from one network to another.
+  quote_section: '1.2'
+  book_distinguishes: false
+  note: 'CHECK: P&D §1.2 says a router "plays much the same role as a switch"; consider kind_of'
+- id: D111:CSMA/CD|CSMA/CA
+  list: different
+  forms:
+  - CSMA/CD
+  - CSMA/CA
+  kind: confusable
+  why: Ethernet detects collisions and backs off; 802.11 avoids collisions because a wireless sender cannot detect
+    them.
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D111
+  quote: 802.11 addresses these problems by using CSMA/CA, where the CA stands for collision avoidance, in contrast
+    to the collision detection of CSMA/CD used on Ethernets.
+  quote_section: '2.7'
+  book_distinguishes: true
+  note: null
+- id: D112:error detection|error correction
+  list: different
+  forms:
+  - error detection
+  - error correction
+  kind: confusable
+  why: Detection only finds that a frame is corrupted; correction repairs it from redundant bits.
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D112
+  quote: Thus, while error detection requires more bits to be sent when errors occur, error correction requires
+    more bits to be sent all the time.
+  quote_section: '2.4'
+  book_distinguishes: false
+  note: null
+- id: D113:NRZ|NRZI
+  list: different
+  forms:
+  - NRZ
+  - NRZI
+  kind: confusable
+  why: NRZ maps a bit to a signal level; NRZI marks a 1 with a transition.
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D113
+  quote: Keep in mind that if the receiver had been able to keep up with the faster baud rate required by the Manchester
+    encoding in Figure, then both NRZ and NRZI could have been able to transmit twice as many bits in the same time
+    period.
+  quote_section: '2.2'
+  book_distinguishes: false
+  note: null
+- id: D114:4B/5B|8B/10B
+  list: different
+  forms:
+  - 4B/5B
+  - 8B/10B
+  kind: confusable
+  why: Two different block codes with different group sizes; the book calls 8B/10B 'similar', not the same.
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D114
+  quote: The original Ethernet specifications used the Manchester encoding scheme described in an earlier section,
+    while 4B/5B encoding (or the similar 8B/10B) scheme is used today on higher speed Ethernets.
+  quote_section: '2.6'
+  book_distinguishes: false
+  note: null
+- id: D115:VLAN|VXLAN
+  list: different
+  forms:
+  - VLAN
+  - VXLAN
+  kind: confusable
+  why: A VLAN tags frames to split one LAN; VXLAN carries Ethernet frames inside UDP/IP to build a virtual layer-2
+    network over layer 3.
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D115
+  quote: This means a VXLAN-based virtual network (which is often referred to as an overlay network) runs on top
+    of an IP-based network, which in turn runs on an underlying ethernet (or perhaps in just one VLAN of the underlying
+    ethernet).
+  quote_section: 3-perspective-virtual-networks-all-the-way-down
+  book_distinguishes: false
+  note: null
+- id: D116:VLAN ID|VXLAN network identifier
+  list: different
+  forms:
+  - VLAN ID
+  - VXLAN network identifier
+  kind: confusable
+  why: 'Different identifiers for different technologies: a 12-bit VLAN ID in the 802.1Q tag vs a 24-bit VNI in
+    the VXLAN header.'
+  scope: book:pd6e
+  status: proposed
+  source: research-chat seed D116
+  quote: null
+  quote_section: null
+  book_distinguishes: false
+  note: null
