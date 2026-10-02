@@ -204,7 +204,12 @@ def test_stop5_report_flags_provisional_marks_and_lists_flagged_edges(tmp_path):
     )
     text = (tmp_path / "s5.md").read_text()
     assert "PROVISIONAL" in text  # not under data/gold
-    assert "1 flagged of 4" in text and "| identifies | 0 | 0 | 0 | n/a | drop" in text
+    assert "| identifies | 0 | 0 | 0 | n/a | drop" in text
+    # CR-008 item 2: the legacy per-pair flag (P4 carries corrects_intuition=True) is ignored by the report
+    assert "flagged of" not in text and "corrects_intuition" not in text.split("## 4.")[1].split(
+        "## 5."
+    )[0].replace("`corrects_intuition` count", "")
+    assert "misconception stage has not run" in text
     assert "<0.70 | band | same | 1" in text
 
 

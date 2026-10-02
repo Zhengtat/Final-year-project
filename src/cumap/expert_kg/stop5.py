@@ -1,6 +1,6 @@
 # ruff: noqa: ISC004, UP031
 """CR-007 STOP 5 ($0, read-only): gate table (§5.1), precision with Wilson CIs, merge errors by
-similarity bucket, corrects_intuition diagnosis, spend by stage.
+similarity bucket, misconception-layer counts, spend by stage.
 
 Reads the owner-filled sheets from `sheets_dir` (data/gold/... once copied; the report labels the
 provenance). Never writes under data/gold/. The gate rule is applied exactly as pre-registered:
@@ -121,26 +121,16 @@ def spend_by_stage(
     return dict(out)
 
 
-def corrects_intuition_rows(cp: dict) -> list[dict]:
-    names = {c["concept_id"]: c["canonical_name"] for c in cp["concepts"]}
-    rows = []
-    for r in cp["relation_results_v3"]:
-        q = r.get("qualifiers") or {}
-        if q.get("corrects_intuition"):
-            p = r["pair"]
-            rows.append(
-                {
-                    "group": r["group"],
-                    "outcome": r["outcome"],
-                    "x": names[p["concept_x_id"]],
-                    "relation": r["relation"],
-                    "y": names[p["concept_y_id"]],
-                    "polarity": q.get("polarity"),
-                    "intuition": q.get("intuition"),
-                    "sentence": p["sentence"],
-                }
-            )
-    return rows
+def misconception_layer_rows(cp: dict) -> dict:
+    """CR-008 item 2: the misconception layer is the only source of warning counts. The legacy
+    per-pair `corrects_intuition` qualifier on old edges is ignored (never read, never reported)."""
+    layer = cp.get("misconceptions") or {}
+    return {
+        "items": layer.get("items", []),
+        "needs_correct_edge": layer.get("needs_correct_edge", []),
+        "needs_review": layer.get("needs_review", []),
+        "stats": layer.get("stats", {}),
+    }
 
 
 CI_READING = (
@@ -256,17 +246,22 @@ def build_report(
         "",
     ]
 
-    L += [
-        "## 4. corrects_intuition diagnosis (no fix applied; counts kept out of the demo report)",
-        "",
-    ]
-    rows = corrects_intuition_rows(cp)
-    L.append(f"{len(rows)} flagged of {len(cp['relation_results_v3'])} classified results.\n")
-    for r in rows:
+    L += ["## 4. Misconception layer (CR-008 §5; replaces the `corrects_intuition` count)", ""]
+    m = misconception_layer_rows(cp)
+    st = m["stats"]
+    if not st:
+        L.append("The misconception stage has not run on this run (no layer stored).")
+    else:
         L.append(
-            f"- [{r['outcome']}/{r['group']}] {r['x']} -[{r['relation']}]-> {r['y']} | polarity {r['polarity']} | "
-            f"intuition: {r['intuition']}\n  - sentence: {r['sentence']}"
+            f"{st.get('candidates', 0)} cue candidates -> {len(m['items'])} layer items, "
+            f"{len(m['needs_correct_edge'])} `needs_correct_edge`, {len(m['needs_review'])} owner review, "
+            f"{st.get('not_warning', 0)} dismissed as plain facts."
         )
+        for it in m["items"]:
+            L.append(
+                f"- [{it['perturbation_type']}] {it['source_name']} -[{it['relation']}]-> "
+                f"{it['target_name']} ({it['polarity']}): {it['intuition']}"
+            )
     L += ["", CI_READING, ""]
 
     spent = spend_by_stage(log_path, tiers, spend_since, cp["run_id"])

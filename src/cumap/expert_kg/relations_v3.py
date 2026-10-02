@@ -124,10 +124,14 @@ def build_relation_choice_v3(
     )
 
 
-def build_qualifiers_v3(registry: RelationRegistry) -> type[BaseModel]:
+def build_qualifiers_v3(registry: RelationRegistry, intuition: bool = True) -> type[BaseModel]:
+    """`intuition=False` is the v4 schema: no corrects_intuition / intuition (CR-008 item 2)."""
+    extra = (
+        {"corrects_intuition": (bool, ...), "intuition": (str | None, ...)} if intuition else {}
+    )
     action_values = tuple(registry.qualifiers["action_type"].values or ["other"])
     return create_model(
-        "QualifiersV3LLM",
+        "QualifiersV3LLM" if intuition else "QualifiersV4LLM",
         __config__=ConfigDict(extra="forbid"),
         polarity=(Literal["affirmed", "negated"], ...),
         modality=(Literal["necessary", "always", "typically", "possible", "never"], ...),
@@ -136,8 +140,7 @@ def build_qualifiers_v3(registry: RelationRegistry) -> type[BaseModel]:
         dimension=(str | None, ...),
         action_type=(Literal[*action_values] | None, ...),
         surface_phrase=(str, ...),
-        corrects_intuition=(bool, ...),
-        intuition=(str | None, ...),
+        **extra,
     )
 
 
@@ -325,7 +328,7 @@ def classify_pair_v3(
                 ),
             }
         ],
-        schema=build_qualifiers_v3(registry),
+        schema=build_qualifiers_v3(registry, intuition=qualifier_prompt.version == "v3"),
         model_tier=model_tier,
         fixture_name=fixtures[2],
     )

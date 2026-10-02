@@ -175,7 +175,7 @@ For CR-005 the comparison uses ch2–3 only; the ch1–3 figures are reported se
 | Spot-check precision (Wilson 95% CI) | Not worse than CR-005 |
 | Merge precision (owner check, Wilson CI) | Reported |
 | Core–periphery Δρ (both nulls), sphere stability | Reported |
-| `corrects_intuition` edges | Count + list (seed for the misconception layer) |
+| ~~`corrects_intuition` edges~~ → **misconception-layer items** | Count + list of the CR-008 misconception layer (cue candidates → items, `needs_correct_edge`, owner review). Superseded 2026-10-02 (CR-008 item 2): the per-pair qualifier is removed |
 | IIR full-test exact / lenient micro F1 (v2 vs v3) | Reported; v3 is the headline |
 
 ## 8. Blind sheets (STOP 4)
