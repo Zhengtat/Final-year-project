@@ -43,7 +43,7 @@ PERTURBATIONS = (
     "modality_error",
 )
 PREVALENCE = ("stated_common", "stated_possible", "none")
-FAMILIES = ("explicit_error", "tempting_belief", "confusion", "negated_identity")
+FAMILIES = ("explicit_error", "tempting_belief", "confusion", "negated_identity", "contrast")
 
 
 # ---------------------------------------------------------------- 5.2 cue scan ($0)
@@ -424,6 +424,7 @@ def run_stage(
     limit: int | None = None,
     fixture: str = "default",
     verify=None,  # callable(pce dict, candidate) -> result dict | None (the relation verifier)
+    extra: list[Candidate] | None = None,  # forced candidates (regression checks)
 ) -> dict:
     """Run the stage on a checkpoint dict; returns and stores the layer in cp['misconceptions']."""
     # idempotent: edges this stage added in an earlier run are re-derived, never accumulated
@@ -433,6 +434,8 @@ def run_stage(
     cands = scan_cues(sections, lexicon)
     if limit is not None:
         cands = cands[:limit]
+    if extra:
+        cands = cands + [c for c in extra if all(c.sentence != x.sentence for x in cands)]
     text_by = dict(sections)
     concepts = cp["concepts"]
     matcher = MentionMatcher(
@@ -493,7 +496,28 @@ def run_stage(
             fixture_name=fixture,
         )
 
+    counted = ("items", "not_warning", "needs_review", "needs_correct_edge")
+    layer["candidate_log"] = []
+    pending: list = []
+
+    def flush() -> None:
+        if not pending:
+            return
+        c, before = pending.pop()
+        grew = [k for k in counted if len(layer[k]) > before[k]]
+        layer["candidate_log"].append(
+            {
+                "section_id": c.section_id,
+                "sentence": c.sentence,
+                "families": c.families,
+                "lexicon_pair": list(c.lexicon_pair) if c.lexicon_pair else None,
+                "outcome": grew[0] if grew else "duplicate_item",
+            }
+        )
+
     for cand in cands:
+        flush()
+        pending.append((cand, {k: len(layer[k]) for k in counted}))
         ctx = build_context(cand, concepts, matcher, edges, registry, lexicon)
         try:
             out = call(cand, ctx).output
@@ -602,6 +626,7 @@ def run_stage(
                     "section": cand.section_id,
                 }
             )
+    flush()
     layer["stats"].update(
         {
             "warnings": len(layer["items"]),

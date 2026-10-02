@@ -113,13 +113,76 @@ def merge_precision() -> tuple[list[str], dict[str, tuple[int, int]]]:
     lines = ["| Rule | marked same | n | Wilson 95% CI |", "|---|---|---|---|"]
     for rule, (ok, n) in tally.items():
         w = wilson_ci(ok, n)
-        lines.append(f"| {rule} | {ok} | {n} | [{w.lower:.2f}, {w.upper:.2f}] |")
+        lines.append(f"| {rule} | {ok} | {n} | [{w.low:.2f}, {w.high:.2f}] |")
     lines += [
         "",
         'Row 14 ("end hosts / frames", R3-weak) was marked `same` in the sheet; you ruled it a slip, so it counts as `different` here. The gold file is unchanged.',
         "Auto rules (R1, R2, R3-strong) have **no wrong merge**: no guard or demotion needed. R3-weak stays review-only, and its one item was wrong, which supports never auto-merging it.",
     ]
     return lines, {k: tuple(v) for k, v in tally.items()}
+
+
+def misconception_tail(ms: dict) -> list[str]:
+    """Owner marks on the layer, carry-over, and structuring yield per lexicon pair and per cue family."""
+    from cumap.eval.stats import wilson_ci
+
+    entries = [*ms.get("items", []), *ms.get("needs_correct_edge", [])]
+    marked = [e for e in entries if e.get("status", "proposed") != "proposed"]
+    yes = sum(e["status"] == "owner_confirmed" for e in marked)
+    L = ["", "### Owner marks on the misconception layer (carried over by quote)", ""]
+    if marked:
+        w = wilson_ci(yes, len(marked))
+        L.append(
+            f"- (a) the book gives this warning: **{yes} of {len(marked)}** marked entries "
+            f"(Wilson 95% CI [{w.low:.2f}, {w.high:.2f}]). The one `no` is the forwarding/routing-table "
+            'conflation: "sometimes used interchangeably … we will make a distinction" is a terminology '
+            "note, not a refuted belief."
+        )
+        fixes = [e for e in marked if e.get("owner_fix")]
+        L.append(
+            f"- (b) {len(fixes)} entries carry an owner rewrite (`owner_fix`); (c) correct-edge judgement carried where the entry still has one."
+        )
+    new = [e for e in entries if e.get("status", "proposed") == "proposed"]
+    L.append(f"- {len(new)} entries are new since your marks (delta sheet).")
+    log = ms.get("candidate_log", [])
+    if log:
+        from collections import Counter, defaultdict
+        by: dict[str, Counter] = defaultdict(Counter)
+        for c in log:
+            text_fams = [f for f in c["families"] if f != "lexicon_different"]
+            key = (
+                ("pair: " + " | ".join(c["lexicon_pair"]))
+                if c["lexicon_pair"]
+                else "text cue: " + "+".join(text_fams)
+            )
+            by[key][c["outcome"]] += 1
+        L += [
+            "",
+            "### Structuring yield (family 5 not narrowed this run)",
+            "",
+            "| source | candidates | kept (items + needs_correct_edge + review) | dismissed as plain facts |",
+            "|---|---|---|---|",
+        ]
+        for k, v in sorted(by.items(), key=lambda kv: (-sum(kv[1].values()), kv[0])):
+            kept = v["items"] + v["needs_correct_edge"] + v["needs_review"]
+            L.append(f"| {k} | {sum(v.values())} | {kept} | {v['not_warning']} |")
+        pair_total = sum(sum(v.values()) for k, v in by.items() if k.startswith("pair:"))
+        pair_kept = sum(
+            v["items"] + v["needs_correct_edge"] + v["needs_review"]
+            for k, v in by.items()
+            if k.startswith("pair:")
+        )
+        text_total = sum(sum(v.values()) for k, v in by.items() if k.startswith("text cue"))
+        text_kept = sum(
+            v["items"] + v["needs_correct_edge"] + v["needs_review"]
+            for k, v in by.items()
+            if k.startswith("text cue")
+        )
+        L += [
+            "",
+            f"Lexicon-pair candidates kept {pair_kept} of {pair_total}; text-cue candidates kept {text_kept} of {text_total}.",
+        ]
+    return L
 
 
 def build(before: str, after: str, org_before: str, org_after: str) -> str:
@@ -265,7 +328,12 @@ def build(before: str, after: str, org_before: str, org_after: str) -> str:
         f"- {n['intuition'] or n['sentence'][:120]} (§{n['section_id']})"
         for n in ms.get("needs_correct_edge", [])
     ]
-    L += ["", "Sheet: `data/interim/checks/cr008_misconception_sheet.csv` (+ key).", ""]
+    L += misconception_tail(ms)
+    L += [
+        "",
+        "Sheets: the sheet you marked is `cr008_misconception_sheet.csv` (rows refer to the CR-008 STOP 2 run); new entries are on `cr008_misconception_sheet_delta.csv`; the recall sample is `cr008_recall_sample_sheet.csv` (20 negation sentences the cues did not catch).",
+        "",
+    ]
     out = REPO_ROOT / "reports" / "cr008_stop2.md"
     out.write_text("\n".join(L), encoding="utf-8")
     return str(out)

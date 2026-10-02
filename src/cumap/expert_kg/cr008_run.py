@@ -68,7 +68,11 @@ if __name__ == "__main__":
 def misconception_stage(run: str, *, dry_run: bool, limit: int | None, max_usd: float) -> dict:
     from cumap.expert_kg import misconception as mc
     from cumap.expert_kg.canonicalize import RegisteredConcept
-    from cumap.expert_kg.cr008_sheets import write_misconception_sheet
+    from cumap.expert_kg.cr008_sheets import (
+        apply_owner_marks,
+        write_misconception_sheet,
+        write_recall_sample,
+    )
     from cumap.expert_kg.mentions import MentionMatcher
     from cumap.expert_kg.pipeline import load_checkpoint
     from cumap.expert_kg.relations import CandidatePair, concept_vocab
@@ -158,13 +162,22 @@ def misconception_stage(run: str, *, dry_run: bool, limit: int | None, max_usd: 
     snapshots_stage(cp, run_dir, sections, registry, lambda t: np.zeros(1))
     save_checkpoint(cp, run_dir)
     edges = mc.expert_edges(cp.relation_results_v3)
+    # the owner's marks (data/gold, read-only) carry over by quote; only unmarked entries go on a delta sheet
+    carried = apply_owner_marks(
+        layer, REPO_ROOT / "data" / "gold" / "cr008_misconception_sheet.csv"
+    )
+    save_checkpoint(cp, run_dir)
+    checks = REPO_ROOT / "data" / "interim" / "checks"
     sheet = write_misconception_sheet(
         {"misconceptions": layer},
         registry,
         edges,
-        REPO_ROOT / "data" / "interim" / "checks",
+        checks,
         lexicon=lexicon,
+        name="cr008_misconception_sheet_delta",
+        skip_marked=True,
     )
+    recall = write_recall_sample(pairs, {" ".join(c.sentence.split()) for c in cands}, checks)
     (run_dir / "misconceptions.jsonl").write_text(
         "\n".join(json.dumps(i) for i in layer["items"]) + "\n", encoding="utf-8"
     )
@@ -173,4 +186,6 @@ def misconception_stage(run: str, *, dry_run: bool, limit: int | None, max_usd: 
         "backend_calls": client.backend_call_count,
         **layer["stats"],
         "sheet": sheet,
+        "carried_marks": carried,
+        "recall_sample": recall,
     }

@@ -4,6 +4,8 @@ scores, pre-fills labelled); the owner saves the filled copy to `data/gold/`. Co
 from __future__ import annotations
 
 import csv
+import random
+import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
@@ -83,9 +85,21 @@ def _plain(item: dict, registry: RelationRegistry) -> str:
 
 
 def write_misconception_sheet(
-    cp: dict, registry: RelationRegistry, edges: dict[str, dict], out_dir: Path, cap: int = 40, lexicon=None
+    cp: dict,
+    registry: RelationRegistry,
+    edges: dict[str, dict],
+    out_dir: Path,
+    cap: int = 40,
+    lexicon=None,
+    name: str = "cr008_misconception_sheet",
+    skip_marked: bool = False,
 ) -> dict:
-    layer = cp["misconceptions"]
+    layer = dict(cp["misconceptions"])
+    if skip_marked:  # only entries without an owner mark (a delta sheet)
+        layer["items"] = [i for i in layer["items"] if i.get("status", "proposed") == "proposed"]
+        layer["needs_correct_edge"] = [
+            n for n in layer["needs_correct_edge"] if n.get("status", "proposed") == "proposed"
+        ]
     lex = {f"L:{e.id}": e for e in (lexicon.entries if lexicon else [])}
     items = layer["items"]
     if len(items) > cap:  # stratified by perturbation type
@@ -142,7 +156,7 @@ def write_misconception_sheet(
         )
         key.append([i, "", "", "needs_correct_edge"])
     _write(
-        out_dir / "cr008_misconception_sheet.csv",
+        out_dir / f"{name}.csv",
         [
             "id",
             "section",
@@ -158,10 +172,103 @@ def write_misconception_sheet(
         rows,
     )
     _write(
-        out_dir / "cr008_misconception_key.csv", ["id", "item_id", "perturbation_type", "kind"], key
+        out_dir / f"{name.replace('sheet', 'key')}.csv",
+        ["id", "item_id", "perturbation_type", "kind"],
+        key,
     )
     return {
         "rows": len(rows),
         "items": len(layer["items"]),
         "needs_correct_edge": len(layer["needs_correct_edge"]),
     }
+
+
+# ---------------------------------------------------------------- owner marks carry-over, recall sample
+def _norm(text: str | None) -> str:
+    return " ".join((text or "").split()).lower()
+
+
+def apply_owner_marks(layer: dict, gold_csv: Path) -> dict:
+    """Carry the owner's marks (read-only from data/gold) onto layer entries by misconception quote.
+    (a) no -> owner_rejected; (a) yes -> owner_confirmed (+ owner_fix when (b) is `fix`). Unmatched
+    entries (new since the marked sheet) stay `proposed`. Returns counts and the unmatched marks."""
+    if not gold_csv.exists():
+        return {"marks": 0}
+    rows = list(csv.DictReader(gold_csv.open(encoding="utf-8")))
+    by_q: dict[str, dict] = {}
+    for r in rows:
+        by_q[_norm(r["misconception quote"])] = r
+    matched, applied = set(), Counter()
+
+    def find(quote: str | None, sentence: str | None) -> tuple[dict | None, str]:
+        """Exact quote first; else the marked quote is contained in this entry's quote or sentence
+        (the model may have trimmed or widened the quote between runs)."""
+        nq = _norm(quote)
+        if nq in by_q:
+            return by_q[nq], nq
+        for k, row in by_q.items():
+            if k in nq or k in _norm(sentence) or (nq and nq in k):
+                return row, k
+        return None, nq
+
+    def mark(entry: dict, quote: str | None, sentence: str | None = None) -> None:
+        r, nq = find(quote, sentence)
+        if r is None:
+            entry.setdefault("status", "proposed")
+            return
+        matched.add(nq)
+        a = r["(a) does the book give this warning? yes/no"].strip().lower()
+        entry["status"] = (
+            "owner_rejected" if a == "no" else "owner_confirmed" if a == "yes" else "proposed"
+        )
+        if r["(b) wrong edge a faithful version? yes/fix"].strip().lower() == "fix":
+            entry["owner_fix"] = r["(b) fix (write it)"].strip()
+        c = r["(c) linked correct edge the right one? yes/no"].strip().lower()
+        if c:
+            entry["owner_correct_edge_right"] = c == "yes"
+        applied[entry["status"]] += 1
+
+    for it in layer["items"]:
+        mark(it, it["misconception_quote"]["quote"])
+    for n in layer["needs_correct_edge"]:
+        mark(n, n["proposed"].get("misconception_quote"), n.get("sentence"))
+    return {
+        "marks": len(rows),
+        "applied": dict(applied),
+        "unmatched": [q for q in by_q if q not in matched],
+    }
+
+
+NEGATION = re.compile(r"\b(?:not|n't|never|cannot|no longer|neither|nor|without)\b", re.IGNORECASE)
+
+
+def write_recall_sample(
+    sections: list[tuple[str, str]],
+    candidate_sentences: set[str],
+    out_dir: Path,
+    n: int = 20,
+    seed: int = 42,
+) -> dict:
+    """CR-008 §7 optional recall sample: n negation sentences the cue scan did NOT catch, for a
+    yes/no 'does this reject a wrong belief?' judgement. Blind: no model output, no cue names."""
+    pool = []
+    for sid, text in sections:
+        for par in re.split(r"\n\s*\n", text):
+            for sent in re.split(r"(?<=[.!?])\s+", par):
+                one = " ".join(sent.split())
+                if len(one) >= 40 and NEGATION.search(one) and one not in candidate_sentences:
+                    pool.append((sid, one))
+    rng = random.Random(seed)
+    pick = sorted(rng.sample(pool, min(n, len(pool))), key=lambda t: t[0])
+    _write(
+        out_dir / "cr008_recall_sample_sheet.csv",
+        [
+            "id",
+            "section",
+            "sentence",
+            "does this sentence reject a wrong belief the book describes? yes/no",
+            "note",
+        ],
+        [[i, s, q, "", ""] for i, (s, q) in enumerate(pick, 1)],
+    )
+    return {"pool": len(pool), "sampled": len(pick)}

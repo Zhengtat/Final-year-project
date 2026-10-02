@@ -1,6 +1,6 @@
 # CR-008 §5.2: misconception cue scan. Cues only propose candidates; the structuring step decides.
 # Family 5 (existing signals) is computed from the run, not from text patterns.
-version: 0.1-draft
+version: 0.2  # 2026-10-02: + contrast family (despite; narrow "Note that"); owner-approved
 
 families:
   explicit_error:
@@ -31,3 +31,8 @@ families:
     - "\\bdoes not (?:mean|imply|guarantee)\\b"
     - "it is not the case that"
     - "\\bnot [^.;]{1,60}\\bbut rather\\b"
+  # v0.2 (owner-approved 2026-10-02 after the $0 scan: "despite" 4 hits; "Note that" any = 54 hits, too broad,
+  # so only the narrow form: a negation/contrast within 100 characters, 9 hits on ch. 1-3).
+  contrast:
+    - "\\bdespite\\b"
+    - "\\bnote that\\b[^.]{0,100}\\b(?:not|n't|never|cannot|rather than|instead of|smaller than|larger than|unlike)\\b"
