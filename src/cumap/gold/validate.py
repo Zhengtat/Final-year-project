@@ -133,7 +133,15 @@ def _validate_expert_pilot_file(
             continue
         known_edge_ids.add(edge.edge_id)
 
-        if edge.relation not in registry:
+        if edge.relation == "equivalent_to":
+            issues.append(
+                ValidationIssue(
+                    str(path),
+                    f"{edge.edge_id}: 'equivalent_to' is retired (CR-008): equivalence is a node "
+                    "property (aliases), never an edge",
+                )
+            )
+        elif edge.relation not in registry:
             issues.append(ValidationIssue(str(path), f"{edge.edge_id}: unknown relation {edge.relation!r}"))
         else:
             for e in registry.check_types(EdgeRef(edge.source_id, edge.relation, edge.target_id), {}):

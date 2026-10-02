@@ -33,6 +33,7 @@ from cumap.schemas.relations import EdgeRef, RelationRegistry
 # CR-007 (2026-10-01): the generic fallback type never blocks an edge (owner decision at STOP 4);
 # specific wrong types still do. check_types skips endpoints whose type is not supplied.
 GENERIC_TYPE = "Concept"
+SAME_CONCEPT = "same_concept"  # CR-008 §3.5: a choice, never an edge
 DIMENSION_RELATIONS = {"contrasts_with", "trades_off_with"}
 _STOP = {
     "the",
@@ -63,7 +64,9 @@ def family_options_v3(registry: RelationRegistry) -> str:
     return "\n".join(lines)
 
 
-def filled_options(registry: RelationRegistry, family: str, x: str, y: str) -> str:
+def filled_options(
+    registry: RelationRegistry, family: str, x: str, y: str, same_concept: bool = False
+) -> str:
     """Registry templates filled with the actual names, both directions for directional relations."""
     lines = []
     for rel in registry.all_relations():
@@ -77,6 +80,11 @@ def filled_options(registry: RelationRegistry, family: str, x: str, y: str) -> s
             )
         for nm in rel.near_misses:
             lines.append(f'    not {nm.relation}: "{nm.example}" ({nm.why})')
+    if same_concept and family == "comparison":  # CR-008 §3.5: equivalence is a node property
+        lines.append(
+            f"- {SAME_CONCEPT}: {x} and {y} are two names for the same thing (no relation is "
+            "drawn; the pair is queued to be merged into one node)"
+        )
     lines.append(
         "- no_relation: X and Y are only listed together or co-mentioned; no relation is stated between them"
     )
@@ -85,10 +93,14 @@ def filled_options(registry: RelationRegistry, family: str, x: str, y: str) -> s
 
 
 # ------------------------------------------------------------------ schemas
-def build_relation_choice_v3(registry: RelationRegistry, family: str) -> type[BaseModel]:
-    names = tuple(r.name for r in registry.all_relations() if r.family == family) + (
-        NO_RELATION,
-        OTHER,
+def build_relation_choice_v3(
+    registry: RelationRegistry, family: str, same_concept: bool = False
+) -> type[BaseModel]:
+    extra = (SAME_CONCEPT,) if same_concept and family == "comparison" else ()
+    names = (
+        tuple(r.name for r in registry.all_relations() if r.family == family)
+        + extra
+        + (NO_RELATION, OTHER)
     )
 
     def _other_needs_text(self):
@@ -155,7 +167,7 @@ def endpoint_grounding(
 @dataclass
 class V3Result:
     pair: CandidatePair
-    outcome: str  # edge | no_relation | other | rejected
+    outcome: str  # edge | no_relation | other | rejected | same_concept (CR-008: no edge)
     reason: str | None = None
     family: str | None = None
     relation: str | None = None
@@ -189,6 +201,7 @@ def classify_pair_v3(
     matcher: MentionMatcher,
     *,
     grounding_scope: str = "quote",  # "quote" (CR-007 §5.3) | "sentence"
+    same_concept: bool = False,  # CR-008: offer the `same_concept` outcome (relation_choice v4)
     fixtures: tuple[str, str, str] = ("default", "default", "default"),
 ) -> V3Result:
     x, y = cx.canonical_name, cy.canonical_name
@@ -222,7 +235,7 @@ def classify_pair_v3(
         res.other_description = fam.output.reason
         return res
 
-    schema = build_relation_choice_v3(registry, res.family)
+    schema = build_relation_choice_v3(registry, res.family, same_concept)
     try:
         rel = client.parse(
             task="relation_choice",
@@ -235,7 +248,7 @@ def classify_pair_v3(
                         concept_y=y,
                         family=res.family,
                         sentence=pair.sentence,
-                        relation_options=filled_options(registry, res.family, x, y),
+                        relation_options=filled_options(registry, res.family, x, y, same_concept),
                     ),
                 }
             ],
@@ -252,6 +265,12 @@ def classify_pair_v3(
     res.evidence_quote, res.comparison_dimension = o.evidence_quote, o.comparison_dimension
     if o.relation == NO_RELATION:
         res.outcome, res.reason = "no_relation", "relation_no_relation"
+        return res
+    if o.relation == SAME_CONCEPT:  # no edge: the pair becomes a canonicalisation merge candidate
+        if not verify_quote(o.evidence_quote, pair.sentence):
+            res.reason = "evidence_quote_not_in_sentence"
+            return res
+        res.outcome, res.reason = "same_concept", "queued_for_merge"
         return res
     if o.relation == OTHER:
         res.outcome, res.reason = "other", "relation_other"
