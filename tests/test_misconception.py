@@ -102,28 +102,28 @@ class Fake:
         return SimpleNamespace(output=kw["schema"].model_validate(a))
 
 
-BASE = dict(
-    is_warning=False,
-    reason="plain fact",
-    intuition=None,
-    wrong_source=None,
-    wrong_relation=None,
-    wrong_target=None,
-    wrong_polarity=None,
-    wrong_modality=None,
-    wrong_conditions=[],
-    perturbation_type=None,
-    prevalence_cue="none",
-    misconception_quote=None,
-    correction_quote=None,
-    contradicts=[],
-    proposed_correct=False,
-    pce_source=None,
-    pce_relation=None,
-    pce_target=None,
-    pce_polarity=None,
-    pce_quote=None,
-)
+BASE = {
+    "is_warning": False,
+    "reason": "plain fact",
+    "intuition": None,
+    "wrong_source": None,
+    "wrong_relation": None,
+    "wrong_target": None,
+    "wrong_polarity": None,
+    "wrong_modality": None,
+    "wrong_conditions": [],
+    "perturbation_type": None,
+    "prevalence_cue": "none",
+    "misconception_quote": None,
+    "correction_quote": None,
+    "contradicts": [],
+    "proposed_correct": False,
+    "pce_source": None,
+    "pce_relation": None,
+    "pce_target": None,
+    "pce_polarity": None,
+    "pce_quote": None,
+}
 WARN = {
     **BASE,
     "is_warning": True,
@@ -212,25 +212,40 @@ def _ctx(edges):
 @pytest.mark.parametrize(
     ("ptype", "wrong", "ok"),
     [
-        ("polarity_flip", dict(src="c_sw", rel="acts_on", tgt="c_fr", pol="negated"), True),
-        ("polarity_flip", dict(src="c_sw", rel="acts_on", tgt="c_fr", pol="affirmed"), False),
-        ("reversed", dict(src="c_fr", rel="acts_on", tgt="c_sw", pol="affirmed"), True),
-        ("substituted_concept", dict(src="c_hub", rel="acts_on", tgt="c_fr", pol="affirmed"), True),
-        ("wrong_relation", dict(src="c_sw", rel="uses", tgt="c_fr", pol="affirmed"), True),
+        ("polarity_flip", {"src": "c_sw", "rel": "acts_on", "tgt": "c_fr", "pol": "negated"}, True),
+        (
+            "polarity_flip",
+            {"src": "c_sw", "rel": "acts_on", "tgt": "c_fr", "pol": "affirmed"},
+            False,
+        ),
+        ("reversed", {"src": "c_fr", "rel": "acts_on", "tgt": "c_sw", "pol": "affirmed"}, True),
+        (
+            "substituted_concept",
+            {"src": "c_hub", "rel": "acts_on", "tgt": "c_fr", "pol": "affirmed"},
+            True,
+        ),
+        ("wrong_relation", {"src": "c_sw", "rel": "uses", "tgt": "c_fr", "pol": "affirmed"}, True),
         (
             "modality_error",
-            dict(src="c_sw", rel="acts_on", tgt="c_fr", pol="affirmed", mod="possible"),
+            {"src": "c_sw", "rel": "acts_on", "tgt": "c_fr", "pol": "affirmed", "mod": "possible"},
             True,
         ),
         (
             "condition_error",
-            dict(src="c_sw", rel="acts_on", tgt="c_fr", pol="affirmed", cond=["x"]),
+            {"src": "c_sw", "rel": "acts_on", "tgt": "c_fr", "pol": "affirmed", "cond": ["x"]},
             True,
         ),
     ],
 )
 def test_perturbation_consistency(ptype, wrong, ok, tmp_path):
-    ce = dict(src="c_sw", rel="acts_on", tgt="c_fr", pol="affirmed", mod="always", cond=[])
+    ce = {
+        "src": "c_sw",
+        "rel": "acts_on",
+        "tgt": "c_fr",
+        "pol": "affirmed",
+        "mod": "always",
+        "cond": [],
+    }
     w = {"mod": "always", "cond": [], **wrong}
     names = {c["concept_id"]: c["canonical_name"] for c in CONCEPTS}
     assert consistent(ptype, w, ce, REG, None, names) is ok
@@ -238,10 +253,31 @@ def test_perturbation_consistency(ptype, wrong, ok, tmp_path):
 
 def test_conflation_needs_a_contrast_edge_or_lexicon_pair(tmp_path):
     names = {c["concept_id"]: c["canonical_name"] for c in CONCEPTS}
-    w = dict(src="c_lat", rel="conflated_with", tgt="c_bw", pol="affirmed", mod=None, cond=[])
-    ce = dict(src="c_lat", rel="contrasts_with", tgt="c_bw", pol="affirmed", mod="always", cond=[])
+    w = {
+        "src": "c_lat",
+        "rel": "conflated_with",
+        "tgt": "c_bw",
+        "pol": "affirmed",
+        "mod": None,
+        "cond": [],
+    }
+    ce = {
+        "src": "c_lat",
+        "rel": "contrasts_with",
+        "tgt": "c_bw",
+        "pol": "affirmed",
+        "mod": "always",
+        "cond": [],
+    }
     assert consistent("conflation", w, ce, REG, None, names)
-    other = dict(src="c_sw", rel="acts_on", tgt="c_fr", pol="affirmed", mod="always", cond=[])
+    other = {
+        "src": "c_sw",
+        "rel": "acts_on",
+        "tgt": "c_fr",
+        "pol": "affirmed",
+        "mod": "always",
+        "cond": [],
+    }
     assert not consistent("conflation", w, other, REG, None, names)
     assert consistent(
         "conflation", w, other, REG, lex(tmp_path, [diff(["latency", "bandwidth"])]), names
