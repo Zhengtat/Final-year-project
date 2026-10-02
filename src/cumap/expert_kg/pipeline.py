@@ -140,6 +140,9 @@ class Checkpoint:
     relation_results_v3: list[dict] = field(default_factory=list)
     pair_registry: list[dict] = field(default_factory=list)  # stage d's PairRegistry state
     rejected_relations: list[dict] = field(default_factory=list)
+    # CR-008: re-keying log (merge records, equivalence migration, conflicts, self-loops, ...)
+    rekey: dict = field(default_factory=dict)
+    misconceptions: dict = field(default_factory=dict)  # CR-008 §5 layer + stage log
 
 
 def checkpoint_path(run_dir: Path) -> Path:

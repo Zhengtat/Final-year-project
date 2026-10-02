@@ -61,6 +61,9 @@ class RegisteredConcept:
     embedding: np.ndarray | None = None
     # CR-007 §4.2: append-only refinements (later `defined` mentions): {section_id, quote, definition}
     description_history: list[dict] = field(default_factory=list)
+    # CR-008 §3/§4: pre-merge ids, and per-alias provenance {form, rule_id, section_id, evidence_quote, from_id}
+    merged_from: list[str] = field(default_factory=list)
+    alias_provenance: list[dict] = field(default_factory=list)
 
 
 @dataclass

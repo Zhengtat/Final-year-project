@@ -249,9 +249,17 @@ def build_pair_registry(cp: Checkpoint) -> PairRegistry:
     """Adapter: v3 results of the SELECTED group -> the PairRegistry the snapshot writer expects. (The
     unselected sample is measurement only and is kept out of the graph.)"""
     reg = PairRegistry()
+    edge_pairs: set[frozenset[str]] = set()  # CR-008: an edge on a node pair is never overwritten
     for r in cp.relation_results_v3:
-        if r["group"] != "selected":
+        if r["group"] != "selected" or r.get("self_pair"):
             continue
+        if r.get("consolidated_into") or r.get("snapshot_secondary"):
+            continue
+        pk = frozenset((r["pair"]["concept_x_id"], r["pair"]["concept_y_id"]))
+        if r["outcome"] != "edge" and pk in edge_pairs:
+            continue
+        if r["outcome"] == "edge" and not r.get("gated_dropped"):
+            edge_pairs.add(pk)
         pair = CandidatePair(**r["pair"])
         edge = None
         if r["outcome"] == "edge" and not r.get("gated_dropped"):

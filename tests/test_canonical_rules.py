@@ -13,7 +13,6 @@ from cumap.expert_kg.canonical_rules import AliasContext
 from cumap.expert_kg.canonicalize import ConceptRegistry, canonicalize_mention
 from cumap.expert_kg.concepts import ConceptMentionCandidate
 from cumap.expert_kg.lexicon import Lexicon, LexiconError
-from cumap.llm.client import LLMClient
 from cumap.llm.prompts import load_prompt
 
 REPO = Path(__file__).parents[1]
