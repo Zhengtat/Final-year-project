@@ -1,99 +1,750 @@
-version: 0.1-draft
+version: '0.2'
 changelog:
-- '0.1-draft 2026-10-02: research-chat seeds D101-D116 added as proposed (ignored by the pipeline until approved)'
-same: []
+- '0.1-draft 2026-10-02: research-chat seeds D101-D116 added as proposed'
+- '0.2 2026-10-02: owner-derived entries from the CR-005 and CR-007 merge sheets and never_merge added as approved
+  (learning loop); "Telco Central Office / Central Office" and "data link protocol / Link-level protocol" left out
+  by owner ruling (neither list, leave to R4); routing/forwarding table recorded as book_distinguishes with the
+  P&D §3.4 quote'
+same:
+- id: S-CR-005-1
+  canonical: Internet Service Provider
+  forms:
+  - ISP
+  - Internet Service Provider
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 1, CR-007 sheet row 24'
+  quote: connected by various means to an ISP
+  section: '2.1'
+- id: S-CR-005-2
+  canonical: last-mile link
+  forms:
+  - access network
+  - last-mile link
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 2, CR-007 sheet row 7'
+  quote: last-mile links (or alternatively, access networks)
+  section: '2.1'
+- id: S-CR-005-3
+  canonical: local area network
+  forms:
+  - LAN
+  - local area network
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 3'
+  quote: local area networks (LANs)
+  section: '2.1'
+- id: S-CR-005-4
+  canonical: cellular network
+  forms:
+  - mobile network
+  - cellular network
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 4'
+  quote: there is also the mobile or cellular network
+  section: '2.1'
+- id: S-CR-005-5
+  canonical: non-return to zero (NRZ)
+  forms:
+  - Non-Return-to-Zero (NRZ)
+  - non-return to zero (NRZ)
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 5, CR-007 sheet row 35'
+  quote: the simple encoding described in the previous section where 1s are high and 0s are low.
+  section: '2.3'
+- id: S-CR-005-6
+  canonical: cyclic redundancy check (CRC)
+  forms:
+  - cyclic redundancy check
+  - cyclic redundancy check (CRC)
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 6, CR-007 sheet row 1'
+  quote: One of the most common techniques for detecting transmission errors is a technique known as the cyclic
+    redundancy check (CRC).
+  section: '2.4'
+- id: S-CR-005-7
+  canonical: exclusive OR (XOR)
+  forms:
+  - exclusive OR
+  - exclusive OR (XOR)
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 7, CR-007 sheet row 28'
+  quote: The remainder obtained when B(x) is divided by C(x) is obtained by performing the exclusive OR (XOR) operation
+    on each pair of matching coefficients.
+  section: '2.4'
+- id: S-CR-005-8
+  canonical: 4B/5B
+  forms:
+  - 4B/5B encoding
+  - 4B/5B
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 8'
+  quote: while 4B/5B encoding (or the similar 8B/10B) scheme is used today on higher speed Ethernets.
+  section: '2.6'
+- id: S-CR-005-9
+  canonical: media access control
+  forms:
+  - media access control (MAC)
+  - media access control
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 9'
+  quote: This algorithm is commonly called the Ethernet’s media access control (MAC).
+  section: '2.6'
+- id: S-CR-005-10
+  canonical: High-Level Data Link Control (HDLC)
+  forms:
+  - HDLC protocol
+  - High-Level Data Link Control (HDLC)
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 10'
+  quote: Like the HDLC protocol described in an earlier section
+  section: '2.6'
+- id: S-CR-005-11
+  canonical: bit-oriented protocol
+  forms:
+  - bit-oriented framing protocol
+  - bit-oriented protocol
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 11, CR-007 sheet row 15'
+  quote: the Ethernet is a bit-oriented framing protocol.
+  section: '2.6'
+- id: S-CR-005-12
+  canonical: bit rate
+  forms:
+  - data rate
+  - bit rate
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 12, CR-007 sheet row 10'
+  quote: use the term data rate to describe the number of bits per second that can be sent over the link
+  section: '2.7'
+- id: S-CR-005-13
+  canonical: Carrier Sense, Multiple Access with Collision Detect (CSMA/CD)
+  forms:
+  - CSMA/CD
+  - Carrier Sense, Multiple Access with Collision Detect (CSMA/CD)
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 13'
+  quote: CSMA/CD used on Ethernets.
+  section: '2.7'
+- id: S-CR-005-14
+  canonical: frequency hopping
+  forms:
+  - frequency-hopping
+  - frequency hopping
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 14, CR-007 sheet row 37'
+  quote: It uses frequency-hopping with 79 channels (frequencies), using each for 625 μs at a time.
+  section: '2.7'
+- id: S-CR-005-15
+  canonical: Internet Service Provider
+  forms:
+  - Internet Service Provider (ISP)
+  - Internet Service Provider
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 15'
+  quote: an ISP
+  section: '2.8'
+- id: S-CR-005-16
+  canonical: multiple-access network
+  forms:
+  - multi-access network
+  - multiple-access network
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 16, CR-007 sheet row 38'
+  quote: the networks are multi-access (like Ethernet and Wi-Fi)
+  section: '2.8'
+- id: S-CR-005-17
+  canonical: last-mile link
+  forms:
+  - last-mile
+  - last-mile link
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 17'
+  quote: the ISP-side of the last-mile that directly connects to customers
+  section: '2.8'
+- id: S-CR-005-18
+  canonical: Passive Optical Network
+  forms:
+  - Passive Optical Network (PON)
+  - Passive Optical Network
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 18, CR-007 sheet row 16'
+  quote: PON is the technology most commonly used to deliver fiber-based broadband to homes and businesses.
+  section: '2.8'
+- id: S-CR-005-19
+  canonical: Broadband Base Unit (BBU)
+  forms:
+  - Evolved NodeB (eNodeB)
+  - Broadband Base Unit (BBU)
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 19, CR-007 sheet row 17'
+  quote: BBUs officially go by another name—Evolved NodeB, often abbreviated eNodeB or eNB
+  section: '2.8'
+- id: S-CR-005-20
+  canonical: millimeter-wave band
+  forms:
+  - millimeter wave (mmWave)
+  - millimeter-wave band
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 20, CR-007 sheet row 14'
+  quote: Carrier frequencies above 24GHz (mmWaves) are designed to provide super wide bandwidths over short, line-of-sight
+    coverage.
+  section: '2.8'
+- id: S-CR-005-21
+  canonical: Broadband Base Unit (BBU)
+  forms:
+  - BBU
+  - Broadband Base Unit (BBU)
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 21'
+  quote: BBUs
+  section: 2-perspective-race-to-the-edge
+- id: S-CR-005-22
+  canonical: Evolved Packet Core (EPC)
+  forms:
+  - EPC
+  - Evolved Packet Core (EPC)
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 22'
+  quote: EPCs
+  section: 2-perspective-race-to-the-edge
+- id: S-CR-005-24
+  canonical: Internet
+  forms:
+  - public Internet
+  - Internet
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 24'
+  quote: connect it to the public Internet
+  section: 2-perspective-race-to-the-edge
+- id: S-CR-005-25
+  canonical: Internet protocol
+  forms:
+  - IP
+  - Internet protocol
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 25'
+  quote: the Internet Protocol (IP)
+  section: 3-problem-not-all-networks-are-directly-connected
+- id: S-CR-005-26
+  canonical: path
+  forms:
+  - route
+  - path
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 26'
+  quote: Finding a suitable path or route through a network is one of the fundamental problems of networking.
+  section: 3-problem-not-all-networks-are-directly-connected
+- id: S-CR-005-28
+  canonical: connection-oriented approach
+  forms:
+  - connection-oriented model
+  - connection-oriented approach
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 28'
+  quote: This approach, which is also referred to as a connection-oriented model, requires setting up a virtual
+    connection
+  section: '3.1'
+- id: S-CR-005-30
+  canonical: Layer 2 switch
+  forms:
+  - L2 switch
+  - Layer 2 switch
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 30'
+  quote: using L2 switches to connect a set of point-to-point links
+  section: '3.2'
+- id: S-CR-005-31
+  canonical: Spanning tree algorithm
+  forms:
+  - Spanning tree protocol
+  - Spanning tree algorithm
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 31'
+  quote: The spanning tree algorithm, which was developed by Radia Perlman, then at the Digital Equipment Corporation,
+    is a protocol used by a set of switches to agree upon a spanning tree for a particular network.
+  section: '3.2'
+- id: S-CR-005-32
+  canonical: VLAN ID
+  forms:
+  - VLAN tag
+  - VLAN ID
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 32'
+  quote: This VID is typically referred to as a VLAN Tag.
+  section: '3.2'
+- id: S-CR-005-33
+  canonical: maximum transmission unit
+  forms:
+  - MTU
+  - maximum transmission unit
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 33, CR-007 sheet row 21'
+  quote: maximum transmission unit (MTU), which is the largest IP datagram that it can carry in a frame.
+  section: '3.3'
+- id: S-CR-005-34
+  canonical: classless addressing
+  forms:
+  - Classless Interdomain Routing
+  - classless addressing
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 34'
+  quote: more often called Classless Interdomain Routing or CIDR
+  section: '3.3'
+- id: S-CR-005-35
+  canonical: ARP cache
+  forms:
+  - ARP table
+  - ARP cache
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 35, CR-007 sheet row 20'
+  quote: The set of mappings currently stored in a host is known as the ARP cache or ARP table.
+  section: '3.3'
+- id: S-CR-005-36
+  canonical: virtual private network
+  forms:
+  - VPN
+  - virtual private network
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 36'
+  quote: An important example of such a situation is the virtual private network (VPN).
+  section: '3.3'
+- id: S-CR-005-38
+  canonical: prefix
+  forms:
+  - network prefix
+  - prefix
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 38'
+  quote: a row in the forwarding table contains the mapping from a network prefix to an outgoing interface
+  section: '3.4'
+- id: S-CR-005-39
+  canonical: network adaptor
+  forms:
+  - network interface card
+  - network adaptor
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 39'
+  quote: four network interface cards (NICs)
+  section: '3.5'
+- id: S-CR-005-40
+  canonical: main memory
+  forms:
+  - physical memory
+  - main memory
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 40, CR-007 sheet row 31'
+  quote: the underlying physical memory may be shared by many applications
+  section: 3-perspective-virtual-networks-all-the-way-down
+- id: S-CR-005-41
+  canonical: Virtual LAN
+  forms:
+  - VLAN
+  - Virtual LAN
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 41'
+  quote: VLANs, as described in Section 3.2, are how we typically virtualize an L2 network.
+  section: 3-perspective-virtual-networks-all-the-way-down
+- id: S-CR-005-42
+  canonical: virtual machine
+  forms:
+  - virtual machine (VM)
+  - virtual machine
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 42, CR-007 sheet row 13'
+  quote: the network needs to connect virtual machines rather than the physical machines that those VMs run on.
+  section: 3-perspective-virtual-networks-all-the-way-down
+- id: S-CR-005-43
+  canonical: Virtual Network Id (VNI)
+  forms:
+  - VXLAN VID
+  - Virtual Network Id (VNI)
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 43, CR-007 sheet row 27'
+  quote: virtual networks (VXLAN VIDs)
+  section: 3-perspective-virtual-networks-all-the-way-down
+- id: S-CR-007-2
+  canonical: Internet architecture
+  forms:
+  - TCP/IP architecture
+  - Internet architecture
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 2'
+  quote: The Internet architecture, which is also sometimes called the TCP/IP architecture after its two main protocols
+  section: '1.3'
+- id: S-CR-007-3
+  canonical: delay × bandwidth product
+  forms:
+  - Delay-bandwidth product
+  - delay × bandwidth product
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 3'
+  quote: This link has a delay × bandwidth product of 67.5 Kb
+  section: '2.5'
+- id: S-CR-007-5
+  canonical: synchronous time-division multiplexing
+  forms:
+  - STDM
+  - synchronous time-division multiplexing
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 5'
+  quote: One common method is synchronous time-division multiplexing (STDM).
+  section: '1.2'
+- id: S-CR-007-6
+  canonical: router
+  forms:
+  - gateway
+  - router
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 6'
+  quote: A node that is connected to two or more networks is commonly called a router or gateway
+  section: '1.2'
+- id: S-CR-007-9
+  canonical: Transmission Control Protocol (TCP)
+  forms:
+  - Transmission Control Protocol
+  - Transmission Control Protocol (TCP)
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 9'
+  quote: TCP provides a reliable byte-stream channel
+  section: '1.3'
+- id: S-CR-007-11
+  canonical: Classless Interdomain Routing
+  forms:
+  - CIDR
+  - Classless Interdomain Routing
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 11'
+  quote: more often called Classless Interdomain Routing or CIDR
+  section: '3.3'
+- id: S-CR-007-12
+  canonical: OSI architecture
+  forms:
+  - OSI reference model
+  - OSI architecture
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 12'
+  quote: the schematic given in Figure is not a protocol graph, per se, but rather a reference model for a protocol
+    graph.
+  section: '1.3'
+- id: S-CR-007-18
+  canonical: frequency-division multiplexing
+  forms:
+  - FDM
+  - frequency-division multiplexing
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 18'
+  quote: Another method is frequency-division multiplexing (FDM).
+  section: '1.2'
+- id: S-CR-007-19
+  canonical: 802.11 Wi-Fi standards
+  forms:
+  - IEEE 802.11
+  - 802.11 Wi-Fi standards
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 19'
+  quote: Like Ethernet, 802.11 is designed for use in a limited geographical area
+  section: '2.7'
+- id: S-CR-007-22
+  canonical: last mile
+  forms:
+  - last-mile
+  - last mile
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 22'
+  quote: last-mile
+  section: '2.1'
+- id: S-CR-007-23
+  canonical: Software Defined Networks
+  forms:
+  - Software Defined Network
+  - Software Defined Networks
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 23'
+  quote: 'The fundamental idea of SDN is one we’ve already discussed: to decouple the network control plane'
+  section: '3.5'
+- id: S-CR-007-25
+  canonical: bit pipe
+  forms:
+  - bit-pipe
+  - bit pipe
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 25'
+  quote: the access network remains a dumb bit-pipe
+  section: 2-perspective-race-to-the-edge
+- id: S-CR-007-26
+  canonical: synchronous time-division multiplexing
+  forms:
+  - synchronous time division multiplexing
+  - synchronous time-division multiplexing
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 26'
+  quote: This provides a natural time slot for Bluetooth to use for synchronous time division multiplexing.
+  section: '2.7'
+- id: S-CR-007-29
+  canonical: Message body
+  forms:
+  - Payload
+  - Message body
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 29'
+  quote: The rest of the message—that is, the data being transmitted on behalf of the application—is called the
+    message’s body or payload.
+  section: '1.3'
+- id: S-CR-007-30
+  canonical: network application
+  forms:
+  - networked application
+  - network application
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 30'
+  quote: In addition to understanding how networks are built, it is increasingly important to understand how they
+    are operated or managed and how network applications are developed.
+  section: 1-problem-building-a-network
+- id: S-CR-007-32
+  canonical: File Transfer Protocol
+  forms:
+  - FTP
+  - File Transfer Protocol
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 32'
+  quote: File Transfer Protocol (FTP)
+  section: '1.2'
+- id: S-CR-007-33
+  canonical: Application layer protocol
+  forms:
+  - application-level protocol
+  - Application layer protocol
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 33'
+  quote: implement an application-level protocol
+  section: '1.4'
+- id: S-CR-007-34
+  canonical: network designer
+  forms:
+  - network designers
+  - network designer
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 34'
+  quote: network designers, application developers, end users, and network operators
+  section: 1-perspective-feature-velocity
+- id: S-CR-007-36
+  canonical: frequency-division multiplexing
+  forms:
+  - frequency division multiplexing
+  - frequency-division multiplexing
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 36'
+  quote: a variant of frequency division multiplexing called orthogonal frequency division multiplexing
+  section: '2.7'
+- id: S-CR-007-39
+  canonical: physical medium
+  forms:
+  - link
+  - physical medium
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 39'
+  quote: directly connected by some physical medium
+  section: '1.2'
+- id: S-CR-007-40
+  canonical: application developer
+  forms:
+  - application developers
+  - application developer
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-007 sheet row 40'
+  quote: network designers, application developers, end users, and network operators
+  section: 1-perspective-feature-velocity
 different:
+- id: D-CR-005-29
+  forms:
+  - routing table
+  - forwarding table
+  kind: book_distinguishes
+  why: 'P&D §3.4: "we will make a distinction between them here"; owner marked the §3.1 alias wrong'
+  distinction_dimension: 'what the table is used for: a forwarding table is consulted per packet, a routing table
+    is built by routing algorithms'
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 29'
+  quote: While the terms forwarding table and routing table are sometimes used interchangeably, we will make a distinction
+    between them here.
+  section: '3.4'
+- id: D-CR-005-37
+  forms:
+  - destination address
+  - DestinationAddr
+  kind: different_type
+  why: owner marked wrong (a header-field name in the book vs the concept)
+  scope: book:pd6e
+  status: approved
+  source: 'owner mark: CR-005 sheet row 37'
+  quote: look at a destination address and then to determine which of the output ports is the best choice
+  section: '3.4'
+- id: D-never_merge-2
+  forms:
+  - High-Level Data Link Control (HDLC)
+  - Synchronous Data Link Control (SDLC)
+  kind: predecessor
+  why: SDLC was later standardized by ISO as HDLC (kind assigned by Claude Code from the never_merge comment)
+  scope: book:pd6e
+  status: approved
+  source: configs/canonical_overrides.yaml never_merge (owner review 2026-09-30)
+  section: §2.3
+- id: D-never_merge-3
+  forms:
+  - Internet
+  - internetworking
+  kind: instance_of
+  why: the Internet is one particular internetwork (kind assigned by Claude Code from the never_merge comment)
+  scope: book:pd6e
+  status: approved
+  source: configs/canonical_overrides.yaml never_merge (owner review 2026-09-30)
+- id: D-never_merge-4
+  forms:
+  - cyclic redundancy check
+  - error-detecting code
+  kind: kind_of
+  why: CRC is one kind of error-detecting code (kind assigned by Claude Code from the never_merge comment)
+  scope: book:pd6e
+  status: approved
+  source: configs/canonical_overrides.yaml never_merge (owner review 2026-09-30)
 - id: D101:switch|switching
-  list: different
   forms:
   - switch
   - switching
   kind: different_type
   why: A switch is a device (Component); switching is the forwarding technique (Mechanism).
+  distinction_dimension: device vs process
   scope: book:pd6e
   status: proposed
   source: research-chat seed D101
   quote: 'The switching function is then very simple: For each packet that arrives on an input, the switch would
     read the port number in the header and transmit the packet on that output.'
-  quote_section: '3.1'
-  book_distinguishes: false
-  note: null
+  section: '3.1'
 - id: D102:bit|bit rate
-  list: different
   forms:
   - bit
   - bit rate
   kind: different_type
   why: A bit is a unit of data; bit rate is a property (bits per second); a bit stream is a sequence of bits.
+  distinction_dimension: unit vs rate vs sequence
   scope: book:pd6e
   status: proposed
   source: research-chat seed D102
   quote: In the case of the Manchester encoding, the bit rate is half the baud rate, so the encoding is considered
     only 50% efficient.
-  quote_section: '2.2'
-  book_distinguishes: false
-  note: null
+  section: '2.2'
 - id: D102:bit|bit stream
-  list: different
   forms:
   - bit
   - bit stream
   kind: different_type
   why: A bit is a unit of data; bit rate is a property (bits per second); a bit stream is a sequence of bits.
+  distinction_dimension: unit vs rate vs sequence
   scope: book:pd6e
   status: proposed
   source: research-chat seed D102
   quote: The idea of 4B/5B is to insert extra bits into the bit stream so as to break up long sequences of 0s or
     1s.
-  quote_section: '2.2'
-  book_distinguishes: false
-  note: null
+  section: '2.2'
 - id: D102:bit rate|bit stream
-  list: different
   forms:
   - bit rate
   - bit stream
   kind: different_type
   why: A bit is a unit of data; bit rate is a property (bits per second); a bit stream is a sequence of bits.
+  distinction_dimension: unit vs rate vs sequence
   scope: book:pd6e
   status: proposed
   source: research-chat seed D102
-  quote: null
-  quote_section: null
-  book_distinguishes: false
-  note: null
 - id: D103:bandwidth|throughput
-  list: different
   forms:
   - bandwidth
   - throughput
   kind: confusable
   why: Bandwidth is what a link can carry; throughput is what is measured end to end in practice.
+  distinction_dimension: nominal capacity vs achieved rate
   scope: book:pd6e
   status: proposed
   source: research-chat seed D103
   quote: 'Network performance is measured in two fundamental ways: bandwidth (also called throughput) and latency
     (also called delay).'
-  quote_section: '1.5'
-  book_distinguishes: false
-  note: 'CONFLICT: P&D §1.5 says bandwidth is "also called throughput" (a strong R3 alias); the seed says different'
+  section: '1.5'
+  note: 'CONFLICT: P&D §1.5 says bandwidth is "also called throughput"; the seed says different'
 - id: D104:latency|round-trip time
-  list: different
   forms:
   - latency
   - round-trip time
   kind: confusable
   why: Latency (delay) is one-way; RTT is there and back.
+  distinction_dimension: one-way vs round trip
   scope: book:pd6e
   status: proposed
   source: research-chat seed D104
   quote: Also, we make it clear in the context of the discussion whether we are referring to the one-way latency
     or the round-trip time.
-  quote_section: '1.5'
-  book_distinguishes: false
-  note: null
+  section: '1.5'
 - id: D105:bandwidth|data rate
-  list: different
   forms:
   - bandwidth
   - data rate
@@ -101,66 +752,57 @@ different:
   why: OWNER DECISION NEEDED. Ch. 1 uses bandwidth to mean bits per second (close to data rate); Ch. 2 also uses
     bandwidth for a range of frequencies in hertz. May be same in one chapter and different in another; a chapter
     scope may fit better than a book-wide entry.
+  distinction_dimension: bits per second vs hertz
   scope: book:pd6e
   status: proposed
   source: research-chat seed D105
   quote: You may recall that bandwidth sometimes means the width of a frequency band in hertz and sometimes the
     data rate of a link.
-  quote_section: '2.7'
-  book_distinguishes: false
-  note: 'OWNER DECISION: consider scope chapter:2 for the frequency sense (book §2.7 states both senses)'
+  section: '2.7'
+  note: 'OWNER DECISION: consider scope chapter:2 for the frequency sense (§2.7 states both senses)'
 - id: D106:flow control|congestion control
-  list: different
   forms:
   - flow control
   - congestion control
   kind: confusable
   why: Flow control keeps a sender from overrunning the receiver; congestion control keeps senders from overloading
     the network.
+  distinction_dimension: protects the receiver vs protects the network
   scope: book:pd6e
   status: proposed
   source: research-chat seed D106
-  quote: null
-  quote_section: null
-  book_distinguishes: false
-  note: null
 - id: D107:frame|packet
-  list: different
   forms:
   - frame
   - packet
   kind: confusable
   why: The book uses frame for the link-level data unit and packet for the network-level one (and generically).
+  distinction_dimension: layer of the data unit
   scope: book:pd6e
   status: proposed
   source: research-chat seed D107
   quote: At this layer, the unit of data exchanged among nodes is typically called a packet rather than a frame,
     although they are fundamentally the same thing.
-  quote_section: '1.3'
-  book_distinguishes: true
-  note: 'CONFLICT: P&D §1.3 says packet and frame are "fundamentally the same thing"; the seed says different'
+  section: '1.3'
+  note: 'CONFLICT: P&D §1.3 says packet and frame are "fundamentally the same thing"'
 - id: D108:MAC address|IP address
-  list: different
   forms:
   - MAC address
   - IP address
   kind: confusable
   why: A MAC address is a flat link-layer hardware address; an IP address is a hierarchical network-layer address.
+  distinction_dimension: layer and structure of the address
   scope: book:pd6e
   status: proposed
   source: research-chat seed D108
-  quote: null
-  quote_section: null
-  book_distinguishes: false
-  note: null
 - id: D109:hub|switch
-  list: different
   forms:
   - hub
   - switch
   kind: confusable
   why: A hub (multiway repeater) sends every frame out of every port; a switch forwards each frame only to the port
     that leads to its destination.
+  distinction_dimension: repeats to all ports vs forwards per destination
   scope: book:pd6e
   status: proposed
   source: research-chat seed D109
@@ -168,116 +810,99 @@ different:
     is primarily because it could be deployed incrementally—with some hosts connected by point-to-point links to
     switches while others remained tapped into coax and connected to repeaters or hubs—all the while retaining the
     simplicity of network administration.
-  quote_section: '2.6'
-  book_distinguishes: false
-  note: null
+  section: '2.6'
 - id: D110:router|switch
-  list: different
   forms:
   - router
   - switch
   kind: confusable
   why: 'A switch forwards within one network (link layer); a router forwards between networks (network layer). Owner
     check: if the book presents a router as a network-layer kind of switch, change kind to kind_of.'
+  distinction_dimension: layer at which forwarding happens
   scope: book:pd6e
   status: proposed
   source: research-chat seed D110
   quote: A node that is connected to two or more networks is commonly called a router or gateway, and it plays much
     the same role as a switch—it forwards messages from one network to another.
-  quote_section: '1.2'
-  book_distinguishes: false
+  section: '1.2'
   note: 'CHECK: P&D §1.2 says a router "plays much the same role as a switch"; consider kind_of'
 - id: D111:CSMA/CD|CSMA/CA
-  list: different
   forms:
   - CSMA/CD
   - CSMA/CA
   kind: confusable
   why: Ethernet detects collisions and backs off; 802.11 avoids collisions because a wireless sender cannot detect
     them.
+  distinction_dimension: collision detection vs collision avoidance
   scope: book:pd6e
   status: proposed
   source: research-chat seed D111
   quote: 802.11 addresses these problems by using CSMA/CA, where the CA stands for collision avoidance, in contrast
     to the collision detection of CSMA/CD used on Ethernets.
-  quote_section: '2.7'
-  book_distinguishes: true
-  note: null
+  section: '2.7'
 - id: D112:error detection|error correction
-  list: different
   forms:
   - error detection
   - error correction
   kind: confusable
   why: Detection only finds that a frame is corrupted; correction repairs it from redundant bits.
+  distinction_dimension: find vs repair
   scope: book:pd6e
   status: proposed
   source: research-chat seed D112
   quote: Thus, while error detection requires more bits to be sent when errors occur, error correction requires
     more bits to be sent all the time.
-  quote_section: '2.4'
-  book_distinguishes: false
-  note: null
+  section: '2.4'
 - id: D113:NRZ|NRZI
-  list: different
   forms:
   - NRZ
   - NRZI
   kind: confusable
   why: NRZ maps a bit to a signal level; NRZI marks a 1 with a transition.
+  distinction_dimension: level encodes the bit vs transition encodes the bit
   scope: book:pd6e
   status: proposed
   source: research-chat seed D113
   quote: Keep in mind that if the receiver had been able to keep up with the faster baud rate required by the Manchester
     encoding in Figure, then both NRZ and NRZI could have been able to transmit twice as many bits in the same time
     period.
-  quote_section: '2.2'
-  book_distinguishes: false
-  note: null
+  section: '2.2'
 - id: D114:4B/5B|8B/10B
-  list: different
   forms:
   - 4B/5B
   - 8B/10B
   kind: confusable
   why: Two different block codes with different group sizes; the book calls 8B/10B 'similar', not the same.
+  distinction_dimension: code group size
   scope: book:pd6e
   status: proposed
   source: research-chat seed D114
   quote: The original Ethernet specifications used the Manchester encoding scheme described in an earlier section,
     while 4B/5B encoding (or the similar 8B/10B) scheme is used today on higher speed Ethernets.
-  quote_section: '2.6'
-  book_distinguishes: false
-  note: null
+  section: '2.6'
 - id: D115:VLAN|VXLAN
-  list: different
   forms:
   - VLAN
   - VXLAN
   kind: confusable
   why: A VLAN tags frames to split one LAN; VXLAN carries Ethernet frames inside UDP/IP to build a virtual layer-2
     network over layer 3.
+  distinction_dimension: tag within a LAN vs overlay across an IP network
   scope: book:pd6e
   status: proposed
   source: research-chat seed D115
   quote: This means a VXLAN-based virtual network (which is often referred to as an overlay network) runs on top
     of an IP-based network, which in turn runs on an underlying ethernet (or perhaps in just one VLAN of the underlying
     ethernet).
-  quote_section: 3-perspective-virtual-networks-all-the-way-down
-  book_distinguishes: false
-  note: null
+  section: 3-perspective-virtual-networks-all-the-way-down
 - id: D116:VLAN ID|VXLAN network identifier
-  list: different
   forms:
   - VLAN ID
   - VXLAN network identifier
   kind: confusable
   why: 'Different identifiers for different technologies: a 12-bit VLAN ID in the 802.1Q tag vs a 24-bit VNI in
     the VXLAN header.'
+  distinction_dimension: which header, and identifier size
   scope: book:pd6e
   status: proposed
   source: research-chat seed D116
-  quote: null
-  quote_section: null
-  book_distinguishes: false
-  note: null

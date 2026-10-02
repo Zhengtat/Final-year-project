@@ -20,12 +20,14 @@ version would say.
 from __future__ import annotations
 
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 import numpy as np
 import yaml
 
+from cumap.expert_kg.alias_rules import split_embedded_acronym
+from cumap.expert_kg.canonical_rules import AliasContext
 from cumap.expert_kg.concepts import ConceptMentionCandidate
 from cumap.expert_kg.llm_schemas import CanonicalizeDecisionLLM
 from cumap.llm.client import LLMClient
@@ -74,6 +76,9 @@ class CanonicalizationOutcome:
     review: bool = False  # the LLM said "same" but similarity is below the review band: not merged
     similarity: float | None = None  # similarity to `matched_concept_id`
     related_ids: list[str] = field(default_factory=list)  # different node_type: never `same`
+    # CR-008 §3: the deterministic rule that merged it (R0/R1/R2/R3-strong) and its evidence
+    rule_id: str | None = None
+    evidence_quote: str | None = None
 
 
 @dataclass
@@ -223,6 +228,7 @@ def canonicalize_mention(
     overrides: CanonicalOverrides | None = None,
     type_aware: bool = False,
     review_below: float | None = None,
+    alias_ctx: AliasContext | None = None,
 ) -> CanonicalizationOutcome:
     """CR-007 §4.3 (off by default; the CR-007 pipeline turns both on): with `type_aware`, a
     candidate with a different `node_type` is never offered as `same` (it is logged as a `related`
@@ -230,7 +236,30 @@ def canonicalize_mention(
     the band is NOT merged but routed to the review sheet (decision "review", a new concept is
     created, nothing is lost). Exact-string auto-merge and the overrides are unchanged."""
     overrides = overrides or CanonicalOverrides()
+    extra_alias: str | None = None
+    original_name = mention.canonical_name
+    if alias_ctx is not None:  # CR-008 R2: "long form (SF)" -> canonical long form + alias SF
+        split = split_embedded_acronym(mention.canonical_name, alias_ctx.cfg)
+        if split:
+            mention = replace(mention, canonical_name=split[0])
+            extra_alias = split[1]
+    outcome = _canonicalize(
+        client, prompt_template, registry, mention, similarity_threshold, k, fixture_name,
+        overrides, type_aware, review_below, alias_ctx,
+    )
+    if extra_alias:
+        if outcome.decision == "same" and outcome.rule_id in (None, "exact"):
+            outcome.rule_id, outcome.evidence_quote = "R2", original_name
+        concept = registry.get(outcome.concept_id)
+        if extra_alias != concept.canonical_name and extra_alias not in concept.aliases:
+            concept.aliases.append(extra_alias)
+    return outcome
 
+
+def _canonicalize(
+    client, prompt_template, registry, mention, similarity_threshold, k, fixture_name,
+    overrides, type_aware, review_below, alias_ctx,
+) -> CanonicalizationOutcome:
     # Exact-string duplicate: auto-merge, no LLM call (unless a human has specifically
     # blocked this exact pair via never_merge).
     exact_match = registry.find_exact_match(mention.canonical_name)
@@ -244,9 +273,33 @@ def canonicalize_mention(
             llm_called=False,
             matched_concept_id=exact_match.concept_id,
             auto_merged=True,
+            rule_id="exact",
         )
 
+    # CR-008 R0-R3: deterministic rules before any embedding or LLM call
+    if alias_ctx is not None:
+        found = alias_ctx.find_merge(
+            registry.all(), mention.canonical_name, mention.node_type, mention.section_id,
+            type_aware=type_aware,
+        )
+        if found and not overrides.is_never_merge(mention.canonical_name, found[0].canonical_name):
+            target, hit = found
+            registry.merge_alias(target.concept_id, mention)
+            return CanonicalizationOutcome(
+                decision="same", concept_id=target.concept_id, llm_called=False,
+                matched_concept_id=target.concept_id, auto_merged=True,
+                rule_id=hit.rule_id, evidence_quote=hit.evidence_quote,
+            )
+
     candidates = registry.top_k_similar(mention.canonical_name, mention.definition, k=k)
+    if alias_ctx is not None:  # lexicon `different` guard: never offer a listed look-alike to the LLM
+        chapter = alias_ctx.chapter_of.get(mention.section_id)
+        kept = [
+            (c, s) for c, s in candidates
+            if not alias_ctx.lexicon.is_different(mention.canonical_name, c.canonical_name, chapter)
+        ]
+        alias_ctx.stats["candidates_blocked_by_lexicon"] += len(candidates) - len(kept)
+        candidates = kept
 
     for candidate, _sim in candidates:
         if overrides.is_force_merge(mention.canonical_name, candidate.canonical_name):
