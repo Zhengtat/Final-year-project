@@ -140,8 +140,8 @@ examples:
     covers: [anchor uses, anchor used_for, complete span with acronym, a value is not a concept, a verb use is not a concept, independent concepts]
     paragraphs:
       P1: >-
-        Write-ahead logging (WAL) records every change in the log file before the change reaches the data file. WAL
-        makes recovery after a crash possible.
+        Write-ahead logging (WAL) records every change in the log file. The change reaches the data file only
+        afterwards. WAL makes recovery after a crash possible.
       P2: >-
         A checkpoint every 5 minutes limits how long recovery takes.
     cards:

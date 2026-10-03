@@ -98,7 +98,7 @@ def bank_tokens(bank: dict) -> int:
 
 def preflight(nums: dict, bank: dict) -> list[str]:
     root = ROOT
-    prompt_tokens = int(len(Path("prompts/concept_generator_v4.md").read_text().split()) * 1.3)
+    prompt_tokens = int(len(Path("prompts/concept_generator/v4.md").read_text().split()) * 1.3)
     btok = bank_tokens(bank)
     iir_dev = [
         json.loads(x)

@@ -2,7 +2,7 @@
 version: draft-1
 
 generator:
-  prompt: concept_generator/v4-draft        # prompts/concept_generator_v4.md
+  prompt: concept_generator/v4              # prompts/concept_generator/v4.md
   bank: configs/fewshot/concepts_v4_draft.yaml
   form: G2                                  # G1 | G2: chosen on IIR dev by the pre-registered rule (STOP 2)
   model_tier: bulk
