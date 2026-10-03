@@ -339,7 +339,7 @@ def main() -> None:
     print("preflight:", json.dumps(pf))
     if a.dry_run:
         return
-    out, sections = run_live(
+    out, _sections = run_live(
         a.arm,
         out_dir=OUT / a.run_id,
         form=a.form,

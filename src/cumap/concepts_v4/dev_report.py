@@ -11,7 +11,6 @@ from pathlib import Path
 import spacy
 
 from cumap.concepts_v4 import experiments as X
-from cumap.concepts_v4.pruner import norm
 from cumap.expert_kg.face_scorer import load_gold_concepts
 
 ROOT = Path(".")

@@ -1,6 +1,6 @@
 """CR-007 §6: the P&D ch1-3 slice re-run, stage by stage, each with a preflight cost check.
 
-concepts (prompt v2, cached where the text is unchanged) -> propagate (E3, $0) -> canonicalize v2 (type-aware,
+concepts (prompt v2, cached where the text is unchanged) -> canonicalize v2 (type-aware,
 0.70 review band) + first-occurrence/role rules ($0) -> select (coverage-aware global pair budget, $0) -> relations
 (registry v1.1, prompts v3, strong tier) -> snapshots ($0). Every LLM call goes through LLMClient, whose stage
 budgets are checked before each call; checkpoints are written after each section / batch of pairs so a run can
@@ -14,7 +14,6 @@ from dataclasses import asdict
 from pathlib import Path
 
 from cumap.expert_kg.canonicalize import CanonicalOverrides
-from cumap.expert_kg.concept_experiments import propagate
 from cumap.expert_kg.llm_schemas import QualifiersLLM
 from cumap.expert_kg.mentions import MentionMatcher
 from cumap.expert_kg.pair_selection import select_pairs
@@ -71,16 +70,6 @@ def load_sections(
 
 def _section_texts(sections: list[SectionInput]) -> list[SectionText]:
     return [SectionText(s.section_id, s.chapter_num, i, s.text) for i, s in enumerate(sections)]
-
-
-# ---------------------------------------------------------------- stage: propagation ($0)
-def propagate_stage(cp: Checkpoint, sections: list[SectionInput]) -> int:
-    """E3: tag every accepted concept in each other section where a longest-match mention occurs."""
-    texts = {s.section_id: s.text for s in sections}
-    before = sum(len(v) for v in cp.mentions_by_section.values())
-    final = {s.section_id: list(cp.mentions_by_section.get(s.section_id, [])) for s in sections}
-    cp.mentions_by_section = propagate(final, texts)
-    return sum(len(v) for v in cp.mentions_by_section.values()) - before
 
 
 # ---------------------------------------------------------------- stage: canonicalize + roles
@@ -333,7 +322,6 @@ __all__ = [
     "load_sections",
     "preflight_canonicalize",
     "preflight_relations",
-    "propagate_stage",
     "relations_stage",
     "run_canonicalize_stage",
     "run_concepts_stage",

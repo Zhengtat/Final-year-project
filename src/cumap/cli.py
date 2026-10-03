@@ -561,7 +561,7 @@ def kg_organise_summary(
 
 @kg_app.command("rerun")
 def kg_rerun(
-    stage: str = typer.Option(..., "--stage", help="concepts | propagate | canonicalize | select | relations | snapshots"),
+    stage: str = typer.Option(..., "--stage", help="concepts | canonicalize | select | relations | snapshots"),
     run: str | None = typer.Option(None, "--run", help="existing CR-007 slice run_id; omit with --new"),
     new: bool = typer.Option(False, "--new", help="start a new run_id (slice3_<id>)"),
     chapters: str = typer.Option("1,2,3", "--chapters"),
@@ -618,13 +618,6 @@ def kg_rerun(
         cp.completed_section_ids = []
         save_checkpoint(cp, run_dir)
         typer.echo(f"mentions: {sum(len(v) for v in cp.mentions_by_section.values())}; spend ${client.spent_usd:.4f}; backend calls {client.backend_call_count}")
-    elif stage == "propagate":
-        added = sr.propagate_stage(cp, sections) if not dry_run else 0
-        typer.echo(f"propagation adds {added} `mentioned` mentions ($0)")
-        if not dry_run:
-            cp.stage = "canonicalize"
-            cp.completed_section_ids = []
-            save_checkpoint(cp, run_dir)
     elif stage == "canonicalize":
         overrides = CanonicalOverrides.load(REPO_ROOT / "configs" / "canonical_overrides.yaml")
         pre = sr.preflight_canonicalize(cp, sections, prompts, embed_fn, overrides, Path("/tmp") / f"pre_{run_id}")
