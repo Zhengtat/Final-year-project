@@ -156,7 +156,9 @@ def test_f6_origin_incomplete():
 
 def test_c2_type_conflict_and_c4_role_autofix():
     card = Card(node("n_1", "transaction", "Concept", d="§3.1"), True)
-    assert "C2" not in rules(verify(out(mentions=[mention(typ="Protocol")]), ctx([card])))  # Concept is a wildcard
+    assert "C2" not in rules(
+        verify(out(mentions=[mention(typ="Protocol")]), ctx([card]))
+    )  # Concept is a wildcard
     comp = Card(node("n_1", "transaction", "Component", d="§3.1"), True)
     assert "C2" in rules(verify(out(mentions=[mention(typ="Protocol")]), ctx([comp])))
     r = verify(out(mentions=[mention(role="defined")]), ctx([card]))
@@ -323,3 +325,18 @@ def test_the_banks_expected_outputs_raise_no_flags_and_no_hints(i):
     o["hint_responses"] = ex.get("hint_responses", [])
     r = verify(o, c)
     assert r.flags == [] and r.hints == [], (r.flags, [h.text for h in r.hints])
+
+
+def test_f3_is_tolerant_to_coordination_parenthetical_and_inflection_but_not_to_a_missing_word():
+    from cumap.concepts_v4.verifier import span_in_quote
+
+    assert span_in_quote(
+        "enterprise search", "the space of enterprise, institutional, and domain-specific search"
+    )
+    assert span_in_quote("spam filter", "provide a spam (junk mail) filter")
+    assert span_in_quote("Boolean query", "how Boolean queries are processed.")
+    assert span_in_quote("relevance", "A document is relevant if it is one")
+    assert not span_in_quote(
+        "Boolean operator", "with the operators and, or, and not"
+    )  # a word is missing
+    assert not span_in_quote("search spam", "provide a spam filter for search")  # order matters

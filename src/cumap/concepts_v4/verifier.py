@@ -17,6 +17,7 @@ from cumap.concepts_v4.cards import Card
 from cumap.expert_kg.alias_rules import AliasConfig, find_abbreviations, r1_key
 from cumap.expert_kg.canonical_rules import types_compatible
 from cumap.expert_kg.lexicon import Lexicon
+from cumap.expert_kg.mentions import default_lemma
 from cumap.expert_kg.partial_span import find_partial_spans
 
 _CFG = None
@@ -125,6 +126,32 @@ def _sentence_of(quote: str, text: str) -> str:
     return quote
 
 
+def _tok_eq(a: str, b: str) -> bool:
+    """Same token up to plural/inflection: equal lemma, or a shared stem of >= 5 letters (relevant / relevance)."""
+    la, lb = default_lemma(a), default_lemma(b)
+    return la == lb or (len(la) >= 5 and len(lb) >= 5 and la[:5] == lb[:5])
+
+
+def span_in_quote(span: str, quote: str) -> bool:
+    """F3 (tolerant): the span lies inside the quote if it is a case-insensitive substring, or every word of the
+    span occurs in the quote in order (same word up to inflection), which covers a split coordination
+    ("enterprise, institutional, and domain-specific search"), a parenthetical ("spam (junk mail) filter") and
+    plurals ("Boolean queries")."""
+    if _nl(span) in _nl(quote):
+        return True
+    sw = re.findall(r"[a-z0-9]+", span.lower())
+    qw = re.findall(r"[a-z0-9]+", quote.lower())
+    if not sw:
+        return False
+    i = 0
+    for w in qw:
+        if _tok_eq(w, sw[i]):
+            i += 1
+            if i == len(sw):
+                return True
+    return False
+
+
 def _head(name: str) -> str:
     w = re.findall(r"[a-z0-9]+", name.lower())
     return w[-1].rstrip("s") if w else ""
@@ -165,7 +192,7 @@ def verify(out_in: dict, ctx: VerifyCtx) -> VerifyResult:
         elif exact != c["evidence"]:
             res.autofixes.append({"rule": "F2", "what": "whitespace", "where": f"new {i}"})
             c["evidence"] = exact
-        if not any(_nl(x) in _nl(c["evidence"]) for x in [c["name"], *c["aliases"]]):
+        if not any(span_in_quote(x, c["evidence"]) for x in [c["name"], *c["aliases"]]):
             res.flags.append(
                 Flag("F3", "new", i, f"{c['name']!r} (or an alias) not inside its evidence")
             )

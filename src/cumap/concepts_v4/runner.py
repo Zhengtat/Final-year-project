@@ -388,23 +388,37 @@ class ConceptRun:
 
 # ---------------------------------------------------------------- scoring adapter (CR-009 §7)
 def predictions(
-    out: RunOutput, sections: list[dict], gold_names: dict[str, set[str]]
+    out: RunOutput,
+    sections: list[dict],
+    gold_names: dict[str, set[str]],
+    *,
+    finals: dict[str, dict] | None = None,
+    tau: float | None = None,
+    replay: bool = False,
 ) -> dict[str, list[dict]]:
     """Per section: the NEW concepts that became nodes (pruned items and unconfirmed mentions are not predictions)
     plus existing mentions, scored like new concepts on the surface form PLUS the node's name and aliases: the
-    form that matches gold is used when one does (a mention is not scored more strictly than a new concept)."""
-    final: dict[str, list[dict]] = {}
+    form that matches gold is used when one does (a mention is not scored more strictly than a new concept).
+    `finals` replays another output per section; with `replay`, `tau` re-applies the pruner to the recorded
+    p(growing) values (None = no pruning)."""
+    result: dict[str, list[dict]] = {}
     for s in sections:
         sid = s["section_id"]
         res = out.sections.get(sid)
         if res is None:
             continue
         meta = out.section_meta.get(sid, {})
-        pruned_names = {norm(x) for x in meta.get("pruned", [])} | {
-            norm(x) for x in meta.get("attributes", [])
-        }
+        fin = (finals or {}).get(sid, res.final)
+        if replay:
+            pruned_names = {
+                norm(x["name"]) for x in meta.get("p", []) if tau is not None and x["p"] < tau
+            }
+        else:
+            pruned_names = {norm(x) for x in meta.get("pruned", [])} | {
+                norm(x) for x in meta.get("attributes", [])
+            }
         items: list[dict] = []
-        for c in res.final["new_concepts"]:
+        for c in fin["new_concepts"]:
             if norm(c["name"]) in pruned_names:
                 continue
             items.append(
@@ -417,7 +431,7 @@ def predictions(
                     "aliases": c["aliases"],
                 }
             )
-        for m in res.final["existing_mentions"]:
+        for m in fin["existing_mentions"]:
             node = out.store.nodes.get(m["node_id"])
             forms = [m["surface"], *([node.name, *node.aliases] if node else [])]
             pick = next((f for f in forms if norm(f) in gold_names.get(sid, set())), m["surface"])
@@ -448,5 +462,5 @@ def predictions(
                             "source": "backfill",
                         }
                     )
-        final[sid] = items
-    return final
+        result[sid] = items
+    return result
