@@ -81,6 +81,7 @@ def misconception_stage(run: str, *, dry_run: bool, limit: int | None, max_usd: 
     from cumap.llm.prompts import load_prompt
 
     settings = get_settings()
+    suffix = "" if run in {"slice3_b3", "slice3_b4"} else f"_{run}"  # never overwrite the sheets the owner may be marking
     slice_cfg = load_demo_slice()
     sections = load_sections(REPO_ROOT / slice_cfg.pd.source_jsonl, list(slice_cfg.pd.chapters))
     pairs = [(s.section_id, s.text) for s in sections]
@@ -174,10 +175,10 @@ def misconception_stage(run: str, *, dry_run: bool, limit: int | None, max_usd: 
         edges,
         checks,
         lexicon=lexicon,
-        name="cr008_misconception_sheet_delta",
+        name=f"cr008_misconception_sheet_delta{suffix}",
         skip_marked=True,
     )
-    recall = write_recall_sample(pairs, {" ".join(c.sentence.split()) for c in cands}, checks)
+    recall = write_recall_sample(pairs, {" ".join(c.sentence.split()) for c in cands}, checks, name=f"cr008_recall_sample_sheet{suffix}")
     (run_dir / "misconceptions.jsonl").write_text(
         "\n".join(json.dumps(i) for i in layer["items"]) + "\n", encoding="utf-8"
     )
