@@ -323,7 +323,7 @@ def run_live(
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("phase", choices=["live"])
+    ap.add_argument("phase", choices=["live", "test"])
     ap.add_argument("--arm", required=True)
     ap.add_argument("--form", choices=["G1", "G2"], default="G2")
     ap.add_argument("--max-iterations", type=int, default=3)
@@ -336,6 +336,27 @@ def main() -> None:
     a = ap.parse_args()
     secs, _ = load_dev()
     secs = secs[: a.limit] if a.limit else secs
+    if a.phase == "test":
+        from cumap.concepts_v4.arms_dev import load_split
+
+        tsecs, _ = load_split("test")
+        tsecs = tsecs[: a.limit] if a.limit else tsecs
+        print("preflight (test):", json.dumps(preflight(tsecs, a.form, a.max_iterations)))
+        if a.dry_run:
+            return
+        out, _s = run_test(
+            a.arm,
+            out_dir=OUT / a.run_id,
+            dev_run=OUT / "dev1" / "FINAL.json",
+            form=a.form,
+            max_iterations=a.max_iterations,
+            tau=a.tau,
+            limit=a.limit,
+        )
+        print(
+            f"done: {len(out.store.nodes)} nodes, {sum(r.calls for r in out.sections.values())} calls, spend ${out.cost_usd}"
+        )
+        return
     pf = preflight(secs, a.form, a.max_iterations)
     print("preflight:", json.dumps(pf))
     if a.dry_run:
@@ -399,6 +420,7 @@ def run_test(
         rho=1.5,
         progress=progress,
     )
+    test_secs = test_secs[:limit] if limit else test_secs
     out = run.run(test_secs, store=prev.store, order_offset=len(dev_secs))
     out.cost_usd = round(client.spent_usd, 4)
     save_run(
