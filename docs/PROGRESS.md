@@ -21,6 +21,7 @@ Update at the end of every milestone: what was done, which acceptance checks pas
 
 ## Log
 <!-- newest first: YYYY-MM-DD · milestone · summary -->
+- 2026-10-03 · CR-009 STOP 1 · $0 diagnostics and drafts on branch `cr-009-concept-gvp` (report `reports/cr009_stop1.md`); waiting for the owner on the bank, the propagation audit, M5 and the licence check. Tests: 455 pass.
 - 2026-10-03 · M5.0d/CR-008 · STOP 3 signed off; merged `--no-ff` to `main`, tagged `cr-008-complete`. CR-009 starts on branch `cr-009-concept-gvp`.
 - 2026-10-02 · M5.0d/CR-008 · Owner marks applied (lexicon v0.3; merge precision R1 1/1, R2 10/10, R3-strong 2/2, no wrong auto merge); item 2 done (qualifiers v4, registry v1.3); cues v0.2 (contrast family) with 4 regression tests; final run `slice3_b4` (913 nodes, org `org_41ffa694`); misconception layer: 89 candidates, owner (a) 4/5. Tests: 441 pass.
 - 2026-10-02 · M5.0d/CR-008 · STOP 1 backtest approved with rulings; lexicon (R0), R1-R3 rules, registry v1.3, relation_choice v4 (`same_concept`), re-key and misconception stage built; re-key run `slice3_b3`; STOP 2 report `reports/cr008_stop2.md`, merge and misconception sheets in `data/interim/checks/`. Tests: 433 pass.

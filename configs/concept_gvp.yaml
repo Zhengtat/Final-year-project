@@ -1,0 +1,86 @@
+# CR-009 §4: concept stage v4 (generator -> verifier -> pruner). DRAFT for owner approval at STOP 1.
+version: draft-1
+
+generator:
+  prompt: concept_generator/v4-draft        # prompts/concept_generator_v4.md
+  bank: configs/fewshot/concepts_v4_draft.yaml
+  form: G2                                  # G1 | G2: chosen on IIR dev by the pre-registered rule (STOP 2)
+  model_tier: bulk
+  retriever:
+    eligible: growing                       # only growing nodes of EARLIER sections of the SAME run; never gold
+    semantic_top_k: 30                      # per section, after dedup
+    card_cap: 120                           # string hits first (order of first occurrence), then semantic hits
+    gloss_words: 25
+    include_lexicon_different_partners: true
+
+verifier:                                   # rule-based code, $0, never reads a rationale (SAC-KG style)
+  max_iterations: 3                         # <= 3 as in PiVe; the value is chosen on dev (replay)
+  drop_without_reprompt_max_flagged: 3      # <= 3 items carrying only F/C flags -> drop, no call (SAC-KG App. B)
+  per_section_call_budget: 5
+  carry_forward: true
+  quantity_rho: 1.5                         # Q1: items < max(3, rho * words / 100); STOP 1 (e): half the dev median density
+  m4_enabled: false                         # optional arm, decided on dev
+  rules:
+    - {id: Q1, name: quantity_insufficient, category: quantity, action: one_corrective_round_then_warning}
+    - {id: F1, name: schema_invalid, category: format, action: reprompt}
+    - {id: F2, name: quote_not_verbatim, category: format, action: autofix_whitespace_else_flag}
+    - {id: F3, name: span_not_in_quote, category: format, action: flag_item}
+    - {id: F4, name: unknown_node, category: format, action: mention_flag_anchor_drop_anchor}
+    - {id: F5, name: anchor_cue_invalid, category: format, action: drop_anchor_only}
+    - {id: F6, name: origin_incomplete, category: format, action: autofix_else_flag}
+    - {id: C1, name: lexicon_violation, category: conflict, action: flag}
+    - {id: C2, name: type_conflict, category: conflict, action: flag}
+    - {id: C3, name: duplicate_new, category: conflict, action: autofix_to_existing_mention}
+    - {id: C4, name: role_conflict, category: conflict, action: autofix_to_refined}
+    - {id: C5, name: self_anchor, category: conflict, action: treat_as_C3}
+    - {id: M1, name: missed_existing_mention, category: coverage, action: hint}
+    - {id: M2, name: partial_span, category: coverage, action: hint}
+    - {id: M3, name: possible_anchor_missed, category: coverage, action: hint}
+    - {id: M4, name: missed_candidate, category: coverage, action: hint, optional: true}
+  # Corrective instruction per error type (the equivalent of SAC-KG's Table 6). Rendered into the CORRECTIONS block.
+  corrective_instructions:
+    Q1: "Your list looks too short for this text. Read the section again and add every further term the text treats as a domain concept, using complete spans."
+    F1: "Your answer did not match the required JSON schema. Return the same content in exactly the schema above."
+    F2: "These quotes are not exact substrings of the text: {items}. Copy each quote character-for-character from the numbered paragraphs, or remove the item."
+    F3: "The item's name is not inside its evidence quote: {items}. Use a quote that contains the name, or correct the name to the span the text uses."
+    F4: "These node ids are not among the EXISTING NODES: {items}. Use only listed ids; if the concept is not listed, make it a NEW concept."
+    F5: "These anchors are not supported by their cue: {items}. A cue must contain the new concept's name and name the anchor node (or sit in its paragraph); otherwise drop the anchor."
+    F6: "These items have an inconsistent origin: {items}. An anchored concept needs at least one anchor; an independent one needs independence_check."
+    C1: "These items treat a look-alike pair as the same node or split a synonym set: {items}. Keep look-alikes as separate nodes."
+    C2: "These mentions give a node type that is incompatible with the card: {items}. Re-check whether the text refers to the same node, or make it a NEW concept."
+    C3: "These NEW concepts duplicate a listed node: {items}. Record them as existing mentions instead."
+    C4: "`defined` is only for a NEW concept or a node shown with def '—': {items}. Use `refined`."
+    C5: "A new concept cannot be anchored to a node it is named the same as: {items}."
+    M1: "These listed nodes appear in the text but you neither recorded nor rejected them: {items}. For each, record an existing mention with evidence, or reject it with a reason."
+    M2: "These spans may be the tail of a longer term in the text: {items}. Use the whole term if the text names it, or reject the hint with a reason."
+    M3: "These independent concepts may relate to a listed node named in the same sentence: {items}. Add the anchor with a cue, or keep independence and say why."
+    M4: "These terms look like defined or emphasised concepts that you did not list: {items}. Add each with evidence, or reject it with a reason."
+  hint_rejection_reasons: [different_sense, generic_use, inside_longer_term, not_a_concept, not_related_here]
+  correction_prefix: "Extract the concepts again, and also review the given items. Include each one the text supports, with role and exact evidence, or reject it with a reason."
+
+anchor_family_map:                          # for pair PRIORITY only (CR-007 §5.3); never shown to relation prompts
+  kind_of: classification_structure
+  instance_of: classification_structure
+  part_of: classification_structure
+  property_of: classification_structure
+  performed_by: mechanism_process
+  acts_on: mechanism_process
+  uses: function_means
+  used_for: function_means
+  requires: dependency
+  causes: cause_effect
+  compared_with: comparison
+  other: null
+
+pruner:                                     # SAC-KG-inspired growing/pruned classifier (CR-009 §5)
+  model: P1                                 # P1 logistic regression on embeddings + features | P2 flan-T5-small + LoRA
+  tau: null                                 # chosen on dev: highest exact micro F1 with recall drop <= 0.01 vs no pruner
+  p2: {epochs: 2, batch_size: 64, learning_rate: 1.0e-3}
+  training: {rows_from: iir_dev_only, exclude: [iir_test, pd_owner_marks], label_defining_features: forbidden}
+
+arms:                                       # comparison arms: reported, never selected (selection_eligible: false)
+  B0: {selection_eligible: false}
+  C-SAC: {selection_eligible: false, regenerate_once: true, coverage_rules: false}
+  C-PiVe: {selection_eligible: false, generator_may_reject_hints: false, max_iterations: 3}
+  C-PiVe-off: {selection_eligible: false, offline: true}
+  C-ConExion: {selection_eligible: false, setup: few_shot_1_random}
