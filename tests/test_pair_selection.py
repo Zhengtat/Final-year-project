@@ -75,3 +75,46 @@ def test_unselected_sample_is_random_but_seeded_and_disjoint_from_selected():
     ids = lambda s: [p.pair_id for p in s.unselected_sample]
     assert ids(a) == ids(b) != ids(c) and len(ids(a)) == 8
     assert not set(ids(a)) & {p.pair_id for p in a.selected}
+
+
+def test_anchor_pairs_go_first_use_the_cue_sentence_and_never_carry_the_anchor_type():
+    """CR-009 §6.3: anchor pairs lead the coverage phase; the cue is the evidence sentence when it mentions both."""
+    from cumap.expert_kg.pair_selection import select_pairs
+    from cumap.expert_kg.relations import CandidatePair
+
+    def cp(pid, sid, x, y, sent, n=1, cue=0):
+        return CandidatePair(pid, sid, x, y, sent, n, cue)
+
+    per = {
+        "s1": [
+            cp("P1", "s1", "a", "b", "A and B appear together.", 5, 3),
+            cp("P2", "s1", "c", "d", "C and D appear together.", 1, 0),
+        ]
+    }
+    roles = {"a": "used", "b": "used", "c": "used", "d": "used"}
+    anchors = [
+        {
+            "concept_id": "d",
+            "anchor_id": "c",
+            "section_id": "s1",
+            "cue": "C is part of D.",
+            "both_in_cue": True,
+            "anchor_type": "part_of",
+        }
+    ]
+    sel = select_pairs(per, roles, budget=1, min_per_section=0, anchors=anchors)
+    assert [p.pair_id for p in sel.selected] == ["P2"] and sel.selected[
+        0
+    ].sentence == "C is part of D."
+    assert sel.stats["phase0b_anchor_pairs"] == 1
+    assert not hasattr(sel.selected[0], "anchor_type")  # the type only sets priority
+    none = select_pairs(
+        per,
+        roles,
+        budget=1,
+        min_per_section=0,
+        anchors=[{**anchors[0], "anchor_id": "z", "both_in_cue": False}],
+    )
+    assert [p.pair_id for p in none.selected] == [
+        "P1"
+    ]  # an anchor pair with no evidence sentence is skipped

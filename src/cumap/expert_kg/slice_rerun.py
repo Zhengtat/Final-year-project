@@ -130,6 +130,7 @@ def select_stage(
     min_per_section: int = 8,
     sample: int = 50,
     seed: int = 42,
+    use_anchors: bool = False,
 ) -> dict:
     concepts = _restore_concept_registry(cp, embed_fn).all()
     per: dict[str, list[CandidatePair]] = {
@@ -149,6 +150,7 @@ def select_stage(
         min_per_section=min_per_section,
         sample_unselected=sample,
         seed=seed,
+        anchors=cp.anchors if use_anchors else None,
     )
     cp.selected_pairs = [asdict(p) for p in sel.selected]
     cp.sample_pairs = [asdict(p) for p in sel.unselected_sample]

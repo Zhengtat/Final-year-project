@@ -107,7 +107,7 @@ llm:
     # on the first real call (output_parsed None). Measured 180-711 tokens on non-truncated calls.
     misconception_structuring: 3000
     # CR-009: a section's items (new concepts with anchors and quotes) plus reasoning; the v2 prompt needed 8000.
-    concept_generator: 8000
+    concept_generator: 16000  # P&D units of up to ~2,500 words: anchors and quotes make the answer long
     concept_backfill: 3000
     conexion_baseline: 3000  # CR-009 C-ConExion comparison arm
     default: 1000

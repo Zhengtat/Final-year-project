@@ -143,6 +143,9 @@ class Checkpoint:
     # CR-008: re-keying log (merge records, equivalence migration, conflicts, self-loops, ...)
     rekey: dict = field(default_factory=dict)
     misconceptions: dict = field(default_factory=dict)  # CR-008 §5 layer + stage log
+    # CR-009 §3.6/§6.3: anchors of the v4 concept stage; they set relation-pair PRIORITY only and are never shown
+    # to the relation generator or verifier.
+    anchors: list[dict] = field(default_factory=list)
 
 
 def checkpoint_path(run_dir: Path) -> Path:

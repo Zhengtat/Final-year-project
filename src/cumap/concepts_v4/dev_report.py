@@ -253,8 +253,8 @@ def append_test(report: str, run: str = "test1") -> None:
         "",
         "FACE's published micro F1 is 0.76 (supervised, 5-fold CV; a different protocol, shown for orientation only).",
         "",
-        f"v4 test statistics: {len(rs)} sections; stop reasons {dict(Counter(r.stop_reason for r in rs))}; flags {dict(flags)}; hints added / rejected {sum(r.hints_added for r in rs)} / {sum(r.hints_rejected for r in rs)}; "
-        f"pruned items {len(out.pruned)}; backfill calls {len(out.backfill)}; sections with a schema error {sum(1 for r in rs if r.error)}; nodes {len(out.store.nodes)} (including the dev nodes the run started from).",
+        (f"v4 test statistics: {len(rs)} sections; stop reasons {dict(Counter(r.stop_reason for r in rs))}; flags {dict(flags)}; hints added / rejected {sum(r.hints_added for r in rs)} / {sum(r.hints_rejected for r in rs)}; "
+        f"pruned items {len(out.pruned)}; backfill calls {len(out.backfill)}; sections with a schema error {sum(1 for r in rs if r.error)}; nodes {len(out.store.nodes)} (including the dev nodes the run started from)."),
         "",
     ]
     p = Path(report)
