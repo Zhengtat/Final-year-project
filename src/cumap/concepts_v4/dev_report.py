@@ -95,7 +95,6 @@ def main() -> None:
             )
         )
     # replays on the first arm that is a step-1 candidate
-    base = a.arms[0] if len(a.arms) == 1 else None
     L += [
         "",
         "## Verifier statistics per arm",
