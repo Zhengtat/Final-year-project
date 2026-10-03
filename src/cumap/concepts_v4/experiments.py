@@ -375,10 +375,6 @@ def main() -> None:
     )
 
 
-if __name__ == "__main__":
-    main()
-
-
 def run_test(
     arm: str,
     *,
@@ -436,3 +432,7 @@ def run_test(
         },
     )
     return out, test_secs
+
+
+if __name__ == "__main__":
+    main()
