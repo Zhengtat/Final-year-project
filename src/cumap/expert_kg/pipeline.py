@@ -24,6 +24,7 @@ import json
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
+from cumap.expert_kg.canonical_rules import AliasContext
 from cumap.expert_kg.canonicalize import (
     CanonicalOverrides,
     ConceptRegistry,
@@ -139,6 +140,9 @@ class Checkpoint:
     relation_results_v3: list[dict] = field(default_factory=list)
     pair_registry: list[dict] = field(default_factory=list)  # stage d's PairRegistry state
     rejected_relations: list[dict] = field(default_factory=list)
+    # CR-008: re-keying log (merge records, equivalence migration, conflicts, self-loops, ...)
+    rekey: dict = field(default_factory=dict)
+    misconceptions: dict = field(default_factory=dict)  # CR-008 §5 layer + stage log
 
 
 def checkpoint_path(run_dir: Path) -> Path:
@@ -305,6 +309,7 @@ def run_canonicalize_stage(
     overrides: CanonicalOverrides | None = None,
     type_aware: bool = True,
     review_below: float | None = 0.70,
+    alias_ctx: AliasContext | None = None,  # CR-008: R0-R3 before any embedding or LLM merge call
 ) -> tuple[Checkpoint, ConceptRegistry]:
     concept_registry = _restore_concept_registry(checkpoint, embed_fn)
     concept_first_chapter: dict[str, int] = dict(checkpoint.concept_first_chapter)
@@ -324,7 +329,7 @@ def run_canonicalize_stage(
             for mention in mentions:
                 outcome = canonicalize_mention(
                     client, prompts.canonicalize, concept_registry, mention, overrides=overrides,
-                    type_aware=type_aware, review_below=review_below,
+                    type_aware=type_aware, review_below=review_below, alias_ctx=alias_ctx,
                 )
                 if outcome.decision == "same":
                     merges.append(
@@ -337,6 +342,8 @@ def run_canonicalize_stage(
                             "overridden": outcome.overridden,
                             "reason": outcome.reason,
                             "similarity": outcome.similarity,
+                            "rule_id": outcome.rule_id,
+                            "evidence_quote": outcome.evidence_quote,
                         }
                     )
                 elif outcome.decision == "review":

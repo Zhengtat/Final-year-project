@@ -1,0 +1,10 @@
+# Registry patch from CR-008 §3.5 (2026-10-02). Built on the final CR-007 registry (relations_v1.1.1.yaml).
+# Equivalence is a node property (one node, other names in `aliases`), never an edge: `equivalent_to`
+# is removed. Its references in contrasts_with (conflicts_with, near_misses) are pruned by the generator.
+# v1.2 stays reserved for CR-004's `instantiates`; when CR-004 runs its patch is rebased onto v1.3.
+patch_for_registry_version: 1
+new_version: "1.3"
+drops: [equivalent_to]
+# CR-008 item 2 (owner-approved 2026-10-02): the per-pair corrects_intuition / intuition qualifiers are
+# removed; the misconception stage (CR-008 section 5) is the only producer. This supersedes CR-007 5.1.
+drop_qualifiers: [corrects_intuition, intuition]

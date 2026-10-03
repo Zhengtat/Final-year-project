@@ -192,9 +192,10 @@ def relations_stage(
 ) -> Checkpoint:
     concepts = {c.concept_id: c for c in _restore_concept_registry(cp, embed_fn).all()}
     matcher = MentionMatcher(concept_vocab(list(concepts.values())))
+    # CR-008: choice v4 (adds `same_concept`, no edge), qualifiers v4 (no corrects_intuition / intuition)
     fam, rel, qual = (
-        load_prompt(prompts_dir, t, "v3")
-        for t in ("relation_family", "relation_choice", "relation_qualifiers")
+        load_prompt(prompts_dir, t, v)
+        for t, v in (("relation_family", "v3"), ("relation_choice", "v4"), ("relation_qualifiers", "v4"))
     )
     done = {
         frozenset((r["pair"]["concept_x_id"], r["pair"]["concept_y_id"]))
@@ -217,6 +218,7 @@ def relations_stage(
                 concepts[pair.concept_x_id],
                 concepts[pair.concept_y_id],
                 matcher,
+                same_concept=True,
             )
         except BudgetExceededError:
             save_checkpoint(cp, run_dir)
@@ -249,9 +251,17 @@ def build_pair_registry(cp: Checkpoint) -> PairRegistry:
     """Adapter: v3 results of the SELECTED group -> the PairRegistry the snapshot writer expects. (The
     unselected sample is measurement only and is kept out of the graph.)"""
     reg = PairRegistry()
+    edge_pairs: set[frozenset[str]] = set()  # CR-008: an edge on a node pair is never overwritten
     for r in cp.relation_results_v3:
-        if r["group"] != "selected":
+        if r["group"] != "selected" or r.get("self_pair"):
             continue
+        if r.get("consolidated_into") or r.get("snapshot_secondary"):
+            continue
+        pk = frozenset((r["pair"]["concept_x_id"], r["pair"]["concept_y_id"]))
+        if r["outcome"] != "edge" and pk in edge_pairs:
+            continue
+        if r["outcome"] == "edge" and not r.get("gated_dropped"):
+            edge_pairs.add(pk)
         pair = CandidatePair(**r["pair"])
         edge = None
         if r["outcome"] == "edge" and not r.get("gated_dropped"):

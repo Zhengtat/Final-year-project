@@ -666,6 +666,35 @@ def kg_rerun(
         raise typer.BadParameter(f"unknown stage {stage!r}")
 
 
+@kg_app.command("rekey")
+def kg_rekey(
+    run: str = typer.Option(..., "--run", help="source run_id"),
+    new_run: str = typer.Option(..., "--new-run", help="run_id to write (never overwrites)"),
+) -> None:
+    """CR-008 step 3: re-key a run under the R0-R3 merge rules and registry v1.3. $0, no API call."""
+    from cumap.config import REPO_ROOT
+    from cumap.expert_kg.cr008_run import KG_DIR, rekey_stage
+
+    if (KG_DIR / new_run).exists():
+        raise typer.BadParameter(f"{new_run} already exists; every run writes to a new run_id")
+    result, _ = rekey_stage(run, new_run)
+    typer.echo(json.dumps(result.report, indent=1, default=str))
+    typer.echo(f"wrote {KG_DIR / new_run} (repo {REPO_ROOT.name})")
+
+
+@kg_app.command("misconceptions")
+def kg_misconceptions(
+    run: str = typer.Option(..., "--run"),
+    dry_run: bool = typer.Option(False, "--dry-run"),
+    limit: int | None = typer.Option(None, "--limit"),
+    max_usd: float = typer.Option(3.0, "--max-usd", help="CR-008 hard cap"),
+) -> None:
+    """CR-008 §5: textbook misconception layer (cue scan, then strong-tier structuring per candidate)."""
+    from cumap.expert_kg.cr008_run import misconception_stage
+
+    typer.echo(json.dumps(misconception_stage(run, dry_run=dry_run, limit=limit, max_usd=max_usd), indent=1))
+
+
 @kg_app.command("stop4")
 def kg_stop4(
     run: str = typer.Option(..., "--run"),

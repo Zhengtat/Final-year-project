@@ -54,6 +54,10 @@ uv run streamlit run src/cumap/app/review_app.py
 16. **(CR-007) Report examples are rendered from logged prompts.** The exact prompt text of every LLM call is in `data/logs/llm_prompts.jsonl` (by input hash); a worked example in a report is read from there, never re-rendered from a template.
 17. **(CR-007) Concept mentions use longest-match spans** (`expert_kg/mentions.py`): "bit rate" beats "bit"; spans are non-overlapping at token boundaries over all names and aliases. Candidate pairs, propagation, spread and first occurrence all use it.
 18. **(CR-007) `defined` marks only the first definition in book order.** Later `defined` tags become `refined` (evidence kept, appended to `description_history`); `first_chapter` is the first longest-match occurrence, not the first extraction.
+19. **(CR-008) Every merge records its rule and evidence.** Deterministic alias rules (R0 lexicon, R1 key, R2 acronym, R3-strong) run before any LLM merge call; "sometimes called" never auto-merges.
+20. **(CR-008) The term lexicon outranks every automatic rule** (`configs/term_lexicon.yaml`). Only `status: approved` entries take effect, and a `different` pair is never merged at any stage (rules, sweep, re-key, verifier, LLM candidates).
+21. **(CR-008) Equivalence is a node property:** one node with aliases, never an edge. `equivalent_to` is retired (registry v1.3); a `same_concept` answer draws no edge and queues a merge.
+22. **(CR-008) Misconception edges live in layer `misconception`** (`checkpoint.misconceptions`), always link to the correct edge (or approved lexicon `different` entry) they contradict, and never count as expert knowledge: they are invisible to expert precision, importance, pair selection, prerequisites, fusion and expected subgraphs.
 
 ## OpenAI usage
 - Use the Responses API with Structured Outputs:
@@ -76,7 +80,7 @@ uv run streamlit run src/cumap/app/review_app.py
 
 ## Repo map (target)
 ```
-configs/            default.yaml, relations_v0.yaml (history), relations_v1.yaml (CR-001, current)
+configs/            default.yaml, relations_v0.yaml (history), relations_v1.yaml (CR-001), relations_v1.3.yaml (CR-008, current), term_lexicon.yaml, alias_rules.yaml, misconception_cues.yaml
 data/raw/           downloaded datasets + textbook clone        (gitignored)
 data/interim/       parsed sections, ID tables, suggestions/     (suggestions are drafts)
 data/gold/          HUMAN-OWNED annotations                      (committed)
