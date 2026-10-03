@@ -330,3 +330,32 @@ def test_prompt_sections_appear_in_the_fixed_order():
     assert text.index("EXISTING NODES (id |") > text.index(
         "=== THIS SECTION ==="
     )  # static content first, per-item content last
+
+
+def test_a_run_can_continue_from_a_finished_runs_state_with_an_order_offset():
+    """CR-009 §7: the test run starts from the final dev run's state (nodes keep their dev order, new sections follow)."""
+    f = Fake(
+        {"s1": S1_OUT, "s2": gen_out([new("page size", "The page size is 4 KB", typ="Parameter")])}
+    )
+    first = run(f, sections=(S1,))
+    s2 = {**S2, "order_index": 0}
+    f2 = Fake(
+        {"s1": S1_OUT, "s2": gen_out([new("page size", "The page size is 4 KB", typ="Parameter")])}
+    )
+    cfg = LoopConfig(form="G1", instructions={}, max_iterations=0)
+    out = ConceptRun(
+        f2,
+        GEN,
+        BANK,
+        cfg,
+        nlp=NLP,
+        embed_fn=embed,
+        lexicon=None,
+        domain="d",
+        backfill_prompt=BF,
+        rho=0.0,
+    ).run([s2], store=first.store, order_offset=1)
+    assert out.section_meta["s2"][
+        "cards_shown"
+    ]  # the dev run's nodes are cards for the continued run
+    assert out.store.nodes["n_0003"].first_order == 1 and "B-tree index" in f2.calls[0][1]

@@ -293,7 +293,7 @@ def run_live(
         lexicon=None,
         domain="information retrieval",
         backfill_prompt=load_prompt(ROOT / "prompts", "concept_backfill", "v1"),
-        pruner_for=(lambda ch: pruners[str(ch)].p_growing) if pruners else None,
+        pruner_for=(lambda ch: pruners.get(str(ch), pruners["all"]).p_growing) if pruners else None,
         tau=tau,
         rho=1.5,
         m4=m4,
@@ -329,6 +329,7 @@ def main() -> None:
     ap.add_argument("--max-iterations", type=int, default=3)
     ap.add_argument("--m4", action="store_true")
     ap.add_argument("--m5", action="store_true")
+    ap.add_argument("--tau", type=float, default=0.0)
     ap.add_argument("--limit", type=int)
     ap.add_argument("--run-id", default="dev1")
     ap.add_argument("--dry-run", action="store_true")
@@ -355,3 +356,61 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+def run_test(
+    arm: str,
+    *,
+    out_dir: Path,
+    dev_run: Path,
+    form: str = "G1",
+    max_iterations: int = 1,
+    tau: float = 0.1,
+    progress=print,
+):
+    """The IIR test split, run ONCE (CR-009 §7): starts from the final dev run's state and processes the test sections
+    in book order with the all-dev pruner (chapters 4+). Never used for selection."""
+    import spacy
+
+    from cumap.concepts_v4.arms_dev import load_split
+    from cumap.config import get_settings
+    from cumap.llm.client import LLMClient
+
+    settings = get_settings()
+    nlp = spacy.load("en_core_web_sm")
+    embed_fn = Embedder(settings.embeddings.model)
+    dev_secs, _emph = load_dev()
+    test_secs, _gold = load_split("test")
+    pruners = loco_pruners(dev_secs, nlp, embed_fn)
+    prev = load_run(dev_run)
+    client = LLMClient(settings, run_id=f"cr009_test_{arm}")
+    run = R.ConceptRun(
+        client,
+        load_prompt(ROOT / "prompts", "concept_generator", "v4"),
+        load_bank(),
+        loop_config(form, max_iterations),
+        nlp=nlp,
+        embed_fn=embed_fn,
+        lexicon=None,
+        domain="information retrieval",
+        backfill_prompt=load_prompt(ROOT / "prompts", "concept_backfill", "v1"),
+        pruner_for=lambda ch: pruners.get(str(ch), pruners["all"]).p_growing,
+        tau=tau,
+        rho=1.5,
+        progress=progress,
+    )
+    out = run.run(test_secs, store=prev.store, order_offset=len(dev_secs))
+    out.cost_usd = round(client.spent_usd, 4)
+    save_run(
+        out,
+        out_dir / f"{arm}.json",
+        {
+            "arm": arm,
+            "split": "test",
+            "form": form,
+            "max_iterations": max_iterations,
+            "tau": tau,
+            "spend_usd": out.cost_usd,
+        },
+    )
+    return out, test_secs

@@ -89,18 +89,26 @@ class ConceptRun:
         }
 
     # ---------------------------------------------------------------- the run
-    def run(self, sections: list[dict], *, backfill: bool = True) -> RunOutput:
+    def run(
+        self,
+        sections: list[dict],
+        *,
+        backfill: bool = True,
+        store: NodeStore | None = None,
+        order_offset: int = 0,
+    ) -> RunOutput:
+        """`store` + `order_offset` continue a finished run (CR-009 §7: the test run starts from the final dev run's state)."""
         sections = sorted(sections, key=lambda s: int(s["order_index"]))
-        order = {s["section_id"]: i for i, s in enumerate(sections)}
+        order = {s["section_id"]: i + order_offset for i, s in enumerate(sections)}
         chap = self._chapter_ctx(sections)
-        out = RunOutput(NodeStore())
+        out = RunOutput(store or NodeStore())
         n_sec = len(sections)
         for i, sec in enumerate(sections):
             paras = split_paragraphs(sec["text"])
             cards = select_cards(
                 paras,
                 out.store,
-                i,
+                i + order_offset,
                 self.lexicon,
                 self.embed_fn,
                 k=self.retriever_k,
@@ -127,14 +135,14 @@ class ConceptRun:
             }
             res = self.runner.run(sec, paras, cards, self.lexicon, vctx)
             out.sections[sec["section_id"]] = res
-            self._apply(out, sec, i, res, cards, paras)
+            self._apply(out, sec, i + order_offset, res, cards, paras)
             if self.progress:
                 self.progress(
                     f"section {i + 1}/{n_sec} {sec['section_id']}: {res.calls} calls, stop={res.stop_reason}, nodes={len(out.store.nodes)}"
                 )
             last_of_chapter = i + 1 == n_sec or sections[i + 1]["chapter_num"] != sec["chapter_num"]
             if backfill and last_of_chapter and self.backfill_prompt is not None:
-                self._backfill(out, sections, order, i)
+                self._backfill(out, sections, order, i, order_offset)
         return out
 
     # ---------------------------------------------------------------- apply one section to the store
@@ -268,7 +276,12 @@ class ConceptRun:
 
     # ---------------------------------------------------------------- backfill (CR-009 §3.7)
     def _backfill(
-        self, out: RunOutput, sections: list[dict], order: dict[str, int], last_idx: int
+        self,
+        out: RunOutput,
+        sections: list[dict],
+        order: dict[str, int],
+        last_idx: int,
+        order_offset: int = 0,
     ) -> None:
         chapter = sections[last_idx]["chapter_num"]
         first_in_chapter = min(
@@ -277,7 +290,8 @@ class ConceptRun:
         new_nodes = [
             n
             for n in out.store.nodes.values()
-            if n.growing and first_in_chapter <= n.first_order <= last_idx
+            if n.growing
+            and first_in_chapter + order_offset <= n.first_order <= last_idx + order_offset
         ]
         if not new_nodes:
             return
