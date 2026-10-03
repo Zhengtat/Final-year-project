@@ -219,5 +219,52 @@ def main() -> None:
     (d / "scores.json").write_text(json.dumps(scored, indent=1, default=str), encoding="utf-8")
 
 
+def append_test(report: str, run: str = "test1") -> None:
+    """The test split (run ONCE): v4 and the comparison arms, scored and appended to the STOP 2 report."""
+    d = X.OUT / run
+    v4 = json.loads((d / "v4_test_scores.json").read_text())["v4_test"]
+    arms = json.loads((d / "arms_test_scores.json").read_text())
+    b = json.loads((ROOT / "data/processed/ablation/test_0d5035ce/scores.json").read_text())
+    ex = json.loads((d / "TEST_V4.json").read_text())["extra"]
+    out = X.load_run(d / "TEST_V4.json")
+    rs = list(out.sections.values())
+    flags: Counter = Counter()
+    for r in rs:
+        flags.update(r.flags_by_rule)
+    L = [
+        "",
+        "## Test split (IIR chapters 4-16, 70 sections; every system run ONCE, never used for selection)",
+        "",
+        HEAD,
+    ]
+    L.append(_row("B0 = v2 (CR-007 test)", b["v2"], "1 / section", "published CR-007 number"))
+    L.append(_row("B0 = v3 (CR-007, E3)", b["E3"], "1 / section", "published CR-007 number"))
+    for k, sc in arms.items():
+        L.append(_row(k, sc, str(sc["calls"]), "comparison arm, one run"))
+    L.append(
+        _row(
+            "**v4 (frozen configuration)**",
+            v4,
+            str(sum(r.calls for r in rs) + len(out.backfill)),
+            f"starts from the final dev state; ${ex['spend_usd']}",
+        )
+    )
+    L += [
+        "",
+        "FACE's published micro F1 is 0.76 (supervised, 5-fold CV; a different protocol, shown for orientation only).",
+        "",
+        f"v4 test statistics: {len(rs)} sections; stop reasons {dict(Counter(r.stop_reason for r in rs))}; flags {dict(flags)}; hints added / rejected {sum(r.hints_added for r in rs)} / {sum(r.hints_rejected for r in rs)}; "
+        f"pruned items {len(out.pruned)}; backfill calls {len(out.backfill)}; sections with a schema error {sum(1 for r in rs if r.error)}; nodes {len(out.store.nodes)} (including the dev nodes the run started from).",
+        "",
+    ]
+    p = Path(report)
+    p.write_text(p.read_text(encoding="utf-8") + "\n".join(L) + "\n", encoding="utf-8")
+
+
 if __name__ == "__main__":
-    main()
+    import sys
+
+    if len(sys.argv) > 1 and sys.argv[1] == "append-test":
+        append_test(sys.argv[2] if len(sys.argv) > 2 else "reports/cr009_stop2_dev.md")
+    else:
+        main()

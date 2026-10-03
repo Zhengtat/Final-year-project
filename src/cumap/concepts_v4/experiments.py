@@ -383,6 +383,7 @@ def run_test(
     form: str = "G1",
     max_iterations: int = 1,
     tau: float = 0.1,
+    limit: int | None = None,
     progress=print,
 ):
     """The IIR test split, run ONCE (CR-009 §7): starts from the final dev run's state and processes the test sections

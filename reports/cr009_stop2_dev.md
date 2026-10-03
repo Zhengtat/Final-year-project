@@ -75,3 +75,20 @@ Pre-registration: DECISIONS 2026-10-03. Scored with the existing FACE scorer; a 
 
 Caveats: C-SAC and C-PiVe are SAC-KG-style and PiVe-style re-implementations on our benchmark, not reproductions; C-ConExion uses our model, not Llama-3-70B. FACE's published supervised micro F1 is 0.76 (a different protocol).
 
+
+## Test split (IIR chapters 4-16, 70 sections; every system run ONCE, never used for selection)
+
+| arm | predicted | exact P / R / F1 (micro) | lenient micro F1 | exact macro F1 | recall 1/2/3/4-gram (lenient) | calls | note |
+|---|---|---|---|---|---|---|---|
+| B0 = v2 (CR-007 test) | 2101 | 0.520 / 0.371 / **0.433** | 0.569 | 0.443 | 0.38 / 0.56 / 0.49 / 0.42 | 1 / section | published CR-007 number |
+| B0 = v3 (CR-007, E3) | 4081 | 0.417 / 0.580 / **0.485** | 0.633 | 0.489 | 0.79 / 0.79 / 0.65 / 0.51 | 1 / section | published CR-007 number |
+| C-SAC | 1493 | 0.593 / 0.301 / **0.399** | 0.496 | 0.405 | 0.30 / 0.43 / 0.36 / 0.19 | 101 | comparison arm, one run |
+| C-PiVe | 2622 | 0.486 / 0.433 / **0.458** | 0.590 | 0.464 | 0.47 / 0.62 / 0.56 / 0.46 | 133 | comparison arm, one run |
+| C-PiVe-off | 2314 | 0.513 / 0.403 / **0.452** | 0.575 | 0.457 | 0.39 / 0.58 / 0.51 / 0.47 | 70 | comparison arm, one run |
+| C-ConExion | 1045 | 0.722 / 0.256 / **0.378** | 0.424 | 0.401 | 0.13 / 0.36 / 0.35 / 0.26 | 70 | comparison arm, one run |
+| **v4 (frozen configuration)** | 3730 | 0.447 / 0.569 / **0.501** | 0.592 | 0.506 | 0.76 / 0.68 / 0.57 / 0.42 | 462 | starts from the final dev state; $0.4309 |
+
+FACE's published micro F1 is 0.76 (supervised, 5-fold CV; a different protocol, shown for orientation only).
+
+v4 test statistics: 70 sections; stop reasons {'max_iterations': 57, 'dropped_few': 9, 'correct': 3, 'error': 1}; flags {'F3': 364, 'F2': 163}; hints added / rejected 202 / 77; pruned items 96; backfill calls 327; sections with a schema error 1; nodes 1299 (including the dev nodes the run started from).
+
