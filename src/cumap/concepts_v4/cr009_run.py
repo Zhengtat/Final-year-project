@@ -27,7 +27,13 @@ KG = REPO_ROOT / "data" / "processed" / "kg"
 
 
 def stage_concepts(
-    run: str, *, dry_run: bool, limit_units: int | None, max_usd: float, tau: float = 0.1
+    run: str,
+    *,
+    dry_run: bool,
+    limit_units: int | None,
+    max_usd: float,
+    tau: float = 0.1,
+    strict_g_links: bool = False,
 ) -> dict:
     settings = get_settings()
     slice_cfg = load_demo_slice()
@@ -77,6 +83,7 @@ def stage_concepts(
         pruner_for=lambda ch: pruners["all"].p_growing,
         tau=tau,
         rho=1.5,
+        strict_g_links=strict_g_links,
         progress=print,
     )
     out = run_obj.run(units)
@@ -175,9 +182,18 @@ def main() -> None:
     ap.add_argument("--limit-units", type=int)
     ap.add_argument("--max-usd", type=float, default=15.0)
     ap.add_argument("--budget", type=int, default=700)
+    ap.add_argument("--tau", type=float, default=0.1)
+    ap.add_argument("--strict-g-links", action="store_true")
     a = ap.parse_args()
     if a.stage == "concepts":
-        r = stage_concepts(a.run, dry_run=a.dry_run, limit_units=a.limit_units, max_usd=a.max_usd)
+        r = stage_concepts(
+            a.run,
+            dry_run=a.dry_run,
+            limit_units=a.limit_units,
+            max_usd=a.max_usd,
+            tau=a.tau,
+            strict_g_links=a.strict_g_links,
+        )
     elif a.stage == "select":
         r = stage_select(a.run, a.budget)
     elif a.stage == "relations":

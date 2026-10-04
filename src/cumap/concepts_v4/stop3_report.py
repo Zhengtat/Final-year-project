@@ -192,8 +192,10 @@ def build(
     L += [
         "## Anchor pairs through the relation stage",
         "",
-        (f"- Anchor pairs classified: {n_anchor_pairs}; outcomes {dict(conv)}; **anchor → accepted-edge conversion {conv.get('edge', 0) / max(n_anchor_pairs, 1):.1%}**; "
-        f"NO_RELATION rate {(conv.get('no_relation', 0)) / max(n_anchor_pairs, 1):.1%}; anchor-type family agreement with the accepted relation's family {agree}/{tot} ({agree / max(tot, 1):.0%})."),
+        (
+            f"- Anchor pairs classified: {n_anchor_pairs}; outcomes {dict(conv)}; **anchor → accepted-edge conversion {conv.get('edge', 0) / max(n_anchor_pairs, 1):.1%}**; "
+            f"NO_RELATION rate {(conv.get('no_relation', 0)) / max(n_anchor_pairs, 1):.1%}; anchor-type family agreement with the accepted relation's family {agree}/{tot} ({agree / max(tot, 1):.0%})."
+        ),
         "",
     ]
     # ---- sphere
@@ -205,9 +207,11 @@ def build(
         L += [
             "## Sphere (ch3)",
             "",
-            (f"- Core–periphery: {ma['core_periphery']['label']} (Δρ {ma['core_periphery']['primary']['delta_rho']:.3f}) → {mb['core_periphery']['label']} (Δρ {mb['core_periphery']['primary']['delta_rho']:.3f}); "
-            f"core (centre+inner) name-matched Jaccard {len(ca & cb) / max(len(ca | cb), 1):.2f} ({len(ca)} → {len(cb)} nodes); "
-            f"top-15 entered: {sorted({n['name'] for n in sorted(nb, key=lambda n: -n['importance_adj'])[:15]} - {n['name'] for n in sorted(na, key=lambda n: -n['importance_adj'])[:15]})}"),
+            (
+                f"- Core–periphery: {ma['core_periphery']['label']} (Δρ {ma['core_periphery']['primary']['delta_rho']:.3f}) → {mb['core_periphery']['label']} (Δρ {mb['core_periphery']['primary']['delta_rho']:.3f}); "
+                f"core (centre+inner) name-matched Jaccard {len(ca & cb) / max(len(ca | cb), 1):.2f} ({len(ca)} → {len(cb)} nodes); "
+                f"top-15 entered: {sorted({n['name'] for n in sorted(nb, key=lambda n: -n['importance_adj'])[:15]} - {n['name'] for n in sorted(na, key=lambda n: -n['importance_adj'])[:15]})}"
+            ),
             "",
         ]
     # ---- misconception layer and cost

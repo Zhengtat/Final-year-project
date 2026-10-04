@@ -5,6 +5,8 @@ Pruned items are never cards and never paired."""
 
 from __future__ import annotations
 
+import re
+
 from collections import Counter, defaultdict
 from collections.abc import Callable
 from dataclasses import dataclass, field
@@ -50,6 +52,34 @@ class RunOutput:
     cost_usd: float = 0.0
 
 
+def g_link_ok(
+    surface: str, node: Node, text: str, lexicon: Lexicon | None, cfg: AliasConfig
+) -> bool:
+    """Strict G-link: a text form may be recorded as a mention of a node with a different name only when a rule shows it is
+    the same node: the lexicon `same` set, an acronym and its long form (in the text), or the same words up to plural."""
+    from cumap.expert_kg.alias_rules import find_abbreviations, split_embedded_acronym
+    from cumap.expert_kg.mentions import default_lemma
+
+    ks, nk = r1_key(surface, cfg), {r1_key(f, cfg) for f in node.forms()}
+    if (
+        lexicon is not None
+        and (rep := lexicon.same_set(surface)) is not None
+        and any(lexicon.same_set(f) == rep for f in node.forms())
+    ):
+        return True
+    for ab in find_abbreviations(text, cfg):
+        pair = {r1_key(ab.long_form, cfg), r1_key(ab.short_form, cfg)}
+        if ks in pair and (pair - {ks}) & nk:
+            return True
+    if (sp := split_embedded_acronym(surface, cfg)) and {
+        r1_key(sp[0], cfg),
+        r1_key(sp[1], cfg),
+    } & nk:
+        return True
+    lem = lambda f: [default_lemma(t) for t in re.findall(r"[a-z0-9]+", f.lower())]
+    return any(lem(surface) == lem(f) for f in node.forms())
+
+
 class ConceptRun:
     def __init__(
         self,
@@ -68,6 +98,7 @@ class ConceptRun:
         rho: float = 1.5,
         m4: bool = False,
         m5: bool = False,
+        strict_g_links: bool = False,
         emphasised: dict[str, set[str]] | None = None,
         retriever_k: int = 30,
         card_cap: int = 120,
@@ -169,6 +200,29 @@ class ConceptRun:
         for m in final["existing_mentions"]:
             node = by_id.get(m["node_id"])
             if node is None:
+                continue
+            nontrivial = r1_key(m["surface"], self.alias_cfg) not in {
+                r1_key(f, self.alias_cfg) for f in node.forms()
+            }
+            if (
+                nontrivial
+                and self.strict_g_links
+                and not g_link_ok(
+                    m["surface"], node, " ".join(paras.values()), self.lexicon, self.alias_cfg
+                )
+            ):
+                # CR-009 STOP 3 (owner marks: 4/15 non-trivial links were the same sense): a link the rules cannot
+                # show to be the same node is NOT recorded, and the form is not added as an alias
+                out.merges.append(
+                    {
+                        "rule_id": "G-link-rejected",
+                        "node_id": node.id,
+                        "surface": m["surface"],
+                        "section_id": sid,
+                        "evidence": m["evidence"],
+                        "trivial": False,
+                    }
+                )
                 continue
             node.mentions.append(
                 {

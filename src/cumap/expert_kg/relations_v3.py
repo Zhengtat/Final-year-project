@@ -126,9 +126,7 @@ def build_relation_choice_v3(
 
 def build_qualifiers_v3(registry: RelationRegistry, intuition: bool = True) -> type[BaseModel]:
     """`intuition=False` is the v4 schema: no corrects_intuition / intuition (CR-008 item 2)."""
-    extra = (
-        {"corrects_intuition": (bool, ...), "intuition": (str | None, ...)} if intuition else {}
-    )
+    extra = {"corrects_intuition": (bool, ...), "intuition": (str | None, ...)} if intuition else {}
     action_values = tuple(registry.qualifiers["action_type"].values or ["other"])
     return create_model(
         "QualifiersV3LLM" if intuition else "QualifiersV4LLM",
@@ -155,6 +153,16 @@ def dimension_grounded(dimension: str | None, sentence: str) -> bool:
     words = {t for _, _, t in tokenize(dimension) if len(t) > 2 and t not in _STOP}
     have = {default_lemma(t) for _, _, t in tokenize(sentence)}
     return bool(words) and words <= have
+
+
+def _contained(short: str, longer: str) -> bool:
+    a, b = tokenize(short), tokenize(longer)
+    ta, tb = [t for _, _, t in a], [t for _, _, t in b]
+    return (
+        bool(ta)
+        and len(ta) < len(tb)
+        and any(tb[i : i + len(ta)] == ta for i in range(len(tb) - len(ta) + 1))
+    )
 
 
 def endpoint_grounding(
@@ -206,6 +214,7 @@ def classify_pair_v3(
     grounding_scope: str = "quote",  # "quote" (CR-007 §5.3) | "sentence"
     same_concept: bool = False,  # CR-008: offer the `same_concept` outcome (relation_choice v4)
     model_tier: str = "strong",
+    containment_grounding: bool = False,
     fixtures: tuple[str, str, str] = ("default", "default", "default"),
 ) -> V3Result:
     x, y = cx.canonical_name, cy.canonical_name
@@ -301,6 +310,12 @@ def classify_pair_v3(
         "sentence_x": sx,
         "sentence_y": sy,
     }
+    if containment_grounding and gx != gy:
+        # CR-009: an ANCHOR pair whose shorter name sits inside the longer term ("frame" in "control frame") grounds
+        # through the longer term; the rule exists to stop a granularity error, not a kind_of between those two.
+        short, longer = (cy, cx) if gx else (cx, cy)
+        if _contained(short.canonical_name, longer.canonical_name):
+            gx = gy = True
     if not (gx and gy):
         res.reason = "endpoint_not_grounded"
         return res

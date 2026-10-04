@@ -186,11 +186,18 @@ def relations_stage(
     # CR-008: choice v4 (adds `same_concept`, no edge), qualifiers v4 (no corrects_intuition / intuition)
     fam, rel, qual = (
         load_prompt(prompts_dir, t, v)
-        for t, v in (("relation_family", "v3"), ("relation_choice", "v4"), ("relation_qualifiers", "v4"))
+        for t, v in (
+            ("relation_family", "v3"),
+            ("relation_choice", "v4"),
+            ("relation_qualifiers", "v4"),
+        )
     )
     done = {
         frozenset((r["pair"]["concept_x_id"], r["pair"]["concept_y_id"]))
         for r in cp.relation_results_v3
+    }
+    anchor_pairs = {
+        frozenset((a["concept_id"], a["anchor_id"])) for a in getattr(cp, "anchors", [])
     }
     todo = [("selected", p) for p in cp.selected_pairs] + [("sample", p) for p in cp.sample_pairs]
     for i, (group, p) in enumerate(todo):
@@ -210,6 +217,8 @@ def relations_stage(
                 concepts[pair.concept_y_id],
                 matcher,
                 same_concept=True,
+                containment_grounding=key
+                in anchor_pairs,  # CR-009: anchor pairs only (a code check, never shown to a model)
             )
         except BudgetExceededError:
             save_checkpoint(cp, run_dir)
@@ -280,7 +289,11 @@ def build_pair_registry(cp: Checkpoint) -> PairRegistry:
                     pair.concept_y_id,
                     True,
                     edge,
-                    None if edge else ("gated_dropped" if r.get("gated_dropped") else (r["reason"] or r["outcome"])),
+                    None
+                    if edge
+                    else (
+                        "gated_dropped" if r.get("gated_dropped") else (r["reason"] or r["outcome"])
+                    ),
                     [pair.sentence],
                 )
             ]
