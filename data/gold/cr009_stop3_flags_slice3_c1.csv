@@ -1,0 +1,11 @@
+id,item the model listed,section,its evidence quote,mark (valid flag = the item really is not supported by the quote / false flag)
+1,buffer,2.5,the receiver could resend an ACK,valid flag
+2,IP,3.3,we have assumed that we could find the network number in a packet,valid flag
+3,routing,1.2,none,valid flag
+4,audio,1.2,none,valid flag
+5,error detection,2.4,correction versus detection,false flag
+6,air,2.7,signals that reach just the nodes to its immediate left and right,valid flag
+7,clock-based framing,2.3,A third approach to framing is exemplified by the Synchronous Optical Network (SONET) standard.,false flag
+8,source,3.1,"a third approach, source routing",valid flag
+9,Byte-Oriented Protocol,2.3,2.3.2 Bit-Oriented Protocols (HDLC),valid flag
+10,demultiplexing,1.2,none,valid flag

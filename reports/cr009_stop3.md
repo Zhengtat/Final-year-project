@@ -57,3 +57,38 @@ All numbers are computed from the saved runs; owner precision figures are pendin
 | concept_backfill | 0.046 |
 | **total** | **8.81** |
 
+## Owner marks (STOP 3; read from `data/gold/`, split by the hidden keys)
+
+### Concepts (40, stratified)
+
+- **Valid complete concept: 25/40 = 62% (Wilson 95% [0.47, 0.76])**; verdicts {'valid complete': 25, 'partial': 1, 'not a concept': 5, 'generic': 9}
+
+| stratum | n | valid complete |
+|---|---|---|
+| independent | 17 | 7/17 = 41% (Wilson 95% [0.22, 0.64]) |
+| anchored | 17 | 12/17 = 71% (Wilson 95% [0.47, 0.87]) |
+| found_via_anchor | 6 | 6/6 = 100% (Wilson 95% [0.61, 1.00]) |
+
+- **Anchor correct: 17/21 = 81% (Wilson 95% [0.60, 0.92])** ({'correct': 17, 'wrong': 4}); by anchor type: kind_of 10/11; other 2/4; part_of 1/2; used_for 2/2; uses 2/2
+
+### Non-trivial generator links (G-link, 15)
+
+- **Same sense: 4/15 = 27% (Wilson 95% [0.11, 0.52]).** A wrong G-link merges a text form into a node as an alias; 11 of 15 sampled were wrong (e.g. network -> cloud, system -> device, link -> link capacity).
+
+### Pruned items (15)
+
+- **False-prune rate (should have been a node): 7/15 = 47% (Wilson 95% [0.25, 0.70])**; of the `pruned_defined` ones sampled 5, wrongly pruned 4. The pruner is trained on IIR dev only, so it is out of domain on P&D.
+
+### Not-mentions and backfill rejections (10)
+
+- **Correct rejection: 5/10 = 50% (Wilson 95% [0.24, 0.76])**; wrongly rejected by reason: {'generic_use': 1, 'inside_longer_term': 3, 'different_sense: “transmitter” refers to the sending adaptor or sender, not the transmitter component described by the node.': 1}; by kind: {'not_mention': 4, 'backfill_rejection': 1}
+
+### Verifier flags (10, rules F3 and F2)
+
+- **Valid flag: 8/10 = 80% (Wilson 95% [0.49, 0.94])**; false flags by rule: {'F3': 2}
+
+### STOP 1 propagation audit (20)
+
+- **Same sense: 17/20 = 85% (Wilson 95% [0.64, 0.95])**; by direction: backward 8/10; forward 9/10
+- Bank approval sheet: {'approve': 7}
+
