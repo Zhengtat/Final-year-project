@@ -214,7 +214,128 @@ def build(run: str, seed: int = 9) -> dict:
     }
 
 
+def build_resample(run: str, seed: int = 21) -> dict:
+    """The smaller re-marking sample after the STOP 3 fixes: 30 concepts (10 independent, 10 anchored, 5 found_via_anchor,
+    5 random), every non-trivial G-link, and 30 edges (15 anchor-derived, 15 other) for edge precision."""
+    d = ROOT / "data/processed/kg" / run
+    v4 = json.loads((d / "v4_concepts.json").read_text())
+    cp = json.loads((d / "checkpoint.json").read_text())
+    rng = random.Random(seed)
+    nodes, by_id = list(v4["nodes"].values()), v4["nodes"]
+
+    def orig(sid: str) -> str:
+        return sid.split("#")[0]
+
+    pick = []
+    for pool, k in (
+        ([n for n in nodes if n["extraction_origin"] == "independent"], 10),
+        (
+            [
+                n
+                for n in nodes
+                if n["extraction_origin"] == "anchored" and not n["found_via_anchor"]
+            ],
+            10,
+        ),
+        ([n for n in nodes if n["found_via_anchor"]], 5),
+    ):
+        pick += rng.sample(pool, min(k, len(pool)))
+    pick += rng.sample([n for n in nodes if n not in pick], 5)
+    rng.shuffle(pick)
+    srows, krows = [], []
+    for i, n in enumerate(pick, 1):
+        m0 = min(n["mentions"], key=lambda m: m["order"])
+        a = n["anchors"][0] if n["anchors"] else None
+        srows.append(
+            [
+                i,
+                n["name"],
+                n["node_type"],
+                orig(m0["section_id"]),
+                m0["evidence"],
+                "",
+                "",
+                by_id.get(a["node_id"], {}).get("name", "") if a else "",
+                a["cue"] if a else "",
+                "" if a else "(none)",
+            ]
+        )
+        krows.append(
+            [i, n["extraction_origin"], n["found_via_anchor"], a["anchor_type"] if a else ""]
+        )
+    _w(
+        CHECKS / f"cr009_stop3b_concepts_{run}.csv",
+        [
+            "id",
+            "concept",
+            "type",
+            "section",
+            "evidence quote",
+            "judgement (valid complete / partial / not a concept / generic)",
+            "if partial: the full term",
+            "anchored to (known concept)",
+            "cue sentence",
+            "anchor judgement (correct / wrong / should be independent)",
+        ],
+        srows,
+    )
+    _w(
+        CHECKS / f"cr009_stop3b_concepts_key_{run}.csv",
+        ["id", "origin", "found_via_anchor", "anchor_type"],
+        krows,
+    )
+    gl = [m for m in v4["merges"] if m["rule_id"] == "G-link"]
+    _w(
+        CHECKS / f"cr009_stop3b_glinks_{run}.csv",
+        ["id", "text form", "linked to node", "section", "evidence", "mark (same / not same)"],
+        [
+            [i, g["surface"], by_id[g["node_id"]]["name"], orig(g["section_id"]), g["evidence"], ""]
+            for i, g in enumerate(gl, 1)
+        ],
+    )
+    names = {c["concept_id"]: c["canonical_name"] for c in cp["concepts"]}
+    anch = {frozenset((a["concept_id"], a["anchor_id"])) for a in cp["anchors"]}
+    edges = [
+        r
+        for r in cp["relation_results_v3"]
+        if r["outcome"] == "edge"
+        and not r.get("gated_dropped")
+        and r.get("group", "selected") == "selected"
+    ]
+    is_a = lambda r: frozenset((r["pair"]["concept_x_id"], r["pair"]["concept_y_id"])) in anch
+    ek = rng.sample([r for r in edges if is_a(r)], 15) + rng.sample(
+        [r for r in edges if not is_a(r)], 15
+    )
+    rng.shuffle(ek)
+    erows = []
+    for i, r in enumerate(ek, 1):
+        x, y = names[r["pair"]["concept_x_id"]], names[r["pair"]["concept_y_id"]]
+        a, b = (y, x) if r["direction"] == "reversed" else (x, y)
+        erows.append([i, a, r["statement"], b, r["pair"]["section_id"], r["evidence_quote"], ""])
+    _w(
+        CHECKS / f"cr009_stop3b_edges_{run}.csv",
+        [
+            "id",
+            "source concept",
+            "relation (stated in words)",
+            "target concept",
+            "section",
+            "evidence quote",
+            "judgement (correct / wrong relation / wrong direction / not supported)",
+        ],
+        erows,
+    )
+    _w(
+        CHECKS / f"cr009_stop3b_edges_key_{run}.csv",
+        ["id", "anchor_derived", "relation", "family"],
+        [[i, is_a(r), r["relation"], r["family"]] for i, r in enumerate(ek, 1)],
+    )
+    return {"concepts": len(pick), "glinks": len(gl), "edges": len(ek)}
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--run", required=True)
-    print(build(ap.parse_args().run))
+    ap.add_argument("--resample", action="store_true")
+    a = ap.parse_args()
+    print(build_resample(a.run) if a.resample else build(a.run))
