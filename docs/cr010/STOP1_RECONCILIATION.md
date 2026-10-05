@@ -91,3 +91,14 @@ Measured units: v4 generator about $0.005-0.006 per IIR section (dev $0.065 / 13
 - [ ] PASS: package can be mapped to the repository without methodological change.
 - [ ] BLOCKED: implementation issue only.
 - [x] **RESEARCH DECISION REQUIRED**: §3 items 1-3 (pair-recall denominator, eRST graph scope, second annotator) are not implementation choices; item 4 (N0 tau, test-split reuse) is an implementation proposal that needs the owner's OK. Nothing has been changed or run.
+
+## 7. Owner decisions (2026-10-05)
+
+| # | Decision | Consequence recorded |
+|---|---|---|
+| 1 | **N0 = G1, depth 1, M4/M5 off, P1 pruner tau 0.1, no strict G-links.** `configs/concept_gvp.yaml` updated to these frozen values (version `frozen-1`). N0 dev is re-run once live (about $0.07); the frozen test run is reused; N-arms are tuned on dev only and the IIR test split is evaluated once. | The test split was already used once for CR-009 reporting; this is stated in every CR-010 test number. |
+| 2 | **Pair-recall denominator = union of REL-MAP-180 accepted edges and owner-validated edges from the P0-P3 pools.** | Recall is relative to edges found by some arm (a lower-bound style denominator, biased toward what the arms can find); it must be labelled so in the report. |
+| 3 | **eRST graph scope = evidence spans of the evaluated pairs only.** | `dual` can be called an eRST-compatible layer only on those spans; no corpus-wide discourse claim. |
+| 4 | **No second annotator available.** | CR-010 §9 requires >= 60 double annotations and gate "mapping agreement kappa >= 0.67". Neither can be met. **The full-replacement gate set cannot pass**, so the architecture verdict cannot be "replace current with eRST"; the strongest possible verdict is a provisional one (keep current, or dual as an experimental layer). kappa is reported as "not measured" and REL-MAP-180 labels are single-annotator. |
+
+Not yet approved: spend per stage (hard caps in `reports/cr010_cost_report.csv`, `approved_by_owner` = NO).

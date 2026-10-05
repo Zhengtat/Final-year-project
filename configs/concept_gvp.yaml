@@ -1,10 +1,11 @@
-# CR-009 §4: concept stage v4 (generator -> verifier -> pruner). DRAFT for owner approval at STOP 1.
-version: draft-1
+# CR-009 §4: concept stage v4 (generator -> verifier -> pruner).
+# CR-010 (2026-10-05): values below updated to the CR-009 FROZEN selection (DECISIONS 2026-10-03/04); N0 for CR-010 is read from here.
+version: frozen-1
 
 generator:
   prompt: concept_generator/v4              # prompts/concept_generator/v4.md
   bank: configs/fewshot/concepts_v4_draft.yaml
-  form: G2                                  # G1 | G2: chosen on IIR dev by the pre-registered rule (STOP 2)
+  form: G1                                  # G1 | G2: G1 selected on IIR dev by the pre-registered rule (CR-009 STOP 2)
   model_tier: bulk
   retriever:
     eligible: growing                       # only growing nodes of EARLIER sections of the SAME run; never gold
@@ -14,12 +15,12 @@ generator:
     include_lexicon_different_partners: true
 
 verifier:                                   # rule-based code, $0, never reads a rationale (SAC-KG style)
-  max_iterations: 3                         # <= 3 as in PiVe; the value is chosen on dev (replay)
+  max_iterations: 1                         # selected on dev by replay (CR-009 STOP 2); PiVe's cap was 3
   drop_without_reprompt_max_flagged: 3      # <= 3 items carrying only F/C flags -> drop, no call (SAC-KG App. B)
   per_section_call_budget: 5
   carry_forward: true
   quantity_rho: 1.5                         # Q1: items < max(3, rho * words / 100); STOP 1 (e): half the dev median density
-  m4_enabled: false                         # optional arm, decided on dev
+  m4_enabled: false                         # off (live +M4 0.508 vs 0.507, CR-009 STOP 2)
   rules:
     - {id: Q1, name: quantity_insufficient, category: quantity, action: one_corrective_round_then_warning}
     - {id: F1, name: schema_invalid, category: format, action: reprompt}
@@ -74,7 +75,9 @@ anchor_family_map:                          # for pair PRIORITY only (CR-007 §5
 
 pruner:                                     # SAC-KG-inspired growing/pruned classifier (CR-009 §5)
   model: P1                                 # P1 logistic regression on embeddings + features | P2 flan-T5-small + LoRA
-  tau: null                                 # chosen on dev: highest exact micro F1 with recall drop <= 0.01 vs no pruner
+  tau: 0.1                                  # frozen (CR-009 STOP 2); the dev FINAL run recorded 0.0 by a CLI default (CR-010 STOP 1 finding F1)
+  strict_g_links: false                     # the IIR runs never had it; P&D slice3_c2 used it
+  m5_enabled: false
   p2: {epochs: 2, batch_size: 64, learning_rate: 1.0e-3}
   training: {rows_from: iir_dev_only, exclude: [iir_test, pd_owner_marks], label_defining_features: forbidden}
 
