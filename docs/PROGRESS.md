@@ -23,6 +23,7 @@ Update at the end of every milestone: what was done, which acceptance checks pas
 
 ## Log
 <!-- newest first: YYYY-MM-DD · milestone · summary -->
+- 2026-10-05 · M5.0f/CR-010 · STOP 3 eRST inventory audit ($0): inventory equals the paper's Table A.1 (32/32 labels and symbols), 31 discourse relations + technical SAME-UNIT, signals = DM + 7 types with all Table 1 subtypes; 21 checks, 0 failed, 1 flag (CR-008 lexicon matches only exact surface forms: bare HDLC/SDLC not recognised). 36 new tests, 562 pass. Report `reports/cr010_stop3_audit.md`. STOP 4 (REL-MAP-180, P0-P3) not started.
 - 2026-10-05 · M5.0f/CR-010 · STOP 2 held-out IIR test run once under the freeze tag `cr-010-stop2-freeze` (attempt 1 lost to a network outage, attempt 2 clean): N1 +0.009 F1 vs the frozen N0 (meets the criteria through the bootstrap lower bound only), descriptive N3 +0.011, N2 +0.002, fresh N0 replication -0.015 vs the frozen run. No arm adopted; the N1/N0 decision is with Research. Report `reports/cr010_stop2_test.md`. Spend $1.05.
 - 2026-10-05 · M5.0e/CR-009 · STOP 4 signed off; merged `--no-ff` to `main`, tagged `cr-009-complete`.
 - 2026-10-05 · M5.0e/CR-009 · STOP 3 fixes (strict G-links, pruner off on P&D, containment grounding for anchor pairs) re-run as `slice3_c2`; owner re-marks: concepts 73%, anchors 100%, G-links 100%, edges 90%. Awaiting STOP 4.

@@ -1,0 +1,26 @@
+NOTICE,NOT GOLD — RESEARCH HYPOTHESIS ONLY. Do not expose to blind annotators. Active current relations must be reconciled at STOP 1.
+
+current_relation,current_family_or_layer,candidate_erst_correlates,initial_mapping_judgement,critical_loss_categories_to_watch,rationale
+performs,mechanism_process,MODE-MANNER;MODE-MEANS,UNRESOLVED,mechanism,"Proposition-level mode may provide evidence, but the concept predicate is not guaranteed recoverable."
+triggers,mechanism_process,CAUSAL-CAUSE;CAUSAL-RESULT,UNRESOLVED,mechanism;causal sign/direction,"Causal discourse may coincide, but trigger semantics and concept endpoints still require testing."
+precedes,mechanism_process,JOINT-SEQUENCE,UNRESOLVED,mechanism;causal sign/direction,"Sequence may express order, but not every semantic precedence edge is a discourse sequence."
+causes,cause_effect,CAUSAL-CAUSE;CAUSAL-RESULT,UNRESOLVED,causal sign/direction,Most plausible direct discourse correlate; instance-level direction/recoverability still required.
+prevents,cause_effect,CAUSAL-CAUSE;CAUSAL-RESULT,UNRESOLVED,causal sign/direction,eRST causal label does not itself preserve prevention/negative causal polarity.
+increases,cause_effect,CAUSAL-CAUSE;CAUSAL-RESULT,UNRESOLVED,causal sign/direction,Magnitude/sign information may be lost.
+decreases,cause_effect,CAUSAL-CAUSE;CAUSAL-RESULT,UNRESOLVED,causal sign/direction,Magnitude/sign information may be lost.
+has_purpose,function_means,PURPOSE-ATTRIBUTE;PURPOSE-GOAL,UNRESOLVED,mechanism,"Strong discourse correlate, but participant-vs-proposition scope must be preserved."
+uses,function_means,MODE-MEANS;PURPOSE-ATTRIBUTE,UNRESOLVED,mechanism,"Means/purpose may cue use, but enduring concept-to-concept use semantics can be lost."
+requires,dependency,CONTINGENCY-CONDITION,UNRESOLVED,technical dependency,Logical/discourse condition is not automatically a technical dependency.
+is_a,classification_structure,ELABORATION-ATTRIBUTE,UNRESOLVED,taxonomy,No source-faithful eRST taxonomy relation; likely requires a domain edge.
+part_of,classification_structure,ELABORATION-ATTRIBUTE;ELABORATION-ADDITIONAL,UNRESOLVED,part/whole composition,"Meronymy may be a signal, not an eRST discourse label; likely requires a domain edge."
+has_property,classification_structure,ELABORATION-ATTRIBUTE,UNRESOLVED,taxonomy,Attribute elaboration may cue properties but does not guarantee concept-level property recovery.
+contrasts_with,comparison,ADVERSATIVE-CONTRAST;ADVERSATIVE-ANTITHESIS,UNRESOLVED,trade-off semantics,Discourse contrast may align; existing grounded-dimension rule still matters.
+prerequisite_of,pedagogical,CONTINGENCY-CONDITION;EXPLANATION-MOTIVATION,UNRESOLVED,pedagogical prerequisite,Pedagogical prerequisite must not be collapsed into ordinary condition/motivation.
+acts_on,mechanism_process,,UNRESOLVED,mechanism,No obvious eRST equivalent; likely requires a domain-semantic predicate.
+connected_to,classification_structure,,UNRESOLVED,network topology,Topology is not a discourse-relation meaning.
+identifies,classification_structure,,UNRESOLVED,identifier semantics,Identifier semantics are domain-level and likely require a domain edge.
+encapsulates,classification_structure,,UNRESOLVED,encapsulation/payload semantics,Payload/encapsulation meaning is domain-level and likely requires a domain edge.
+trades_off_with,comparison,ADVERSATIVE-CONTRAST,UNRESOLVED,trade-off semantics,Contrast alone does not preserve a trade-off or its grounded dimension.
+instantiates,classification_structure,ELABORATION-ATTRIBUTE;ELABORATION-ADDITIONAL,UNRESOLVED,principle-instance organisation,Instance/principle organisation may not survive discourse-only representation.
+equivalent_to,REMOVED_NODE_PROPERTY,RESTATEMENT-PARTIAL;RESTATEMENT-REPETITION,NODE-PROPERTY,taxonomy,"Removed by CR-008; restatement may only provide a canonicalisation signal, never recreate an expert-KG equivalence edge."
+conflated_with,MISCONCEPTION_LAYER,,MISCONCEPTION-ONLY,misconception,Not part of normal expert-KG mapping or precision/pair-selection calculations.

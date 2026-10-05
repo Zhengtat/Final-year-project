@@ -1,0 +1,133 @@
+{
+ "source": "arXiv:2403.13560v2 Appendix A Table A.1 (labels and nuclearity symbols only)",
+ "rows": [
+  {
+   "label": "ADVERSATIVE-ANTITHESIS",
+   "symbol": "→←"
+  },
+  {
+   "label": "ADVERSATIVE-CONCESSION",
+   "symbol": "→←"
+  },
+  {
+   "label": "ADVERSATIVE-CONTRAST",
+   "symbol": "Λ"
+  },
+  {
+   "label": "ATTRIBUTION-NEGATIVE",
+   "symbol": "→←"
+  },
+  {
+   "label": "ATTRIBUTION-POSITIVE",
+   "symbol": "→←"
+  },
+  {
+   "label": "CAUSAL-CAUSE",
+   "symbol": "→←"
+  },
+  {
+   "label": "CAUSAL-RESULT",
+   "symbol": "→←"
+  },
+  {
+   "label": "CONTEXT-BACKGROUND",
+   "symbol": "→←"
+  },
+  {
+   "label": "CONTEXT-CIRCUMSTANCE",
+   "symbol": "→←"
+  },
+  {
+   "label": "CONTINGENCY-CONDITION",
+   "symbol": "→←"
+  },
+  {
+   "label": "ELABORATION-ADDITIONAL",
+   "symbol": "←"
+  },
+  {
+   "label": "ELABORATION-ATTRIBUTE",
+   "symbol": "←"
+  },
+  {
+   "label": "EVALUATION-COMMENT",
+   "symbol": "→←"
+  },
+  {
+   "label": "EXPLANATION-EVIDENCE",
+   "symbol": "→←"
+  },
+  {
+   "label": "EXPLANATION-JUSTIFY",
+   "symbol": "→←"
+  },
+  {
+   "label": "EXPLANATION-MOTIVATION",
+   "symbol": "→←"
+  },
+  {
+   "label": "JOINT-DISJUNCTION",
+   "symbol": "Λ"
+  },
+  {
+   "label": "JOINT-LIST",
+   "symbol": "Λ"
+  },
+  {
+   "label": "JOINT-OTHER",
+   "symbol": "Λ"
+  },
+  {
+   "label": "JOINT-SEQUENCE",
+   "symbol": "Λ"
+  },
+  {
+   "label": "MODE-MANNER",
+   "symbol": "→←"
+  },
+  {
+   "label": "MODE-MEANS",
+   "symbol": "→←"
+  },
+  {
+   "label": "ORGANIZATION-HEADING",
+   "symbol": "→"
+  },
+  {
+   "label": "ORGANIZATION-PHATIC",
+   "symbol": "→←"
+  },
+  {
+   "label": "ORGANIZATION-PREPARATION",
+   "symbol": "→"
+  },
+  {
+   "label": "PURPOSE-ATTRIBUTE",
+   "symbol": "→←"
+  },
+  {
+   "label": "PURPOSE-GOAL",
+   "symbol": "→←"
+  },
+  {
+   "label": "RESTATEMENT-PARTIAL",
+   "symbol": "←"
+  },
+  {
+   "label": "RESTATEMENT-REPETITION",
+   "symbol": "Λ"
+  },
+  {
+   "label": "SAME-UNIT",
+   "symbol": "Λ"
+  },
+  {
+   "label": "TOPIC-QUESTION",
+   "symbol": "→"
+  },
+  {
+   "label": "TOPIC-SOLUTIONHOOD",
+   "symbol": "→←"
+  }
+ ]
+}
