@@ -35,3 +35,9 @@ uv run python -m cumap.cr010.nodes_exp n0-test-replicate
 uv run python -m cumap.cr010.nodes_exp arms --split test --arms N1 N3 N2 --max-usd 2
 uv run python -m cumap.cr010.nodes_exp report --split test
 ```
+
+## Execution log (appended; the frozen protocol above is unchanged)
+
+**Attempt 1, 2026-10-05: infrastructure failure (network outage), no result used.** The commands above were started once. The machine lost its connection to the API during the run: the first N0 replication process hung with no logged call for 15+ minutes and was killed; the resumed replication and the N1 arm then ran against the dead connection. Outcome of attempt 1: **N1: 70 of 70 rescue calls failed with `APIConnectionError` (0 decisions, $0.00); N0 replication: 4 of 70 sections and 129 of 300 backfill calls failed with `APIConnectionError`; N3 and N2 produced no usable output (killed).** No metric was computed from any attempt-1 output; the files are kept, unscored, under `data/processed/cr010/test/failed_attempt1_connection_outage/`. The held-out split was not evaluated by attempt 1.
+
+**Attempt 2 (same commit, same frozen files, same commands).** After connectivity returned (`api.openai.com` reachable), the same three commands are re-run in full; calls that already succeeded are served from the cache of identical inputs, the failed ones are made fresh. This is a completion of the same computation after an outage, not a selective rerun: no test result had been seen, nothing about the arms or thresholds has changed. Each output is checked for any remaining `APIConnectionError` BEFORE scoring; a file with remaining failures is not scored, and the number of failed calls will be reported.
