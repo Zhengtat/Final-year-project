@@ -248,6 +248,7 @@ def write_recall_sample(
     out_dir: Path,
     n: int = 20,
     seed: int = 42,
+    name: str = "cr008_recall_sample_sheet",
 ) -> dict:
     """CR-008 §7 optional recall sample: n negation sentences the cue scan did NOT catch, for a
     yes/no 'does this reject a wrong belief?' judgement. Blind: no model output, no cue names."""
@@ -261,7 +262,7 @@ def write_recall_sample(
     rng = random.Random(seed)
     pick = sorted(rng.sample(pool, min(n, len(pool))), key=lambda t: t[0])
     _write(
-        out_dir / "cr008_recall_sample_sheet.csv",
+        out_dir / f"{name}.csv",
         [
             "id",
             "section",

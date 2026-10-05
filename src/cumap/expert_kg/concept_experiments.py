@@ -5,8 +5,8 @@ blocks of the `v3x` prompt template are on and how runs are aggregated:
 
   E1 codebook    condensed FACE code-book in our own words (networking examples)
   E2 samples=3   three deliberately varied runs; scored as the union AND as the >= 2-of-3 vote
-  E3 propagate   a concept accepted in any section is also tagged, role `mentioned`, source
-                 `propagation`, in every other section where a longest-match mention occurs ($0)
+  E3 propagate   REMOVED in CR-009 (replaced by the generator's existing-node sweep and the backfill
+                 pass; its code and results stay in git history and in data/processed/ablation)
   E4 fewshot=k   k worked examples from OTHER dev sections (leave-one-section-out)
   E5 granularity compound terms stay whole; device and process are separate concepts
 
@@ -25,7 +25,6 @@ from pathlib import Path
 from cumap.expert_kg.concepts import extract_concepts_for_section
 from cumap.expert_kg.face_eval import evaluate_mentions
 from cumap.expert_kg.face_scorer import GoldConcept, normalize
-from cumap.expert_kg.mentions import MentionMatcher
 from cumap.expert_kg.stats import extract_candidate_terms
 from cumap.llm.client import LLMClient
 from cumap.llm.prompts import load_prompt
@@ -54,7 +53,6 @@ class Variant:
     fewshot: int = 0
     samples: int = 1
     aggregate: str = "single"  # single | union | vote2
-    propagate: bool = False
 
     @property
     def calls_per_section(self) -> int:
@@ -63,7 +61,7 @@ class Variant:
     @property
     def n_components(self) -> int:
         return sum(
-            [self.codebook, self.granularity, self.fewshot > 0, self.samples > 1, self.propagate]
+            [self.codebook, self.granularity, self.fewshot > 0, self.samples > 1]
         )
 
 
@@ -72,20 +70,18 @@ SINGLES = [
     Variant("E1", codebook=True),
     Variant("E2-union", samples=3, aggregate="union"),
     Variant("E2-vote2", samples=3, aggregate="vote2"),
-    Variant("E3", prompt="v2", propagate=True),
     Variant("E4", fewshot=2),
     Variant("E5", granularity=True),
 ]
 
 
 def combine_variants(name: str, parts: list[Variant]) -> Variant:
-    """A combination of singles (E3 propagates on top of whatever the prompt is)."""
+    """A combination of singles."""
     kw = {}
     for p in parts:
         kw["codebook"] = kw.get("codebook", False) or p.codebook
         kw["granularity"] = kw.get("granularity", False) or p.granularity
         kw["fewshot"] = max(kw.get("fewshot", 0), p.fewshot)
-        kw["propagate"] = kw.get("propagate", False) or p.propagate
         if p.samples > 1:
             kw["samples"], kw["aggregate"] = p.samples, p.aggregate
     return Variant(name, prompt="v3x", **kw)
@@ -177,35 +173,6 @@ def aggregate_runs(runs: list[list[dict]], mode: str) -> list[dict]:
     return [m for k, m in seen.items() if votes[k] >= need]
 
 
-def propagate(final: dict[str, list[dict]], texts: dict[str, str]) -> dict[str, list[dict]]:
-    """E3: tag every accepted concept in each other section where a longest-match mention occurs."""
-    names = {m["canonical_name"].lower(): m["canonical_name"] for ms in final.values() for m in ms}
-    matcher = MentionMatcher({k: k for k in names})
-    out: dict[str, list[dict]] = {}
-    for sid, ms in final.items():
-        have = {m["canonical_name"].lower() for m in ms}
-        extra, seen = [], set(have)
-        for hit in matcher.find(texts[sid]):
-            key = hit.concept_id
-            if key in seen:
-                continue
-            seen.add(key)
-            extra.append(
-                {
-                    "canonical_name": names[key],
-                    "node_type": "Concept",
-                    "role": "mentioned",
-                    "definition": None,
-                    "evidence_quote": hit.surface,
-                    "section_id": sid,
-                    "run_index": 0,
-                    "source": "propagation",
-                }
-            )
-        out[sid] = ms + extra
-    return out
-
-
 # ---------------------------------------------------------------- run + score
 @dataclass
 class VariantResult:
@@ -258,8 +225,6 @@ def run_variant(
         res.final[s["section_id"]] = aggregate_runs(runs, variant.aggregate)
         if progress:
             progress(f"{variant.name}: section {i + 1}/{len(sections)}")
-    if variant.propagate:
-        res.final = propagate(res.final, {s["section_id"]: s["text"] for s in sections})
     return res
 
 

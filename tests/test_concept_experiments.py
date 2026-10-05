@@ -12,7 +12,6 @@ from cumap.expert_kg.concept_experiments import (
     build_fewshot_pool,
     combine_variants,
     pick_fewshot,
-    propagate,
     render_vars,
     run_variant,
     select_by_rule,
@@ -81,21 +80,6 @@ def test_e2_run_notes_differ_and_aggregation_union_vs_vote():
     assert [x["canonical_name"] for x in aggregate_runs(runs, "single")] == ["a", "b"]
 
 
-def test_e3_propagation_tags_later_occurrences_as_mentioned_with_source_propagation():
-    final = {"s1": [m("bit rate", "defined", "s1")], "s2": [m("frame", "used", "s2")]}
-    texts = {"s1": "A frame carries bits.", "s2": "The bit rate is fixed. A frame follows."}
-    out = propagate(final, texts)
-    s1 = {x["canonical_name"]: x for x in out["s1"]}
-    assert s1["frame"]["role"] == "mentioned" and s1["frame"]["source"] == "propagation"
-    assert (
-        s1["frame"]["evidence_quote"] in texts["s1"] and "bit rate" in s1
-    )  # already-found kept as-is
-    assert [x["canonical_name"] for x in out["s2"]] == [
-        "frame",
-        "bit rate",
-    ]  # 'bit rate' propagated, not 'bit'
-
-
 def test_e4_fewshot_is_leave_one_section_out_and_uses_only_terms_present_in_the_excerpt():
     secs = [
         {"section_id": f"s{i}", "text": f"Alpha beta gamma delta. Term{i} appears here. " * 10}
@@ -114,7 +98,8 @@ def test_e4_fewshot_is_leave_one_section_out_and_uses_only_terms_present_in_the_
 
 
 def test_selection_rule_takes_the_best_and_breaks_ties_toward_the_simpler():
-    variants = {"E1": SINGLES[0], "E2-union": SINGLES[1], "E4": SINGLES[4]}
+    by = {v.name: v for v in SINGLES}
+    variants = {"E1": by["E1"], "E2-union": by["E2-union"], "E4": by["E4"]}
     assert select_by_rule({"E1": 0.60, "E2-union": 0.70, "E4": 0.61}, variants) == "E2-union"
     assert (
         select_by_rule({"E1": 0.69, "E2-union": 0.70, "E4": 0.61}, variants) == "E1"
@@ -122,7 +107,7 @@ def test_selection_rule_takes_the_best_and_breaks_ties_toward_the_simpler():
     assert (
         select_by_rule({"E1": 0.70, "E4": 0.69}, variants) == "E1"
     )  # equal calls: fewer components/name
-    combo = combine_variants("C", [SINGLES[0], SINGLES[5], SINGLES[1]])
+    combo = combine_variants("C", [by["E1"], by["E5"], by["E2-union"]])
     assert combo.codebook and combo.granularity and combo.samples == 3 and combo.n_components == 3
 
 
@@ -138,7 +123,7 @@ def test_run_variant_end_to_end_on_the_mock_backend_records_per_run_outputs(
             "heading_path": ["Ch", "TCP"],
         }
     ]
-    v = Variant("E2-union", samples=3, aggregate="union", propagate=True)
+    v = Variant("E2-union", samples=3, aggregate="union")
     res = run_variant(
         client,
         v,

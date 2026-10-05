@@ -58,6 +58,11 @@ uv run streamlit run src/cumap/app/review_app.py
 20. **(CR-008) The term lexicon outranks every automatic rule** (`configs/term_lexicon.yaml`). Only `status: approved` entries take effect, and a `different` pair is never merged at any stage (rules, sweep, re-key, verifier, LLM candidates).
 21. **(CR-008) Equivalence is a node property:** one node with aliases, never an edge. `equivalent_to` is retired (registry v1.3); a `same_concept` answer draws no edge and queues a merge.
 22. **(CR-008) Misconception edges live in layer `misconception`** (`checkpoint.misconceptions`), always link to the correct edge (or approved lexicon `different` entry) they contradict, and never count as expert knowledge: they are invisible to expert precision, importance, pair selection, prerequisites, fusion and expected subgraphs.
+23. **(CR-009) In the main pass the concept generator sees only growing nodes from earlier sections of the same run, never gold.** Backfill may show later nodes to earlier sections, as hints only.
+24. **(CR-009) Mentions are written only by the generator (main pass or backfill), with evidence.** String matching only produces hints (`concepts_v4/verifier.py` M-rules, the backfill detector).
+25. **(CR-009) The concept verifier is rule-based code.** Any LLM check is a separate, measured arm.
+26. **(CR-009) Pruned concepts are never shown to the generator and never paired.**
+27. **(CR-009) Anchors set pair priority but are never shown to the relation generator or verifier.**
 
 ## OpenAI usage
 - Use the Responses API with Structured Outputs:
@@ -87,7 +92,7 @@ data/gold/          HUMAN-OWNED annotations                      (committed)
 data/processed/     KG runs, silver labels, diagnoses by run_id  (gitignored)
 data/cache/ data/logs/                                           (gitignored)
 prompts/<task>/vN.md
-src/cumap/          config, cli, llm/, schemas/, data/, textbook/, expert_kg/, labels/,
+src/cumap/          config, cli, llm/, schemas/, data/, textbook/, expert_kg/, concepts_v4/ (CR-009), labels/,
                     student/, align/, graph/, eval/, app/
 tests/              unit tests + fixtures (incl. tests/fixtures/llm/<task>/*.json)
 reports/            generated markdown reports per milestone

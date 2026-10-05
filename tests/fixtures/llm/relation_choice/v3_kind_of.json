@@ -1,0 +1,1 @@
+{"direction": "forward", "comparison_dimension": null, "other_description": null, "other_suggested_label": null, "relation": "is_a", "evidence_quote": "A control frame is a small unit", "statement": "a control frame is a kind of frame", "_usage": {"input_tokens": 100, "output_tokens": 30}}

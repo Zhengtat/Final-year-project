@@ -1,0 +1,227 @@
+# CR-009 §3.5: few-shot bank for the concept generator, DRAFT for owner approval at STOP 1.
+# Domains: operating systems, databases, computer architecture. Neither book (P&D networking, IIR) is covered,
+# so no example paraphrases a section we score or spot-check. Written for the bank; nothing is copied from a book.
+# Each example: passage (numbered paragraphs), the cards the generator would be shown (none for a cold start),
+# optional look-alikes, and the full expected output. `negatives` are teaching notes (not part of the output).
+version: draft-1
+anchor_types: [kind_of, instance_of, part_of, property_of, performed_by, acts_on, uses, used_for, requires, causes, compared_with, other]
+
+examples:
+  # ---------------------------------------------------------------- 1: cold start; complete spans; component vs process
+  - id: ex1_scheduler
+    domain: operating systems
+    covers: [cold start, complete spans with an acronym, compound terms kept whole, component vs process, independent concepts]
+    paragraphs:
+      P1: >-
+        The scheduler is the part of the kernel that decides which ready process runs next. A context switch saves the
+        state of the running process, including its program counter, and loads the state of another process.
+      P2: >-
+        Round-robin scheduling (RR) gives every process a fixed time slice, and the scheduler preempts a process when
+        its slice expires.
+    cards: []
+    look_alikes: []
+    expected:
+      existing_mentions: []
+      not_mentions: []
+      new_concepts:
+        - {name: scheduler, aliases: [], node_type: Component, role: defined, para: P1, evidence: "The scheduler is the part of the kernel that decides which ready process runs next.", extraction_origin: independent, anchors: [], independence_check: "No existing nodes were given, so nothing can be related to it.", found_via_anchor: false}
+        - {name: kernel, aliases: [], node_type: Component, role: used, para: P1, evidence: "the part of the kernel", extraction_origin: independent, anchors: [], independence_check: "No existing nodes were given.", found_via_anchor: false}
+        - {name: context switch, aliases: [], node_type: Mechanism, role: defined, para: P1, evidence: "A context switch saves the state of the running process", extraction_origin: independent, anchors: [], independence_check: "No existing nodes were given.", found_via_anchor: false}
+        - {name: program counter, aliases: [], node_type: Component, role: used, para: P1, evidence: "including its program counter", extraction_origin: independent, anchors: [], independence_check: "No existing nodes were given.", found_via_anchor: false}
+        - {name: round-robin scheduling, aliases: [RR], node_type: Mechanism, role: defined, para: P2, evidence: "Round-robin scheduling (RR) gives every process a fixed time slice", extraction_origin: independent, anchors: [], independence_check: "No existing nodes were given.", found_via_anchor: false}
+        - {name: time slice, aliases: [], node_type: Parameter, role: defined, para: P2, evidence: "a fixed time slice", extraction_origin: independent, anchors: [], independence_check: "No existing nodes were given.", found_via_anchor: false}
+    negatives:
+      - {text: "counter", why: "partial span: the term is program counter"}
+      - {text: "which ready process runs next", why: "a descriptive phrase, not a term"}
+      - {text: "preempts", why: "a verb use; the scheduler (component) and round-robin scheduling (process) are different things"}
+      - {text: "fixed", why: "an ordinary modifier, not part of the name: the term is time slice"}
+
+  # ---------------------------------------------------------------- 2: existing mentions; not-mentions; anchors part_of / acts_on
+  - id: ex2_index
+    domain: databases
+    covers: [existing mention, not-mention inside_longer_term, not-mention different_sense, anchor kind_of, anchor part_of, anchor acts_on]
+    paragraphs:
+      P1: >-
+        A B-tree index keeps its keys in sorted order, so a query can find a row without a full table scan. Each
+        index page holds many keys.
+      P2: >-
+        When a transaction updates an indexed column, the database takes a lock on the affected index page and releases
+        it at commit.
+      P3: >-
+        In the query editor, a cursor shows where the next statement will be typed.
+    cards:
+      - {id: n_001, name: index, aliases: [], type: Component, def: "§2.1", in_text: true, gloss: "a sorted structure that lets the database find rows without scanning a table"}
+      - {id: n_002, name: transaction, aliases: [], type: Concept, def: "§3.1", in_text: true, gloss: "a group of operations that the database treats as a single unit of work"}
+      - {id: n_003, name: lock, aliases: [], type: Mechanism, def: "§3.4", in_text: true, gloss: "a mechanism that stops two transactions from changing the same data at once"}
+      - {id: n_004, name: cursor, aliases: [], type: Component, def: "§2.6", in_text: true, gloss: "a handle that walks through the rows a query returns"}
+      - {id: n_005, name: table, aliases: [], type: Component, def: "§2.1", in_text: true, gloss: "a named set of rows that share the same columns"}
+    look_alikes: []
+    expected:
+      existing_mentions:
+        - {node_id: n_002, surface: transaction, node_type: Concept, role: used, para: P2, evidence: "When a transaction updates an indexed column"}
+        - {node_id: n_003, surface: lock, node_type: Mechanism, role: used, para: P2, evidence: "takes a lock on the affected index page"}
+      not_mentions:
+        - {node_id: n_004, reason: different_sense}
+        - {node_id: n_005, reason: inside_longer_term}
+        - {node_id: n_001, reason: inside_longer_term}
+      new_concepts:
+        - {name: B-tree index, aliases: [], node_type: Component, role: defined, para: P1, evidence: "A B-tree index keeps its keys in sorted order", extraction_origin: anchored, anchors: [{node_id: n_001, anchor_type: kind_of, cue: "A B-tree index keeps its keys in sorted order"}], independence_check: null, found_via_anchor: false}
+        - {name: table scan, aliases: [], node_type: Mechanism, role: used, para: P1, evidence: "a full table scan", extraction_origin: anchored, anchors: [{node_id: n_005, anchor_type: acts_on, cue: "without a full table scan"}], independence_check: null, found_via_anchor: false}
+        - {name: index page, aliases: [], node_type: Component, role: defined, para: P1, evidence: "Each index page holds many keys.", extraction_origin: anchored, anchors: [{node_id: n_001, anchor_type: part_of, cue: "Each index page holds many keys."}], independence_check: null, found_via_anchor: false}
+        - {name: commit, aliases: [], node_type: Event, role: used, para: P2, evidence: "releases it at commit", extraction_origin: independent, anchors: [], independence_check: "The text relates commit to the lock only through the verb releases, and the lock card is already recorded as a mention.", found_via_anchor: false}
+    negatives:
+      - {text: "index", why: "inside the longer terms B-tree index and index page, so the card is a not-mention here"}
+      - {text: "page", why: "partial span: the term is index page"}
+      - {text: "cursor", why: "different sense: a screen cursor, not the database cursor"}
+      - {text: "table", why: "inside the longer term table scan, so the card is a not-mention"}
+      - {text: "many keys", why: "a quantity plus a noun, not a term here"}
+
+  # ---------------------------------------------------------------- 3: look-alike kept separate; kind_of + compared_with on one concept; property_of
+  - id: ex3_write_policy
+    domain: computer architecture
+    covers: [look-alike kept separate, kind_of and compared_with on one concept, property_of, anchor to a card from the text, independent concept]
+    paragraphs:
+      P1: >-
+        A write-back policy is a write policy that tracks each modified cache line with a dirty bit and writes the line
+        to memory only when it is evicted.
+      P2: >-
+        Unlike a write-through policy, a write-back policy reduces memory traffic but makes coherence harder.
+    cards:
+      - {id: n_101, name: write policy, aliases: [], type: Concept, def: "§4.2", in_text: true, gloss: "the rule that decides when a cache writes modified data to memory"}
+      - {id: n_102, name: write-through policy, aliases: [], type: Mechanism, def: "§4.2", in_text: true, gloss: "a write policy that sends every write to memory immediately"}
+      - {id: n_103, name: cache line, aliases: [], type: DataUnit, def: "§4.1", in_text: true, gloss: "the fixed-size block a cache stores and moves"}
+    look_alikes:
+      - {a: write-back policy, b: write-through policy, why: "write-back delays the memory write until eviction; write-through writes immediately. They are different policies."}
+    expected:
+      existing_mentions:
+        - {node_id: n_101, surface: write policy, node_type: Concept, role: used, para: P1, evidence: "is a write policy that tracks each modified cache line"}
+        - {node_id: n_102, surface: write-through policy, node_type: Mechanism, role: mentioned, para: P2, evidence: "Unlike a write-through policy"}
+        - {node_id: n_103, surface: cache line, node_type: DataUnit, role: used, para: P1, evidence: "each modified cache line"}
+      not_mentions: []
+      new_concepts:
+        - {name: write-back policy, aliases: [], node_type: Mechanism, role: defined, para: P1, evidence: "A write-back policy is a write policy that tracks each modified cache line with a dirty bit", extraction_origin: anchored, anchors: [{node_id: n_101, anchor_type: kind_of, cue: "A write-back policy is a write policy that tracks each modified cache line"}, {node_id: n_102, anchor_type: compared_with, cue: "Unlike a write-through policy, a write-back policy reduces memory traffic"}], independence_check: null, found_via_anchor: false}
+        - {name: dirty bit, aliases: [], node_type: Property, role: defined, para: P1, evidence: "a dirty bit", extraction_origin: anchored, anchors: [{node_id: n_103, anchor_type: property_of, cue: "tracks each modified cache line with a dirty bit"}], independence_check: null, found_via_anchor: false}
+        - {name: memory traffic, aliases: [], node_type: Parameter, role: used, para: P2, evidence: "a write-back policy reduces memory traffic", extraction_origin: independent, anchors: [], independence_check: "No card is related to memory traffic by this text.", found_via_anchor: false}
+        - {name: coherence, aliases: [], node_type: Property, role: used, para: P2, evidence: "makes coherence harder", extraction_origin: independent, anchors: [], independence_check: "No card is related to coherence by this text.", found_via_anchor: false}
+    negatives:
+      - {text: "write-back policy merged into write-through policy", why: "a look-alike: kept as a separate new concept, never linked as the same"}
+      - {text: "evicted", why: "a verb use, not a term"}
+      - {text: "harder", why: "an ordinary word"}
+
+  # ---------------------------------------------------------------- 4: refined; found via anchor; component vs part
+  - id: ex4_thread
+    domain: operating systems
+    covers: [refined (not defined) on a card that already has a definition, found_via_anchor, anchor part_of, a compound kept whole]
+    paragraphs:
+      P1: >-
+        A thread is a unit of execution inside a process; every thread has its own stack and register set but shares the
+        process address space.
+    cards:
+      - {id: n_201, name: thread, aliases: [], type: Concept, def: "§3.1", in_text: true, gloss: "an independent path of execution within a process"}
+      - {id: n_202, name: stack, aliases: [], type: Component, def: "§3.2", in_text: true, gloss: "a last-in first-out region of memory used for calls and local variables"}
+      - {id: n_203, name: process, aliases: [], type: Concept, def: "§2.5", in_text: true, gloss: "a running program together with its resources"}
+    look_alikes: []
+    expected:
+      existing_mentions:
+        - {node_id: n_201, surface: thread, node_type: Concept, role: refined, para: P1, evidence: "A thread is a unit of execution inside a process"}
+        - {node_id: n_202, surface: stack, node_type: Component, role: used, para: P1, evidence: "its own stack and register set"}
+        - {node_id: n_203, surface: process, node_type: Concept, role: used, para: P1, evidence: "inside a process"}
+      not_mentions: []
+      new_concepts:
+        - {name: register set, aliases: [], node_type: Component, role: used, para: P1, evidence: "register set", extraction_origin: anchored, anchors: [{node_id: n_201, anchor_type: part_of, cue: "every thread has its own stack and register set"}], independence_check: null, found_via_anchor: true}
+        - {name: process address space, aliases: [], node_type: Concept, role: used, para: P1, evidence: "the process address space", extraction_origin: anchored, anchors: [{node_id: n_203, anchor_type: part_of, cue: "shares the process address space"}], independence_check: null, found_via_anchor: false}
+    negatives:
+      - {text: "unit of execution", why: "a descriptive phrase, not a term"}
+      - {text: "address space", why: "partial span: the text names the whole term process address space"}
+
+  # ---------------------------------------------------------------- 5: uses / used_for anchors; acronym; values and verbs are not concepts
+  - id: ex5_wal
+    domain: databases
+    covers: [anchor uses, anchor used_for, complete span with acronym, a value is not a concept, a verb use is not a concept, independent concepts]
+    paragraphs:
+      P1: >-
+        Write-ahead logging (WAL) records every change in the log file. The change reaches the data file only
+        afterwards. WAL makes recovery after a crash possible.
+      P2: >-
+        A checkpoint every 5 minutes limits how long recovery takes.
+    cards:
+      - {id: n_301, name: log file, aliases: [], type: Component, def: "§5.1", in_text: true, gloss: "an append-only file that records changes in order"}
+      - {id: n_302, name: recovery, aliases: [], type: Mechanism, def: "§5.3", in_text: true, gloss: "restoring a consistent database state after a failure"}
+      - {id: n_303, name: index, aliases: [], type: Component, def: "§2.1", in_text: false, gloss: "a sorted structure that lets the database find rows without scanning a table"}
+    look_alikes: []
+    expected:
+      existing_mentions:
+        - {node_id: n_301, surface: log file, node_type: Component, role: used, para: P1, evidence: "in the log file"}
+        - {node_id: n_302, surface: recovery, node_type: Mechanism, role: used, para: P2, evidence: "how long recovery takes"}
+      not_mentions: []
+      new_concepts:
+        - {name: write-ahead logging, aliases: [WAL], node_type: Mechanism, role: defined, para: P1, evidence: "Write-ahead logging (WAL) records every change in the log file", extraction_origin: anchored, anchors: [{node_id: n_301, anchor_type: uses, cue: "Write-ahead logging (WAL) records every change in the log file"}, {node_id: n_302, anchor_type: used_for, cue: "WAL makes recovery after a crash possible"}], independence_check: null, found_via_anchor: false}
+        - {name: data file, aliases: [], node_type: Component, role: used, para: P1, evidence: "reaches the data file", extraction_origin: independent, anchors: [], independence_check: "The text relates data file only to the change, not to any card.", found_via_anchor: false}
+        - {name: crash, aliases: [], node_type: Event, role: used, para: P1, evidence: "recovery after a crash", extraction_origin: independent, anchors: [], independence_check: "The text relates crash to recovery only through the word after, and the recovery card is already recorded as a mention.", found_via_anchor: false}
+        - {name: checkpoint, aliases: [], node_type: Mechanism, role: defined, para: P2, evidence: "A checkpoint every 5 minutes limits how long recovery takes.", extraction_origin: independent, anchors: [], independence_check: "The sentence relates checkpoint to recovery only through the verb limits, so it is recorded for the relation step instead.", found_via_anchor: false}
+    negatives:
+      - {text: "every 5 minutes", why: "a value, not a concept"}
+      - {text: "records", why: "a verb use"}
+      - {text: "index", why: "a card that is not in this text: no mention is invented for it"}
+
+  # ---------------------------------------------------------------- 6: anchor `other`; performed_by; stall as a mechanism; independent defined
+  - id: ex6_hazard
+    domain: computer architecture
+    covers: [anchor performed_by, anchor other, existing mention under an alias, a defined concept that relates only to another new concept]
+    paragraphs:
+      P1: >-
+        A pipeline hazard occurs when the next instruction cannot execute in the following clock cycle. A data hazard
+        arises when an instruction needs a result that an earlier instruction has not produced yet.
+      P2: >-
+        The processor can insert a pipeline stall until the result is ready, or use operand forwarding, in which the
+        execution unit passes the result straight to the next instruction.
+    cards:
+      - {id: n_401, name: instruction pipeline, aliases: [pipeline], type: Mechanism, def: "§6.1", in_text: true, gloss: "overlapping the stages of several instructions to raise throughput"}
+      - {id: n_402, name: clock cycle, aliases: [], type: Parameter, def: "§1.3", in_text: true, gloss: "one tick of the processor clock"}
+      - {id: n_403, name: execution unit, aliases: [], type: Component, def: "§6.2", in_text: true, gloss: "the part of the processor that carries out an instruction's operation"}
+    look_alikes: []
+    expected:
+      existing_mentions:
+        - {node_id: n_402, surface: clock cycle, node_type: Parameter, role: used, para: P1, evidence: "in the following clock cycle"}
+        - {node_id: n_403, surface: execution unit, node_type: Component, role: used, para: P2, evidence: "the execution unit passes the result"}
+      not_mentions:
+        - {node_id: n_401, reason: inside_longer_term}
+      new_concepts:
+        - {name: pipeline hazard, aliases: [], node_type: Event, role: defined, para: P1, evidence: "A pipeline hazard occurs when the next instruction cannot execute in the following clock cycle.", extraction_origin: anchored, anchors: [{node_id: n_402, anchor_type: other, cue: "A pipeline hazard occurs when the next instruction cannot execute in the following clock cycle"}], independence_check: null, found_via_anchor: false}
+        - {name: data hazard, aliases: [], node_type: Event, role: defined, para: P1, evidence: "A data hazard arises when an instruction needs a result", extraction_origin: independent, anchors: [], independence_check: "The text relates data hazard only to the earlier instruction and to pipeline hazard, which is another new concept, not a card.", found_via_anchor: false}
+        - {name: pipeline stall, aliases: [], node_type: Mechanism, role: defined, para: P2, evidence: "insert a pipeline stall until the result is ready", extraction_origin: independent, anchors: [], independence_check: "The sentence relates pipeline stall to the result, and no card is named with it.", found_via_anchor: false}
+        - {name: operand forwarding, aliases: [], node_type: Mechanism, role: defined, para: P2, evidence: "use operand forwarding, in which the execution unit passes the result straight to the next instruction", extraction_origin: anchored, anchors: [{node_id: n_403, anchor_type: performed_by, cue: "operand forwarding, in which the execution unit passes the result straight to the next instruction"}], independence_check: null, found_via_anchor: false}
+    negatives:
+      - {text: "the next instruction", why: "a description, not a term"}
+      - {text: "hazard", why: "partial span: the terms are pipeline hazard and data hazard"}
+
+  # ---------------------------------------------------------------- 7: corrective round (PiVe App. G): GIVEN ITEMS + hint_responses
+  - id: ex7_corrective
+    domain: operating systems
+    covers: [corrective iteration, GIVEN ITEMS accepted, a hint rejected with a reason, a longer span replacing a partial one]
+    corrective: true
+    paragraphs:
+      P1: >-
+        The kernel installs a signal handler that runs on the stack of the interrupted process when the signal arrives.
+    cards:
+      - {id: n_501, name: stack, aliases: [], type: Component, def: "§3.2", in_text: true, gloss: "a last-in first-out region of memory used for calls and local variables"}
+      - {id: n_502, name: register, aliases: [], type: Component, def: "§1.4", in_text: false, gloss: "a small fast storage location inside the processor"}
+    look_alikes: []
+    given_items:
+      - {hint_id: h1, type: longer_span, text: "signal handler", detail: "your previous answer named 'handler'; the text says 'signal handler'"}
+      - {hint_id: h2, type: missed_existing_mention, text: "stack", detail: "card n_501 appears in the text and was neither recorded nor rejected"}
+      - {hint_id: h3, type: missed_existing_mention, text: "register", detail: "card n_502 has a string match: 'installs'"}
+    hint_responses:
+      - {hint_id: h1, decision: added, reason: "The text uses the whole term signal handler."}
+      - {hint_id: h2, decision: added, reason: "stack of the interrupted process refers to the stack in the same sense."}
+      - {hint_id: h3, decision: rejected, reason: "different_sense"}
+    expected:
+      existing_mentions:
+        - {node_id: n_501, surface: stack, node_type: Component, role: used, para: P1, evidence: "runs on the stack of the interrupted process"}
+      not_mentions:
+        - {node_id: n_502, reason: different_sense}
+      new_concepts:
+        - {name: signal handler, aliases: [], node_type: Mechanism, role: used, para: P1, evidence: "installs a signal handler that runs on the stack", extraction_origin: anchored, anchors: [{node_id: n_501, anchor_type: uses, cue: "a signal handler that runs on the stack of the interrupted process"}], independence_check: null, found_via_anchor: false}
+        - {name: signal, aliases: [], node_type: Event, role: used, para: P1, evidence: "when the signal arrives", extraction_origin: independent, anchors: [], independence_check: "The text relates signal only to the handler, which is another new concept.", found_via_anchor: false}
+    negatives:
+      - {text: "handler", why: "partial span: replaced by signal handler (hint h1)"}

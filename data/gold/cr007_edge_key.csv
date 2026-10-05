@@ -1,0 +1,42 @@
+id,pair_id,section,family,relation,evidence_quote
+1,RP-1.4-111,1.4,classification_structure,identifies,SOCK_STREAM is used to denote a byte stream
+2,RP-3.1-6,3.1,function_means,has_purpose,a switch is a mechanism that allows us to interconnect links to form a larger network
+3,RP-3.3-319,3.3,dependency,requires,"relay agent on each network, and it is configured with just one piece of information: the IP address of the DHCP server"
+4,RP-2.8-0,2.8,comparison,contrasts_with,4G (supporting data rates typically measured in the few megabits per second) and is in the process of transitioning to 5G (with the promise of a tenfold increase in data rates)
+5,RP-2.2-53,2.2,function_means,uses,framing protocols described later in this chapter make use of these control symbols
+6,RP-3.1-136,3.1,classification_structure,identifies,all Ethernet cards are assigned a globally unique identifier
+7,RP-3.4-255,3.4,classification_structure,identifies,Routing Information Protocol (RIP)
+8,RP-1.5-11,1.5,comparison,equivalent_to,latency (also called delay)
+9,RP-3.1-3,3.1,mechanism_process,acts_on,A host can send a packet anywhere at any time
+10,RP-3-perspective-virtual-networks-all-the-way-down-1,3-perspective-virtual-networks-all-the-way-down,cause_effect,causes,Virtual memory creates an abstraction
+11,RP-3-perspective-virtual-networks-all-the-way-down-57,3-perspective-virtual-networks-all-the-way-down,classification_structure,encapsulates,a virtual ethernet frame inside a UDP packet
+12,RP-1.2-9,1.2,mechanism_process,acts_on,"network:
+
+-  An application programmer would list the services that his or her application needs: for example, a guarantee that each message the application sends will be delivered without error"
+13,RP-1.2-16,1.2,classification_structure,identifies,assigning an address to each node
+14,RP-3.3-508,3.3,classification_structure,identifies,class D addresses that specify a multicast group
+15,RP-3.4-0,3.4,classification_structure,part_of,networks of fairly modest size—up to a few hundred nodes
+16,RP-1.5-8,1.5,mechanism_process,acts_on,bits that can be transmitted over the network
+17,RP-3.3-23,3.3,function_means,uses,IP is that it runs on all the nodes (both hosts and routers) in a collection of networks and defines the infrastructure that allows these nodes and networks to function as a single logical internetwork
+18,RP-2.7-191,2.7,mechanism_process,performs,active scanning since the node is actively searching for an access point
+19,RP-3.3-1,3.3,classification_structure,identifies,no two hosts have the same address
+20,RP-2.6-193,2.6,classification_structure,connected_to,"Ethernet links are now largely point to point; that is, they connect one host to an Ethernet switch"
+21,RP-2.3-2,2.3,dependency,requires,the size of a frame is dependent on the data that is being sent in the payload of the frame
+22,RP-2.4-5,2.4,mechanism_process,acts_on,"In ones’ complement arithmetic, a negative integer (-x) is represented as the complement of x; that is, each bit of x is inverted."
+23,RP-3.3-41,3.3,classification_structure,identifies,The network part of an IP address identifies the network
+24,RP-3.3-27,3.3,dependency,requires,"protocols, such as TCP and UDP, typically run on top of IP"
+25,RP-2.6-66,2.6,mechanism_process,performs,“collision detect” means that a node listens as it transmits and can therefore detect
+26,RP-3.3-878,3.3,classification_structure,encapsulates,a packet to be delivered to a particular place even if its original header—the one that gets encapsulated inside the tunnel header
+27,RP-3.4-354,3.4,cause_effect,increases,"Load balancing—OSPF allows multiple routes to the same place to be assigned the same cost and will cause traffic to be distributed evenly over those routes, thus making better use of the available network capacity."
+28,RP-1.2-0,1.2,cause_effect,causes,networks are constantly changing as technology evolves and new applications are invented
+29,RP-3.5-346,3.5,classification_structure,connected_to,a network of virtual (software) switches that interconnect virtual servers
+30,RP-3.3-24,3.3,classification_structure,connected_to,hosts and routers that share the same network part of their address are connected to the same physical network
+31,RP-3.5-377,3.5,comparison,contrasts_with,the number of virtual ports in the Internet rocketed past the number of physical ports in 2012
+32,RP-1.2-101,1.2,comparison,trades_off_with,fundamental tension between stability and feature velocity: the rate at which new capabilities are introduced into the network
+33,RP-2.4-37,2.4,classification_structure,is_a,approach to error detection is exemplified by the Internet checksum
+34,RP-3.3-2,3.3,classification_structure,connected_to,The nodes that interconnect the networks are called routers.
+35,RP-3.2-2,3.2,mechanism_process,acts_on,each switch decides the ports over which it is and is not willing to forward frames
+36,RP-2.5-259,2.5,mechanism_process,performs,implementation does not support piggybacking ACKs on data frames
+37,RP-3.1-1,3.1,classification_structure,connected_to,number of hosts that can be connected to a single switch
+38,RP-3.3-0,3.3,classification_structure,part_of,hosts and routers) in a collection of networks
+39,RP-1.4-181,1.4,classification_structure,identifies,Internet (AF_INET)

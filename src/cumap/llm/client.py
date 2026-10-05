@@ -209,6 +209,7 @@ class LLMClient:
         model_tier: str,
         fixture_name: str = "default",
         escalate_check: Callable[[SchemaT], bool] | None = None,
+        allow_escalation: bool = True,
     ) -> ParsedResult[SchemaT]:
         """`escalate_check`: optional predicate for the "evidence_check_failed" escalation
         trigger — the caller's own post-hoc check (e.g. evidence-quote verification)
@@ -216,7 +217,9 @@ class LLMClient:
         this class trying to know about every task's validation rules.
         """
         escalation = self._settings.llm.escalation
-        can_escalate = escalation.enabled and model_tier == escalation.from_tier
+        can_escalate = (
+            allow_escalation and escalation.enabled and model_tier == escalation.from_tier
+        )  # CR-009: the concept loop keeps one tier
 
         try:
             result = self._parse_single_tier(

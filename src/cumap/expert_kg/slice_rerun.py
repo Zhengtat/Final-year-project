@@ -1,6 +1,6 @@
 """CR-007 §6: the P&D ch1-3 slice re-run, stage by stage, each with a preflight cost check.
 
-concepts (prompt v2, cached where the text is unchanged) -> propagate (E3, $0) -> canonicalize v2 (type-aware,
+concepts (prompt v2, cached where the text is unchanged) -> canonicalize v2 (type-aware,
 0.70 review band) + first-occurrence/role rules ($0) -> select (coverage-aware global pair budget, $0) -> relations
 (registry v1.1, prompts v3, strong tier) -> snapshots ($0). Every LLM call goes through LLMClient, whose stage
 budgets are checked before each call; checkpoints are written after each section / batch of pairs so a run can
@@ -14,7 +14,6 @@ from dataclasses import asdict
 from pathlib import Path
 
 from cumap.expert_kg.canonicalize import CanonicalOverrides
-from cumap.expert_kg.concept_experiments import propagate
 from cumap.expert_kg.llm_schemas import QualifiersLLM
 from cumap.expert_kg.mentions import MentionMatcher
 from cumap.expert_kg.pair_selection import select_pairs
@@ -71,16 +70,6 @@ def load_sections(
 
 def _section_texts(sections: list[SectionInput]) -> list[SectionText]:
     return [SectionText(s.section_id, s.chapter_num, i, s.text) for i, s in enumerate(sections)]
-
-
-# ---------------------------------------------------------------- stage: propagation ($0)
-def propagate_stage(cp: Checkpoint, sections: list[SectionInput]) -> int:
-    """E3: tag every accepted concept in each other section where a longest-match mention occurs."""
-    texts = {s.section_id: s.text for s in sections}
-    before = sum(len(v) for v in cp.mentions_by_section.values())
-    final = {s.section_id: list(cp.mentions_by_section.get(s.section_id, [])) for s in sections}
-    cp.mentions_by_section = propagate(final, texts)
-    return sum(len(v) for v in cp.mentions_by_section.values()) - before
 
 
 # ---------------------------------------------------------------- stage: canonicalize + roles
@@ -141,6 +130,7 @@ def select_stage(
     min_per_section: int = 8,
     sample: int = 50,
     seed: int = 42,
+    use_anchors: bool = False,
 ) -> dict:
     concepts = _restore_concept_registry(cp, embed_fn).all()
     per: dict[str, list[CandidatePair]] = {
@@ -160,6 +150,7 @@ def select_stage(
         min_per_section=min_per_section,
         sample_unselected=sample,
         seed=seed,
+        anchors=cp.anchors if use_anchors else None,
     )
     cp.selected_pairs = [asdict(p) for p in sel.selected]
     cp.sample_pairs = [asdict(p) for p in sel.unselected_sample]
@@ -195,11 +186,18 @@ def relations_stage(
     # CR-008: choice v4 (adds `same_concept`, no edge), qualifiers v4 (no corrects_intuition / intuition)
     fam, rel, qual = (
         load_prompt(prompts_dir, t, v)
-        for t, v in (("relation_family", "v3"), ("relation_choice", "v4"), ("relation_qualifiers", "v4"))
+        for t, v in (
+            ("relation_family", "v3"),
+            ("relation_choice", "v4"),
+            ("relation_qualifiers", "v4"),
+        )
     )
     done = {
         frozenset((r["pair"]["concept_x_id"], r["pair"]["concept_y_id"]))
         for r in cp.relation_results_v3
+    }
+    anchor_pairs = {
+        frozenset((a["concept_id"], a["anchor_id"])) for a in getattr(cp, "anchors", [])
     }
     todo = [("selected", p) for p in cp.selected_pairs] + [("sample", p) for p in cp.sample_pairs]
     for i, (group, p) in enumerate(todo):
@@ -219,6 +217,8 @@ def relations_stage(
                 concepts[pair.concept_y_id],
                 matcher,
                 same_concept=True,
+                containment_grounding=key
+                in anchor_pairs,  # CR-009: anchor pairs only (a code check, never shown to a model)
             )
         except BudgetExceededError:
             save_checkpoint(cp, run_dir)
@@ -289,7 +289,11 @@ def build_pair_registry(cp: Checkpoint) -> PairRegistry:
                     pair.concept_y_id,
                     True,
                     edge,
-                    None if edge else ("gated_dropped" if r.get("gated_dropped") else (r["reason"] or r["outcome"])),
+                    None
+                    if edge
+                    else (
+                        "gated_dropped" if r.get("gated_dropped") else (r["reason"] or r["outcome"])
+                    ),
                     [pair.sentence],
                 )
             ]
@@ -333,7 +337,6 @@ __all__ = [
     "load_sections",
     "preflight_canonicalize",
     "preflight_relations",
-    "propagate_stage",
     "relations_stage",
     "run_canonicalize_stage",
     "run_concepts_stage",

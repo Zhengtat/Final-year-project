@@ -194,7 +194,11 @@ class ConceptRegistry:
             first_introduced=mention.section_id,
             mentions=[
                 Mention(
-                    mention.section_id, mention.role, mention.evidence_quote, mention.definition
+                    mention.section_id,
+                    mention.role,
+                    mention.evidence_quote,
+                    mention.definition,
+                    mention.source,  # CR-009 STOP 1: add_new used to drop it, relabelling propagation as llm
                 )
             ],
         )

@@ -341,3 +341,11 @@ def test_review_sheet_is_blind(tmp_path):
     assert (
         "similarity" not in text.lower() and "secret model reason" not in text and "0.5" not in text
     )
+
+
+def test_add_new_keeps_the_mentions_source():
+    """CR-009 STOP 1: add_new used to drop `source`, relabelling a propagation-created node's first mention as llm."""
+    reg = ConceptRegistry(lambda t: np.zeros(3))
+    m = _mention("bandwidth")
+    m.source = "propagation"
+    assert reg.add_new(m).mentions[0].source == "propagation"

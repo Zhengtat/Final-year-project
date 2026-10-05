@@ -332,3 +332,38 @@ def test_generic_concept_type_never_blocks_an_edge(tmp_settings, fixtures_dir):
         "v3_acts_on",
     )
     assert r.outcome == "edge" and not r.type_errors  # CR-007: Concept is a wildcard
+
+
+def test_containment_grounding_lets_an_anchor_pair_ground_through_the_longer_term_only_when_asked(
+    tmp_settings, fixtures_dir
+):
+    """CR-009: "frame" inside "control frame" cannot ground by longest match; an ANCHOR pair may ground through the longer term."""
+    from cumap.expert_kg.relations_v3 import _contained
+
+    assert _contained("frame", "control frame") and not _contained("control frame", "frame")
+    assert _contained("bit", "bit rate") and not _contained("rate bit", "bit rate")
+    ctl = rc("c_ctl", "control frame", "DataUnit")
+    sentence = "A control frame is a small unit that a switch forwards."
+    matcher = MentionMatcher(concept_vocab([ctl, FRAME]))
+    client = LLMClient(tmp_settings, fixtures_dir=fixtures_dir)
+
+    def classify(**kw):
+        return classify_pair_v3(
+            client,
+            PROMPTS["relation_family"],
+            PROMPTS["relation_choice"],
+            PROMPTS["relation_qualifiers"],
+            REG,
+            pair(ctl, FRAME, sentence),
+            ctl,
+            FRAME,
+            matcher,
+            fixtures=("v3_classification", "v3_kind_of", "v3_acts_on"),
+            **kw,
+        )
+
+    assert (
+        classify().reason == "endpoint_not_grounded"
+    )  # the default: longest-match grounding is unchanged
+    ok = classify(containment_grounding=True)
+    assert ok.outcome == "edge" and ok.relation == "is_a"

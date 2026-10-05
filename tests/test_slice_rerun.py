@@ -1,4 +1,4 @@
-"""CR-007 §6 slice re-run pieces (no network, no key): section loading, propagation, selection,
+"""CR-007 §6 slice re-run pieces (no network, no key): section loading, selection,
 preflight and the PairRegistry adapter (only the selected group enters the graph)."""
 
 from __future__ import annotations
@@ -82,29 +82,6 @@ def test_load_sections_filters_chapters_and_keeps_book_order(tmp_path):
     assert [s.section_id for s in sr.load_sections(p, [1, 2])] == ["1.1", "2.1"]
     only = sr.load_sections(p, [2])
     assert [s.section_id for s in only] == ["2.1"] and only[0].domain == "computer networking"
-
-
-def test_propagation_adds_mentioned_tags_in_other_sections(tmp_path):
-    p = tmp_path / "s.jsonl"
-    write_sections(p)
-    sections = sr.load_sections(p, [1, 2])
-    cp = checkpoint()
-    cp.mentions_by_section = {
-        "1.1": [
-            {
-                "canonical_name": "switch",
-                "node_type": "Component",
-                "role": "defined",
-                "quote": "A switch forwards",
-                "definition": None,
-                "source": "llm",
-            }
-        ],
-        "2.1": [],
-    }
-    added = sr.propagate_stage(cp, sections)
-    assert added >= 1
-    assert any(m["role"] == "mentioned" for m in cp.mentions_by_section["2.1"])
 
 
 def test_preflight_relations_counts_only_unclassified_pairs():
