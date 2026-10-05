@@ -89,8 +89,15 @@ def test_chunk_only_candidates_need_the_minimum_count_and_the_cap_applies():
     by = {c.term for c in cands(chunk_min_count=99)}
     assert "postings list" not in by  # only a chunk source, seen 3 times < 99
     assert "index construction" in by  # a structural source needs no count
-    assert len(cands(cap=2)) == 2
-    assert [c.cid for c in cands(cap=3)] == ["c1", "c2", "c3"]
+    capped = cands(cap_one_token=1, cap_multi_token=1)
+    assert sum(c.one_token for c in capped) == 1 and sum(not c.one_token for c in capped) == 1
+    assert [c.cid for c in capped] == ["c1", "c2"]
+
+
+def test_n3_list_is_exactly_the_n1_list_without_its_one_token_class():
+    n1 = {c.term for c in cands()}
+    n3 = {c.term for c in cands(include_one_token=False)}
+    assert n3 == {c.term for c in cands() if not c.one_token} and n3 < n1
 
 
 def test_candidate_ranking_is_deterministic_and_prefers_more_sources():

@@ -123,7 +123,8 @@ def candidate_kwargs(cfg: dict) -> dict:
     return {
         "chunk_min_count": c["chunk_min_count"],
         "max_tokens": c["max_tokens"],
-        "cap": c["cap_per_section"],
+        "cap_one_token": c["cap_one_token"],
+        "cap_multi_token": c["cap_multi_token"],
         "head_min_chars": c["head_min_chars"],
     }
 

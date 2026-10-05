@@ -10,7 +10,8 @@ candidates:                                  # N1: hints only
   sources: [noun_chunk, technical_head, heading, emphasis, acronym, definitional]
   chunk_min_count: 2                         # chunk/head candidates need >= 2 occurrences in the section
   max_tokens: 4
-  cap_per_section: 30                        # ranked by (#sources, count, first position)
+  cap_one_token: 20                          # per section, ranked by (#sources, count, first position)
+  cap_multi_token: 10                        # a separate cap, so N3 = N1's list minus its one-token class
   head_min_chars: 3
 rescue:
   prompt: concept_rescue/v1

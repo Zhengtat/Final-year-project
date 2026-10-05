@@ -97,11 +97,12 @@ def residual_candidates(
     cfg: AliasConfig | None = None,
     chunk_min_count: int = 2,
     max_tokens: int = 4,
-    cap: int = 30,
+    cap_one_token: int = 20,
+    cap_multi_token: int = 10,
     head_min_chars: int = 3,
     include_one_token: bool = True,
 ) -> list[Candidate]:
-    """Candidates the generator's `final` output does not cover, ranked by (#sources, count, first position)."""
+    """Candidates the generator's `final` output does not cover, ranked by (#sources, count, first position); one cap per class (one-token / multi-token)."""
     cfg = cfg or AliasConfig.load()
     text_l = _nl(text)
     have = recorded_keys(final, cfg)
@@ -119,7 +120,11 @@ def residual_candidates(
             continue
         ranked.append(((-len(srcs), -count, pos), term, srcs, count, pos))
     ranked.sort(key=lambda r: (r[0], r[1]))
+    # one cap per class: N3 (one-token hints off) is then exactly N1's list minus its one-token class
+    one = [r for r in ranked if len(r[1].split()) == 1][:cap_one_token]
+    multi = [r for r in ranked if len(r[1].split()) > 1][:cap_multi_token]
+    kept = sorted(one + multi, key=lambda r: (r[0], r[1]))
     return [
         Candidate(f"c{i}", term, tuple(sorted(srcs)), count, pos, len(term.split()) == 1)
-        for i, (_k, term, srcs, count, pos) in enumerate(ranked[:cap], 1)
+        for i, (_k, term, srcs, count, pos) in enumerate(kept, 1)
     ]
