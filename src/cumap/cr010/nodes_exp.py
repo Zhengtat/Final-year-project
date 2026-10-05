@@ -488,7 +488,7 @@ def _common():
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("phase", choices=["dry-run", "n0-dev", "arms", "report"])
+    ap.add_argument("phase", choices=["dry-run", "n0-dev", "n0-test-replicate", "arms", "report"])
     ap.add_argument("--split", choices=["dev", "test"], default="dev")
     ap.add_argument("--limit", type=int)
     ap.add_argument("--max-usd", type=float, default=1.0)
@@ -522,6 +522,21 @@ def main() -> None:
             pruners=pruners,
         )
         print(f"N0 dev: {len(out.store.nodes)} nodes, spend ${out.cost_usd}")
+        return
+    if a.phase == "n0-test-replicate":
+        # baseline-stability sensitivity check: ONE fresh N0 run on the test split, started from the dev N0 state;
+        # never used to select anything (the frozen CR-009 test run stays the historical comparator)
+        client = LLMClient(settings, run_id="cr010_test_N0rep")
+        out, _s = X.run_test(
+            "N0rep",
+            out_dir=OUT / "test",
+            dev_run=ROOT / cfg["baseline"]["dev_run"],
+            form=gv["generator"]["form"],
+            max_iterations=gv["verifier"]["max_iterations"],
+            tau=tau,
+            client=client,
+        )
+        print(f"N0rep test: {len(out.store.nodes)} nodes, spend ${out.cost_usd}")
         return
     sections, emph, gold = split_data(a.split)
     sections = sections[: a.limit] if a.limit else sections

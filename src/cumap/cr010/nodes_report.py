@@ -88,13 +88,18 @@ def write_report(split, cfg, out0, sections, emph, gold, nlp, embed, pruner_for,
         if key in theta_rows:
             sc["N2"] = theta_rows[key]
             runs["N2"] = theta_rows[key]["_run"]
-    cmp_rows = {a: E.compare(sc["N0"], sc[a], cfg) for a in sc if a != "N0"}
+    rep_path = d / "N0rep.json"
+    if split == "test" and rep_path.exists():
+        out_rep = E.X.load_run(rep_path)
+        sc["N0rep"] = E.score_arm(None, out_rep, sections, gold, nlp, embed)
+    cmp_rows = {a: E.compare(sc["N0"], sc[a], cfg) for a in sc if a not in {"N0", "N0rep"}}
     chosen, verdict = E.select_node_arm(cmp_rows, cfg) if cmp_rows else ("N0", {})
     preds0 = R.predictions(out0, sections, E.X.gold_names(gold))
     resid = residual_gold(out0, preds0, gold)
     n_resid = sum(len(v) for v in resid.values())
     L = [
-        f"# CR-010 STOP 2 — node residual recall, IIR {split} ({len(sections)} sections)",
+        f"# CR-010 STOP 2 — node residual recall, IIR {split} ({len(sections)} sections)"
+        + (" — HELD-OUT, run once" if split == "test" else ""),
         "",
         (
             "N0 = the frozen CR-009 pipeline (G1, depth 1, M4/M5 off, pruner tau "
@@ -110,7 +115,7 @@ def write_report(split, cfg, out0, sections, emph, gold, nlp, embed, pruner_for,
     ]
     for a, s in sc.items():
         e = s["exact"]
-        c = cmp_rows.get(a)
+        c = cmp_rows.get(a) or (E.compare(sc["N0"], s, cfg) if a == "N0rep" else None)
         rp = (
             f"{s['added_exact_tp']}/{s['added_items']}"
             if s["added_items"]
@@ -132,14 +137,75 @@ def write_report(split, cfg, out0, sections, emph, gold, nlp, embed, pruner_for,
             + f" | {s['lenient_micro_f1']:.3f} | {s['exact_macro_f1']:.3f} | {_recalls(s)} | "
             f"{_pct(s['one_token_recall_exact'])} / {_pct(s['one_token_recall_lenient'])} | {rp} | {cost_s} |"
         )
-    L += ["", "## Selection by the pre-registered rule", ""]
-    if verdict:
-        L += ["| arm | gain ok | precision ok | qualifies |", "|---|---|---|---|"]
+    if split == "dev":
+        L += ["", "## Selection by the pre-registered rule", ""]
+        if verdict:
+            L += ["| arm | gain ok | precision ok | qualifies |", "|---|---|---|---|"]
+            L += [
+                f"| {a} | {v['gain_ok']} | {v['precision_ok']} | {v['qualifies']} |"
+                for a, v in verdict.items()
+            ]
+        L += ["", f"**Rule outcome: {chosen}**" + (" (no change)" if chosen == "N0" else ""), ""]
+    else:
+        n1 = verdict.get("N1")
         L += [
-            f"| {a} | {v['gain_ok']} | {v['precision_ok']} | {v['qualifies']} |"
-            for a, v in verdict.items()
+            "",
+            "## Confirmatory outcome (N1 only) and descriptive arms",
+            "",
+            (
+                "Frozen before this run: **N1 is the sole confirmatory arm; N2 and N3 are descriptive.** The criteria "
+                "are the same as on dev (exact micro F1 +0.02, or paired section-bootstrap 95% lower bound > 0, with a "
+                "precision drop <= 0.02), against the **frozen CR-009 N0** (historical comparator). Nothing is "
+                "adopted here; the N1/N0 decision belongs to Research."
+            ),
+            "",
+            "| arm | role | gain ok | precision ok | meets the criteria |",
+            "|---|---|---|---|---|",
         ]
-    L += ["", f"**Rule outcome: {chosen}**" + (" (no change)" if chosen == "N0" else ""), ""]
+        for a, v in verdict.items():
+            role = "confirmatory" if a == "N1" else "descriptive"
+            L.append(f"| {a} | {role} | {v['gain_ok']} | {v['precision_ok']} | {v['qualifies']} |")
+        if n1 is not None:
+            L += [
+                "",
+                f"**N1 meets the pre-registered criteria on the held-out split: {n1['qualifies']}.**",
+            ]
+        dev_scores = ROOT / "data/processed/cr010/dev/scores.json"
+        if dev_scores.exists() and "N1" in cmp_rows:
+            dv = json.loads(dev_scores.read_text())["compare"].get("N1")
+            if dv:
+                L += [
+                    "",
+                    (
+                        f"Dev vs test for N1: dev Δ F1 {dv['delta']:+.3f} (95% [{dv['lo95']:+.3f}, {dv['hi95']:+.3f}]); "
+                        f"test Δ F1 {cmp_rows['N1']['delta']:+.3f} "
+                        f"(95% [{cmp_rows['N1']['lo95']:+.3f}, {cmp_rows['N1']['hi95']:+.3f}])."
+                    ),
+                ]
+        if "N0rep" in sc:
+            rep = E.compare(sc["N0"], sc["N0rep"], cfg)
+            L += [
+                "",
+                "### Baseline stability (fresh N0 replication, sensitivity check only)",
+                "",
+                (
+                    f"Frozen CR-009 N0 F1 {sc['N0']['exact']['f1']:.3f}; fresh N0 replication F1 "
+                    f"{sc['N0rep']['exact']['f1']:.3f} (Δ {rep['delta']:+.3f}, paired 95% "
+                    f"[{rep['lo95']:+.3f}, {rep['hi95']:+.3f}]). For reference, the arms relative to the fresh replication:"
+                ),
+                "",
+            ]
+            for a in ("N1", "N2", "N3"):
+                if a in sc:
+                    c2 = E.compare(sc["N0rep"], sc[a], cfg)
+                    L.append(
+                        f"- {a} vs N0rep: Δ F1 {c2['delta']:+.3f} (95% [{c2['lo95']:+.3f}, {c2['hi95']:+.3f}]), precision change {-c2['precision_drop']:+.3f}"
+                    )
+            L += [
+                "",
+                "(The arms are post-passes over the frozen N0 run, so they are paired with it; the comparison with the fresh replication is on the same sections but not the same generated items.)",
+            ]
+        L.append("")
     if theta_rows:
         L += [
             "## N2 trigger (items per 100 words in N0's final output below theta)",

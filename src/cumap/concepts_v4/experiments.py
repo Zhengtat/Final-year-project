@@ -385,6 +385,7 @@ def run_test(
     tau: float = 0.1,
     limit: int | None = None,
     progress=print,
+    client=None,
 ):
     """The IIR test split, run ONCE (CR-009 §7): starts from the final dev run's state and processes the test sections
     in book order with the all-dev pruner (chapters 4+). Never used for selection."""
@@ -401,7 +402,7 @@ def run_test(
     test_secs, _gold = load_split("test")
     pruners = loco_pruners(dev_secs, nlp, embed_fn)
     prev = load_run(dev_run)
-    client = LLMClient(settings, run_id=f"cr009_test_{arm}")
+    client = client or LLMClient(settings, run_id=f"cr009_test_{arm}")
     run = R.ConceptRun(
         client,
         load_prompt(ROOT / "prompts", "concept_generator", "v4"),
