@@ -1,0 +1,30 @@
+# CR-010 STOP 2: frozen knobs of the node experiment (N1-N3). Fixed BEFORE any live run; changing a value after a run
+# means a new version. The N2 trigger threshold is chosen on IIR dev by the pre-registered rule and written to
+# `n2.trigger_frozen` BEFORE the held-out run.
+version: node-1
+baseline:
+  config: configs/concept_gvp.yaml          # N0 = the frozen CR-009 configuration (G1, depth 1, pruner tau 0.1)
+  dev_run: data/processed/cr010/dev/N0.json
+  test_run: data/processed/concepts_v4/test1/TEST_V4.json   # the frozen CR-009 test run, reused unchanged ($0)
+candidates:                                  # N1: hints only
+  sources: [noun_chunk, technical_head, heading, emphasis, acronym, definitional]
+  chunk_min_count: 2                         # chunk/head candidates need >= 2 occurrences in the section
+  max_tokens: 4
+  cap_per_section: 30                        # ranked by (#sources, count, first position)
+  head_min_chars: 3
+rescue:
+  prompt: concept_rescue/v1
+  model_tier: bulk
+  outcomes: [add_new, link_existing, reject]
+n2:
+  sample_label: sample2                       # distinct cache key; the second sample never sees the first output
+  trigger: items_per_100_words_below         # recall-warning condition
+  trigger_grid: [1.0, 1.5, 2.0, 2.5, 3.0]    # candidates for the frozen value; "always" is reported as a reference only
+  trigger_frozen: null                       # set on dev before the test run
+selection:
+  metric: exact_micro_f1
+  min_gain: 0.02
+  max_precision_drop: 0.02
+  tie_band: 0.02
+  simplicity_order: [N0, N3, N1, N2]         # fewer mechanisms first; no change is an allowed outcome
+bootstrap: {n: 10000, seed: 20261005, unit: section}
