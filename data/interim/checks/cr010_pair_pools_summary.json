@@ -1,0 +1,119 @@
+{
+ "run": "slice3_c2",
+ "frozen_selection_reproduced": {
+  "unique_window0_pairs_now": 8604,
+  "unique_window0_pairs_recorded": 8604,
+  "match": true,
+  "p0_pairs": 1100,
+  "p0_pairs_outside_the_same_sentence_universe": 226
+ },
+ "pools": {
+  "P0": 1100,
+  "P0_unselected_random_sample_classified": 50,
+  "P1_extra_same_sentence": 7680,
+  "adjacent_sentence_pairs_not_in_the_same_sentence_universe": 7934,
+  "P2_extra_strict_cue (proposed definition)": 2324,
+  "P2_extra_loose_cue (the frozen substring cue; not selective)": 7460,
+  "P3_extra": "needs the experimental eRST graph (evidence-span scope)"
+ },
+ "cue_signal": {
+  "note": "the frozen ranking tests cues by substring ('for' fires in 'information', 'so' in 'also'); strict = word boundary, function words (for, so, if, but, then, when, while, since, after, before, until, next, once, is a) excluded",
+  "strict_cues": [
+   "as a result",
+   "as long as",
+   "because",
+   "cause",
+   "causes",
+   "composed of",
+   "consists of",
+   "decreases",
+   "depends on",
+   "differs from",
+   "due to",
+   "equivalent to",
+   "has property",
+   "hence",
+   "however",
+   "in contrast",
+   "in order to",
+   "increases",
+   "is a type of",
+   "leads to",
+   "only if",
+   "part of",
+   "performs",
+   "prevents",
+   "requires",
+   "results in",
+   "so that",
+   "therefore",
+   "to avoid",
+   "to ensure",
+   "triggers",
+   "unless",
+   "unlike",
+   "used by",
+   "uses",
+   "whenever",
+   "whereas"
+  ]
+ },
+ "by_section_p2_extra": {
+  "3.3": 353,
+  "2.7": 236,
+  "1.2": 222,
+  "2.8": 201,
+  "3.1": 198,
+  "2.3": 173,
+  "3.4": 135,
+  "1.4": 117,
+  "2.4": 113,
+  "1.3": 113,
+  "3.2": 109,
+  "3.5": 89,
+  "1.5": 86,
+  "2.6": 66,
+  "3-perspective-virtual-networks-all-the-way-down": 54,
+  "2.5": 51,
+  "2.2": 47,
+  "2.1": 34,
+  "2-problem-connecting-to-a-network": 29,
+  "2-perspective-race-to-the-edge": 25,
+  "1.1": 11,
+  "3-problem-not-all-networks-are-directly-connected": 5,
+  "1-perspective-feature-velocity": 5,
+  "1-problem-building-a-network": 3
+ },
+ "full_classification_cost_usd": {
+  "P1_extra": 63.7,
+  "P2_extra": 19.3
+ },
+ "p0_miss_indication": {
+  "sample_size": 50,
+  "sample_accepted_edges": 20,
+  "unselected_yield": {
+   "point": 0.4,
+   "wilson95": [
+    0.2760838973025655,
+    0.5381856225241064
+   ]
+  },
+  "unselected_pairs": 7504,
+  "projected_unselected_accepted_edges": {
+   "point": 3002,
+   "range": [
+    2072,
+    4039
+   ]
+  },
+  "selected_accepted_edges": 529,
+  "classifier_accepted_pair_recall_of_p0": {
+   "point": 0.15,
+   "range": [
+    0.116,
+    0.203
+   ]
+  },
+  "status": "indicative only: classifier-accepted edges, not owner-validated; n=50"
+ }
+}
