@@ -25,12 +25,14 @@ def _recalls(sc: dict) -> str:
 
 
 def pick_theta(rows: dict[str, dict], cfg: dict) -> float | None:
-    """Freeze rule for the N2 trigger: highest exact micro F1 on dev; among values within the tie band of the best, the
-    smallest theta (fewest sections resampled). Always-trigger ('all') is a reference only and never selected."""
+    """Freeze rule for the N2 trigger: the grid value with the highest exact micro F1 on dev; ties go to the smaller theta
+    (fewer sections resampled). The 0.02 tie band belongs to the ARM selection, not to this choice: applied here it
+    would pick a theta that never fires. Always-trigger ('all') is a reference only and never selected."""
     grid = [t for t in rows if t != "all"]
+    if not grid:
+        return None
     best = max(rows[t]["exact"]["f1"] for t in grid)
-    near = [t for t in grid if best - rows[t]["exact"]["f1"] <= cfg["selection"]["tie_band"] + 1e-9]
-    return float(min(near, key=float)) if near else None
+    return float(min((t for t in grid if rows[t]["exact"]["f1"] >= best - 1e-12), key=float))
 
 
 def residual_gold(out0: R.RunOutput, preds0, gold: list[GoldConcept]) -> dict[str, set[str]]:
@@ -152,7 +154,7 @@ def write_report(split, cfg, out0, sections, emph, gold, nlp, embed, pruner_for,
             )
         L += [
             "",
-            f"Frozen trigger rule: highest exact micro F1; within the tie band the smallest theta; 'all' is a reference only. "
+            f"Frozen trigger rule: highest exact micro F1 on dev, ties to the smaller theta; 'all' is a reference only. "
             f"Value on this split: **{theta}**"
             + (
                 " (to be written to `n2.trigger_frozen` BEFORE the test run)."

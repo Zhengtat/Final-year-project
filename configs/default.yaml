@@ -110,6 +110,9 @@ llm:
     concept_generator: 16000  # P&D units of up to ~2,500 words: anchors and quotes make the answer long
     concept_backfill: 3000
     conexion_baseline: 3000  # CR-009 C-ConExion comparison arm
+    # CR-010 2026-10-05: the default 1000 truncated every N1 rescue answer mid-JSON (up to 30 decisions + reasoning);
+    # 13/13 dev calls failed with 'EOF while parsing'. Measured after the fix is recorded in DECISIONS.
+    concept_rescue: 6000
     default: 1000
 
 embeddings:

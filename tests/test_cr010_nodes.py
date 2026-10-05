@@ -266,14 +266,13 @@ def test_n2_prompt_variant_changes_only_the_cache_label():
     assert v.body == base.body and v.version != base.version
 
 
-def test_pick_theta_takes_the_smallest_value_within_the_tie_band_and_ignores_all():
+def test_pick_theta_takes_the_best_f1_ties_to_the_smaller_theta_and_ignores_all():
     rows = {
         t: {"exact": {"f1": f}}
-        for t, f in {"1.0": 0.50, "1.5": 0.51, "2.0": 0.52, "all": 0.60}.items()
+        for t, f in {"1.0": 0.50, "1.5": 0.52, "2.0": 0.52, "all": 0.60}.items()
     }
-    assert (
-        pick_theta(rows, CFG) == 1.0
-    )  # 0.52 - 0.50 = 0.02 is inside the tie band; 'all' is never selected
+    assert pick_theta(rows, CFG) == 1.5  # best 0.52 (tie -> smaller); 'all' is never selected
+    assert pick_theta({"1.0": {"exact": {"f1": 0.4}}, "2.0": {"exact": {"f1": 0.4}}}, CFG) == 1.0
 
 
 # ---------------------------------------------------------------- bootstrap

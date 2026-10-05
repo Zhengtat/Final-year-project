@@ -20,8 +20,8 @@ rescue:
 n2:
   sample_label: sample2                       # distinct cache key; the second sample never sees the first output
   trigger: items_per_100_words_below         # recall-warning condition
-  trigger_grid: [1.0, 1.5, 2.0, 2.5, 3.0]    # candidates for the frozen value; "always" is reported as a reference only
-  trigger_frozen: null                       # set on dev before the test run
+  trigger_grid: [1.0, 1.5, 2.0, 2.5, 3.0]    # frozen value = highest dev exact micro F1, ties to the smaller theta; "always" is a reference only
+  trigger_frozen: 3.0                        # frozen on IIR dev (2026-10-05, report reports/cr010_stop2_dev.md) BEFORE any test run
 selection:
   metric: exact_micro_f1
   min_gain: 0.02
