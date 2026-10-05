@@ -1,0 +1,6 @@
+id,item_id,perturbation_type,kind
+1,M-2.7-796585,polarity_flip,item
+2,M-3.4-579827,conflation,item
+3,,,needs_correct_edge
+4,,,needs_correct_edge
+5,,,needs_correct_edge

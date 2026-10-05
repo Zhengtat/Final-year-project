@@ -1,0 +1,11 @@
+id,kind,reason
+1,not_mention,generic_use
+2,backfill_rejection,"“Signalling” occurs only inside the longer term “signalling component,” not as the signalling mechanism."
+3,not_mention,inside_longer_term
+4,not_mention,different_sense
+5,not_mention,different_sense
+6,not_mention,inside_longer_term
+7,backfill_rejection,"different_sense: “transmitter” refers to the sending adaptor or sender, not the transmitter component described by the node."
+8,not_mention,inside_longer_term
+9,not_mention,different_sense
+10,not_mention,inside_longer_term

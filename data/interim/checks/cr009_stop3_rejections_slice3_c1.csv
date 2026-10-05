@@ -1,0 +1,11 @@
+id,known concept,section,sentence where the word occurs,mark (correct rejection / actually a mention)
+1,link-level protocol,2.5,A link-level protocol that wants to deliver frames reliably must somehow recover from these discarded (lost) frames.,actually a mention
+2,signalling,2.2,The network adaptor contains a signalling component that actually encodes bits into signals at the sending node and decodes signals into bits at the receiving node.,correct rejection
+3,identifier,2.3,PPP and LCP work in tandem: LCP sends control messages encapsulated in PPP frames—such messages are denoted by an LCP identifier in the PPP (Protocol) field—and then turns around and changes PPP’s frame format based on the information contained in those control messages.,actually a mention
+4,operation,1-perspective-feature-velocity,"And they are increasingly doing this by adopting the best practices of cloud providers, which can be summarized as having two major themes: (1) take advantage of commodity hardware and move all intelligence into software, and (2) adopt agile engineering processes that break down barriers between development and operations.",correct rejection
+5,flow,3.4,"It is more accurate to make the edges directed, which typically means that there would be a pair of edges between each node—one flowing in each direction, and each with its own edge cost.",correct rejection
+6,metric,3.4,"As we will see below, it is possible to use a range of different metrics or costs for the links in a routing protocol.",correct rejection
+7,transmitter,2.6,"Transmitter Algorithm As we have just seen, the receiver side of the Ethernet protocol is simple; the real smarts are implemented at the sender’s side.",actually a mention
+8,hierarchical addressing,3.3,We can now see how hierarchical addressing—splitting the address into network and host parts—has improved the scalability of a large network.,actually a mention
+9,packet switch,3.1,3.1.2 Virtual Circuit Switching A second technique for packet switching uses the concept of a virtual circuit (VC).,correct rejection
+10,optical fiber,2.3,"SONET was first proposed by Bell Communications Research (Bellcore), and then developed under the American National Standards Institute (ANSI) for digital transmission over optical fiber; it has since been adopted by the ITU-T.",actually a mention
