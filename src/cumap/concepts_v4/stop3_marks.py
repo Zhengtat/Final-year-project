@@ -122,5 +122,72 @@ def main() -> str:
     return "\n".join(L)
 
 
+def main_b(run: str = "slice3_c2") -> str:
+    """Marks on the re-marking sample after the fixes (`cr009_stop3b_*`): concepts, G-links, edges."""
+    L = [
+        "",
+        "## Owner marks after the fixes (`slice3_c2`; read from `data/gold/`, split by the hidden keys)",
+        "",
+    ]
+    cs = _rows(GOLD / f"cr009_stop3b_concepts_{run}.csv")
+    key = {r[0]: r for r in _rows(CHECKS / f"cr009_stop3b_concepts_key_{run}.csv")}
+    j = {r[0]: r[5].strip().lower() for r in cs}
+    ok = {i for i, v in j.items() if v == "valid complete"}
+    L += [
+        "### Concepts (30)",
+        "",
+        f"- **Valid complete concept: {ci(len(ok), len(j))}** (first run, 40 sampled: 25/40 = 62%); verdicts {dict(Counter(j.values()))}",
+        "",
+        "| stratum | n | valid complete |",
+        "|---|---|---|",
+    ]
+    for name, f in {
+        "independent": lambda k: k[1] == "independent" and k[2] != "True",
+        "anchored": lambda k: k[1] == "anchored" and k[2] != "True",
+        "found_via_anchor": lambda k: k[2] == "True",
+    }.items():
+        ids = [i for i, k in key.items() if f(k)]
+        L.append(f"| {name} | {len(ids)} | {ci(sum(i in ok for i in ids), len(ids))} |")
+    aj = [
+        (r[0], r[9].strip().lower())
+        for r in cs
+        if r[9].strip().lower() in {"correct", "wrong", "should be independent"}
+    ]
+    L += [
+        "",
+        f"- **Anchor correct: {ci(sum(v == 'correct' for _, v in aj), len(aj))}** (first run: 17/21 = 81%)",
+        "",
+    ]
+    gl = [r[5].strip().lower() for r in _rows(GOLD / f"cr009_stop3b_glinks_{run}.csv")]
+    L += [
+        "### Non-trivial generator links (all that remain after the strict rule)",
+        "",
+        f"- **Same sense: {ci(gl.count('same'), len(gl))}** (first run: 4/15 = 27%)",
+        "",
+    ]
+    ek = {r[0]: r for r in _rows(CHECKS / f"cr009_stop3b_edges_key_{run}.csv")}
+    ej = [(r[0], r[6].strip().lower()) for r in _rows(GOLD / f"cr009_stop3b_edges_{run}.csv")]
+    good = {i for i, v in ej if v == "correct"}
+    L += [
+        "### Edges (30: 15 anchor-derived, 15 other)",
+        "",
+        f"- **Strict edge precision (relation and direction right): {ci(len(good), len(ej))}** (CR-007 spot-check: 29/39 = 74%, CR-005: 23/30 = 77%); verdicts {dict(Counter(v for _, v in ej))}",
+        f"- anchor-derived {ci(sum(i in good for i, _ in ej if ek[i][1] == 'True'), sum(1 for i, _ in ej if ek[i][1] == 'True'))}; other {ci(sum(i in good for i, _ in ej if ek[i][1] != 'True'), sum(1 for i, _ in ej if ek[i][1] != 'True'))}",
+        "- errors: " + "; ".join(f"{v} ({ek[i][2]})" for i, v in ej if v != "correct"),
+        "",
+    ]
+    out = ROOT / "reports" / "cr009_stop3_c2.md"
+    txt = (
+        out.read_text(encoding="utf-8").split("\n## Owner marks after the fixes")[0].rstrip("\n")
+        + "\n"
+        + "\n".join(L)
+        + "\n"
+    )
+    out.write_text(txt, encoding="utf-8")
+    return "\n".join(L)
+
+
 if __name__ == "__main__":
-    print(main())
+    import sys
+
+    print(main_b() if len(sys.argv) > 1 and sys.argv[1] == "b" else main())

@@ -57,3 +57,27 @@ All numbers are computed from the saved runs; owner precision figures are pendin
 | concept_backfill | 0.089 |
 | **total** | **10.29** |
 
+## Owner marks after the fixes (`slice3_c2`; read from `data/gold/`, split by the hidden keys)
+
+### Concepts (30)
+
+- **Valid complete concept: 22/30 = 73% (Wilson 95% [0.56, 0.86])** (first run, 40 sampled: 25/40 = 62%); verdicts {'valid complete': 22, 'generic': 6, 'partial': 2}
+
+| stratum | n | valid complete |
+|---|---|---|
+| independent | 11 | 4/11 = 36% (Wilson 95% [0.15, 0.65]) |
+| anchored | 14 | 13/14 = 93% (Wilson 95% [0.69, 0.99]) |
+| found_via_anchor | 5 | 5/5 = 100% (Wilson 95% [0.57, 1.00]) |
+
+- **Anchor correct: 18/18 = 100% (Wilson 95% [0.82, 1.00])** (first run: 17/21 = 81%)
+
+### Non-trivial generator links (all that remain after the strict rule)
+
+- **Same sense: 16/16 = 100% (Wilson 95% [0.81, 1.00])** (first run: 4/15 = 27%)
+
+### Edges (30: 15 anchor-derived, 15 other)
+
+- **Strict edge precision (relation and direction right): 27/30 = 90% (Wilson 95% [0.74, 0.97])** (CR-007 spot-check: 29/39 = 74%, CR-005: 23/30 = 77%); verdicts {'correct': 27, 'wrong direction': 1, 'not supported': 1, 'wrong relation': 1}
+- anchor-derived 15/15 = 100% (Wilson 95% [0.80, 1.00]); other 12/15 = 80% (Wilson 95% [0.55, 0.93])
+- errors: wrong direction (has_property); not supported (is_a); wrong relation (part_of)
+
