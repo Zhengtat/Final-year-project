@@ -89,7 +89,9 @@ def write_report(split, cfg, out0, sections, emph, gold, nlp, embed, pruner_for,
             sc["N2"] = theta_rows[key]
             runs["N2"] = theta_rows[key]["_run"]
     rep_path = d / "N0rep.json"
+    rep_spend = 0.0
     if split == "test" and rep_path.exists():
+        rep_spend = json.loads(rep_path.read_text())["extra"].get("spend_usd", 0.0)
         out_rep = E.X.load_run(rep_path)
         sc["N0rep"] = E.score_arm(None, out_rep, sections, gold, nlp, embed)
     cmp_rows = {a: E.compare(sc["N0"], sc[a], cfg) for a in sc if a not in {"N0", "N0rep"}}
@@ -103,9 +105,15 @@ def write_report(split, cfg, out0, sections, emph, gold, nlp, embed, pruner_for,
         "",
         (
             "N0 = the frozen CR-009 pipeline (G1, depth 1, M4/M5 off, pruner tau "
-            f"{tau}, no strict G-links). Arms are post-passes over the N0 run; selection by the pre-registered rule "
-            "(`configs/cr010_node.yaml`): exact micro F1 +0.02 or paired section-bootstrap 95% lower bound > 0, precision "
-            "drop <= 0.02, tie band 0.02 (simpler wins), no change allowed."
+            f"{tau}, no strict G-links). Arms are post-passes over the N0 run. "
+            + (
+                "Criteria (`configs/cr010_node.yaml`): exact micro F1 +0.02 or paired section-bootstrap 95% lower bound "
+                "> 0, precision drop <= 0.02. No selection happens on this split."
+                if split == "test"
+                else "Selection by the pre-registered rule (`configs/cr010_node.yaml`): exact micro F1 +0.02 or paired "
+                "section-bootstrap 95% lower bound > 0, precision drop <= 0.02, tie band 0.02 (simpler wins), no "
+                "change allowed."
+            )
         ),
         "",
         "## Metrics",
@@ -125,7 +133,11 @@ def write_report(split, cfg, out0, sections, emph, gold, nlp, embed, pruner_for,
         cost_s = (
             f"${cost.cost_usd}"
             if cost is not None
-            else (f"${n2_cost}" if a == "N2" else "$0 (reused)")
+            else (
+                f"${n2_cost}"
+                if a == "N2"
+                else (f"${rep_spend} (fresh run)" if a == "N0rep" else "$0 (reused)")
+            )
         )
         L.append(
             f"| {a} | {s['n_predicted']} | {e['precision']:.3f} / {e['recall']:.3f} / **{e['f1']:.3f}** | "
