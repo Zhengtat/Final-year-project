@@ -1,0 +1,11 @@
+stage,arm_or_task,unit_count,estimated_calls,estimated_input_tokens,estimated_output_tokens,estimated_api_usd,owner_annotation_minutes,hard_cap_usd,approved_by_owner,actual_calls,actual_api_usd,notes
+STOP1,repository reconciliation + dry run,1,0,0,0,0,0,0,N/A,0,0,No paid calls; executed 2026-10-05
+STOP2,N0 baseline (dev rerun at tau 0.1; frozen test run reused),13,26,150000,40000,0.07,0,3.0,NO,,,Live rerun only for dev; test baseline is the frozen CR-009 run ($0)
+STOP2,N1 candidate-hint rescue (dev 13 + test 70),83,83,330000,125000,0.1,0,1.0,NO,,,1 bulk rescue call per section; candidate extraction is $0 code
+STOP2,N2 selective independent resampling (dev 13 + test 70),33,66,400000,160000,0.2,0,1.0,NO,,,Assumes the frozen trigger fires on about 40% of sections; each firing = a full G1 generation (about 2 calls)
+STOP2,N3 one-token diagnostic ablation (dev 13 + test 70),83,83,330000,125000,0.1,0,1.0,NO,,,Same as N1 without one-token hints; may reuse N1 cache
+STOP4,REL-MAP-180 construction / annotation,180,0,0,0,0,960,0,NO,,,Owner time separate from API: 180 items x 4 min (first annotator) + 60 x 4 min (second); construction from slice3_c2 is $0
+STOP4,P0-P3 pair-selection experiment (P1-P3 pools about 300 pairs each + eRST discourse graph for P3),900,2700,3000000,500000,9.5,90,25.0,NO,,,Pair classification $0.0083/pair measured; discourse graph $2-15 depends on the Research decision on its scope; pair-recall validation 60-120 min
+STOP5,current architecture (frozen CR-009 results reused),1150,0,0,0,0,0,0,NO,,,slice3_c2 classifications already exist ($0)
+STOP5,"erst_direct architecture (same 1,150 pairs + REL-MAP-180)",1150,2300,2500000,500000,8.0,0,12.0,NO,,,"Single classification into the 31 relations + NO_ERST_RELATION, about 2 calls per pair, strong tier"
+STOP5,dual architecture (concept layer reused + discourse layer),1150,1500,1500000,300000,2.0,0,8.0,NO,,,Incremental to the P3 discourse graph; reverse-recovery evaluation is code
