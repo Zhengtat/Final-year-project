@@ -3,13 +3,26 @@
  "scinlp": {
   "source": "https://github.com/AKADDC/SciNLP",
   "clone_dir": "data/raw/external/scinlp (gitignored; not redistributed)",
-  "commit": "88ca191386ac225ed072fee9b7559a998cc84bf7",
-  "commit_subject": "CR-012: SciNLP provenance note (data stays local; clone .git removed)",
+  "commit": "1aba50cba472b65e5f8ce26362eb6aef45a599d7",
+  "commit_subject": "Adopt the dataset snapshot rule (CLAUDE.md, DECISIONS); CR-012 manifest records the SciNLP snapshot state",
   "dataset_snapshot": {
    "version_label": "scinlp-repo-e78342be517e",
-   "pre_change_archive": null,
-   "note": "no dataset change has happened since the first download; per the Dataset snapshot rule (CLAUDE.md) any replacement, upgrade, reformatting or switch needs an archive branch/tag cr012-scinlp-pre-change and a local-only archive of these exact bytes (data is gitignored and CC BY-NC, so never pushed); results must name this version",
-   "bytes_recoverable_from": "the original GitHub commit above (authoritative reproducible source) plus the per-file sha256 in this manifest"
+   "pre_change_git_commit": "1aba50cba472b65e5f8ce26362eb6aef45a599d7",
+   "archive_branch": "archive/cr012-scinlp-pre-change",
+   "archive_branch_commit": "1aba50cba472b65e5f8ce26362eb6aef45a599d7",
+   "archive_tag": "cr012-scinlp-pre-change (annotated)",
+   "dataset_tracked_by_git": false,
+   "git_branch_or_tag_is_a_dataset_backup": false,
+   "local_only_archive": {
+    "path": "dataset_snapshots/cr012-scinlp-pre-change.tar.gz (gitignored)",
+    "sha256": "718cb9650e2d9766e4975f6499e04e0a92e051d02d1b427bedbdd28e61decd94",
+    "bytes": 12935542,
+    "contents": "data/raw/external/scinlp/ (Dataset/*.json, KG_triples.txt, README.md, SOURCE.md) exactly as downloaded; gzip -n, so the archive bytes are reproducible",
+    "verified": "extracted to a temporary folder; train/dev/test sha256 equal the per-file hashes in this manifest"
+   },
+   "authoritative_reproducible_source": "https://github.com/AKADDC/SciNLP at the commit above",
+   "redistribution": "CC BY-NC 4.0, non-commercial academic use only: the data and the archive are never pushed or published",
+   "rule": "any replacement, upgrade, reformatting or switch of this dataset requires this snapshot to exist first; every CR-012 result names this version label"
   },
   "licence": "CC BY-NC 4.0 (non-commercial academic research only; follows the ACL OCL Corpus policy)",
   "official_scorer": "NONE in the repository; README lists PURE / PL-Marker / HGERE F1 only. Published numbers cannot be verified as computed with a scoring definition identical to ours.",

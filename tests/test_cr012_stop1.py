@@ -39,3 +39,16 @@ def test_no_pipeline_module_reads_scinlp_text_into_prompts():
         if f.parts[2] == "cr012":
             continue
         assert "scinlp" not in f.read_text().lower(), f
+
+
+def test_scinlp_snapshot_record_follows_the_snapshot_rule():
+    snap = M["scinlp"]["dataset_snapshot"]
+    assert (
+        snap["archive_branch"] == "archive/cr012-scinlp-pre-change"
+        and snap["dataset_tracked_by_git"] is False
+    )
+    assert snap["git_branch_or_tag_is_a_dataset_backup"] is False
+    assert (
+        len(snap["local_only_archive"]["sha256"]) == 64 and "never pushed" in snap["redistribution"]
+    )
+    assert snap["pre_change_git_commit"] == snap["archive_branch_commit"]

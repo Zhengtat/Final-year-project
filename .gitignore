@@ -38,3 +38,6 @@ reports/demo/
 
 # full (unredacted) local copies of generated reports
 reports/*.local.md
+
+# local-only dataset archives (licence-restricted data is never pushed; see the Dataset snapshot rule in CLAUDE.md)
+dataset_snapshots/

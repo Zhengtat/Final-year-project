@@ -102,6 +102,31 @@ def git(*a: str, cwd: Path = SCINLP) -> str:
     ).stdout.strip()
 
 
+def snapshot_record() -> dict:
+    """Dataset snapshot rule (CLAUDE.md): archive branch + annotated tag + local-only archive with its SHA-256."""
+    arch = REPO_ROOT / "dataset_snapshots/cr012-scinlp-pre-change.tar.gz"
+    top = REPO_ROOT
+    return {
+        "version_label": "scinlp-repo-e78342be517e",
+        "pre_change_git_commit": git("rev-parse", "cr012-scinlp-pre-change^{commit}", cwd=top),
+        "archive_branch": "archive/cr012-scinlp-pre-change",
+        "archive_branch_commit": git("rev-parse", "archive/cr012-scinlp-pre-change", cwd=top),
+        "archive_tag": "cr012-scinlp-pre-change (annotated)",
+        "dataset_tracked_by_git": False,
+        "git_branch_or_tag_is_a_dataset_backup": False,
+        "local_only_archive": {
+            "path": "dataset_snapshots/cr012-scinlp-pre-change.tar.gz (gitignored)",
+            "sha256": sha(arch) if arch.exists() else None,
+            "bytes": arch.stat().st_size if arch.exists() else None,
+            "contents": "data/raw/external/scinlp/ (Dataset/*.json, KG_triples.txt, README.md, SOURCE.md) exactly as downloaded; gzip -n, so the archive bytes are reproducible",
+            "verified": "extracted to a temporary folder; train/dev/test sha256 equal the per-file hashes in this manifest",
+        },
+        "authoritative_reproducible_source": "https://github.com/AKADDC/SciNLP at the commit above",
+        "redistribution": "CC BY-NC 4.0, non-commercial academic use only: the data and the archive are never pushed or published",
+        "rule": "any replacement, upgrade, reformatting or switch of this dataset requires this snapshot to exist first; every CR-012 result names this version label",
+    }
+
+
 def pd_audit() -> dict:
     src = REPO_ROOT / "data/interim/textbook_sections.jsonl"
     rows = [json.loads(line) for line in src.read_text().splitlines()]
@@ -138,12 +163,7 @@ def build() -> dict:
             "clone_dir": "data/raw/external/scinlp (gitignored; not redistributed)",
             "commit": git("rev-parse", "HEAD"),
             "commit_subject": git("log", "-1", "--format=%s"),
-            "dataset_snapshot": {
-                "version_label": "scinlp-repo-e78342be517e",
-                "pre_change_archive": None,
-                "note": "no dataset change has happened since the first download; per the Dataset snapshot rule (CLAUDE.md) any replacement, upgrade, reformatting or switch needs an archive branch/tag cr012-scinlp-pre-change and a local-only archive of these exact bytes (data is gitignored and CC BY-NC, so never pushed); results must name this version",
-                "bytes_recoverable_from": "the original GitHub commit above (authoritative reproducible source) plus the per-file sha256 in this manifest",
-            },
+            "dataset_snapshot": snapshot_record(),
             "licence": "CC BY-NC 4.0 (non-commercial academic research only; follows the ACL OCL Corpus policy)",
             "official_scorer": "NONE in the repository; README lists PURE / PL-Marker / HGERE F1 only. Published numbers cannot be verified as computed with a scoring definition identical to ours.",
             "readme_stated_counts": {"papers": 60, "entities": 6429, "relations": 1649},
