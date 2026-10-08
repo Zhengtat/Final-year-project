@@ -277,10 +277,64 @@ def reveal_p3(sheet: Path, rows: list[dict], key: list[dict]) -> dict:
     }
 
 
+def write_report() -> Path:
+    """reports/cr010_p3.md from the saved analysis and the freeze manifests ($0)."""
+    d = json.loads((PR.OUT / "p3_analysis_with_reveal.json").read_text())
+    fm = json.loads((PR.OUT / "p3_freeze_manifest.json").read_text())
+    gm = json.loads((GRAPH.parent / "manifest.json").read_text())
+    e, cc = d["estimates"], d["classifier_conditional_p3"]
+    L = [
+        "# CR-010 P3 — eRST-linked candidate pairs, sampled pair recall",
+        "",
+        f"- Graph: eRST-compatible discourse graph over sentence units (not a complete eRST parse), {gm['windows']} windows, **{gm['edges']} edges**, sha256 `{gm['graph_sha256'][:16]}…`; rejected by code checks: {gm['rejected_by_reason']}. eRST is candidate-pair evidence only.",
+        f"- P3-extra: concept pairs in two directly eRST-linked sentences, minus P0/P1/P2: **{fm['p3_extra_size']}** (of {fm['eRST_linked_concept_pairs_total']} eRST-linked concept pairs); first link adjacent {fm['composition']['first_link_adjacent_vs_farther'].get('adjacent')}, farther {fm['composition']['first_link_adjacent_vs_farther'].get('farther')}. Random {fm['n_drawn']} sampled, blind human labels, classifier sealed until the annotation was frozen.",
+        "",
+        "| pool | true / n | share true | 95% CI (section-clustered) | pool size | estimated true edges |",
+        "|---|---|---|---|---|---|",
+    ]
+    for k, v in e["prevalence"].items():
+        t = e["estimated_true_edges"][k]
+        L.append(
+            f"| {k} | {v['true']}/{v['n']} | {v['point']:.1%} | [{v['ci95_cluster'][0]:.1%}, {v['ci95_cluster'][1]:.1%}] | {t['pool_size']} | {t['point']:.0f} [{t['ci95_cluster'][0]:.0f}, {t['ci95_cluster'][1]:.0f}] |"
+        )
+    u = e["estimated_true_edges_in_universe_P3"]
+    L += [
+        "",
+        f"Estimated true edges in the P3 universe: **{u['point']:.0f}** [{u['ci95_cluster'][0]:.0f}, {u['ci95_cluster'][1]:.0f}].",
+        "",
+        "| pair recall within the P3 universe | point | 95% CI |",
+        "|---|---|---|",
+    ]
+    for k, v in e["pair_recall_within_universe"].items():
+        L.append(
+            f"| {k} | {v['point']:.1%} | [{v['ci95_cluster'][0]:.1%}, {v['ci95_cluster'][1]:.1%}] |"
+        )
+    r, pr_ = cc["classifier_recall_on_human_true"], cc["classifier_precision_vs_human"]
+    L += [
+        "",
+        f"Conditional classifier accuracy on P3-extra (revealed after the freeze; separate from pair recall): recall on human-true {r[0]}/{r[1]} ({r[0] / r[1]:.0%}), precision vs human {pr_[0]}/{pr_[1]} ({pr_[0] / pr_[1]:.0%}).",
+        "",
+        "Limits: single annotator; recall is relative to the enumerated universe (P3 adds eRST-linked pairs at any distance but only pairs in directly linked sentences); the P3 figures use the same truth definition and estimator as P0-P2; the earlier 450 labels are reused unchanged.",
+        "",
+    ]
+    out = REPO_ROOT / "reports/cr010_p3.md"
+    out.write_text("\n".join(L), encoding="utf-8")
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument(
-        "phase", choices=["pool", "freeze", "classify", "validate", "freeze-annotation", "analyse"]
+        "phase",
+        choices=[
+            "pool",
+            "freeze",
+            "classify",
+            "validate",
+            "freeze-annotation",
+            "analyse",
+            "report",
+        ],
     )
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--limit", type=int)
@@ -294,6 +348,8 @@ def main() -> None:
         print(
             json.dumps({"linked_total": bp["linked_total"], **composition(bp["extra"])}, indent=1)
         )
+    elif a.phase == "report":
+        print(write_report())
     elif a.phase == "freeze":
         print(json.dumps(freeze(), indent=1))
     elif a.phase == "classify":
