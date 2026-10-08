@@ -1,0 +1,101 @@
+{
+ "strata_availability": {
+  "available_before_allocation": {
+   "deterministic_r1_r3": 212,
+   "high_similarity_r4": 111,
+   "confusables_difficult_negatives": 950,
+   "one_token_polysemy": 507,
+   "cross_chapter_long_distance": 180,
+   "cluster_bridge_transitive_risk": 96
+  },
+  "selected": {
+   "cluster_bridge_transitive_risk": 40,
+   "high_similarity_r4": 40,
+   "cross_chapter_long_distance": 40,
+   "deterministic_r1_r3": 40,
+   "one_token_polysemy": 40,
+   "confusables_difficult_negatives": 40
+  },
+  "shortfall": {}
+ },
+ "bridge_pairs": 96,
+ "strong_edges": 258,
+ "split": {
+  "status": "ok",
+  "families": 136,
+  "largest_family": 6,
+  "dev_by_stratum": {
+   "cluster_bridge_transitive_risk": 14,
+   "confusables_difficult_negatives": 13,
+   "cross_chapter_long_distance": 13,
+   "deterministic_r1_r3": 14,
+   "high_similarity_r4": 13,
+   "one_token_polysemy": 13
+  },
+  "heldout_by_stratum": {
+   "cluster_bridge_transitive_risk": 26,
+   "confusables_difficult_negatives": 27,
+   "cross_chapter_long_distance": 27,
+   "deterministic_r1_r3": 26,
+   "high_similarity_r4": 27,
+   "one_token_polysemy": 27
+  }
+ },
+ "leakage": {
+  "shared_families": 0,
+  "shared_nodes": 0,
+  "shared_normalised_keys": 0,
+  "ok": true
+ },
+ "files": {
+  "dev": {
+   "path": "/Users/wongzhengtat/Desktop/h420020-mapper/data/interim/checks/cr011/sleep240_dev_blind_sheet.csv",
+   "rows": 80,
+   "sha256": "baab60d10008b5d41f3c4975d70a7312cab786089d80d922189dc46b3dc3ee1d"
+  },
+  "heldout": {
+   "path": "/Users/wongzhengtat/Desktop/h420020-mapper/data/interim/checks/cr011/sleep240_heldout_blind_sheet.csv",
+   "rows": 160,
+   "sha256": "a45503573b9c06d4b2c931a47fe088af105e88f8c39b2dc9fde115342a75aadc"
+  },
+  "manifest": {
+   "path": "/Users/wongzhengtat/Desktop/h420020-mapper/data/interim/checks/cr011/sleep240_manifest_DO_NOT_SHARE.csv",
+   "rows": 240,
+   "sha256": "fc4db83192a1d0c9338fc9eaef13a24ab3896c17569f171ce6b8190987b40039"
+  },
+  "double_annotation_heldout": 80
+ },
+ "summary": {
+  "total": 240,
+  "by_stratum": {
+   "cluster_bridge_transitive_risk": 40,
+   "confusables_difficult_negatives": 40,
+   "cross_chapter_long_distance": 40,
+   "deterministic_r1_r3": 40,
+   "high_similarity_r4": 40,
+   "one_token_polysemy": 40
+  },
+  "by_split": {
+   "dev": 80,
+   "heldout": 160
+  },
+  "by_stratum_split": {
+   "dev/cluster_bridge_transitive_risk": 14,
+   "heldout/cluster_bridge_transitive_risk": 26,
+   "heldout/confusables_difficult_negatives": 27,
+   "dev/confusables_difficult_negatives": 13,
+   "heldout/cross_chapter_long_distance": 27,
+   "dev/cross_chapter_long_distance": 13,
+   "dev/deterministic_r1_r3": 14,
+   "heldout/deterministic_r1_r3": 26,
+   "heldout/high_similarity_r4": 27,
+   "dev/high_similarity_r4": 13,
+   "heldout/one_token_polysemy": 27,
+   "dev/one_token_polysemy": 13
+  },
+  "multi_membership_items": 127,
+  "seed": 20261009,
+  "digest": "d32ed56a9a236f68c0f1860d4a884ad7ee2d97939710b12279216283235a8122"
+ },
+ "status": "ok"
+}

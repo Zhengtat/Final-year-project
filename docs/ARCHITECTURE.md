@@ -326,3 +326,13 @@ link never creates a semantic edge, a merge or an alias (`erst/guards.py`), and 
 layer: under the evaluated REL-MAP evidence regime it expressed 27.2% of valid relations and preserved the useful meaning of 8.6%.
 The semantic performance of the dual layer equals the current layer by construction. Pair recall figures are recall within the
 enumerated P0-P3 candidate universe. Evidence: `reports/cr010_stop5.md`, `reports/cr010_p3.md`.
+
+
+## Sleep-phase consolidation (CR-011): evaluated, not adopted
+
+CR-011 asked whether a global accumulated-evidence "sleep" phase adds value after the existing pipeline. It was closed on 2026-10-09 with
+`NO_PRODUCTION_CHANGE`: online canonicalisation (CR-008 rules, CR-009 generator links) already resolves most straightforward duplicates, the
+residual candidate space is dominated by related-but-distinct concepts (natural dev SAME 3.75%), and local ranking features did not separate
+the remaining duplicates (AUC 0.40-0.55). The production canonicalisation architecture is therefore unchanged. No automatic ML/LLM merging is
+eligible. One finding is kept for future work: a hard node-type guard can reject a genuine SAME pair when the type labels are noisy
+(`TYPE_GUARD_FALSE_NEGATIVE`); a soft type conflict routed to review is a possible future design, not part of the current architecture.

@@ -1,0 +1,124 @@
+{
+ "pool_sizes_and_draw": {
+  "pool_sizes": {
+   "alias_acronym_queue": 3,
+   "bridge_high_support": 35,
+   "evidence_similarity": 100,
+   "definition_similarity": 100,
+   "cross_chapter_same_surface": 100,
+   "same_type_same_sense": 100,
+   "name_similarity": 100,
+   "lexical_similarity": 100
+  },
+  "quota": {
+   "alias_acronym_queue": 12,
+   "bridge_high_support": 22,
+   "evidence_similarity": 14,
+   "definition_similarity": 18,
+   "cross_chapter_same_surface": 22,
+   "same_type_same_sense": 22,
+   "name_similarity": 22,
+   "lexical_similarity": 28
+  },
+  "drawn_by_source": {
+   "alias_acronym_queue": 3,
+   "bridge_high_support": 24,
+   "evidence_similarity": 15,
+   "definition_similarity": 19,
+   "cross_chapter_same_surface": 24,
+   "same_type_same_sense": 23,
+   "name_similarity": 23,
+   "lexical_similarity": 29
+  },
+  "total": 160,
+  "shortfall": 0
+ },
+ "excluded_sleep240_pairs": 240,
+ "split": {
+  "status": "ok",
+  "families": 98,
+  "largest_family": 7,
+  "dev_by_stratum": {
+   "alias_acronym_queue": 3,
+   "bridge_high_support": 11,
+   "cross_chapter_same_surface": 11,
+   "definition_similarity": 11,
+   "evidence_similarity": 11,
+   "lexical_similarity": 11,
+   "name_similarity": 11,
+   "same_type_same_sense": 11
+  },
+  "heldout_by_stratum": {
+   "bridge_high_support": 13,
+   "cross_chapter_same_surface": 13,
+   "definition_similarity": 8,
+   "evidence_similarity": 4,
+   "lexical_similarity": 18,
+   "name_similarity": 12,
+   "same_type_same_sense": 12
+  }
+ },
+ "leakage": {
+  "shared_families": 0,
+  "shared_nodes": 0,
+  "shared_normalised_keys": 0,
+  "ok": true
+ },
+ "files": {
+  "dev": {
+   "path": "/Users/wongzhengtat/Desktop/h420020-mapper/data/interim/checks/cr011/sleep_pos160_dev_blind_sheet.csv",
+   "rows": 80,
+   "sha256": "85573743b989c509655dc83b63b37d8be99ba62b9c2e7e0f5b3339f2b3612a14"
+  },
+  "heldout": {
+   "path": "/Users/wongzhengtat/Desktop/h420020-mapper/data/interim/checks/cr011/sleep_pos160_heldout_blind_sheet.csv",
+   "rows": 80,
+   "sha256": "c275216fd1bcdd6f8a14417f95d439b3dec56c5653c55e55bddf0833862121d0"
+  },
+  "manifest": {
+   "path": "/Users/wongzhengtat/Desktop/h420020-mapper/data/interim/checks/cr011/sleep_pos160_manifest_DO_NOT_SHARE.csv",
+   "rows": 160,
+   "sha256": "7291b235d9d94493346f3a1cfe425e6d0b9c020e7b02b757339ac038dda04e3d"
+  },
+  "double_annotation_heldout": 0
+ },
+ "distinct_nodes_check": true,
+ "status": "ok",
+ "summary": {
+  "total": 160,
+  "by_stratum": {
+   "alias_acronym_queue": 3,
+   "bridge_high_support": 24,
+   "cross_chapter_same_surface": 24,
+   "definition_similarity": 19,
+   "evidence_similarity": 15,
+   "lexical_similarity": 29,
+   "name_similarity": 23,
+   "same_type_same_sense": 23
+  },
+  "by_split": {
+   "dev": 80,
+   "heldout": 80
+  },
+  "by_stratum_split": {
+   "dev/alias_acronym_queue": 3,
+   "dev/bridge_high_support": 11,
+   "heldout/bridge_high_support": 13,
+   "heldout/cross_chapter_same_surface": 13,
+   "dev/cross_chapter_same_surface": 11,
+   "dev/definition_similarity": 11,
+   "heldout/definition_similarity": 8,
+   "dev/evidence_similarity": 11,
+   "heldout/evidence_similarity": 4,
+   "heldout/lexical_similarity": 18,
+   "dev/lexical_similarity": 11,
+   "heldout/name_similarity": 12,
+   "dev/name_similarity": 11,
+   "dev/same_type_same_sense": 11,
+   "heldout/same_type_same_sense": 12
+  },
+  "multi_membership_items": 67,
+  "seed": 20261009,
+  "digest": "187ae2d64ecf3a017fbf7f21bc1bc47f76b39d8c7d8a07012dbfda51d75cf6e0"
+ }
+}

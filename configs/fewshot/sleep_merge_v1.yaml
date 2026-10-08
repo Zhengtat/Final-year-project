@@ -1,0 +1,29 @@
+version: 1
+name: sleep_merge_v1
+status: EMPTY_UNTIL_STOP2_APPROVAL
+
+purpose: >
+  Development-only few-shot bank for the CR-011 LLM identity adjudicator.
+  Do not populate from held-out SLEEP-240 items.
+
+source_policy:
+  allowed:
+    - historical_owner_merge_decisions
+    - development_split_only
+    - owner_approved_synthetic_or_repository_fixture
+  forbidden:
+    - sleep240_heldout_test
+    - heldout_adjudication_disagreements_before_reporting
+    - model_generated_examples_without_owner_review
+
+blindness:
+  expose_pair_score: false
+  expose_current_prediction: false
+  expose_gold_label_name_in_prompt: false
+
+approval:
+  owner_approval_required: true
+  record_source_item_id: true
+  record_approval_date: true
+
+examples: []
