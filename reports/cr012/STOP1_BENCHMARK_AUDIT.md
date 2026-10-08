@@ -81,6 +81,6 @@ The ceiling and even the floor reach or exceed the $30 hard cap. The estimates w
 
 ## 7. STOP 1 decision
 
-- [ ] PASS
+- [x] **PASS (2026-10-09, Research rulings D1-D4 recorded in `docs/DECISIONS.md` and `configs/cr012_e2e_eval.yaml`)**
 - [ ] BLOCKED (path / implementation only)
-- [x] **RESEARCH DECISION REQUIRED** on D1, D2, D3, D4. Nothing was run; no benchmark data entered any prompt; no paid call. STOP 2 starts after the answers.
+- [ ] RESEARCH DECISION REQUIRED (resolved) on D1, D2, D3, D4. Nothing was run; no benchmark data entered any prompt; no paid call. STOP 2 starts after the answers.
