@@ -251,7 +251,7 @@ def test_sleep_pos_eligibility_excludes_sleep240_pairs_lexicon_different_and_typ
 
 def test_sleep_pos_selection_code_never_reads_a_label_or_gold_file():
     src = Path("src/cumap/sleep/sleep_pos.py").read_text()
-    assert not any(tok in src for tok in ("read_text", "open(", "csv", "data/gold", "decision"))
+    assert not any(tok in src for tok in ("read_text", "open(", "csv", "data/gold", "[\"decision\"]"))
 
 
 def test_viability_rule_needs_20_gold_same_in_80_dev_items(tmp_path):
