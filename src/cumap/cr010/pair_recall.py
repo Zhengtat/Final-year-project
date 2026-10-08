@@ -238,11 +238,19 @@ def freeze() -> dict:
 
 
 # ---------------------------------------------------------------- sealed classification
-def classify(dry_run: bool, limit: int | None, max_usd: float) -> dict:
+def classify(
+    dry_run: bool,
+    limit: int | None,
+    max_usd: float,
+    *,
+    key_file: str = "pair_recall_KEY_DO_NOT_SHARE.csv",
+    sealed_file: str = "pair_recall_classifier_SEALED.jsonl",
+    run_id: str = RUN_ID,
+) -> dict:
     """P1-extra and P2-extra samples only (P0 results already exist in the run checkpoint). Resumable; every result is
     appended to the sealed file. Hard stop before the cap."""
-    key = read_csv(OUT / "pair_recall_KEY_DO_NOT_SHARE.csv")
-    sealed = OUT / "pair_recall_classifier_SEALED.jsonl"
+    key = read_csv(OUT / key_file)
+    sealed = OUT / sealed_file
     done = (
         {json.loads(line)["pair_id"] for line in sealed.read_text().splitlines()}
         if sealed.exists()
@@ -269,7 +277,7 @@ def classify(dry_run: bool, limit: int | None, max_usd: float) -> dict:
 
     settings = get_settings()
     settings.llm.stage_budgets_usd["relations"] = max_usd
-    client = LLMClient(settings, run_id=RUN_ID)
+    client = LLMClient(settings, run_id=run_id)
     registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
     cp = load_checkpoint(REPO_ROOT / "data/processed/kg/slice3_c2")
     concepts = {c.concept_id: c for c in _restore_concept_registry(cp, lambda t: np.zeros(1)).all()}
@@ -304,7 +312,9 @@ def classify(dry_run: bool, limit: int | None, max_usd: float) -> dict:
                     concepts[k["concept_y_id"]],
                     matcher,
                     # the two-sentence P2 span is the evidence: an endpoint may sit in the other sentence
-                    grounding_scope="sentence" if k["pool"] == "P2_extra_strict" else "quote",
+                    grounding_scope="sentence"
+                    if k["pool"] != "P1_extra" and k["pool"] != "P0"
+                    else "quote",
                     same_concept=True,
                 )
             except BudgetExceededError as e:

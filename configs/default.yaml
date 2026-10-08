@@ -52,6 +52,7 @@ llm:
     student_extraction: low
     expert_subgraph: medium
     student_graph_draft: low
+    erst_graph: low
   escalation:
     enabled: true
     from_tier: bulk
@@ -78,6 +79,7 @@ llm:
     concepts: null
     canonicalize: null
     relations: null
+    erst: null
   # Worst-case output-token bound per task: used for the pre-call budget check AND
   # passed to the real API as max_output_tokens, so a single call can't blow past this
   # regardless of how much the model wants to reason (the direct cause of the $14.03
@@ -113,6 +115,8 @@ llm:
     # CR-010 2026-10-05: the default 1000 truncated every N1 rescue answer mid-JSON (up to 30 decisions + reasoning);
     # 13/13 dev calls failed with 'EOF while parsing'. Measured after the fix is recorded in DECISIONS.
     concept_rescue: 6000
+    # CR-010 P3: up to ~30 relations with quotes and signals per 30-sentence window, plus reasoning
+    erst_graph: 8000
     default: 1000
 
 embeddings:
