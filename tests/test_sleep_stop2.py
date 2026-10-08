@@ -251,7 +251,7 @@ def test_sleep_pos_eligibility_excludes_sleep240_pairs_lexicon_different_and_typ
 
 def test_sleep_pos_selection_code_never_reads_a_label_or_gold_file():
     src = Path("src/cumap/sleep/sleep_pos.py").read_text()
-    assert not any(tok in src for tok in ("read_text", "open(", "csv", "data/gold", "[\"decision\"]"))
+    assert not any(tok in src for tok in ("read_text", "open(", "csv", "data/gold", '["decision"]'))
 
 
 def test_viability_rule_needs_20_gold_same_in_80_dev_items(tmp_path):
@@ -268,3 +268,19 @@ def test_viability_rule_needs_20_gold_same_in_80_dev_items(tmp_path):
     assert viability(sheet(20))["verdict"] == "STOP 3 MAY PROCEED"
     assert viability(sheet(19))["verdict"].startswith("STOP")
     assert viability(sheet(0))["gold_same"] == 0
+
+
+# ---------------------------------------------------------------- revised STOP 3 triage
+def test_triage_threshold_is_the_lowest_positive_and_unreachable_positives_cap_recall():
+    import numpy as np
+
+    from cumap.sleep import triage as T
+
+    cfg = next(c for c in T.configs() if c.name == "single:name_cos")
+    x = np.zeros((5, 29))
+    x[:, 0] = [0.9, 0.5, 0.3, 0.2, 0.1]  # name_cos is feature 0
+    y = np.array([1, 1, 0, 0, 0])
+    o = T.oof(cfg, x, y, np.array(list("abcde")))
+    assert float(min(o[y == 1])) == 0.5  # keep both positives => threshold 0.5
+    assert [c.name for c in T.configs()][-3:] == ["lr_similarity", "lr_all", "gb_all"]
+    assert T.TIE == 0.005 and T.MUST == {"SAME", "UNSURE"}
