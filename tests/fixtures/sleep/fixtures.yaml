@@ -1,0 +1,87 @@
+version: 1
+suite: cr011_sleep_consolidation
+
+fixtures:
+  - id: r0_approved_same
+    condition: approved R0 SAME pair
+    expected: merge
+
+  - id: r0_different_overrides_embedding
+    condition: approved R0 DIFFERENT with embedding_similarity 0.99
+    expected: veto
+
+  - id: r2_unambiguous_acronym
+    condition: unambiguous approved acronym/long-form pair
+    expected: merge
+
+  - id: r2_acronym_collision_cross_chapter
+    condition: same short form maps to multiple plausible expansions across chapters
+    expected: scoped_or_review
+
+  - id: r3_strong_alias_no_contradiction
+    condition: strong textbook alias evidence with no later distinction
+    expected: merge
+
+  - id: r3_alias_later_contradicted
+    condition: later evidence explicitly distinguishes previously proposed alias forms
+    expected: review_or_rollback_candidate
+
+  - id: same_spelling_incompatible_type
+    condition: same surface form but configured incompatible node types
+    expected: veto
+
+  - id: one_token_same_spelling_different_context
+    condition: one-token same surface with materially different context
+    expected: no_automatic_merge
+
+  - id: broader_narrower_neighbours
+    condition: high semantic similarity but broader/narrower distinction
+    expected: keep_separate
+
+  - id: process_vs_component
+    condition: related process and component
+    expected: keep_separate
+
+  - id: transitive_bridge_conflict
+    condition: A_same_B and B_same_C but A_different_C
+    expected: cluster_must_not_collapse_all_three
+
+  - id: duplicate_edges_after_merge
+    condition: merge rekeys two equivalent edges to the same canonical endpoints/relation
+    expected: one_edge_all_evidence_retained
+
+  - id: merge_created_self_loop
+    condition: rekeying creates a self-loop not valid under relation semantics
+    expected: rejected_and_logged
+
+  - id: rollback_roundtrip_hash
+    condition: merge then inverse migration
+    expected: exact_pre_sleep_canonical_hash
+
+  - id: aliases_after_rollback
+    condition: rollback after alias union
+    expected: exact_original_alias_provenance
+
+  - id: gold_write_protection
+    condition: pipeline attempts write under data/gold
+    expected: fail
+
+  - id: no_api_key
+    condition: API key unavailable
+    expected: deterministic_stages_still_run
+
+  - id: dry_run
+    condition: dry-run mode
+    expected: zero_paid_calls
+
+  - id: split_family_leakage
+    condition: same candidate cluster or normalized-form family appears across dev and heldout
+    expected: fail_split_validation
+
+  - id: llm_prompt_blindness
+    condition: render adjudication prompt
+    expected: no_pair_score_no_current_prediction_no_gold
+
+  - id: aggressive_namespace_safety
+    condition: aggressive_experimental mode targets production namespace
+    expected: fail
