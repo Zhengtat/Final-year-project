@@ -264,16 +264,16 @@ CUES = {"for", "so", "because", "if", "uses", "requires", "is a", "then", "part 
 
 
 def test_strict_cue_uses_word_boundaries_and_drops_function_words():
-    assert not PP.strict_cue(
+    assert not PP.strict_cue_v0(
         "Information is also processed.", CUES
     )  # 'for' / 'so' only as substrings
-    assert not PP.strict_cue(
+    assert not PP.strict_cue_v0(
         "We wait for it, so it works, if then.", CUES
     )  # function words are left out
-    assert PP.strict_cue("A switch requires a table.", CUES) and PP.strict_cue(
+    assert PP.strict_cue_v0("A switch requires a table.", CUES) and PP.strict_cue_v0(
         "It is part of IP.", CUES
     )
-    assert not PP.strict_cue("This is a thing.", CUES)  # 'is a' is a copula, not a relation cue
+    assert not PP.strict_cue_v0("This is a thing.", CUES)  # 'is a' is a copula, not a relation cue
 
 
 def concept(cid, name):
@@ -299,9 +299,12 @@ def test_adjacent_pairs_exclude_same_sentence_and_flag_the_cue_variants():
     assert (
         frozenset(("r", "p")) not in got
     )  # same sentence: the enumeration at window 0 already has it
-    assert got[frozenset(("r", "s"))] == {"loose_cue": True, "strict_cue": True}
+    assert got[frozenset(("r", "s"))]["loose_cue"] and got[frozenset(("r", "s"))]["strict_cue"]
+    assert got[frozenset(("r", "s"))]["strict_v0_cue"]
     assert (
         got[frozenset(("s", "h"))]["strict_cue"] is True
     )  # the two-sentence span contains 'requires'
-    assert got[frozenset(("h", "c"))] == {"loose_cue": False, "strict_cue": False}
+    assert not got[frozenset(("h", "c"))]["loose_cue"]
+    assert not got[frozenset(("h", "c"))]["strict_cue"]
+    assert got[frozenset(("h", "c"))]["spans"][0]["text"] == "A hub is dumb. The cable is long."
     assert frozenset(("r", "h")) not in got  # two sentences apart

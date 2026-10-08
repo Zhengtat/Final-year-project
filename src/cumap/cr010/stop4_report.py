@@ -62,7 +62,7 @@ def main() -> None:
         "|---|---|---|",
         f"| P0 (frozen CR-009 selection) | {p['P0']} | reproduces the recorded {pools['frozen_selection_reproduced']['unique_window0_pairs_recorded']} same-sentence candidates exactly; {pools['frozen_selection_reproduced']['p0_pairs_outside_the_same_sentence_universe']} P0 pairs are anchor-derived and outside the same-sentence universe |",
         f"| P1 extra (same-sentence pairs the budget left out) | {p['P1_extra_same_sentence']} | classifying all of them would cost about ${pools['full_classification_cost_usd']['P1_extra']} |",
-        f"| P2 extra, strict cue (proposed) | {p['P2_extra_strict_cue (proposed definition)']} | adjacent-sentence pairs with a relation-bearing cue; about ${pools['full_classification_cost_usd']['P2_extra']} in full |",
+        f"| P2 extra, strict cue (proposed) | {p['P2_extra_strict_cue_FROZEN']} | adjacent-sentence pairs with a relation-bearing cue; about ${pools['full_classification_cost_usd']['P2_extra']} in full |",
         f"| P2 extra, loose cue (the frozen substring cue) | {p['P2_extra_loose_cue (the frozen substring cue; not selective)']} | not selective, shown for reference |",
         f"| adjacent-sentence pairs in all | {p['adjacent_sentence_pairs_not_in_the_same_sentence_universe']} | |",
         "",

@@ -1,0 +1,35 @@
+# CR-010 STOP 4: the strict cue matcher for the P2 expansion pool (Research decision 2026-10-05).
+# Policy: configs/cr010_p2_strict_cue_policy.yaml in the Research package. Cue choices below follow that policy
+# only; NO cue was chosen or changed using gold, annotation or classifier results (none existed when this was written).
+# Frozen: its sha256 is recorded in data/interim/pair_recall/freeze_manifest.json before any sample is labelled.
+version: 1
+inventory_source: "_cue_words(registry v1.3) in src/cumap/expert_kg/relations.py (52 cues); a test checks this file covers exactly that inventory"
+tokenisation: "lowercase; tokens are [a-z0-9]+ runs (hyphens and apostrophes split); matched sentence by sentence, so a cue never spans a sentence boundary"
+matching: "whole tokens only (no substring), multiword cues are contiguous token sequences, each cue token may match any of its listed forms (lemma_forms)"
+# Standalone single-token closed-class function words: not relation-specific -> removed (same 14 as the STOP 4 prep proposal;
+# 'is a' is NOT in this list: it is a relation-bearing multiword expression and is preserved, see keep_multiword).
+removed_standalone_function_words: [after, afterwards, before, but, for, if, next, once, since, so, then, until, when, while]
+keep_single_token: [because, cause, causes, decreases, hence, however, increases, performs, prevents, requires, therefore, triggers, unless, unlike, uses, whenever, whereas]
+keep_multiword: ["as a result", "as long as", "composed of", "consists of", "depends on", "differs from", "due to", "equivalent to", "has property", "in contrast", "in order to", "is a", "is a type of", "leads to", "only if", "part of", "results in", "so that", "to avoid", "to ensure", "used by"]
+# Inflection forms (explicit, auditable stand-in for lemma matching; no NLP model, deterministic). Tokens not listed match themselves only.
+lemma_forms:
+  cause: [cause, causes, caused, causing]
+  causes: [cause, causes, caused, causing]
+  decreases: [decrease, decreases, decreased, decreasing]
+  increases: [increase, increases, increased, increasing]
+  performs: [perform, performs, performed, performing]
+  prevents: [prevent, prevents, prevented, preventing]
+  requires: [require, requires, required, requiring]
+  triggers: [trigger, triggers, triggered, triggering]
+  uses: [use, uses, used, using]
+  used: [use, uses, used, using]
+  consists: [consist, consists, consisted, consisting]
+  composed: [compose, composes, composed, composing]
+  depends: [depend, depends, depended, depending]
+  differs: [differ, differs, differed, differing]
+  leads: [lead, leads, led, leading]
+  results: [result, results, resulted, resulting]
+  has: [has, have, had, having]
+  is: [is, are, was, were]
+  a: [a, an]
+  part: [part, parts]
