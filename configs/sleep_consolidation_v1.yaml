@@ -1,6 +1,6 @@
 version: 1
 name: sleep_consolidation_v1
-status: draft_until_stop1_reconciled
+status: stop1_approved_2026-10-08  # STOP 1 rulings recorded; DEV_SELECT values still unset
 
 mode: conservative  # conservative | balanced | aggressive_experimental
 
@@ -39,6 +39,36 @@ candidate_generation:
   erst_context_metadata:
     enabled: true
     may_decide_identity: false
+
+type_compatibility:
+  # Research ruling 2026-10-08 (STOP 1, Decision 2). 'Concept' is a generic/underspecified type, NOT a wildcard.
+  # COMPATIBLE means only "the type does not veto"; it never adds positive identity evidence.
+  # Compatibility is NOT transitive: the cluster guard checks every material cross-pair of a proposed cluster.
+  same_type: compatible
+  cross_type_compatible:
+    - [Protocol, Mechanism]
+    - [Component, Concept]
+    - [DataUnit, Concept]
+    - [Parameter, Property]
+    - [Identifier, Parameter]
+  all_other_cross_type: incompatible
+  generic_type: Concept
+  generic_type_positive_evidence: 0
+
+alias_provenance:
+  # Research ruling 2026-10-08 (STOP 1, Decision 1).
+  classes:
+    legacy_reconstructed: alias existed before CR-011 and its origin is deterministically linked to an existing merge/log/evidence record
+    legacy_unrecorded: alias in the immutable pre-sleep snapshot whose origin cannot be recovered; stated as unknown, never invented
+    cr011_native: alias created by CR-011; complete evidence/rule/transaction provenance
+  completeness_metric: aliases with a valid structured provenance envelope / all (canonical node, alias) entries in the post-sleep canonical view
+  completeness_min: 1.0
+  cr011_new_alias_source_traceability_min: 1.0
+  legacy_origin_traceability: descriptive_only
+  legacy_unrecorded_min_fields: [alias, pre_sleep_canonical_node_id, baseline_run_snapshot_hash, provenance_class, historical_origin_status, migration_backfill_record]
+  legacy_unrecorded_may: [preserved, mention_matching, candidate_retrieval]
+  legacy_unrecorded_may_not: [independently_establish_SAME, independently_trigger_auto_merge]
+  sidecar_registry_not_snapshot_mutation: true
 
 hard_guards:
   approved_same: authoritative

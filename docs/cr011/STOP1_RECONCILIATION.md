@@ -78,9 +78,9 @@ The upper figure is below the **$15 soft warning** and the **$25 hard cap**. The
 
 ## Reconciliation decision
 
-- [ ] PASS - package maps to repository without methodological change.
+- [x] **PASS (2026-10-08) after the Research rulings below were recorded** (see CR section 28)
 - [ ] BLOCKED - implementation/path issue only.
-- [x] **RESEARCH DECISION REQUIRED** - two points where repository reality meets a gate or an identity rule the CR fixes.
+- [ ] RESEARCH DECISION REQUIRED (resolved below) - two points where repository reality meets a gate or an identity rule the CR fixes.
 
 ### Decision 1 - alias-provenance completeness gate (CR §19: required 1.00)
 
@@ -105,3 +105,12 @@ The upper figure is below the **$15 soft warning** and the **$25 hard cap**. The
 - The scorer has few negatives (15 owner negatives + 21 lexicon `different` pairs). `t_auto` may end up disabled by the CR's own "if no threshold satisfies the safety criterion" rule; that is an allowed outcome, noted here so it is not a surprise at STOP 2.
 
 **No paid call has been made and none will be made until the owner approves this preflight and Research answers the two decisions.**
+
+
+## Research rulings (2026-10-08) - recorded; STOP 1 PASS
+
+Full text in `docs/change-requests/CR-011-sleep-consolidation.md` section 28 and `configs/sleep_consolidation_v1.yaml` (`type_compatibility`, `alias_provenance`).
+
+1. **Alias provenance:** three classes (`legacy_reconstructed`, `legacy_unrecorded`, `cr011_native`); completeness = valid structured provenance envelope / all (node, alias) entries in the post-sleep view, required 1.00; legacy origin traceability descriptive only; new CR-011 aliases fully traceable; `legacy_unrecorded` never establishes SAME alone; no snapshot mutation (sidecar registry).
+2. **Type compatibility:** `Concept` is generic, not a wildcard; approved cross-type pairs Protocol-Mechanism, Component-Concept, DataUnit-Concept, Parameter-Property, Identifier-Parameter; everything else incompatible; non-transitive; cluster guard checks the whole cluster.
+3. Budget about $6.5 approved (soft $15, hard $25). Other findings: build rollback; consume `same_concept` as a candidate source; re-key misconception references; no 0.70 identity threshold; transitive closure and exact-string cross-chapter merges are S0-only behaviour.
