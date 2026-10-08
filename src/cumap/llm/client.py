@@ -44,6 +44,7 @@ TASK_TO_STAGE = {
     "relation_choice": "relations",
     "relation_qualifiers": "relations",
     "erst_graph": "erst",  # CR-010 P3
+    "erst_direct": "erst",  # CR-010 STOP 5
 }
 
 # Rough chars-per-token ratio for English prose, used only for the pre-call worst-case
