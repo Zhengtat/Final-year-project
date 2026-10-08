@@ -35,7 +35,9 @@ caching:
 
 stability:
   repeats: 3
-  subset: {scinlp_documents: 2, pd_sections: 2}
+  subset:                                    # frozen by a length rule (the two shortest), blind to any outcome
+    scinlp_documents: [P17-1058.grobid, 2021.acl-long.353]       # test split; 6,504 and 6,798 tokens
+    pd_sections: [4.5, 4.4]                                      # held-out; 3,255 and 4,091 words
   never_select_best_run: true
   report: [strict_e2e_edge_f1_mean_sd, node_set_jaccard, edge_set_jaccard, canonicalisation_disagreement_rate, relation_disagreement_rate]
 

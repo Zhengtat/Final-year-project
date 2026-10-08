@@ -1,0 +1,8 @@
+{
+ "artefacts_scanned": 59,
+ "artefacts_sha256": "5bad4df52d52494b170d4fd9728fd418776065bd535a0a361ba053bbbc1b0072",
+ "scinlp_test_multi_token_surfaces_checked": 122,
+ "scinlp_test_surfaces_found_in_development_artefacts": {},
+ "pd_heldout_8gram_overlap_with_artefacts": {},
+ "verdict": "CLEAN"
+}

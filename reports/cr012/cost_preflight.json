@@ -1,0 +1,28 @@
+{
+ "upper_no_sharing": {
+  "pilot": 6.94,
+  "heldout_pd": 18.78,
+  "heldout_scinlp": 10.26,
+  "stability": 8.83,
+  "total": 44.81
+ },
+ "lower_cache_sharing": {
+  "pilot": 6.46,
+  "heldout_pd": 14.35,
+  "heldout_scinlp": 7.29,
+  "stability": 8.83,
+  "total": 36.93
+ },
+ "limits": {
+  "soft_warning": 40,
+  "hard_cap": 50
+ },
+ "words_k": {
+  "pd_pilot": 6.564,
+  "pd_heldout": 30.053,
+  "scinlp_test": 17.4,
+  "scinlp_dev_rehearsal": 9.5,
+  "stability_run": 18.6527
+ },
+ "status": "UPPER BELOW CAP"
+}
