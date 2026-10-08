@@ -3,8 +3,14 @@
  "scinlp": {
   "source": "https://github.com/AKADDC/SciNLP",
   "clone_dir": "data/raw/external/scinlp (gitignored; not redistributed)",
-  "commit": "e78342be517e34ec26c69da3261e5ae002d66ea6",
-  "commit_subject": "readme",
+  "commit": "88ca191386ac225ed072fee9b7559a998cc84bf7",
+  "commit_subject": "CR-012: SciNLP provenance note (data stays local; clone .git removed)",
+  "dataset_snapshot": {
+   "version_label": "scinlp-repo-e78342be517e",
+   "pre_change_archive": null,
+   "note": "no dataset change has happened since the first download; per the Dataset snapshot rule (CLAUDE.md) any replacement, upgrade, reformatting or switch needs an archive branch/tag cr012-scinlp-pre-change and a local-only archive of these exact bytes (data is gitignored and CC BY-NC, so never pushed); results must name this version",
+   "bytes_recoverable_from": "the original GitHub commit above (authoritative reproducible source) plus the per-file sha256 in this manifest"
+  },
   "licence": "CC BY-NC 4.0 (non-commercial academic research only; follows the ACL OCL Corpus policy)",
   "official_scorer": "NONE in the repository; README lists PURE / PL-Marker / HGERE F1 only. Published numbers cannot be verified as computed with a scoring definition identical to ours.",
   "readme_stated_counts": {

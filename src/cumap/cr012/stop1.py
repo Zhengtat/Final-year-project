@@ -138,6 +138,12 @@ def build() -> dict:
             "clone_dir": "data/raw/external/scinlp (gitignored; not redistributed)",
             "commit": git("rev-parse", "HEAD"),
             "commit_subject": git("log", "-1", "--format=%s"),
+            "dataset_snapshot": {
+                "version_label": "scinlp-repo-e78342be517e",
+                "pre_change_archive": None,
+                "note": "no dataset change has happened since the first download; per the Dataset snapshot rule (CLAUDE.md) any replacement, upgrade, reformatting or switch needs an archive branch/tag cr012-scinlp-pre-change and a local-only archive of these exact bytes (data is gitignored and CC BY-NC, so never pushed); results must name this version",
+                "bytes_recoverable_from": "the original GitHub commit above (authoritative reproducible source) plus the per-file sha256 in this manifest",
+            },
             "licence": "CC BY-NC 4.0 (non-commercial academic research only; follows the ACL OCL Corpus policy)",
             "official_scorer": "NONE in the repository; README lists PURE / PL-Marker / HGERE F1 only. Published numbers cannot be verified as computed with a scoring definition identical to ours.",
             "readme_stated_counts": {"papers": 60, "entities": 6429, "relations": 1649},
