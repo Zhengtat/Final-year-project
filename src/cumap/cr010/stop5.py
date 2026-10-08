@@ -504,7 +504,7 @@ def gate_table(
             "NOT_EVALUABLE: no second human annotator",
         ),
         row(
-            "Organisation/pedagogical information",
+            "Organisation/pedagogical information (vacuous: REL-MAP-180 has no pedagogical item)",
             "no silent loss",
             {
                 "silent": held_metrics["pedagogical_silent_losses"],
@@ -568,6 +568,135 @@ def compute(annotator_sheet: Path) -> dict:
     return res
 
 
+def _pct(x) -> str:
+    return "n/a" if x is None else f"{x:.1%}"
+
+
+def write_report(res: dict, cost: dict) -> Path:
+    """reports/cr010_stop5.md: neutral evidence for Research (sections 4, 6, 7, 9 of the evaluation template)."""
+    mh, md = res["mapping_heldout"], res["mapping_dev"]
+    rv = res["reverse_heldout"]
+
+    def line(name, key):
+        a, b = md[key], mh[key]
+        return f"| {name} | {a['k']}/{a['n']} = {_pct(a['rate'])} | {b['k']}/{b['n']} = {_pct(b['rate'])} |"
+
+    L = [
+        "# CR-010 STOP 5 - architecture evaluation (evidence for Research; no architecture is selected here)",
+        "",
+        (
+            "Definitions: `docs/cr010/STOP5_PREREGISTRATION.md` (committed before any STOP-5 call). Single annotator (annotator 1); "
+            "REL-MAP-180 is relation-balanced, so rates are not natural prevalence. Gates use the 120 held-out items; the dev column is for information."
+        ),
+        "",
+        "## 1. eRST expressibility, 2. semantic preservation (separate blocks)",
+        "",
+        "| metric (valid-relation items) | dev | held-out |",
+        "|---|---|---|",
+        line("eRST expressibility", "erst_expressibility"),
+        line("Semantic preservation", "semantic_preservation"),
+        line("Mapping-loss rate", "mapping_loss_rate"),
+        line("Critical-loss rate (survives = no and a loss category named)", "critical_loss"),
+        f"| Critical-loss Wilson 95% upper | {_pct((md['critical_loss']['wilson95'] or [0, None])[1])} | {_pct((mh['critical_loss']['wilson95'] or [0, None])[1])} |",
+        line(
+            "Silent loss (survives = no, no category named)",
+            "silent_loss_survives_no_without_category",
+        ),
+        line(
+            "Relation-collision rate (among expressible)",
+            "relation_collision_rate_among_expressible",
+        ),
+        "",
+        f"Valid-relation items: dev {md['valid_relation_items']}, held-out {mh['valid_relation_items']}; `other` judgements outside the gates: dev {md['other_relation_items_outside_gates']}, held-out {mh['other_relation_items_outside_gates']}.",
+        "",
+        "### Loss by category (held-out valid-relation items)",
+        "",
+        "| category | count | rate | examples |",
+        "|---|---|---|---|",
+    ]
+    for r in res["loss_by_category_heldout"]:
+        L.append(
+            f"| {r['category']} | {r['count']} | {_pct(r['rate'])} | {'; '.join(r['examples'])} |"
+        )
+    L += [
+        "",
+        "## 3. Reverse recoverability",
+        "",
+        f"Recovery table frozen from the 60 dev items (sha256 `{res['reverse_recovery_frozen_sha256'][:16]}...`) before use; applied once to held-out. **Macro F1 = {rv['macro_f1']:.3f}** over {rv['n']} valid-relation items.",
+        "",
+        "| relation | n | recovered | recall | status |",
+        "|---|---|---|---|---|",
+    ]
+    for lab, v in sorted(rv["represented"].items(), key=lambda kv: -kv[1]["n"]):
+        L.append(f"| {lab} | {v['n']} | {v['recovered']} | {_pct(v['recall'])} | {v['status']} |")
+    L += [
+        "",
+        "## 4. Direct edge quality and architecture results (held-out 120 items)",
+        "",
+        "| architecture | precision | recall | F1 | TP/FP/FN | cost | notes |",
+        "|---|---|---|---|---|---|---|",
+    ]
+    c = res["current"]
+    L.append(
+        f"| current | {c['precision']:.3f} | {c['recall']:.3f} | {c['f1']:.3f} | {c['tp']}/{c['fp']}/{c['fn']} | stored run ($0 now) | frozen CR-009 outcome |"
+    )
+    if "erst_direct" in res:
+        d = res["erst_direct"]
+        L.append(
+            f"| erst_direct | {d['precision']:.3f} | {d['recall']:.3f} | {d['f1']:.3f} | {d['tp']}/{d['fp']}/{d['fn']} | ${cost.get('erst_direct', 0):.2f} | outcomes {res['erst_direct_reasons']} |"
+        )
+    L.append(
+        "| dual | = current | = current | = current | = current | graph $3.13 + P3 sample $0.91 | concept layer unchanged by construction; discourse graph 2,024 edges (sha256 41cc5e7b...) |"
+    )
+    if "erst_direct" in res:
+        a = res["erst_direct_vs_annotator_descriptive"]
+        L.append(
+            f"\nDescriptive: erst_direct agrees with annotator 1 on applicability for {a['applicability_agreement']['k']}/{a['applicability_agreement']['n']}; same label when both apply {a['label_agreement_when_both_apply']['k']}/{a['label_agreement_when_both_apply']['n']}."
+        )
+    L += [
+        "",
+        "## 5. P3 candidate-routing utility (separate; from `reports/cr010_p3.md`)",
+        "",
+        (
+            "P3-extra 2,547 pairs, 63/150 = 42.0% human-true (CI 33.3-49.7), about 1,070 true edges; eRST-linked units are a useful candidate-discovery signal. "
+            "The conditional classifier on those pairs (recall 23/63, precision 23/32) is a classifier finding, not a representation failure. Recall is within the enumerated candidate universe only."
+        ),
+        "",
+        "## 6. Full-replacement gate table (section 9)",
+        "",
+        "| gate | threshold | observed | status |",
+        "|---|---|---|---|",
+    ]
+    for g in res["gates"]:
+        o = g["observed"]
+        o = _pct(o) if isinstance(o, float) and abs(o) <= 1 else o
+        L.append(
+            f"| {g['gate']} | {g['threshold']} | {o} | {g['status']}{(' (' + g['note'] + ')') if g['note'] else ''} |"
+        )
+    L += [
+        "",
+        f"Mechanical eligibility under section 9 (all gates PASS): **{'ELIGIBLE' if res['gates_all_pass_mechanical'] else 'NOT ELIGIBLE'}**. IAA gate: NOT_EVALUABLE (no second human annotator); FULL_ERST_REPLACEMENT is ineligible regardless.",
+        "",
+        "## 7. Cost (this stage)",
+        "",
+        f"- erst_direct on 120 held-out items: ${cost.get('erst_direct', 0):.2f}. CR-010 totals: pair-recall sample $1.81, eRST graph $3.13, P3 classification $0.91.",
+        "",
+        "## 8. Limitations and ambiguities for Research",
+        "",
+        "- Single annotator; adjudicated = annotator 1; no kappa. The annotator marginals (applicability, survival) were seen before the metrics were defined; no per-split metric was.",
+        "- 'Critical loss' was not defined by the CR; the pre-registered reading is survives = no plus a named loss category. Silent losses are reported alongside; treating them as critical would raise the critical-loss rate to the mapping-loss rate.",
+        "- REL-MAP items are mostly single sentences; eRST relates discourse units, so low applicability is partly a property of the sampled evidence (same-sentence pairs from P0), not only of the inventory. P3 shows eRST structure is informative across sentences.",
+        "- erst_direct is run once, prompt frozen; no retuning. The gate difference compares presence of a discourse relation with presence of a concept relation, as the CR specifies for a direct-replacement test.",
+        "- Relations with n < 5 held-out valid instances are INSUFFICIENT_SUPPORT. 'other' judgements (relations the registry lacks) are outside every gate denominator.",
+        "",
+        "Decision form for Research: `reports/cr010_decision_report_template.md` (unselected).",
+        "",
+    ]
+    out = REPO_ROOT / "reports/cr010_stop5.md"
+    out.write_text("\n".join(L), encoding="utf-8")
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("phase", choices=["mapping", "direct", "report"])
@@ -583,15 +712,14 @@ def main() -> None:
     (OUT / "stop5_results.json").write_text(
         json.dumps(res, indent=1, default=str), encoding="utf-8"
     )
-    print(
-        json.dumps(
-            {k: v for k, v in res.items() if k in ("mapping_heldout", "reverse_heldout", "gates")},
-            indent=1,
-            default=str,
-        )
-        if a.phase == "mapping"
-        else "written"
-    )
+    if a.phase == "report":
+        from cumap.llm.cost import spend_from_log
+
+        cost = {"erst_direct": spend_from_log(get_settings(), RUN_ID)}
+        print(write_report(res, cost))
+        return
+    keep = ("mapping_heldout", "reverse_heldout", "gates")
+    print(json.dumps({k: v for k, v in res.items() if k in keep}, indent=1, default=str))
 
 
 if __name__ == "__main__":
