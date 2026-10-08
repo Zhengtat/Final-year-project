@@ -28,7 +28,31 @@
 - Classifier run on the 300 P1/P2 samples and **sealed** (300/300 done; P0 reuses the stored run results); revealed only after `freeze-annotation`.
 - Truth (fixed now): `true_relation_exists = yes` AND `evidence_supported != no`. Estimator: pool proportion x pool size; 95% percentile bootstrap resampling evidence sections within each pool.
 
-**Results: pending** — they need the owner's labels on the 450 pairs (code never invents labels).
+### Results (human labels)
+
+| pool | true / n | prevalence | 95% CI (clustered) | naive Wilson | estimated true edges |
+|---|---|---|---|---|---|
+| P0 | 112/150 | 74.7% | [66.7%, 80.6%] | [67.2%, 81.0%] | 821 [733, 886] |
+| P1_extra | 67/150 | 44.7% | [35.8%, 52.9%] | [36.9%, 52.7%] | 3453 [2764, 4092] |
+| P2_extra_strict | 38/150 | 25.3% | [17.1%, 34.8%] | [19.0%, 32.8%] | 1246 [843, 1710] |
+
+| pair recall within the P2 universe | point | 95% CI (clustered) |
+|---|---|---|
+| P0 | 14.9% | [12.6%, 17.6%] |
+| P1 | 77.4% | [70.4%, 83.9%] |
+| P2 | 100.0% | [100.0%, 100.0%] |
+
+Label counts: {'P0': {'no': 38, 'yes': 112}, 'P1_extra': {'no': 83, 'yes': 67}, 'P2_extra_strict': {'no': 112, 'yes': 38}}. Both sensitivities (evidence ignored; unclear as yes) give identical numbers: no `unclear` label and no `evidence_supported = no` among the 450.
+
+Pair recall is measured against true edges inside the enumerated universe (same sentence, or adjacent sentences with a strict cue); edges outside it are not counted. It is NOT conditional classifier accuracy.
+
+### Conditional classifier accuracy (revealed after the annotation was frozen; separate from pair recall)
+
+| pool | recall on human-true | precision vs human | same relation among TP |
+|---|---|---|---|
+| P0 | 71/112 (63%) | 71/75 (95%) | 66/71 |
+| P1_extra | 35/67 (52%) | 35/49 (71%) | 27/35 |
+| P2_extra_strict | 18/38 (47%) | 18/29 (62%) | 16/18 |
 
 ## 4. Actual spend
 

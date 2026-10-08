@@ -119,7 +119,7 @@ def main() -> None:
             )
         L += [
             "",
-            f"Label counts: {res['label_counts']}. Sensitivities (evidence ignored / unclear as yes) are in the JSON output of `analyse`.",
+            f"Label counts: {res['label_counts']}. Both sensitivities (evidence ignored; unclear as yes) give identical numbers: no `unclear` label and no `evidence_supported = no` among the 450.",
             "",
             "Pair recall is measured against true edges inside the enumerated universe (same sentence, or adjacent sentences with a strict cue); edges outside it are not counted. It is NOT conditional classifier accuracy.",
         ]
@@ -128,6 +128,25 @@ def main() -> None:
             "",
             "**Results: pending** — they need the owner's labels on the 450 pairs (code never invents labels).",
         ]
+    af = PR.OUT / "analysis_with_reveal.json"
+    if a.sheet and af.exists():
+        cc = json.loads(af.read_text())["classifier_conditional"]
+        L += [
+            "",
+            "### Conditional classifier accuracy (revealed after the annotation was frozen; separate from pair recall)",
+            "",
+            "| pool | recall on human-true | precision vs human | same relation among TP |",
+            "|---|---|---|---|",
+        ]
+        for k, v in cc.items():
+            r, pr_, ag = (
+                v["classifier_recall_on_human_true"],
+                v["classifier_precision_vs_human"],
+                v["relation_agreement_among_tp"],
+            )
+            L.append(
+                f"| {k} | {r[0]}/{r[1]} ({r[0] / r[1]:.0%}) | {pr_[0]}/{pr_[1]} ({pr_[0] / pr_[1]:.0%}) | {ag[0]}/{ag[1]} |"
+            )
     L += [
         "",
         "## 4. Actual spend",
