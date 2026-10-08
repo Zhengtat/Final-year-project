@@ -1,0 +1,338 @@
+{
+ "recall": {
+  "labelled_pairs": 86,
+  "by_label_and_resolution": {
+   "NOT_SAME/distinct_nodes": 2,
+   "NOT_SAME/partial": 9,
+   "NOT_SAME/same_node": 1,
+   "NOT_SAME/strings": 1,
+   "SAME/distinct_nodes": 1,
+   "SAME/partial": 16,
+   "SAME/same_node": 51,
+   "SAME/strings": 5
+  },
+  "same_pairs_that_are_distinct_nodes": 1,
+  "same_pairs_already_co_clustered_by_baseline": 51,
+  "candidate_recall_on_distinct": 1.0,
+  "covered": 1,
+  "covering_signals": {
+   "r3_weak": 1
+  },
+  "lexicon_different_pairs_as_distinct_nodes": 17,
+  "lexicon_different_pairs_in_candidates": 16,
+  "lexicon_same_pairs_as_distinct_nodes": 0,
+  "note": "positives that were already merged online (same_node) are baseline successes; partial/strings are not nodes of this snapshot",
+  "name_level_replay": {
+   "same_pairs_replayed": 11,
+   "retrieved_by": {
+    "name_embedding_top5": 7,
+    "token_overlap": 4,
+    "name_embedding_top20": 7,
+    "any_of_r1_token_name20": 7,
+    "r1_key": 1
+   },
+   "union_recall": 0.6363636363636364,
+   "note": "definition/evidence/graph signals are unavailable for a bare alias string, so this is a conservative (name-only) recall"
+  }
+ },
+ "n_train": 107,
+ "n_pos": 73,
+ "n_neg": 34,
+ "groups": 80,
+ "logistic": {
+  "auc": 0.8769137792103142,
+  "average_precision": 0.9201758264733475,
+  "calibration": {
+   "brier": 0.1118803766394144,
+   "ece": 0.026624134407171606,
+   "bins": [
+    {
+     "bin": [
+      0.0,
+      0.2
+     ],
+     "n": 17,
+     "mean_pred": 0.05393715473472169,
+     "frac_pos": 0.058823529411764705
+    },
+    {
+     "bin": [
+      0.2,
+      0.4
+     ],
+     "n": 5,
+     "mean_pred": 0.28923133110269605,
+     "frac_pos": 0.2
+    },
+    {
+     "bin": [
+      0.4,
+      0.6
+     ],
+     "n": 6,
+     "mean_pred": 0.540454029973156,
+     "frac_pos": 0.5
+    },
+    {
+     "bin": [
+      0.6,
+      0.8
+     ],
+     "n": 21,
+     "mean_pred": 0.6980329527543503,
+     "frac_pos": 0.7619047619047619
+    },
+    {
+     "bin": [
+      0.8,
+      1.0
+     ],
+     "n": 58,
+     "mean_pred": 0.9092331928370099,
+     "frac_pos": 0.896551724137931
+    }
+   ]
+  },
+  "calibration_before_platt": {
+   "brier": 0.1260543239344674,
+   "ece": 0.0836464953642178,
+   "bins": [
+    {
+     "bin": [
+      0.0,
+      0.2
+     ],
+     "n": 23,
+     "mean_pred": 0.030633554819258713,
+     "frac_pos": 0.13043478260869565
+    },
+    {
+     "bin": [
+      0.2,
+      0.4
+     ],
+     "n": 7,
+     "mean_pred": 0.32502595237867565,
+     "frac_pos": 0.2857142857142857
+    },
+    {
+     "bin": [
+      0.4,
+      0.6
+     ],
+     "n": 15,
+     "mean_pred": 0.49743477502420785,
+     "frac_pos": 0.8
+    },
+    {
+     "bin": [
+      0.6,
+      0.8
+     ],
+     "n": 13,
+     "mean_pred": 0.7240261329864405,
+     "frac_pos": 0.8461538461538461
+    },
+    {
+     "bin": [
+      0.8,
+      1.0
+     ],
+     "n": 49,
+     "mean_pred": 0.9131953785234619,
+     "frac_pos": 0.9183673469387755
+    }
+   ]
+  }
+ },
+ "boosted_ablation": {
+  "auc": 0.8813456889605157,
+  "average_precision": 0.9316764687734984
+ },
+ "operating_point_dev_labelled_distribution": {
+  "t_auto": null,
+  "t_review": 0.6488429509013013,
+  "auto_status": "DISABLED: no threshold meets precision >= 0.98 with Wilson lower >= 0.95",
+  "detail": {
+   "best_wilson_lower_over_thresholds": [
+    0.827464,
+    [
+     0.9272727272727272,
+     0.8274005992784395,
+     55
+    ]
+   ]
+  }
+ },
+ "group_ablation": {
+  "all_features": {
+   "auc": 0.8769137792103142,
+   "average_precision": 0.9201758264733475
+  },
+  "without_lexical": {
+   "auc": 0.8797340854149879,
+   "average_precision": 0.9129512639940041,
+   "delta_auc": 0.0028203062046736616
+  },
+  "without_embedding": {
+   "auc": 0.8853746978243352,
+   "average_precision": 0.9266614640041133,
+   "delta_auc": 0.008460918614020985
+  },
+  "without_alias": {
+   "auc": 0.845890410958904,
+   "average_precision": 0.8903045604652191,
+   "delta_auc": -0.031023368251410166
+  },
+  "without_type": {
+   "auc": 0.8680499597099114,
+   "average_precision": 0.9174621817020514,
+   "delta_auc": -0.008863819500402825
+  },
+  "without_graph": {
+   "auc": 0.8773166800966962,
+   "average_precision": 0.9203350039937361,
+   "delta_auc": 0.00040290088638195165
+  },
+  "without_chapter_recurrence": {
+   "auc": 0.8861804995970991,
+   "average_precision": 0.9264395089249478,
+   "delta_auc": 0.009266720386784888
+  },
+  "without_one_token": {
+   "auc": 0.8748992747784045,
+   "average_precision": 0.9226408507725905,
+   "delta_auc": -0.0020145044319097583
+  },
+  "without_erst_context": {
+   "auc": 0.8769137792103142,
+   "average_precision": 0.9202992848589253,
+   "delta_auc": 0.0
+  },
+  "only_lexical": {
+   "auc": 0.5284045124899275,
+   "average_precision": 0.7578592356178616
+  },
+  "only_embedding": {
+   "auc": 0.8603948428686543,
+   "average_precision": 0.8865631937509966
+  },
+  "only_alias": {
+   "auc": 0.4895245769540693,
+   "average_precision": 0.720741057123655
+  },
+  "only_type": {
+   "auc": 0.7608783239323126,
+   "average_precision": 0.8072009294424314
+  },
+  "only_graph": {
+   "auc": 0.6015310233682514,
+   "average_precision": 0.7181958510315307
+  },
+  "only_chapter_recurrence": {
+   "auc": 0.8585817888799355,
+   "average_precision": 0.8938798764309674
+  },
+  "only_one_token": {
+   "auc": 0.5823932312651087,
+   "average_precision": 0.7243759332745695
+  },
+  "only_erst_context": {
+   "auc": 0.6319500402900886,
+   "average_precision": 0.7289396506534367
+  }
+ },
+ "slices": {
+  "one_token_any": {
+   "n": 56,
+   "pos": 34,
+   "auc": 0.9244652406417112,
+   "average_precision": 0.9428930164840569
+  },
+  "multi_token": {
+   "n": 51,
+   "pos": 39,
+   "auc": 0.8012820512820512,
+   "average_precision": 0.9135905487386652
+  }
+ },
+ "candidate_pool": {
+  "candidates": 28487,
+  "vetoed_before_scoring": {
+   "type_incompatible": 15077,
+   "lexicon_different": 16
+  },
+  "scored": 13394,
+  "score_quantiles": {
+   "0.5": 0.052715966291437065,
+   "0.9": 0.16062458332224733,
+   "0.99": 0.24635653857644835,
+   "0.999": 0.3173737988500886
+  },
+  "training_prior": 0.6822429906542056,
+  "predicted_review_volume": {
+   "uncorrected": {
+    "review_band_pairs": 0,
+    "above_review_pairs": 0
+   },
+   "assumed_pool_base_rate_0.05": {
+    "review_band_pairs": 0,
+    "above_review_pairs": 0
+   },
+   "assumed_pool_base_rate_0.02": {
+    "review_band_pairs": 0,
+    "above_review_pairs": 0
+   },
+   "assumed_pool_base_rate_0.01": {
+    "review_band_pairs": 0,
+    "above_review_pairs": 0
+   },
+   "assumed_pool_base_rate_0.005": {
+    "review_band_pairs": 0,
+    "above_review_pairs": 0
+   }
+  },
+  "caveat": "UNVALIDATED: the scorer is trained on a positive-skewed set of owner-reviewed pairs, not on the candidate pool; the pool base rate is unknown until SLEEP-240 dev labels exist, so the volumes are scenarios, not forecasts"
+ },
+ "features_absent": [
+  "concept_score (not stored on checkpoint nodes)"
+ ],
+ "candidates": {
+  "union": 28487,
+  "by_signal": {
+   "lexicon_same": 1,
+   "r1_key": 1,
+   "token_overlap": 208,
+   "r2_acronym": 1,
+   "r3_strong": 1,
+   "r3_weak": 2,
+   "name_embedding": 17889,
+   "definition_embedding": 4825,
+   "evidence_embedding": 8939,
+   "graph_neighbours": 2086,
+   "same_surface": 1,
+   "same_concept_queue": 1
+  },
+  "exclusive_by_signal": {
+   "lexicon_same": 0,
+   "r1_key": 0,
+   "token_overlap": 0,
+   "r2_acronym": 0,
+   "r3_strong": 1,
+   "r3_weak": 1,
+   "name_embedding": 13754,
+   "definition_embedding": 3390,
+   "evidence_embedding": 5034,
+   "graph_neighbours": 1516,
+   "same_surface": 0,
+   "same_concept_queue": 1
+  },
+  "per_node": 45.835880933226065
+ },
+ "one_token": {
+  "one_token_nodes": 374,
+  "candidates_with_one_token_node": 13822,
+  "one_token_pairs_with_only_embedding_signals": 13812,
+  "rule": "embedding-only one-token auto-merge is forbidden; such pairs can only reach review"
+ }
+}
