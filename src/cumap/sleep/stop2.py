@@ -373,12 +373,133 @@ def run_sleep240() -> dict:
     return out
 
 
+def run_sleep_pos() -> dict:
+    """SLEEP-POS-160 (Research 2026-10-09). Label-blind: reads the SLEEP-240 manifest only for the pair ids to exclude."""
+    import csv
+
+    from cumap.sleep import sleep240 as Z
+    from cumap.sleep import sleep_pos as P
+
+    sections, snap, lex, ctx, vec = B.load_all()
+    types = TypeMap.load()
+    vz = Vectoriser(vec)
+    erst = erst_linked_set(snap, sections)
+    cs = B.candidates(snap, vec, ctx)
+    pf = pool_features(snap, sections, ctx, vec, cs, types, lex, vz, erst)
+    d = REPO_ROOT / "data/interim/checks/cr011"
+    with (d / "sleep240_manifest_DO_NOT_SHARE.csv").open(encoding="utf-8") as f:
+        excluded = {tuple(sorted((r["pair_a_id"], r["pair_b_id"]))) for r in csv.DictReader(f)}
+    strong = {p for p, (f, fl) in pf.items() if (cs.signals[p] & Z.DET) or f["name_cos"] >= 0.85}
+    adj: dict[str, set[str]] = {}
+    for p in strong:
+        x, y = tuple(p)
+        adj.setdefault(x, set()).add(y)
+        adj.setdefault(y, set()).add(x)
+
+    def cos(x, y):
+        v = pf.get(frozenset((x, y)))
+        return (
+            v[0]["name_cos"]
+            if v
+            else float(vec.name[vec.row(x)] @ vec.name[vec.row(y)])
+            if hasattr(vec, "row")
+            else 0.0
+        )
+
+    bridge: dict[tuple[str, str], float] = {}
+    for b, nb in adj.items():
+        nbs = sorted(nb)
+        for i, x in enumerate(nbs):
+            for y in nbs[i + 1 :]:
+                pr = frozenset((x, y))
+                if pr in strong:
+                    continue
+                a, c = snap.nodes[x], snap.nodes[y]
+                mid = snap.nodes[b]
+                if (
+                    lex.is_different(a.name, c.name)
+                    or not types.compatible(a.type, c.type)
+                    or not types.compatible(a.type, mid.type)
+                    or not types.compatible(c.type, mid.type)
+                ):
+                    continue  # a hard contradiction (lexicon / type) is not a high-support bridge
+                sc = min(cos(x, b), cos(y, b))
+                key = tuple(sorted((x, y)))
+                bridge[key] = max(bridge.get(key, 0.0), sc)
+    pools = P.source_pools(pf, cs.signals, excluded, bridge)
+    items, rep = P.draw(pools)
+    out = {"pool_sizes_and_draw": rep, "excluded_sleep240_pairs": len(excluded)}
+    if rep["shortfall"]:
+        out["status"] = "SHORTFALL"
+        (OUT / "stop2_sleep_pos.json").write_text(
+            json.dumps(out, indent=1, default=str), encoding="utf-8"
+        )
+        return out
+    assert not ({it.pair for it in items} & excluded)
+    Z.families(items, snap.nodes, ctx.cfg)
+    sp = Z.split(items, seed=P.SEED, dev=80, strata=P.SOURCES)
+    out["split"] = sp
+    if sp["status"] != "ok":
+        out["status"] = "SPLIT FAILED"
+        (OUT / "stop2_sleep_pos.json").write_text(
+            json.dumps(out, indent=1, default=str), encoding="utf-8"
+        )
+        return out
+    out["leakage"] = Z.leakage_check(items, snap.nodes, ctx.cfg)
+    out["files"] = Z.sheets(
+        items,
+        snap.nodes,
+        snap.run_id,
+        d,
+        seed=P.SEED,
+        prefix="sleep_pos160",
+        id_prefix="SP",
+        double_target=0,
+        strata=P.SOURCES,
+    )
+    for sname in ("dev", "heldout"):
+        Z.assert_blind(d / f"sleep_pos160_{sname}_blind_sheet.csv")
+    out["distinct_nodes_check"] = all(a != b for a, b in (it.pair for it in items))
+    out["status"] = "ok" if out["leakage"]["ok"] else "LEAKAGE"
+    out["summary"] = Z.summary(items)
+    (OUT / "stop2_sleep_pos.json").write_text(
+        json.dumps(out, indent=1, default=str), encoding="utf-8"
+    )
+    return out
+
+
+def viability(sheet: Path) -> dict:
+    """Research rule: after SLEEP-POS dev is annotated, gold SAME >= 20 lets STOP 3 proceed, otherwise stop and return."""
+    import csv
+
+    with sheet.open(encoding="utf-8-sig") as f:
+        rows = list(csv.DictReader(f))
+    c = Counter(r["decision"].strip() for r in rows)
+    bad = [
+        r["item_id"] for r in rows if r["decision"].strip() not in {"SAME", "NOT_SAME", "UNSURE"}
+    ]
+    return {
+        "rows": len(rows),
+        "counts": dict(c),
+        "invalid_rows": bad,
+        "gold_same": c["SAME"],
+        "verdict": "STOP 3 MAY PROCEED"
+        if not bad and len(rows) == 80 and c["SAME"] >= 20
+        else "STOP: return to Research before any paid STOP-3 call",
+    }
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("phase", choices=["scorer", "sleep240"])
+    ap.add_argument("phase", choices=["scorer", "sleep240", "sleep_pos", "viability"])
     ap.add_argument("--gold-dir")
+    ap.add_argument("--sheet")
     a = ap.parse_args()
-    if a.phase == "sleep240":
+    if a.phase == "sleep_pos":
+        print(json.dumps(run_sleep_pos(), indent=1, default=str))
+    elif a.phase == "viability":
+        print(json.dumps(viability(Path(a.sheet)), indent=1))
+    elif a.phase == "sleep240":
         print(json.dumps(run_sleep240(), indent=1, default=str))
     else:
         print(json.dumps(run_scorer(Path(a.gold_dir)), indent=1, default=str))

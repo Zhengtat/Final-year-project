@@ -208,3 +208,63 @@ def test_no_pipeline_module_builds_a_gold_path():
         src = f.read_text()
         assert "data/gold" not in src and '"gold"' not in src
         assert "openai" not in src.lower()
+
+
+# ---------------------------------------------------------------- SLEEP-POS-160 (label-blind residual challenge set)
+def test_sleep_pos_quotas_sum_to_160_and_draw_is_deterministic_and_node_capped():
+    from cumap.sleep import sleep_pos as P
+
+    assert sum(P.QUOTA.values()) == 160
+    pools = {s: [(f"{s}-{i}-a", f"{s}-{i}-b") for i in range(100)] for s in P.SOURCES}
+    pools["alias_acronym_queue"] = pools["alias_acronym_queue"][:3]
+    items, rep = P.draw(pools)
+    assert (
+        rep["total"] == 160
+        and rep["shortfall"] == 0
+        and rep["pool_sizes"]["alias_acronym_queue"] == 3
+    )
+    assert [i.pair for i in P.draw(pools)[0]] == [i.pair for i in items]
+    use = {}
+    for it in items:
+        for n in it.pair:
+            use[n] = use.get(n, 0) + 1
+    assert max(use.values()) <= P.MAX_PAIRS_PER_NODE
+
+
+def test_sleep_pos_reports_a_shortfall_rather_than_inventing_items():
+    from cumap.sleep import sleep_pos as P
+
+    pools = {s: [(f"{s}{i}a", f"{s}{i}b") for i in range(3)] for s in P.SOURCES}
+    _items, rep = P.draw(pools)
+    assert rep["shortfall"] == 160 - rep["total"] > 0
+
+
+def test_sleep_pos_eligibility_excludes_sleep240_pairs_lexicon_different_and_type_incompatible():
+    from cumap.sleep import sleep_pos as P
+
+    ok = {"lexicon_different": False, "type_incompatible": False}
+    assert P.eligible(("a", "b"), ok, set())
+    assert not P.eligible(("b", "a"), ok, {("a", "b")})  # unordered, already in SLEEP-240
+    assert not P.eligible(("a", "b"), {**ok, "lexicon_different": True}, set())
+    assert not P.eligible(("a", "b"), {**ok, "type_incompatible": True}, set())
+
+
+def test_sleep_pos_selection_code_never_reads_a_label_or_gold_file():
+    src = Path("src/cumap/sleep/sleep_pos.py").read_text()
+    assert not any(tok in src for tok in ("read_text", "open(", "csv", "data/gold", "decision"))
+
+
+def test_viability_rule_needs_20_gold_same_in_80_dev_items(tmp_path):
+    from cumap.sleep.stop2 import viability
+
+    def sheet(n_same):
+        p = tmp_path / f"s{n_same}.csv"
+        rows = ["item_id,decision"] + [
+            f"X{i},{'SAME' if i < n_same else 'NOT_SAME'}" for i in range(80)
+        ]
+        p.write_text("\n".join(rows))
+        return p
+
+    assert viability(sheet(20))["verdict"] == "STOP 3 MAY PROCEED"
+    assert viability(sheet(19))["verdict"].startswith("STOP")
+    assert viability(sheet(0))["gold_same"] == 0

@@ -165,7 +165,9 @@ def families(items: list[Item], nodes: dict[str, Node], cfg: AliasConfig) -> Non
         )
 
 
-def split(items: list[Item], seed: int = SEED) -> dict:
+def split(
+    items: list[Item], seed: int = SEED, dev: int = DEV, strata: tuple[str, ...] = STRATA
+) -> dict:
     """Assign whole families to development so that development has exactly 80 items, balancing strata (subset-sum DP, ties
     broken by stratum balance). Returns diagnostics."""
     by_fam: dict[str, list[Item]] = defaultdict(list)
@@ -173,7 +175,7 @@ def split(items: list[Item], seed: int = SEED) -> dict:
         by_fam[it.family].append(it)
     fams = sorted(by_fam)
     random.Random(seed).shuffle(fams)
-    target_stratum = DEV / len(STRATA)
+    target_stratum = dev / len(strata)
     # dp over reachable (size) -> best family subset by balance cost, kept as dict size -> (cost, chosen tuple)
     best: dict[int, tuple[float, tuple[str, ...]]] = {0: (0.0, ())}
     for f in fams:
@@ -182,18 +184,21 @@ def split(items: list[Item], seed: int = SEED) -> dict:
         new = dict(best)
         for size, (_c, chosen) in best.items():
             ns = size + sz
-            if ns > DEV:
+            if ns > dev:
                 continue
             chosen2 = (*chosen, f)
             per = Counter(it.stratum for g in chosen2 for it in by_fam[g])
-            cost = sum((per.get(s, 0) - target_stratum) ** 2 for s in STRATA)
+            cost = sum((per.get(s, 0) - target_stratum) ** 2 for s in strata)
             if ns not in new or cost < new[ns][0]:
                 new[ns] = (cost, chosen2)
         best = new
         _ = cnt
-    if DEV not in best:
-        return {"status": "FAILED: no family subset sums to exactly 80", "reachable": sorted(best)}
-    dev_f = set(best[DEV][1])
+    if dev not in best:
+        return {
+            "status": f"FAILED: no family subset sums to exactly {dev}",
+            "reachable": sorted(best),
+        }
+    dev_f = set(best[dev][1])
     for it in items:
         it.split = "dev" if it.family in dev_f else "heldout"
     return {
@@ -240,7 +245,15 @@ def excerpts(n: Node, k: int = 2) -> list[str]:
 
 
 def sheets(
-    items: list[Item], nodes: dict[str, Node], run_id: str, out: Path, seed: int = SEED
+    items: list[Item],
+    nodes: dict[str, Node],
+    run_id: str,
+    out: Path,
+    seed: int = SEED,
+    prefix: str = "sleep240",
+    id_prefix: str = "SL",
+    double_target: int = 80,
+    strata: tuple[str, ...] = STRATA,
 ) -> dict:
     rng = random.Random(seed)
     heldout = [it for it in items if it.split == "heldout"]
@@ -249,18 +262,18 @@ def sheets(
     for it in heldout:
         per[it.stratum].append(it)
     double = set()
-    for s in STRATA:
+    for s in strata:
         lst = sorted(per[s], key=lambda it: it.pair)
         rng.shuffle(lst)
-        double.update(it.pair for it in lst[: round(80 / len(STRATA))])
+        double.update(it.pair for it in lst[: round(double_target / len(strata))])
     extra = [it for it in sorted(heldout, key=lambda it: it.pair) if it.pair not in double]
     rng.shuffle(extra)
-    for it in extra[: 80 - len(double)]:
+    for it in extra[: max(0, double_target - len(double))]:
         double.add(it.pair)
     manifest, written = [], {}
     order = list(items)
     rng.shuffle(order)
-    ids = {it.pair: f"SL{n:03d}" for n, it in enumerate(order, 1)}
+    ids = {it.pair: f"{id_prefix}{n:03d}" for n, it in enumerate(order, 1)}
     for split_name in ("dev", "heldout"):
         rows = []
         for it in order:
@@ -283,7 +296,7 @@ def sheets(
                 "pair_a_id": a_id, "pair_b_id": b_id, "double_annotation": "yes" if it.pair in double else "no",
                 "shown_a": a_id, "memberships": "|".join(it.memberships),
             })  # fmt: skip
-        path = out / f"sleep240_{split_name}_blind_sheet.csv"
+        path = out / f"{prefix}_{split_name}_blind_sheet.csv"
         with path.open("w", newline="", encoding="utf-8") as f:
             w = csv.DictWriter(f, fieldnames=BLIND_COLUMNS)
             w.writeheader()
@@ -293,7 +306,7 @@ def sheets(
             "rows": len(rows),
             "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
         }
-    mpath = out / "sleep240_manifest_DO_NOT_SHARE.csv"
+    mpath = out / f"{prefix}_manifest_DO_NOT_SHARE.csv"
     with mpath.open("w", newline="", encoding="utf-8") as f:
         w = csv.DictWriter(f, fieldnames=MANIFEST_COLUMNS)
         w.writeheader()

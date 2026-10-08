@@ -23,6 +23,7 @@ Update at the end of every milestone: what was done, which acceptance checks pas
 
 ## Log
 <!-- newest first: YYYY-MM-DD · milestone · summary -->
+- 2026-10-09 · CR-011 · Research chose Option B: SLEEP-POS-160 built label-blind and frozen (80 dev / 80 held-out, leakage 0, $0); STOP 3 paused until its 80 dev labels show >= 20 gold SAME. Waiting for the owner's annotation of `sleep_pos160_dev_blind_sheet.csv`.
 - 2026-10-09 · CR-011 · SLEEP-240 development labels in (75 NOT_SAME / 3 SAME / 2 UNSURE): recall/benefit/Wilson gates cannot be evaluated on this graph; STOP 3 paused, return to Research (options A-D). No spend.
 - 2026-10-08 · CR-011 · STOP 2 ($0): candidates (28,487; 45.8/node), historical-label replay, logistic + boosted scorers with calibration, `t_auto` disabled / thresholds deferred to SLEEP-240 dev labels, SLEEP-240 built (240 = 6x40, 80 dev / 160 held-out, leakage 0) with blind sheets. Waiting for the owner's annotation of the 80 development items before STOP 3. Report `reports/cr011_sleep/stop2.md`.
 - 2026-10-08 · CR-011 · STOP 1 ($0): repository reconciled against the amended CR (sheet `docs/cr011/STOP1_RECONCILIATION.md`); preflight about $6.5 upper; RESEARCH DECISION REQUIRED on alias-provenance gate scope and the `Concept` type wildcard; no paid call. Waiting for owner approval + Research.
