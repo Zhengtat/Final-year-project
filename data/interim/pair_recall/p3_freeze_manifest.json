@@ -1,0 +1,48 @@
+{
+ "frozen_at_utc": "2026-10-08T08:24:21+00:00",
+ "seed": 20261010,
+ "n_requested": 150,
+ "n_drawn": 150,
+ "p3_extra_size": 2547,
+ "p2_pool_size": 13747,
+ "eRST_linked_concept_pairs_total": 10191,
+ "composition": {
+  "p3_extra": 2547,
+  "first_link_adjacent_vs_farther": {
+   "adjacent": 1612,
+   "farther": 935
+  },
+  "pairs_linked_by_label (a pair can have several)": {
+   "ELABORATION-ADDITIONAL": 949,
+   "JOINT-LIST": 321,
+   "ELABORATION-ATTRIBUTE": 310,
+   "ADVERSATIVE-CONTRAST": 142,
+   "JOINT-SEQUENCE": 138,
+   "CAUSAL-RESULT": 104,
+   "RESTATEMENT-PARTIAL": 97,
+   "CONTEXT-BACKGROUND": 77,
+   "PURPOSE-GOAL": 61,
+   "ADVERSATIVE-CONCESSION": 60,
+   "CAUSAL-CAUSE": 56,
+   "MODE-MEANS": 55,
+   "EXPLANATION-EVIDENCE": 48,
+   "ORGANIZATION-HEADING": 40,
+   "ORGANIZATION-PREPARATION": 27,
+   "TOPIC-SOLUTIONHOOD": 26,
+   "CONTINGENCY-CONDITION": 24,
+   "EXPLANATION-JUSTIFY": 19,
+   "EVALUATION-COMMENT": 18,
+   "EXPLANATION-MOTIVATION": 15,
+   "TOPIC-QUESTION": 13,
+   "ADVERSATIVE-ANTITHESIS": 12,
+   "CONTEXT-CIRCUMSTANCE": 7,
+   "JOINT-DISJUNCTION": 3
+  }
+ },
+ "graph_sha256": "41cc5e7b31b982f4ead21795f7afc752b63482b606d6b94bdfa03af6242a0156",
+ "pool_key_hash": "293c2e90bb92740ac24ded11b22aa65732a51bdeaebd8342939a11488693271c",
+ "sample_sha256": "cd2a00ca0138d3472bc7f3d8802c19080fd6c4858eedb7a7bd4a3b8fd88eb282",
+ "blind_sheet_sha256": "58904548122cbb8e0ebbcc00569d6bcc2c34216c794f194bc12cedde597f7563",
+ "all_pairs_evaluated": false,
+ "labels_hidden_from_annotator": "eRST labels and links are in the key only"
+}

@@ -15,6 +15,7 @@ from pathlib import Path
 from cumap.config import REPO_ROOT, DemoSliceConfig, Settings
 from cumap.expert_kg.face_eval import FACE_CAVEAT, FACE_PUBLISHED, evaluate_run
 from cumap.report import data as D
+from cumap.report.data import with_mentions_by_section
 from cumap.report.graph import (
     FAMILY_ORDER,
     GNode,
@@ -359,7 +360,7 @@ def build_report(
     out = out_dir or (root / "reports" / "demo")
     figs = Figures(out / "figures")
     run_dir = root / "data" / "processed" / "kg" / run_id
-    checkpoint = json.loads((run_dir / "checkpoint.json").read_text())
+    checkpoint = with_mentions_by_section(json.loads((run_dir / "checkpoint.json").read_text()))
     registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
     from cumap.expert_kg.pipeline import PromptSet
 

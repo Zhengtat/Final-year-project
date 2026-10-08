@@ -1,0 +1,35 @@
+{
+ "frozen_at_utc": "2026-10-08T00:38:40+00:00",
+ "seed": 20261008,
+ "composition": {
+  "ACCEPTED_EDGE": 40,
+  "NO_RELATION": 10,
+  "OTHER_NEAR_MISS": 10
+ },
+ "accepted_edge_items_per_relation": {
+  "has_purpose": 3,
+  "causes": 3,
+  "acts_on": 3,
+  "increases": 3,
+  "connected_to": 3,
+  "prevents": 1,
+  "requires": 3,
+  "performs": 3,
+  "decreases": 2,
+  "has_property": 3,
+  "part_of": 3,
+  "precedes": 2,
+  "uses": 3,
+  "is_a": 3,
+  "contrasts_with": 2
+ },
+ "split": {
+  "dev": 24,
+  "test": 36
+ },
+ "freeze_hash_sha256_of_sorted_item_ids": "c03e9a798cdc1b2fa43ac800d4c5fd150e3ff512c80ecfc3121955e8acdfd1e2",
+ "selected_from": "hidden manifest fields only (stratum, current relation, rejection reason); no annotator-1 field was read",
+ "TIMING_DEVIATION": "annotator 1 had ALREADY completed and saved all 180 rows (the owner's marked sheet, saved 2026-10-06) when this subset was frozen. The selection cannot depend on those labels (it never reads them) but the CR's 'freeze before annotator-1 outcomes are known' was not met. Disclosed to Research.",
+ "second_human_annotator": "NOT RECORDED in the repository or this session: IAA = NOT_EVALUABLE until one is named",
+ "blind_sheet_for_annotator_2": "cr010_relmap180_iaa_annotator2_blind_sheet.csv (blank judgement columns)"
+}

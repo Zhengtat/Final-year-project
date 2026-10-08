@@ -262,6 +262,31 @@ def build_growth(
     )
 
 
+def with_mentions_by_section(checkpoint: dict) -> dict:
+    """CR-009 runs keep mentions on the concepts and leave `mentions_by_section` empty; the report reads the section
+    view, so derive it (one entry per mention that carries an evidence quote). Older checkpoints are returned as is."""
+    if checkpoint.get("mentions_by_section"):
+        return checkpoint
+    by: dict[str, list[dict]] = {}
+    for c in checkpoint["concepts"]:
+        for m in c["mentions"]:
+            quote = m.get("quote") or m.get("evidence_quote") or ""
+            if not quote.strip():
+                continue
+            by.setdefault(m["section_id"], []).append(
+                {
+                    "canonical_name": c["canonical_name"],
+                    "node_type": c["node_type"],
+                    "role": m["role"],
+                    "definition": m.get("definition"),
+                    "evidence_quote": quote,
+                    "section_id": m["section_id"],
+                    "source": m.get("source", "llm"),
+                }
+            )
+    return {**checkpoint, "mentions_by_section": by}
+
+
 def load_logged_prompts(log_path: Path | None, hashes: set[str]) -> dict[str, str]:
     """CR-007 rule 16: exact prompt text of an LLM call, read from the prompt log by input hash
     (never re-rendered from a template). Returns {input_hash: user message text}."""

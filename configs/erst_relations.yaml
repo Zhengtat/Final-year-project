@@ -1,0 +1,231 @@
+registry_id: erst-gum-1.0
+source:
+  title: 'eRST: A Signaled Graph Theory of Discourse Relations and Organization'
+  authors: Zeldes et al.
+  year: 2024
+  authority: Appendix A, Table A.1 in the uploaded primary paper
+  note: The table has 32 labels. SAME-UNIT is technical, leaving 31 discourse relations.
+nuclearity_legend:
+  ←: satellite relation licensed in the table’s left-to-right orientation
+  →: the opposite fixed orientation
+  →←: satellite relation allowed in either direction
+  Λ: multinuclear relation
+secondary_edge_rule: For experimental secondary edges, preserve edge direction separately;
+  do not fabricate primary-tree nuclearity.
+signal_types:
+  discourse_marker: DM/connective signal
+  non_dm:
+  - graphical
+  - lexical
+  - morphological
+  - numerical
+  - reference
+  - semantic
+  - syntactic
+relations:
+- label: ADVERSATIVE-ANTITHESIS
+  coarse_class: adversative
+  fine_relation: antithesis
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Reader is meant to prefer the nucleus as an alternative to the satellite.
+- label: ADVERSATIVE-CONCESSION
+  coarse_class: adversative
+  fine_relation: concession
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Reader is meant to look past an incompatibility of nucleus with satellite.
+- label: ADVERSATIVE-CONTRAST
+  coarse_class: adversative
+  fine_relation: contrast
+  primary_nuclearity_symbol: Λ
+  is_true_discourse_relation: true
+  definition: Writer presents multiple nuclei as incompatible but equally prominent.
+- label: ATTRIBUTION-NEGATIVE
+  coarse_class: attribution
+  fine_relation: negative
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Satellite states that a potential source is not a source of the information
+    in the nucleus.
+- label: ATTRIBUTION-POSITIVE
+  coarse_class: attribution
+  fine_relation: positive
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Satellite states a source for the information in the nucleus.
+- label: CAUSAL-CAUSE
+  coarse_class: causal
+  fine_relation: cause
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Satellite is the cause of the nucleus; nucleus is more prominent.
+- label: CAUSAL-RESULT
+  coarse_class: causal
+  fine_relation: result
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Satellite is the result of the nucleus; equivalently the nucleus is
+    the cause of the satellite and is more prominent.
+- label: CONTEXT-BACKGROUND
+  coarse_class: context
+  fine_relation: background
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Satellite provides information that increases the reader’s understanding
+    of the nucleus.
+- label: CONTEXT-CIRCUMSTANCE
+  coarse_class: context
+  fine_relation: circumstance
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Satellite gives circumstances, often spatio-temporal, under which the
+    nucleus applies.
+- label: CONTINGENCY-CONDITION
+  coarse_class: contingency
+  fine_relation: condition
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: The nucleus occurs depending on the satellite.
+- label: ELABORATION-ADDITIONAL
+  coarse_class: elaboration
+  fine_relation: additional
+  primary_nuclearity_symbol: ←
+  is_true_discourse_relation: true
+  definition: Satellite elaborates on the nucleus as a whole in cases not covered
+    by attribute elaboration.
+- label: ELABORATION-ATTRIBUTE
+  coarse_class: elaboration
+  fine_relation: attribute
+  primary_nuclearity_symbol: ←
+  is_true_discourse_relation: true
+  definition: Satellite elaborates on a participant within the nucleus rather than
+    on the entire proposition.
+- label: EVALUATION-COMMENT
+  coarse_class: evaluation
+  fine_relation: comment
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Satellite provides the writer’s assessment of the nucleus; the reader
+    need not share it.
+- label: EXPLANATION-EVIDENCE
+  coarse_class: explanation
+  fine_relation: evidence
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Satellite provides evidence that increases the reader’s belief in the
+    nucleus.
+- label: EXPLANATION-JUSTIFY
+  coarse_class: explanation
+  fine_relation: justify
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Satellite increases the reader’s acceptance of the writer’s right to
+    say the nucleus.
+- label: EXPLANATION-MOTIVATION
+  coarse_class: explanation
+  fine_relation: motivation
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Satellite is meant to influence the reader’s willingness to act according
+    to the nucleus.
+- label: JOINT-DISJUNCTION
+  coarse_class: joint
+  fine_relation: disjunction
+  primary_nuclearity_symbol: Λ
+  is_true_discourse_relation: true
+  definition: Writer presents multiple nuclei as interchangeable alternatives.
+- label: JOINT-LIST
+  coarse_class: joint
+  fine_relation: list
+  primary_nuclearity_symbol: Λ
+  is_true_discourse_relation: true
+  definition: Writer presents multiple nuclei in parallel as additive to one another.
+- label: JOINT-OTHER
+  coarse_class: joint
+  fine_relation: other
+  primary_nuclearity_symbol: Λ
+  is_true_discourse_relation: true
+  definition: Other collection of unlike discourse units of equal prominence at the
+    same level of hierarchy.
+- label: JOINT-SEQUENCE
+  coarse_class: joint
+  fine_relation: sequence
+  primary_nuclearity_symbol: Λ
+  is_true_discourse_relation: true
+  definition: Multiple nuclei form a temporally ordered sequence of events.
+- label: MODE-MANNER
+  coarse_class: mode
+  fine_relation: manner
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Satellite indicates the manner in which the nucleus happens.
+- label: MODE-MEANS
+  coarse_class: mode
+  fine_relation: means
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Satellite indicates the means by which the nucleus happens.
+- label: ORGANIZATION-HEADING
+  coarse_class: organization
+  fine_relation: heading
+  primary_nuclearity_symbol: →
+  is_true_discourse_relation: true
+  definition: Explicit text-organizing device such as a heading.
+- label: ORGANIZATION-PHATIC
+  coarse_class: organization
+  fine_relation: phatic
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Writer holds the floor without contributing propositional content.
+- label: ORGANIZATION-PREPARATION
+  coarse_class: organization
+  fine_relation: preparation
+  primary_nuclearity_symbol: →
+  is_true_discourse_relation: true
+  definition: Satellite is primarily used to signal an upcoming nucleus.
+- label: PURPOSE-ATTRIBUTE
+  coarse_class: purpose
+  fine_relation: attribute
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Satellite gives the purpose of a participant in the nucleus rather than
+    the entire proposition.
+- label: PURPOSE-GOAL
+  coarse_class: purpose
+  fine_relation: goal
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: The proposition in the nucleus exists or is initiated in order to realize
+    the satellite.
+- label: RESTATEMENT-PARTIAL
+  coarse_class: restatement
+  fine_relation: partial
+  primary_nuclearity_symbol: ←
+  is_true_discourse_relation: true
+  definition: Satellite partly realizes the same role and content as a previous nucleus.
+- label: RESTATEMENT-REPETITION
+  coarse_class: restatement
+  fine_relation: repetition
+  primary_nuclearity_symbol: Λ
+  is_true_discourse_relation: true
+  definition: Multiple nuclei realize the same role and content.
+- label: SAME-UNIT
+  coarse_class: technical
+  fine_relation: same-unit
+  primary_nuclearity_symbol: Λ
+  is_true_discourse_relation: false
+  definition: Technical device connecting multiple parts of a discontinuous EDU; not
+    a discourse relation.
+- label: TOPIC-QUESTION
+  coarse_class: topic
+  fine_relation: question
+  primary_nuclearity_symbol: →
+  is_true_discourse_relation: true
+  definition: Nucleus is the answer to the question posed by the satellite.
+- label: TOPIC-SOLUTIONHOOD
+  coarse_class: topic
+  fine_relation: solutionhood
+  primary_nuclearity_symbol: →←
+  is_true_discourse_relation: true
+  definition: Nucleus is a solution to a problem presented by the satellite.

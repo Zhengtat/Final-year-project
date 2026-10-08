@@ -63,6 +63,8 @@ uv run streamlit run src/cumap/app/review_app.py
 25. **(CR-009) The concept verifier is rule-based code.** Any LLM check is a separate, measured arm.
 26. **(CR-009) Pruned concepts are never shown to the generator and never paired.**
 27. **(CR-009) Anchors set pair priority but are never shown to the relation generator or verifier.**
+28. **(CR-010) Dual layer: eRST never replaces the semantic relation layer.** The eRST-compatible discourse graph (`erst/graph.py`) is candidate-pair routing evidence only; an eRST label, signal or link never creates a semantic edge, merge or alias, and discourse relation, discourse signal and domain relation stay separate types (`erst/guards.py`).
+29. **(CR-010) Pair-recall figures say what they cover:** recall within the enumerated candidate universe (P0-P3), never global textbook recall. Human labels are blind to classifier and eRST outputs until frozen; experimental outputs use new run ids.
 
 ## OpenAI usage
 - Use the Responses API with Structured Outputs:

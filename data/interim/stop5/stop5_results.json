@@ -1,0 +1,581 @@
+{
+ "mapping_dev": {
+  "valid_relation_items": 48,
+  "other_relation_items_outside_gates": 3,
+  "none_items": 9,
+  "erst_expressibility": {
+   "k": 14,
+   "n": 48,
+   "rate": 0.2916666666666667,
+   "wilson95": [
+    0.18241578926516536,
+    0.43179259809571696
+   ]
+  },
+  "semantic_preservation": {
+   "k": 2,
+   "n": 48,
+   "rate": 0.041666666666666664,
+   "wilson95": [
+    0.011501893489386593,
+    0.13975655870455442
+   ]
+  },
+  "mapping_loss_rate": {
+   "k": 46,
+   "n": 48,
+   "rate": 0.9583333333333334,
+   "wilson95": [
+    0.8602434412954456,
+    0.9884981065106133
+   ]
+  },
+  "critical_loss": {
+   "k": 38,
+   "n": 48,
+   "rate": 0.7916666666666666,
+   "wilson95": [
+    0.6574109872738206,
+    0.882697270420944
+   ]
+  },
+  "silent_loss_survives_no_without_category": {
+   "k": 8,
+   "n": 48,
+   "rate": 0.16666666666666666,
+   "wilson95": [
+    0.08695513576485567,
+    0.295778284012556
+   ]
+  },
+  "relation_collision_rate_among_expressible": {
+   "k": 2,
+   "n": 14,
+   "rate": 0.14285714285714285,
+   "wilson95": [
+    0.04009392127146496,
+    0.3994137949697036
+   ]
+  },
+  "pedagogical_items": 0,
+  "pedagogical_silent_losses": 0,
+  "pedagogical_flags": 0
+ },
+ "mapping_heldout": {
+  "valid_relation_items": 81,
+  "other_relation_items_outside_gates": 10,
+  "none_items": 29,
+  "erst_expressibility": {
+   "k": 22,
+   "n": 81,
+   "rate": 0.2716049382716049,
+   "wilson95": [
+    0.18673822637971732,
+    0.3771542323980525
+   ]
+  },
+  "semantic_preservation": {
+   "k": 7,
+   "n": 81,
+   "rate": 0.08641975308641975,
+   "wilson95": [
+    0.04249258333995923,
+    0.16779916633870515
+   ]
+  },
+  "mapping_loss_rate": {
+   "k": 74,
+   "n": 81,
+   "rate": 0.9135802469135802,
+   "wilson95": [
+    0.8322008336612947,
+    0.9575074166600408
+   ]
+  },
+  "critical_loss": {
+   "k": 67,
+   "n": 81,
+   "rate": 0.8271604938271605,
+   "wilson95": [
+    0.7305386248522877,
+    0.8941559612227986
+   ]
+  },
+  "silent_loss_survives_no_without_category": {
+   "k": 7,
+   "n": 81,
+   "rate": 0.08641975308641975,
+   "wilson95": [
+    0.04249258333995923,
+    0.16779916633870515
+   ]
+  },
+  "relation_collision_rate_among_expressible": {
+   "k": 3,
+   "n": 22,
+   "rate": 0.13636363636363635,
+   "wilson95": [
+    0.04749003714055253,
+    0.33334987166571717
+   ]
+  },
+  "pedagogical_items": 0,
+  "pedagogical_silent_losses": 0,
+  "pedagogical_flags": 0
+ },
+ "loss_by_category_heldout": [
+  {
+   "category": "taxonomy",
+   "count": 12,
+   "rate": 0.14814814814814814,
+   "examples": [
+    "RM006: is_a (low-speed terrestrial link / link)",
+    "RM031: is_a (X.25 / virtual circuit)"
+   ]
+  },
+  {
+   "category": "part_whole_composition",
+   "count": 17,
+   "rate": 0.20987654320987653,
+   "examples": [
+    "RM002: part_of (teleconferencing / audio stream)",
+    "RM004: part_of (edge cluster / edge presence)"
+   ]
+  },
+  {
+   "category": "mechanism",
+   "count": 27,
+   "rate": 0.3333333333333333,
+   "examples": [
+    "RM003: acts_on (message / request/reply protocol)",
+    "RM027: has_purpose (throughput rate / ASIC)"
+   ]
+  },
+  {
+   "category": "network_topology",
+   "count": 5,
+   "rate": 0.06172839506172839,
+   "examples": [
+    "RM020: connected_to (Broadband Network Gateway / Internet)",
+    "RM070: connected_to (peer / link)"
+   ]
+  },
+  {
+   "category": "identifier_semantics",
+   "count": 0,
+   "rate": 0.0,
+   "examples": []
+  },
+  {
+   "category": "encapsulation_payload_semantics",
+   "count": 0,
+   "rate": 0.0,
+   "examples": []
+  },
+  {
+   "category": "causal_sign_direction",
+   "count": 5,
+   "rate": 0.06172839506172839,
+   "examples": [
+    "RM005: causes (star topology / switch)",
+    "RM011: causes (abstraction / virtual memory)"
+   ]
+  },
+  {
+   "category": "technical_dependency",
+   "count": 0,
+   "rate": 0.0,
+   "examples": []
+  },
+  {
+   "category": "tradeoff_semantics",
+   "count": 1,
+   "rate": 0.012345679012345678,
+   "examples": [
+    "RM098: contrasts_with (detection / correction)"
+   ]
+  },
+  {
+   "category": "pedagogical_prerequisite",
+   "count": 0,
+   "rate": 0.0,
+   "examples": []
+  },
+  {
+   "category": "principle_instance_organisation",
+   "count": 0,
+   "rate": 0.0,
+   "examples": []
+  }
+ ],
+ "loss_by_category_dev": [
+  {
+   "category": "taxonomy",
+   "count": 6,
+   "rate": 0.125,
+   "examples": [
+    "RM084: is_a (streaming application / application)",
+    "RM131: is_a (ZigBee / IEEE 802.15.4)"
+   ]
+  },
+  {
+   "category": "part_whole_composition",
+   "count": 5,
+   "rate": 0.10416666666666667,
+   "examples": [
+    "RM001: part_of (global network / multiple-access network)",
+    "RM015: part_of (FromDS / Control field)"
+   ]
+  },
+  {
+   "category": "mechanism",
+   "count": 23,
+   "rate": 0.4791666666666667,
+   "examples": [
+    "RM010: acts_on (msgStripHdr / header)",
+    "RM021: prevents (transition / clock drift)"
+   ]
+  },
+  {
+   "category": "network_topology",
+   "count": 2,
+   "rate": 0.041666666666666664,
+   "examples": [
+    "RM145: connected_to (network / router)",
+    "RM147: connected_to (distribution system / access point)"
+   ]
+  },
+  {
+   "category": "identifier_semantics",
+   "count": 0,
+   "rate": 0.0,
+   "examples": []
+  },
+  {
+   "category": "encapsulation_payload_semantics",
+   "count": 0,
+   "rate": 0.0,
+   "examples": []
+  },
+  {
+   "category": "causal_sign_direction",
+   "count": 2,
+   "rate": 0.041666666666666664,
+   "examples": [
+    "RM124: causes (network / address assignment inefficiency)",
+    "RM130: increases (effective throughput / transfer size)"
+   ]
+  },
+  {
+   "category": "technical_dependency",
+   "count": 0,
+   "rate": 0.0,
+   "examples": []
+  },
+  {
+   "category": "tradeoff_semantics",
+   "count": 0,
+   "rate": 0.0,
+   "examples": []
+  },
+  {
+   "category": "pedagogical_prerequisite",
+   "count": 0,
+   "rate": 0.0,
+   "examples": []
+  },
+  {
+   "category": "principle_instance_organisation",
+   "count": 0,
+   "rate": 0.0,
+   "examples": []
+  }
+ ],
+ "reverse_recovery_frozen_sha256": "a63935dee52083260f99eadfe227208a98df6ec6eade08344bee1cfe41ba106d",
+ "reverse_heldout": {
+  "macro_f1": 0.04304733727810651,
+  "per_relation_f1": {
+   "acts_on": {
+    "tp": 0,
+    "fp": 2,
+    "fn": 6,
+    "f1": 0.0
+   },
+   "causes": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 4,
+    "f1": 0.0
+   },
+   "connected_to": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 5,
+    "f1": 0.0
+   },
+   "contrasts_with": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 1,
+    "f1": 0.0
+   },
+   "decreases": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 1,
+    "f1": 0.0
+   },
+   "has_property": {
+    "tp": 6,
+    "fp": 53,
+    "fn": 0,
+    "f1": 0.18461538461538463
+   },
+   "has_purpose": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 10,
+    "f1": 0.0
+   },
+   "increases": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 1,
+    "f1": 0.0
+   },
+   "is_a": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 12,
+    "f1": 0.0
+   },
+   "part_of": {
+    "tp": 0,
+    "fp": 1,
+    "fn": 17,
+    "f1": 0.0
+   },
+   "performs": {
+    "tp": 0,
+    "fp": 1,
+    "fn": 2,
+    "f1": 0.0
+   },
+   "precedes": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 1,
+    "f1": 0.0
+   },
+   "uses": {
+    "tp": 6,
+    "fp": 11,
+    "fn": 9,
+    "f1": 0.37500000000000006
+   }
+  },
+  "represented": {
+   "part_of": {
+    "n": 17,
+    "recovered": 0,
+    "recall": 0.0,
+    "status": "FAIL"
+   },
+   "acts_on": {
+    "n": 6,
+    "recovered": 0,
+    "recall": 0.0,
+    "status": "FAIL"
+   },
+   "causes": {
+    "n": 4,
+    "recovered": 0,
+    "recall": 0.0,
+    "status": "INSUFFICIENT_SUPPORT"
+   },
+   "is_a": {
+    "n": 12,
+    "recovered": 0,
+    "recall": 0.0,
+    "status": "FAIL"
+   },
+   "has_purpose": {
+    "n": 10,
+    "recovered": 0,
+    "recall": 0.0,
+    "status": "FAIL"
+   },
+   "uses": {
+    "n": 15,
+    "recovered": 6,
+    "recall": 0.4,
+    "status": "FAIL"
+   },
+   "connected_to": {
+    "n": 5,
+    "recovered": 0,
+    "recall": 0.0,
+    "status": "FAIL"
+   },
+   "has_property": {
+    "n": 6,
+    "recovered": 6,
+    "recall": 1.0,
+    "status": "PASS"
+   },
+   "performs": {
+    "n": 2,
+    "recovered": 0,
+    "recall": 0.0,
+    "status": "INSUFFICIENT_SUPPORT"
+   },
+   "contrasts_with": {
+    "n": 1,
+    "recovered": 0,
+    "recall": 0.0,
+    "status": "INSUFFICIENT_SUPPORT"
+   },
+   "precedes": {
+    "n": 1,
+    "recovered": 0,
+    "recall": 0.0,
+    "status": "INSUFFICIENT_SUPPORT"
+   },
+   "decreases": {
+    "n": 1,
+    "recovered": 0,
+    "recall": 0.0,
+    "status": "INSUFFICIENT_SUPPORT"
+   },
+   "increases": {
+    "n": 1,
+    "recovered": 0,
+    "recall": 0.0,
+    "status": "INSUFFICIENT_SUPPORT"
+   }
+  },
+  "n": 81
+ },
+ "reverse_dev_resubstitution_NOT_A_RESULT": 0.3633437990580847,
+ "current": {
+  "tp": 69,
+  "fp": 11,
+  "fn": 22,
+  "precision": 0.8625,
+  "recall": 0.7582417582417582,
+  "f1": 0.8070175438596491,
+  "tn": 18,
+  "n": 120
+ },
+ "erst_direct": {
+  "tp": 45,
+  "fp": 14,
+  "fn": 46,
+  "precision": 0.7627118644067796,
+  "recall": 0.4945054945054945,
+  "f1": 0.6,
+  "tn": 15,
+  "n": 120
+ },
+ "erst_direct_reasons": {
+  "edge": 59,
+  "no_erst_relation": 61
+ },
+ "erst_direct_vs_annotator_descriptive": {
+  "applicability_agreement": {
+   "k": 84,
+   "n": 120,
+   "rate": 0.7,
+   "wilson95": [
+    0.6128485756752643,
+    0.7747437577572543
+   ]
+  },
+  "label_agreement_when_both_apply": {
+   "k": 21,
+   "n": 27,
+   "rate": 0.7777777777777778,
+   "wilson95": [
+    0.5924307113336742,
+    0.8939276054763996
+   ]
+  }
+ },
+ "gates": [
+  {
+   "gate": "eRST expressibility",
+   "threshold": ">= 0.90",
+   "observed": 0.2716049382716049,
+   "status": "FAIL",
+   "note": ""
+  },
+  {
+   "gate": "Semantic preservation",
+   "threshold": ">= 0.90",
+   "observed": 0.08641975308641975,
+   "status": "FAIL",
+   "note": ""
+  },
+  {
+   "gate": "Mapping-loss rate",
+   "threshold": "<= 0.10",
+   "observed": 0.9135802469135802,
+   "status": "FAIL",
+   "note": ""
+  },
+  {
+   "gate": "Critical-loss Wilson 95% upper",
+   "threshold": "<= 0.15",
+   "observed": 0.8941559612227986,
+   "status": "FAIL",
+   "note": ""
+  },
+  {
+   "gate": "Reverse-mapping macro F1",
+   "threshold": ">= 0.90",
+   "observed": 0.04304733727810651,
+   "status": "FAIL",
+   "note": ""
+  },
+  {
+   "gate": "Represented-relation recall (min over n>=5 relations)",
+   "threshold": ">= 0.75",
+   "observed": 0.0,
+   "status": "FAIL",
+   "note": "per-relation numerators in the report"
+  },
+  {
+   "gate": "eRST-direct edge-F1 difference",
+   "threshold": ">= -0.05",
+   "observed": -0.2070175438596491,
+   "status": "FAIL",
+   "note": ""
+  },
+  {
+   "gate": "eRST-direct precision difference",
+   "threshold": ">= -0.05",
+   "observed": -0.09978813559322042,
+   "status": "FAIL",
+   "note": ""
+  },
+  {
+   "gate": "Mapping agreement kappa",
+   "threshold": ">= 0.67",
+   "observed": null,
+   "status": "NOT_EVALUABLE",
+   "note": "NOT_EVALUABLE: no second human annotator"
+  },
+  {
+   "gate": "Organisation/pedagogical information (vacuous: REL-MAP-180 has no pedagogical item)",
+   "threshold": "no silent loss",
+   "observed": {
+    "silent": 0,
+    "flags": 0,
+    "items": 0
+   },
+   "status": "PASS",
+   "note": ""
+  }
+ ],
+ "gates_all_pass_mechanical": false
+}
