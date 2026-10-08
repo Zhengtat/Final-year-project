@@ -23,6 +23,7 @@ Update at the end of every milestone: what was done, which acceptance checks pas
 
 ## Log
 <!-- newest first: YYYY-MM-DD · milestone · summary -->
+- 2026-10-09 · CR-012 · STOP 1 ($0): SciNLP release audited (3-doc test split, no identity gold, no scorer, counts differ from paper), baseline = unchanged `slice3_c2`; RESEARCH DECISION REQUIRED on D1-D4 (CI unit, strict scoring semantics, pair budget, cost cap). Waiting for Research.
 - 2026-10-09 · CR-011 · **CLOSED: NO_PRODUCTION_CHANGE** (Research final decision). Revised STOP-3 gate not passed (recall capped 13/14 by the frozen type guard; rankers AUC 0.40-0.55); STOP 4/5 not run; held-out sets sealed; no paid call; no-op CR-012 handoff written and validated. Merged to `main`, tagged `cr-011-complete`. Report `reports/cr011_sleep/final_report.md`.
 - 2026-10-09 · CR-011 · revised STOP 3 ($0): continuation gate not passed (recall capped 13/14 by the type-guard veto of one gold-SAME pair; rankers at chance, OOF AUC 0.40-0.55); CR-011 stops with NO PRODUCTION CHANGE pending Research confirmation; held-out sets unopened.
 - 2026-10-09 · CR-011 · SLEEP-POS dev labels: 8 SAME / 71 NOT_SAME / 1 UNSURE; viability rule (>= 20 SAME) failed; STOP 3 paused, return to Research. No spend.
