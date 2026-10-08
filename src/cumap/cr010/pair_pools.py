@@ -218,6 +218,13 @@ def enumerate_pools(run: str) -> dict:
         },
         "nesting": nesting,
         "strict_cue_config": {**config_hashes(), "kept_cues": list(matcher.names)},
+        "strict_cue_candidate_counts": {
+            "note": "P2-extra pairs whose evidence span holds the cue (any), and for which it is the only strict cue (sole); frozen config, logged per Research 2026-10-08",
+            "any": dict(Counter(c for h in cue_hits.values() for c in h).most_common()),
+            "sole": dict(
+                Counter(next(iter(h)) for h in cue_hits.values() if len(h) == 1).most_common()
+            ),
+        },
         "sensitivity_not_used_for_selection": {
             "P2_extra_if_is_a_were_removed": len(without_is_a),
             "P2_extra_if_inflection_forms_were_not_used (exact tokens only)": len(without_forms),
