@@ -23,6 +23,7 @@ Update at the end of every milestone: what was done, which acceptance checks pas
 
 ## Log
 <!-- newest first: YYYY-MM-DD · milestone · summary -->
+- 2026-10-09 · CR-011 · SLEEP-POS dev labels: 8 SAME / 71 NOT_SAME / 1 UNSURE; viability rule (>= 20 SAME) failed; STOP 3 paused, return to Research. No spend.
 - 2026-10-09 · CR-011 · Research chose Option B: SLEEP-POS-160 built label-blind and frozen (80 dev / 80 held-out, leakage 0, $0); STOP 3 paused until its 80 dev labels show >= 20 gold SAME. Waiting for the owner's annotation of `sleep_pos160_dev_blind_sheet.csv`.
 - 2026-10-09 · CR-011 · SLEEP-240 development labels in (75 NOT_SAME / 3 SAME / 2 UNSURE): recall/benefit/Wilson gates cannot be evaluated on this graph; STOP 3 paused, return to Research (options A-D). No spend.
 - 2026-10-08 · CR-011 · STOP 2 ($0): candidates (28,487; 45.8/node), historical-label replay, logistic + boosted scorers with calibration, `t_auto` disabled / thresholds deferred to SLEEP-240 dev labels, SLEEP-240 built (240 = 6x40, 80 dev / 160 held-out, leakage 0) with blind sheets. Waiting for the owner's annotation of the 80 development items before STOP 3. Report `reports/cr011_sleep/stop2.md`.
