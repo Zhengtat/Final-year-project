@@ -14,9 +14,9 @@ PAIR_USD = 0.0083
 CONCEPT, CANON = 0.008, 0.032
 REL_BUDGET = 14.2 * PAIR_USD  # per 1k words
 GOLD_PAIRS_PER_1K = {
-    "pd": 12.0,
-    "scinlp": 17.0,
-}  # SciNLP: 295 / 17.4k words measured; P&D: assumption until the gold exists
+    "pd": 18.0,  # 118 unique pilot gold edges / 6.56k words, measured on the owner-reviewed pilot
+    "scinlp": 17.0,  # 295 test relations / 17.4k words
+}
 WORDS_K = {
     "pd_pilot": 6.564,
     "pd_heldout": 30.053,

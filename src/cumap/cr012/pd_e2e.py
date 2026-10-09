@@ -159,13 +159,83 @@ def _parse_kv(s: str) -> tuple[tuple[str, str], ...]:
     return tuple(sorted(tuple(p.split("=", 1)) for p in s.split("|") if "=" in p))  # type: ignore[misc]
 
 
+def _nth(sentence: str, needle: str, n: int, *, exact: bool) -> int:
+    """Start of the n-th occurrence of `needle` in `sentence` (exact case, or case-insensitive), or -1."""
+    hay, nd = (sentence, needle) if exact else (sentence.lower(), needle.lower())
+    pos = -1
+    for _ in range(n):
+        pos = hay.find(nd, pos + 1)
+        if pos < 0:
+            return -1
+    return pos
+
+
+def _jlist(s: str) -> list[str]:
+    s = (s or "").strip()
+    if s.startswith("["):
+        return [str(x) for x in json.loads(s)]
+    return [x for x in s.split("|") if x]
+
+
+def _jdict(s: str) -> str:
+    s = (s or "").strip()
+    if s.startswith("{"):
+        return "|".join(f"{k}={v}" for k, v in sorted(json.loads(s).items()))
+    return s
+
+
+def normalise_rows(rows: list[dict]) -> tuple[list[dict], list[str]]:
+    """Accept the codebook layout AND the compact layout of the owner's reviewed sheet: one CONCEPT row per mention occurrence
+    (sentence_id, span_text, occurrence on the CONCEPT row), aliases / evidence ids as JSON lists, qualifiers as a JSON object.
+    Emits one CONCEPT per concept id plus a MENTION row per occurrence, and checks that repeated concept rows agree."""
+    out, problems, first = [], [], {}
+    for r in rows:
+        if r["row_type"] == "CONCEPT" and r.get("span_text"):
+            cid = (
+                r["section_id"],
+                r["concept_id"],
+            )  # concept ids may be reused across sections; concepts are per section
+            sig = (r["canonical_name"], r["node_type"], tuple(_jlist(r["aliases"])))
+            if cid in first and first[cid] != sig:
+                problems.append(
+                    f"{r['section_id']} {cid}: inconsistent name / type / aliases across rows"
+                )
+            if cid not in first:
+                first[cid] = sig
+                out.append(
+                    {
+                        **r,
+                        "span_text": "",
+                        "sentence_id": "",
+                        "occurrence": "",
+                        "aliases": "|".join(sig[2]),
+                    }
+                )
+            out.append(
+                {**r, "row_type": "MENTION", "aliases": "", "canonical_name": "", "node_type": ""}
+            )
+        elif r["row_type"] == "RELATION":
+            out.append(
+                {
+                    **r,
+                    "qualifiers": _jdict(r["qualifiers"]),
+                    "evidence_sentence_ids": "|".join(_jlist(r["evidence_sentence_ids"])),
+                }
+            )
+        elif r["row_type"] == "CONCEPT":
+            out.append({**r, "aliases": "|".join(_jlist(r["aliases"]))})
+        else:
+            out.append(r)
+    return out, problems
+
+
 def load_gold(
     path: Path, sections: dict[str, str], registry: RelationRegistry
 ) -> tuple[dict[str, UnitGold], list[str]]:
     """-> (gold per section with CHARACTER spans in the section text, problems). Problems make the sheet unusable."""
     with path.open(encoding="utf-8-sig", newline="") as f:
-        rows = list(csv.DictReader(f))
-    problems: list[str] = []
+        rows, pre = normalise_rows(list(csv.DictReader(f)))
+    problems: list[str] = list(pre)
     out: dict[str, UnitGold] = {}
     types = set(registry.node_types)
     for sid in sorted({r["section_id"] for r in rows}):
@@ -203,12 +273,16 @@ def load_gold(
                 continue
             a, b = sent[r["sentence_id"]]
             sentence = text[a:b]
-            occ, start, pos = int(r["occurrence"] or 1), -1, 0
-            for _ in range(occ):
-                start = sentence.find(r["span_text"], pos)
-                pos = start + 1
-                if start < 0:
-                    break
+            occ = int(r["occurrence"] or 1)
+            start = _nth(sentence, r["span_text"], occ, exact=True)
+            if (
+                start < 0
+            ):  # the owner's sheet counts occurrences case-insensitively: accept it, and say so
+                start = _nth(sentence, r["span_text"], occ, exact=False)
+                if start >= 0:
+                    g.notes.append(
+                        f"{r['sentence_id']} {r['span_text']!r} occurrence {occ}: case-insensitive match"
+                    )
             if start < 0:
                 problems.append(
                     f"{sid} {r['sentence_id']}: span {r['span_text']!r} (occurrence {occ}) is not in the sentence"

@@ -189,6 +189,27 @@ def score_graph_unit(
             matched.add(k)
             correct_pred += 1
     strict = prf(correct_pred, len(edges) - correct_pred, len(gold_keys) - len(matched))
+    # secondary: relation-specific qualifiers (part_type, action_type, ...) of the strictly matched edges. Gold may state several
+    # qualifier variants of one (source, target, relation); a prediction is right when its value is one of them.
+    gold_q: dict[tuple, dict[str, set[str]]] = defaultdict(lambda: defaultdict(set))
+    for r in gold.relations:
+        if r.src_concept and r.tgt_concept:
+            for qn, qv in r.qualifiers:
+                gold_q[_edge_key(r.src_concept, r.tgt_concept, r.relation, symmetric)][qn].add(qv)
+    q_tot = q_ok = 0
+    seen_q: set[tuple] = set()
+    for e in edges:
+        cs, ct = n2c.get(e.src), n2c.get(e.tgt)
+        if cs is None or ct is None or cs == ct:
+            continue
+        k = _edge_key(cs, ct, e.relation, symmetric)
+        if k in gold_q and k in matched and k not in seen_q:
+            seen_q.add(k)
+            pq = dict(e.qualifiers)
+            for qn, values in gold_q[k].items():
+                q_tot += 1
+                q_ok += pq.get(qn) in values
+    qualifier = {"matched_edges_needing_a_qualifier": q_tot, "qualifier_correct": q_ok}
     # ---- identity (mention pairs over gold mentions) and B-cubed
     ident = identity_metrics(gold, nodes)
     # ---- pair recall: gold edges whose endpoint nodes exist; reached = pair proposed for classification
@@ -238,6 +259,7 @@ def score_graph_unit(
                 cond["direction_correct"] += 1
     return {
         "strict_e2e_edge": strict,
+        "qualifier_accuracy": qualifier,
         "canonical_node": canon,
         "canonical_node_typed": canon_typed,
         "concept_mentions_typed": concept_mentions,

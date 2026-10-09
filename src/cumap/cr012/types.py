@@ -66,6 +66,9 @@ class UnitGold:
     concepts: list[GoldConcept] = field(default_factory=list)
     relations: list[GoldRelation] = field(default_factory=list)
     not_same: list[tuple[str, str]] = field(default_factory=list)
+    notes: list[str] = field(
+        default_factory=list
+    )  # loader notes (for example case-insensitive occurrence matches)
 
 
 @dataclass(frozen=True)

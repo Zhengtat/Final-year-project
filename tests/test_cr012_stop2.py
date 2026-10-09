@@ -534,3 +534,161 @@ def test_no_cr012_module_writes_to_the_gold_folder_or_reads_the_scinlp_test_spli
                 and 'load_documents("test")' not in src
                 and 'gold("test")' not in src
             ), f
+
+
+# ---------------------------------------------------------------- STOP 3: compact owner layout, qualifiers, validation invariants
+def test_compact_sheet_layout_is_normalised_per_section(tmp_path):
+    cols = PD.COLUMNS
+
+    def row(**k):
+        return {c: k.get(c, "") for c in cols}
+
+    rows = [
+        row(
+            section_id="F1",
+            row_type="SENTENCE",
+            row_id="S001",
+            sentence_id="S001",
+            text="A router forwards packets.",
+        ),
+        row(
+            section_id="F1",
+            row_type="SENTENCE",
+            row_id="S002",
+            sentence_id="S002",
+            text="The Router uses a router table.",
+        ),
+        # one CONCEPT row per mention occurrence, JSON aliases / qualifiers / evidence ids, case-insensitive occurrence counting
+        row(
+            section_id="F1",
+            row_type="CONCEPT",
+            sentence_id="S001",
+            span_text="router",
+            occurrence="1",
+            concept_id="pd:router",
+            canonical_name="router",
+            node_type="Component",
+            aliases='["router"]',
+        ),
+        row(
+            section_id="F1",
+            row_type="CONCEPT",
+            sentence_id="S002",
+            span_text="router",
+            occurrence="2",
+            concept_id="pd:router",
+            canonical_name="router",
+            node_type="Component",
+            aliases='["router"]',
+        ),
+        row(
+            section_id="F1",
+            row_type="CONCEPT",
+            sentence_id="S001",
+            span_text="packets",
+            occurrence="1",
+            concept_id="pd:packet",
+            canonical_name="packet",
+            node_type="DataUnit",
+            aliases="[]",
+        ),
+        row(
+            section_id="F1",
+            row_type="RELATION",
+            relation="acts_on",
+            source_concept_id="pd:router",
+            target_concept_id="pd:packet",
+            qualifiers='{"action_type": "forwards"}',
+            evidence_sentence_ids='["S001"]',
+        ),
+        # the same concept id reused in a second section must be defined in THAT section too
+        row(
+            section_id="F2",
+            row_type="SENTENCE",
+            row_id="S001",
+            sentence_id="S001",
+            text="A router forwards packets.",
+        ),
+        row(
+            section_id="F2",
+            row_type="CONCEPT",
+            sentence_id="S001",
+            span_text="router",
+            occurrence="1",
+            concept_id="pd:router",
+            canonical_name="router",
+            node_type="Component",
+            aliases='["router"]',
+        ),
+    ]
+    p = tmp_path / "compact.csv"
+    with p.open("w", newline="", encoding="utf-8") as f:
+        w = csv.DictWriter(f, fieldnames=cols)
+        w.writeheader()
+        w.writerows(rows)
+    texts = {
+        "F1": "A router forwards packets. The Router uses a router table.",
+        "F2": "A router forwards packets.",
+    }
+    gold, problems = PD.load_gold(p, texts, PD.registry())
+    assert problems == [] and len(gold["F1"].mentions) == 3 and len(gold["F2"].concepts) == 1
+    assert gold["F1"].relations[0].qualifiers == (("action_type", "forwards"),)
+    assert any(
+        "case-insensitive" in n for n in gold["F1"].notes
+    )  # occurrence 2 of 'router' is 'Router'... counted case-insensitively
+
+
+def test_qualifier_accuracy_is_scored_apart_from_the_headline():
+    g = gold_graph()
+    g.relations = [
+        GoldRelation(
+            "u",
+            "acts_on",
+            src_concept="A",
+            tgt_concept="B",
+            qualifiers=(("action_type", "forwards"),),
+        ),
+        GoldRelation(
+            "u", "acts_on", src_concept="A", tgt_concept="B", qualifiers=(("action_type", "drops"),)
+        ),
+    ]
+    ok = S.score_graph_unit(
+        g,
+        nodes_ok(),
+        [PredEdge("u", "n1", "n2", "acts_on", qualifiers=(("action_type", "drops"),))],
+        SYM,
+    )
+    assert ok["strict_e2e_edge"] == PRF(1, 0, 0)  # two qualifier variants are one headline edge
+    assert ok["qualifier_accuracy"] == {
+        "matched_edges_needing_a_qualifier": 1,
+        "qualifier_correct": 1,
+    }
+    bad = S.score_graph_unit(
+        g,
+        nodes_ok(),
+        [PredEdge("u", "n1", "n2", "acts_on", qualifiers=(("action_type", "stores"),))],
+        SYM,
+    )
+    assert bad["strict_e2e_edge"].tp == 1 and bad["qualifier_accuracy"]["qualifier_correct"] == 0
+
+
+@pytest.mark.skipif(not (SCINLP_DIR / "dev.json").exists(), reason="SciNLP is local-only data")
+def test_scinlp_validation_never_loads_the_test_split_and_perfect_scores_one():
+    import inspect
+
+    from cumap.cr012 import scorer_validation as V
+
+    assert 'for split in ("train", "dev")' in inspect.getsource(V.validate_scinlp)
+    ad = SciNLPAdapter()
+    g = next(iter(ad.gold("dev").values()))
+    m, r, nodes, edges = V.scinlp_gold_as_prediction(g)
+    out = S.score_scinlp_unit(g, m, r, ad.symmetric_relations())
+    assert out["rel_plus"].f1 == 1.0 and out["entity_typed"].f1 == 1.0
+    pr, ung = S.project_edges_to_mentions(nodes, edges)
+    assert (
+        ung == 0
+        and S.score_scinlp_unit(
+            g, S.project_nodes_to_mentions(nodes), pr, ad.symmetric_relations()
+        )["rel"].f1
+        == 1.0
+    )
