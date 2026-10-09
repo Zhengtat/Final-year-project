@@ -1,6 +1,5 @@
-"""CR-012 cost preflight (D4: soft warning $40, hard cap $50, mandatory scope only). Unit rates are the measured non-cached costs of the
-frozen production run slice3_c2 (concepts + backfill $0.008 / 1k words, canonicalisation $0.032, relations $0.0083 per pair at the
-frozen 14.2 pairs per 1k words). 'upper' = no cache sharing between oracle runs; 'lower' = byte-identical calls reused where the
+"""CR-012 cost preflight (D4: soft warning $40, hard cap $50, mandatory scope only). Unit rates are measured on the STOP 3 pilot E0 run (see
+the constants below). 'upper' = no cache sharing between oracle runs; 'lower' = byte-identical calls reused where the
 oracle did not alter the call (E3 and E4 classify the same gold pairs, so E4 is then free). Stability repeats never share a cache.
 Replaced by measured numbers after the STOP 3 rehearsal; STOP 4 may not start if the refreshed total exceeds the cap."""
 
@@ -10,8 +9,12 @@ import json
 
 from cumap.config import REPO_ROOT
 
-PAIR_USD = 0.0083
-CONCEPT, CANON = 0.008, 0.032
+# measured on the STOP 3 pilot E0 run of section 1.5 (3.64k words, 52 pairs): concepts $0.0033 and canonicalisation $0.0165 per 1k words,
+# relations $0.0062 per selected pair (many selected pairs end at the family step). Forced GOLD pairs are mostly true edges and need all three
+# steps, so they keep the earlier $0.0083.
+PAIR_USD = 0.0062
+GOLD_PAIR_USD = 0.0083
+CONCEPT, CANON = 0.0033, 0.0165
 REL_BUDGET = 14.2 * PAIR_USD  # per 1k words
 GOLD_PAIRS_PER_1K = {
     "pd": 18.0,  # 118 unique pilot gold edges / 6.56k words, measured on the owner-reviewed pilot
@@ -27,7 +30,7 @@ WORDS_K = {
 
 
 def per_1k(kind: str, sharing: bool) -> dict[str, float]:
-    g = GOLD_PAIRS_PER_1K[kind] * PAIR_USD
+    g = GOLD_PAIRS_PER_1K[kind] * GOLD_PAIR_USD
     e = {
         "E0": CONCEPT + CANON + REL_BUDGET,
         "E1": CANON + REL_BUDGET,

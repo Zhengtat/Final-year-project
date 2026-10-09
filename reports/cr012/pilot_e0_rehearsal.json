@@ -1,0 +1,85 @@
+{
+ "status": "DEVELOPMENT REHEARSAL ON THE PILOT ONLY - not an E0 result and never tuned on",
+ "recipe": {
+  "tau": 0.0,
+  "strict_g_links": true,
+  "anchors": true,
+  "reference_run": "slice3_c2",
+  "budget": "D3: B(u) = min(pool, max(1, ceil(14.2 * words / 1000)))"
+ },
+ "gold": "owner-reviewed pilot sheet (LLM prefill reviewed by the owner), see pilot_gold_provenance.json",
+ "sections": {
+  "1.5": {
+   "words": 3643,
+   "gold_headline_edges": 39,
+   "pool": 165,
+   "budget": 52,
+   "selected": 52,
+   "saturated": true,
+   "nodes": 66,
+   "predicted_edges": 27,
+   "strict": {
+    "tp": 2,
+    "fp": 25,
+    "fn": 37,
+    "precision": 0.074,
+    "recall": 0.051,
+    "f1": 0.061
+   },
+   "canonical_node_f1": 0.623,
+   "typed_mention_f1": 0.582,
+   "identity_pairwise_f1": 0.546,
+   "bcubed_f1": 0.677,
+   "pair_recall": "4/18",
+   "relation_conditional": "2 of 3 gold edges with a proposed edge: relation and direction right",
+   "usd": 0.393
+  },
+  "2.6": {
+   "words": 2921,
+   "gold_headline_edges": 79,
+   "pool": 187,
+   "budget": 42,
+   "selected": 42,
+   "saturated": true,
+   "nodes": 86,
+   "predicted_edges": 17,
+   "strict": {
+    "tp": 5,
+    "fp": 12,
+    "fn": 74,
+    "precision": 0.294,
+    "recall": 0.063,
+    "f1": 0.104
+   },
+   "canonical_node_f1": 0.685,
+   "typed_mention_f1": 0.651,
+   "identity_pairwise_f1": 0.771,
+   "bcubed_f1": 0.728,
+   "pair_recall": "10/51",
+   "relation_conditional": "5 of 8 gold edges with a proposed edge: relation and direction right",
+   "usd": 0.659,
+   "note": "cost includes $0.41 for the 50-pair measurement sample that was classified in this run only"
+  }
+ },
+ "pooled_micro": {
+  "tp": 7,
+  "fp": 37,
+  "fn": 111,
+  "precision": 0.159,
+  "recall": 0.059,
+  "f1": 0.086
+ },
+ "reference_slice3_c2_same_sections": {
+  "1.5": {
+   "f1": 0.118,
+   "tp": 3,
+   "pair_recall": "5/24"
+  },
+  "2.6": {
+   "f1": 0.097,
+   "tp": 5,
+   "pair_recall": "7/49"
+  }
+ },
+ "correction": "an earlier in-session figure for 2.6 (F1 0.21) wrongly included the unselected measurement-sample edges; the converter now keeps only group=selected"
+}

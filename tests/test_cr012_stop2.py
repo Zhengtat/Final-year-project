@@ -26,6 +26,7 @@ from cumap.cr012.types import (
 )
 
 FX = Path("tests/fixtures/cr012")
+REPO_ROOT = Path(__file__).resolve().parents[1]
 SYM = {"compareWith", "similarWith", "connected_to", "contrasts_with"}
 
 
@@ -692,3 +693,68 @@ def test_scinlp_validation_never_loads_the_test_split_and_perfect_scores_one():
         )["rel"].f1
         == 1.0
     )
+
+
+# ---------------------------------------------------------------- STOP 3: unit runner and production-graph converter
+def test_unit_run_prepares_a_one_section_slice_and_the_env_override_is_honoured(
+    tmp_path, monkeypatch
+):
+    from cumap.config import load_demo_slice
+    from cumap.cr012 import unit_run as U
+
+    info = U.prepare("2.6")
+    monkeypatch.setenv("CUMAP_DEMO_SLICE", info["slice_config"])
+    cfg = load_demo_slice()
+    assert cfg.pd.chapters == [2] and cfg.pd.source_jsonl.name == "sections.jsonl"
+    rows = (REPO_ROOT / cfg.pd.source_jsonl).read_text().strip().splitlines()
+    assert len(rows) == 1 and info["words"] == 2921
+    monkeypatch.delenv("CUMAP_DEMO_SLICE")
+    assert load_demo_slice().pd.chapters == [1, 2, 3]  # the default production slice is untouched
+
+
+def test_the_recipe_is_the_cr009_final_run_and_only_the_budget_is_unit_specific():
+    from cumap.cr012 import unit_run as U
+
+    assert U.RECIPE == {
+        "tau": 0.0,
+        "strict_g_links": True,
+        "anchors": True,
+        "reference_run": "slice3_c2",
+    }
+
+
+def test_measurement_sample_results_never_enter_the_scored_graph():
+    from cumap.cr012 import production_graph as PG
+
+    def res(pair_id, group, rel="uses"):
+        return {
+            "outcome": "edge",
+            "group": group,
+            "direction": "forward",
+            "relation": rel,
+            "evidence_quote": "a b",
+            "pair": {
+                "section_id": "s",
+                "concept_x_id": "x",
+                "concept_y_id": "y",
+                "pair_id": pair_id,
+            },
+        }
+
+    concept = lambda cid: {
+        "concept_id": cid,
+        "canonical_name": cid,
+        "node_type": "Concept",
+        "aliases": [],
+        "mentions": [{"section_id": "s", "role": "used", "quote": cid}],
+        "first_introduced": "s",
+        "definition": None,
+        "description_history": [],
+    }
+    cp = {
+        "concepts": [concept("x"), concept("y")],
+        "relation_results_v3": [res("p1", "selected"), res("p2", "sample", "causes")],
+    }
+    g = PG.graph_for_sections(cp, {"s": "x and y are a b"})["s"]
+    assert [e.relation for e in g["edges"]] == ["uses"]
+    assert PG.proposed_pairs(cp, "s") == {frozenset(("x", "y"))}

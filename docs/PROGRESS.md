@@ -23,6 +23,7 @@ Update at the end of every milestone: what was done, which acceptance checks pas
 
 ## Log
 <!-- newest first: YYYY-MM-DD · milestone · summary -->
+- 2026-10-10 · CR-012 · STOP 3 P&D side: scorer validation, owner-reviewed pilot gold, per-section E0 runner, pilot E0 rehearsal ($1.05; pooled strict F1 0.086, budgets saturated), cost measured ($0.11 / 1k words), full-plan estimate $29.7-38.4. SciNLP model track + config freeze wait for Research (schema decision). Report `reports/cr012/stop3.md`.
 - 2026-10-09 · CR-012 · STOP 2 ($0): adapters, strict scorers, oracles, attribution, bootstrap, stability, D3 budget, P&D pilot / held-out selection frozen, blind sheets + codebook, isolation scan CLEAN, cost preflight $36.9-44.8. Waiting for the owner's annotation of the 2 pilot sections before STOP 3. Report `reports/cr012/stop2.md`.
 - 2026-10-09 · CR-012 · STOP 1 ($0): SciNLP release audited (3-doc test split, no identity gold, no scorer, counts differ from paper), baseline = unchanged `slice3_c2`; RESEARCH DECISION REQUIRED on D1-D4 (CI unit, strict scoring semantics, pair budget, cost cap). Waiting for Research.
 - 2026-10-09 · CR-011 · **CLOSED: NO_PRODUCTION_CHANGE** (Research final decision). Revised STOP-3 gate not passed (recall capped 13/14 by the frozen type guard; rankers AUC 0.40-0.55); STOP 4/5 not run; held-out sets sealed; no paid call; no-op CR-012 handoff written and validated. Merged to `main`, tagged `cr-011-complete`. Report `reports/cr011_sleep/final_report.md`.

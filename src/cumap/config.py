@@ -170,5 +170,10 @@ class DemoSliceConfig(BaseModel):
 
 
 def load_demo_slice(path: Path | None = None) -> DemoSliceConfig:
-    raw = yaml.safe_load((path or (REPO_ROOT / "configs" / "demo_slice.yaml")).read_text())
+    """`CUMAP_DEMO_SLICE` (a path) overrides the default slice file, so an evaluation unit (CR-012) can be run through the unchanged
+    production stages as its own one-section slice."""
+    env = os.environ.get("CUMAP_DEMO_SLICE")
+    raw = yaml.safe_load(
+        (path or (Path(env) if env else REPO_ROOT / "configs" / "demo_slice.yaml")).read_text()
+    )
     return DemoSliceConfig(**raw)

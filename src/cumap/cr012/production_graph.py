@@ -51,6 +51,8 @@ def graph_for_sections(cp: dict, sections: dict[str, str]) -> dict[str, dict]:
         for r in cp["relation_results_v3"]:
             if (
                 r["outcome"] != "edge"
+                or r.get("group", "selected")
+                != "selected"  # the 50-pair unselected sample is measurement only, never part of the graph
                 or r.get("gated_dropped")
                 or r.get("consolidated_into")
                 or r["pair"]["section_id"] != sid
@@ -78,11 +80,12 @@ def graph_for_sections(cp: dict, sections: dict[str, str]) -> dict[str, dict]:
 
 
 def proposed_pairs(cp: dict, section_id: str) -> set[frozenset[str]]:
-    """Pairs sent to relation classification for a section (every result of the run, whatever its outcome)."""
+    """Pairs the production run chose to send to relation classification for a section (the measurement sample is not a choice of the
+    pipeline and is excluded)."""
     return {
         frozenset((r["pair"]["concept_x_id"], r["pair"]["concept_y_id"]))
         for r in cp["relation_results_v3"]
-        if r["pair"]["section_id"] == section_id
+        if r["pair"]["section_id"] == section_id and r.get("group", "selected") == "selected"
     }
 
 
