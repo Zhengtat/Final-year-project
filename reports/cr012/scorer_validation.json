@@ -74,7 +74,9 @@
     "gold_counts": {
      "concepts": 56,
      "mentions": 433,
-     "relations": 39,
+     "relation_rows": 40,
+     "unique_headline_edges": 39,
+     "qualifier_variant_rows_collapsed": 1,
      "symmetric_relations": 2
     },
     "perfect": {
@@ -112,7 +114,9 @@
     "gold_counts": {
      "concepts": 92,
      "mentions": 424,
-     "relations": 79,
+     "relation_rows": 82,
+     "unique_headline_edges": 79,
+     "qualifier_variant_rows_collapsed": 3,
      "symmetric_relations": 8
     },
     "perfect": {

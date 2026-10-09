@@ -168,7 +168,9 @@ def validate_pilot(sheet: Path) -> dict:
             "gold_counts": {
                 "concepts": len(g.concepts),
                 "mentions": len(g.mentions),
-                "relations": n,
+                "relation_rows": len(g.relations),
+                "unique_headline_edges": n,
+                "qualifier_variant_rows_collapsed": len(g.relations) - n,
                 "symmetric_relations": n_sym,
             },
             "perfect": {
