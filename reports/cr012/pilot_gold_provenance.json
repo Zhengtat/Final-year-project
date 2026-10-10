@@ -1,5 +1,5 @@
 {
- "sheet": "data/interim/checks/cr012/pd_e2e_pilot_blind.csv (saved by the owner in the interim folder; a copy belongs in the human-owned gold folder, which code never writes)",
+ "sheet": "data/gold/pd_e2e_pilot_blind.csv (owner-reviewed, copied into the human-owned gold folder by the owner on 2026-10-10; the interim sheet was restored to the blank version)",
  "sha256": "7dd929da4e9c4f5a1b0d87def59e28e69caa848c8d07cd7a1794e37257d8e2a3",
  "sections": [
   "1.5",
@@ -19,5 +19,6 @@
    "NOT_SAME": 8
   }
  },
- "loader_notes": "occurrences are counted case-insensitively in the sheet (8 mentions); concept ids are reused across sections and defined per section; 4 relation rows are qualifier variants of an existing (source, target, relation) and collapse in the headline key"
+ "loader_notes": "occurrences are counted case-insensitively in the sheet (8 mentions); concept ids are reused across sections and defined per section; 4 relation rows are qualifier variants of an existing (source, target, relation) and collapse in the headline key",
+ "gold_sha256": "7dd929da4e9c4f5a1b0d87def59e28e69caa848c8d07cd7a1794e37257d8e2a3"
 }
