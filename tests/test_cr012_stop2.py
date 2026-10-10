@@ -836,3 +836,21 @@ def test_a_node_without_a_locatable_quote_has_no_grounded_span_and_overlaps_go_t
         (29, 36)
     ]  # the inner 'network' of the longer term is not claimed twice
     assert "c_ghost" not in spans and stats["nodes_with_no_locatable_evidence_quote"] == 1
+
+
+def test_leak_check_flags_labels_in_structured_fields_but_not_words_of_the_book_sentence():
+    import pytest as _pt
+
+    from cumap.cr012.oracle_run import assert_no_leak
+    from cumap.cr012.types import GoldRelation, UnitGold
+
+    g = UnitGold(unit="u", relations=[GoldRelation("u", "uses", src_concept="a", tgt_concept="b")])
+    ok = {
+        "pair_id": "p",
+        "concept_x_id": "c_a",
+        "concept_y_id": "c_b",
+        "sentence": "A router uses a table.",
+    }
+    assert_no_leak([ok], g)
+    with _pt.raises(AssertionError):
+        assert_no_leak([{**ok, "pair_id": "uses-1"}], g)

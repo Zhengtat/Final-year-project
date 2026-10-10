@@ -148,10 +148,13 @@ def checkpoint_for(
 
 
 def assert_no_leak(pairs: list[dict], gold: UnitGold) -> None:
+    """No label field and no gold relation name in any STRUCTURED field of a forced pair. The evidence `sentence` is the book's own text and may
+    contain the word ("performs", "uses") by itself; that is not a leak."""
     for p in pairs:
         assert not (set(p) & O.FORBIDDEN_VISIBLE_KEYS), p
-        assert all(r.relation not in json.dumps(p) for r in gold.relations), (
-            "a gold relation label is visible in a forced pair"
+        structured = json.dumps({k: v for k, v in p.items() if k != "sentence"})
+        assert all(r.relation not in structured for r in gold.relations), (
+            "a gold relation label is visible in a structured field of a forced pair"
         )
 
 
