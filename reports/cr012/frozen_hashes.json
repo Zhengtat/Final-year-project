@@ -111,5 +111,111 @@
    "src/cumap/config.py": "98b8ee11f7abdbaee498ed7f6b3accd29da5b8b6efe7f819a6e9faba2e4cc5e7",
    "src/cumap/expert_kg/relations_v3.py": "0e6b378b298dd00df86d274223ad58c4aa1cdf3e884aa70481aad2186c254e07"
   }
+ },
+ "stop4_execution_addendum": {
+  "frozen_at_utc": "2026-10-10T13:42:59+00:00",
+  "git_head": "0deef1a8701921fb121518ab5b4041d9636e6cf3",
+  "purpose": "execution plumbing added after the STOP-3 freeze: tagged oracle runs, SciNLP surface-level oracle runner, STOP-4 orchestrator and scorer, test-split gate, private-cache env. No scorer semantics, oracle definition, prompt, model, threshold or budget changed.",
+  "changed_since_final_freeze": [
+   "src/cumap/config.py",
+   "src/cumap/cr012/freeze.py",
+   "src/cumap/cr012/oracle_run.py",
+   "src/cumap/cr012/scinlp_run.py"
+  ],
+  "added_since_final_freeze": [
+   "src/cumap/cr012/scinlp_oracle.py",
+   "src/cumap/cr012/stop4.py",
+   "src/cumap/cr012/stop4_score.py"
+  ],
+  "pipeline_and_schema_files": {
+   "scinlp_profile": {
+    "path": "configs/cr012_scinlp_schema.yaml",
+    "sha256": "58b07157333e8459fe5b487347d6e5104af3df95fb5997ef2f838b57b069ebe4"
+   },
+   "scinlp_relation_registry": {
+    "path": "configs/relations_scinlp.yaml",
+    "sha256": "2446acb2febd29488893072bfe16344d288998fd4fb58ce8f4389b322a2739b5"
+   },
+   "scinlp_generator_prompt": {
+    "path": "prompts/concept_generator/v4_scinlp.md",
+    "sha256": "714113c983df22c462c0fb46d7350b808a17ce0d9d6ccc00b1d5fe0c95dc2a35"
+   },
+   "concept_generator_cum": {
+    "path": "prompts/concept_generator/v4.md",
+    "sha256": "ba407e4d1293e57f0ae0b3473cbcc0e1df1e9696c0b041b523071c5b181b8a92"
+   },
+   "concept_backfill": {
+    "path": "prompts/concept_backfill/v1.md",
+    "sha256": "26363a2987e97cb1c26da851e2c3577777eb77bc1d05812723b69c009236025a"
+   },
+   "canonicalize": {
+    "path": "prompts/canonicalize/v2.md",
+    "sha256": "b4a83be786daf97c8def74d5f7342432be3ef8059cdc1b8b0e9889a9081f4e9f"
+   },
+   "relation_family": {
+    "path": "prompts/relation_family/v3.md",
+    "sha256": "c94062e9f88ac30d3a168ac04e8c16a02adb4ee6281547b06dc9c823caa18ca4"
+   },
+   "relation_choice": {
+    "path": "prompts/relation_choice/v4.md",
+    "sha256": "6d75c7b39048427f93b8062565dc579595aa1c9bd87fd817198a0dd9d3b4ce6c"
+   },
+   "relation_qualifiers": {
+    "path": "prompts/relation_qualifiers/v4.md",
+    "sha256": "7ab0f6b2e9a07fc085871d7a5c0e72e8fd5dce8b15e9e09c37088ded50f1485d"
+   },
+   "cum_relation_registry": {
+    "path": "configs/relations_v1.3.yaml",
+    "sha256": "e4ce5220061b3f0f0bf84b0b50fc3a047631af9db50a38e50ed434c3446caccf"
+   },
+   "cum_concept_stage_config": {
+    "path": "configs/concept_gvp.yaml",
+    "sha256": "40d4c383cda1291d5f0fc6e2b473e64ff2621521a55f087ba7cba3f3e80c15ed"
+   },
+   "alias_rules": {
+    "path": "configs/alias_rules.yaml",
+    "sha256": "a703886ecd60fb1cb2a67d6bf1ebf603bb43db3b2a324a4c18e9c409b69f56ff"
+   },
+   "default_config": {
+    "path": "configs/default.yaml",
+    "sha256": "e8e3de66be54f14fe07d6a6017bee50aaf5f25f39e01e84fa7a25cbd46f1c813"
+   },
+   "cr012_eval_config": {
+    "path": "configs/cr012_e2e_eval.yaml",
+    "sha256": "706b29dd7d366f5a1acfd1779fede73fd3d8f117858af6cea78fe03562297270"
+   }
+  },
+  "evaluation_code": {
+   "src/cumap/cr012/__init__.py": "c109883e2d48bc11f63dc4361ffd057ab2738dd95f7a8b2b3a9db707581231e9",
+   "src/cumap/cr012/adapters.py": "d285e704a8de69bf95e09c448223aae298c14518ff56b6aa8d1a7bf3e06e759c",
+   "src/cumap/cr012/attribution.py": "35af3394958d6689cae0898d539718b64154b040340f4892286d779ee8698a4b",
+   "src/cumap/cr012/bootstrap.py": "6f801b6df8e7cd2a4bd66b0643990fa1504133ea03d912670ae8f9c00e67f26a",
+   "src/cumap/cr012/budget.py": "d85660769121ac8eb3162235724b19bec7d203f853139b25031888d857f16344",
+   "src/cumap/cr012/cost.py": "e0fe125f2a1bd527b2001b41459ac80f5ce86b832fef43234ccd5e64b1259241",
+   "src/cumap/cr012/freeze.py": "187f43d6e81d43c0d3a89a170924daaa9a5a5b39019bf7987c344b9a65bf4214",
+   "src/cumap/cr012/isolation.py": "ad776eefb075ad5488397a69e4405d0b2c16366cf7a090e5375e4f71b1fd3365",
+   "src/cumap/cr012/oracle.py": "be512048e6d2f6bb2b568538b850211c0547b96411feb7ce9decc673155d99fe",
+   "src/cumap/cr012/oracle_run.py": "0625c95a1b334ea7748f068da02d658dcde7f9b1c7825a08a47b0dfa8cf10e4b",
+   "src/cumap/cr012/pd_e2e.py": "96d11d2d6495ad3995e1ca5e21cabd1d1645676af0c85eabb76dcd289c0e7902",
+   "src/cumap/cr012/pilot_oracle_report.py": "2592b95169ec5f539ae0bd87a38a2e24417adcc7974166a351a54e0e0a590344",
+   "src/cumap/cr012/production_graph.py": "fa0d37191fe57891b08576ab7d0d2c0de22dc8fcdaebf10548f767a24ded7dae",
+   "src/cumap/cr012/schema_profile.py": "30e711800565ec7e363bd00c2b8282ba677c10fffda5292c1113d5346f0232ff",
+   "src/cumap/cr012/scinlp_oracle.py": "98f5af49b3fa0f039c451fbb229c2c28968d4de8921b2a818b7c01866769bae6",
+   "src/cumap/cr012/scinlp_run.py": "f00c550e18bfbc85ef3ee7bb1ded32d39dfd2d38ce8657c8eaa58bdf99429014",
+   "src/cumap/cr012/scorer_validation.py": "9abf7d6a6fc280261ce620481bfbcdeb205c2ac4012b835521ed9ba32abd37e7",
+   "src/cumap/cr012/scoring.py": "f64e1b65c5fa38c0d329351b8b73348c3559571cd4055591a6f81cfa312363bd",
+   "src/cumap/cr012/stability.py": "0b8749742f5c467e703a705a1e32ce6ad968baa2b1cf211454e48eebe246ca52",
+   "src/cumap/cr012/stop1.py": "c3aaafa064b67848b9274b5d08f311a8774ee4f85256eb0edf50c41385aa4b7a",
+   "src/cumap/cr012/stop4.py": "9bfd1261f828a766c4db4c5bb6463538bb99f7452bff4481f4489dad8f5f9100",
+   "src/cumap/cr012/stop4_score.py": "bbc6d4a6fd47c9feabb11618406a5f39802610a965b79b0a1ff296b1d5917fd9",
+   "src/cumap/cr012/types.py": "14f9cc1d2efbac1f0141d309876a63552f8c5ccc0e9331fb4f4ae4346ed30124",
+   "src/cumap/cr012/unit_run.py": "de001e735963e1467873f5d6c47ffce075cbccfa7339c4e129ed56d79cfb3533",
+   "src/cumap/concepts_v4/schema.py": "e50dfd83f9653287378109ffef8d4f36b700a3afa27e54bdbb881224a68077b8",
+   "src/cumap/concepts_v4/loop.py": "524443c80d94f7e2c8796573ff34cd528eb5c77ed34b2f4a8784c466e4dcc932",
+   "src/cumap/concepts_v4/runner.py": "3cef15e616de4ada56e82b00be79452e435205f43582dbc1f85ed605fcae2eca",
+   "src/cumap/concepts_v4/cr009_run.py": "0bc64da0ae682c5bf56dca59be2c8f152aa916bece63dfbda03b907d725ced5d",
+   "src/cumap/config.py": "7b8a9f7844a508837a73f0fee7826172e2d2751fbfe637b50dde756835fa3b10",
+   "src/cumap/expert_kg/relations_v3.py": "0e6b378b298dd00df86d274223ad58c4aa1cdf3e884aa70481aad2186c254e07"
+  }
  }
 }
