@@ -1,0 +1,40 @@
+# CR-012 SciNLP benchmark-local schema profile (Research ruling 2026-10-10). Only the benchmark schema changes; the CR-009 architecture is the same.
+name: scinlp
+release_label: SciNLP-repo-e78342be
+status: frozen-at-STOP-3 (hash recorded in reports/cr012/frozen_hashes.json)
+entity_types:
+  task: An objective requiring operational resolution through systematic processes (for example text classification, named
+    entity recognition).
+  method: Specific algorithms or model architectures explicitly mentioned in the paper (for example BERT, LSTM). The paper
+    calls this type Model; the frozen repository's literal label is `method`.
+  dataset: Structured data resources explicitly used or referenced in the research (for example Penn Treebank).
+  metric: Quantitative measures used to evaluate model performance (for example F1-score, BLEU).
+relation_registry: configs/relations_scinlp.yaml
+symmetric:
+- similarWith
+- compareWith
+domain: natural language processing research
+generator_prompt:
+  task: concept_generator
+  version: v4_scinlp
+  base_version: v4
+few_shot_bank: none (the existing prompt framework does not require examples; no test-derived or invented examples are used)
+term_lexicon: empty (the networking lexicon is disabled; no SciNLP identity lexicon is created)
+canonical_overrides: empty
+alias_rules: configs/alias_rules.yaml (generic R1-R3 machinery retained)
+pruner:
+  tau: 0.0
+  note: same recipe as the CR-009 final production run (pruner off outside its training domain)
+strict_g_links: true
+scoring:
+  level: mention
+  scorer: CR-012 SciNLP strict scorer
+  negated_relations_are_not_positive_edges: true
+  unit: document
+  full_documents: true
+forbidden_in_prompts:
+- SciNLP test examples
+- test entity surfaces
+- test relations
+- test-derived aliases
+- test-derived few-shot examples

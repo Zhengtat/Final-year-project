@@ -1,6 +1,6 @@
 {
- "artefacts_scanned": 59,
- "artefacts_sha256": "5bad4df52d52494b170d4fd9728fd418776065bd535a0a361ba053bbbc1b0072",
+ "artefacts_scanned": 62,
+ "artefacts_sha256": "d12502adcb87d38437c62bf5c5ceaaea65c3d7ebd3cfca3c9c2a9c97065ce744",
  "scinlp_test_multi_token_surfaces_checked": 122,
  "scinlp_test_surfaces_found_in_development_artefacts": {},
  "pd_heldout_8gram_overlap_with_artefacts": {},

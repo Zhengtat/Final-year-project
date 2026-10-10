@@ -1,0 +1,22 @@
+{
+ "scinlp_schema_freeze": {
+  "frozen_at_utc": "2026-10-10T11:29:35+00:00",
+  "git_head": "9b7c64a0c0ce0adbd8881f647f1d4bd80c8277f1",
+  "files": {
+   "scinlp_profile": {
+    "path": "configs/cr012_scinlp_schema.yaml",
+    "sha256": "58b07157333e8459fe5b487347d6e5104af3df95fb5997ef2f838b57b069ebe4"
+   },
+   "scinlp_relation_registry": {
+    "path": "configs/relations_scinlp.yaml",
+    "sha256": "2446acb2febd29488893072bfe16344d288998fd4fb58ce8f4389b322a2739b5"
+   },
+   "scinlp_generator_prompt": {
+    "path": "prompts/concept_generator/v4_scinlp.md",
+    "sha256": "714113c983df22c462c0fb46d7350b808a17ce0d9d6ccc00b1d5fe0c95dc2a35"
+   }
+  },
+  "isolation_scan": "CLEAN",
+  "no_scinlp_model_run_before_this_point": true
+ }
+}

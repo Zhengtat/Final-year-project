@@ -3,9 +3,10 @@ no extra properties) and the anchor/role vocabularies. Internal models stay plai
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, create_model
 
 NODE_TYPES = (
     "Protocol",
@@ -95,3 +96,38 @@ class BackfillLLM(_Strict):
 
     existing_mentions: list[ExistingMentionLLM]
     hint_responses: list[HintResponseLLM]
+
+
+@dataclass(frozen=True)
+class GeneratorSchemas:
+    """The generator / backfill output schemas for one node-type set. The default set is the networking one (this module's classes);
+    a benchmark-local schema (CR-012) supplies its own node types and nothing else changes."""
+
+    generator: type[BaseModel]
+    backfill: type[BaseModel]
+
+
+DEFAULT_SCHEMAS = GeneratorSchemas(ConceptGeneratorV4LLM, BackfillLLM)
+
+
+def make_schemas(node_types: tuple[str, ...] | list[str] | None) -> GeneratorSchemas:
+    if node_types is None or tuple(node_types) == NODE_TYPES:
+        return DEFAULT_SCHEMAS
+    nt = Literal[tuple(node_types)]  # type: ignore[valid-type]
+    existing = create_model("ExistingMentionLLM", __base__=ExistingMentionLLM, node_type=(nt, ...))
+    new = create_model("NewConceptLLM", __base__=NewConceptLLM, node_type=(nt, ...))
+    gen = create_model(
+        "ConceptGeneratorV4LLM_" + "_".join(node_types),
+        __base__=_Strict,
+        existing_mentions=(list[existing], ...),  # type: ignore[valid-type]
+        not_mentions=(list[NotMentionLLM], ...),
+        new_concepts=(list[new], ...),  # type: ignore[valid-type]
+        hint_responses=(list[HintResponseLLM], ...),
+    )
+    back = create_model(
+        "BackfillLLM_" + "_".join(node_types),
+        __base__=_Strict,
+        existing_mentions=(list[existing], ...),  # type: ignore[valid-type]
+        hint_responses=(list[HintResponseLLM], ...),
+    )
+    return GeneratorSchemas(gen, back)

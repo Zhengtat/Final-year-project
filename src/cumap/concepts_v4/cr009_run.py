@@ -64,7 +64,18 @@ def stage_concepts(
         raise SystemExit(f"preflight worst case ${est['usd_worst']} exceeds --max-usd {max_usd}")
     nlp = spacy.load("en_core_web_sm")
     embed = X.Embedder(settings.embeddings.model)
-    lexicon = Lexicon.load(REPO_ROOT / "configs" / "term_lexicon.yaml")
+    from cumap.concepts_v4.schema import make_schemas
+    from cumap.cr012.schema_profile import active_profile
+
+    profile = (
+        active_profile()
+    )  # CR-012 benchmark-local schema; None leaves the CUM production path unchanged
+    if profile is None:
+        lexicon = Lexicon.load(REPO_ROOT / "configs" / "term_lexicon.yaml")
+    else:  # the networking lexicon is disabled; the generic R1-R3 machinery stays (alias config)
+        from cumap.expert_kg.alias_rules import AliasConfig
+
+        lexicon = Lexicon([], AliasConfig.load(), "empty")
     dev_secs, _ = X.load_dev()
     pruners = X.loco_pruners(
         dev_secs, nlp, embed
@@ -72,19 +83,24 @@ def stage_concepts(
     client = LLMClient(settings, run_id=run)
     run_obj = R.ConceptRun(
         client,
-        load_prompt(REPO_ROOT / "prompts", "concept_generator", "v4"),
-        load_bank(),
+        load_prompt(
+            REPO_ROOT / "prompts",
+            profile.prompt_task if profile else "concept_generator",
+            profile.prompt_version if profile else "v4",
+        ),
+        {"examples": []} if profile else load_bank(),
         X.loop_config("G1", 1),
         nlp=nlp,
         embed_fn=embed,
         lexicon=lexicon,
-        domain="computer networking",
+        domain=profile.domain if profile else "computer networking",
         backfill_prompt=load_prompt(REPO_ROOT / "prompts", "concept_backfill", "v1"),
         pruner_for=lambda ch: pruners["all"].p_growing,
         tau=tau,
         rho=1.5,
         strict_g_links=strict_g_links,
         progress=print,
+        schemas=make_schemas(profile.entity_types if profile else None),
     )
     out = run_obj.run(units)
     run_dir = KG / run
@@ -93,7 +109,11 @@ def stage_concepts(
         run_dir / "v4_concepts.json",
         {"units": len(units), "spend_usd": round(client.spent_usd, 4)},
     )
-    overrides = CanonicalOverrides.load(REPO_ROOT / "configs" / "canonical_overrides.yaml")
+    overrides = (
+        CanonicalOverrides()
+        if profile
+        else CanonicalOverrides.load(REPO_ROOT / "configs" / "canonical_overrides.yaml")
+    )
     res = P.canonicalise(
         out,
         units,

@@ -121,6 +121,10 @@ def load_settings(config_path: Path | None = None, *, env_file: Path | None = No
     llm_raw["tiers"] = tiers_raw
     raw = {**raw, "llm": llm_raw}
 
+    if os.environ.get(
+        "CUMAP_RELATION_REGISTRY"
+    ):  # evaluation plumbing (CR-012): a benchmark-local registry instead of the CUM one
+        raw = {**raw, "relation_registry": os.environ["CUMAP_RELATION_REGISTRY"]}
     return Settings(
         **raw,
         openai_api_key=os.environ.get("OPENAI_API_KEY"),
