@@ -1,7 +1,7 @@
 {
  "sheet": "data/gold/pd_e2e_test_blind.csv",
  "status": "FROZEN by the owner 2026-10-10 (owner states: gold is final); LLM prefill reviewed by the owner",
- "sha256": "b11233e03edc9048cdbf88b6e793bf27609837d455ad0daf4907e2569c2cac60",
+ "sha256": "44ff0383b3144a7a441e6746cfcc4d5793b661166fb6f45a268e3d1e1cf976fa",
  "sections": {
   "4.4": {
    "concepts": 97,
@@ -47,10 +47,9 @@
   }
  },
  "headline_edges_total": 426,
- "loader_problems": [
-  "4.4: relation connected_to has an unknown or identical endpoint"
- ],
- "known_exclusion": "4.4 csv line 5008: connected_to IP router (C0018) -> IP router (C0018), evidence S061, a self-loop; the loader skips it, so it is not in any denominator. The owner declared the gold final with this row present (file sha unchanged since the problem was reported).",
+ "loader_problems": [],
+ "known_exclusion": "none: the 4.4 self-loop connected_to row (S061) was fixed by the owner on 2026-10-10 before any model run; the earlier sha256 is kept as superseded_sha256",
  "interim_sheet": "restored to the blank committed version",
- "second_annotator": "none obtained so far; single-annotator limitation to be reported (not a STOP-4 blocker per Research)"
+ "second_annotator": "none obtained so far; single-annotator limitation to be reported (not a STOP-4 blocker per Research)",
+ "superseded_sha256": "b11233e03edc9048cdbf88b6e793bf27609837d455ad0daf4907e2569c2cac60"
 }
