@@ -1,0 +1,56 @@
+{
+ "sheet": "data/gold/pd_e2e_test_blind.csv",
+ "status": "FROZEN by the owner 2026-10-10 (owner states: gold is final); LLM prefill reviewed by the owner",
+ "sha256": "b11233e03edc9048cdbf88b6e793bf27609837d455ad0daf4907e2569c2cac60",
+ "sections": {
+  "4.4": {
+   "concepts": 97,
+   "mentions": 500,
+   "relation_rows": 64,
+   "headline_edges": 63
+  },
+  "4.5": {
+   "concepts": 64,
+   "mentions": 333,
+   "relation_rows": 49,
+   "headline_edges": 49
+  },
+  "5.4": {
+   "concepts": 76,
+   "mentions": 332,
+   "relation_rows": 58,
+   "headline_edges": 56
+  },
+  "6.3": {
+   "concepts": 56,
+   "mentions": 483,
+   "relation_rows": 49,
+   "headline_edges": 47
+  },
+  "7.1": {
+   "concepts": 89,
+   "mentions": 534,
+   "relation_rows": 69,
+   "headline_edges": 69
+  },
+  "8.2": {
+   "concepts": 69,
+   "mentions": 490,
+   "relation_rows": 64,
+   "headline_edges": 64
+  },
+  "9.3": {
+   "concepts": 88,
+   "mentions": 484,
+   "relation_rows": 79,
+   "headline_edges": 78
+  }
+ },
+ "headline_edges_total": 426,
+ "loader_problems": [
+  "4.4: relation connected_to has an unknown or identical endpoint"
+ ],
+ "known_exclusion": "4.4 csv line 5008: connected_to IP router (C0018) -> IP router (C0018), evidence S061, a self-loop; the loader skips it, so it is not in any denominator. The owner declared the gold final with this row present (file sha unchanged since the problem was reported).",
+ "interim_sheet": "restored to the blank committed version",
+ "second_annotator": "none obtained so far; single-annotator limitation to be reported (not a STOP-4 blocker per Research)"
+}
