@@ -52,7 +52,7 @@ def code_hashes() -> dict:
             REPO_ROOT / f"src/cumap/concepts_v4/{n}.py"
             for n in ("schema", "loop", "runner", "cr009_run")
         ]
-        + [REPO_ROOT / "src/cumap/config.py"]
+        + [REPO_ROOT / "src/cumap/config.py", REPO_ROOT / "src/cumap/expert_kg/relations_v3.py"]
     )
     return {str(p.relative_to(REPO_ROOT)): sha(p) for p in files}
 

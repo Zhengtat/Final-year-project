@@ -195,3 +195,46 @@ def test_schema_files_contain_no_test_derived_material():
         text = Path(f).read_text()
         for doc in MANIFEST["splits"]["test"]["doc_keys"]:
             assert doc not in text
+
+
+def test_scinlp_prediction_uses_evidence_grounded_token_spans_and_drops_negated_edges():
+    from cumap.cr012 import scinlp_run as SR
+    from cumap.cr012.adapters import SciNLPAdapter
+
+    doc = SciNLPAdapter().load_documents("dev", paragraph_every=10)[
+        0
+    ]  # dev only; the test split is never read
+    sent = doc.text
+    qa = sent[: doc.span_to_chars((0, 5))[1]]
+
+    def node(cid, name):
+        return {
+            "concept_id": cid,
+            "canonical_name": name,
+            "aliases": [],
+            "node_type": "method",
+            "mentions": [{"section_id": doc.doc_key, "role": "used", "quote": qa}],
+        }
+
+    def res(qual):
+        return {
+            "outcome": "edge",
+            "group": "selected",
+            "direction": "forward",
+            "relation": "UsedFor",
+            "qualifiers": qual,
+            "evidence_quote": qa,
+            "pair": {"concept_x_id": "x", "concept_y_id": "y"},
+        }
+
+    surf_a, surf_b = (
+        sent[slice(*doc.span_to_chars((0, 2)))],
+        sent[slice(*doc.span_to_chars((3, 5)))],
+    )
+    cp = {
+        "concepts": [node("x", surf_a), node("y", surf_b)],
+        "relation_results_v3": [res({}), res({"polarity": "negated"})],
+    }
+    out = SR.predict(doc, cp)
+    assert {n.node_id: n.mentions for n in out["nodes"]} == {"x": ((0, 2),), "y": ((3, 5),)}
+    assert len(out["edges"]) == 1 and out["stats"]["negated_dropped"] == 1

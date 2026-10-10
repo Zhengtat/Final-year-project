@@ -16,12 +16,11 @@ import os
 import yaml
 
 from cumap.config import REPO_ROOT
+from cumap.cr012 import production_graph as PG
 from cumap.cr012 import scoring as S
 from cumap.cr012.adapters import SciNLPAdapter, SciNLPDoc
 from cumap.cr012.budget import pair_budget
 from cumap.cr012.types import PredEdge, PredNode
-from cumap.expert_kg.mentions import MentionMatcher
-from cumap.expert_kg.relations import concept_vocab
 
 PROFILE = REPO_ROOT / "configs/cr012_scinlp_schema.yaml"
 UNITS = REPO_ROOT / "data/interim/cr012/scinlp_units"
@@ -120,19 +119,19 @@ def char_to_token(doc: SciNLPDoc, start: int, end: int) -> tuple[int, int] | Non
 
 
 def predict(doc: SciNLPDoc, cp: dict) -> dict:
-    from cumap.expert_kg.pipeline import _concept_from_dict
-
-    concepts = [_concept_from_dict(c) for c in cp["concepts"]]
-    matcher = MentionMatcher(concept_vocab(concepts))
     by_id = {c["concept_id"]: c for c in cp["concepts"]}
+    spans, _gstats = PG.grounded_spans(
+        cp["concepts"], doc.text, doc.doc_key
+    )  # evidence-grounded (rule 24)
     found: dict[str, set[tuple[int, int]]] = {}
     off_boundary = 0
-    for m in matcher.find(doc.text):
-        span = doc.chars_to_span(m.start, m.end)  # exact token boundaries only (strict)
-        if span is None:
-            off_boundary += 1
-            continue
-        found.setdefault(m.concept_id, set()).add(span)
+    for cid, chars in spans.items():
+        for a, b in chars:
+            span = doc.chars_to_span(a, b)  # exact token boundaries only (strict)
+            if span is None:
+                off_boundary += 1
+                continue
+            found.setdefault(cid, set()).add(span)
     nodes = [
         PredNode(
             cid,

@@ -1,6 +1,6 @@
 # CR-012 evaluation configuration. FROZEN at STOP 3 (after scorer validation on SciNLP train/dev and the P&D pilot); until then
 # values are the Research decisions of 2026-10-09 (STOP 1 PASS, D1-D4). Nothing here may change after held-out inspection.
-version: stop2-draft
+version: stop3-frozen
 headline_metric: STRICT_E2E_EDGE_F1          # never replaced by a composite score
 
 benchmarks:

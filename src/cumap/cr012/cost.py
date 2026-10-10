@@ -38,6 +38,16 @@ def per_1k(kind: str, sharing: bool) -> dict[str, float]:
         "E3": g,
         "E4": 0.0 if sharing else g,
     }
+    if (
+        kind == "pd"
+    ):  # measured on the pilot oracle runs of section 1.5 (3.64k words): E1 $0.4575, E2 $0.323, E3 $0.217, E4 $0.045
+        e["E1"], e["E2"], e["E3"] = 0.126, 0.089, 0.0596
+        e["E4"] = 0.0124 if sharing else 0.0596
+    if (
+        kind == "scinlp"
+    ):  # measured on two dev documents (107 selected pairs): $0.0071 per selected pair, concepts+canon $0.0207 per 1k words
+        e["E0"] = 0.0207 + 14.2 * 0.0071
+        e["E1"] = CANON + 14.2 * 0.0071
     if sharing:
         e["E1"] *= 0.8
         e["E2"] *= 0.85

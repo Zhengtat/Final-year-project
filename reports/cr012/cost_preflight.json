@@ -1,17 +1,17 @@
 {
  "upper_no_sharing": {
-  "pilot": 5.73,
-  "heldout_pd": 18.01,
-  "heldout_scinlp": 8.61,
+  "pilot": 5.54,
+  "heldout_pd": 13.28,
+  "heldout_scinlp": 9.07,
   "stability": 6.03,
-  "total": 38.38
+  "total": 33.92
  },
  "lower_cache_sharing": {
-  "pilot": 5.4,
-  "heldout_pd": 12.49,
-  "heldout_scinlp": 5.79,
+  "pilot": 5.15,
+  "heldout_pd": 10.71,
+  "heldout_scinlp": 6.2,
   "stability": 6.03,
-  "total": 29.71
+  "total": 28.09
  },
  "limits": {
   "soft_warning": 40,
