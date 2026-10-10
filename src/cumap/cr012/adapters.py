@@ -83,8 +83,11 @@ class SciNLPDoc:
         return ts[0], te[0] + 1
 
 
-def detokenise(sentences: list[list[str]]) -> tuple[str, list[tuple[int, int]], list[int]]:
-    """Lossless: tokens joined by single spaces, sentences by a newline. Every token keeps an exact character range, so a strict
+def detokenise(
+    sentences: list[list[str]], paragraph_every: int | None = None
+) -> tuple[str, list[tuple[int, int]], list[int]]:
+    """Lossless: tokens joined by single spaces, sentences by a newline (a blank line every `paragraph_every` sentences when set: SciNLP has
+    no paragraph structure and the production unit splitter works on paragraphs). Every token keeps an exact character range, so a strict
     token span survives the round trip. (Natural punctuation attachment would lose this exactness, so it is not used.)"""
     parts, offsets, ends, pos, n_tok = [], [], [], 0, 0
     for si, sent in enumerate(sentences):
@@ -98,8 +101,9 @@ def detokenise(sentences: list[list[str]]) -> tuple[str, list[tuple[int, int]], 
         n_tok += len(sent)
         ends.append(n_tok)
         if si < len(sentences) - 1:
-            parts.append("\n")
-            pos += 1
+            sep = "\n\n" if paragraph_every and (si + 1) % paragraph_every == 0 else "\n"
+            parts.append(sep)
+            pos += len(sep)
     return "".join(parts), offsets, ends
 
 
@@ -114,10 +118,10 @@ class SciNLPAdapter(BenchmarkAdapter):
         text = (self.root / f"{split}.json").read_text(encoding="utf-8")
         return [json.loads(line) for line in text.splitlines() if line.strip()]
 
-    def load_documents(self, split: str) -> list[SciNLPDoc]:  # type: ignore[override]
+    def load_documents(self, split: str, paragraph_every: int | None = None) -> list[SciNLPDoc]:  # type: ignore[override]
         docs = []
         for d in self._raw(split):
-            text, offs, ends = detokenise(d["sentences"])
+            text, offs, ends = detokenise(d["sentences"], paragraph_every)
             toks = [t for s in d["sentences"] for t in s]
             docs.append(SciNLPDoc(d["doc_key"], toks, ends, text, offs, len(toks)))
         return docs

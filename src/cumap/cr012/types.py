@@ -36,6 +36,7 @@ class GoldRelation:
     src_concept: str | None = None
     tgt_concept: str | None = None
     qualifiers: tuple[tuple[str, str], ...] = ()
+    evidence: tuple[str, ...] = ()  # cited sentence ids (location only; never used as a label)
 
 
 @dataclass(frozen=True)

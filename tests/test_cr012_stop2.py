@@ -758,3 +758,73 @@ def test_measurement_sample_results_never_enter_the_scored_graph():
     g = PG.graph_for_sections(cp, {"s": "x and y are a b"})["s"]
     assert [e.relation for e in g["edges"]] == ["uses"]
     assert PG.proposed_pairs(cp, "s") == {frozenset(("x", "y"))}
+
+
+def test_two_senses_sharing_a_surface_are_resolved_by_their_own_evidence_windows():
+    from cumap.cr012 import production_graph as PG
+
+    text = "A link has bandwidth measured in bits. A band has bandwidth measured in hertz."
+
+    def node(cid, name, quote):
+        return {
+            "concept_id": cid,
+            "canonical_name": name,
+            "aliases": ["bandwidth"],
+            "node_type": "Property",
+            "mentions": [{"section_id": "s", "role": "used", "quote": quote}],
+        }
+
+    concepts = [
+        node("c_link", "link bandwidth", "A link has bandwidth measured in bits."),
+        node("c_freq", "frequency bandwidth", "A band has bandwidth measured in hertz."),
+    ]
+    spans, _ = PG.grounded_spans(concepts, text, "s")
+    assert spans["c_link"] == [(11, 20)] and spans["c_freq"] == [
+        (50, 59)
+    ]  # each node keeps only the surface inside its own evidence
+
+
+def test_a_node_without_a_locatable_quote_has_no_grounded_span_and_overlaps_go_to_the_longer_span():
+    from cumap.cr012 import production_graph as PG
+
+    text = "The network performance of a network matters."
+    concepts = [
+        {
+            "concept_id": "c_net",
+            "canonical_name": "network",
+            "aliases": [],
+            "node_type": "Concept",
+            "mentions": [
+                {
+                    "section_id": "s",
+                    "role": "used",
+                    "quote": "The network performance of a network matters.",
+                }
+            ],
+        },
+        {
+            "concept_id": "c_perf",
+            "canonical_name": "network performance",
+            "aliases": [],
+            "node_type": "Property",
+            "mentions": [
+                {
+                    "section_id": "s",
+                    "role": "used",
+                    "quote": "The network performance of a network matters.",
+                }
+            ],
+        },
+        {
+            "concept_id": "c_ghost",
+            "canonical_name": "ghost",
+            "aliases": [],
+            "node_type": "Concept",
+            "mentions": [{"section_id": "s", "role": "used", "quote": "not in the text at all"}],
+        },
+    ]
+    spans, stats = PG.grounded_spans(concepts, text, "s")
+    assert spans["c_perf"] == [(4, 23)] and spans["c_net"] == [
+        (29, 36)
+    ]  # the inner 'network' of the longer term is not claimed twice
+    assert "c_ghost" not in spans and stats["nodes_with_no_locatable_evidence_quote"] == 1

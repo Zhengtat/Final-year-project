@@ -326,6 +326,7 @@ def load_gold(
                     src_concept=r["source_concept_id"],
                     tgt_concept=r["target_concept_id"],
                     qualifiers=_parse_kv(r["qualifiers"]),
+                    evidence=tuple(e for e in r["evidence_sentence_ids"].split("|") if e),
                 )
             )
         for r in (x for x in mine if x["row_type"] == "NOT_SAME"):
