@@ -522,11 +522,19 @@ def test_pd_gold_validator_rejects_bad_sheets(tmp_path):
 
 
 # ---------------------------------------------------------------- gold safety
+READS_AUTHORISED_AT_STOP4 = {"stop4.py", "stop4_score.py"}
+
+
 def test_no_cr012_module_writes_to_the_gold_folder_or_reads_the_scinlp_test_split():
     for f in Path("src/cumap/cr012").glob("*.py"):
         src = f.read_text()
-        assert "data/gold" not in src and '"gold"' not in src, f
-        if f.name not in {
+        if (
+            f.name not in READS_AUTHORISED_AT_STOP4
+        ):  # the two STOP-4 modules read the frozen gold / test split (never write)
+            assert "data/gold" not in src and '"gold"' not in src, f
+        else:
+            assert "open(" not in src.replace("encoding=", "") or '"w"' not in src, f
+        if f.name not in READS_AUTHORISED_AT_STOP4 | {
             "stop1.py",
             "isolation.py",
         }:  # these two read the test split once, as data (hash / string search)

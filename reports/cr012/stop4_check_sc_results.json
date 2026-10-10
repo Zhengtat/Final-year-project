@@ -1,0 +1,998 @@
+{
+ "pd": {
+  "levels": {}
+ },
+ "scinlp": {
+  "split": "dev",
+  "levels": {
+   "E0": {
+    "documents": [
+     "P02-1004.grobid"
+    ],
+    "aggregates": {
+     "entity_strict": {
+      "metric": "entity_strict",
+      "documents": 1,
+      "micro": {
+       "tp": 16,
+       "fp": 82,
+       "fn": 19,
+       "precision": 0.16326530612244897,
+       "recall": 0.45714285714285713,
+       "f1": 0.24060150375939846
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 16,
+        "fp": 82,
+        "fn": 19,
+        "precision": 0.16326530612244897,
+        "recall": 0.45714285714285713,
+        "f1": 0.24060150375939846
+       }
+      },
+      "macro_mean": {
+       "precision": 0.16326530612244897,
+       "recall": 0.45714285714285713,
+       "f1": 0.24060150375939846
+      },
+      "min_document_f1": 0.24060150375939846,
+      "max_document_f1": 0.24060150375939846,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     },
+     "entity_typed": {
+      "metric": "entity_typed",
+      "documents": 1,
+      "micro": {
+       "tp": 16,
+       "fp": 82,
+       "fn": 19,
+       "precision": 0.16326530612244897,
+       "recall": 0.45714285714285713,
+       "f1": 0.24060150375939846
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 16,
+        "fp": 82,
+        "fn": 19,
+        "precision": 0.16326530612244897,
+        "recall": 0.45714285714285713,
+        "f1": 0.24060150375939846
+       }
+      },
+      "macro_mean": {
+       "precision": 0.16326530612244897,
+       "recall": 0.45714285714285713,
+       "f1": 0.24060150375939846
+      },
+      "min_document_f1": 0.24060150375939846,
+      "max_document_f1": 0.24060150375939846,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     },
+     "rel": {
+      "metric": "rel",
+      "documents": 1,
+      "micro": {
+       "tp": 1,
+       "fp": 4,
+       "fn": 5,
+       "precision": 0.2,
+       "recall": 0.16666666666666666,
+       "f1": 0.1818181818181818
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 1,
+        "fp": 4,
+        "fn": 5,
+        "precision": 0.2,
+        "recall": 0.16666666666666666,
+        "f1": 0.1818181818181818
+       }
+      },
+      "macro_mean": {
+       "precision": 0.2,
+       "recall": 0.16666666666666666,
+       "f1": 0.1818181818181818
+      },
+      "min_document_f1": 0.1818181818181818,
+      "max_document_f1": 0.1818181818181818,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     },
+     "rel_plus": {
+      "metric": "rel_plus",
+      "documents": 1,
+      "micro": {
+       "tp": 1,
+       "fp": 4,
+       "fn": 5,
+       "precision": 0.2,
+       "recall": 0.16666666666666666,
+       "f1": 0.1818181818181818
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 1,
+        "fp": 4,
+        "fn": 5,
+        "precision": 0.2,
+        "recall": 0.16666666666666666,
+        "f1": 0.1818181818181818
+       }
+      },
+      "macro_mean": {
+       "precision": 0.2,
+       "recall": 0.16666666666666666,
+       "f1": 0.1818181818181818
+      },
+      "min_document_f1": 0.1818181818181818,
+      "max_document_f1": 0.1818181818181818,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     }
+    },
+    "headline_relation_micro": {
+     "tp": 1,
+     "fp": 4,
+     "fn": 5,
+     "precision": 0.2,
+     "recall": 0.16666666666666666,
+     "f1": 0.1818181818181818
+    },
+    "CI_status": "NOT_EVALUABLE_SMALL_N",
+    "attribution_pooled": {
+     "misses": 5,
+     "recovered": 1,
+     "by_code": {
+      "N0": 5,
+      "N1": 0,
+      "C0": 0,
+      "C1": 0,
+      "P0": 0,
+      "R0": 0,
+      "R1": 0,
+      "R2": 0,
+      "R3": 0,
+      "E0": 0
+     },
+     "not_applicable": [
+      "S0",
+      "S1"
+     ]
+    },
+    "identity_metrics": "NOT_SUPPORTED",
+    "usd": 0.4693,
+    "per_document": {
+     "P02-1004.grobid": {
+      "scores": {
+       "entity_strict": {
+        "tp": 16,
+        "fp": 82,
+        "fn": 19,
+        "precision": 0.16326530612244897,
+        "recall": 0.45714285714285713,
+        "f1": 0.24060150375939846
+       },
+       "entity_typed": {
+        "tp": 16,
+        "fp": 82,
+        "fn": 19,
+        "precision": 0.16326530612244897,
+        "recall": 0.45714285714285713,
+        "f1": 0.24060150375939846
+       },
+       "rel": {
+        "tp": 1,
+        "fp": 4,
+        "fn": 5,
+        "precision": 0.2,
+        "recall": 0.16666666666666666,
+        "f1": 0.1818181818181818
+       },
+       "rel_plus": {
+        "tp": 1,
+        "fp": 4,
+        "fn": 5,
+        "precision": 0.2,
+        "recall": 0.16666666666666666,
+        "f1": 0.1818181818181818
+       }
+      },
+      "gold_relations": 6,
+      "pair_recall": {
+       "gold_relations_with_both_endpoints_predicted": 1,
+       "pair_reached_classification": 1,
+       "rate": 1.0
+      },
+      "relation_given_correct_endpoints": {
+       "classified_pairs": 1,
+       "relation_correct": 1,
+       "wrong_relation": 0,
+       "wrong_direction": 0,
+       "no_relation": 0
+      },
+      "provenance": {
+       "nodes": 62,
+       "nodes_with_grounded_span": 62,
+       "unsupported_node_rate": 0.0,
+       "edges": 20,
+       "edges_with_located_evidence_quote": 20,
+       "unsupported_edge_rate": 0.0,
+       "edges_dropped_without_endpoint_node": 0,
+       "provenance_completeness": 1.0
+      },
+      "prediction_stats": {
+       "nodes": 62,
+       "edges": 20,
+       "negated_dropped": 1,
+       "ungrounded_dropped": 0,
+       "mentions_off_token_boundary": 0
+      },
+      "attribution": {
+       "misses": 5,
+       "recovered": 1,
+       "by_code": {
+        "N0": 5,
+        "N1": 0,
+        "C0": 0,
+        "C1": 0,
+        "P0": 0,
+        "R0": 0,
+        "R1": 0,
+        "R2": 0,
+        "R3": 0,
+        "E0": 0
+       },
+       "not_applicable": [
+        "S0",
+        "S1"
+       ]
+      },
+      "usd": 0.4693
+     }
+    }
+   },
+   "E1": {
+    "documents": [
+     "P02-1004.grobid"
+    ],
+    "aggregates": {
+     "entity_strict": {
+      "metric": "entity_strict",
+      "documents": 1,
+      "micro": {
+       "tp": 35,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 35,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       }
+      },
+      "macro_mean": {
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "min_document_f1": 1.0,
+      "max_document_f1": 1.0,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     },
+     "entity_typed": {
+      "metric": "entity_typed",
+      "documents": 1,
+      "micro": {
+       "tp": 35,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 35,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       }
+      },
+      "macro_mean": {
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "min_document_f1": 1.0,
+      "max_document_f1": 1.0,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     },
+     "rel": {
+      "metric": "rel",
+      "documents": 1,
+      "micro": {
+       "tp": 4,
+       "fp": 1,
+       "fn": 2,
+       "precision": 0.8,
+       "recall": 0.6666666666666666,
+       "f1": 0.7272727272727272
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 4,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.8,
+        "recall": 0.6666666666666666,
+        "f1": 0.7272727272727272
+       }
+      },
+      "macro_mean": {
+       "precision": 0.8,
+       "recall": 0.6666666666666666,
+       "f1": 0.7272727272727272
+      },
+      "min_document_f1": 0.7272727272727272,
+      "max_document_f1": 0.7272727272727272,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     },
+     "rel_plus": {
+      "metric": "rel_plus",
+      "documents": 1,
+      "micro": {
+       "tp": 4,
+       "fp": 1,
+       "fn": 2,
+       "precision": 0.8,
+       "recall": 0.6666666666666666,
+       "f1": 0.7272727272727272
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 4,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.8,
+        "recall": 0.6666666666666666,
+        "f1": 0.7272727272727272
+       }
+      },
+      "macro_mean": {
+       "precision": 0.8,
+       "recall": 0.6666666666666666,
+       "f1": 0.7272727272727272
+      },
+      "min_document_f1": 0.7272727272727272,
+      "max_document_f1": 0.7272727272727272,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     }
+    },
+    "headline_relation_micro": {
+     "tp": 4,
+     "fp": 1,
+     "fn": 2,
+     "precision": 0.8,
+     "recall": 0.6666666666666666,
+     "f1": 0.7272727272727272
+    },
+    "CI_status": "NOT_EVALUABLE_SMALL_N",
+    "attribution_pooled": {
+     "misses": 1,
+     "recovered": 5,
+     "by_code": {
+      "N0": 0,
+      "N1": 0,
+      "C0": 0,
+      "C1": 0,
+      "P0": 0,
+      "R0": 0,
+      "R1": 1,
+      "R2": 0,
+      "R3": 0,
+      "E0": 0
+     },
+     "not_applicable": [
+      "S0",
+      "S1"
+     ]
+    },
+    "identity_metrics": "NOT_SUPPORTED",
+    "usd": 0.044,
+    "per_document": {
+     "P02-1004.grobid": {
+      "scores": {
+       "entity_strict": {
+        "tp": 35,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "entity_typed": {
+        "tp": 35,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "rel": {
+        "tp": 4,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.8,
+        "recall": 0.6666666666666666,
+        "f1": 0.7272727272727272
+       },
+       "rel_plus": {
+        "tp": 4,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.8,
+        "recall": 0.6666666666666666,
+        "f1": 0.7272727272727272
+       }
+      },
+      "gold_relations": 6,
+      "pair_recall": {
+       "gold_relations_with_both_endpoints_predicted": 6,
+       "pair_reached_classification": 6,
+       "rate": 1.0
+      },
+      "relation_given_correct_endpoints": {
+       "classified_pairs": 6,
+       "relation_correct": 5,
+       "wrong_relation": 1,
+       "wrong_direction": 0,
+       "no_relation": 0
+      },
+      "provenance": {
+       "nodes": 15,
+       "nodes_with_grounded_span": 15,
+       "unsupported_node_rate": 0.0,
+       "edges": 5,
+       "edges_with_located_evidence_quote": 5,
+       "unsupported_edge_rate": 0.0,
+       "edges_dropped_without_endpoint_node": 0,
+       "provenance_completeness": 1.0
+      },
+      "prediction_stats": {
+       "nodes": 15,
+       "edges": 5,
+       "negated_dropped": 0,
+       "ungrounded_dropped": 0,
+       "mentions_off_token_boundary": 0
+      },
+      "attribution": {
+       "misses": 1,
+       "recovered": 5,
+       "by_code": {
+        "N0": 0,
+        "N1": 0,
+        "C0": 0,
+        "C1": 0,
+        "P0": 0,
+        "R0": 0,
+        "R1": 1,
+        "R2": 0,
+        "R3": 0,
+        "E0": 0
+       },
+       "not_applicable": [
+        "S0",
+        "S1"
+       ]
+      },
+      "usd": 0.044
+     }
+    }
+   },
+   "E3": {
+    "documents": [
+     "P02-1004.grobid"
+    ],
+    "aggregates": {
+     "entity_strict": {
+      "metric": "entity_strict",
+      "documents": 1,
+      "micro": {
+       "tp": 35,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 35,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       }
+      },
+      "macro_mean": {
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "min_document_f1": 1.0,
+      "max_document_f1": 1.0,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     },
+     "entity_typed": {
+      "metric": "entity_typed",
+      "documents": 1,
+      "micro": {
+       "tp": 35,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 35,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       }
+      },
+      "macro_mean": {
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "min_document_f1": 1.0,
+      "max_document_f1": 1.0,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     },
+     "rel": {
+      "metric": "rel",
+      "documents": 1,
+      "micro": {
+       "tp": 4,
+       "fp": 1,
+       "fn": 2,
+       "precision": 0.8,
+       "recall": 0.6666666666666666,
+       "f1": 0.7272727272727272
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 4,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.8,
+        "recall": 0.6666666666666666,
+        "f1": 0.7272727272727272
+       }
+      },
+      "macro_mean": {
+       "precision": 0.8,
+       "recall": 0.6666666666666666,
+       "f1": 0.7272727272727272
+      },
+      "min_document_f1": 0.7272727272727272,
+      "max_document_f1": 0.7272727272727272,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     },
+     "rel_plus": {
+      "metric": "rel_plus",
+      "documents": 1,
+      "micro": {
+       "tp": 4,
+       "fp": 1,
+       "fn": 2,
+       "precision": 0.8,
+       "recall": 0.6666666666666666,
+       "f1": 0.7272727272727272
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 4,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.8,
+        "recall": 0.6666666666666666,
+        "f1": 0.7272727272727272
+       }
+      },
+      "macro_mean": {
+       "precision": 0.8,
+       "recall": 0.6666666666666666,
+       "f1": 0.7272727272727272
+      },
+      "min_document_f1": 0.7272727272727272,
+      "max_document_f1": 0.7272727272727272,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     }
+    },
+    "headline_relation_micro": {
+     "tp": 4,
+     "fp": 1,
+     "fn": 2,
+     "precision": 0.8,
+     "recall": 0.6666666666666666,
+     "f1": 0.7272727272727272
+    },
+    "CI_status": "NOT_EVALUABLE_SMALL_N",
+    "attribution_pooled": {
+     "misses": 1,
+     "recovered": 5,
+     "by_code": {
+      "N0": 0,
+      "N1": 0,
+      "C0": 0,
+      "C1": 0,
+      "P0": 0,
+      "R0": 0,
+      "R1": 1,
+      "R2": 0,
+      "R3": 0,
+      "E0": 0
+     },
+     "not_applicable": [
+      "S0",
+      "S1"
+     ]
+    },
+    "identity_metrics": "NOT_SUPPORTED",
+    "usd": 0.0098,
+    "per_document": {
+     "P02-1004.grobid": {
+      "scores": {
+       "entity_strict": {
+        "tp": 35,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "entity_typed": {
+        "tp": 35,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "rel": {
+        "tp": 4,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.8,
+        "recall": 0.6666666666666666,
+        "f1": 0.7272727272727272
+       },
+       "rel_plus": {
+        "tp": 4,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.8,
+        "recall": 0.6666666666666666,
+        "f1": 0.7272727272727272
+       }
+      },
+      "gold_relations": 6,
+      "pair_recall": {
+       "gold_relations_with_both_endpoints_predicted": 6,
+       "pair_reached_classification": 6,
+       "rate": 1.0
+      },
+      "relation_given_correct_endpoints": {
+       "classified_pairs": 6,
+       "relation_correct": 5,
+       "wrong_relation": 1,
+       "wrong_direction": 0,
+       "no_relation": 0
+      },
+      "provenance": {
+       "nodes": 17,
+       "nodes_with_grounded_span": 17,
+       "unsupported_node_rate": 0.0,
+       "edges": 5,
+       "edges_with_located_evidence_quote": 5,
+       "unsupported_edge_rate": 0.0,
+       "edges_dropped_without_endpoint_node": 0,
+       "provenance_completeness": 1.0
+      },
+      "prediction_stats": {
+       "nodes": 17,
+       "edges": 5,
+       "negated_dropped": 0,
+       "ungrounded_dropped": 0,
+       "mentions_off_token_boundary": 0
+      },
+      "attribution": {
+       "misses": 1,
+       "recovered": 5,
+       "by_code": {
+        "N0": 0,
+        "N1": 0,
+        "C0": 0,
+        "C1": 0,
+        "P0": 0,
+        "R0": 0,
+        "R1": 1,
+        "R2": 0,
+        "R3": 0,
+        "E0": 0
+       },
+       "not_applicable": [
+        "S0",
+        "S1"
+       ]
+      },
+      "usd": 0.0098
+     }
+    }
+   },
+   "E4": {
+    "documents": [
+     "P02-1004.grobid"
+    ],
+    "aggregates": {
+     "entity_strict": {
+      "metric": "entity_strict",
+      "documents": 1,
+      "micro": {
+       "tp": 35,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 35,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       }
+      },
+      "macro_mean": {
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "min_document_f1": 1.0,
+      "max_document_f1": 1.0,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     },
+     "entity_typed": {
+      "metric": "entity_typed",
+      "documents": 1,
+      "micro": {
+       "tp": 35,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 35,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       }
+      },
+      "macro_mean": {
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "min_document_f1": 1.0,
+      "max_document_f1": 1.0,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     },
+     "rel": {
+      "metric": "rel",
+      "documents": 1,
+      "micro": {
+       "tp": 4,
+       "fp": 1,
+       "fn": 2,
+       "precision": 0.8,
+       "recall": 0.6666666666666666,
+       "f1": 0.7272727272727272
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 4,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.8,
+        "recall": 0.6666666666666666,
+        "f1": 0.7272727272727272
+       }
+      },
+      "macro_mean": {
+       "precision": 0.8,
+       "recall": 0.6666666666666666,
+       "f1": 0.7272727272727272
+      },
+      "min_document_f1": 0.7272727272727272,
+      "max_document_f1": 0.7272727272727272,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     },
+     "rel_plus": {
+      "metric": "rel_plus",
+      "documents": 1,
+      "micro": {
+       "tp": 4,
+       "fp": 1,
+       "fn": 2,
+       "precision": 0.8,
+       "recall": 0.6666666666666666,
+       "f1": 0.7272727272727272
+      },
+      "per_document": {
+       "P02-1004.grobid": {
+        "tp": 4,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.8,
+        "recall": 0.6666666666666666,
+        "f1": 0.7272727272727272
+       }
+      },
+      "macro_mean": {
+       "precision": 0.8,
+       "recall": 0.6666666666666666,
+       "f1": 0.7272727272727272
+      },
+      "min_document_f1": 0.7272727272727272,
+      "max_document_f1": 0.7272727272727272,
+      "CI_status": "NOT_EVALUABLE_SMALL_N"
+     }
+    },
+    "headline_relation_micro": {
+     "tp": 4,
+     "fp": 1,
+     "fn": 2,
+     "precision": 0.8,
+     "recall": 0.6666666666666666,
+     "f1": 0.7272727272727272
+    },
+    "CI_status": "NOT_EVALUABLE_SMALL_N",
+    "attribution_pooled": {
+     "misses": 1,
+     "recovered": 5,
+     "by_code": {
+      "N0": 0,
+      "N1": 0,
+      "C0": 0,
+      "C1": 0,
+      "P0": 0,
+      "R0": 0,
+      "R1": 1,
+      "R2": 0,
+      "R3": 0,
+      "E0": 0
+     },
+     "not_applicable": [
+      "S0",
+      "S1"
+     ]
+    },
+    "identity_metrics": "NOT_SUPPORTED",
+    "usd": 0.0,
+    "per_document": {
+     "P02-1004.grobid": {
+      "scores": {
+       "entity_strict": {
+        "tp": 35,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "entity_typed": {
+        "tp": 35,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+       },
+       "rel": {
+        "tp": 4,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.8,
+        "recall": 0.6666666666666666,
+        "f1": 0.7272727272727272
+       },
+       "rel_plus": {
+        "tp": 4,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.8,
+        "recall": 0.6666666666666666,
+        "f1": 0.7272727272727272
+       }
+      },
+      "gold_relations": 6,
+      "pair_recall": {
+       "gold_relations_with_both_endpoints_predicted": 6,
+       "pair_reached_classification": 6,
+       "rate": 1.0
+      },
+      "relation_given_correct_endpoints": {
+       "classified_pairs": 6,
+       "relation_correct": 5,
+       "wrong_relation": 1,
+       "wrong_direction": 0,
+       "no_relation": 0
+      },
+      "provenance": {
+       "nodes": 17,
+       "nodes_with_grounded_span": 17,
+       "unsupported_node_rate": 0.0,
+       "edges": 5,
+       "edges_with_located_evidence_quote": 5,
+       "unsupported_edge_rate": 0.0,
+       "edges_dropped_without_endpoint_node": 0,
+       "provenance_completeness": 1.0
+      },
+      "prediction_stats": {
+       "nodes": 17,
+       "edges": 5,
+       "negated_dropped": 0,
+       "ungrounded_dropped": 0,
+       "mentions_off_token_boundary": 0
+      },
+      "attribution": {
+       "misses": 1,
+       "recovered": 5,
+       "by_code": {
+        "N0": 0,
+        "N1": 0,
+        "C0": 0,
+        "C1": 0,
+        "P0": 0,
+        "R0": 0,
+        "R1": 1,
+        "R2": 0,
+        "R3": 0,
+        "E0": 0
+       },
+       "not_applicable": [
+        "S0",
+        "S1"
+       ]
+      },
+      "usd": 0.0
+     }
+    }
+   }
+  }
+ }
+}

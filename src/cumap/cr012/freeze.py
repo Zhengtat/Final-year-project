@@ -65,7 +65,7 @@ def git_head() -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("phase", choices=["schema", "final"])
+    ap.add_argument("phase", choices=["schema", "final", "stop4"])
     a = ap.parse_args()
     rec = json.loads(OUT.read_text()) if OUT.exists() else {}
     stamp = datetime.now(UTC).isoformat(timespec="seconds")
@@ -79,6 +79,30 @@ def main() -> None:
             )["verdict"],
             "no_scinlp_model_run_before_this_point": True,
         }
+    elif a.phase == "stop4":
+        now, was = code_hashes(), rec["final_freeze"]["evaluation_code"]
+        rec["stop4_execution_addendum"] = {
+            "frozen_at_utc": stamp,
+            "git_head": git_head(),
+            "purpose": "execution plumbing added after the STOP-3 freeze: tagged oracle runs, SciNLP surface-level oracle runner, STOP-4 orchestrator and "
+            "scorer, test-split gate, private-cache env. No scorer semantics, oracle definition, prompt, model, threshold or budget changed.",
+            "changed_since_final_freeze": sorted(k for k in now if k in was and now[k] != was[k]),
+            "added_since_final_freeze": sorted(k for k in now if k not in was),
+            "pipeline_and_schema_files": {**hashes(SCHEMA_FILES), **hashes(PIPELINE_FILES)},
+            "evaluation_code": now,
+        }
+        print(
+            json.dumps(
+                {
+                    k: v
+                    for k, v in rec["stop4_execution_addendum"].items()
+                    if k.endswith("final_freeze") or k.startswith(("changed", "added"))
+                },
+                indent=1,
+            )
+        )
+        OUT.write_text(json.dumps(rec, indent=1), encoding="utf-8")
+        return
     else:
         rec["final_freeze"] = {
             "frozen_at_utc": stamp,

@@ -125,6 +125,10 @@ def load_settings(config_path: Path | None = None, *, env_file: Path | None = No
         "CUMAP_RELATION_REGISTRY"
     ):  # evaluation plumbing (CR-012): a benchmark-local registry instead of the CUM one
         raw = {**raw, "relation_registry": os.environ["CUMAP_RELATION_REGISTRY"]}
+    if os.environ.get(
+        "CUMAP_LLM_CACHE_DIR"
+    ):  # evaluation plumbing (CR-012 stability): a private model-output cache per repeated run
+        raw = {**raw, "paths": {**raw["paths"], "data_cache": os.environ["CUMAP_LLM_CACHE_DIR"]}}
     return Settings(
         **raw,
         openai_api_key=os.environ.get("OPENAI_API_KEY"),

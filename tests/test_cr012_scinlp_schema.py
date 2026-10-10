@@ -238,3 +238,43 @@ def test_scinlp_prediction_uses_evidence_grounded_token_spans_and_drops_negated_
     out = SR.predict(doc, cp)
     assert {n.node_id: n.mentions for n in out["nodes"]} == {"x": ((0, 2),), "y": ((3, 5),)}
     assert len(out["edges"]) == 1 and out["stats"]["negated_dropped"] == 1
+
+
+def test_the_scinlp_test_split_is_refused_unless_stop4_is_authorised(monkeypatch):
+    from cumap.cr012 import scinlp_run as SR
+
+    monkeypatch.delenv("CUMAP_CR012_STOP4", raising=False)
+    assert SR.split_allowed("dev") and not SR.split_allowed("test")
+    monkeypatch.setenv("CUMAP_CR012_STOP4", "1")
+    assert SR.split_allowed("test")
+
+
+def test_surface_gold_converts_token_spans_to_characters_and_drops_same_surface_relations():
+    from cumap.cr012.adapters import SciNLPAdapter
+    from cumap.cr012.scinlp_oracle import surface_gold
+
+    ad = SciNLPAdapter()
+    doc = ad.load_documents("dev", paragraph_every=10)[0]
+    g = ad.gold("dev")[doc.doc_key]
+    pg, stats = surface_gold(doc, g)
+    assert stats["gold_mentions"] == len(g.mentions) and len(pg.mentions) == len(g.mentions)
+    for m, om in zip(pg.mentions, sorted(g.mentions, key=lambda x: x.span), strict=True):
+        a, b = doc.span_to_chars(om.span)
+        assert m.span == (a, b) and m.type == om.type
+    assert all(r.src_concept != r.tgt_concept for r in pg.relations)
+    assert stats["relations_between_distinct_surfaces"] + stats[
+        "relations_with_identical_endpoint_surface"
+    ] == len(g.relations)
+
+
+def test_stop4_refuses_without_authorisation_and_names_runs_consistently(monkeypatch, capsys):
+    from cumap.cr012 import stop4
+
+    assert stop4.run_id("pd", "4.4", "E3") == "cr012_heldout_4_4_E3"
+    assert (
+        stop4.run_id("sc", "P17-1058.grobid", "E1", "stab2")
+        == "cr012_scinlp_stab2_P17_1058_grobid_E1"
+    )
+    monkeypatch.setattr("sys.argv", ["stop4", "run"])
+    with pytest.raises(SystemExit):
+        stop4.main()

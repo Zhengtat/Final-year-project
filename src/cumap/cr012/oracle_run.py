@@ -155,27 +155,59 @@ def assert_no_leak(pairs: list[dict], gold: UnitGold) -> None:
         )
 
 
-def run_oracle(oracle: str, sid: str, pilot_sheet: Path, *, dry_run: bool, max_usd: float) -> dict:
+def run_oracle(
+    oracle: str, sid: str, pilot_sheet: Path, *, dry_run: bool, max_usd: float, tag: str = "pilot"
+) -> dict:
+    info = prepare(sid)
+    os.environ["CUMAP_DEMO_SLICE"] = info["slice_config"]
+    secs = {r["section_id"]: r["text"] for r in PD.load_sections()}
+    gold, problems = PD.load_gold(pilot_sheet, secs, PD.registry())
+    assert not problems, problems[:3]
+    return run_oracle_unit(
+        oracle,
+        sid,
+        gold[sid],
+        secs[sid],
+        f"cr012_{tag}_{sid.replace('.', '_')}_{oracle}",
+        chapter=int(sid.split(".")[0]),
+        dry_run=dry_run,
+        max_usd=max_usd,
+    )
+
+
+def run_oracle_unit(
+    oracle: str,
+    sid: str,
+    g: UnitGold,
+    text: str,
+    run_id: str,
+    *,
+    chapter: int,
+    dry_run: bool,
+    max_usd: float,
+    empty_lexicon: bool = False,
+    sections_path: Path | None = None,
+) -> dict:
+    """The oracle body for any unit whose slice file is already active (`CUMAP_DEMO_SLICE`). `empty_lexicon` is the SciNLP profile (no identity
+    lexicon, no canonical overrides)."""
     from cumap.concepts_v4 import cr009_run as R
     from cumap.concepts_v4 import experiments as X
     from cumap.expert_kg import slice_rerun as sr
     from cumap.llm.cost import spend_from_log
     from cumap.schemas.relations import RelationRegistry
 
-    info = prepare(sid)
-    os.environ["CUMAP_DEMO_SLICE"] = info["slice_config"]
-    secs = {r["section_id"]: r["text"] for r in PD.load_sections()}
-    gold, problems = PD.load_gold(pilot_sheet, secs, PD.registry())
-    assert not problems, problems[:3]
-    g, text = gold[sid], secs[sid]
-    run_id = f"cr012_pilot_{sid.replace('.', '_')}_{oracle}"
     settings = get_settings()
     sections = sr.load_sections(
-        REPO_ROOT / "data/interim/cr012/units" / sid / "sections.jsonl", [int(sid.split(".")[0])]
+        sections_path or REPO_ROOT / "data/interim/cr012/units" / sid / "sections.jsonl", [chapter]
     )
     out: dict = {"run_id": run_id, "oracle": oracle, "section": sid}
     if oracle == "E1":
-        out.update(e1(sid, g, text, run_id, sections, dry_run=dry_run, max_usd=max_usd))
+        out.update(
+            e1(
+                sid, g, text, run_id, sections, dry_run=dry_run, max_usd=max_usd,
+                chapter=chapter, empty_lexicon=empty_lexicon,
+            )
+        )  # fmt: skip
         if dry_run:
             return out
     else:
@@ -236,7 +268,16 @@ def run_oracle(oracle: str, sid: str, pilot_sheet: Path, *, dry_run: bool, max_u
 
 
 def e1(
-    sid: str, g: UnitGold, text: str, run_id: str, sections, *, dry_run: bool, max_usd: float
+    sid: str,
+    g: UnitGold,
+    text: str,
+    run_id: str,
+    sections,
+    *,
+    dry_run: bool,
+    max_usd: float,
+    chapter: int | None = None,
+    empty_lexicon: bool = False,
 ) -> dict:
     """Gold mentions + types as provisional nodes (one per distinct surface), then the production canonicalisation, selection and relations."""
     from cumap.concepts_v4 import cr009_run as R
@@ -259,7 +300,7 @@ def e1(
     sents = [text[a:b] for a, b in offs]
     raw = {
         "section_id": sid,
-        "chapter_num": int(sid.split(".")[0]),
+        "chapter_num": chapter if chapter is not None else int(sid.split(".")[0]),
         "order_index": 0,
         "text": text,
         "heading_path": [sid],
@@ -300,8 +341,13 @@ def e1(
         )
         return info
     embed = X.Embedder(settings.embeddings.model)
-    lexicon = Lexicon.load(REPO_ROOT / "configs" / "term_lexicon.yaml")
-    overrides = CanonicalOverrides.load(REPO_ROOT / "configs" / "canonical_overrides.yaml")
+    if empty_lexicon:  # SciNLP profile: no networking identity lexicon, no overrides
+        from cumap.expert_kg.alias_rules import AliasConfig
+
+        lexicon, overrides = Lexicon([], AliasConfig.load(), "empty"), CanonicalOverrides()
+    else:
+        lexicon = Lexicon.load(REPO_ROOT / "configs" / "term_lexicon.yaml")
+        overrides = CanonicalOverrides.load(REPO_ROOT / "configs" / "canonical_overrides.yaml")
     client = LLMClient(settings, run_id=run_id)
     settings.llm.stage_budgets_usd["concepts"] = max_usd
     res = P.canonicalise(
@@ -347,11 +393,17 @@ def main() -> None:
     ap.add_argument("--pilot-sheet", required=True)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--max-usd", type=float, default=0.6)
+    ap.add_argument("--tag", default="pilot")
     a = ap.parse_args()
     print(
         json.dumps(
             run_oracle(
-                a.oracle, a.section, Path(a.pilot_sheet), dry_run=a.dry_run, max_usd=a.max_usd
+                a.oracle,
+                a.section,
+                Path(a.pilot_sheet),
+                dry_run=a.dry_run,
+                max_usd=a.max_usd,
+                tag=a.tag,
             ),
             indent=1,
             default=str,

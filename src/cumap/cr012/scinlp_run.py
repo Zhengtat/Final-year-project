@@ -28,11 +28,17 @@ PARAGRAPH_EVERY = 10  # sentences per paragraph (SciNLP has no paragraph structu
 ALLOWED_SPLITS = {
     "train",
     "dev",
-}  # the test split stays unopened by the model until Research approves STOP 4
+}  # the test split is opened only by the authorised STOP-4 execution (CUMAP_CR012_STOP4=1)
+
+
+def split_allowed(split: str) -> bool:
+    return split in ALLOWED_SPLITS or (
+        split == "test" and os.environ.get("CUMAP_CR012_STOP4") == "1"
+    )
 
 
 def prepare(split: str, doc: SciNLPDoc) -> dict:
-    assert split in ALLOWED_SPLITS, (
+    assert split_allowed(split), (
         "the SciNLP test split may not be run through a model before the final freeze and Research approval"
     )
     d = UNITS / split / doc.doc_key
