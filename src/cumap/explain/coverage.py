@@ -69,7 +69,9 @@ def coverage(
         r for rs in lin.evidence.values() for r in rs
     }
     unresolved = sorted(r for r in refs if not resolves(r))
-    q_checked = q_found = q_missing_rejected = 0
+    q_checked = q_found = q_missing_rejected = q_elsewhere = 0
+    mism: dict[str, dict] = {}
+    all_norm = {k: norm(v) for k, v in sec_text.items()}
     by_kind: Counter = Counter()
     q_missing: list[str] = []
     for e in store.events.values():
@@ -83,6 +85,17 @@ def coverage(
                 q_checked += 1
                 if norm(v) in text:
                     q_found += 1
+                elif ".rejected[" not in r and sum(norm(v) in t for t in all_norm.values()) >= 1:
+                    q_elsewhere += 1  # verbatim in other section(s) only: a section-attribution mismatch (ambiguous when several), reported, never corrected
+                    mism.setdefault(
+                        e.object_id,
+                        {
+                            "object_id": e.object_id,
+                            "section_id": e.section_id,
+                            "found_in": [k for k, t in all_norm.items() if norm(v) in t],
+                            "evidence_ref": r,
+                        },
+                    )
                 else:
                     q_missing_rejected += ".rejected[" in r
                     if ".rejected[" not in r:
@@ -91,7 +104,7 @@ def coverage(
                         q_missing.append(r)
     out["evidence"] = {
         "refs_total": len(refs), "refs_resolving": len(refs) - len(unresolved), "pct_locators_resolve": 100 * (len(refs) - len(unresolved)) / max(len(refs), 1), "unresolved_examples": unresolved[:10],
-        "quote_in_source_text_checked": q_checked, "quote_in_source_text_found": q_found, "pct_quote_in_source_text": 100 * q_found / max(q_checked, 1), "quote_not_found_examples": q_missing, "quote_not_found_in_verifier_rejected_candidates": q_missing_rejected, "quote_not_found_other_by_locator_kind": dict(by_kind),
+        "quote_in_source_text_checked": q_checked, "quote_in_source_text_found": q_found, "pct_quote_in_source_text": 100 * q_found / max(q_checked, 1), "quote_not_found_examples": q_missing, "quote_not_found_in_verifier_rejected_candidates": q_missing_rejected, "quote_not_found_but_verbatim_in_other_sections": q_elsewhere, "section_attribution_mismatches": list(mism.values()), "quote_not_found_other_by_locator_kind": dict(by_kind),
     }  # fmt: skip
     segs = bad = unrec_ok = unrec_total = 0
     sentences = 0

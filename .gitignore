@@ -47,3 +47,6 @@ data/interim/cr012/scinlp_units/
 
 # generated KG explorer embeds SciNLP-derived sentences (CC BY-NC): never committed
 reports/kg_explorer/
+
+# CR-013: the SciNLP-mode screenshot contains CC BY-NC text
+reports/cr013/screenshots/_*

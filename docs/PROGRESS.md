@@ -67,3 +67,6 @@ Evaluation-only; no architecture change after the held-out run. P&D E0 STRICT_E2
 
 ## CR-013 STOP 2 (2026-10-12)
 Trace model built and verified on `slice3_c2` (1,243 concepts, 528 edges: 100% lineage to resolvable evidence; replay valid and deterministic; sources byte-identical; explanations 100% field-supported). `reports/cr013/stop2.md`. Awaiting Research before STOP 3 (P&D explorer).
+
+## CR-013 STOP 3 (2026-10-12)
+P&D explorer extended (Pipeline, Explain a section, Why not?, Rejected / lost, Stage snapshots, Debug trace table, Node and Edge journeys). 754 tests pass; JS/Python text parity on all 36,730 events and Why-not parity on 230 probes; 14 real-browser checks (headless Chromium) all true; 14 screenshots. `reports/cr013/stop3.md`. Awaiting Research before STOP 4 (evaluation overlay).

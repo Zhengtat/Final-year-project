@@ -1,0 +1,11 @@
+task_id,task,view_to_use,rater,success_yes_no,seconds,confusion_or_notes,clarity_1_to_5,trust_in_explanation_1_to_5
+T1,Open a textbook section and use Explain a section to walk from the source text to the local final graph,review,,,,,,
+T2,Find a concept the verifier rejected and say why it was rejected,review,,,,,,
+T3,"Open a concept and describe, in order, what happened to it (node journey)",review,,,,,,
+T4,Open a relation and find the sentence it was read from and which concept is the source,review,,,,,,
+T5,Use Why not? on a pair that did not become an edge and state the earliest observable failure,review,,,,,,
+T6,"Say whether a pair rank shown is recorded or replayed, and what that means",review,,,,,,
+T7,Find which pipeline stage lost the most candidate pairs in one section (Pipeline tab),review,,,,,,
+T8,"Find the model, prompt version and source locator behind one edge decision",debug,,,,,,
+T9,Find a field that is NOT_RECORDED and explain what that means,review,,,,,,
+T10,Use the stage snapshots to describe how the local graph changes from selection to validation,review,,,,,,

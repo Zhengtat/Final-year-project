@@ -125,6 +125,30 @@ def build(run: str, *, replay_enabled: bool = True, out_root: Path | None = None
         }
     lin = Lineage(bf.links, bf.finals, bf.evidence)
     cov = coverage(bf.store, lin, bf.finals, sec_text, bf.gaps)
+    for m_ in cov[
+        "evidence"
+    ][
+        "section_attribution_mismatches"
+    ]:  # documented, never corrected: the retained section id and the section that contains the sentence differ
+        bf.gaps.append(
+            {
+                "scope": "object",
+                "object_id": m_["object_id"],
+                "stage": "pair_selection"
+                if m_["object_id"].startswith("pair:")
+                else "relation_classification",
+                "field": "section_attribution",
+                "status": "SECTION_ATTRIBUTION_MISMATCH"
+                if len(m_["found_in"]) == 1
+                else "SECTION_ATTRIBUTION_AMBIGUOUS",
+                "detail": f"retained section {m_['section_id']}; the cited sentence is verbatim only in section {', '.join(m_['found_in'])} ({m_['evidence_ref']})",
+            }
+        )
+    cov["gaps"] = {
+        "total": len(bf.gaps),
+        "by_status": dict(__import__("collections").Counter(g["status"] for g in bf.gaps)),
+        "by_stage": dict(__import__("collections").Counter(g["stage"] for g in bf.gaps)),
+    }
     explain_id = hashlib.sha1(
         (
             json.dumps(before, sort_keys=True)

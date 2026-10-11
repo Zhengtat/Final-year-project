@@ -386,29 +386,30 @@ class PDAdapter:
             self.link(oid, f"concept:{p['concept_x_id']}", "endpoint_x")
             self.link(oid, f"concept:{p['concept_y_id']}", "endpoint_y")
             self.evid(oid, self.ref(self.cp_path, loc("selected_pairs", i, "sentence")))
-        anchor_by_key: dict[str, list[int]] = {}
-        for i, a in enumerate(cp["anchors"]):
-            anchor_by_key.setdefault(
-                "|".join(sorted((a["concept_id"], a["anchor_id"]))), []
-            ).append(i)
         for i, p in enumerate(cp["selected_pairs"]):
             if not p["pair_id"].startswith("AP-"):
                 continue
+            idx = int(
+                p["pair_id"][3:]
+            )  # pair_selection builds AP pairs as f"AP-{i}" over enumerate(anchors): the id carries the anchor index (checked against key and section)
             key = "|".join(sorted((p["concept_x_id"], p["concept_y_id"])))
-            hits = anchor_by_key.get(key, [])
-            if len(hits) == 1:
-                a = cp["anchors"][hits[0]]
-                self.ev("pair_generation", "pair", f"pair:{p['pair_id']}", "anchor_pair_join", "emitted", artifact=self.cp_path, locator=loc("anchors", hits[0]), section=str(a["section_id"]).split("#")[0],
-                        layer="JOINED", authority="RULE", join={"method": "anchor_pair_unique_key", "key": key}, attrs={"anchor_type": a.get("anchor_type"), "cue": a.get("cue")},
-                        evidence_refs=[self.ref(self.cp_path, loc("anchors", hits[0], "cue"))])  # fmt: skip
+            a = cp["anchors"][idx] if idx < len(cp["anchors"]) else None
+            if (
+                a
+                and "|".join(sorted((a["concept_id"], a["anchor_id"]))) == key
+                and a["section_id"] == p["section_id"]
+            ):
+                self.ev("pair_generation", "pair", f"pair:{p['pair_id']}", "anchor_pair_join", "emitted", artifact=self.cp_path, locator=loc("anchors", idx), section=str(a["section_id"]).split("#")[0],
+                        layer="JOINED", authority="RULE", join={"method": "anchor_index_from_pair_id", "key": p["pair_id"]}, attrs={"anchor_type": a.get("anchor_type"), "cue": a.get("cue")},
+                        evidence_refs=[self.ref(self.cp_path, loc("anchors", idx, "cue"))])  # fmt: skip
             else:
                 self.gap(
                     "object",
                     f"pair:{p['pair_id']}",
                     "pair_generation",
                     "anchor_record",
-                    "AMBIGUOUS_JOIN" if hits else "UNRESOLVED",
-                    f"{len(hits)} anchor records for pair key {key}",
+                    "UNRESOLVED",
+                    f"anchors[{idx}] does not match the pair's concept pair and section",
                 )
         for i, p in enumerate(cp["sample_pairs"]):
             self.ev("pair_selection", "pair", f"pair:{p['pair_id']}", "unselected_sample_recorded", "not_selected", artifact=self.cp_path, locator=loc("sample_pairs", i), section=p["section_id"], authority="SCORE",
@@ -669,7 +670,11 @@ class PDAdapter:
                     "graph_commit",
                     "edge_commit",
                     "INCONSISTENT",
-                    f"relation row {i} has outcome 'edge' but no snapshot edge with id {pid}",
+                    (
+                        f"relation row {i} is a misconception-verification edge (retained pair id prefix MP-, created outside pair selection) with outcome 'edge', but no snapshot edge has id {pid}; the reason it was not committed is not recorded"
+                        if pid.startswith("MP-")
+                        else f"relation row {i} has outcome 'edge' but no snapshot edge with id {pid}"
+                    ),
                 )
         for pid, idxs in rows.items():
             sel = [i for i in idxs if cp["relation_results_v3"][i].get("group") == "selected"]

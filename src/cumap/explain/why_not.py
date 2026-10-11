@@ -20,6 +20,21 @@ CODE_TEXT = {
     "E0": "A relation was proposed for the pair but validation rejected it because an endpoint or the evidence could not be grounded.",
 }
 E0_REASONS = {"endpoint_not_grounded"}
+RANK_SENTENCE = "The pair ranked {rank} out of {eligible_count} eligible pairs ({rank_layer} rank); the run's budget was {budget}. Selection also uses a per-section minimum, anchor and coverage phases, so rank alone is not a cut-off."
+REASON_SENTENCE = "Recorded reason code: {reason_code}."
+
+
+CHECK_LABELS = {
+    "final": "{c} is a node of the final graph?", "identity": "identity of the two concepts valid?", "eligible": "eligible pair generated?", "selected": "selected for relation classification?",
+    "classified": "relation classification outcome", "validated": "passed validation?", "committed": "edge committed to the graph?",
+}  # fmt: skip
+
+
+def check_id(check: str) -> str:
+    for cid, label in CHECK_LABELS.items():
+        if check == label or (cid == "final" and check.endswith("is a node of the final graph?")):
+            return cid
+    raise KeyError(check)
 
 
 def pair_index(store: TraceStore) -> dict[frozenset, list[str]]:
@@ -64,6 +79,7 @@ def why_not(store: TraceStore, concept_a: str, concept_b: str, idx: dict | None 
     def add(check, answer, events=(), fields=None, note=None):
         checks.append(
             {
+                "id": check_id(check),
                 "check": check,
                 "answer": answer,
                 "event_ids": [e.event_id for e in events],
@@ -176,16 +192,12 @@ def why_not(store: TraceStore, concept_a: str, concept_b: str, idx: dict | None 
             f = last["fields"]
             sentences.append(
                 render_template(
-                    "The pair ranked {rank} out of {eligible_count} eligible pairs ({rank_layer} rank); the run's budget was {budget}. Selection also uses a per-section minimum, anchor and coverage phases, so rank alone is not a cut-off.",
+                    RANK_SENTENCE,
                     lambda p, f=f: f.get(p),
                 )
             )
         if last["fields"].get("reason_code"):
-            sentences.append(
-                render_template(
-                    "Recorded reason code: {reason_code}.", lambda p, f=last["fields"]: f.get(p)
-                )
-            )
+            sentences.append(render_template(REASON_SENTENCE, lambda p, f=last["fields"]: f.get(p)))
     return {"concept_a": concept_a, "concept_b": concept_b, "checks": checks, "earliest_failure": final, "status": status,
             "sentences": ["".join(s["text"] for s in segs) for segs in sentences], "note": "production mode: a missing edge is never claimed to be a missing true relation"}  # fmt: skip
 

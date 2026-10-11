@@ -9,6 +9,8 @@ scorer's own functions (`project_edges_to_mentions`, `_rel_key`) on the retained
 
 from __future__ import annotations
 
+import base64
+import gzip
 import json
 import math
 from collections import Counter
@@ -260,21 +262,44 @@ def build_scinlp() -> dict:
     }
 
 
-def build() -> Path:
+def build(out: Path | None = None) -> Path:
     data = {
         "pd": build_pd(), "sci": build_scinlp(),
         "pd_heldout": {"e0_strict_f1": 0.053, "sections": ["4.4", "4.5", "5.4", "6.3", "7.1", "8.2", "9.3"]},
         "na": NA,
     }  # fmt: skip
-    OUT.parent.mkdir(parents=True, exist_ok=True)
+    target = out or OUT
+    target.parent.mkdir(parents=True, exist_ok=True)
     html = (Path(__file__).with_name("kg_explorer.html")).read_text(encoding="utf-8")
-    OUT.write_text(
+    html = html.replace(
+        "/*__TRACE_JS__*/",
+        (Path(__file__).with_name("kg_explorer_trace.js")).read_text(encoding="utf-8"),
+    )
+    trace_b64 = ""
+    try:  # CR-013: the derived trace of the production run, gzip + base64 (decoded lazily in the browser)
+        from cumap.explain.viewer_adapter import build_trace_payload
+
+        payload = build_trace_payload()
+        if payload:
+            trace_b64 = base64.b64encode(
+                gzip.compress(
+                    json.dumps(
+                        payload, separators=(",", ":"), ensure_ascii=False, default=list
+                    ).encode("utf-8"),
+                    9,
+                    mtime=0,
+                )
+            ).decode()
+    except FileNotFoundError:
+        trace_b64 = ""
+    html = html.replace("/*__TRACE_B64__*/", trace_b64)
+    target.write_text(
         html.replace(
             "/*__DATA__*/null", json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
         ),
         encoding="utf-8",
     )
-    return OUT
+    return target
 
 
 if __name__ == "__main__":
