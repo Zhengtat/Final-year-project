@@ -177,3 +177,66 @@ def test_existing_explorer_views_remain(page):
         "function detEdge",
     ):
         assert marker in text or marker.lower() in text.lower()
+
+
+# ---------------------------------------------------------------- STOP 4: evaluation overlay in the page
+def test_overlay_is_opt_in_not_decoded_before_and_never_leaks_into_production_views(page):
+    _, res, *_ = page
+    assert res["ev_null_before_opt_in"] is True
+    assert res["prod_text_has_eval"] is False and res["after_leaving_has_eval"] is False
+
+
+def test_overlay_is_dataset_scoped_and_pooled_counts_equal_the_frozen_results(page):
+    _, res, *_ = page
+    fz = json.loads(Path("reports/cr012/stop4_heldout_results.json").read_text())
+    assert res["ev"]["scinlp"]["rows_all"] == 295 and res["ev"]["pd"]["rows_all"] == 432
+    assert set(res["ev"]["scinlp"]["units"]).isdisjoint(res["ev"]["pd"]["units"])
+    assert (
+        res["ev"]["scinlp"]["unit_ids_of_relations_match"]
+        and res["ev"]["pd"]["unit_ids_of_relations_match"]
+    )
+    for ds, level in (("scinlp", fz["scinlp"]["levels"]["E0"]), ("pd", fz["pd"]["levels"]["E0"])):
+        assert {
+            c: res["ev_pooled"][ds].get(c, 0) for c in level["attribution_pooled"]["by_code"]
+        } == level["attribution_pooled"]["by_code"]
+    assert res["ev"]["scinlp"]["rows_p0"] == 15 and res["ev"]["pd"]["rows_p0"] == 206
+    assert res["ev_debug_ok"] is True and res["errors"] == []
+
+
+def test_every_code_has_an_explanation_with_decisive_stage_and_frozen_wording(page):
+    _, res, *_ = page
+    from cumap.explain.why_not_eval import EVAL_TEXT
+
+    for ds in ("scinlp", "pd"):
+        for code, html in res["ev"][ds]["details"].items():
+            assert (
+                "Earliest failure (frozen CR-012 attribution order)" in html
+                and "earliest failure" in html.lower()
+            )
+            assert EVAL_TEXT[code].replace("'", "&#39;") in html or EVAL_TEXT[code] in html
+            assert "not evaluated" in html or code == "N0"
+        assert "N0" in res["ev"][ds]["details"] and "P0" in res["ev"][ds]["details"]
+
+
+def test_the_two_payload_blobs_are_separate_and_the_overlay_blob_matches_python(page):
+    html, *_ = page
+    text = Path(html).read_text(encoding="utf-8")
+    tr = json.loads(
+        gzip.decompress(
+            base64.b64decode(re.search(r'id="trace-gz">([^<]*)</script>', text).group(1))
+        ).decode()
+    )
+    ev = json.loads(
+        gzip.decompress(
+            base64.b64decode(re.search(r'id="eval-gz">([^<]*)</script>', text).group(1))
+        ).decode()
+    )
+    assert "datasets" not in tr and "frozen_commit" not in json.dumps(tr["meta"])
+    assert (
+        ev["meta"]["scope"] == "evaluation"
+        and ev["meta"]["frozen_tag"] == "cr012-stop4-complete"
+        and set(ev["datasets"]) == {"scinlp", "pd"}
+    )
+    from cumap.explain.eval_adapter import build_eval_payload
+
+    assert json.dumps(build_eval_payload(), sort_keys=True) == json.dumps(ev, sort_keys=True)

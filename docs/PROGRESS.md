@@ -70,3 +70,6 @@ Trace model built and verified on `slice3_c2` (1,243 concepts, 528 edges: 100% l
 
 ## CR-013 STOP 3 (2026-10-12)
 P&D explorer extended (Pipeline, Explain a section, Why not?, Rejected / lost, Stage snapshots, Debug trace table, Node and Edge journeys). 754 tests pass; JS/Python text parity on all 36,730 events and Why-not parity on 230 probes; 14 real-browser checks (headless Chromium) all true; 14 screenshots. `reports/cr013/stop3.md`. Awaiting Research before STOP 4 (evaluation overlay).
+
+## CR-013 STOP 4 (2026-10-12)
+Evaluation overlay built and verified: 432 P&D held-out and 295 SciNLP gold relations explained with the frozen earliest-failure codes (counts equal the frozen results), 11/11 localisation fixtures, gold-isolation tests and 16 real-browser opt-in/isolation checks pass. `reports/cr013/stop4.md`. Awaiting Research before STOP 5.

@@ -293,6 +293,26 @@ def build(out: Path | None = None) -> Path:
     except FileNotFoundError:
         trace_b64 = ""
     html = html.replace("/*__TRACE_B64__*/", trace_b64)
+    html = html.replace(
+        "/*__EVAL_JS__*/",
+        (Path(__file__).with_name("kg_explorer_eval.js")).read_text(encoding="utf-8"),
+    )
+    eval_b64 = ""
+    try:  # CR-013 STOP 4: the evaluation overlay has its OWN payload; it is never mixed into the production trace
+        from cumap.explain.eval_adapter import build_eval_payload
+
+        eval_b64 = base64.b64encode(
+            gzip.compress(
+                json.dumps(build_eval_payload(), separators=(",", ":"), ensure_ascii=False).encode(
+                    "utf-8"
+                ),
+                9,
+                mtime=0,
+            )
+        ).decode()
+    except FileNotFoundError:
+        eval_b64 = ""
+    html = html.replace("/*__EVAL_B64__*/", eval_b64)
     target.write_text(
         html.replace(
             "/*__DATA__*/null", json.dumps(data, ensure_ascii=False).replace("</", "<\\/")

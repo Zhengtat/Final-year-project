@@ -137,13 +137,23 @@ body.debug .reviewonly{display:none}body.debug .debugonly{display:block}
 canvas.mini{width:100%;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
 .snapctl{display:flex;gap:12px;align-items:center;margin:8px 0;flex-wrap:wrap}
 .jst{margin:8px 0;padding-top:6px;border-top:1px solid var(--line)}.jh{font-size:13px;margin:16px 0 4px}
+
+/* ---- CR-013 STOP 4: evaluation overlay (visually distinct, opt-in) */
+.evbtn{border-color:var(--warn)!important;color:var(--warn)}
+.evbtn.on{background:var(--warn)!important;color:#fff!important}
+.evmatrix td.evcell{cursor:pointer;font-variant-numeric:tabular-nums;text-align:center;min-width:44px}
+.evmatrix td.evzero{text-align:center;color:var(--ink2)}
+.evmatrix th{text-align:center}
+@media (hover:hover) and (pointer:fine){.evmatrix td.evcell:hover{outline:2px solid var(--warn)}}
+button.evchip{font-size:12px;padding:3px 9px;border-radius:12px}button.evchip.on{background:var(--warn);color:#fff;border-color:var(--warn)}
+.checks li.evbad{background:var(--warnbg);border-radius:5px;padding:1px 4px}.checks li.evafter{color:var(--ink2)}
 </style>
 </head>
 <body class="review">
 <header>
   <div class="top">
     <h1>Knowledge graph explorer</h1>
-    <div class="seg" id="modeseg"><button id="m-pd">P&amp;D Expert KG</button><button id="m-sci">SciNLP Evaluation Graph</button></div>
+    <div class="seg" id="modeseg"><button id="m-pd">P&amp;D Expert KG</button><button id="m-sci">SciNLP Evaluation Graph</button><button id="m-ev" class="evbtn" title="Opt-in: gold-derived frozen CR-012 evaluation. Not the production graph.">CR-012 evaluation overlay</button></div>
     <div class="sp"></div>
     <div class="seg" id="viewseg" title="Review: a guided reading for examiners. Debug: every field, tables and ids."><button id="v-review">Review</button><button id="v-debug">Debug</button></div>
   </div>
@@ -162,10 +172,13 @@ canvas.mini{width:100%;display:block;border:1px solid var(--line);border-radius:
     <div class="pane" id="p-lost"><div class="scroll" id="v-lost"></div></div>
     <div class="pane" id="p-snap"><div class="scroll" id="v-snap"></div></div>
     <div class="pane" id="p-trace"><div class="scroll" id="v-trace"></div></div>
+    <div class="pane" id="p-evmap"><div class="scroll" id="v-evmap"></div></div>
+    <div class="pane" id="p-evlist"><div class="scroll" id="v-evlist"></div></div>
   </div>
   <aside id="detail"><div class="in" id="detailin"></div></aside>
 </main>
 <script type="application/octet-stream" id="trace-gz">/*__TRACE_B64__*/</script>
+<script type="application/octet-stream" id="eval-gz">/*__EVAL_B64__*/</script>
 <script>
 const DATA = /*__DATA__*/null;
 const NA = DATA.na;
@@ -204,6 +217,7 @@ function hashRead(){
 }
 
 function setMode(m, d, keepSel){
+  if(m==='ev'){ evEnter(); return; }
   S.mode=m; S.tab='graph';
   if(m==='pd'){ S.G=DATA.pd; S.doc=null; S.F.chapter=3; S.F.unlinked=false; S.F.layout='force'; S.F.colour='type'; S.F.missed=false; }
   else { S.doc=d||S.doc||DATA.sci.docs[0]; S.G=S.doc; S.F.colour='gold'; S.F.missed=(S.view==='debug'); }
@@ -215,12 +229,14 @@ function setMode(m, d, keepSel){
 function setView(v){
   S.view=v; document.body.className=v; store.set('kg_view',v);
   $('v-review').classList.toggle('on',v==='review'); $('v-debug').classList.toggle('on',v==='debug');
+  if(S.mode==='ev'){ evSide(); tabs(); showTab(S.tab); renderDetail(true); hashWrite(); return; }
   if(S.mode==='sci') S.F.missed=(v==='debug');
   side(); tabs(); showTab((S.tab==='table'||S.tab==='trace')&&v==='review'?'graph':S.tab); renderDetail(true); draw(); hashWrite();
 }
-function chrome(){ $('m-pd').classList.toggle('on',S.mode==='pd'); $('m-sci').classList.toggle('on',S.mode==='sci'); $('v-review').classList.toggle('on',S.view==='review'); $('v-debug').classList.toggle('on',S.view==='debug'); }
+function chrome(){ $('m-ev').classList.toggle('on',S.mode==='ev'); $('m-pd').classList.toggle('on',S.mode==='pd'); $('m-sci').classList.toggle('on',S.mode==='sci'); $('v-review').classList.toggle('on',S.view==='review'); $('v-debug').classList.toggle('on',S.view==='debug'); }
 
 function banner(){
+  if(S.mode==='ev'){ evBanner(); return; }
   const b=$('banner');
   if(S.mode==='pd'){
     b.innerHTML='<div class="banner ok"><b>P&amp;D Expert KG — production/development graph. Peterson &amp; Davie, Chapters 1–3.</b> This is the project\'s current networking Expert KG product graph. It currently covers the P&amp;D Chapters 1–3 development slice (run <code>'+esc(DATA.pd.run_id)+'</code>).<br>'+
@@ -283,6 +299,7 @@ let raf=0;
 function draw(){ if(raf) return; raf=requestAnimationFrame(paint); }
 function paint(){
   raf=0;
+  if(S.mode==='ev') return;
   const r=cv.getBoundingClientRect(); ctx.clearRect(0,0,r.width,r.height);
   const v=visible(), q=S.F.query.trim().toLowerCase(), dark=DARK(), focus=focusSet(), ink=dark?'#e8e8ea':'#15171c';
   // dim non-focused elements: eased over ~150ms in the review view, immediate in debug / keyboard / reduced motion
@@ -331,6 +348,7 @@ function fillTemplate(e,a,b){ const d=defs()[e.rel]; if(!d||!d.template||d.templ
 function copyBtn(t){ return ' <a class="lnk" data-copy="'+esc(t)+'">copy</a>'; }
 function renderDetail(instant){
   const box=$('detailin'), dbg=S.view==='debug';
+  if(S.mode==='ev'){ box.className='in'; box.innerHTML=evDetailHTML(); wireEvDetail(box); return; }
   let h='';
   if(!S.sel){
     h = '<p class="na">Click a node or an edge to see what it is, where it came from, and the sentence that supports it.</p>';
@@ -479,14 +497,14 @@ function tour(name){
 
 // ---------------------------------------------------------------- tabs: graph / document / tables
 function tabs(){
-  const t=[['graph','Graph']]; if(S.mode==='sci') t.push(['doc','Document']); if(traceAvailable()) t.push(...TRACE_TABS); if(S.view==='debug') t.push(['table','Tables']); if(S.view==='debug'&&traceAvailable()) t.push(['trace','Trace table']);
+  let t=[['graph','Graph']]; if(S.mode==='ev') t=[...EV_TABS]; else { if(S.mode==='sci') t.push(['doc','Document']); if(traceAvailable()) t.push(...TRACE_TABS); if(S.view==='debug') t.push(['table','Tables']); if(S.view==='debug'&&traceAvailable()) t.push(['trace','Trace table']); }
   $('tabs').innerHTML=t.map(([k,l])=>'<button data-tab="'+k+'" class="'+(S.tab===k?'on':'')+'">'+l+'</button>').join('');
   document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 }
 function showTab(k){
-  S.tab=k; ['graph','doc','table',...TRACE_PANES].forEach(p=>{const el=$('p-'+p); if(el) el.classList.toggle('on',p===k);});
+  S.tab=k; ['graph','doc','table',...TRACE_PANES,...EV_PANES].forEach(p=>{const el=$('p-'+p); if(el) el.classList.toggle('on',p===k);});
   document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===k));
-  if(k==='graph'){ resize(); draw(); } if(k==='doc') renderDoc(); if(k==='table') renderTables(); if(TRACE_PANES.includes(k)) renderTraceTab(k);
+  if(k==='graph'){ resize(); draw(); } if(k==='doc') renderDoc(); if(k==='table') renderTables(); if(TRACE_PANES.includes(k)) renderTraceTab(k); if(EV_PANES.includes(k)) renderEvalTab(k);
 }
 function renderDoc(){
   const d=S.doc, goldSet=new Set(d.gold_spans.map(g=>g[0]+'-'+g[1])), predSet=new Map(d.pred_spans.map(p=>[p[0]+'-'+p[1],p[2]]));
@@ -543,19 +561,20 @@ addEventListener('keydown',ev=>{
   if(ev.key==='ArrowRight'){ const nb=neighbours(); if(!nb.length) return; ev.preventDefault(); (S.hist=S.hist||[]).push(S.sel.id); selectNode(nb[0],true); return; }
   if(ev.key==='ArrowLeft'){ const prev=(S.hist||[]).pop(); if(prev&&byId[prev]){ ev.preventDefault(); selectNode(prev,true); } return; }
 });
-$('m-pd').onclick=()=>setMode('pd'); $('m-sci').onclick=()=>setMode('sci');
+$('m-pd').onclick=()=>setMode('pd'); $('m-sci').onclick=()=>setMode('sci'); $('m-ev').onclick=()=>setMode('ev');
 $('v-review').onclick=()=>setView('review'); $('v-debug').onclick=()=>setView('debug');
 
 /*__TRACE_JS__*/
+/*__EVAL_JS__*/
 // ---------------------------------------------------------------- boot
 (function(){
   const h=hashRead(), v=h.v||store.get('kg_view')||'review';
   S.view=(v==='debug')?'debug':'review'; document.body.className=S.view;
   const d=h.d?DATA.sci.docs.find(x=>x.doc_id===h.d):null;
   if(h.ch) S.F.chapter=+h.ch;
-  setMode(h.m==='sci'?'sci':'pd', d, false);
-  if(h.m!=='sci'&&h.ch){ S.F.chapter=+h.ch; side(); fit(false); }
-  if(h.s){ const [k,id]=[h.s.slice(0,1),h.s.slice(2)]; if(k==='n'&&byId[id]) selectNode(id); else if(k==='e'){ const e=S.G.edges.find(x=>x.id===id); if(e) selectEdge(e); } }
+  setMode(h.m==='sci'?'sci':(h.m==='ev'?'ev':'pd'), d, false);
+  if(h.m!=='sci'&&h.m!=='ev'&&h.ch){ S.F.chapter=+h.ch; side(); fit(false); }
+  if(h.s&&S.mode!=='ev'){ const [k,id]=[h.s.slice(0,1),h.s.slice(2)]; if(k==='n'&&byId[id]) selectNode(id); else if(k==='e'){ const e=S.G.edges.find(x=>x.id===id); if(e) selectEdge(e); } }
 })();
 </script>
 </body>

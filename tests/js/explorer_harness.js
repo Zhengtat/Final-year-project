@@ -3,8 +3,8 @@
 const fs = require('fs'), vm = require('vm');
 const html = fs.readFileSync(process.argv[2], 'utf8');
 const pairs = JSON.parse(fs.readFileSync(process.argv[3], 'utf8'));
-const scripts = [...html.matchAll(/<script(?: type="application\/octet-stream" id="trace-gz")?>([\s\S]*?)<\/script>/g)].map(m => m[1]);
-const traceB64 = scripts[0], main = scripts[1];
+const scripts = [...html.matchAll(/<script(?: type="application\/octet-stream" id="(?:trace|eval)-gz")?>([\s\S]*?)<\/script>/g)].map(m => m[1]);
+const traceB64 = scripts[0], evalB64 = scripts[1], main = scripts[2];
 const els = {};
 function El(id) {
   const o = { id, innerHTML: '', textContent: '', style: {}, dataset: {}, checked: true, value: '', className: '', classList: { toggle() {}, add() {}, remove() {} },
@@ -15,6 +15,7 @@ function El(id) {
 }
 global.document = { body: { className: '' }, getElementById: id => els[id] || (els[id] = El(id)), querySelectorAll: () => [] };
 els['trace-gz'] = El('trace-gz'); els['trace-gz'].textContent = traceB64;
+els['eval-gz'] = El('eval-gz'); els['eval-gz'].textContent = evalB64;
 global.window = global; global.devicePixelRatio = 1; global.addEventListener = () => {};
 global.matchMedia = () => ({ matches: false }); global.requestAnimationFrame = f => setTimeout(() => f(performance.now()), 0); global.cancelAnimationFrame = () => {};
 global.location = { hash: '' }; global.history = { replaceState() {} };
@@ -46,6 +47,26 @@ vm.runInThisContext(main);
     S.mode === 'pd' && selectNode(node); const eobj = S.G.edges.find(x => x.id === edge); selectEdge(eobj);
   }
   setMode('sci'); out.sci_tabs = $('tabs').innerHTML; out.sci_trace_available = traceAvailable(); setMode('pd'); out.pd_tabs_after = $('tabs').innerHTML;
+  // ---- evaluation overlay: opt-in, dataset-scoped, separate payload
+  out.ev_null_before_opt_in = (EV === null);
+  const prodPanes = ['v-pipeline', 'v-section', 'v-why', 'v-lost', 'v-snap', 'v-trace', 'detailin', 'banner', 'side'];
+  out.prod_text_has_eval = /EVALUATION|frozen CR-012|\bgold\b/i.test(prodPanes.map(k => $(k).innerHTML || '').join(' '));
+  setView('review'); setMode('ev');
+  out.ev = {};
+  for (const ds of ['scinlp', 'pd']) {
+    ES.ds = ds; ES.code = ''; ES.unit = ''; ES.status = 'all'; ES.q = ''; ES.sel = null; ES.more = true;
+    await renderEvalTab('evmap'); await renderEvalTab('evlist');
+    const d = EV.datasets[ds]; const first = d.units[0]; const rel = first.relations.find(r => r.code === 'P0') || first.relations[0];
+    evSelect(first.id, rel.i);
+    const rowsAll = d.units.flatMap(u => u.relations.filter(relMatches)).length;
+    ES.code = 'P0'; const rowsP0 = d.units.flatMap(u => u.relations.filter(relMatches)).length;
+    const dets = {}; for (const c of EV.code_order) { const x = d.units.flatMap(u => u.relations).find(r => r.code === c); if (x) { ES.sel = { u: x.unit, i: x.i }; dets[c] = evDetailHTML(); } }
+    out.ev[ds] = { map: ($('v-evmap').innerHTML || '').length, list: ($('v-evlist').innerHTML || '').length, rows_all: rowsAll, rows_p0: rowsP0, units: d.units.map(u => u.id), unit_ids_of_relations_match: d.units.every(u => u.relations.every(r => r.unit === u.id)), details: dets, tabs: ($('tabs').innerHTML || '') };
+  }
+  out.ev_pooled = {}; for (const ds of ['scinlp', 'pd']) { const t = {}; EV.datasets[ds].units.forEach(u => Object.entries(u.counts).forEach(([c, n]) => { t[c] = (t[c] || 0) + n; })); out.ev_pooled[ds] = t; }
+  setView('debug'); try { await renderEvalTab('evmap'); out.ev_debug_ok = true; } catch (e) { out.errors.push('ev debug: ' + e.message); }
+  setView('review'); setMode('pd');
+  out.after_leaving_has_eval = /EVALUATION|frozen CR-012/i.test(($('banner').innerHTML || '') + ($('detailin').innerHTML || '') + ($('tabs').innerHTML || ''));
   out.ui = ui; out.counts = { events: TR.events.length, pool: TR.pool.length, sections: TR.secList.length, journeys: Object.keys(TR.journeys).length, why: Object.keys(TR.why).length };
   out.tabs = { review: ($('tabs').innerHTML || '').length };
   fs.writeFileSync(process.argv[4], JSON.stringify(out));
