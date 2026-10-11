@@ -47,6 +47,17 @@ def force_layout(ids: list[str], edges: list[tuple[str, str]], seed: int = 42) -
     )
 
 
+def relation_defs(path: str) -> dict:
+    import yaml
+
+    y = yaml.safe_load((REPO_ROOT / path).read_text())
+    return {
+        r["name"]: {"definition": r.get("definition", NA), "template": r.get("template", NA), "family": r.get("family", NA),
+                    "symmetric": bool(r.get("symmetric")), "domain": r.get("domain_types", []), "range": r.get("range_types", [])}
+        for r in y["relations"]
+    }  # fmt: skip
+
+
 # ------------------------------------------------------------------ P&D production graph
 def build_pd() -> dict:
     base = KG / PD_RUN
@@ -113,7 +124,7 @@ def build_pd() -> dict:
                   "aliases": sum(len(n["aliases"]) for n in out_nodes), "relation_counts": dict(rel_counts.most_common()),
                   "ring_counts": dict(Counter(n["ring"] for n in out_nodes)), "chapters": [1, 2, 3],
                   "organisation": {"org_id": ORG, "label_source": manifest["label_source"], "modularity_fine": manifest["chapters"]["3"]["modularity_fine"]}},
-        "nodes": out_nodes, "edges": out_edges,
+        "defs": relation_defs("configs/relations_v1.3.yaml"), "nodes": out_nodes, "edges": out_edges,
     }  # fmt: skip
 
 
@@ -122,6 +133,7 @@ def build_scinlp() -> dict:
     from cumap.cr012 import scinlp_run as SR
     from cumap.cr012 import scoring as S
     from cumap.cr012.adapters import SciNLPAdapter
+    from cumap.cr012.stop4_score import sc_attribution
 
     res = json.loads((REPO_ROOT / "reports/cr012/stop4_heldout_results.json").read_text())[
         "scinlp"
@@ -138,11 +150,15 @@ def build_scinlp() -> dict:
         g = gold_all[doc.doc_key]
         gold_spans = {m.span for m in g.mentions}
         gold_typed = {(m.span, m.type) for m in g.mentions}
+        gold_type = {m.span: m.type for m in g.mentions}
         gold_keys = {S._rel_key(r.src_span, r.tgt_span, r.relation, sym) for r in g.relations}
         starts = [0, *doc.sentence_ends[:-1]]
 
+        def sent_idx(tok: int, starts=starts) -> int:
+            return max(j for j, s0 in enumerate(starts) if s0 <= tok)
+
         def sentence_of(tok: int, doc=doc, starts=starts) -> str:
-            i = max(j for j, s in enumerate(starts) if s <= tok)
+            i = sent_idx(tok)
             return " ".join(doc.tokens[starts[i] : doc.sentence_ends[i]])
 
         results = [
@@ -150,48 +166,91 @@ def build_scinlp() -> dict:
             for r in cp["relation_results_v3"]
             if r["outcome"] == "edge" and r.get("group", "selected") == "selected"
         ]
-        by_pair = {}
+        by_pair: dict = {}
         for r in results:
             by_pair.setdefault(
                 frozenset((r["pair"]["concept_x_id"], r["pair"]["concept_y_id"])), []
             ).append(r)
-        nodes = []
+        nodes, span_node = [], {}
         for n in pred["nodes"]:
             surf = [" ".join(doc.tokens[a:b]) for a, b in n.mentions]
             nodes.append({
                 "id": n.node_id, "name": surf[0] if surf else n.name, "canonical_name": n.name, "type": n.type, "surfaces": sorted(set(surf))[:6], "n_spans": len(n.mentions),
-                "spans": [list(s) for s in n.mentions[:6]], "sentence": sentence_of(n.mentions[0][0]) if n.mentions else NA,
-                "gold_entity_match": any(s in gold_spans for s in n.mentions), "gold_entity_typed_match": any((s, n.type) in gold_typed for s in n.mentions),
+                "spans": [list(s0) for s0 in n.mentions[:6]], "sentence": sentence_of(n.mentions[0][0]) if n.mentions else NA, "ghost": False,
+                "gold_entity_match": any(s0 in gold_spans for s0 in n.mentions), "gold_entity_typed_match": any((s0, n.type) in gold_typed for s0 in n.mentions),
             })  # fmt: skip
-        nid = {n["id"] for n in nodes}
-        edges = []
+            for s0 in n.mentions:
+                span_node.setdefault(s0, n.node_id)
+        edges, matched_keys = [], set()
         for i, e in enumerate(pred["edges"]):
             proj, _ = S.project_edges_to_mentions(pred["nodes"], [e])
-            match = any(S._rel_key(a, b, rel, sym) in gold_keys for a, b, rel, _st, _tt in proj)
+            keys = [S._rel_key(a, b, rel, sym) for a, b, rel, _st, _tt in proj]
+            match = any(k in gold_keys for k in keys)
+            matched_keys |= {k for k in keys if k in gold_keys}
             cands = [
                 r for r in by_pair.get(frozenset((e.src, e.tgt)), []) if r["relation"] == e.relation
             ]
             r = cands[0] if cands else {}
             edges.append({
-                "id": f"{doc.doc_key}-e{i}", "s": e.src, "t": e.tgt, "rel": e.relation, "statement": r.get("statement", NA), "quote": r.get("evidence_quote", NA),
+                "id": f"{doc.doc_key}-e{i}", "kind": "pred", "s": e.src, "t": e.tgt, "rel": e.relation, "statement": r.get("statement", NA), "quote": r.get("evidence_quote", NA),
                 "sentence": r.get("pair", {}).get("sentence", NA), "qual": r.get("qualifiers", NA), "model_direction": r.get("direction", NA),
-                "matches_gold": match, "grounded": bool(proj), "confidence": NA,
+                "matches_gold": match, "grounded": bool(proj), "confidence": NA, "family_reason": r.get("family_reason", NA),
+                "grounding": r.get("grounding", NA), "hashes": r.get("prompt_hashes", NA),
             })  # fmt: skip
+        # gold relations: matched / missed with the earliest-failure code (frozen attribution)
+        codes = sc_attribution(doc, g, pred, cp, sym)
+        ghosts: dict = {}
+        gold_rels, miss_i = [], 0
+        for r, code in zip(g.relations, codes, strict=True):
+            matched = S._rel_key(r.src_span, r.tgt_span, r.relation, sym) in matched_keys
+            item = {
+                "src": list(r.src_span), "tgt": list(r.tgt_span), "src_text": " ".join(doc.tokens[r.src_span[0] : r.src_span[1]]),
+                "tgt_text": " ".join(doc.tokens[r.tgt_span[0] : r.tgt_span[1]]), "rel": r.relation, "matched": matched,
+                "code": "MATCHED" if matched else (code or "NODE_LEVEL_ONLY"), "sentence": sentence_of(r.src_span[0]),
+            }  # fmt: skip
+            gold_rels.append(item)
+            if matched:
+                continue
+            ends = []
+            for sp in (r.src_span, r.tgt_span):
+                if sp in span_node:
+                    ends.append(span_node[sp])
+                else:
+                    gid = f"ghost-{sp[0]}-{sp[1]}"
+                    ghosts.setdefault(gid, {
+                        "id": gid, "name": " ".join(doc.tokens[sp[0] : sp[1]]), "canonical_name": NA, "type": gold_type.get(sp, NA), "surfaces": [" ".join(doc.tokens[sp[0] : sp[1]])],
+                        "n_spans": 1, "spans": [list(sp)], "sentence": sentence_of(sp[0]), "ghost": True, "gold_entity_match": True, "gold_entity_typed_match": True,
+                    })  # fmt: skip
+                    ends.append(gid)
+            edges.append({
+                "id": f"{doc.doc_key}-g{miss_i}", "kind": "gold_missed", "s": ends[0], "t": ends[1], "rel": r.relation, "statement": NA, "quote": NA,
+                "sentence": item["sentence"], "qual": NA, "model_direction": NA, "matches_gold": False, "grounded": True, "confidence": NA, "code": item["code"],
+            })  # fmt: skip
+            miss_i += 1
+        nodes += list(ghosts.values())
+        nid = {n["id"] for n in nodes}
         assert all(e["s"] in nid and e["t"] in nid for e in edges)
         lay = force_layout([n["id"] for n in nodes], [(e["s"], e["t"]) for e in edges], seed=7)
         for n in nodes:
             n["fx"], n["fy"] = lay[n["id"]]
         sc = res["per_document"][doc.doc_key]["scores"]
+        att = res["per_document"][doc.doc_key]["attribution"]
         docs.append({
             "doc_id": doc.doc_key, "retained_prediction_path": f"data/processed/kg/{rid}/checkpoint.json",
-            "predicted_nodes": len(nodes), "predicted_entity_mentions": sum(n["n_spans"] for n in nodes), "predicted_edges": len(edges),
+            "predicted_nodes": len(pred["nodes"]), "predicted_entity_mentions": sum(len(n.mentions) for n in pred["nodes"]), "predicted_edges": len(pred["edges"]),
             "gold_entities": len(g.mentions), "gold_relations": len(g.relations), "e0_strict_relation_f1": sc["rel"]["f1"],
-            "e0_relation_tp_fp_fn": [sc["rel"]["tp"], sc["rel"]["fp"], sc["rel"]["fn"]], "e0_entity_strict_f1": sc["entity_strict"]["f1"],
-            "edges_matching_gold": sum(1 for e in edges if e["matches_gold"]), "nodes": nodes, "edges": edges,
+            "e0_relation_tp_fp_fn": [sc["rel"]["tp"], sc["rel"]["fp"], sc["rel"]["fn"]], "e0_relation_prf": [sc["rel"]["precision"], sc["rel"]["recall"], sc["rel"]["f1"]],
+            "e0_entity_strict_f1": sc["entity_strict"]["f1"], "e0_entity_prf": [sc["entity_strict"]["precision"], sc["entity_strict"]["recall"], sc["entity_strict"]["f1"]],
+            "edges_matching_gold": sum(1 for e in edges if e["kind"] == "pred" and e["matches_gold"]), "attribution": att["by_code"], "recovered_by_attribution": att["recovered"],
+            "tokens": doc.tokens, "sentence_ends": doc.sentence_ends,
+            "pred_spans": [[a, b, n.node_id] for n in pred["nodes"] for a, b in n.mentions],
+            "gold_spans": [[m.span[0], m.span[1], m.type] for m in g.mentions], "gold_rels": gold_rels,
+            "nodes": nodes, "edges": edges,
         })  # fmt: skip
     micro = res["aggregates"]["rel"]["micro"]
     return {
         "docs": docs,
+        "defs": relation_defs("configs/relations_scinlp.yaml"),
         "headline": {
             "relation_f1": micro["f1"],
             "precision": micro["precision"],
