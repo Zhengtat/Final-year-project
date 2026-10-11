@@ -210,3 +210,8 @@ Format: date · decision · reason · alternatives considered.
 - Decision: E0 is the headline; E1-E4 are conditional / oracle uplifts, never an additive decomposition; P&D interval labelled DESCRIPTIVE_SMALL_N; stability canonicalisation disagreement kept as frozen but labelled NON_INFORMATIVE_UNDER_CURRENT_DENOMINATOR (redesign deferred to CR-013); CR-011 panel NOT_APPLICABLE (no fake pre/post); held-out canonicalisation finding takes priority over the pilot's.
 - Reason: Research ruling after STOP 4; avoids post-test metric redefinition.
 - Alternatives: redefine the stability metric now (rejected: post-test change).
+
+## 2026-10-11 · CR-012 closure
+- Decision: CR-012 closed (evaluation-only). Next architecture work starts as a new CR (candidates: high-recall pair delivery, cross-domain concept-extraction recall, relation classification after endpoint recovery, a better canonicalisation-stability diagnostic, independently double-annotated P&D gold). SciNLP-derived document text (`data/interim/cr012/scinlp_units/`) is untracked and gitignored (CC BY-NC: not redistributed); the two dev-document copies committed earlier on the branch were removed from tracking.
+- Reason: Research closure decision; dataset licence rule in CLAUDE.md.
+- Alternatives: keep the dev copies tracked (rejected: licence).

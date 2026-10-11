@@ -61,3 +61,6 @@ Held-out P&D (7 sections, E0-E4), SciNLP test (3 documents, E0/E1/E3-M/E4-M) and
 
 ## CR-012 STOP 5 (2026-10-11)
 Final analysis generated locally from the frozen STOP-4 results (no model call, no rerun): FINAL_EVALUATION, pd_e2e, external_e2e, oracle_error_attribution, stability, unsupported_facts, provenance, cost, CR012_FAILURE_ANALYSIS and five SVG figures in `reports/cr012/`. CR-011 panel: NOT_APPLICABLE. Awaiting Research; no architecture change.
+
+## CR-012 CLOSED / COMPLETE (2026-10-11)
+Evaluation-only; no architecture change after the held-out run. P&D E0 STRICT_E2E_EDGE_F1 0.053; SciNLP E0 strict relation F1 0.050. Main measured bottlenecks: P&D pair / endpoint delivery, SciNLP entity extraction (canonicalisation not dominant: E1 0.113 -> E2 0.129). CR-011 contributed no production transformation (NOT_APPLICABLE). Single-annotator P&D gold and small n remain stated limitations. Cumulative CR-012 API spend $25.93. Merged `--no-ff`, tag `cr-012-complete`; branch retained for audit.

@@ -1,7 +1,7 @@
 pd:
-  source_jsonl: data/interim/cr012/scinlp_units/dev/P02-1004.grobid/sections.jsonl
+  source_jsonl: data/interim/cr012/units/4.5/sections.jsonl
   chapters:
-  - 1
+  - 4
   domain: computer networking
   relations_enabled: true
 iir_face:
