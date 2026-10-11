@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KG Explorer</title>
+<style>
+:root{--bg:#fafaf8;--panel:#fff;--ink:#16181d;--ink2:#555b66;--line:#d9dbe0;--accent:#2457c5;--warn:#9a3b00;--warnbg:#fff3e6;--okbg:#e9f6ee}
+@media (prefers-color-scheme:dark){:root{--bg:#14161a;--panel:#1d2026;--ink:#eceef2;--ink2:#a2a9b5;--line:#33373f;--accent:#7aa2ff;--warn:#ffb27a;--warnbg:#3a2a1c;--okbg:#1b3326}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.4 -apple-system,Segoe UI,Roboto,sans-serif;display:flex;flex-direction:column;height:100vh}
+header{padding:8px 14px;border-bottom:1px solid var(--line);background:var(--panel)}
+h1{font-size:16px;margin:0 0 6px}
+.modes button{font:inherit;padding:6px 14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:6px;cursor:pointer;margin-right:6px}
+.modes button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.banner{margin-top:8px;padding:8px 10px;border-radius:6px;font-size:13px}
+.banner.warn{background:var(--warnbg);color:var(--warn);border:1px solid var(--warn)}
+.banner.ok{background:var(--okbg);border:1px solid var(--line)}
+.banner b{font-weight:600}
+main{flex:1;display:flex;min-height:0}
+#side{width:290px;padding:10px;overflow:auto;border-right:1px solid var(--line);background:var(--panel)}
+#side h3{font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink2);margin:14px 0 4px}
+#side label{display:flex;align-items:center;gap:6px;font-size:13px;margin:2px 0}
+#side input[type=search],#side select{width:100%;font:inherit;padding:5px;border:1px solid var(--line);border-radius:5px;background:var(--bg);color:var(--ink)}
+#side button{font:inherit;padding:4px 10px;margin:2px 4px 2px 0;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:5px;cursor:pointer}
+.sw{width:11px;height:11px;border-radius:50%;display:inline-block}
+.rl{max-height:170px;overflow:auto;border:1px solid var(--line);border-radius:5px;padding:3px 6px}
+#stage{flex:1;position:relative;min-width:0}
+canvas{width:100%;height:100%;display:block;cursor:grab}
+#detail{width:360px;padding:10px;overflow:auto;border-left:1px solid var(--line);background:var(--panel);font-size:13px}
+#detail h2{font-size:15px;margin:0 0 6px}
+#detail dl{margin:6px 0}
+#detail dt{font-size:11px;text-transform:uppercase;color:var(--ink2);margin-top:8px}
+#detail dd{margin:1px 0 0}
+.q{border-left:3px solid var(--accent);padding:2px 8px;margin:3px 0;background:var(--bg)}
+.tag{display:inline-block;padding:0 6px;border-radius:9px;border:1px solid var(--line);font-size:11px;margin:1px}
+.na{color:var(--ink2);font-style:italic}
+table.docs{border-collapse:collapse;font-size:12px;margin:6px 0;width:100%}
+table.docs th,table.docs td{border:1px solid var(--line);padding:3px 6px;text-align:left}
+table.docs tr.sel{background:var(--okbg)}
+table.docs tr{cursor:pointer}
+#status{position:absolute;left:8px;bottom:6px;font-size:12px;color:var(--ink2);background:var(--panel);padding:2px 8px;border-radius:5px;border:1px solid var(--line)}
+@media (max-width:900px){main{flex-direction:column}#side,#detail{width:auto;max-height:30vh}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Knowledge graph explorer <span class="na">(read-only; rendered from retained outputs, no model call)</span></h1>
+  <div class="modes"><button id="m-pd">P&amp;D Expert KG</button><button id="m-sci">SciNLP Evaluation Graph</button></div>
+  <div id="banner"></div>
+</header>
+<main>
+  <aside id="side"></aside>
+  <div id="stage"><canvas id="cv"></canvas><div id="status"></div></div>
+  <aside id="detail"><p class="na">Click a node or an edge to see its details and evidence.</p></aside>
+</main>
+<script>
+const DATA = /*__DATA__*/null;
+const NA = DATA.na;
+const TYPE_COL = {Concept:'#6b7280',Protocol:'#2457c5',Component:'#c2410c',Mechanism:'#7c3aed',DataUnit:'#0f766e',Parameter:'#b45309',Property:'#be185d',Event:'#dc2626',State:'#4d7c0f',Layer:'#0369a1',Identifier:'#a21caf',
+  task:'#2457c5',method:'#c2410c',dataset:'#0f766e',metric:'#7c3aed'};
+const PALETTE = ['#2457c5','#c2410c','#0f766e','#7c3aed','#b45309','#be185d','#4d7c0f','#0369a1','#a21caf','#dc2626','#64748b','#ca8a04','#0891b2','#9333ea'];
+const relColCache = {};
+function relCol(r){ if(!(r in relColCache)){ relColCache[r]=PALETTE[Object.keys(relColCache).length%PALETTE.length]; } return relColCache[r]; }
+function typeCol(t){ return TYPE_COL[t]||'#6b7280'; }
+const RING_COL = {centre:'#dc2626',inner:'#c2410c',middle:'#b45309',outer:'#64748b',unlinked:'#9ca3af'};
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const val = v => (v===null||v===undefined||v===NA||(Array.isArray(v)&&!v.length)) ? '<span class="na">'+NA+'</span>' : (typeof v==='object'? '<code>'+esc(JSON.stringify(v))+'</code>' : esc(v));
+
+const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
+let mode='pd', doc=null, G=null, view={x:0,y:0,k:1}, sel=null, hover=null;
+let F={types:new Set(),rels:new Set(),chapter:3,labels:false,unlinked:false,layout:'force',colour:'type',query:''};
+
+function pos(n){ return mode==='pd' ? (F.layout==='rings'?[n.rx,n.ry]:[n.fx,n.fy]) : [n.fx,n.fy]; }
+function setMode(m, d){
+  mode=m; sel=null; document.getElementById('detail').innerHTML='<p class="na">Click a node or an edge to see its details and evidence.</p>';
+  if(m==='pd'){ G=DATA.pd; F.types=new Set(G.nodes.map(n=>n.type)); F.rels=new Set(G.edges.map(e=>e.rel)); F.chapter=3; F.unlinked=false; F.layout='force'; }
+  else { doc=d||DATA.sci.docs[0]; G=doc; F.types=new Set(G.nodes.map(n=>n.type)); F.rels=new Set(G.edges.map(e=>e.rel)); }
+  F.query='';
+  prep(); banner(); buildSide(); fit(); draw();
+  document.getElementById('m-pd').classList.toggle('on',m==='pd'); document.getElementById('m-sci').classList.toggle('on',m==='sci');
+}
+let byId={}, adj={};
+function prep(){
+  byId={}; adj={}; G.nodes.forEach(n=>{byId[n.id]=n;adj[n.id]=[];});
+  G.edges.forEach(e=>{ if(adj[e.s]) adj[e.s].push(e); if(adj[e.t]) adj[e.t].push(e); });
+}
+function banner(){
+  const b=document.getElementById('banner');
+  if(mode==='pd'){
+    b.innerHTML='<div class="banner ok"><b>P&amp;D Expert KG — production/development graph. Peterson &amp; Davie, Chapters 1–3.</b> This is the project\'s current networking Expert KG product graph. It currently covers the P&amp;D Chapters 1–3 development slice. Run <code>'+esc(G.run_id)+'</code>.<br>'+
+    '<b>CR-012 held-out P&amp;D E0 strict F1 = '+DATA.pd_heldout.e0_strict_f1.toFixed(3)+'</b> — measured on separate held-out P&amp;D sections ('+DATA.pd_heldout.sections.join(', ')+'), <b>not</b> the score of the displayed Chapters 1–3 graph.</div>';
+  } else {
+    const h=DATA.sci.headline;
+    b.innerHTML='<div class="banner warn"><b>CR-012 SciNLP held-out E0 graph — EVALUATION OUTPUT — NOT the production Expert KG.</b> This graph was produced only for CR-012 external held-out evaluation. It is not incorporated into the production Expert KG.<br>'+
+    '<b>Frozen headline: E0 strict relation F1 = '+h.relation_f1.toFixed(3)+'</b> (micro over the 3 test documents; P '+h.precision.toFixed(3)+' / R '+h.recall.toFixed(3)+'). CI status = <b>'+esc(h.ci_status)+'</b>. Benchmark labels are the literal repository labels (task / method / dataset / metric).</div>';
+  }
+}
+function visible(){
+  const nodes=[], ok=new Set();
+  const q=F.query.trim().toLowerCase();
+  G.nodes.forEach(n=>{
+    if(!F.types.has(n.type)) return;
+    if(mode==='pd'){ if(n.ch>F.chapter) return; if(!n.linked && !F.unlinked) return; }
+    nodes.push(n); ok.add(n.id);
+  });
+  const edges=G.edges.filter(e=>F.rels.has(e.rel)&&ok.has(e.s)&&ok.has(e.t)&&(mode!=='pd'||e.ch<=F.chapter));
+  return {nodes,edges,ok};
+}
+function nodeCol(n){
+  if(mode==='pd' && F.colour==='ring') return RING_COL[n.ring]||'#9ca3af';
+  if(mode==='sci' && F.colour==='gold') return n.gold_entity_match?'#15803d':'#b91c1c';
+  return typeCol(n.type);
+}
+function rad(n){ if(mode==='pd'&&F.colour==='ring'&&n.importance!=null) return 3+9*n.importance; if(mode==='pd') return 3+Math.min(5,n.n_mentions*0.25); return 5+Math.min(6,n.n_spans); }
+
+function resize(){ const r=cv.getBoundingClientRect(), d=window.devicePixelRatio||1; cv.width=r.width*d; cv.height=r.height*d; ctx.setTransform(d,0,0,d,0,0); }
+function sx(p){ return p[0]*view.k+view.x; } function sy(p){ return p[1]*view.k+view.y; }
+function fit(){
+  resize(); const v=visible(); const r=cv.getBoundingClientRect();
+  if(!v.nodes.length){ view={x:r.width/2,y:r.height/2,k:1}; return; }
+  let a=1e9,b=1e9,c=-1e9,d=-1e9; v.nodes.forEach(n=>{const p=pos(n); a=Math.min(a,p[0]);b=Math.min(b,p[1]);c=Math.max(c,p[0]);d=Math.max(d,p[1]);});
+  const k=Math.min((r.width-60)/Math.max(c-a,1e-6),(r.height-60)/Math.max(d-b,1e-6));
+  view={k:k,x:r.width/2-k*(a+c)/2,y:r.height/2-k*(b+d)/2};
+}
+function arrow(x1,y1,x2,y2,r2,col,w){
+  const dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy)||1,ux=dx/L,uy=dy/L, ex=x2-ux*r2, ey=y2-uy*r2;
+  ctx.strokeStyle=col; ctx.lineWidth=w; ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(ex,ey); ctx.stroke();
+  const s=5+w; ctx.fillStyle=col; ctx.beginPath(); ctx.moveTo(ex,ey); ctx.lineTo(ex-ux*s-uy*s*0.5,ey-uy*s+ux*s*0.5); ctx.lineTo(ex-ux*s+uy*s*0.5,ey-uy*s-ux*s*0.5); ctx.closePath(); ctx.fill();
+}
+function draw(){
+  const r=cv.getBoundingClientRect(); ctx.clearRect(0,0,r.width,r.height);
+  const v=visible(); const q=F.query.trim().toLowerCase();
+  const dark=matchMedia('(prefers-color-scheme:dark)').matches;
+  const focus=new Set(); if(sel){ if(sel.kind==='node'){ focus.add(sel.id); (adj[sel.id]||[]).forEach(e=>{focus.add(e.s);focus.add(e.t);}); } else { focus.add(sel.e.s); focus.add(sel.e.t); } }
+  v.edges.forEach(e=>{
+    const a=byId[e.s],b=byId[e.t]; const pa=pos(a),pb=pos(b);
+    const on=sel&&((sel.kind==='edge'&&sel.e===e)||(sel.kind==='node'&&(e.s===sel.id||e.t===sel.id)));
+    let col=relCol(e.rel); if(mode==='sci'&&F.colour==='gold') col=e.matches_gold?'#15803d':'#b91c1c';
+    ctx.globalAlpha= sel&&!on?0.12:0.75;
+    arrow(sx(pa),sy(pa),sx(pb),sy(pb),rad(b)*Math.min(view.k,2)*0.5+3,col,on?2.5:1.1);
+    if(F.labels||on){ ctx.globalAlpha=1; ctx.fillStyle=dark?'#ddd':'#222'; ctx.font='10px sans-serif'; ctx.fillText(e.rel,(sx(pa)+sx(pb))/2+3,(sy(pa)+sy(pb))/2-3); }
+  });
+  v.nodes.forEach(n=>{
+    const p=pos(n),x=sx(p),y=sy(p); const rr=rad(n)*Math.min(Math.max(view.k/60,0.7),2.2);
+    const hit=q&&(n.name.toLowerCase().includes(q)||(n.aliases||[]).some(a=>a.toLowerCase().includes(q)));
+    ctx.globalAlpha= sel&&!focus.has(n.id)?0.15:1;
+    ctx.fillStyle=nodeCol(n); ctx.beginPath(); ctx.arc(x,y,rr,0,6.283); ctx.fill();
+    if(hit||(sel&&sel.kind==='node'&&sel.id===n.id)){ ctx.strokeStyle='#eab308'; ctx.lineWidth=3; ctx.stroke(); }
+    if(F.labels||hit||focus.has(n.id)&&sel||hover===n){ ctx.globalAlpha=1; ctx.fillStyle=dark?'#eee':'#111'; ctx.font='11px sans-serif'; ctx.fillText(n.name,x+rr+3,y+4); }
+  });
+  ctx.globalAlpha=1;
+  document.getElementById('status').textContent=v.nodes.length+' nodes · '+v.edges.length+' edges shown'+(mode==='pd'&&!F.unlinked?' (unlinked nodes hidden)':'');
+}
+function nodeAt(mx,my){ const v=visible(); let best=null,bd=1e9; v.nodes.forEach(n=>{const p=pos(n),d=Math.hypot(sx(p)-mx,sy(p)-my); const rr=Math.max(rad(n)*Math.min(Math.max(view.k/60,0.7),2.2),6); if(d<rr+2&&d<bd){bd=d;best=n;}}); return best; }
+function edgeAt(mx,my){ const v=visible(); let best=null,bd=6; v.edges.forEach(e=>{const a=pos(byId[e.s]),b=pos(byId[e.t]);const x1=sx(a),y1=sy(a),x2=sx(b),y2=sy(b);const L2=(x2-x1)**2+(y2-y1)**2||1;let t=((mx-x1)*(x2-x1)+(my-y1)*(y2-y1))/L2;t=Math.max(0,Math.min(1,t));const d=Math.hypot(mx-(x1+t*(x2-x1)),my-(y1+t*(y2-y1)));if(d<bd){bd=d;best=e;}}); return best; }
+
+function detNode(n){
+  let h='<h2>'+esc(n.name)+'</h2><span class="tag" style="border-color:'+typeCol(n.type)+'">'+esc(n.type)+'</span>';
+  if(mode==='pd'){
+    h+='<dl><dt>Aliases</dt><dd>'+(n.aliases.length?n.aliases.map(a=>'<span class="tag">'+esc(a)+'</span>').join(''):'<span class="na">none recorded</span>')+'</dd>'+
+    '<dt>Introduced</dt><dd>chapter '+n.ch+' · first section: '+val(n.first_section)+'</dd>'+
+    '<dt>Mentions</dt><dd>'+n.n_mentions+' in sections: '+esc(n.sections.join(', ')||NA)+'</dd>'+
+    '<dt>Definition</dt><dd>'+val(n.definition)+'</dd>'+
+    '<dt>Alias provenance</dt><dd>'+val(n.alias_provenance)+'</dd>'+
+    '<dt>Merged from</dt><dd>'+val(n.merged_from)+'</dd>'+
+    '<dt>Organisation (CR-006, ch3)</dt><dd>ring <b>'+esc(n.ring)+'</b> · importance '+(n.importance==null?'<span class="na">'+NA+'</span>':n.importance.toFixed(3))+' · community '+esc(n.comm)+' / '+esc(n.comm_fine)+'</dd>'+
+    '<dt>Ring by chapter</dt><dd>'+Object.entries(n.ring_by_chapter).map(([c,r])=>'ch'+c+': '+esc(r)).join(' → ')+'</dd>'+
+    '<dt>Evidence quotes (generator)</dt>'+n.quotes.map(q=>'<dd><div class="q">'+esc(q.q)+'<br><span class="na">'+esc(q.sec)+' · '+esc(q.role)+'</span></div></dd>').join('')+'</dl>';
+  } else {
+    h+=' <span class="tag">'+(n.gold_entity_match?'span matches a gold entity':'no gold entity at this span')+'</span>'+(n.gold_entity_typed_match?' <span class="tag">type also matches</span>':'')+
+    '<dl><dt>Surface text</dt><dd>'+n.surfaces.map(s=>'<span class="tag">'+esc(s)+'</span>').join('')+'</dd>'+
+    '<dt>Canonical node name</dt><dd>'+esc(n.canonical_name)+'</dd>'+
+    '<dt>Spans (token start–end, half-open)</dt><dd>'+esc(n.spans.map(s=>s[0]+'–'+s[1]).join(', '))+(n.n_spans>n.spans.length?' …':'')+'</dd>'+
+    '<dt>Source sentence (first span)</dt><dd><div class="q">'+esc(n.sentence)+'</div></dd></dl>';
+  }
+  const es=(adj[n.id]||[]); h+='<dt style="font-size:11px;text-transform:uppercase;color:var(--ink2)">Edges ('+es.length+')</dt>'+es.map(e=>'<div><a href="#" data-e="'+e.id+'">'+esc(byId[e.s].name)+' —'+esc(e.rel)+'→ '+esc(byId[e.t].name)+'</a></div>').join('');
+  return h;
+}
+function detEdge(e){
+  const a=byId[e.s],b=byId[e.t];
+  let h='<h2>'+esc(a.name)+' <span style="color:'+relCol(e.rel)+'">—'+esc(e.rel)+'→</span> '+esc(b.name)+'</h2>'+
+  '<dl><dt>Direction</dt><dd>source <b>'+esc(a.name)+'</b> → target <b>'+esc(b.name)+'</b> (model direction flag: '+val(e.model_direction)+')</dd>'+
+  '<dt>Statement</dt><dd>'+val(e.statement)+'</dd>'+
+  '<dt>Evidence quote (verified exact substring)</dt><dd><div class="q">'+val(e.quote)+'</div></dd>'+
+  '<dt>Source sentence</dt><dd><div class="q">'+val(e.sentence)+'</div></dd>'+
+  '<dt>Qualifiers</dt><dd>'+val(e.qual)+'</dd>'+
+  '<dt>Confidence</dt><dd>'+val(e.confidence)+'</dd>';
+  if(mode==='pd') h+='<dt>Family</dt><dd>'+esc(e.family)+'</dd><dt>Section / chapter</dt><dd>'+esc(e.section)+' · chapter '+e.ch+'</dd><dt>Relation provenance</dt><dd>edge id '+esc(e.id)+' · selection group '+val(e.selection_group)+'<br>grounding: '+val(e.grounding)+'<br>family reason: '+val(e.family_reason)+'<br>prompt hashes: '+val(e.hashes)+'</dd>';
+  else h+='<dt>Matches a gold relation (frozen scorer, strict)</dt><dd><b>'+(e.matches_gold?'yes':'no')+'</b>'+(e.grounded?'':' <span class="na">(edge could not be projected to mentions)</span>')+'</dd>';
+  return h+'</dl>';
+}
+function select(s){
+  sel=s; const d=document.getElementById('detail');
+  d.innerHTML = !s ? '' : s.kind==='node' ? detNode(byId[s.id]) : detEdge(s.e);
+  d.querySelectorAll('a[data-e]').forEach(a=>a.onclick=ev=>{ev.preventDefault(); const e=G.edges.find(x=>x.id===a.dataset.e); select({kind:'edge',e});});
+  draw();
+}
+cv.addEventListener('click',ev=>{ const r=cv.getBoundingClientRect(),mx=ev.clientX-r.left,my=ev.clientY-r.top; const n=nodeAt(mx,my); if(n){select({kind:'node',id:n.id});return;} const e=edgeAt(mx,my); if(e){select({kind:'edge',e});return;} select(null); document.getElementById('detail').innerHTML='<p class="na">Click a node or an edge to see its details and evidence.</p>'; });
+let drag=null, moved=false;
+cv.addEventListener('mousedown',ev=>{drag={x:ev.clientX,y:ev.clientY,vx:view.x,vy:view.y};moved=false;cv.style.cursor='grabbing';});
+addEventListener('mouseup',()=>{drag=null;cv.style.cursor='grab';});
+addEventListener('mousemove',ev=>{ if(drag){ view.x=drag.vx+ev.clientX-drag.x; view.y=drag.vy+ev.clientY-drag.y; draw(); return;} const r=cv.getBoundingClientRect(); if(ev.clientX<r.left||ev.clientX>r.right||ev.clientY<r.top||ev.clientY>r.bottom) return; const n=nodeAt(ev.clientX-r.left,ev.clientY-r.top); if(n!==hover){hover=n;draw();} });
+cv.addEventListener('wheel',ev=>{ev.preventDefault(); const r=cv.getBoundingClientRect(),mx=ev.clientX-r.left,my=ev.clientY-r.top; const f=ev.deltaY<0?1.15:1/1.15; view.x=mx-(mx-view.x)*f; view.y=my-(my-view.y)*f; view.k*=f; draw();},{passive:false});
+addEventListener('resize',()=>{fit();draw();});
+
+function buildSide(){
+  const s=document.getElementById('side'); let h='';
+  if(mode==='sci'){
+    h+='<h3>Test documents (3)</h3><table class="docs"><tr><th>document</th><th>pred nodes / edges</th><th>gold ent / rel</th><th>E0 rel F1</th></tr>'+
+    DATA.sci.docs.map(d=>'<tr data-d="'+esc(d.doc_id)+'" class="'+(d===doc?'sel':'')+'"><td>'+esc(d.doc_id)+'</td><td>'+d.predicted_nodes+' / '+d.predicted_edges+'</td><td>'+d.gold_entities+' / '+d.gold_relations+'</td><td>'+d.e0_strict_relation_f1.toFixed(3)+'</td></tr>').join('')+'</table>'+
+    '<div class="na" style="font-size:12px">Selected: '+esc(doc.doc_id)+'<br>predicted entity mentions: '+doc.predicted_entity_mentions+'<br>edges matching a gold relation: '+doc.edges_matching_gold+' / '+doc.predicted_edges+' (relation tp/fp/fn '+doc.e0_relation_tp_fp_fn.join('/')+')<br>entity strict F1 '+doc.e0_entity_strict_f1.toFixed(3)+'<br>retained prediction: <code>'+esc(doc.retained_prediction_path)+'</code></div>';
+  } else {
+    const st=G.stats;
+    h+='<h3>Snapshot</h3><div class="na" style="font-size:12px">run <code>'+esc(G.run_id)+'</code><br>'+esc(G.snapshot_path)+'<br>organisation: <code>'+esc(G.organisation_path)+'</code><br>'+st.canonical_nodes+' canonical nodes ('+st.nodes_with_edges+' linked, '+st.unlinked_nodes+' unlinked) · '+st.accepted_edges+' accepted edges · '+st.aliases+' aliases<br>ring counts: '+Object.entries(st.ring_counts).map(([k,v])=>k+' '+v).join(', ')+'<br>organisation label source: '+esc(st.organisation.label_source)+'</div>'+
+    '<h3>Chapter (cumulative, introduced ≤)</h3><select id="f-ch">'+[1,2,3].map(c=>'<option value="'+c+'"'+(c===3?' selected':'')+'>up to chapter '+c+'</option>').join('')+'</select>'+
+    '<h3>Layout</h3><select id="f-lay"><option value="force">Force (connected structure)</option><option value="rings">Rings (CR-006 centre/inner/middle/outer)</option></select>'+
+    '<h3>Colour nodes by</h3><select id="f-col"><option value="type">node type</option><option value="ring">ring (size = importance)</option></select>'+
+    '<label><input type="checkbox" id="f-unl"> show unlinked nodes ('+st.unlinked_nodes+')</label>';
+  }
+  if(mode==='sci') h+='<h3>Colour by</h3><select id="f-col"><option value="type">node / relation type</option><option value="gold">matches gold (green) / not (red)</option></select>';
+  h+='<h3>Search nodes</h3><input type="search" id="f-q" placeholder="name or alias" list="dl"><datalist id="dl">'+G.nodes.slice(0,2000).map(n=>'<option value="'+esc(n.name)+'">').join('')+'</datalist>';
+  const types=[...new Set(G.nodes.map(n=>n.type))].sort();
+  h+='<h3>Node types</h3>'+types.map(t=>'<label><input type="checkbox" data-t="'+esc(t)+'" checked><span class="sw" style="background:'+typeCol(t)+'"></span>'+esc(t)+' ('+G.nodes.filter(n=>n.type===t).length+')</label>').join('');
+  const rels=[...new Set(G.edges.map(e=>e.rel))].sort(); const cnt={}; G.edges.forEach(e=>cnt[e.rel]=(cnt[e.rel]||0)+1);
+  h+='<h3>Relations</h3><div class="rl">'+rels.map(r=>'<label><input type="checkbox" data-r="'+esc(r)+'" checked><span class="sw" style="background:'+relCol(r)+'"></span>'+esc(r)+' ('+cnt[r]+')</label>').join('')+'</div>'+
+  '<div><button id="b-all">all</button><button id="b-none">none</button></div>'+
+  '<h3>View</h3><label><input type="checkbox" id="f-lab"> show labels</label><button id="b-fit">Fit to screen</button><button id="b-reset">Reset view</button>';
+  s.innerHTML=h;
+  s.querySelectorAll('tr[data-d]').forEach(tr=>tr.onclick=()=>setMode('sci',DATA.sci.docs.find(d=>d.doc_id===tr.dataset.d)));
+  s.querySelectorAll('input[data-t]').forEach(i=>i.onchange=()=>{i.checked?F.types.add(i.dataset.t):F.types.delete(i.dataset.t);draw();});
+  s.querySelectorAll('input[data-r]').forEach(i=>i.onchange=()=>{i.checked?F.rels.add(i.dataset.r):F.rels.delete(i.dataset.r);draw();});
+  const q=s.querySelector('#f-q'); q.oninput=()=>{F.query=q.value; const m=G.nodes.find(n=>n.name.toLowerCase()===q.value.trim().toLowerCase()); if(m){ select({kind:'node',id:m.id}); } else draw();};
+  const ch=s.querySelector('#f-ch'); if(ch) ch.onchange=()=>{F.chapter=+ch.value;fit();draw();};
+  const lay=s.querySelector('#f-lay'); if(lay) lay.onchange=()=>{F.layout=lay.value;fit();draw();};
+  const col=s.querySelector('#f-col'); if(col) col.onchange=()=>{F.colour=col.value;draw();};
+  const unl=s.querySelector('#f-unl'); if(unl) unl.onchange=()=>{F.unlinked=unl.checked;fit();draw();};
+  s.querySelector('#f-lab').onchange=e=>{F.labels=e.target.checked;draw();};
+  s.querySelector('#b-fit').onclick=()=>{fit();draw();};
+  s.querySelector('#b-reset').onclick=()=>{F.types=new Set(G.nodes.map(n=>n.type));F.rels=new Set(G.edges.map(e=>e.rel));F.query='';F.chapter=3;F.unlinked=false;F.labels=false;sel=null;buildSide();fit();draw();};
+  s.querySelector('#b-all').onclick=()=>{s.querySelectorAll('input[data-r]').forEach(i=>{i.checked=true;F.rels.add(i.dataset.r);});draw();};
+  s.querySelector('#b-none').onclick=()=>{s.querySelectorAll('input[data-r]').forEach(i=>{i.checked=false;F.rels.delete(i.dataset.r);});draw();};
+  F.colour='type';
+}
+document.getElementById('m-pd').onclick=()=>setMode('pd');
+document.getElementById('m-sci').onclick=()=>setMode('sci');
+setMode('pd');
+</script>
+</body>
+</html>

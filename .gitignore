@@ -44,3 +44,6 @@ dataset_snapshots/
 
 # CR-012: SciNLP-derived document text is CC BY-NC and never redistributed
 data/interim/cr012/scinlp_units/
+
+# generated KG explorer embeds SciNLP-derived sentences (CC BY-NC): never committed
+reports/kg_explorer/
