@@ -121,6 +121,14 @@ def load_settings(config_path: Path | None = None, *, env_file: Path | None = No
     llm_raw["tiers"] = tiers_raw
     raw = {**raw, "llm": llm_raw}
 
+    if os.environ.get(
+        "CUMAP_RELATION_REGISTRY"
+    ):  # evaluation plumbing (CR-012): a benchmark-local registry instead of the CUM one
+        raw = {**raw, "relation_registry": os.environ["CUMAP_RELATION_REGISTRY"]}
+    if os.environ.get(
+        "CUMAP_LLM_CACHE_DIR"
+    ):  # evaluation plumbing (CR-012 stability): a private model-output cache per repeated run
+        raw = {**raw, "paths": {**raw["paths"], "data_cache": os.environ["CUMAP_LLM_CACHE_DIR"]}}
     return Settings(
         **raw,
         openai_api_key=os.environ.get("OPENAI_API_KEY"),
@@ -170,5 +178,10 @@ class DemoSliceConfig(BaseModel):
 
 
 def load_demo_slice(path: Path | None = None) -> DemoSliceConfig:
-    raw = yaml.safe_load((path or (REPO_ROOT / "configs" / "demo_slice.yaml")).read_text())
+    """`CUMAP_DEMO_SLICE` (a path) overrides the default slice file, so an evaluation unit (CR-012) can be run through the unchanged
+    production stages as its own one-section slice."""
+    env = os.environ.get("CUMAP_DEMO_SLICE")
+    raw = yaml.safe_load(
+        (path or (Path(env) if env else REPO_ROOT / "configs" / "demo_slice.yaml")).read_text()
+    )
     return DemoSliceConfig(**raw)

@@ -16,7 +16,7 @@ from dataclasses import dataclass, field
 
 from cumap.concepts_v4.bank import card_line, render_examples
 from cumap.concepts_v4.cards import Card
-from cumap.concepts_v4.schema import ConceptGeneratorV4LLM
+from cumap.concepts_v4.schema import DEFAULT_SCHEMAS, GeneratorSchemas
 from cumap.concepts_v4.verifier import (
     Hint,
     VerifyCtx,
@@ -140,7 +140,9 @@ class SectionRunner:
         *,
         domain: str,
         fixture: str = "default",
+        schemas: GeneratorSchemas | None = None,
     ):
+        self.schemas = schemas or DEFAULT_SCHEMAS
         self.client, self.prompt, self.bank, self.cfg, self.domain, self.fixture = (
             client,
             prompt,
@@ -187,7 +189,7 @@ class SectionRunner:
             task="concept_generator",
             prompt_version=self.prompt.version,
             messages=[{"role": "user", "content": rendered}],
-            schema=ConceptGeneratorV4LLM,
+            schema=self.schemas.generator,
             model_tier=self.cfg.model_tier,
             fixture_name=self.fixture,
             allow_escalation=False,

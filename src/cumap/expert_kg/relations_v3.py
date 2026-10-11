@@ -127,7 +127,10 @@ def build_relation_choice_v3(
 def build_qualifiers_v3(registry: RelationRegistry, intuition: bool = True) -> type[BaseModel]:
     """`intuition=False` is the v4 schema: no corrects_intuition / intuition (CR-008 item 2)."""
     extra = {"corrects_intuition": (bool, ...), "intuition": (str | None, ...)} if intuition else {}
-    action_values = tuple(registry.qualifiers["action_type"].values or ["other"])
+    action = registry.qualifiers.get(
+        "action_type"
+    )  # a benchmark-local registry (CR-012) defines no action_type
+    action_values = tuple((action.values if action else None) or ["other"])
     return create_model(
         "QualifiersV3LLM" if intuition else "QualifiersV4LLM",
         __config__=ConfigDict(extra="forbid"),

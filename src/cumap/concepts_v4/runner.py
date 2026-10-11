@@ -22,7 +22,7 @@ from cumap.concepts_v4.cards import (
 )
 from cumap.concepts_v4.loop import LoopConfig, SectionResult, SectionRunner, render_paragraphs
 from cumap.concepts_v4.pruner import is_value_like, norm
-from cumap.concepts_v4.schema import BackfillLLM
+from cumap.concepts_v4.schema import DEFAULT_SCHEMAS, GeneratorSchemas
 from cumap.concepts_v4.verifier import VerifyCtx, drop_flagged, verify
 from cumap.expert_kg.alias_rules import AliasConfig, r1_key
 from cumap.expert_kg.lexicon import Lexicon
@@ -103,9 +103,13 @@ class ConceptRun:
         card_cap: int = 120,
         fixture: str = "default",
         progress: Callable[[str], None] | None = None,
+        schemas: GeneratorSchemas | None = None,
     ):
         self.__dict__.update(locals())
-        self.runner = SectionRunner(client, prompt, bank, cfg, domain=domain, fixture=fixture)
+        self.schemas = schemas or DEFAULT_SCHEMAS
+        self.runner = SectionRunner(
+            client, prompt, bank, cfg, domain=domain, fixture=fixture, schemas=self.schemas
+        )
         self.alias_cfg = lexicon.cfg if lexicon else AliasConfig.load()
 
     # ---------------------------------------------------------------- chapter contexts
@@ -385,7 +389,7 @@ class ConceptRun:
                     task="concept_backfill",
                     prompt_version=self.backfill_prompt.version,
                     messages=[{"role": "user", "content": rendered}],
-                    schema=BackfillLLM,
+                    schema=self.schemas.backfill,
                     model_tier=self.cfg.model_tier,
                     fixture_name=self.fixture,
                     allow_escalation=False,

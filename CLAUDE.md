@@ -20,6 +20,15 @@ Final-year project (FYP H420020) by Zheng Tat Wong. The system:
 - Keep commits small, with clear messages. Don't push unless asked.
 - **Git workflow (from 2026-09-30):** one branch per change request (`cr-NNN-<slug>`), created from the mainline (`main`). Doc updates for a CR (PROGRESS, DECISIONS, BUILD_PLAN, ARCHITECTURE, CLAUDE.md) live on the CR's branch with its code. When all of the CR's stop points are signed off and tests pass, open a PR to the mainline (or merge with `--no-ff` if there is no PR workflow) and tag the merge `cr-NNN-complete`. Don't start the next CR until the previous one is merged; it branches from the updated mainline. Every run writes to a new `run_id`, so runs from different branches never overwrite each other.
 
+## Dataset snapshot rule
+Before replacing, upgrading, reformatting or switching any dataset used by an active CR:
+1. Preserve the repository state first: create the archive branch `archive/<cr>-<dataset>-pre-change` from the exact current `HEAD` and an annotated tag `<cr>-<dataset>-pre-change` at the same commit. Never modify the archive branch afterwards.
+2. A dataset tracked by Git is covered by that branch/tag. A gitignored, local-only or licence-restricted dataset needs a separate local archive of the exact bytes (for example `dataset_snapshots/<cr>-<dataset>-pre-change.tar.gz`) with its SHA-256; record the dataset source / version / commit, the archive location, the archive branch/tag, per-file hashes and the redistribution restriction in the active CR's dataset manifest. Do not push a dataset whose licence or project rules forbid it.
+3. A Git branch or tag is never called a dataset backup unless the dataset files are actually tracked by Git.
+4. After the snapshot is verified, continue on the original CR branch (no development on the archive branch).
+5. Reports must name the dataset snapshot / version behind every result; never silently compare or combine results from different dataset versions.
+6. Before any destructive replacement, verify that both the pre-change commit and the exact pre-change bytes (or an authoritative reproducible source) are recoverable.
+
 ## Commands
 ```bash
 uv sync                                   # install

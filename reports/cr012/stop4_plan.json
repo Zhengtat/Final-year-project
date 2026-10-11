@@ -1,0 +1,86 @@
+{
+ "tag": "heldout",
+ "pd_sections": {
+  "4.4": 4091,
+  "4.5": 3255,
+  "5.4": 4597,
+  "6.3": 4108,
+  "7.1": 4799,
+  "8.2": 4110,
+  "9.3": 5093
+ },
+ "scinlp_test_docs": {
+  "2021.acl-long.353": 6798,
+  "2024.acl-long.108-1-9.grobid": 7166,
+  "P17-1058.grobid": 6504
+ },
+ "max_budget_pairs_D3": {
+  "4.4": 59,
+  "4.5": 47,
+  "5.4": 66,
+  "6.3": 59,
+  "7.1": 69,
+  "8.2": 59,
+  "9.3": 73,
+  "2021.acl-long.353": 97,
+  "2024.acl-long.108-1-9.grobid": 102,
+  "P17-1058.grobid": 93
+ },
+ "pd_levels": [
+  "E0",
+  "E1",
+  "E2",
+  "E3",
+  "E4"
+ ],
+ "scinlp_levels": [
+  "E0",
+  "E1",
+  "E3",
+  "E4"
+ ],
+ "stability_subset": {
+  "scinlp_documents": [
+   "P17-1058.grobid",
+   "2021.acl-long.353"
+  ],
+  "pd_sections": [
+   4.5,
+   4.4
+  ]
+ },
+ "stability_repeats": 3,
+ "forecast_usd": {
+  "upper_no_sharing": {
+   "pilot": 5.54,
+   "heldout_pd": 13.28,
+   "heldout_scinlp": 9.07,
+   "stability": 6.03,
+   "total": 33.92
+  },
+  "lower_cache_sharing": {
+   "pilot": 5.15,
+   "heldout_pd": 10.71,
+   "heldout_scinlp": 6.2,
+   "stability": 6.03,
+   "total": 28.09
+  },
+  "limits": {
+   "soft_warning": 40,
+   "hard_cap": 50
+  },
+  "words_k": {
+   "pd_pilot": 6.564,
+   "pd_heldout": 30.053,
+   "scinlp_test": 17.4,
+   "scinlp_dev_rehearsal": 9.5,
+   "stability_run": 18.6527
+  },
+  "status": "UPPER BELOW CAP"
+ },
+ "spent_before": 2.8539,
+ "projected_mandatory_total_upper": 31.23,
+ "hard_cap": 50.0,
+ "soft_warning": 40.0,
+ "status": "WITHIN_CAP"
+}

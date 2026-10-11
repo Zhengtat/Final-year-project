@@ -1,0 +1,323 @@
+{
+ "stage": "CR-012 STOP 1",
+ "scinlp": {
+  "source": "https://github.com/AKADDC/SciNLP",
+  "clone_dir": "data/raw/external/scinlp (gitignored; not redistributed)",
+  "commit": "1aba50cba472b65e5f8ce26362eb6aef45a599d7",
+  "commit_subject": "Adopt the dataset snapshot rule (CLAUDE.md, DECISIONS); CR-012 manifest records the SciNLP snapshot state",
+  "dataset_snapshot": {
+   "version_label": "scinlp-repo-e78342be517e",
+   "pre_change_git_commit": "1aba50cba472b65e5f8ce26362eb6aef45a599d7",
+   "archive_branch": "archive/cr012-scinlp-pre-change",
+   "archive_branch_commit": "1aba50cba472b65e5f8ce26362eb6aef45a599d7",
+   "archive_tag": "cr012-scinlp-pre-change (annotated)",
+   "dataset_tracked_by_git": false,
+   "git_branch_or_tag_is_a_dataset_backup": false,
+   "local_only_archive": {
+    "path": "dataset_snapshots/cr012-scinlp-pre-change.tar.gz (gitignored)",
+    "sha256": "718cb9650e2d9766e4975f6499e04e0a92e051d02d1b427bedbdd28e61decd94",
+    "bytes": 12935542,
+    "contents": "data/raw/external/scinlp/ (Dataset/*.json, KG_triples.txt, README.md, SOURCE.md) exactly as downloaded; gzip -n, so the archive bytes are reproducible",
+    "verified": "extracted to a temporary folder; train/dev/test sha256 equal the per-file hashes in this manifest"
+   },
+   "authoritative_reproducible_source": "https://github.com/AKADDC/SciNLP at the commit above",
+   "redistribution": "CC BY-NC 4.0, non-commercial academic use only: the data and the archive are never pushed or published",
+   "rule": "any replacement, upgrade, reformatting or switch of this dataset requires this snapshot to exist first; every CR-012 result names this version label"
+  },
+  "licence": "CC BY-NC 4.0 (non-commercial academic research only; follows the ACL OCL Corpus policy)",
+  "official_scorer": "NONE in the repository; README lists PURE / PL-Marker / HGERE F1 only. Published numbers cannot be verified as computed with a scoring definition identical to ours.",
+  "readme_stated_counts": {
+   "papers": 60,
+   "entities": 6429,
+   "relations": 1649
+  },
+  "paper": {
+   "source": "https://arxiv.org/abs/2509.07801 (v3, 2025-09-20; EMNLP 2025 main)",
+   "papers": 60,
+   "entities": 7072,
+   "relations": 1826,
+   "split": "8:1:1 (approx. 48/6/6 papers)",
+   "entity_types": [
+    "Task",
+    "Model",
+    "Dataset",
+    "Metric"
+   ],
+   "relation_types_11": "directional: measuredBy, usedFor, trainedWith, enhancedBy, evaluatedBy, evaluatedOn, subclassOf, subtaskOf, partOf; symmetric: compareWith, similarWith",
+   "annotation": "2 experts (pilot, 12 papers) + 5 graduate students (48 papers), >= 2 annotators per paper, Doccano; entity kappa 0.83-0.91, relation kappa 0.64-0.81",
+   "coreference": "not annotated (entity mentions only; abbreviation / full-form normalisation applied as post-processing)",
+   "metrics": {
+    "NER": "strict span + type",
+    "Rel": "subject span, object span, relation type",
+    "Rel+": "Rel plus subject/object entity types",
+    "RE": "relation classification with gold entities"
+   },
+   "released_scorer": "none described"
+  },
+  "splits": {
+   "train": {
+    "file": "Dataset/train.json",
+    "sha256": "b40acb3b486d2cfcb7cf451b6ed0472801f4fc5d007d68b52b395c20812075ec",
+    "bytes": 2661917,
+    "format": "JSON lines, one document per line (keys: doc_key, sentences, ner, relations); pre-tokenised, document-level token offsets",
+    "documents": 51,
+    "sentences": 11182,
+    "tokens": 284865,
+    "entities": 4993,
+    "relations": 1175,
+    "entity_types": {
+     "dataset": 818,
+     "method": 2610,
+     "metric": 739,
+     "task": 826
+    },
+    "relation_types": {
+     "MeasuredBy": 159,
+     "UsedFor": 212,
+     "compareWith": 158,
+     "enhancedBy": 86,
+     "evaluatedBy": 39,
+     "evaluatedOn": 61,
+     "partOf": 110,
+     "similarWith": 89,
+     "subclassOf": 56,
+     "subtaskOf": 70,
+     "trainedWith": 135
+    },
+    "doc_keys": [
+     "2020.acl-main.21.grobid",
+     "2020.acl-main.25.grobid",
+     "2020.acl-main.9.grobid",
+     "P01-1002.grobid",
+     "P01-1008.grobid",
+     "P02-1001.grobid",
+     "P03-1022.grobid",
+     "P04-1002.grobid",
+     "P04-1004.grobid",
+     "P05-1004.grobid",
+     "P06-1010.grobid",
+     "P06-1037.grobid",
+     "P07-1007.grobid",
+     "P07-1040.grobid",
+     "P08-1019.grobid",
+     "P08-1025.grobid",
+     "P09-1057.grobid",
+     "P10-2042.grobid",
+     "P10-4002.grobid",
+     "P11-1006.grobid",
+     "P12-1030.grobid",
+     "P12-1032.grobid",
+     "P13-1074.grobid",
+     "P14-1022.grobid",
+     "P14-1065.grobid",
+     "P15-1098.grobid",
+     "P15-1101.grobid",
+     "P16-1002.grobid",
+     "P16-1037.grobid",
+     "P16-1049.grobid",
+     "P17-1005.grobid",
+     "P17-1006.grobid",
+     "P17-1032.grobid",
+     "P18-1003.grobid",
+     "P18-1008.grobid",
+     "P18-1015.grobid",
+     "P18-1070.grobid",
+     "P19-1010.grobid",
+     "P19-1028v2.grobid",
+     "P19-1035.grobid",
+     "P19-1087.grobid",
+     "2022.acl-long.64",
+     "2024.acl-long.401-1-9.grobid",
+     "2024.acl-long.850-1-10.grobid",
+     "P09-1023.grobid",
+     "2023.acl-long.362-1-10.grobid",
+     "2022.acl-long.556",
+     "2023.acl-long.66-1-9.grobid",
+     "P13-2153.grobid",
+     "2020.acl-main.71.grobid",
+     "P11-2005.grobid"
+    ]
+   },
+   "dev": {
+    "file": "Dataset/dev.json",
+    "sha256": "3912609b53de08159b4becf5be974945fb48e2dd54c9902f0b2712914c12d607",
+    "bytes": 317801,
+    "format": "JSON lines, one document per line (keys: doc_key, sentences, ner, relations); pre-tokenised, document-level token offsets",
+    "documents": 6,
+    "sentences": 1267,
+    "tokens": 33440,
+    "entities": 671,
+    "relations": 179,
+    "entity_types": {
+     "dataset": 68,
+     "method": 318,
+     "metric": 163,
+     "task": 122
+    },
+    "relation_types": {
+     "MeasuredBy": 36,
+     "UsedFor": 32,
+     "compareWith": 31,
+     "enhancedBy": 13,
+     "evaluatedBy": 9,
+     "evaluatedOn": 10,
+     "partOf": 7,
+     "similarWith": 8,
+     "subclassOf": 8,
+     "subtaskOf": 12,
+     "trainedWith": 13
+    },
+    "doc_keys": [
+     "2021.acl-long.295",
+     "2024.acl-long.144-1-9.grobid",
+     "P05-1008.grobid",
+     "P16-1007.grobid",
+     "P02-1004.grobid",
+     "P03-1014.grobid"
+    ]
+   },
+   "test": {
+    "file": "Dataset/test.json",
+    "sha256": "4accdc6ac6b0713d66581ee79e398ec9da28ccf488d64432eaad0174b7c73f14",
+    "bytes": 182055,
+    "format": "JSON lines, one document per line (keys: doc_key, sentences, ner, relations); pre-tokenised, document-level token offsets",
+    "documents": 3,
+    "sentences": 765,
+    "tokens": 20468,
+    "entities": 765,
+    "relations": 295,
+    "entity_types": {
+     "dataset": 86,
+     "method": 474,
+     "metric": 54,
+     "task": 151
+    },
+    "relation_types": {
+     "MeasuredBy": 18,
+     "UsedFor": 75,
+     "compareWith": 52,
+     "enhancedBy": 43,
+     "evaluatedBy": 8,
+     "evaluatedOn": 16,
+     "partOf": 8,
+     "similarWith": 18,
+     "subclassOf": 31,
+     "subtaskOf": 15,
+     "trainedWith": 11
+    },
+    "doc_keys": [
+     "2021.acl-long.353",
+     "2024.acl-long.108-1-9.grobid",
+     "P17-1058.grobid"
+    ]
+   }
+  },
+  "totals": {
+   "documents": 60,
+   "sentences": 13214,
+   "tokens": 338773,
+   "entities": 6429,
+   "relations": 1649
+  },
+  "split_overlap": {
+   "train_dev": 0,
+   "train_test": 0,
+   "dev_test": 0
+  },
+  "kg_triples_txt": {
+   "sha256": "80494774fe0bab2f315bbd1bba00bcd1d62fda31c084d99a25675800e7274063",
+   "lines": 1089239,
+   "status": "NOT GOLD: triples extracted from ACL Anthology PDFs by the HGERE model trained on SciNLP train; never used as gold or as input"
+  }
+ },
+ "pd_e2e": {
+  "source": "Peterson & Davie, Computer Networks: A Systems Approach 6e (CC BY 4.0), github.com/SystemsApproach/book",
+  "pinned_commit": "5deec5e741e2b8c0bc44566108a24cb783c2c7de",
+  "parsed_sections_file": "data/interim/textbook_sections.jsonl",
+  "parsed_sections_sha256": "665029b32e45ffc4fd0e150b1d13de719562a3657f7004efb22a94356a7d14f3",
+  "sections": 64,
+  "by_chapter": {
+   "None": {
+    "sections": 3,
+    "words": 2576
+   },
+   "1": {
+    "sections": 7,
+    "words": 16983
+   },
+   "2": {
+    "sections": 10,
+    "words": 24240
+   },
+   "3": {
+    "sections": 7,
+    "words": 33048
+   },
+   "4": {
+    "sections": 7,
+    "words": 22434
+   },
+   "5": {
+    "sections": 6,
+    "words": 25946
+   },
+   "6": {
+    "sections": 7,
+    "words": 26150
+   },
+   "7": {
+    "sections": 4,
+    "words": 14734
+   },
+   "8": {
+    "sections": 7,
+    "words": 18953
+   },
+   "9": {
+    "sections": 6,
+    "words": 31387
+   }
+  },
+  "chapters_used_for_CR005_to_CR011_development_or_runs": [
+   1,
+   2,
+   3
+  ],
+  "chapters_never_run": [
+   4,
+   5,
+   6,
+   7,
+   8,
+   9
+  ],
+  "heldout_candidate_pool": {
+   "sections": 37,
+   "words": 139604
+  },
+  "note": "section selection (2 pilot, 6-8 held-out) is a STOP 2 freeze made before any final CUM prediction is viewed; it is not made here"
+ },
+ "cr010_final": {
+  "architecture": "DUAL_LAYER (semantic Expert-KG unchanged; eRST graph is candidate-routing evidence only)",
+  "tag": "cr-010-complete"
+ },
+ "cr011_final": {
+  "status": "closed_no_production_change",
+  "tag": "cr-011-complete",
+  "handoff": "reports/cr011_sleep/CR012_EVAL_HANDOFF.json",
+  "handoff_sha256": "64a050ec387d3ea63fd5799773b19fca0cc587238cb9ad479dffeba47502fa68",
+  "production_snapshot_run": "slice3_c2",
+  "production_snapshot_checkpoint_sha256": "54eb0f194ca0271da08d38500b781c17eefa6af79638e85e865bdcfedaafde99",
+  "sleep_adopted": false
+ },
+ "isolation": {
+  "scinlp_in_repository_before_this_audit": false,
+  "scierc_scier_text2kgbench_oskgc_in_repository": false,
+  "scinlp_test_doc_keys": [
+   "2021.acl-long.353",
+   "2024.acl-long.108-1-9.grobid",
+   "P17-1058.grobid"
+  ],
+  "rule": "no SciNLP / SciERC / SciER / OSKGC / Text2KGBench test text, label, schema or example may enter prompts, thresholds, lexicon, cues or guards; P&D held-out sections are drawn from chapters 4-9, which no CR-005..011 run touched"
+ }
+}
