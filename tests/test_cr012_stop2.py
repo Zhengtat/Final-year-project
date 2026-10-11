@@ -522,7 +522,7 @@ def test_pd_gold_validator_rejects_bad_sheets(tmp_path):
 
 
 # ---------------------------------------------------------------- gold safety
-READS_AUTHORISED_AT_STOP4 = {"stop4.py", "stop4_score.py", "stop4_stability.py"}
+READS_AUTHORISED_AT_STOP4 = {"stop4.py", "stop4_score.py", "stop4_stability.py", "stop5.py"}
 
 
 def test_no_cr012_module_writes_to_the_gold_folder_or_reads_the_scinlp_test_split():

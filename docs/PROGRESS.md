@@ -58,3 +58,6 @@ Pilot oracle table, SciNLP dev rehearsal (2 docs), cost refresh (upper $33.92, s
 
 ## CR-012 STOP 4 executed (2026-10-11)
 Held-out P&D (7 sections, E0-E4), SciNLP test (3 documents, E0/E1/E3-M/E4-M) and 12 stability repeats run once under `stop3-frozen`; one execution defect (leak-check false positive, $0, logged). Spend $25.93 cumulative. Full report `reports/cr012/stop4.md`. Awaiting Research before final interpretation / STOP 5; no architecture change.
+
+## CR-012 STOP 5 (2026-10-11)
+Final analysis generated locally from the frozen STOP-4 results (no model call, no rerun): FINAL_EVALUATION, pd_e2e, external_e2e, oracle_error_attribution, stability, unsupported_facts, provenance, cost, CR012_FAILURE_ANALYSIS and five SVG figures in `reports/cr012/`. CR-011 panel: NOT_APPLICABLE. Awaiting Research; no architecture change.

@@ -278,3 +278,18 @@ def test_stop4_refuses_without_authorisation_and_names_runs_consistently(monkeyp
     monkeypatch.setattr("sys.argv", ["stop4", "run"])
     with pytest.raises(SystemExit):
         stop4.main()
+
+
+def test_stop5_reports_exist_and_state_the_ruled_wordings():
+    r = Path("reports/cr012")
+    final = (r / "FINAL_EVALUATION.md").read_text()
+    for needle in (
+        "NOT_APPLICABLE_NO_ADOPTED_TRANSFORMATION",
+        "NOT_EVALUABLE_SINGLE_ANNOTATOR",
+        "DESCRIPTIVE_SMALL_N",
+        "not pooled" if False else "never pooled",
+    ):
+        assert needle in final, needle
+    assert "delta_F1_sleep = 0" not in final.replace("no delta_F1_sleep exist", "")
+    assert "NON_INFORMATIVE_UNDER_CURRENT_DENOMINATOR" in (r / "stability.md").read_text()
+    assert len(list((r / "figures").glob("*.svg"))) == 5

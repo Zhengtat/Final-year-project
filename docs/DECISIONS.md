@@ -205,3 +205,8 @@ Format: date · decision · reason · alternatives considered.
 - Decision: graph-to-score conversion uses evidence-grounded per-node mention spans (`production_graph.grounded_spans`), also for SciNLP prediction; the global string-match converter is superseded (invalid_runs.md). `build_qualifiers_v3` tolerates a registry with no `action_type` qualifier (default path identical). Cost constants refreshed from measured pilot oracle and SciNLP dev rates. Evaluation code/config frozen (`configs/cr012_e2e_eval.yaml` version `stop3-frozen`, `frozen_hashes.json` final_freeze).
 - Reason: shared surfaces ("bandwidth") were wrongly counted as false merges and removed gold edges from denominators; the benchmark registry has no CUM-only qualifiers.
 - Alternatives: keep global matching (rejected: violates rule 24); add an `action_type` stub to the SciNLP registry (rejected: invents benchmark schema).
+
+## 2026-10-11 · CR-012 STOP 5 reporting rules (Research STOP-4 decision)
+- Decision: E0 is the headline; E1-E4 are conditional / oracle uplifts, never an additive decomposition; P&D interval labelled DESCRIPTIVE_SMALL_N; stability canonicalisation disagreement kept as frozen but labelled NON_INFORMATIVE_UNDER_CURRENT_DENOMINATOR (redesign deferred to CR-013); CR-011 panel NOT_APPLICABLE (no fake pre/post); held-out canonicalisation finding takes priority over the pilot's.
+- Reason: Research ruling after STOP 4; avoids post-test metric redefinition.
+- Alternatives: redefine the stability metric now (rejected: post-test change).
