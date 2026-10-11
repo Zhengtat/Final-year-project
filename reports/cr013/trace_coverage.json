@@ -1,0 +1,160 @@
+{
+ "measures": {
+  "run": "slice3_c2",
+  "concepts": 1243,
+  "concepts_with_quoted_mention": 1243,
+  "concepts_with_alias_provenance": 0,
+  "concepts_with_merged_from": 0,
+  "v4_nodes": 1275,
+  "v4_nodes_joinable_by_name": 1275,
+  "v4_sections_units": 43,
+  "generator_iterations": 85,
+  "iterations_with_flags": 80,
+  "iterations_with_autofixes": 83,
+  "pruned_records": 0,
+  "pruner_p_recorded_sections": 43,
+  "merges_checkpoint": {
+   "canonicalize_v4|rule=None|llm=True|auto=False": 16,
+   "canonicalize_v4|rule=R0|llm=False|auto=True": 5,
+   "canonicalize_v4|rule=exact|llm=False|auto=True": 11,
+   "generator|rule=G-link|llm=False|auto=False": 140
+  },
+  "merge_review": 10,
+  "taxonomy_candidates": 336,
+  "related_candidates": 448,
+  "anchors": 746,
+  "selection_stats": {
+   "unique_candidate_pairs": 8604,
+   "selected": 1100,
+   "phase0_min_per_section": 192,
+   "phase1_coverage": 269,
+   "phase0b_anchor_pairs": 632,
+   "phase2_fill": 7,
+   "concepts_in_any_candidate": 1174,
+   "concepts_covered": 1098,
+   "core_concepts_with_candidates": 1011,
+   "core_concepts_covered": 1011,
+   "budget": 1100,
+   "min_per_section": 8,
+   "candidate_pairs_before_dedup": 10330
+  },
+  "selected_pairs": 1100,
+  "selected_pair_fields": [
+   "concept_x_id",
+   "concept_y_id",
+   "cooccurrence_count",
+   "cue_score",
+   "pair_id",
+   "section_id",
+   "sentence"
+  ],
+  "relation_rows_selected": 1103,
+  "relation_rows_sample": 50,
+  "outcomes": {
+   "edge": 529,
+   "rejected": 99,
+   "no_relation": 260,
+   "other": 214,
+   "same_concept": 1
+  },
+  "reasons": {
+   "domain_range": 54,
+   "endpoint_not_grounded": 45,
+   "family_no_relation": 241,
+   "relation_other": 212,
+   "comparison_no_grounded_dimension": 17,
+   "relation_no_relation": 2,
+   "queued_for_merge": 1,
+   "family_other": 2
+  },
+  "edge_rows": 529,
+  "snapshot_edges": 528,
+  "snapshot_edges_matched_to_relation_row": 528,
+  "edge_quote_is_substring_of_pair_sentence": 529,
+  "edge_prompt_hashes": 1584,
+  "edge_prompt_hashes_in_llm_prompts_log": 1584,
+  "edges_with_confidence_field": 0,
+  "org_events": 730,
+  "org_events_with_edge_ids": 276,
+  "scinlp_run": "cr012_scinlp_heldout_P17_1058_grobid_E0",
+  "scinlp_keys": {
+   "run_id": 39,
+   "stage": 9,
+   "completed_section_ids": 0,
+   "mentions_by_section": 0,
+   "rejected_concepts": 0,
+   "concepts": 68,
+   "concept_first_chapter": 67,
+   "merges": 5,
+   "taxonomy_candidates": 6,
+   "merge_review": 0,
+   "related_candidates": 7,
+   "selected_pairs": 93,
+   "sample_pairs": 0,
+   "selection_stats": 13,
+   "relation_results_v3": 93,
+   "pair_registry": 0,
+   "rejected_relations": 0,
+   "rekey": 0,
+   "misconceptions": 0,
+   "anchors": 18
+  }
+ },
+ "artifacts": [
+  {
+   "path": "data/processed/kg/slice3_c2/checkpoint.json",
+   "bytes": 4649480,
+   "sha256": "54eb0f194ca0271da08d38500b781c17eefa6af79638e85e865bdcfedaafde99"
+  },
+  {
+   "path": "data/processed/kg/slice3_c2/v4_concepts.json",
+   "bytes": 9298923,
+   "sha256": "dd8f74b0d6974c661e209eddc48489ecc01e787e06a56a8fdd1d8805c6264c86"
+  },
+  {
+   "path": "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch3/events.jsonl",
+   "bytes": 174061,
+   "sha256": "ff52e22d07ca264e79977965b1e2e0471006e7d67919348d386f5bbbf6c4401f"
+  },
+  {
+   "path": "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch3/org_nodes.jsonl",
+   "bytes": 982428,
+   "sha256": "38a5c945d85bf84376da7bbfbd970be9e6e808c79b260a18b48782238496861d"
+  },
+  {
+   "path": "data/processed/kg/slice3_c2/snapshots/ch3/edges.jsonl",
+   "bytes": 47129,
+   "sha256": "09936c9da878f7cb0a757e5bd8ebee73d4247ad20827f144a872832e8423a086"
+  },
+  {
+   "path": "data/interim/textbook_sections.jsonl",
+   "bytes": 1357805,
+   "sha256": "665029b32e45ffc4fd0e150b1d13de719562a3657f7004efb22a94356a7d14f3"
+  },
+  {
+   "path": "data/processed/kg/cr012_scinlp_heldout_P17_1058_grobid_E0/checkpoint.json",
+   "bytes": 248896,
+   "sha256": "65835f9078dd00cf1727ad62e11e7215e6d47749932043a05bedf407ed05ec2c"
+  },
+  {
+   "path": "data/processed/kg/cr012_scinlp_heldout_P17_1058_grobid_E0/v4_concepts.json",
+   "bytes": 331547,
+   "sha256": "2a292d0a3c100ca1397a776b3222ebb0475a1b276cd7b08aec1315e91aa5f505"
+  },
+  {
+   "path": "data/processed/kg/slice3_c2/snapshots/ch1/edges.jsonl",
+   "bytes": 27564,
+   "sha256": "cf3258abc1828272ab08e50047d72254ac2da05c282263c3318a01b5fb57aaeb"
+  },
+  {
+   "path": "data/processed/kg/slice3_c2/snapshots/ch2/edges.jsonl",
+   "bytes": 45298,
+   "sha256": "9a6006d7076a0d0f2cacc9171271c3175d5e95b53e7a5b14a701f03de3cd050e"
+  },
+  {
+   "path": "data/logs/llm_calls.jsonl",
+   "bytes": 13822672,
+   "sha256": "02f97b6b64386d6d6bf0e674b3cc0a999f974edfd8af0a7a587620271681a87e"
+  }
+ ]
+}
