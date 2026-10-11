@@ -215,3 +215,8 @@ Format: date · decision · reason · alternatives considered.
 - Decision: CR-012 closed (evaluation-only). Next architecture work starts as a new CR (candidates: high-recall pair delivery, cross-domain concept-extraction recall, relation classification after endpoint recovery, a better canonicalisation-stability diagnostic, independently double-annotated P&D gold). SciNLP-derived document text (`data/interim/cr012/scinlp_units/`) is untracked and gitignored (CC BY-NC: not redistributed); the two dev-document copies committed earlier on the branch were removed from tracking.
 - Reason: Research closure decision; dataset licence rule in CLAUDE.md.
 - Alternatives: keep the dev copies tracked (rejected: licence).
+
+## 2026-10-12 · CR-013 STOP 2: trace model (Research decisions D1-D3 applied)
+- Decision: derived `TraceEvent` / lineage / gap model in `src/cumap/explain/` with layers RECORDED / REPLAYED / JOINED. D1: pair-ranking replay of the frozen selection code, accepted only because it reproduced the retained selected set, sample and stats exactly (anchor `AP-` pairs are outside the enumerated pool; `MP-` pairs come from the misconception stage). D2: exact, run-scoped joins only. D3: branch base `2e50b65` (the audited `viz-kg-explorer` commit); `viz-kg-explorer` not merged into `main`.
+- Reason: Research approval 2026-10-12; STOP-1 audit showed rank / pool / alias provenance were not retained.
+- Alternatives: no replay (rejected by Research D1 conditions only if invalid); semantic or fuzzy joins (forbidden).
