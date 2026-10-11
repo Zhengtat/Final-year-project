@@ -498,4 +498,4 @@ def test_slice3_c2_trace_meets_the_stop2_integrity_and_coverage_criteria():
 def test_explain_modules_make_no_model_call_and_import_no_llm_client():
     for f in Path("src/cumap/explain").glob("*.py"):
         src = f.read_text()
-        assert not re.search(r"^\s*(from|import)\s+(openai|cumap\.llm)", src, flags=re.M), f
+        assert not re.search(r"^\s*(from|import)\s+(openai|cumap\.llm)", src, flags=re.MULTILINE), f
