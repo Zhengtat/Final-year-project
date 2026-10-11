@@ -1,0 +1,127 @@
+{
+ "pd": {
+  "4.5": {
+   "runs": 3,
+   "per_run": [
+    {
+     "run_id": "cr012_stab1_4_5_E0",
+     "strict_e2e_f1": 0.05970149253731343,
+     "nodes": 87,
+     "edges": 18
+    },
+    {
+     "run_id": "cr012_stab2_4_5_E0",
+     "strict_e2e_f1": 0.061538461538461535,
+     "nodes": 100,
+     "edges": 16
+    },
+    {
+     "run_id": "cr012_stab3_4_5_E0",
+     "strict_e2e_f1": 0.05714285714285714,
+     "nodes": 104,
+     "edges": 21
+    }
+   ],
+   "strict_e2e_f1_mean": 0.05946093707287737,
+   "strict_e2e_f1_sd": 0.0018025416683610405,
+   "node_set_jaccard_mean": 0.6137682074270334,
+   "edge_set_jaccard_mean": 0.2515782828282828,
+   "canonicalisation_disagreement_rate_mean": 0.00013334666800013335,
+   "relation_disagreement_rate_mean": 0.0,
+   "selection": "none: all runs are retained and reported"
+  },
+  "4.4": {
+   "runs": 3,
+   "per_run": [
+    {
+     "run_id": "cr012_stab1_4_4_E0",
+     "strict_e2e_f1": 0.023809523809523808,
+     "nodes": 125,
+     "edges": 21
+    },
+    {
+     "run_id": "cr012_stab2_4_4_E0",
+     "strict_e2e_f1": 0.02222222222222222,
+     "nodes": 113,
+     "edges": 27
+    },
+    {
+     "run_id": "cr012_stab3_4_4_E0",
+     "strict_e2e_f1": 0.07228915662650602,
+     "nodes": 120,
+     "edges": 20
+    }
+   ],
+   "strict_e2e_f1_mean": 0.039440300886084016,
+   "strict_e2e_f1_sd": 0.023236686140290518,
+   "node_set_jaccard_mean": 0.6195767847554773,
+   "edge_set_jaccard_mean": 0.2569977811913296,
+   "canonicalisation_disagreement_rate_mean": 5.3625053625053626e-05,
+   "relation_disagreement_rate_mean": 0.05128205128205129,
+   "selection": "none: all runs are retained and reported"
+  }
+ },
+ "scinlp": {
+  "P17-1058.grobid": {
+   "runs": 3,
+   "per_run": [
+    {
+     "run_id": "cr012_scinlp_stab1_P17_1058_grobid_E0",
+     "strict_e2e_f1": 0.0,
+     "nodes": 50,
+     "edges": 16
+    },
+    {
+     "run_id": "cr012_scinlp_stab2_P17_1058_grobid_E0",
+     "strict_e2e_f1": 0.0,
+     "nodes": 52,
+     "edges": 14
+    },
+    {
+     "run_id": "cr012_scinlp_stab3_P17_1058_grobid_E0",
+     "strict_e2e_f1": 0.0,
+     "nodes": 47,
+     "edges": 11
+    }
+   ],
+   "strict_e2e_f1_mean": 0.0,
+   "strict_e2e_f1_sd": 0.0,
+   "node_set_jaccard_mean": 0.48161651387457843,
+   "edge_set_jaccard_mean": 0.19258639910813824,
+   "canonicalisation_disagreement_rate_mean": 0.0,
+   "relation_disagreement_rate_mean": 0.0,
+   "selection": "none: all runs are retained and reported"
+  },
+  "2021.acl-long.353": {
+   "runs": 3,
+   "per_run": [
+    {
+     "run_id": "cr012_scinlp_stab1_2021_acl_long_353_E0",
+     "strict_e2e_f1": 0.03488372093023255,
+     "nodes": 77,
+     "edges": 46
+    },
+    {
+     "run_id": "cr012_scinlp_stab2_2021_acl_long_353_E0",
+     "strict_e2e_f1": 0.046511627906976744,
+     "nodes": 72,
+     "edges": 43
+    },
+    {
+     "run_id": "cr012_scinlp_stab3_2021_acl_long_353_E0",
+     "strict_e2e_f1": 0.022857142857142854,
+     "nodes": 82,
+     "edges": 47
+    }
+   ],
+   "strict_e2e_f1_mean": 0.03475083056478405,
+   "strict_e2e_f1_sd": 0.00965736025458046,
+   "node_set_jaccard_mean": 0.6826768042323902,
+   "edge_set_jaccard_mean": 0.41102306876713535,
+   "canonicalisation_disagreement_rate_mean": 0.00048666764425232763,
+   "relation_disagreement_rate_mean": 0.0,
+   "selection": "none: all runs are retained and reported"
+  }
+ },
+ "selection": "none: all runs listed"
+}

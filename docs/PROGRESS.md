@@ -55,3 +55,6 @@ Update at the end of every milestone: what was done, which acceptance checks pas
 
 ## CR-012 STOP 3 return (2026-10-10)
 Pilot oracle table, SciNLP dev rehearsal (2 docs), cost refresh (upper $33.92, spent $2.85) and frozen hashes in `reports/cr012/stop3_return.md`. 708 tests pass. SciNLP test and P&D held-out unopened. Awaiting Research before STOP 4.
+
+## CR-012 STOP 4 executed (2026-10-11)
+Held-out P&D (7 sections, E0-E4), SciNLP test (3 documents, E0/E1/E3-M/E4-M) and 12 stability repeats run once under `stop3-frozen`; one execution defect (leak-check false positive, $0, logged). Spend $25.93 cumulative. Full report `reports/cr012/stop4.md`. Awaiting Research before final interpretation / STOP 5; no architecture change.
