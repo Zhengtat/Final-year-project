@@ -88,3 +88,37 @@ def test_verifier_and_boundary_calls_use_the_mock_backend_and_validate_schema(nl
     b = run_boundary(client, pb, u, "h", u.families[:2], {c.cid: c for c in cs}, SB, "d", usage)
     assert usage.calls == 2 and not usage.errors
     assert set(v) <= {c.cid for c in cs} and set(b) <= {f.fid for f in u.families}
+
+
+def test_pilot_score_span_exact_and_boundary_categories(tmp_path):
+    from cumap.cr014.pilot_score import classify_boundary, load_gold, place, score
+
+    sents = tmp_path / "s.csv"
+    sents.write_text(
+        "sentence_id,section_id,char_start,char_end,sentence_text\n"
+        "s1,sec,0,40,A router forwards packets to a switch.\n",
+        encoding="utf-8",
+    )
+    sheet = tmp_path / "g.csv"
+    sheet.write_text(
+        "row_type,sentence_id,span_text,occurrence,concept_id,canonical_name,node_type,aliases,nested_valid,boundary_notes\n"
+        "MENTION,s1,router,1,C1,,,,,\nMENTION,s1,packets,1,C2,,,,,\nMENTION,s1,switch,1,C3,,,,,\n",
+        encoding="utf-8",
+    )
+    gold = load_gold(sheet, sents)
+    text = "A router forwards packets to a switch."
+    assert [(text[m.start : m.end]) for m in gold] == ["router", "packets", "switch"]
+    r = score({"sec": place(["router", "packets"], text)}, gold, {"sec": text})
+    assert (
+        r["mention_span_exact"]["tp"],
+        r["mention_span_exact"]["fp"],
+        r["mention_span_exact"]["fn"],
+    ) == (2, 0, 1)
+    r2 = score(
+        {"sec": place(["A router", "packets"], text)}, gold, {"sec": text}
+    )  # "A router" is over-specific
+    assert r2["false_positive_boundary_categories"] == {"over_specific_contains_gold": 1}
+    assert classify_boundary((2, 8), [(2, 8)]) == "over_specific_contains_gold"
+    assert classify_boundary((0, 8), [(2, 8)]) == "over_specific_contains_gold"
+    assert classify_boundary((3, 5), [(2, 8)]) == "over_general_inside_gold"
+    assert classify_boundary((20, 25), [(2, 8)]) == "no_overlap"

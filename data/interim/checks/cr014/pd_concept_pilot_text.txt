@@ -29,7 +29,7 @@
 [4.1_s0027] We saw in the previous chapter how the hierarchical structure of IP addresses, especially with the flexibility provided by Classless Interdomain Routing (CIDR) and subnetting, can improve the scalability of routing.
 [4.1_s0028] In the next two sections, we’ll see further uses of hierarchy (and its partner, aggregation) to provide greater scalability, first in a single domain and then between domains.
 [4.1_s0029] Our final subsection looks at IP version 6, the invention of which was largely the result of scalability concerns.
-[4.1_s0030] 4.1.1 Routing Areas As a first example of using hierarchy to scale up the routing system, we’ll examine how link-state routing protocols (such as OSPF and IS-IS) can be used to partition a routing domain into subdomains called areas.
+[4.1_s0030] 4.1.1 Routing Areas  As a first example of using hierarchy to scale up the routing system, we’ll examine how link-state routing protocols (such as OSPF and IS-IS) can be used to partition a routing domain into subdomains called areas.
 [4.1_s0031] (The terminology varies somewhat among protocols—we use the OSPF terminology here.)
 [4.1_s0032] By adding this extra level of hierarchy, we enable single domains to grow larger without overburdening the routing protocols or resorting to the more complex interdomain routing protocols described later.
 [4.1_s0033] An area is a set of routers that are administratively configured to exchange link-state information with each other.
@@ -79,7 +79,7 @@
 [4.1_s0077] Thus, each AS can run whatever intradomain routing protocols it chooses.
 [4.1_s0078] It can even use static routes or multiple protocols, if desired.
 [4.1_s0079] The interdomain routing problem is then one of having different ASes share reachability information—descriptions of the set of IP addresses that can be reached via a given AS—with each other.
-[4.1_s0080] Challenges in Interdomain Routing Perhaps the most important challenge of interdomain routing today is the need for each AS to determine its own routing policies.
+[4.1_s0080] Challenges in Interdomain Routing  Perhaps the most important challenge of interdomain routing today is the need for each AS to determine its own routing policies.
 [4.1_s0081] A simple example routing policy implemented at a particular AS might look like this: “Whenever possible, I prefer to send traffic via AS X than via AS Y, but I’ll use AS Y if it is the only path, and I never want to carry traffic from AS X to AS Y or vice versa.”
 [4.1_s0082] Such a policy would be typical when I have paid money to both AS X and AS Y to connect my AS to the rest of the Internet, and AS X is my preferred provider of connectivity, with AS Y being the fallback.
 [4.1_s0083] Because I view both AS X and AS Y as providers (and presumably I paid them to play this role), I don’t expect to help them out by carrying traffic between them across my network (this is called transit traffic).
@@ -102,8 +102,8 @@
 [4.1_s0100] Often, many providers arrange to interconnect with each other at a single peering point.
 [4.1_s0101] To get a better sense of how we might manage routing among this complex interconnection of autonomous systems, we can start by defining a few terms.
 [4.1_s0102] We define local traffic as traffic that originates at or terminates on nodes within an AS, and transit traffic as traffic that passes through an AS.
-[4.1_s0103] We can classify autonomous systems into three broad types: - Stub AS—an AS that only carries local traffic.
-[4.1_s0104] The small corporation in Figure is an example of a stub AS. - Multihomed Stub AS—an AS that has connections to more than one other AS but that refuses to carry transit traffic, such as the large corporation at the top of Figure. - Transit AS—an AS that has connections to more than one other AS and that is designed to carry both transit and local traffic, such as the backbone providers in Figure.
+[4.1_s0103] We can classify autonomous systems into three broad types:  -  Stub AS—an AS that only carries local traffic.
+[4.1_s0104] The small corporation in Figure is an example of a stub AS.  -  Multihomed Stub AS—an AS that has connections to more than one other AS but that refuses to carry transit traffic, such as the large corporation at the top of Figure.  -  Transit AS—an AS that has connections to more than one other AS and that is designed to carry both transit and local traffic, such as the backbone providers in Figure.
 [4.1_s0105] Whereas the discussion of routing in the previous chapter focused on finding optimal paths based on minimizing some sort of link metric, the goals of interdomain routing are rather more complex.
 [4.1_s0106] First, it is necessary to find some path to the intended destination that is loop free.
 [4.1_s0107] Second, paths must be compliant with the policies of the various autonomous systems along the path—and, as we have already seen, those policies might be almost arbitrarily complex.
@@ -124,7 +124,7 @@
 [4.1_s0122] Provider A might be unwilling to believe certain advertisements from provider B for fear that provider B will advertise erroneous routing information.
 [4.1_s0123] For example, trusting provider B when he advertises a great route to anywhere in the Internet can be a disastrous choice if provider B turns out to have made a mistake configuring his routers or to have insufficient capacity to carry the traffic.
 [4.1_s0124] The issue of trust is also related to the need to support complex policies as noted above.
-[4.1_s0125] For example, I might be willing to trust a particular provider only when he advertises reachability to certain prefixes, and thus I would have a policy that says, “Use AS X to reach only prefixes p and q, if and only if AS X advertises reachability to those prefixes.” Basics of BGP Each AS has one or more border routers through which packets enter and leave the AS.
+[4.1_s0125] For example, I might be willing to trust a particular provider only when he advertises reachability to certain prefixes, and thus I would have a policy that says, “Use AS X to reach only prefixes p and q, if and only if AS X advertises reachability to those prefixes.”  Basics of BGP  Each AS has one or more border routers through which packets enter and leave the AS.
 [4.1_s0126] In our simple example in Figure, routers R2 and R4 would be border routers.
 [4.1_s0127] (Over the years, routers have sometimes also been known as gateways, hence the names of the protocols BGP and EGP).
 [4.1_s0128] A border router is simply an IP router that is charged with the task of forwarding packets between autonomous systems.
@@ -165,22 +165,22 @@
 [4.1_s0163] Because BGP speakers can count on TCP to be reliable, this means that any information that has been sent from one speaker to another does not need to be sent again.
 [4.1_s0164] Thus, as long as nothing has changed, a BGP speaker can simply send an occasional keepalive message that says, in effect, “I’m still here and nothing has changed.”
 [4.1_s0165] If that router were to crash or become disconnected from its peer, it would stop sending the keepalives, and the other routers that had learned routes from it would assume that those routes were no longer valid.
-[4.1_s0166] Common AS Relationships and Policies Having said that policies may be arbitrarily complex, there turn out to be a few common ones, reflecting common relationships between autonomous systems.
+[4.1_s0166] Common AS Relationships and Policies  Having said that policies may be arbitrarily complex, there turn out to be a few common ones, reflecting common relationships between autonomous systems.
 [4.1_s0167] The most common relationships are illustrated in Figure.
-[4.1_s0168] The three common relationships and the policies that go with them are as follows: - Provider-Customer—\ Providers are in the business of connecting their customers to the rest of the Internet.
+[4.1_s0168] The three common relationships and the policies that go with them are as follows:  -  Provider-Customer—\ Providers are in the business of connecting their customers to the rest of the Internet.
 [4.1_s0169] A customer might be a corporation, or it might be a smaller ISP (which may have customers of its own).
-[4.1_s0170] So the common policy is to advertise all the routes I know about to my customer, and advertise routes I learn from my customer to everyone. - Customer-Provider—\
+[4.1_s0170] So the common policy is to advertise all the routes I know about to my customer, and advertise routes I learn from my customer to everyone.  -  Customer-Provider—\
 [4.1_s0171] In the other direction, the customer wants to get traffic directed to him (and his customers, if he has them) by his provider, and he wants to be able to send traffic to the rest of the Internet through his provider.
 [4.1_s0172] So the common policy in this case is to advertise my own prefixes and routes learned from my customers to my provider, advertise routes learned from my provider to my customers, but don’t advertise routes learned from one provider to another provider.
 [4.1_s0173] That last part is to make sure the customer doesn’t find himself in the business of carrying traffic from one provider to another, which isn’t in his interests if he is paying the providers to carry traffic for him.
-[4.1_s0174] - Peer—\ The third option is a symmetrical peering between autonomous systems.
+[4.1_s0174] -  Peer—\ The third option is a symmetrical peering between autonomous systems.
 [4.1_s0175] Two providers who view themselves as equals usually peer so that they can get access to each other’s customers without having to pay another provider.
 [4.1_s0176] The typical policy here is to advertise routes learned from my customers to my peer, advertise routes learned from my peer to my customers, but don’t advertise routes from my peer to any provider or vice versa.
 [4.1_s0177] One thing to note about this figure is the way it has brought back some structure to the apparently unstructured Internet.
 [4.1_s0178] At the bottom of the hierarchy we have the stub networks that are customers of one or more providers, and as we move up the hierarchy we see providers who have other providers as their customers.
 [4.1_s0179] At the top, we have providers who have customers and peers but are not customers of anyone.
 [4.1_s0180] These providers are known as the Tier-1 providers.
-[4.1_s0181] Integrating Interdomain and Intradomain Routing While the preceding discussion illustrates how a BGP speaker learns interdomain routing information, the question still remains as to how all the other routers in a domain get this information.
+[4.1_s0181] Integrating Interdomain and Intradomain Routing  While the preceding discussion illustrates how a BGP speaker learns interdomain routing information, the question still remains as to how all the other routers in a domain get this information.
 [4.1_s0182] There are several ways this problem can be addressed.
 [4.1_s0183] Let’s start with a very simple situation, which is also very common.
 [4.1_s0184] In the case of a stub AS that only connects to other autonomous systems at a single point, the border router is clearly the only choice for all routes that are outside the AS.
@@ -232,14 +232,14 @@
 [9.2_s0018] How would you make all that information available to the intended participants?
 [9.2_s0019] One way would be to put all that information in an email and send it out, but ideally there should be a standard format and protocol for disseminating this sort of information.
 [9.2_s0020] The IETF has defined protocols for just this purpose.
-[9.2_s0021] The protocols that have been defined include - Session Description Protocol (SDP) - Session Announcement Protocol (SAP) - Session Initiation Protocol (SIP) - Simple Conference Control Protocol (SCCP)
+[9.2_s0021] The protocols that have been defined include  -  Session Description Protocol (SDP)  -  Session Announcement Protocol (SAP)  -  Session Initiation Protocol (SIP)  -  Simple Conference Control Protocol (SCCP)
 [9.2_s0022] You might think that this is a lot of protocols for a seemingly simple task, but there are many aspects of the problem and several different situations in which it must be addressed.
 [9.2_s0023] For example, there is a difference between announcing the fact that a certain conference session is going to be made available on the MBone (which would be done using SDP and SAP) and trying to make an Internet phone call to a certain user at a particular time (which could be done using SDP and SIP).
 [9.2_s0024] In the former case, you could consider your job done once you have sent all the session information in a standard format to a well-known multicast address.
 [9.2_s0025] In the latter, you would need to locate one or more users, get a message to them announcing your desire to talk (analogous to ringing their phone), and perhaps negotiate a suitable audio encoding among all parties.
 [9.2_s0026] We will look first at SDP, which is common to many applications, then at SIP, which is widely used for a number of interactive applications such as Internet telephony.
-[9.2_s0027] Session Description Protocol (SDP) The Session Description Protocol (SDP) is a rather general protocol that can be used in a variety of situations and is typically used in conjunction with one or more other protocols (e.g., SIP).
-[9.2_s0028] It conveys the following information: - The name and purpose of the session - Start and end times for the session - The media types (e.g., audio, video) that comprise the session - Detailed information required to receive the session (e.g., the multicast address to which data will be sent, the transport protocol to be used, the port numbers, the encoding scheme) SDP provides this information formatted in ASCII using a sequence of lines of text, each of the form <type>=<value>.
+[9.2_s0027] Session Description Protocol (SDP)  The Session Description Protocol (SDP) is a rather general protocol that can be used in a variety of situations and is typically used in conjunction with one or more other protocols (e.g., SIP).
+[9.2_s0028] It conveys the following information:  -  The name and purpose of the session  -  Start and end times for the session  -  The media types (e.g., audio, video) that comprise the session  -  Detailed information required to receive the session (e.g., the multicast address to which data will be sent, the transport protocol to be used, the port numbers, the encoding scheme)  SDP provides this information formatted in ASCII using a sequence of lines of text, each of the form <type>=<value>.
 [9.2_s0029] An example of an SDP message will illustrate the main points.
 [9.2_s0030] Note that SDP, like HTML, is fairly easy for a human to read but has strict formatting rules that make it possible for machines to interpret the data unambiguously.
 [9.2_s0031] For example, the SDP specification defines all the possible information types that are allowed to appear, the order in which they must appear, and the format and reserved words for every type that is defined.
@@ -258,7 +258,7 @@
 [9.2_s0044] Next we see the start and end times for the session (encoded as integers according to the Network Time Protocol).
 [9.2_s0045] Finally, we get to the information about the media for this session.
 [9.2_s0046] This session has three media types available—audio, video, and a shared whiteboard application known as wb.
-[9.2_s0047] For each media type there is one line of information formatted as follows: The media types are self-explanatory, and the port numbers in each case are UDP ports.
+[9.2_s0047] For each media type there is one line of information formatted as follows:  The media types are self-explanatory, and the port numbers in each case are UDP ports.
 [9.2_s0048] When we look at the “transport” field, we can see that the wb application runs directly over UDP, while the audio and video are transported using “RTP/AVP”.
 [9.2_s0049] This means that they run over RTP and use the application profile known as AVP.
 [9.2_s0050] That application profile defines a number of different encoding schemes for audio and video; we can see in this case that the audio is using encoding 0 (which is an encoding using an 8-kHz sampling rate and 8 bits per sample) and the video is using encoding 31, which represents the H.261 encoding scheme.
@@ -272,9 +272,9 @@
 [9.2_s0058] SDP is also used in the delivery of entertainment video of IP (often called IPTV) to provide information about the video content on each TV channel.
 [9.2_s0059] SDP also plays an important role in conjunction with the Session Initiation Protocol (SIP).
 [9.2_s0060] With the widespread adoption of Voice over IP (i.e., the support of telephony-like applications over IP networks) and IP-based video conferencing, SIP is now one of the more important members of the Internet protocol suite.
-[9.2_s0061] SIP SIP is an application layer protocol that bears a certain resemblance to HTTP, being based on a similar request/response model.
+[9.2_s0061] SIP  SIP is an application layer protocol that bears a certain resemblance to HTTP, being based on a similar request/response model.
 [9.2_s0062] However, it is designed with rather different sorts of applications in mind and thus provides quite different capabilities than HTTP.
-[9.2_s0063] The capabilities provided by SIP can be grouped into five categories: - User location—Determining the correct device with which to communicate to reach a particular user - User availability—Determining if the user is willing or able to take part in a particular communication session - User capabilities—Determining such items as the choice of media and coding scheme to use - Session setup—Establishing session parameters such as port numbers to be used by the communicating parties - Session management—A range of functions including transferring sessions (e.g., to implement “call forwarding”) and modifying session parameters Most of these functions are easy enough to understand, but the issue of location bears some further discussion.
+[9.2_s0063] The capabilities provided by SIP can be grouped into five categories:  -  User location—Determining the correct device with which to communicate to reach a particular user  -  User availability—Determining if the user is willing or able to take part in a particular communication session  -  User capabilities—Determining such items as the choice of media and coding scheme to use  -  Session setup—Establishing session parameters such as port numbers to be used by the communicating parties  -  Session management—A range of functions including transferring sessions (e.g., to implement “call forwarding”) and modifying session parameters  Most of these functions are easy enough to understand, but the issue of location bears some further discussion.
 [9.2_s0064] One important difference between SIP and, say, HTTP, is that SIP is primarily used for human-to-human communication.
 [9.2_s0065] Thus, it is important to be able to locate individual users, not just machines.
 [9.2_s0066] And, unlike email, it’s not good enough just to locate a server that the user will be checking on at some later date and dump the message there—we need to know where the user is right now if we want to be able to communicate with him in real time.
@@ -289,13 +289,13 @@
 [9.2_s0075] Consider the two users in Figure.
 [9.2_s0076] The first thing to notice is that each user has a name in the format user@domain, very much like an email address.
 [9.2_s0077] When user Bruce wants to initiate a session with Larry, he sends his initial SIP message to the local proxy for his domain, cisco.com.
-[9.2_s0078] Among other things, this initial message contains a SIP URI—these are a form of uniform resource identifier which look like this: A SIP URI provides complete identification of a user, but (unlike a URL) does not provide his location, since that may change over time.
+[9.2_s0078] Among other things, this initial message contains a SIP URI—these are a form of uniform resource identifier which look like this:  A SIP URI provides complete identification of a user, but (unlike a URL) does not provide his location, since that may change over time.
 [9.2_s0079] We will see shortly how the location of a user can be determined.
 [9.2_s0080] Upon receiving the initial message from Bruce, the proxy looks at the SIP URI and deduces that this message should be sent to the proxy.
 [9.2_s0081] For now, we assume that the proxy has access to some database that enables it to obtain a mapping from the name to the IP address of one or more devices at which Larry currently wishes to receive messages.
 [9.2_s0082] The proxy can therefore forward the message on to Larry’s chosen device(s).
 [9.2_s0083] Sending the message to more than one device is called forking and may be done either in parallel or in series (e.g., send it to his mobile phone if he doesn’t answer the phone at his desk).
-[9.2_s0084] The initial message from Bruce to Larry is likely to be a SIP invite message, which looks something like the following: The first line identifies the type of function to be performed (invite); the resource on which to perform it, the called party (sip:larry@princeton.edu ); and the protocol version (2.0).
+[9.2_s0084] The initial message from Bruce to Larry is likely to be a SIP invite message, which looks something like the following:  The first line identifies the type of function to be performed (invite); the resource on which to perform it, the called party (sip:larry@princeton.edu ); and the protocol version (2.0).
 [9.2_s0085] The subsequent header lines probably look somewhat familiar because of their resemblance to the header lines in an email message.
 [9.2_s0086] SIP defines a large number of header fields, only some of which we describe here.
 [9.2_s0087] Note that the Via: header in this example identifies the device from which this message originated.
@@ -339,7 +339,7 @@
 [9.2_s0125] SIP is a very rich and flexible protocol that can support a wide range of complex calling scenarios as well as applications that have little or nothing to do with telephony.
 [9.2_s0126] For example, SIP supports operations that enable a call to be routed to a “music-on-hold” server or a voicemail server.
 [9.2_s0127] It is also easy to see how it could be used for applications like instant messaging, and standardization of SIP extensions for such purposes is ongoing.
-[9.2_s0128] H.323 The International Telecommunication Union (ITU) has also been very active in the call control area, which is not surprising given its relevance to telephony, the traditional realm of that body.
+[9.2_s0128] H.323  The International Telecommunication Union (ITU) has also been very active in the call control area, which is not surprising given its relevance to telephony, the traditional realm of that body.
 [9.2_s0129] Fortunately, there has been considerable coordination between the IETF and the ITU in this instance, so that the various protocols are somewhat interoperable.
 [9.2_s0130] The major ITU recommendation for multimedia communication over packet networks is known as H.323, which ties together many other recommendations, including H.225 for call control.
 [9.2_s0131] The full set of recommendations covered by H.323 runs to many hundreds of pages, and the protocol is known for its complexity, so it is only possible to give a brief overview of it here.
@@ -357,7 +357,7 @@
 [9.2_s0143] H.245 messages might list a number of different audio codec standards that it can support; the far endpoint of the call would reply with a list of its own supported codecs, and the two ends could pick a coding standard that they can both live with.
 [9.2_s0144] H.245 can also be used to signal the UDP port numbers that will be used by RTP and Real-Time Control Protocol (RTCP) for the media stream (or streams—a call might include both audio and video, for example) for this call.
 [9.2_s0145] Once this is accomplished, the call can proceed, with RTP being used to transport the media streams and RTCP carrying the relevant control information.
-[9.2_s0146] 9.2.2 Resource Allocation for Multimedia Applications As we have just seen, session control protocols like SIP and H.323 can be used to initiate and control communication in multimedia applications, while RTP provides transport-level functions for the data streams of the applications.
+[9.2_s0146] 9.2.2 Resource Allocation for Multimedia Applications  As we have just seen, session control protocols like SIP and H.323 can be used to initiate and control communication in multimedia applications, while RTP provides transport-level functions for the data streams of the applications.
 [9.2_s0147] A final piece of the puzzle in getting multimedia applications to work is making sure that suitable resources are allocated inside the network to ensure that the quality of service needs of the application are met.
 [9.2_s0148] We presented a number of methods for resource allocation in an earlier chapter.
 [9.2_s0149] The motivation for developing these technologies was largely for the support of multimedia applications.

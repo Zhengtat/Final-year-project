@@ -12,11 +12,16 @@ from pathlib import Path
 
 import yaml
 
-SEED = "cr014-manifest-v1"
+SEED = "cr014-manifest-v2"  # v1 (seed cr014-manifest-v1) is superseded: its held-out set was ~54k words; redrawn ONCE before any prediction
 CR012_HELD_OUT = {"4.4", "4.5", "5.4", "6.3", "7.1", "8.2", "9.3"}
 TINY_WORDS = 1000  # sections below this are reserve-only (too short to be a useful held-out unit)
 PILOT_WORDS = (2500, 6600)  # an exhaustive span annotation must be feasible
-N_PILOT, N_HELD, MAX_PER_CHAPTER = 2, 8, 2
+N_PILOT, N_HELD, MAX_PER_CHAPTER = 2, 8, 3
+HELD_MAX_WORDS = 8200  # annotation burden cap for sealed held-out sections (v2)
+PILOT_FIXED = [
+    "4.1",
+    "9.2",
+]  # carried over from v1: blind pilot sheets already prepared, no prediction or label exists for them
 SRC = Path("data/interim/textbook_sections.jsonl")
 OUT = Path("configs/cr014_manifest.yaml")
 
@@ -38,11 +43,9 @@ def build() -> dict:
     sections = sorted(pool(), key=lambda r: [int(p) for p in r["section_id"].split(".")])
     normal = [r for r in sections if r["words"] >= TINY_WORDS]
     pilot_pool = [r for r in normal if PILOT_WORDS[0] <= r["words"] <= PILOT_WORDS[1]]
-    pilot: list[dict] = []
-    for r in rng.sample(pilot_pool, len(pilot_pool)):
-        if len(pilot) < N_PILOT and all(p["chapter"] != r["chapter"] for p in pilot):
-            pilot.append(r)
-    rest = [r for r in normal if r not in pilot]
+    pilot = [r for r in sections if r["section_id"] in PILOT_FIXED]
+    assert len(pilot) == N_PILOT and all(r in pilot_pool for r in pilot)
+    rest = [r for r in normal if r not in pilot and r["words"] <= HELD_MAX_WORDS]
     held: list[dict] = []
     per_ch: dict[int, int] = {}
     for r in rng.sample(rest, len(rest)):
@@ -54,9 +57,14 @@ def build() -> dict:
         (x["section_id"] for x in xs), key=lambda s: [int(p) for p in s.split(".")]
     )
     body = {
-        "version": "cr014-manifest-1",
+        "version": "cr014-manifest-2",
+        "supersedes": {
+            "version": "cr014-manifest-1",
+            "sha256": "7462e305a43f43bf1a72be393d684ed32a25c79e0eb19558d6bb27ba05800437",
+            "why": "v1 held-out totalled ~54k words (annotation burden); redrawn once, before any prediction on any pool section; pilot carried over unchanged",
+        },
         "seed": SEED,
-        "rule": "pool = ch4-9 numbered sections minus the 7 CR-012 held-out; tiny (<1000 words) reserve-only; pilot 2 from 2500-6600 words, different chapters; held-out 8, at most 2 per chapter; rest reserve. Inputs: chapter + word count only.",
+        "rule": "pool = ch4-9 numbered sections minus the 7 CR-012 held-out; tiny (<1000 words) reserve-only; pilot fixed (4.1, 9.2; carried over from v1); held-out 8 drawn by seed from non-pilot sections of <=8200 words, at most 3 per chapter; rest reserve. Inputs: chapter + word count only.",
         "pilot": ids(pilot),
         "heldout_sealed": ids(held),
         "reserve": ids(reserve),
