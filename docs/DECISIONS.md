@@ -247,3 +247,6 @@ Format: date · decision · reason · alternatives considered.
 - Reason: Research STOP-3B decision. Alternatives: further verifier search before held-out (rejected by Research: model-selection freedom on two pilot sections).
 
 - **2026-10-12 · CR-014 gold provenance (owner statement).** Decision: the pilot gold is recorded as LLM-assisted/model-generated annotation (ChatGPT, GPT-5.6 Sol; blind source text + guides; no system output), not human-annotated; the manifest, STOP 3B report and decision log say so. The STOP-3B PASS was based on this gold; whether model-generated gold is acceptable for the held-out adoption gate is a Research decision, raised, not made by code.
+
+- **2026-10-12 · CR-014 gold acceptance (owner).** Decision: the owner accepts the model-generated pilot annotation as gold "for now" (provisional, not human-only gold). Every CR-014 number computed against it is labelled "agreement with model-generated gold"; the held-out gold must carry its own provenance statement in `gold_manifest_heldout.json`; Research is to be told that the pilot/held-out evidence rests on model-generated gold.
+- Reason: owner instruction; the CR's human-annotation expectation cannot be met at present. Alternatives: human annotation or human review of a sample (open; would remove the caveat).
