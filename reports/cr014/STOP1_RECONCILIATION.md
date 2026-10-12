@@ -21,7 +21,18 @@ Branch `cr-014-recall-first-concepts` from tag `cr013-stop5-complete`. $0 spent,
 | N0 replication | 0.433 / 0.553 / 0.486 | 0.712 |
 N1 rescue precision 126/270 exact. Gain is small: rescue recovers a minority of misses.
 
-**Could not reconcile Research's quoted working diagnostics** (historical miss count, rescue candidate coverage, recovered misses, one-token share, anchored-vs-independent audit): the file `CR-014_Research_Handover_Recall_First_Concept_Extraction.md` is no longer in the package folder (searched). Please resend; the values above are repo-recorded only.
+**Reconciliation of the Research handover (found at `~/Downloads/CR-014_Research_Handover_Recall_First_Concept_Extraction.md`; an earlier version of this report wrongly said it was missing):**
+
+| Handover figure | Repo value (`reports/cr010_stop2_test.md`) | Status |
+|---|---|---|
+| N0 / N1 / N3 P, R, F1 (0.444/0.599/0.510; 0.451/0.591/0.512) | identical | confirmed |
+| N0 misses ≈1,262 | 1,262 exact-unmatched gold terms (test split) | confirmed |
+| In N1 candidate pool 193/1,262 (15.3%) | 193/1262 | confirmed |
+| Recovered 77/1,262 (6.1%) | 77 kept by exact name (74 more proposed then rejected by the model) | confirmed |
+| One-token 727/834 (87.2%) of dev rescue candidates | dev N1: 260/331 (78.5%); test N1: 1,324/1,734 (76.4%) | **not reproduced**; no 834-candidate table found in the repo |
+| Anchored vs independent audit | not located in repo reports | **not reproduced** |
+
+Note the 1,262/193/77 figures come from the IIR **test** split (held out, run once, inspected), so they are context, not tuning data. Please confirm the source of 727/834 and the anchored-vs-independent audit.
 
 ## 3. Coverage-veto audit (CR-014 §9 independence)
 Mechanisms that can suppress a proposal after the generator: `not_mentions` suppress M1 hints (`verifier.py` ~349); rejected hints go to `rejected_keys` and are never re-offered (`loop.py` ~343–357); strict G-link rejection drops a mention without adding alias or concept (`runner.py` ~205–230; slice3_c2: 124 rejected vs 16 linked); ≤3 flagged items dropped without reprompt. Stage A proposers must therefore run **before and independent of** these vetoes; trace must log each veto.
@@ -35,7 +46,7 @@ spaCy noun chunks, technical heads, headings, emphasised terms, acronym pairs, d
 - Projected totals sit far below limits (pilot ≤$5, dev ≤$15, held-out ≤$10, hard cap $30); estimates are from measured rates, not a priced dry-run of the U-arms (their prompts do not exist yet).
 
 ## 6. RESEARCH DECISION REQUIRED
-1. Resend the handover working numbers (item 2).
+1. Confirm the source of the 727/834 one-token figure and the anchored-vs-independent audit (item 2); the other handover numbers match the repo.
 2. Define U0: slice3_c2 recipe (tau 0, strict G-links) vs `frozen-1` (tau 0.1).
 3. Approve the fresh-pool correction (18 candidates, not 30) and the selection rule in `contamination_audit.md`; consider keeping Stage A/B dev on ch1–3 only.
 4. Approve extending the CR-013 trace Stage literal (proposal, boundary) — observability only.
