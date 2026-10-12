@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Knowledge graph explorer</title>
+<style>
+:root{
+  --bg:#f6f6f3;--panel:#fff;--ink:#15171c;--ink2:#5a6070;--line:#dcdde2;--accent:#0072B2;--accent-ink:#fff;
+  --warn:#8a3b00;--warnbg:#fff1e3;--okbg:#e8f3fa;--chip:#eef0f4;--code:#f1f2f5;
+  --ease-out:cubic-bezier(0.23,1,0.32,1);--ease-io:cubic-bezier(0.77,0,0.175,1);
+}
+@media (prefers-color-scheme:dark){:root{--bg:#121418;--panel:#1b1e24;--ink:#eceef2;--ink2:#a3aab8;--line:#31353d;--accent:#56B4E9;--accent-ink:#0b1117;--warn:#ffb27a;--warnbg:#33261a;--okbg:#17262f;--chip:#262a32;--code:#23262d}}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;display:flex;flex-direction:column}
+button,select,input{font:inherit;color:inherit}
+.small select,.small input,.whyform select,.whyform input{color:var(--ink)}
+select.tsec{background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:4px 8px;max-width:100%}
+button{cursor:pointer;border:1px solid var(--line);background:var(--panel);border-radius:7px;padding:5px 11px;transition:transform 140ms var(--ease-out),background-color 140ms var(--ease-out),border-color 140ms var(--ease-out)}
+button:active{transform:scale(.97)}
+@media (hover:hover) and (pointer:fine){button:hover{border-color:var(--accent)}}
+button.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+code{background:var(--code);padding:0 4px;border-radius:4px;font-size:12px;word-break:break-all}
+header{padding:10px 16px 8px;background:var(--panel);border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+h1{font-size:15px;margin:0;font-weight:600;letter-spacing:-.005em}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:0;border-radius:0;padding:5px 13px}
+.seg button+button{border-left:1px solid var(--line)}
+.sp{flex:1}
+.banner{margin-top:8px;padding:8px 11px;border-radius:7px;font-size:13px;border:1px solid var(--line)}
+.banner.warn{background:var(--warnbg);color:var(--warn);border-color:var(--warn)}
+.banner.ok{background:var(--okbg)}
+.banner b{font-weight:600}
+main{flex:1;display:flex;min-height:0}
+#side{width:300px;padding:12px;overflow:auto;border-right:1px solid var(--line);background:var(--panel);flex:none}
+#side h3{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink2);margin:16px 0 5px;font-weight:600}
+#side h3:first-child{margin-top:0}
+#side label{display:flex;align-items:center;gap:7px;margin:2px 0;font-size:13px}
+#side input[type=search],#side select{width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:7px;background:var(--bg)}
+.sw{width:11px;height:11px;border-radius:50%;display:inline-block;flex:none}
+.rl{max-height:190px;overflow:auto;border:1px solid var(--line);border-radius:7px;padding:3px 7px}
+.small{font-size:12px;color:var(--ink2)}
+.card{border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:var(--bg);margin-bottom:10px}
+.card .close{float:right;border:0;background:none;padding:0 4px;font-size:16px;color:var(--ink2)}
+.card h4{margin:0 0 4px;font-size:13px}
+.card ul{margin:4px 0 0 16px;padding:0}
+.tour{display:flex;flex-direction:column;gap:6px}
+.tour button{text-align:left;padding:7px 10px}
+.tour button small{display:block;color:var(--ink2);font-size:11px}
+.big{display:flex;gap:14px;margin:4px 0}
+.big div{font-size:11px;color:var(--ink2)}
+.big b{display:block;font-size:20px;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.bar{display:flex;height:12px;border-radius:6px;overflow:hidden;margin:6px 0;background:var(--chip)}
+.bar span{display:block;height:100%}
+.leg{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:11px;color:var(--ink2)}
+.leg i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px}
+#stage{flex:1;min-width:0;display:flex;flex-direction:column}
+.tabs{display:flex;gap:2px;padding:6px 10px 0;border-bottom:1px solid var(--line);background:var(--panel)}
+.tabs button{border:1px solid transparent;border-bottom:0;border-radius:7px 7px 0 0;background:none;padding:5px 14px}
+.tabs button.on{background:var(--bg);border-color:var(--line);color:var(--ink)}
+.pane{flex:1;min-height:0;position:relative;display:none}
+.pane.on{display:block}
+canvas{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
+#status{position:absolute;left:10px;bottom:8px;font-size:12px;color:var(--ink2);background:var(--panel);padding:2px 9px;border-radius:6px;border:1px solid var(--line)}
+#hint{position:absolute;right:10px;top:8px;font-size:11px;color:var(--ink2)}
+.scroll{position:absolute;inset:0;overflow:auto;padding:14px 18px;background:var(--bg)}
+#detail{width:380px;padding:14px;overflow:auto;border-left:1px solid var(--line);background:var(--panel);flex:none;font-size:13px}
+#detail .in{transition:opacity 180ms var(--ease-out),transform 180ms var(--ease-out)}
+#detail .in.pre{opacity:0;transform:translateY(6px)}
+#detail h2{font-size:15px;margin:0 0 6px;font-weight:600;line-height:1.3}
+#detail dt{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink2);margin-top:11px}
+#detail dd{margin:2px 0 0}
+.chip{display:inline-block;padding:1px 8px;border-radius:10px;background:var(--chip);font-size:12px;margin:1px 2px 1px 0}
+.na{color:var(--ink2);font-style:italic}
+.sent{border-left:3px solid var(--accent);padding:4px 10px;background:var(--bg);border-radius:0 6px 6px 0;line-height:1.55}
+.sent mark{padding:0 2px;border-radius:3px}
+.sent mark.a{background:#cde6f5;color:#06324c}
+.sent mark.b{background:#ffe2bf;color:#5a2c00}
+.sent u{text-decoration-color:var(--accent);text-underline-offset:3px;text-decoration-thickness:2px}
+@media (prefers-color-scheme:dark){.sent mark.a{background:#1d4a66;color:#d7ecfa}.sent mark.b{background:#6b3d08;color:#ffe9cf}}
+details{margin-top:10px}
+summary{cursor:pointer;color:var(--ink2);font-size:12px}
+pre.json{background:var(--code);padding:8px;border-radius:7px;overflow:auto;font-size:11px;max-height:260px}
+a.lnk{color:var(--accent);cursor:pointer;text-decoration:none}
+@media (hover:hover) and (pointer:fine){a.lnk:hover{text-decoration:underline}}
+table.t{border-collapse:collapse;width:100%;font-size:12px}
+table.t th,table.t td{border-bottom:1px solid var(--line);padding:4px 8px;text-align:left;vertical-align:top}
+table.t th{position:sticky;top:0;background:var(--panel);cursor:pointer;user-select:none}
+table.t tr[data-id]{cursor:pointer}
+@media (hover:hover) and (pointer:fine){table.t tr[data-id]:hover{background:var(--okbg)}}
+table.t tr.sel{background:var(--okbg)}
+.docs{border-collapse:collapse;font-size:12px;width:100%;margin:4px 0}
+.docs th,.docs td{border:1px solid var(--line);padding:3px 6px;text-align:left}
+.docs tr[data-d]{cursor:pointer}
+.docs tr.sel{background:var(--okbg)}
+.doc{line-height:2;font-size:14px;max-width:900px}
+.doc s{display:inline;text-decoration:none;padding:1px 2px;border-radius:3px;cursor:pointer}
+.doc .pg{background:#cde6f5}.doc .pf{background:#ffd9b8}.doc .gm{outline:2px dashed #888;outline-offset:1px}
+@media (prefers-color-scheme:dark){.doc .pg{background:#1d4a66}.doc .pf{background:#6b3d08}}
+.sentbreak{display:block;height:6px}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.stag>*{animation:rise 260ms var(--ease-out) both}
+.stag>*:nth-child(2){animation-delay:40ms}.stag>*:nth-child(3){animation-delay:80ms}.stag>*:nth-child(4){animation-delay:120ms}.stag>*:nth-child(5){animation-delay:160ms}
+body.debug .stag>*{animation:none}
+body.debug #detail .in{transition:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition-property:opacity!important;transition-duration:120ms!important}#detail .in.pre{transform:none}}
+@media (max-width:980px){html,body{height:auto}body{min-height:100vh}main{flex-direction:column;min-height:0}#stage{order:1;min-height:80vh}#side{order:2;width:auto;max-height:none;border-right:0;border-top:1px solid var(--line)}#detail{order:3;width:auto;max-height:none;border-left:0;border-top:1px solid var(--line)}.tabs{overflow-x:auto;flex-wrap:nowrap}.tabs button{white-space:nowrap}}
+.reviewonly{display:block}.debugonly{display:none}
+body.debug .reviewonly{display:none}body.debug .debugonly{display:block}
+
+/* ---- CR-013 trace layer */
+.vh{font-size:16px;margin:0 0 6px;font-weight:600}
+.ribbon{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:6px;margin:10px 0}
+.ribbon button{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;padding:7px 10px;width:100%}
+.ribbon button .n{font-size:10px;color:var(--ink2)}
+.ribbon button small{font-size:11px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.ribbon button.on{background:var(--accent);color:var(--accent-ink)}
+.ribbon button.on small,.ribbon button.on .n{color:var(--accent-ink);opacity:1}
+.funnel{margin:6px 0 12px}.fr{display:flex;align-items:center;gap:8px;font-size:12px;margin:2px 0}
+.fl{width:130px;color:var(--ink2)}.fb{flex:1;height:10px;background:var(--chip);border-radius:5px;overflow:hidden}.fb i{display:block;height:100%;background:var(--accent)}.fv{width:56px;text-align:right;font-variant-numeric:tabular-nums}
+.card.warn{border-color:var(--warn);background:var(--warnbg);color:var(--warn)}
+.evc{border:1px solid var(--line);border-radius:8px;padding:6px 9px;margin:6px 0;background:var(--panel);font-size:13px}
+.evh{display:flex;gap:5px;align-items:center;flex-wrap:wrap;margin-bottom:2px}
+.auth-RULE{background:#dfe9f5;color:#12365f}.auth-MODEL{background:#f5e3d6;color:#6b3410}.auth-SCORE{background:#e7e0f5;color:#32215e}.auth-STRUCTURAL{background:#e1efe6;color:#17452a}.auth-HUMAN{background:#f3e8c2;color:#5a4400}.auth-UNKNOWN{background:#eee;color:#444}
+.layer-REPLAYED{background:#fff1e3;color:var(--warn);border:1px solid var(--warn)}.layer-JOINED{background:#e8f3fa;color:#0b4a73;border:1px solid #9cc4de}
+@media (prefers-color-scheme:dark){.auth-RULE{background:#1c3350;color:#cfe3fa}.auth-MODEL{background:#4a2d17;color:#f6dcc7}.auth-SCORE{background:#33284f;color:#ddd3f5}.auth-STRUCTURAL{background:#1b3a28;color:#cdeedb}.auth-HUMAN{background:#4a3e12;color:#f3e8c2}.auth-UNKNOWN{background:#333;color:#ddd}.layer-JOINED{background:#17303f;color:#bfe0f5;border-color:#3c6a89}.layer-REPLAYED{background:var(--warnbg);color:var(--warn)}}
+.stepper{display:flex;gap:4px;flex-wrap:wrap;margin:8px 0}.stepper button{font-size:12px;padding:4px 9px}.stepper button.on{background:var(--accent);color:var(--accent-ink)}
+.nav{margin:8px 0}.stepbody{min-height:140px}
+.srcbox{line-height:1.7;max-height:380px;overflow:auto;border:1px solid var(--line);border-radius:7px;padding:8px 10px;background:var(--bg)}
+.srcbox mark.a{background:#cde6f5;color:#06324c;padding:0 1px;border-radius:2px}
+@media (prefers-color-scheme:dark){.srcbox mark.a{background:#1d4a66;color:#d7ecfa}}
+.boundary div{padding:2px 6px;border-left:3px solid var(--line);margin:2px 0;font-size:12px}.boundary .in{border-left-color:#009E73}.boundary .out{border-left-color:#D55E00}.rk{font-variant-numeric:tabular-nums;color:var(--ink2)}
+.whyform{display:flex;gap:8px;flex-wrap:wrap;align-items:end;margin:8px 0}.whyform input,.whyform select{padding:5px 8px;border:1px solid var(--line);border-radius:7px;background:var(--bg);min-width:200px}
+.checks{margin:6px 0 8px 18px;padding:0}.checks li{margin:2px 0}.ans{display:inline-block;min-width:92px;font-weight:600;font-size:12px}
+.ck-yes .ans,.ck-relation_proposed .ans{color:#007a5a}.ck-no .ans,.ck-no_relation .ans{color:#C23B3B}.ck-unknown .ans,.ck-not_assessed_in_production .ans{color:var(--ink2)}
+.fail{border-left:4px solid #C23B3B;padding:6px 10px;background:var(--bg);border-radius:0 6px 6px 0}.okk{border-left:4px solid #009E73;padding:6px 10px;background:var(--bg);border-radius:0 6px 6px 0}
+canvas.mini{width:100%;display:block;border:1px solid var(--line);border-radius:8px;background:var(--bg)}
+.snapctl{display:flex;gap:12px;align-items:center;margin:8px 0;flex-wrap:wrap}
+.jst{margin:8px 0;padding-top:6px;border-top:1px solid var(--line)}.jh{font-size:13px;margin:16px 0 4px}
+
+/* ---- CR-013 STOP 4: evaluation overlay (visually distinct, opt-in) */
+.evbtn{border-color:var(--warn)!important;color:var(--warn)}
+.evbtn.on{background:var(--warn)!important;color:var(--bg)!important}
+.evmatrix td.evcell{cursor:pointer;font-variant-numeric:tabular-nums;text-align:center;min-width:44px}
+.evmatrix td.evzero{text-align:center;color:var(--ink2)}
+.evmatrix th{text-align:center}
+@media (hover:hover) and (pointer:fine){.evmatrix td.evcell:hover{outline:2px solid var(--warn)}}
+button.evchip{font-size:12px;padding:3px 9px;border-radius:12px}button.evchip.on{background:var(--warn);color:var(--bg);border-color:var(--warn)}
+.checks li.evbad{background:var(--warnbg);border-radius:5px;padding:1px 4px}.checks li.evafter{color:var(--ink2)}
+</style>
+</head>
+<body class="review">
+<header>
+  <div class="top">
+    <h1>Knowledge graph explorer</h1>
+    <div class="seg" id="modeseg"><button id="m-pd">P&amp;D Expert KG</button><button id="m-sci">SciNLP Evaluation Graph</button><button id="m-ev" class="evbtn" title="Opt-in: gold-derived frozen CR-012 evaluation. Not the production graph.">CR-012 evaluation overlay</button></div>
+    <div class="sp"></div>
+    <div class="seg" id="viewseg" title="Review: a guided reading for examiners. Debug: every field, tables and ids."><button id="v-review">Review</button><button id="v-debug">Debug</button></div>
+  </div>
+  <div id="banner"></div>
+</header>
+<main>
+  <aside id="side" tabindex="0" aria-label="Filters and guides"></aside>
+  <div id="stage">
+    <div class="tabs" id="tabs"></div>
+    <div class="pane on" id="p-graph"><canvas id="cv"></canvas><div id="status"></div><div id="hint"></div></div>
+    <div class="pane" id="p-doc"><div class="scroll" id="docview" tabindex="0" role="region" aria-label="Document"></div></div>
+    <div class="pane" id="p-table"><div class="scroll" id="tableview" tabindex="0" role="region" aria-label="Tables"></div></div>
+    <div class="pane" id="p-pipeline"><div class="scroll" id="v-pipeline" tabindex="0" role="region" aria-label="Pipeline"></div></div>
+    <div class="pane" id="p-section"><div class="scroll" id="v-section" tabindex="0" role="region" aria-label="Explain a section"></div></div>
+    <div class="pane" id="p-why"><div class="scroll" id="v-why" tabindex="0" role="region" aria-label="Why not?"></div></div>
+    <div class="pane" id="p-lost"><div class="scroll" id="v-lost" tabindex="0" role="region" aria-label="Rejected and lost items"></div></div>
+    <div class="pane" id="p-snap"><div class="scroll" id="v-snap" tabindex="0" role="region" aria-label="Stage snapshots"></div></div>
+    <div class="pane" id="p-trace"><div class="scroll" id="v-trace" tabindex="0" role="region" aria-label="Trace table"></div></div>
+    <div class="pane" id="p-evmap"><div class="scroll" id="v-evmap" tabindex="0" role="region" aria-label="Evaluation failure map"></div></div>
+    <div class="pane" id="p-evlist"><div class="scroll" id="v-evlist" tabindex="0" role="region" aria-label="Evaluation gold relations"></div></div>
+  </div>
+  <aside id="detail" tabindex="0" aria-label="Details of the selected item"><div class="in" id="detailin"></div></aside>
+</main>
+<script type="application/octet-stream" id="trace-gz">/*__TRACE_B64__*/</script>
+<script type="application/octet-stream" id="eval-gz">/*__EVAL_B64__*/</script>
+<script>
+const DATA = /*__DATA__*/null;
+const NA = DATA.na;
+// Okabe-Ito based palette (colour-blind safe)
+const PAL = ['#0072B2','#E69F00','#009E73','#CC79A7','#D55E00','#56B4E9','#B8A400','#7A7A7A','#8C4FD8','#C23B3B','#2E8B8B','#A0522D','#5B6EE1','#4F7F2F'];
+const TYPE_IDX = {Concept:7,Protocol:0,Component:1,Mechanism:3,DataUnit:2,Parameter:4,Property:5,Event:9,State:6,Layer:12,Identifier:8,task:0,method:1,dataset:2,metric:3};
+const RING_COL = {centre:'#C23B3B',inner:'#D55E00',middle:'#E69F00',outer:'#56B4E9',unlinked:'#B5B9C2'};
+const CODE_LABEL = {N0:'the endpoint was never extracted',N1:'the endpoint span was wrong',P0:'the pair was never considered',R0:'the classifier said "no relation"',R1:'wrong relation chosen',R2:'wrong direction',R3:'type or qualifier problem',E0:'evidence invalid',C0:'concept split',C1:'false merge',NODE_LEVEL_ONLY:'matched at node level only'};
+const CODE_COL = {N0:'#C23B3B',N1:'#D55E00',P0:'#E69F00',R0:'#56B4E9',R1:'#0072B2',R2:'#8C4FD8',R3:'#7A7A7A',E0:'#7A7A7A'};
+const REDUCED = typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion:reduce)').matches;
+const DARK = () => typeof matchMedia==='function' && matchMedia('(prefers-color-scheme:dark)').matches;
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const val = v => (v===null||v===undefined||v===NA||(Array.isArray(v)&&!v.length)) ? '<span class="na">'+NA+'</span>' : (typeof v==='object' ? '<code>'+esc(JSON.stringify(v))+'</code>' : esc(v));
+const relCache = {}; const relCol = r => (r in relCache) ? relCache[r] : (relCache[r]=PAL[Object.keys(relCache).length%PAL.length]);
+const typeCol = t => PAL[(t in TYPE_IDX)?TYPE_IDX[t]:7];
+const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+const cv = $('cv'), ctx = cv.getContext('2d');
+const S = {mode:'pd', view:'review', doc:null, G:null, tab:'graph', sel:null, hover:null, kb:false,
+  F:{types:new Set(),rels:new Set(),chapter:3,labels:false,unlinked:false,layout:'force',colour:'type',query:'',missed:false,ghostOnly:false,top:0}};
+let view = {x:0,y:0,k:1}, byId = {}, adj = {}, fade = 0, fadeT = 0, anim = null;
+const animOK = () => S.view==='review' && !REDUCED && !S.kb;
+
+function pos(n){ return (S.mode==='pd'&&S.F.layout==='rings') ? [n.rx,n.ry] : [n.fx,n.fy]; }
+function defs(){ return S.mode==='pd' ? DATA.pd.defs : DATA.sci.defs; }
+
+// ---------------------------------------------------------------- state / url
+function hashWrite(){
+  const p = ['m='+S.mode,'v='+S.view]; if(S.mode==='sci') p.push('d='+encodeURIComponent(S.doc.doc_id)); if(S.mode==='pd') p.push('ch='+S.F.chapter);
+  if(S.sel) p.push('s='+(S.sel.kind==='node'?'n:':'e:')+encodeURIComponent(S.sel.kind==='node'?S.sel.id:S.sel.e.id));
+  try{ history.replaceState(null,'','#'+p.join('&')); }catch(e){}
+}
+function hashRead(){
+  const o={}; (location.hash||'').replace(/^#/,'').split('&').forEach(kv=>{const i=kv.indexOf('='); if(i>0) o[kv.slice(0,i)]=decodeURIComponent(kv.slice(i+1));}); return o;
+}
+
+function setMode(m, d, keepSel){
+  if(m==='ev'){ evEnter(); return; }
+  S.mode=m; S.tab='graph';
+  if(m==='pd'){ S.G=DATA.pd; S.doc=null; S.F.chapter=3; S.F.unlinked=false; S.F.layout='force'; S.F.colour='type'; S.F.missed=false; }
+  else { S.doc=d||S.doc||DATA.sci.docs[0]; S.G=S.doc; S.F.colour='gold'; S.F.missed=(S.view==='debug'); }
+  S.F.types=new Set(S.G.nodes.filter(n=>!n.ghost).map(n=>n.type)); S.F.rels=new Set(S.G.edges.map(e=>e.rel)); S.F.query='';
+  byId={}; adj={}; S.G.nodes.forEach(n=>{byId[n.id]=n;adj[n.id]=[];}); S.G.edges.forEach(e=>{adj[e.s].push(e); adj[e.t].push(e);});
+  if(!keepSel) S.sel=null;
+  chrome(); banner(); side(); tabs(); showTab('graph'); fit(false); renderDetail(true); draw(); hashWrite();
+}
+function setView(v){
+  S.view=v; document.body.className=v; store.set('kg_view',v);
+  $('v-review').classList.toggle('on',v==='review'); $('v-debug').classList.toggle('on',v==='debug');
+  if(S.mode==='ev'){ evSide(); tabs(); showTab(S.tab); renderDetail(true); hashWrite(); return; }
+  if(S.mode==='sci') S.F.missed=(v==='debug');
+  side(); tabs(); showTab((S.tab==='table'||S.tab==='trace')&&v==='review'?'graph':S.tab); renderDetail(true); draw(); hashWrite();
+}
+function chrome(){ $('m-ev').classList.toggle('on',S.mode==='ev'); $('m-pd').classList.toggle('on',S.mode==='pd'); $('m-sci').classList.toggle('on',S.mode==='sci'); $('v-review').classList.toggle('on',S.view==='review'); $('v-debug').classList.toggle('on',S.view==='debug'); }
+
+function banner(){
+  if(S.mode==='ev'){ evBanner(); return; }
+  const b=$('banner');
+  if(S.mode==='pd'){
+    b.innerHTML='<div class="banner ok"><b>P&amp;D Expert KG — production/development graph. Peterson &amp; Davie, Chapters 1–3.</b> This is the project\'s current networking Expert KG product graph. It currently covers the P&amp;D Chapters 1–3 development slice (run <code>'+esc(DATA.pd.run_id)+'</code>).<br>'+
+    '<b>CR-012 held-out P&amp;D E0 strict F1 = '+DATA.pd_heldout.e0_strict_f1.toFixed(3)+'</b> — measured on separate held-out P&amp;D sections ('+DATA.pd_heldout.sections.join(', ')+'), <b>not</b> the score of the graph shown here.</div>';
+  } else {
+    const h=DATA.sci.headline;
+    b.innerHTML='<div class="banner warn"><b>CR-012 SciNLP held-out E0 graph — EVALUATION OUTPUT — NOT the production Expert KG.</b> This graph was produced only for CR-012 external held-out evaluation. It is not incorporated into the production Expert KG.<br>'+
+    '<b>Frozen headline: E0 strict relation F1 = '+h.relation_f1.toFixed(3)+'</b> (micro over 3 test documents; precision '+h.precision.toFixed(3)+', recall '+h.recall.toFixed(3)+'). CI status = <b>'+esc(h.ci_status)+'</b>.</div>';
+  }
+}
+
+// ---------------------------------------------------------------- filtering / drawing
+function visible(){
+  const G=S.G, F=S.F, ok=new Set(), nodes=[];
+  G.nodes.forEach(n=>{
+    if(n.ghost){ if(!F.missed) return; }
+    else if(!F.types.has(n.type)) return;
+    if(S.mode==='pd'){ if(n.ch>F.chapter) return; if(!n.linked&&!F.unlinked) return; }
+    if(F.top&&S.mode==='pd'&&(n.importance==null||n.importance<F.top)) return;
+    nodes.push(n); ok.add(n.id);
+  });
+  const edges=G.edges.filter(e=>(e.kind!=='gold_missed'||F.missed)&&F.rels.has(e.rel)&&ok.has(e.s)&&ok.has(e.t)&&(S.mode!=='pd'||e.ch<=F.chapter));
+  return {nodes,edges,ok};
+}
+function nodeColour(n){
+  if(n.ghost) return '#9aa0ab';
+  if(S.mode==='pd'&&S.F.colour==='ring') return RING_COL[n.ring]||'#B5B9C2';
+  if(S.mode==='sci'&&S.F.colour==='gold') return n.gold_entity_match?'#0072B2':'#D55E00';
+  return typeCol(n.type);
+}
+function nodeR(n){ const z=Math.min(Math.max(view.k/90,.6),1.4); if(S.mode==='pd') return (S.F.colour==='ring'&&n.importance!=null?2+5*n.importance:2.4+Math.min(2.6,n.n_mentions*.12))*z; return (4+Math.min(4,n.n_spans*.5))*z; }
+const sx=p=>p[0]*view.k+view.x, sy=p=>p[1]*view.k+view.y;
+function resize(){ const r=cv.getBoundingClientRect(),d=window.devicePixelRatio||1; cv.width=r.width*d; cv.height=r.height*d; ctx.setTransform(d,0,0,d,0,0); }
+function targetView(nodes){
+  const r=cv.getBoundingClientRect(); if(!nodes.length) return {x:r.width/2,y:r.height/2,k:1};
+  let a=1e9,b=1e9,c=-1e9,d=-1e9; nodes.forEach(n=>{const p=pos(n);a=Math.min(a,p[0]);b=Math.min(b,p[1]);c=Math.max(c,p[0]);d=Math.max(d,p[1]);});
+  const k=Math.min((r.width-80)/Math.max(c-a,1e-6),(r.height-80)/Math.max(d-b,1e-6),nodes.length<4?260:1e9);
+  return {k,x:r.width/2-k*(a+c)/2,y:r.height/2-k*(b+d)/2};
+}
+function moveView(t, ms){
+  if(anim) cancelAnimationFrame(anim.id);
+  if(!ms||!animOK()){ view=t; draw(); return; }
+  const f=Object.assign({},view), t0=performance.now();
+  const ease=u=>u<.5?8*u**4:1-8*(1-u)**4; // strong ease-in-out for on-screen movement
+  const step=now=>{ const u=Math.min(1,(now-t0)/ms), e=ease(u); view={x:f.x+(t.x-f.x)*e,y:f.y+(t.y-f.y)*e,k:f.k*Math.pow(t.k/f.k,e)}; draw(); if(u<1) anim.id=requestAnimationFrame(step); };
+  anim={id:requestAnimationFrame(step)};
+}
+function fit(animate){ resize(); moveView(targetView(visible().nodes), animate?280:0); }
+function focusSet(){
+  const f=new Set(); if(!S.sel) return f;
+  if(S.sel.kind==='node'){ f.add(S.sel.id); (adj[S.sel.id]||[]).forEach(e=>{f.add(e.s);f.add(e.t);}); } else { f.add(S.sel.e.s); f.add(S.sel.e.t); }
+  return f;
+}
+function arrow(x1,y1,x2,y2,r2,col,w,dash){
+  const dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy); if(L<1) return; const ux=dx/L,uy=dy/L,ex=x2-ux*(r2+1),ey=y2-uy*(r2+1);
+  ctx.setLineDash(dash||[]); ctx.strokeStyle=col; ctx.lineWidth=w; ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(ex,ey); ctx.stroke(); ctx.setLineDash([]);
+  const s=5+w*1.2; ctx.fillStyle=col; ctx.beginPath(); ctx.moveTo(ex,ey); ctx.lineTo(ex-ux*s-uy*s*.5,ey-uy*s+ux*s*.5); ctx.lineTo(ex-ux*s+uy*s*.5,ey-uy*s-ux*s*.5); ctx.closePath(); ctx.fill();
+}
+let raf=0;
+function draw(){ if(raf) return; raf=requestAnimationFrame(paint); }
+function paint(){
+  raf=0;
+  if(S.mode==='ev') return;
+  const r=cv.getBoundingClientRect(); ctx.clearRect(0,0,r.width,r.height);
+  const v=visible(), q=S.F.query.trim().toLowerCase(), dark=DARK(), focus=focusSet(), ink=dark?'#e8e8ea':'#15171c';
+  // dim non-focused elements: eased over ~150ms in the review view, immediate in debug / keyboard / reduced motion
+  const want=S.sel?1:0; if(animOK()){ const dt=Math.min(40,performance.now()-fadeT); fadeT=performance.now(); fade+= (want-fade)*Math.min(1,dt/60); if(Math.abs(want-fade)>.01) draw(); else fade=want; } else fade=want;
+  const dimA = 1-.85*fade;
+  v.edges.forEach(e=>{
+    const a=byId[e.s],b=byId[e.t]; if(a===b) return; const pa=pos(a),pb=pos(b);
+    const on=S.sel&&((S.sel.kind==='edge'&&S.sel.e===e)||(S.sel.kind==='node'&&(e.s===S.sel.id||e.t===S.sel.id)));
+    let col=relCol(e.rel), w=1.2, dash=null;
+    if(e.kind==='gold_missed'){ col='#8b919d'; dash=[5,4]; }
+    else if(S.mode==='sci'&&S.F.colour==='gold'){ col=e.matches_gold?'#0072B2':'#D55E00'; w=e.matches_gold?2.6:1.2; }
+    ctx.globalAlpha= on?1:(S.sel?dimA:.78); arrow(sx(pa),sy(pa),sx(pb),sy(pb),nodeR(b)*.6+3,col,on?2.8:w,dash);
+    if(S.F.labels||on){ ctx.globalAlpha=1; ctx.fillStyle=ink; ctx.font='10px sans-serif'; ctx.fillText(e.rel,(sx(pa)+sx(pb))/2+3,(sy(pa)+sy(pb))/2-3); }
+  });
+  const labels=[];
+  const top=[...v.nodes].filter(n=>S.mode==='pd'&&n.importance!=null).sort((a,b)=>b.importance-a.importance).slice(0,S.view==='review'?18:0); const topSet=new Set(top.map(n=>n.id));
+  v.nodes.forEach(n=>{
+    const p=pos(n),x=sx(p),y=sy(p),rr=nodeR(n);
+    const hit=q&&(n.name.toLowerCase().includes(q)||(n.aliases||[]).some(a=>a.toLowerCase().includes(q)));
+    ctx.globalAlpha= focus.has(n.id)||!S.sel?1:dimA;
+    if(n.ghost){ ctx.strokeStyle='#8b919d'; ctx.setLineDash([3,3]); ctx.lineWidth=1.6; ctx.beginPath(); ctx.arc(x,y,rr,0,6.283); ctx.stroke(); ctx.setLineDash([]); }
+    else { ctx.fillStyle=nodeColour(n); ctx.beginPath(); ctx.arc(x,y,rr,0,6.283); ctx.fill(); }
+    const isSel=S.sel&&S.sel.kind==='node'&&S.sel.id===n.id;
+    if(hit||isSel){ ctx.strokeStyle=dark?'#fff':'#15171c'; ctx.lineWidth=2.4; ctx.beginPath(); ctx.arc(x,y,rr+3,0,6.283); ctx.stroke(); }
+    if(S.F.labels||hit||(S.sel&&focus.has(n.id))||S.hover===n||topSet.has(n.id)&&view.k>0){ labels.push({n,x,y,rr,isSel,prio:isSel?0:(hit||S.hover===n)?1:(S.sel&&focus.has(n.id))?2:topSet.has(n.id)?3:4,w:n.importance!=null?n.importance:(n.n_mentions||n.n_spans||0)/100}); }
+  });
+  // label placement: purely visual. Selected / searched / hovered labels are always drawn; the others are drawn greedily by priority and skipped when they would overlap one already placed
+  { const placed=[]; ctx.globalAlpha=1; ctx.fillStyle=ink;
+    labels.sort((a,b)=>a.prio-b.prio||b.w-a.w).forEach(L=>{ ctx.font=(L.isSel?'600 ':'')+'11px sans-serif'; const w=ctx.measureText(L.n.name).width, bx=L.x+L.rr+4, box=[bx-1,L.y-9,bx+w+1,L.y+4];
+      if(L.prio>1&&placed.some(b=>box[0]<b[2]&&box[2]>b[0]&&box[1]<b[3]&&box[3]>b[1])) return; placed.push(box); ctx.fillText(L.n.name,bx,L.y+4); }); }
+  ctx.globalAlpha=1;
+  $('status').textContent=v.nodes.filter(n=>!n.ghost).length+' nodes · '+v.edges.filter(e=>e.kind!=='gold_missed').length+' edges'+(S.F.missed?' · '+v.edges.filter(e=>e.kind==='gold_missed').length+' missed gold':'')+(S.mode==='pd'&&!S.F.unlinked?' · unlinked hidden':'');
+  $('hint').textContent=S.view==='debug'?'/ search · arrows: neighbours · Esc clear':'drag to pan · scroll to zoom · click a node or edge';
+}
+function nodeAt(mx,my){ const v=visible(); let best=null,bd=1e9; v.nodes.forEach(n=>{const p=pos(n),d=Math.hypot(sx(p)-mx,sy(p)-my),rr=Math.max(nodeR(n),6); if(d<rr+2&&d<bd){bd=d;best=n;}}); return best; }
+function edgeAt(mx,my){ const v=visible(); let best=null,bd=6; v.edges.forEach(e=>{const a=pos(byId[e.s]),b=pos(byId[e.t]);const x1=sx(a),y1=sy(a),x2=sx(b),y2=sy(b),L2=(x2-x1)**2+(y2-y1)**2||1;let t=((mx-x1)*(x2-x1)+(my-y1)*(y2-y1))/L2;t=Math.max(0,Math.min(1,t));const d=Math.hypot(mx-(x1+t*(x2-x1)),my-(y1+t*(y2-y1)));if(d<bd){bd=d;best=e;}}); return best; }
+
+// ---------------------------------------------------------------- evidence sentence with highlighted endpoints
+function terms(n){ return [n.canonical_name&&n.canonical_name!==NA?n.canonical_name:null,n.name,...(n.aliases||[]),...(n.surfaces||[])].filter(Boolean).map(s=>s.toLowerCase()).sort((a,b)=>b.length-a.length); }
+function highlight(sentence, quote, srcN, tgtN){
+  if(!sentence||sentence===NA) return '<span class="na">'+NA+'</span>';
+  const low=sentence.toLowerCase(), fl=new Array(sentence.length).fill(0);
+  if(quote&&quote!==NA){ const i=low.indexOf(quote.toLowerCase()); if(i>=0) for(let k=i;k<i+quote.length;k++) fl[k]|=4; }
+  [[srcN,1],[tgtN,2]].forEach(([n,bit])=>{ for(const t of terms(n)){ if(t.length<2) continue; let i=low.indexOf(t); while(i>=0){ const okL=i===0||!/\w/.test(low[i-1]), okR=i+t.length>=low.length||!/\w/.test(low[i+t.length]); if(okL&&okR){ let free=true; for(let k=i;k<i+t.length;k++) if(fl[k]&3) free=false; if(free) for(let k=i;k<i+t.length;k++) fl[k]|=bit; } i=low.indexOf(t,i+t.length); } } });
+  let out='',i=0; while(i<sentence.length){ let j=i; while(j<sentence.length&&fl[j]===fl[i]) j++; let seg=esc(sentence.slice(i,j)); const f=fl[i]; if(f&4) seg='<u>'+seg+'</u>'; if(f&1) seg='<mark class="a">'+seg+'</mark>'; else if(f&2) seg='<mark class="b">'+seg+'</mark>'; out+=seg; i=j; }
+  return out;
+}
+function fillTemplate(e,a,b){ const d=defs()[e.rel]; if(!d||!d.template||d.template===NA) return null; return d.template.replace('{X}','<b>'+esc(a.name)+'</b>').replace('{Y}','<b>'+esc(b.name)+'</b>'); }
+
+// ---------------------------------------------------------------- detail panel
+function copyBtn(t){ return ' <a class="lnk" data-copy="'+esc(t)+'">copy</a>'; }
+function renderDetail(instant){
+  const box=$('detailin'), dbg=S.view==='debug';
+  if(S.mode==='ev'){ box.className='in'; box.innerHTML=evDetailHTML(); wireEvDetail(box); return; }
+  let h='';
+  if(!S.sel){
+    h = '<p class="na">Click a node or an edge to see what it is, where it came from, and the sentence that supports it.</p>';
+    if(S.view==='review') h+='<div class="card"><h4>How to read this</h4><ul><li>Each <b>dot</b> is a concept; colour = its type.</li><li>Each <b>arrow</b> is a relation, pointing from source to target.</li><li>Every edge carries the sentence it was read from.</li></ul></div>';
+  } else if(S.sel.kind==='node') h=detNode(byId[S.sel.id],dbg); else h=detEdge(S.sel.e,dbg);
+  const swap=()=>{ box.innerHTML=h; wireDetail(box); };
+  if(instant||!animOK()){ box.className='in'; swap(); return; }
+  box.className='in pre'; swap(); requestAnimationFrame(()=>requestAnimationFrame(()=>{box.className='in';}));
+}
+function wireDetail(box){
+  box.querySelectorAll('a[data-e]').forEach(a=>a.onclick=()=>{const e=S.G.edges.find(x=>x.id===a.dataset.e); if(e) selectEdge(e);});
+  box.querySelectorAll('a[data-n]').forEach(a=>a.onclick=()=>selectNode(a.dataset.n));
+  box.querySelectorAll('a[data-copy]').forEach(a=>a.onclick=()=>{try{navigator.clipboard.writeText(a.dataset.copy); a.textContent='copied';}catch(e){}});
+  box.querySelectorAll('a[data-whya]').forEach(a=>a.onclick=()=>{TS.whyA=a.dataset.whya; TS.whyB=''; showTab('why');});
+  fillJourney(box);
+}
+function edgeLines(n){
+  const es=(adj[n.id]||[]).filter(e=>e.kind!=='gold_missed'||S.F.missed);
+  return es.slice(0,60).map(e=>{const o=e.s===n.id; const other=byId[o?e.t:e.s]; return '<div>'+(o?'':'← ')+'<a class="lnk" data-e="'+esc(e.id)+'">'+esc(e.rel)+'</a> '+(o?'→ ':'from ')+'<a class="lnk" data-n="'+esc(other.id)+'">'+esc(other.name)+'</a>'+(e.kind==='gold_missed'?' <span class="chip">missed gold</span>':'')+'</div>';}).join('')+(es.length>60?'<div class="na">… '+(es.length-60)+' more</div>':'');
+}
+function detNode(n,dbg){
+  let h='<h2>'+esc(n.name)+'</h2><span class="chip" style="border-left:4px solid '+typeCol(n.type)+'">'+esc(n.type)+'</span>'+(n.ghost?' <span class="chip">in gold, not predicted</span>':'');
+  if(S.mode==='pd'){
+    const ringTxt={centre:'among the most connected, central concepts',inner:'well connected, close to the centre',middle:'moderately connected',outer:'weakly connected, towards the periphery',unlinked:'extracted, but no accepted relation yet'}[n.ring]||'';
+    h+='<dl><dt>Also called</dt><dd>'+(n.aliases.length?n.aliases.map(a=>'<span class="chip">'+esc(a)+'</span>').join(''):'<span class="na">no aliases recorded</span>')+'</dd>'+
+    '<dt>Introduced</dt><dd>chapter '+n.ch+', first seen in <code>'+esc(n.first_section)+'</code>; mentioned '+n.n_mentions+'× across '+n.sections.length+' section(s)</dd>'+
+    '<dt>Position in the graph</dt><dd><b>'+esc(n.ring)+' ring</b> — '+ringTxt+(dbg?'<br>importance '+(n.importance==null?NA:n.importance.toFixed(4))+' · community '+esc(n.comm)+' / '+esc(n.comm_fine):'')+'</dd>'+
+    (n.definition!==NA?'<dt>Definition</dt><dd>'+esc(n.definition)+'</dd>':'')+
+    '<dt>Source text</dt>'+n.quotes.map(q=>'<dd><div class="sent">'+esc(q.q)+'</div><span class="small">'+esc(q.sec)+' · '+esc(q.role)+'</span></dd>').join('');
+    if(dbg) h+='<dt>Ring by chapter</dt><dd>'+Object.entries(n.ring_by_chapter).map(([c,r])=>'ch'+c+': '+esc(r)).join(' → ')+'</dd><dt>Alias provenance</dt><dd>'+val(n.alias_provenance)+'</dd><dt>Merged from</dt><dd>'+val(n.merged_from)+'</dd><dt>Concept id</dt><dd><code>'+esc(n.id)+'</code>'+copyBtn(n.id)+'</dd>';
+    h+='</dl>';
+  } else {
+    h+=(n.ghost?'':' <span class="chip">'+(n.gold_entity_match?'span matches a gold entity':'no gold entity at this span')+'</span>')+'<dl><dt>Text in the document</dt><dd>'+(n.surfaces||[]).map(s=>'<span class="chip">'+esc(s)+'</span>').join('')+'</dd><dt>Sentence</dt><dd><div class="sent">'+highlight(n.sentence,null,n,{})+'</div></dd>';
+    if(dbg) h+='<dt>Spans (token start–end)</dt><dd>'+esc((n.spans||[]).map(s=>s[0]+'–'+s[1]).join(', '))+'</dd><dt>Canonical node name</dt><dd>'+val(n.canonical_name)+'</dd><dt>Typed match</dt><dd>'+(n.gold_entity_typed_match?'yes':'no')+'</dd><dt>Node id</dt><dd><code>'+esc(n.id)+'</code>'+copyBtn(n.id)+'</dd>';
+    h+='</dl>';
+  }
+  h+='<dl><dt>Relations ('+(adj[n.id]||[]).length+')</dt><dd>'+edgeLines(n)+'</dd></dl>';
+  if(S.mode==='pd') h+=journeySlot('concept:'+n.id);
+  if(dbg) h+='<details><summary>raw record</summary><pre class="json" tabindex="0">'+esc(JSON.stringify(n,null,1))+'</pre></details>';
+  return h;
+}
+function detEdge(e,dbg){
+  const a=byId[e.s], b=byId[e.t], d=defs()[e.rel]||{}, tpl=fillTemplate(e,a,b);
+  let h='<h2>'+esc(a.name)+' <span style="border-bottom:3px solid '+(e.kind==='gold_missed'?'#8b919d':relCol(e.rel))+'">— '+esc(e.rel)+' →</span> '+esc(b.name)+'</h2>';
+  if(e.kind==='gold_missed') h+='<div class="card"><h4>Missed by the system</h4>This relation is in the gold annotation but was not predicted. Earliest cause: <b>'+esc(CODE_LABEL[e.code]||e.code)+'</b> <span class="small">('+esc(e.code)+')</span>.</div>';
+  else if(S.mode==='sci') h+='<span class="chip">'+(e.matches_gold?'matches a gold relation':'not in the gold annotation')+'</span>';
+  h+='<dl>'+(tpl?'<dt>Reads as</dt><dd>'+tpl+'</dd>':'')+(d.definition&&d.definition!==NA?'<dt>What “'+esc(e.rel)+'” means</dt><dd class="small">'+esc(d.definition)+'</dd>':'')+
+  '<dt>Evidence</dt><dd><div class="sent">'+highlight(e.sentence,e.quote,a,b)+'</div><span class="small"><mark class="a" style="padding:0 4px">source</mark> <mark class="b" style="padding:0 4px">target</mark> <u>exact quote the model cited</u></span></dd>';
+  if(e.statement&&e.statement!==NA) h+='<dt>Model statement</dt><dd>'+esc(e.statement)+'</dd>';
+  if(S.mode==='pd') h+='<dt>Where it comes from</dt><dd>section <code>'+esc(e.section)+'</code> · chapter '+e.ch+' · family '+esc(e.family)+'</dd>';
+  if(dbg||S.view==='review'){
+    const q=e.qual&&e.qual!==NA?e.qual:null;
+    if(q) h+='<dt>Qualifiers</dt><dd>'+Object.entries(q).filter(([k,v])=>v!==null&&!(Array.isArray(v)&&!v.length)).map(([k,v])=>'<span class="chip">'+esc(k)+': '+esc(Array.isArray(v)?v.join('; '):v)+'</span>').join('')+'</dd>';
+  }
+  h+='<dt>Confidence</dt><dd>'+val(e.confidence)+'</dd>';
+  if(dbg){
+    h+='<dt>Direction (model flag)</dt><dd>'+val(e.model_direction)+'</dd><dt>Grounding checks</dt><dd>'+val(e.grounding)+'</dd><dt>Family reason</dt><dd>'+val(e.family_reason)+'</dd><dt>Prompt hashes</dt><dd>'+val(e.hashes)+'</dd><dt>Selection group</dt><dd>'+val(e.selection_group)+'</dd><dt>Edge id</dt><dd><code>'+esc(e.id)+'</code>'+copyBtn(e.id)+'</dd>';
+    h+='</dl><details open><summary>raw record</summary><pre class="json" tabindex="0">'+esc(JSON.stringify(e,null,1))+'</pre></details>';
+  } else h+='</dl>';
+  if(S.mode==='pd'&&e.kind!=='gold_missed') h+=journeySlot('edge:'+e.id);
+  return h;
+}
+
+// ---------------------------------------------------------------- selection
+function selectNode(id, fromKb){
+  const n=byId[id]; if(!n) return; S.kb=!!fromKb; S.sel={kind:'node',id}; renderDetail(); revealIfHidden([n]); S.kb=false; draw(); markRows(); hashWrite();
+}
+function selectEdge(e){ S.sel={kind:'edge',e}; renderDetail(); revealIfHidden([byId[e.s],byId[e.t]]); draw(); markRows(); hashWrite(); }
+function clearSel(){ S.sel=null; renderDetail(); draw(); markRows(); hashWrite(); }
+function revealIfHidden(ns){
+  if(S.tab!=='graph') return;
+  const r=cv.getBoundingClientRect(); const vis=ns.every(n=>{const p=pos(n),x=sx(p),y=sy(p);return x>40&&x<r.width-40&&y>40&&y<r.height-40;});
+  if(!vis) moveView(targetView(ns.length===1?[ns[0]]:ns), 240);
+}
+function markRows(){ document.querySelectorAll && document.querySelectorAll('tr[data-id]').forEach(tr=>tr.classList.toggle('sel',!!S.sel&&tr.dataset.id===(S.sel.kind==='node'?S.sel.id:S.sel.e.id))); }
+function neighbours(){ if(!S.sel||S.sel.kind!=='node') return []; return [...new Set((adj[S.sel.id]||[]).filter(e=>e.kind!=='gold_missed'||S.F.missed).map(e=>e.s===S.sel.id?e.t:e.s))]; }
+
+// ---------------------------------------------------------------- side panel
+function sciCard(){
+  const d=S.doc, [p,r,f]=d.e0_relation_prf, [tp,fp,fn]=d.e0_relation_tp_fp_fn;
+  const att=Object.entries(d.attribution).filter(([c,v])=>v>0), tot=att.reduce((s,[c,v])=>s+v,0);
+  let h='<h3>This document, at a glance</h3><div class="big"><div><b>'+f.toFixed(3)+'</b>relation F1</div><div><b>'+p.toFixed(2)+'</b>precision</div><div><b>'+r.toFixed(2)+'</b>recall</div></div>'+
+  '<div class="small">'+tp+' of '+d.gold_relations+' gold relations recovered · '+fp+' extra predictions · entity F1 '+d.e0_entity_prf[2].toFixed(3)+'</div>';
+  if(tot){ h+='<h3>Why gold relations were missed</h3><div class="bar">'+att.map(([c,v])=>'<span title="'+esc(c)+': '+v+'" style="width:'+(100*v/tot)+'%;background:'+(CODE_COL[c]||'#7A7A7A')+'"></span>').join('')+'</div><div class="leg">'+att.sort((a,b)=>b[1]-a[1]).map(([c,v])=>'<span><i style="background:'+(CODE_COL[c]||'#7A7A7A')+'"></i>'+(S.view==='debug'?esc(c)+' ':'')+esc(CODE_LABEL[c]||c)+' · '+v+'</span>').join('')+'</div>'; }
+  h+='<div class="card" style="margin-top:10px"><h4>Reading this fairly</h4><span class="small">The benchmark annotates a few concepts per document, while this system extracts every concept it finds. Low precision and recall are an expected architecture-transfer outcome, not a rendering error.'+(d.gold_relations<5?' This document has only '+d.gold_relations+' gold relation(s), so its score says very little.':'')+'</span></div>';
+  return h;
+}
+function side(){
+  const s=$('side'), dbg=S.view==='debug', G=S.G; let h='';
+  if(S.view==='review' && store.get('kg_intro')!=='off'){
+    h+='<div class="card" id="intro"><button class="close" id="intro-x" title="Dismiss">×</button><h4>Start here</h4><span class="small">'+(S.mode==='pd'?'A knowledge graph built from the textbook: concepts connected by typed relations, each backed by a sentence. Try the guided views below.':'The same pipeline run on a scientific-paper benchmark, to test it outside networking. Compare what it found with the human gold annotation.')+'</span></div>';
+  }
+  if(S.mode==='sci'){
+    h+='<h3>Test documents</h3><table class="docs"><tr><th>document</th><th>pred</th><th>gold</th><th>F1</th></tr>'+DATA.sci.docs.map(d=>'<tr data-d="'+esc(d.doc_id)+'" class="'+(d===S.doc?'sel':'')+'"><td>'+esc(d.doc_id.replace('.grobid',''))+'</td><td>'+d.predicted_nodes+'n / '+d.predicted_edges+'e</td><td>'+d.gold_entities+'e / '+d.gold_relations+'r</td><td>'+d.e0_strict_relation_f1.toFixed(3)+'</td></tr>').join('')+'</table>'+sciCard();
+  } else {
+    const st=G.stats;
+    h+='<h3>This graph</h3><div class="big"><div><b>'+st.canonical_nodes+'</b>concepts</div><div><b>'+st.accepted_edges+'</b>relations</div><div><b>'+st.aliases+'</b>aliases</div></div><div class="small">'+st.nodes_with_edges+' concepts are connected; '+st.unlinked_nodes+' were extracted but have no accepted relation yet.</div>'+
+    '<h3>Guided views</h3><div class="tour stag"><button data-tour="centre">1 · The centre of the graph<small>most connected concepts, ring layout</small></button><button data-tour="growth">2 · How it grew<small>chapter 1 first; widen the chapter filter</small></button><button data-tour="evidence">3 · One relation with its evidence<small>see the sentence it was read from</small></button></div>'+
+    '<h3>Chapter (cumulative)</h3><select id="f-ch" aria-label="Chapter (cumulative)">'+[1,2,3].map(c=>'<option value="'+c+'"'+(c===S.F.chapter?' selected':'')+'>up to chapter '+c+'</option>').join('')+'</select>'+
+    '<h3>Layout</h3><select id="f-lay" aria-label="Layout"><option value="force"'+(S.F.layout==='force'?' selected':'')+'>Force — shows connections</option><option value="rings"'+(S.F.layout==='rings'?' selected':'')+'>Rings — centre to periphery</option></select>'+
+    '<h3>Colour by</h3><select id="f-col" aria-label="Colour nodes by"><option value="type">concept type</option><option value="ring"'+(S.F.colour==='ring'?' selected':'')+'>ring (size = importance)</option></select>'+
+    '<label style="margin-top:6px"><input type="checkbox" id="f-unl"'+(S.F.unlinked?' checked':'')+'> show the '+st.unlinked_nodes+' unlinked concepts</label>';
+    if(dbg) h+='<h3>Min. importance</h3><input type="range" id="f-top" aria-label="Minimum importance" min="0" max="1" step="0.05" value="'+S.F.top+'"> <span class="small" id="f-top-v">'+S.F.top+'</span>';
+  }
+  if(S.mode==='sci'){
+    h+='<h3>Guided views</h3><div class="tour stag"><button data-tour="found">1 · What it found<small>blue = matches gold, orange = not in gold</small></button><button data-tour="missed">2 · What it missed<small>dashed grey = gold relations not predicted</small></button><button data-tour="text">3 · Why: the document<small>predictions highlighted on the source text</small></button></div>'+
+    '<label style="margin-top:8px"><input type="checkbox" id="f-miss"'+(S.F.missed?' checked':'')+'> show missed gold relations</label>'+
+    '<h3>Colour by</h3><select id="f-col" aria-label="Colour nodes by"><option value="gold"'+(S.F.colour==='gold'?' selected':'')+'>match with gold</option><option value="type"'+(S.F.colour==='type'?' selected':'')+'>concept type</option></select>';
+  }
+  h+='<h3>Search</h3><input type="search" id="f-q" aria-label="Search concepts by name or alias" placeholder="concept name or alias  ( / )" value="'+esc(S.F.query)+'" list="dl"><datalist id="dl">'+G.nodes.filter(n=>!n.ghost).slice(0,2500).map(n=>'<option value="'+esc(n.name)+'">').join('')+'</datalist>';
+  const types=[...new Set(G.nodes.filter(n=>!n.ghost).map(n=>n.type))].sort();
+  h+='<h3>Concept types</h3><div class="stag">'+types.map(t=>'<label><input type="checkbox" data-t="'+esc(t)+'"'+(S.F.types.has(t)?' checked':'')+'><span class="sw" style="background:'+typeCol(t)+'"></span>'+esc(t)+' <span class="small">'+G.nodes.filter(n=>n.type===t&&!n.ghost).length+'</span></label>').join('')+'</div>';
+  const cnt={}; G.edges.filter(e=>e.kind!=='gold_missed').forEach(e=>cnt[e.rel]=(cnt[e.rel]||0)+1); const rels=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]);
+  h+='<h3>Relations</h3><div class="rl" tabindex="0" aria-label="Relation filters">'+rels.map(r=>{const d=defs()[r]||{}; return '<label title="'+esc(d.definition||'')+'"><input type="checkbox" data-r="'+esc(r)+'"'+(S.F.rels.has(r)?' checked':'')+'><span class="sw" style="background:'+relCol(r)+'"></span>'+esc(r)+' <span class="small">'+cnt[r]+'</span></label>';}).join('')+'</div><div style="margin-top:4px"><button id="b-all">all</button> <button id="b-none">none</button></div>'+
+  '<h3>View</h3><label><input type="checkbox" id="f-lab"'+(S.F.labels?' checked':'')+'> label every concept</label><div style="margin-top:4px"><button id="b-fit">Fit to screen</button> <button id="b-reset">Reset</button></div>';
+  s.innerHTML=h; wireSide(s);
+}
+function wireSide(s){
+  const $$=(q)=>s.querySelectorAll(q), one=(q)=>s.querySelector(q);
+  $$('tr[data-d]').forEach(tr=>tr.onclick=()=>{S.sel=null; setMode('sci',DATA.sci.docs.find(d=>d.doc_id===tr.dataset.d));});
+  $$('input[data-t]').forEach(i=>i.onchange=()=>{i.checked?S.F.types.add(i.dataset.t):S.F.types.delete(i.dataset.t);draw();});
+  $$('input[data-r]').forEach(i=>i.onchange=()=>{i.checked?S.F.rels.add(i.dataset.r):S.F.rels.delete(i.dataset.r);draw();});
+  $$('button[data-tour]').forEach(b=>b.onclick=()=>tour(b.dataset.tour));
+  const q=one('#f-q'); if(q){ q.oninput=()=>{S.F.query=q.value; const m=S.G.nodes.find(n=>!n.ghost&&n.name.toLowerCase()===q.value.trim().toLowerCase()); if(m){S.kb=true; selectNode(m.id,true);} else draw();}; q.onkeydown=ev=>{ if(ev.key==='Enter'){ const t=S.F.query.trim().toLowerCase(); const m=S.G.nodes.find(n=>!n.ghost&&(n.name.toLowerCase().includes(t)||(n.aliases||[]).some(a=>a.toLowerCase().includes(t)))); if(m) selectNode(m.id,true);} }; }
+  const ch=one('#f-ch'); if(ch) ch.onchange=()=>{S.F.chapter=+ch.value; fit(true); hashWrite();};
+  const lay=one('#f-lay'); if(lay) lay.onchange=()=>{S.F.layout=lay.value; fit(true);};
+  const col=one('#f-col'); if(col) col.onchange=()=>{S.F.colour=col.value; draw();};
+  const unl=one('#f-unl'); if(unl) unl.onchange=()=>{S.F.unlinked=unl.checked; fit(true);};
+  const ms=one('#f-miss'); if(ms) ms.onchange=()=>{S.F.missed=ms.checked; fit(true);};
+  const tp=one('#f-top'); if(tp) tp.oninput=()=>{S.F.top=+tp.value; one('#f-top-v').textContent=tp.value; draw();};
+  one('#f-lab').onchange=e=>{S.F.labels=e.target.checked; draw();};
+  one('#b-fit').onclick=()=>fit(true);
+  one('#b-reset').onclick=()=>{S.F.types=new Set(S.G.nodes.filter(n=>!n.ghost).map(n=>n.type)); S.F.rels=new Set(S.G.edges.map(e=>e.rel)); S.F.query=''; S.F.labels=false; S.F.top=0; S.sel=null; setMode(S.mode,S.doc);};
+  one('#b-all').onclick=()=>{$$('input[data-r]').forEach(i=>{i.checked=true;S.F.rels.add(i.dataset.r);}); draw();};
+  one('#b-none').onclick=()=>{$$('input[data-r]').forEach(i=>{i.checked=false;S.F.rels.delete(i.dataset.r);}); draw();};
+  const x=one('#intro-x'); if(x) x.onclick=()=>{store.set('kg_intro','off'); const c=one('#intro'); if(c) c.style.display='none';};
+}
+function tour(name){
+  if(name==='centre'){ S.F.layout='rings'; S.F.colour='ring'; S.F.chapter=3; S.F.unlinked=false; S.F.top=0.35; side(); fit(true); }
+  else if(name==='growth'){ S.F.chapter=1; S.F.layout='force'; S.F.colour='type'; S.F.top=0; side(); fit(true); }
+  else if(name==='evidence'){ S.F.layout='force'; S.F.colour='type'; S.F.chapter=3; S.F.top=0; side(); const e=S.G.edges.find(x=>x.rel==='acts_on'&&x.quote&&x.quote!==NA)||S.G.edges[0]; fit(false); selectEdge(e); moveView(targetView([byId[e.s],byId[e.t]]),280); }
+  else if(name==='found'){ S.F.missed=false; S.F.colour='gold'; showTab('graph'); side(); fit(true); }
+  else if(name==='missed'){ S.F.missed=true; S.F.colour='gold'; showTab('graph'); side(); fit(true); }
+  else if(name==='text'){ showTab('doc'); }
+}
+
+// ---------------------------------------------------------------- tabs: graph / document / tables
+function tabs(){
+  let t=[['graph','Graph']]; if(S.mode==='ev') t=[...EV_TABS]; else { if(S.mode==='sci') t.push(['doc','Document']); if(traceAvailable()) t.push(...TRACE_TABS); if(S.view==='debug') t.push(['table','Tables']); if(S.view==='debug'&&traceAvailable()) t.push(['trace','Trace table']); }
+  $('tabs').innerHTML=t.map(([k,l])=>'<button data-tab="'+k+'" class="'+(S.tab===k?'on':'')+'">'+l+'</button>').join('');
+  document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
+}
+function showTab(k){
+  S.tab=k; ['graph','doc','table',...TRACE_PANES,...EV_PANES].forEach(p=>{const el=$('p-'+p); if(el) el.classList.toggle('on',p===k);});
+  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.tab===k));
+  if(k==='graph'){ resize(); draw(); } if(k==='doc') renderDoc(); if(k==='table') renderTables(); if(TRACE_PANES.includes(k)) renderTraceTab(k); if(EV_PANES.includes(k)) renderEvalTab(k);
+}
+function renderDoc(){
+  const d=S.doc, goldSet=new Set(d.gold_spans.map(g=>g[0]+'-'+g[1])), predSet=new Map(d.pred_spans.map(p=>[p[0]+'-'+p[1],p[2]]));
+  const startAt=new Map(), gOnly=new Map(); d.pred_spans.forEach(p=>startAt.set(p[0],p)); d.gold_spans.forEach(g=>{ if(!predSet.has(g[0]+'-'+g[1])) gOnly.set(g[0],g); });
+  let h='<p class="small" style="max-width:900px"><span class="doc"><s class="pg">predicted and in gold</s> <s class="pf">predicted, not in gold</s> <s class="gm">gold, not predicted</s></span> Click a predicted span to open its node. ' +
+    d.pred_spans.filter(p=>goldSet.has(p[0]+'-'+p[1])).length+' of '+d.pred_spans.length+' predicted spans are in the gold; '+d.gold_spans.filter(g=>!predSet.has(g[0]+'-'+g[1])).length+' of '+d.gold_spans.length+' gold entities were not predicted.</p><div class="doc">';
+  let sentI=0, i=0; const T=d.tokens;
+  while(i<T.length){
+    const p=startAt.get(i), g=gOnly.get(i);
+    if(p){ const cls=goldSet.has(p[0]+'-'+p[1])?'pg':'pf'; h+='<s class="'+cls+'" data-n="'+esc(p[2])+'">'+esc(T.slice(p[0],p[1]).join(' '))+'</s> '; i=p[1]; }
+    else if(g){ h+='<s class="gm" title="gold '+esc(g[2])+'">'+esc(T.slice(g[0],g[1]).join(' '))+'</s> '; i=g[1]; }
+    else { h+=esc(T[i])+' '; i++; }
+    if(i>=d.sentence_ends[sentI]){ h+='<span class="sentbreak"></span>'; sentI++; }
+  }
+  $('docview').innerHTML=h+'</div>';
+  document.querySelectorAll('#docview s[data-n]').forEach(el=>el.onclick=()=>{ selectNode(el.dataset.n); });
+}
+function renderTables(){
+  const el=$('tableview'); let h='';
+  const nodesRows=S.G.nodes.filter(n=>!n.ghost).map(n=>({id:n.id,name:n.name,type:n.type,ch:n.ch??'',ring:n.ring??'',imp:n.importance??'',deg:(adj[n.id]||[]).length,al:(n.aliases||[]).length}));
+  const edgesRows=S.G.edges.map(e=>({id:e.id,s:byId[e.s].name,rel:e.rel,t:byId[e.t].name,kind:e.kind||'accepted',m:e.kind==='gold_missed'?e.code:(S.mode==='sci'?(e.matches_gold?'match':'no match'):('ch'+e.ch+' '+e.section))}));
+  h+='<h3 style="margin-top:0">Concepts ('+nodesRows.length+')</h3>'+tbl(nodesRows,['name','type','ch','ring','imp','deg','al'],['concept','type','chapter','ring','importance','degree','aliases'],'n');
+  h+='<h3>Relations ('+edgesRows.length+')</h3>'+tbl(edgesRows,['s','rel','t','kind','m'],['source','relation','target','kind','match / code / section'],'e');
+  if(S.mode==='sci') h+='<h3>Gold relations ('+S.doc.gold_rels.length+')</h3>'+tbl(S.doc.gold_rels.map((r,i)=>({id:'gold'+i,a:r.src_text,rel:r.rel,b:r.tgt_text,m:r.matched?'MATCHED':'missed',c:r.code})),['a','rel','b','m','c'],['gold source','relation','gold target','status','earliest failure'],'g');
+  el.innerHTML=h; wireTables(el);
+}
+function tbl(rows,keys,heads,kind){
+  return '<table class="t" data-kind="'+kind+'"><tr>'+heads.map((x,i)=>'<th data-k="'+keys[i]+'">'+esc(x)+'</th>').join('')+'</tr>'+rows.slice(0,3000).map(r=>'<tr data-id="'+esc(r.id)+'" data-kind="'+kind+'">'+keys.map(k=>'<td>'+esc(typeof r[k]==='number'?(Number.isInteger(r[k])?r[k]:r[k].toFixed(3)):r[k])+'</td>').join('')+'</tr>').join('')+'</table>';
+}
+function wireTables(el){
+  el.querySelectorAll('tr[data-id]').forEach(tr=>tr.onclick=()=>{ if(tr.dataset.kind==='n') selectNode(tr.dataset.id); else if(tr.dataset.kind==='e'){ const e=S.G.edges.find(x=>x.id===tr.dataset.id); if(e) selectEdge(e);} });
+  el.querySelectorAll('th[data-k]').forEach(th=>th.onclick=()=>{ const t=th.closest('table'), body=[...t.querySelectorAll('tr[data-id]')], i=[...th.parentNode.children].indexOf(th), num=body.every(r=>r.children[i].textContent===''||!isNaN(+r.children[i].textContent)); const dir=th.dataset.d==='1'?-1:1; th.dataset.d=dir===1?'1':'0'; body.sort((a,b)=>{const x=a.children[i].textContent,y=b.children[i].textContent; return dir*(num?(+x)-(+y):x.localeCompare(y));}).forEach(r=>t.appendChild(r)); });
+}
+
+// ---------------------------------------------------------------- input
+let drag=null;
+cv.addEventListener('pointerdown',ev=>{drag={x:ev.clientX,y:ev.clientY,vx:view.x,vy:view.y,moved:false}; try{cv.setPointerCapture(ev.pointerId);}catch(e){} cv.style.cursor='grabbing';});
+cv.addEventListener('pointermove',ev=>{
+  if(drag){ const dx=ev.clientX-drag.x,dy=ev.clientY-drag.y; if(Math.abs(dx)+Math.abs(dy)>3) drag.moved=true; view.x=drag.vx+dx; view.y=drag.vy+dy; draw(); return; }
+  const r=cv.getBoundingClientRect(); const n=nodeAt(ev.clientX-r.left,ev.clientY-r.top); if(n!==S.hover){S.hover=n; cv.style.cursor=n?'pointer':'grab'; draw();}
+});
+cv.addEventListener('pointerup',ev=>{
+  const was=drag; drag=null; cv.style.cursor='grab'; if(!was||was.moved) return;
+  const r=cv.getBoundingClientRect(),mx=ev.clientX-r.left,my=ev.clientY-r.top, n=nodeAt(mx,my);
+  if(n){ selectNode(n.id); return; } const e=edgeAt(mx,my); if(e){ selectEdge(e); return; } clearSel();
+});
+cv.addEventListener('wheel',ev=>{ev.preventDefault(); const r=cv.getBoundingClientRect(),mx=ev.clientX-r.left,my=ev.clientY-r.top,f=ev.deltaY<0?1.12:1/1.12; view.x=mx-(mx-view.x)*f; view.y=my-(my-view.y)*f; view.k*=f; draw();},{passive:false});
+addEventListener('resize',()=>{resize(); draw();});
+addEventListener('keydown',ev=>{
+  const tag=(ev.target&&ev.target.tagName)||'';
+  if(ev.key==='/'&&tag!=='INPUT'){ ev.preventDefault(); const q=$('f-q'); if(q) q.focus(); return; }
+  if(ev.key==='Escape'){ S.kb=true; clearSel(); S.kb=false; return; }
+  if(tag==='INPUT'||tag==='SELECT') return;
+  if(ev.key==='ArrowRight'){ const nb=neighbours(); if(!nb.length) return; ev.preventDefault(); (S.hist=S.hist||[]).push(S.sel.id); selectNode(nb[0],true); return; }
+  if(ev.key==='ArrowLeft'){ const prev=(S.hist||[]).pop(); if(prev&&byId[prev]){ ev.preventDefault(); selectNode(prev,true); } return; }
+});
+$('m-pd').onclick=()=>setMode('pd'); $('m-sci').onclick=()=>setMode('sci'); $('m-ev').onclick=()=>setMode('ev');
+$('v-review').onclick=()=>setView('review'); $('v-debug').onclick=()=>setView('debug');
+
+/*__TRACE_JS__*/
+/*__EVAL_JS__*/
+// ---------------------------------------------------------------- boot
+(function(){
+  const h=hashRead(), v=h.v||store.get('kg_view')||'review';
+  S.view=(v==='debug')?'debug':'review'; document.body.className=S.view;
+  const d=h.d?DATA.sci.docs.find(x=>x.doc_id===h.d):null;
+  if(h.ch) S.F.chapter=+h.ch;
+  setMode(h.m==='sci'?'sci':(h.m==='ev'?'ev':'pd'), d, false);
+  if(h.m!=='sci'&&h.m!=='ev'&&h.ch){ S.F.chapter=+h.ch; side(); fit(false); }
+  if(h.s&&S.mode!=='ev'){ const [k,id]=[h.s.slice(0,1),h.s.slice(2)]; if(k==='n'&&byId[id]) selectNode(id); else if(k==='e'){ const e=S.G.edges.find(x=>x.id===id); if(e) selectEdge(e); } }
+})();
+</script>
+</body>
+</html>

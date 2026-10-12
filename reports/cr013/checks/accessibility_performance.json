@@ -1,0 +1,73 @@
+{
+ "axe": {
+  "graph_review": {
+   "violations": [],
+   "passes": 19
+  },
+  "pipeline_review": {
+   "violations": [],
+   "passes": 24
+  },
+  "section_review": {
+   "violations": [],
+   "passes": 24
+  },
+  "why_review": {
+   "violations": [],
+   "passes": 22
+  },
+  "lost_review": {
+   "violations": [],
+   "passes": 25
+  },
+  "snap_review": {
+   "violations": [],
+   "passes": 22
+  },
+  "edge_journey_review": {
+   "violations": [],
+   "passes": 20
+  },
+  "graph_debug": {
+   "violations": [],
+   "passes": 20
+  },
+  "trace_table_debug": {
+   "violations": [],
+   "passes": 25
+  },
+  "evaluation_map": {
+   "violations": [],
+   "passes": 19
+  }
+ },
+ "perf": {
+  "load_to_interactive_ms": 126,
+  "file_mb": 5.96,
+  "navigation": {
+   "domContentLoaded": 99,
+   "load": 101
+  },
+  "js_heap_mb_after_load": 12.7,
+  "first_trace_tab_incl_decode_ms": 314,
+  "trace_decoded_events": 19522,
+  "tab_section_render_ms": 38,
+  "tab_why_render_ms": 38,
+  "tab_lost_render_ms": 38,
+  "tab_snap_render_ms": 141,
+  "five_redraws_ms": 104,
+  "js_heap_mb_after_everything": 12.7
+ },
+ "manual": {
+  "zoom_200_no_horizontal_page_scroll": true,
+  "landmarks": {
+   "header": true,
+   "main": true,
+   "aside": 2
+  },
+  "buttons_without_accessible_name": 0,
+  "inputs_without_label": [],
+  "canvas_has_text_alternative_nearby": true,
+  "first_tab_reaches_an_interactive_element": true
+ }
+}

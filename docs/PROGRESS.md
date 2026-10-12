@@ -64,3 +64,18 @@ Final analysis generated locally from the frozen STOP-4 results (no model call, 
 
 ## CR-012 CLOSED / COMPLETE (2026-10-11)
 Evaluation-only; no architecture change after the held-out run. P&D E0 STRICT_E2E_EDGE_F1 0.053; SciNLP E0 strict relation F1 0.050. Main measured bottlenecks: P&D pair / endpoint delivery, SciNLP entity extraction (canonicalisation not dominant: E1 0.113 -> E2 0.129). CR-011 contributed no production transformation (NOT_APPLICABLE). Single-annotator P&D gold and small n remain stated limitations. Cumulative CR-012 API spend $25.93. Merged `--no-ff`, tag `cr-012-complete`; branch retained for audit.
+
+## CR-013 STOP 2 (2026-10-12)
+Trace model built and verified on `slice3_c2` (1,243 concepts, 528 edges: 100% lineage to resolvable evidence; replay valid and deterministic; sources byte-identical; explanations 100% field-supported). `reports/cr013/stop2.md`. Awaiting Research before STOP 3 (P&D explorer).
+
+## CR-013 STOP 3 (2026-10-12)
+P&D explorer extended (Pipeline, Explain a section, Why not?, Rejected / lost, Stage snapshots, Debug trace table, Node and Edge journeys). 754 tests pass; JS/Python text parity on all 36,730 events and Why-not parity on 230 probes; 14 real-browser checks (headless Chromium) all true; 14 screenshots. `reports/cr013/stop3.md`. Awaiting Research before STOP 4 (evaluation overlay).
+
+## CR-013 STOP 4 (2026-10-12)
+Evaluation overlay built and verified: 432 P&D held-out and 295 SciNLP gold relations explained with the frozen earliest-failure codes (counts equal the frozen results), 11/11 localisation fixtures, gold-isolation tests and 16 real-browser opt-in/isolation checks pass. `reports/cr013/stop4.md`. Awaiting Research before STOP 5.
+
+## CR-013 STOP 5 / complete (2026-10-12)
+Final report `reports/cr013/FINAL_EXPLAINABILITY.md`, final trace manifest (all audited sources byte-identical), demo script and executed 13-step flow, axe WCAG A/AA zero violations (10 light + 7 dark states), Chromium full tests, Firefox/WebKit smoke, usability face check NOT_EVALUATED. 769 tests pass, ruff clean. Tag `cr013-stop5-complete` on the branch; merge into `main` and push are owner decisions.
+
+## CR-014 recall-first concept extraction (2026-10-12/13)
+STOPs 1-5 done. Outcome (Research): scientific success, production adoption failed; production remains U0; CR-015 to target precision recovery and boundary calibration. Held-out (8 sealed P&D sections, model-generated gold): mention-level span-exact U0 P/R/F1 0.749/0.508/0.605 vs V3 0.675/0.615/0.643 (precision gate −0.074 fails the −0.02 floor); STOP 5: concepts +66%, canonical merges ×20, candidate pairs +93% under an unchanged 573-pair budget, relation calls +0-8%, cost $5.05 vs $6.69 for the stage. Reports in `reports/cr014/` (heldout_results.md, downstream_compatibility.md, STOP*.md). Cumulative CR-014 spend about $14.9.

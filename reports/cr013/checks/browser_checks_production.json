@@ -1,0 +1,16 @@
+{
+ "ribbon_arrowright_moves_the_selected_stage": true,
+ "ribbon_keeps_focus_on_the_selected_stage": true,
+ "ribbon_arrowleft_returns": true,
+ "ribbon_has_tab_roles": true,
+ "stepper_arrowright_advances": true,
+ "stepper_next_button_works": true,
+ "reduced_motion_removes_detail_transition_movement": true,
+ "journey_is_populated": true,
+ "narrow_has_no_horizontal_page_scroll": true,
+ "narrow_pipeline_has_no_horizontal_page_scroll": true,
+ "scinlp_mode_still_works_and_hides_pd_trace_tabs": true,
+ "debug_view_adds_trace_table_tab": true,
+ "review_view_hides_trace_table_tab": true,
+ "no_page_errors": true
+}
