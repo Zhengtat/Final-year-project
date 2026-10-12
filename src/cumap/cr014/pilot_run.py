@@ -16,7 +16,7 @@ from pathlib import Path
 
 import yaml
 
-from cumap.cr014 import stage_b as SBm
+from cumap.cr014 import v3_core
 from cumap.cr014.pilot_score import load_gold, place, score
 from cumap.cr014.union import build_section_union
 from cumap.expert_kg.alias_rules import AliasConfig
@@ -69,7 +69,6 @@ def run_v3(max_usd: float) -> None:
     from cumap.cr014.llm_stage import Usage
     from cumap.llm.client import LLMClient
 
-    SBm.DOMAIN = DOMAIN
     nlp, cfg = spacy.load("en_core_web_sm"), AliasConfig.load()
     pv = load_prompt(ROOT / "prompts", "cr014_concept_verifier", "v2")
     pb = load_prompt(ROOT / "prompts", "cr014_boundary_repair", "v1")
@@ -87,7 +86,9 @@ def run_v3(max_usd: float) -> None:
         u = build_section_union(sec, set(row.get("emphasized_terms") or []), nlp, cfg, raw)
         client = LLMClient(get_settings(), run_id=f"cr014_pilot_V3_{sid.replace('.', '_')}")
         usage, t0 = Usage(), time.time()
-        res = SBm.run_v2(client, pv, pb, u, sec["heading"], {}, usage, None, evidence=True)
+        res = v3_core.run_v2(
+            client, pv, pb, u, sec["heading"], {}, usage, None, evidence=True, domain=DOMAIN
+        )
         cost = round(getattr(client, "spent_usd", 0.0), 4)
         spent += cost
         meta = {"section": sid, "candidates": len(u.cands), "families": len(u.families), "calls": usage.calls, "errors": usage.errors, "cost_usd": cost, "seconds": round(time.time() - t0, 1), "prompt_v": pv.version, "prompt_b": pb.version, "tier": "bulk"}  # fmt: skip

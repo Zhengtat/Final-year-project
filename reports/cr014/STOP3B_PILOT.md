@@ -37,7 +37,7 @@ U0: $0.135 (4.1) + $0.190 (9.2) incl. canonicalisation. V3: $0.038 + $0.047 = $0
 
 ## Reading and limits
 - On P&D, with a dense gold, V3 raises recall and F1 with essentially unchanged mention-level precision — in contrast to IIR dev, where the same system lost precision. That fits the FP-audit finding that IIR dev gold is incomplete, but it is two sections of one textbook and one annotator's inclusive definition; it does not by itself show adoption-level evidence.
-- Gold provenance: owner-supplied, not independently double-annotated; agreement `NOT_EVALUABLE`. Dense gold favours recall-oriented systems (generic terms such as "network" and "component" are in gold); production's stricter concept definition is part of why U0 recall is low.
+- Gold provenance: owner-supplied, not independently double-annotated; agreement `NOT_EVALUABLE`. The annotator/provenance statement (human or LLM-assisted) has not been given to me and is not asserted here; file facts are in `reports/cr014/gold_manifest_pilot.json` (its last write, 14:14:54, precedes every pilot prediction, the first being 14:22; the LLM-generated FP-audit file was last written 6 s later, which the owner should explain when stating provenance). Dense gold favours recall-oriented systems (generic terms such as "network" and "component" are in gold); production's stricter concept definition is part of why U0 recall is low.
 - Not done: held-out run, downstream compatibility, stability repeats, strong-tier or two-sample verifier variants. The sealed held-out sections (manifest v2) remain unopened.
 
 ## RESEARCH DECISION REQUIRED
@@ -45,3 +45,7 @@ U0: $0.135 (4.1) + $0.190 (9.2) incl. canonicalisation. V3: $0.038 + $0.047 = $0
 2. Which adoption-rule precision basis applies (gold-measured vs audited) — a gate change, so Research only; unchanged here.
 3. A like-for-like U0 false-positive audit on IIR dev (≈30 items, blind) if the IIR precision question is to be settled.
 4. Commit of the owner's `data/gold/*` files (untracked) — owner decision.
+
+
+## Update after Research decision (STOP 3B PASS)
+V3 frozen for STOP 4; precision basis for the adoption gate remains gold-measured (mention-level span-exact); the IIR FP audit is diagnostic only and its labels were LLM-generated per Research. Distinct-surface result (U0 P 0.868 / R 0.485; V3 P 0.744 / R 0.723) is reported prominently and is not the gate.

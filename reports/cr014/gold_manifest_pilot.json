@@ -1,0 +1,13 @@
+{
+ "kind": "pilot",
+ "path": "data/gold/pd_concept_pilot_blind.csv",
+ "sha256": "9a199e638772bae5048b8f739b64709ffdad0cb2580c209de28083f083946be1",
+ "rows": 2145,
+ "concepts": 374,
+ "mentions": 1771,
+ "nested_valid_mentions": 172,
+ "file_mtime": "2026-10-12 14:14:54",
+ "recorded_at": "2026-10-12 14:58:52",
+ "annotator_provenance": "TO BE STATED BY THE OWNER (human / LLM-assisted); not asserted by code",
+ "raw_file_committed": false
+}
