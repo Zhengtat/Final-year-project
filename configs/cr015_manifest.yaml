@@ -1,0 +1,31 @@
+version: cr015-manifest-1
+seed: cr015-manifest-v1
+rule: 'pool = the 8 CR-014 reserve sections verified untouched; sections < 1000 words
+  are reserve-only; pilot = the (up to) 2 sections of 2500-6600 words; held-out =
+  every other usable section. Inputs: chapter + word count only.'
+words:
+  '4.3': 5338
+  '5.1': 957
+  '5.2': 12799
+  '6.2': 2619
+  '6.5': 9160
+  '8.1': 662
+  '9.1': 10197
+  '9.4': 9676
+pilot:
+- '4.3'
+- '6.2'
+heldout_sealed:
+- '5.2'
+- '6.5'
+- '9.1'
+- '9.4'
+reserve:
+- '5.1'
+- '8.1'
+heldout_words: 41832
+pilot_words: 7957
+replacement_rule: a section may be replaced only for a predeclared source/data-quality
+  reason, never for model performance; log it here before any prediction
+no_redraw: this manifest is frozen once; no redraw
+sha256: 0c55ce2604b50b06b83ff9eb52d4c8477001c8c238ad3d5167046f12730f72c6

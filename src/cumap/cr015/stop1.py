@@ -100,10 +100,10 @@ def main() -> dict:
                 if surf in verdict_of:
                     res["verifier_rejections_of_gold_surfaces"][verdict_of[surf]] += 1
                 elif surf in rej_members:
-                    res["boundary_loss_causes"][sorted(rej_members[surf])[0]] += 1
+                    res["boundary_loss_causes"][min(rej_members[surf])] += 1
                 elif surf in replaced:
                     res["boundary_loss_causes"][
-                        "replaced_by_a_different_span_(" + sorted(replaced[surf])[0] + ")"
+                        "replaced_by_a_different_span_(" + min(replaced[surf]) + ")"
                     ] += 1
                 elif surf in unaddressed:
                     res["boundary_loss_causes"]["unaddressed_by_boundary_decisions"] += 1
