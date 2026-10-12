@@ -1,0 +1,15 @@
+{
+ "summary": {
+  "draft_path": "data/interim/suggestions/cr015_pd_pilot_gold_draft.csv",
+  "model_tier": "strong",
+  "prompt": "cr015_gold_draft v1",
+  "sentences": 333,
+  "sentences_answered": 333,
+  "concepts": 441,
+  "mentions": 1911,
+  "invalid_mentions_dropped": 0,
+  "spend_usd": 0.8044,
+  "provenance": "MODEL_GENERATED_DIAGNOSTIC (pipeline strong tier); becomes HUMAN_REVIEWED_MODEL_DRAFT only after owner review"
+ },
+ "dropped": []
+}
