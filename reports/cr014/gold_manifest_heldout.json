@@ -1,0 +1,14 @@
+{
+ "kind": "heldout",
+ "path": "data/gold/pd_concept_test_blind.csv",
+ "sha256": "2050319b6bd6ec4ee7ee85705a9fc881bee61db9a72555a5ef038eaaf108b6a8",
+ "rows": 8344,
+ "concepts": 1065,
+ "mentions": 7279,
+ "nested_valid_mentions": 1812,
+ "file_mtime": "2026-10-12 17:58:42",
+ "recorded_at": "2026-10-12 17:59:35",
+ "annotator_provenance": "LLM-assisted/model-generated annotation (owner-supplied, same procedure as the pilot: blind source text + guides, no system output); NOT human-annotated. Owner accepted LLM-generated provenance as OK for now (2026-10-12). Annotator model/version for this file was not separately stated.",
+ "raw_file_committed": false,
+ "human_annotated": false
+}
