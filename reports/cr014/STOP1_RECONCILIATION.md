@@ -32,7 +32,7 @@ N1 rescue precision 126/270 exact. Gain is small: rescue recovers a minority of 
 | One-token 727/834 (87.2%) of dev rescue candidates | dev N1: 260/331 (78.5%); test N1: 1,324/1,734 (76.4%) | **not reproduced**; no 834-candidate table found in the repo |
 | Anchored vs independent audit | not located in repo reports | **not reproduced** |
 
-Note the 1,262/193/77 figures come from the IIR **test** split (held out, run once, inspected), so they are context, not tuning data. Please confirm the source of 727/834 and the anchored-vs-independent audit.
+Note the 1,262/193/77 figures come from the IIR **test** split (held out, run once, inspected), so they are context, not tuning data. **Research resolution (received):** 727/834 is UNVERIFIED / SUPERSEDED (origin: a research-chat working note, no retained artifact); use dev 260/331 (78.5%) and test 1,324/1,734 (76.4%). The anchored-vs-independent audit (note: anchored 13/14, anchor-derived 5/5, independent 4/11) is an UNVERIFIED historical note and must not be used as quantitative evidence in CR-014; anchor usefulness is a hypothesis to measure prospectively.
 
 ## 3. Coverage-veto audit (CR-014 §9 independence)
 Mechanisms that can suppress a proposal after the generator: `not_mentions` suppress M1 hints (`verifier.py` ~349); rejected hints go to `rejected_keys` and are never re-offered (`loop.py` ~343–357); strict G-link rejection drops a mention without adding alias or concept (`runner.py` ~205–230; slice3_c2: 124 rejected vs 16 linked); ≤3 flagged items dropped without reprompt. Stage A proposers must therefore run **before and independent of** these vetoes; trace must log each veto.
@@ -46,7 +46,7 @@ spaCy noun chunks, technical heads, headings, emphasised terms, acronym pairs, d
 - Projected totals sit far below limits (pilot ≤$5, dev ≤$15, held-out ≤$10, hard cap $30); estimates are from measured rates, not a priced dry-run of the U-arms (their prompts do not exist yet).
 
 ## 6. RESEARCH DECISION REQUIRED
-1. Confirm the source of the 727/834 one-token figure and the anchored-vs-independent audit (item 2); the other handover numbers match the repo.
+1. (Resolved) 727/834 and the anchored-vs-independent audit are unverified and excluded; other handover numbers match the repo.
 2. Define U0: slice3_c2 recipe (tau 0, strict G-links) vs `frozen-1` (tau 0.1).
 3. Approve the fresh-pool correction (18 candidates, not 30) and the selection rule in `contamination_audit.md`; consider keeping Stage A/B dev on ch1–3 only.
 4. Approve extending the CR-013 trace Stage literal (proposal, boundary) — observability only.
