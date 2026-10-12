@@ -1,5 +1,7 @@
 # CR-014 STOP 3B — P&D pilot, span-exact (frozen U0 vs current V3)
 
+> **Gold provenance (owner statement, 2026-10-12): the pilot gold is LLM-assisted/model-generated (ChatGPT, GPT-5.6 Sol) from the blind source text and the annotation guides, with no system output consulted. It is NOT human-annotated and must not be described as human-only gold. Every number below is span-exact agreement with that model-generated annotation.**
+
 Written for: Research. Development material only (pilot sections 4.1 and 9.2, ≈10.5k words). Gold = owner-supplied `data/gold/pd_concept_pilot_blind.csv` (1,771 mentions, 374 concepts, 172 flagged `nested_valid`; ≈16.9 mentions per 100 words, so a very inclusive annotation). Metric = **mention-level span-exact** (character offsets); never pooled with the IIR normalised-name metric. No code, prompt or threshold was changed after seeing these results; V3 is exactly the STOP-3 configuration (`cr014-stageB-1`, verifier prompt v2, boundary prompt v1, bulk tier).
 
 ## Setup (how each arm produced spans)
@@ -37,7 +39,7 @@ U0: $0.135 (4.1) + $0.190 (9.2) incl. canonicalisation. V3: $0.038 + $0.047 = $0
 
 ## Reading and limits
 - On P&D, with a dense gold, V3 raises recall and F1 with essentially unchanged mention-level precision — in contrast to IIR dev, where the same system lost precision. That fits the FP-audit finding that IIR dev gold is incomplete, but it is two sections of one textbook and one annotator's inclusive definition; it does not by itself show adoption-level evidence.
-- Gold provenance: owner-supplied, not independently double-annotated; agreement `NOT_EVALUABLE`. The annotator/provenance statement (human or LLM-assisted) has not been given to me and is not asserted here; file facts are in `reports/cr014/gold_manifest_pilot.json` (its last write, 14:14:54, precedes every pilot prediction, the first being 14:22; the LLM-generated FP-audit file was last written 6 s later, which the owner should explain when stating provenance). Dense gold favours recall-oriented systems (generic terms such as "network" and "component" are in gold); production's stricter concept definition is part of why U0 recall is low.
+- Gold provenance: LLM-generated (see banner), single annotation, not double-annotated; agreement `NOT_EVALUABLE`. File facts are in `reports/cr014/gold_manifest_pilot.json`: its last write (14:14:54) precedes every pilot prediction (the first was 14:22). The annotating model is from the same broad family as the pipeline's LLMs, so shared biases between gold and system are possible and unmeasured. Dense gold favours recall-oriented systems (generic terms such as "network" and "component" are in gold); production's stricter concept definition is part of why U0 recall is low.
 - Not done: held-out run, downstream compatibility, stability repeats, strong-tier or two-sample verifier variants. The sealed held-out sections (manifest v2) remain unopened.
 
 ## RESEARCH DECISION REQUIRED

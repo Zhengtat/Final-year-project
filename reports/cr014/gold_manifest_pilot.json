@@ -8,6 +8,8 @@
  "nested_valid_mentions": 172,
  "file_mtime": "2026-10-12 14:14:54",
  "recorded_at": "2026-10-12 14:58:52",
- "annotator_provenance": "TO BE STATED BY THE OWNER (human / LLM-assisted); not asserted by code",
- "raw_file_committed": false
+ "annotator_provenance": "LLM-assisted/model-generated annotation by ChatGPT (GPT-5.6 Sol), using only the blind pilot source text and the CR-014/base annotation guides; no CR-014 system predictions, classifier outputs, scores or other system output were consulted (statement by the owner, 2026-10-12). NOT independently human-annotated; must not be represented as human-only gold.",
+ "raw_file_committed": false,
+ "human_annotated": false,
+ "provenance_statement_recorded_at": "2026-10-12"
 }
