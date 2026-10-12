@@ -39,5 +39,34 @@ def freeze(group: str) -> dict:
     return rec
 
 
+def gold_manifest(kind: str, path: str, provenance: str, note: str) -> dict:
+    import csv
+    import time as _t
+
+    rows = list(csv.DictReader(Path(path).open(encoding="utf-8-sig")))
+    from collections import Counter
+
+    rec = {
+        "kind": kind, "path": path, "sha256": sha(path), "rows": len(rows),
+        "concepts": sum(r["row_type"] == "CONCEPT" for r in rows), "mentions": sum(r["row_type"] == "MENTION" for r in rows),
+        "nested_valid_mentions": sum((r.get("nested_valid") or "").strip().lower() in {"yes", "true", "1"} for r in rows),
+        "review_decision_counts": dict(Counter((r.get("review_decision") or "").split(":")[0].strip().lower() or "blank" for r in rows).most_common()),
+        "file_mtime": _t.strftime("%Y-%m-%d %H:%M:%S", _t.localtime(Path(path).stat().st_mtime)), "recorded_at": _t.strftime("%Y-%m-%d %H:%M:%S"),
+        "provenance_label": provenance, "note": note, "raw_file_committed": False,
+    }  # fmt: skip
+    Path(f"reports/cr015/gold_manifest_{kind}.json").write_text(json.dumps(rec, indent=1))
+    return rec
+
+
 if __name__ == "__main__":
-    print(json.dumps(freeze(sys.argv[1]), indent=1))
+    if sys.argv[1] == "gold-pilot":
+        print(
+            json.dumps(
+                gold_manifest(
+                    "pilot", "data/gold/cr015_pd_pilot_gold_draft.csv", sys.argv[2], sys.argv[3]
+                ),
+                indent=1,
+            )
+        )
+    else:
+        print(json.dumps(freeze(sys.argv[1]), indent=1))
