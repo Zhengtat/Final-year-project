@@ -25,7 +25,8 @@ OUT = Path("reports/cr014")
 def main() -> None:
     nlp = spacy.load("en_core_web_sm")
     cfg = AliasConfig.load()
-    secs = [json.loads(line) for line in open("data/interim/textbook_sections.jsonl")]
+    path = Path("data/interim/textbook_sections.jsonl")
+    secs = [json.loads(line) for line in path.read_text().splitlines()]
     rows = []
     for s in secs:
         sid = s["section_id"]
