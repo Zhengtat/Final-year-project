@@ -1,0 +1,480 @@
+{
+ "summary": {
+  "n_sections_ch4_9": 25,
+  "n_candidate_fresh": 18,
+  "words_fresh_total": 101931,
+  "words_median": 5296.0,
+  "gen_pass_usd_per_section_median": 0.0175,
+  "canon_usd_per_section_median": 0.0874
+ },
+ "rows": [
+  {
+   "section_id": "4.1",
+   "chapter": 4,
+   "words": 5032,
+   "emphasized": 31,
+   "cand_total": 602,
+   "cand_one_token": 334,
+   "cand_per_1k_words": 119.6,
+   "by_source": {
+    "noun_chunk": 518,
+    "technical_head": 295,
+    "definitional": 16,
+    "heading": 1,
+    "emphasis": 30,
+    "acronym": 21
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "4.2",
+   "chapter": 4,
+   "words": 3724,
+   "emphasized": 10,
+   "cand_total": 557,
+   "cand_one_token": 299,
+   "cand_per_1k_words": 149.6,
+   "by_source": {
+    "noun_chunk": 469,
+    "technical_head": 276,
+    "definitional": 5,
+    "emphasis": 10,
+    "acronym": 2
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "4.3",
+   "chapter": 4,
+   "words": 5338,
+   "emphasized": 32,
+   "cand_total": 655,
+   "cand_one_token": 310,
+   "cand_per_1k_words": 122.7,
+   "by_source": {
+    "noun_chunk": 575,
+    "technical_head": 271,
+    "heading": 1,
+    "definitional": 14,
+    "emphasis": 28,
+    "acronym": 28
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "4.4",
+   "chapter": 4,
+   "words": 4091,
+   "emphasized": 21,
+   "cand_total": 595,
+   "cand_one_token": 307,
+   "cand_per_1k_words": 145.4,
+   "by_source": {
+    "noun_chunk": 504,
+    "technical_head": 280,
+    "heading": 1,
+    "acronym": 24,
+    "definitional": 12,
+    "emphasis": 20
+   },
+   "cr012_heldout": true,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "4.5",
+   "chapter": 4,
+   "words": 3255,
+   "emphasized": 24,
+   "cand_total": 411,
+   "cand_one_token": 224,
+   "cand_per_1k_words": 126.3,
+   "by_source": {
+    "noun_chunk": 346,
+    "technical_head": 210,
+    "emphasis": 22,
+    "definitional": 6,
+    "acronym": 4
+   },
+   "cr012_heldout": true,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "5.1",
+   "chapter": 5,
+   "words": 957,
+   "emphasized": 6,
+   "cand_total": 171,
+   "cand_one_token": 95,
+   "cand_per_1k_words": 178.7,
+   "by_source": {
+    "noun_chunk": 142,
+    "technical_head": 87,
+    "definitional": 3,
+    "emphasis": 6,
+    "acronym": 2
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "5.2",
+   "chapter": 5,
+   "words": 12799,
+   "emphasized": 33,
+   "cand_total": 1355,
+   "cand_one_token": 637,
+   "cand_per_1k_words": 105.9,
+   "by_source": {
+    "noun_chunk": 1201,
+    "technical_head": 606,
+    "definitional": 13,
+    "emphasis": 31,
+    "acronym": 12
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "5.3",
+   "chapter": 5,
+   "words": 6523,
+   "emphasized": 30,
+   "cand_total": 928,
+   "cand_one_token": 444,
+   "cand_per_1k_words": 142.3,
+   "by_source": {
+    "noun_chunk": 764,
+    "technical_head": 423,
+    "heading": 1,
+    "acronym": 18,
+    "definitional": 21,
+    "emphasis": 28
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "5.4",
+   "chapter": 5,
+   "words": 4597,
+   "emphasized": 13,
+   "cand_total": 676,
+   "cand_one_token": 344,
+   "cand_per_1k_words": 147.1,
+   "by_source": {
+    "noun_chunk": 576,
+    "technical_head": 331,
+    "acronym": 13,
+    "emphasis": 11,
+    "definitional": 2
+   },
+   "cr012_heldout": true,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "6.1",
+   "chapter": 6,
+   "words": 3638,
+   "emphasized": 28,
+   "cand_total": 522,
+   "cand_one_token": 300,
+   "cand_per_1k_words": 143.5,
+   "by_source": {
+    "noun_chunk": 428,
+    "emphasis": 27,
+    "heading": 1,
+    "technical_head": 276,
+    "definitional": 2,
+    "acronym": 2
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "6.2",
+   "chapter": 6,
+   "words": 2619,
+   "emphasized": 11,
+   "cand_total": 320,
+   "cand_one_token": 184,
+   "cand_per_1k_words": 122.2,
+   "by_source": {
+    "noun_chunk": 264,
+    "technical_head": 164,
+    "acronym": 8,
+    "definitional": 7,
+    "emphasis": 10,
+    "heading": 1
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "6.3",
+   "chapter": 6,
+   "words": 4108,
+   "emphasized": 12,
+   "cand_total": 454,
+   "cand_one_token": 233,
+   "cand_per_1k_words": 110.5,
+   "by_source": {
+    "noun_chunk": 386,
+    "technical_head": 219,
+    "heading": 2,
+    "emphasis": 12,
+    "definitional": 14,
+    "acronym": 5
+   },
+   "cr012_heldout": true,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "6.4",
+   "chapter": 6,
+   "words": 5254,
+   "emphasized": 24,
+   "cand_total": 685,
+   "cand_one_token": 371,
+   "cand_per_1k_words": 130.4,
+   "by_source": {
+    "noun_chunk": 574,
+    "technical_head": 342,
+    "emphasis": 23,
+    "heading": 1,
+    "acronym": 12,
+    "definitional": 9
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "6.5",
+   "chapter": 6,
+   "words": 9160,
+   "emphasized": 48,
+   "cand_total": 1053,
+   "cand_one_token": 501,
+   "cand_per_1k_words": 115.0,
+   "by_source": {
+    "noun_chunk": 902,
+    "technical_head": 460,
+    "definitional": 25,
+    "emphasis": 48,
+    "acronym": 20,
+    "heading": 2
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "7.1",
+   "chapter": 7,
+   "words": 4799,
+   "emphasized": 39,
+   "cand_total": 729,
+   "cand_one_token": 369,
+   "cand_per_1k_words": 151.9,
+   "by_source": {
+    "noun_chunk": 618,
+    "technical_head": 338,
+    "emphasis": 39,
+    "definitional": 22,
+    "acronym": 23,
+    "heading": 1
+   },
+   "cr012_heldout": true,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "7.2",
+   "chapter": 7,
+   "words": 8174,
+   "emphasized": 35,
+   "cand_total": 1154,
+   "cand_one_token": 566,
+   "cand_per_1k_words": 141.2,
+   "by_source": {
+    "noun_chunk": 991,
+    "heading": 1,
+    "technical_head": 508,
+    "emphasis": 33,
+    "acronym": 19,
+    "definitional": 20
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "8.1",
+   "chapter": 8,
+   "words": 662,
+   "emphasized": 4,
+   "cand_total": 139,
+   "cand_one_token": 100,
+   "cand_per_1k_words": 210.0,
+   "by_source": {
+    "noun_chunk": 112,
+    "technical_head": 95,
+    "emphasis": 4,
+    "definitional": 1,
+    "acronym": 2,
+    "heading": 1
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "8.2",
+   "chapter": 8,
+   "words": 4110,
+   "emphasized": 39,
+   "cand_total": 592,
+   "cand_one_token": 321,
+   "cand_per_1k_words": 144.0,
+   "by_source": {
+    "noun_chunk": 512,
+    "technical_head": 288,
+    "emphasis": 36,
+    "heading": 1,
+    "definitional": 21,
+    "acronym": 19
+   },
+   "cr012_heldout": true,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "8.3",
+   "chapter": 8,
+   "words": 3323,
+   "emphasized": 29,
+   "cand_total": 421,
+   "cand_one_token": 240,
+   "cand_per_1k_words": 126.7,
+   "by_source": {
+    "noun_chunk": 339,
+    "technical_head": 213,
+    "definitional": 14,
+    "emphasis": 28,
+    "acronym": 18
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "8.4",
+   "chapter": 8,
+   "words": 1876,
+   "emphasized": 9,
+   "cand_total": 255,
+   "cand_one_token": 147,
+   "cand_per_1k_words": 135.9,
+   "by_source": {
+    "noun_chunk": 214,
+    "technical_head": 141,
+    "emphasis": 9,
+    "definitional": 5,
+    "heading": 1,
+    "acronym": 5
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "8.5",
+   "chapter": 8,
+   "words": 7546,
+   "emphasized": 39,
+   "cand_total": 1120,
+   "cand_one_token": 556,
+   "cand_per_1k_words": 148.4,
+   "by_source": {
+    "noun_chunk": 957,
+    "technical_head": 518,
+    "acronym": 43,
+    "definitional": 23,
+    "emphasis": 38
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "9.1",
+   "chapter": 9,
+   "words": 10197,
+   "emphasized": 64,
+   "cand_total": 1387,
+   "cand_one_token": 686,
+   "cand_per_1k_words": 136.0,
+   "by_source": {
+    "noun_chunk": 1195,
+    "technical_head": 626,
+    "heading": 2,
+    "definitional": 36,
+    "acronym": 42,
+    "emphasis": 61
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "9.2",
+   "chapter": 9,
+   "words": 5433,
+   "emphasized": 15,
+   "cand_total": 772,
+   "cand_one_token": 417,
+   "cand_per_1k_words": 142.1,
+   "by_source": {
+    "noun_chunk": 645,
+    "heading": 2,
+    "technical_head": 384,
+    "acronym": 26,
+    "emphasis": 14,
+    "definitional": 11
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "9.3",
+   "chapter": 9,
+   "words": 5093,
+   "emphasized": 27,
+   "cand_total": 737,
+   "cand_one_token": 416,
+   "cand_per_1k_words": 144.7,
+   "by_source": {
+    "noun_chunk": 637,
+    "technical_head": 365,
+    "acronym": 25,
+    "heading": 1,
+    "definitional": 15,
+    "emphasis": 26
+   },
+   "cr012_heldout": true,
+   "cr012_pilot": false
+  },
+  {
+   "section_id": "9.4",
+   "chapter": 9,
+   "words": 9676,
+   "emphasized": 48,
+   "cand_total": 1234,
+   "cand_one_token": 572,
+   "cand_per_1k_words": 127.5,
+   "by_source": {
+    "noun_chunk": 1069,
+    "technical_head": 523,
+    "heading": 2,
+    "emphasis": 44,
+    "definitional": 16,
+    "acronym": 25
+   },
+   "cr012_heldout": false,
+   "cr012_pilot": false
+  }
+ ]
+}
