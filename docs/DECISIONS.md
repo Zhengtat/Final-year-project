@@ -230,3 +230,8 @@ Format: date · decision · reason · alternatives considered.
 - Decision: add an opt-in `CR-012 evaluation overlay` mode (separate gzip payload `eval-gz`, own module `eval_adapter.py`, own JavaScript) with a failure map, a gold-relation list and a per-relation earliest-failure explanation for SciNLP held-out (3 documents) and P&D held-out (7 sections); every code is the frozen `attribute()` and the counts are asserted equal to `stop4_heldout_results.json`; codes are presented as observations, never production rules; datasets never pooled.
 - Reason: Research STOP-4 authorisation (consume frozen outputs; no rerun, no reinterpretation).
 - Alternatives: add gold fields to the production trace (rejected: isolation); show oracle-level traces per relation (rejected: not in scope, would need reruns).
+
+## 2026-10-12 · CR-013 STOP 5: finalisation
+- Decision: CR-013 is explainability/observability only (no accuracy claim); the descriptive usability face check is recorded as NOT_EVALUATED (no readers recruited; nothing fabricated; blank sheet ready; a scripted feasibility run is reported separately and labelled as not usability evidence); cross-engine testing is a smoke test of Playwright Firefox 155 / WebKit 26.6 builds, with full testing in Chromium only and no release-compatibility claim; the crowded-label issue is mitigated visually and documented as a limitation; the overlay is described as gold-derived evaluation observations (earliest observed failure location), never as an explanation of model intent.
+- Reason: Research STOP-5 authorisation and wording rules.
+- Alternatives: simulate or LLM-generate reader responses (rejected: fabrication).

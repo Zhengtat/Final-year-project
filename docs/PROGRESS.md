@@ -73,3 +73,6 @@ P&D explorer extended (Pipeline, Explain a section, Why not?, Rejected / lost, S
 
 ## CR-013 STOP 4 (2026-10-12)
 Evaluation overlay built and verified: 432 P&D held-out and 295 SciNLP gold relations explained with the frozen earliest-failure codes (counts equal the frozen results), 11/11 localisation fixtures, gold-isolation tests and 16 real-browser opt-in/isolation checks pass. `reports/cr013/stop4.md`. Awaiting Research before STOP 5.
+
+## CR-013 STOP 5 / complete (2026-10-12)
+Final report `reports/cr013/FINAL_EXPLAINABILITY.md`, final trace manifest (all audited sources byte-identical), demo script and executed 13-step flow, axe WCAG A/AA zero violations (10 light + 7 dark states), Chromium full tests, Firefox/WebKit smoke, usability face check NOT_EVALUATED. 769 tests pass, ruff clean. Tag `cr013-stop5-complete` on the branch; merge into `main` and push are owner decisions.

@@ -135,7 +135,12 @@ def test_localisation_fixtures_attribute_to_the_intended_stage_and_have_frozen_w
 
 
 def test_only_the_evaluation_modules_read_gold_or_import_cr012():
-    allowed = {"eval_adapter.py", "why_not_eval.py", "eval_report.py"}
+    allowed = {
+        "eval_adapter.py",
+        "why_not_eval.py",
+        "eval_report.py",
+        "final_manifest.py",
+    }  # final_manifest only hashes the gold file bytes for the read-only integrity record
     for f in Path("src/cumap/explain").glob("*.py"):
         src = f.read_text()
         touches = bool(

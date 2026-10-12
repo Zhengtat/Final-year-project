@@ -1,0 +1,32 @@
+{
+ "firefox": {
+  "engine_version": "155.0",
+  "has_DecompressionStream": true,
+  "page_loads_and_graph_tab_present": true,
+  "trace_decodes_and_pipeline_renders": true,
+  "ribbon_keyboard_navigation": true,
+  "section_walkthrough_step_renders": true,
+  "why_not_answers": true,
+  "edge_journey_renders": true,
+  "canvas_has_drawn_pixels": true,
+  "evaluation_overlay_opens": true,
+  "scinlp_mode_works": true,
+  "no_page_errors": true,
+  "page_errors": []
+ },
+ "webkit": {
+  "engine_version": "26.6",
+  "has_DecompressionStream": true,
+  "page_loads_and_graph_tab_present": true,
+  "trace_decodes_and_pipeline_renders": true,
+  "ribbon_keyboard_navigation": true,
+  "section_walkthrough_step_renders": true,
+  "why_not_answers": true,
+  "edge_journey_renders": true,
+  "canvas_has_drawn_pixels": true,
+  "evaluation_overlay_opens": true,
+  "scinlp_mode_works": true,
+  "no_page_errors": true,
+  "page_errors": []
+ }
+}

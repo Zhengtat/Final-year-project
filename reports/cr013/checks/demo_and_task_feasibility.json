@@ -1,0 +1,141 @@
+{
+ "demo_steps": [
+  {
+   "step": "demo_01_source_text",
+   "title": "Open section 3.3: source text with the evidence sentences the generator cited highlighted",
+   "ok": true,
+   "evidence": "312 highlighted evidence spans",
+   "seconds": 0.59
+  },
+  {
+   "step": "demo_02_generator",
+   "title": "Concepts proposed by the generator, with the recorded model reason (or NOT_RECORDED)",
+   "ok": true,
+   "evidence": "Concepts proposed \u2014 The concept generator proposes candidate concepts and mentions from the text; a proposal is not yet a final graph node.\n\nThe generator propo",
+   "seconds": 0.59
+  },
+  {
+   "step": "demo_03_verification",
+   "title": "Verifier: one candidate that was rejected, with the rule that rejected it",
+   "ok": true,
+   "evidence": "Verification \u2014 The verifier checks proposals with deterministic rules (evidence must be verbatim, spans must be consistent) and records flags, corrections and rejections.\n\nDeterministic checks on the ",
+   "seconds": 0.6
+  },
+  {
+   "step": "demo_04_pruning",
+   "title": "Pruner: scores recorded, nothing pruned, threshold NOT_RECORDED",
+   "ok": true,
+   "evidence": "Pruning \u2014 The pruner scores each candidate and drops low-scoring ones; in this run it was configured not to drop anything.\n\nThe pruner scored 115 candidates. In this run it was configured not to drop ",
+   "seconds": 0.59
+  },
+  {
+   "step": "demo_05_canonicalisation",
+   "title": "Canonicalisation: name links and taxonomy decisions (identity, not relations); blocked merges NOT_RECORDED",
+   "ok": true,
+   "evidence": "Canonicalisation \u2014 Canonicalisation decides which names are the same concept (one node with aliases); it is about identity, not about semantic relations.\n\nIdentity decisions (which names are one conce",
+   "seconds": 0.6
+  },
+  {
+   "step": "demo_06_eligible_pairs",
+   "title": "Eligible candidate pairs of the section (REPLAYED layer, labelled)",
+   "ok": true,
+   "evidence": "Eligible pairs \u2014 Pair generation lists the concept pairs that co-occur in a sentence and are eligible for a relation check.\n\n1256 eligible candidate pairs are attributed to this section (REPLAYED laye",
+   "seconds": 0.58
+  },
+  {
+   "step": "demo_07_budget_boundary",
+   "title": "Selection budget and the boundary: selected versus not selected pairs",
+   "ok": true,
+   "evidence": "Budget boundary \u2014 Pair selection chooses which eligible pairs are sent to relation classification, under a budget with coverage rules.\n\nBudget for the whole run: 1100 pairs out of 8604 eligible. In this section 99 of 125",
+   "seconds": 0.6
+  },
+  {
+   "step": "demo_08_relation_decisions",
+   "title": "Relation decisions of the section: outcome, relation, direction, reason code",
+   "ok": true,
+   "evidence": "Relation decision \u2014 Relation classification asks, for a selected pair, whether the sentence states a relation from the registry, and in which direction.\n\nThe classifier decided 129 pairs of this secti",
+   "seconds": 0.59
+  },
+  {
+   "step": "demo_09_edge_journey",
+   "title": "One committed relation: evidence with source and target highlighted, direction, qualifiers, relation decision, validation, rank and budget",
+   "ok": true,
+   "evidence": "unreliable service \u2014 is_a \u2192 service\nREADS AS\nunreliable service is a kind of service\nWHAT \u201cIS_A\u201d MEANS\nSource is a kind/subtype of target.\nEVIDENCE\nThis is sometimes called an unreliable service.\nsource target exact quote the model cited\nMO",
+   "seconds": 0.62
+  },
+  {
+   "step": "demo_10_local_graph",
+   "title": "The resulting local graph of the section (committed edges; rejected relations dashed red)",
+   "ok": true,
+   "evidence": "Local graph \u2014 Graph commit writes the accepted concepts and edges to the final knowledge graph.\n\nThe local final graph of this section: 30 committed edges in this section (the section mentions 235 fin",
+   "seconds": 0.62
+  },
+  {
+   "step": "demo_11_why_not",
+   "title": "Why not? for a pair that never became an edge: stage-by-stage checks and the earliest observable failure",
+   "ok": true,
+   "evidence": "Earliest observable failure: P0\nThe pair was never sent to relation classification, so the classifier had no opportunity to decide whether a semantic relation exists. The pair ranked 1101 out of 8604 eligible pairs (REPLAYED rank); the run's budget was 1100. Selection also uses a per-section minimum",
+   "seconds": 0.59
+  },
+  {
+   "step": "demo_12_global_graph",
+   "title": "Zoom out: the chapter / global P&D graph (centre of the graph view)",
+   "ok": true,
+   "evidence": "389 nodes \u00b7 317 edges \u00b7 unlinked hidden",
+   "seconds": 0.62
+  },
+  {
+   "step": "demo_13_evaluation_overlay_optional",
+   "title": "Optional: the CR-012 evaluation overlay, clearly labelled as evaluation output and not the production graph",
+   "ok": true,
+   "evidence": "CR-012 EVALUATION OVERLAY \u2014 EVALUATION OUTPUT, gold-derived. NOT the production Expert KG. Dataset: P&D held-out sections (not the Chapters 1\u20133 graph). This view compares the frozen E0 predictions wit",
+   "seconds": 0.57
+  }
+ ],
+ "demo_all_steps_ok": true,
+ "demo_seconds_scripted": 12.7,
+ "task_feasibility": {
+  "T1": {
+   "completable_in_ui": true,
+   "evidence": "Local graph \u2014 Graph commit writes the accepted concepts and edges to the final k"
+  },
+  "T2": {
+   "completable_in_ui": true,
+   "evidence": "Rejected / lost items\n\nWhat did not make it, and where it was lost. Section \nAll sections\n1-perspect"
+  },
+  "T3": {
+   "completable_in_ui": true,
+   "evidence": "Node journey with stages"
+  },
+  "T4": {
+   "completable_in_ui": true,
+   "evidence": "evidence sentence with source / target legend and the cited quote"
+  },
+  "T6": {
+   "completable_in_ui": true,
+   "evidence": "REPLAYED label in the edge journey"
+  },
+  "T9": {
+   "completable_in_ui": true,
+   "evidence": "unavailable field shown explicitly"
+  },
+  "T5": {
+   "completable_in_ui": true,
+   "evidence": "Earliest observable failure: P0\nThe pair was never sent to relation classification, so the classifie"
+  },
+  "T7": {
+   "completable_in_ui": true,
+   "evidence": "6 funnel rows"
+  },
+  "T8": {
+   "completable_in_ui": true,
+   "evidence": "model, prompt version (in the text) and source_locator (in the expanded trace fields) of the Debug edge journey"
+  },
+  "T10": {
+   "completable_in_ui": true,
+   "evidence": "After extraction (concepts in the section) | After pair selection (dashed = pairs sent to the classifier) | After validation (thick = committed edge, red = reje"
+  }
+ },
+ "all_tasks_completable": true,
+ "page_errors": []
+}
