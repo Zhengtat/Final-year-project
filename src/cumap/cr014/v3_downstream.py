@@ -82,6 +82,9 @@ def type_nodes(sid: str, client, batch: int = 40) -> dict[str, str]:
 
     text = section_row(sid)["text"]
     prompt = load_prompt(ROOT / "prompts", "cr014_node_typing", "v1")
+    client._settings.llm.max_output_tokens["cr014_node_typing"] = (
+        4000  # the 1000-token default truncated a 40-item batch mid-JSON (8.5); infrastructure only
+    )
     items = v3_items(sid)
     heading = " > ".join(section_row(sid)["heading_path"] or []) or sid
     out: dict[str, str] = {}
