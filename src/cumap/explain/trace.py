@@ -18,8 +18,12 @@ from pydantic import BaseModel, ConfigDict, Field
 
 SCHEMA_VERSION = "1.0"
 NOT_RECORDED = "NOT_RECORDED"
-Stage = Literal["source", "generator", "verifier", "correction", "pruner", "canonicalisation", "pair_generation", "pair_selection", "relation_classification", "validation", "graph_commit", "organisation"]  # fmt: skip
-STAGES: tuple[str, ...] = Stage.__args__  # type: ignore[attr-defined]
+Stage = Literal["source", "generator", "verifier", "correction", "pruner", "canonicalisation", "pair_generation", "pair_selection", "relation_classification", "validation", "graph_commit", "organisation", "proposal", "boundary_repair"]  # fmt: skip
+CR014_STAGES: tuple[str, ...] = (
+    "proposal",
+    "boundary_repair",
+)  # additive vocabulary for new CR-014 runs only
+STAGES: tuple[str, ...] = tuple(s for s in Stage.__args__ if s not in CR014_STAGES)  # type: ignore[attr-defined]  # historical CR-013 stages, unchanged
 Outcome = Literal[
     "accepted",
     "corrected",

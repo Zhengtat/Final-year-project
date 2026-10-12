@@ -44,3 +44,47 @@ def test_overlap_requires_containment_and_ignores_stopword_singletons():
 
 def test_definitional_hits_are_normalised(nlp):
     assert all(h == norm_surface(h) for h in definitional_hits("A router is called a gateway."))
+
+
+def test_union_families_cover_every_candidate_and_never_reject(nlp):
+    from cumap.cr014.union import build_section_union
+
+    sec = {
+        "section_id": "s",
+        "text": "An inverted index maps terms to documents. The inverted index is built once.",
+        "heading": "",
+    }
+    u = build_section_union(
+        sec, set(), nlp, AliasConfig.load(), ["inverted index", "not in the text"]
+    )
+    in_fam = {m for f in u.families for m in f.members}
+    assert in_fam == {c.cid for c in u.cands.values()}  # every candidate sits in a family
+    assert "not in the text" not in u.cands  # an unevidenced proposal can never be verified
+    assert "llm_iter0" in u.cands["inverted index"].sources and u.cands["inverted index"].count == 2
+    assert all(
+        sec["text"][c.start_offset : c.end_offset].lower() == c.surface for c in u.cands.values()
+    )
+
+
+def test_verifier_and_boundary_calls_use_the_mock_backend_and_validate_schema(nlp, monkeypatch):
+    from pathlib import Path
+
+    from cumap.config import get_settings
+    from cumap.cr014.llm_stage import Usage, run_boundary, run_verifier
+    from cumap.cr014.stage_b import SB
+    from cumap.cr014.union import build_section_union
+    from cumap.llm.client import LLMClient
+    from cumap.llm.prompts import load_prompt
+
+    monkeypatch.setenv("CUMAP_LLM_BACKEND", "mock")
+    client = LLMClient(get_settings(), run_id="t")
+    sec = {"section_id": "s", "text": "An inverted index maps terms to documents.", "heading": ""}
+    u = build_section_union(sec, set(), nlp, AliasConfig.load(), [])
+    pv = load_prompt(Path("prompts"), "cr014_concept_verifier", "v1")
+    pb = load_prompt(Path("prompts"), "cr014_boundary_repair", "v1")
+    usage = Usage()
+    cs = sorted(u.cands.values(), key=lambda c: c.cid)
+    v = run_verifier(client, pv, u, "h", cs, SB, {}, "d", usage)
+    b = run_boundary(client, pb, u, "h", u.families[:2], {c.cid: c for c in cs}, SB, "d", usage)
+    assert usage.calls == 2 and not usage.errors
+    assert set(v) <= {c.cid for c in cs} and set(b) <= {f.fid for f in u.families}
