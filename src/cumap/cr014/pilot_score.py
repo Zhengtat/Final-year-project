@@ -50,8 +50,8 @@ def load_gold(sheet: Path, sentences: Path) -> list[GoldMention]:
     return out
 
 
-def place(surfaces: list[str], text: str) -> list[Span]:
-    """Longest-match, non-overlapping placement of surfaces in the section text (token-boundary regex, case-insensitive)."""
+def place(surfaces: list[str], text: str, nested: bool = False) -> list[Span]:
+    """Longest-match, non-overlapping placement of surfaces in the section text (token-boundary regex, case-insensitive). `nested=True` keeps every occurrence of every surface (nested concepts both counted)."""
     found: list[Span] = []
     for s in sorted({x.strip() for x in surfaces if x.strip()}, key=lambda x: (-len(x), x)):
         pat = re.compile(
@@ -59,9 +59,9 @@ def place(surfaces: list[str], text: str) -> list[Span]:
         )
         for m in pat.finditer(text):
             a, b = m.span()
-            if all(b <= x or a >= y for x, y in found):
+            if nested or all(b <= x or a >= y for x, y in found):
                 found.append((a, b))
-    return sorted(found)
+    return sorted(set(found))
 
 
 def _prf(tp: int, fp: int, fn: int) -> dict:
