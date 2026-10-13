@@ -34,9 +34,28 @@ def task_of(system: str) -> str:
     return "cr016_hipporag_filter"
 
 
+def normalise(task: str, content: str) -> tuple[str, str | None]:
+    """HippoRAG's triple parser accepts only a JSON object {"triples": [...]} while its NER parser also accepts a bare list. If the model returned the triples as a bare JSON list (or an empty
+    answer), wrap it as the object HippoRAG expects. Same information, no content change; every use is counted and sampled in the shim stats."""
+    if task != "cr016_hipporag_triples":
+        return content, None
+    t = content.strip()
+    if t.startswith("```"):
+        t = t.strip("`")
+        t = t[4:] if t.startswith("json") else t
+        t = t.strip()
+    try:
+        payload = json.loads(t) if t else []
+    except json.JSONDecodeError:
+        return content, None
+    if isinstance(payload, list):
+        return json.dumps({"triples": payload}), "bare_list_wrapped"
+    return content, None
+
+
 class Handler(http.server.BaseHTTPRequestHandler):
     client: LLMClient
-    stats = {"requests": 0, "errors": 0}  # noqa: RUF012
+    stats = {"requests": 0, "errors": 0, "normalised": 0, "normalised_examples": []}  # noqa: RUF012
     max_usd = 3.5
     lock = threading.Lock()
 
@@ -79,7 +98,12 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 model_tier="bulk",
                 allow_escalation=False,
             )
-            out = r.output.content
+            out, how = normalise(task, r.output.content)
+            if how:
+                with self.lock:
+                    self.stats["normalised"] += 1
+                    if len(self.stats["normalised_examples"]) < 5:
+                        self.stats["normalised_examples"].append(r.output.content[:160])
             u = r.usage
         except Exception as e:  # noqa: BLE001
             with self.lock:
