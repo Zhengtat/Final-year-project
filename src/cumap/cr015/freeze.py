@@ -12,6 +12,7 @@ import time
 from pathlib import Path
 
 GROUPS = {
+    "stageb_design": ["docs/cr015/STAGE_B_DESIGN.md", "prompts/cr015_concept_validity/v1.md", "prompts/cr015_concept_validity/v2.md"],
     "a2": [
         "prompts/cr015_boundary_family/v1.md", "prompts/cr014_concept_verifier/v2.md", "configs/cr014_concept_extraction.yaml", "configs/default.yaml",
         "src/cumap/cr015/selector.py", "src/cumap/cr015/placement.py", "src/cumap/cr015/stage_a.py", "src/cumap/cr015/dev_data.py", "src/cumap/cr015/scoring.py",
