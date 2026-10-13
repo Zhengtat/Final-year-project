@@ -51,7 +51,12 @@ def normalise(task: str, content: str) -> tuple[str, str | None]:
     if isinstance(payload, list):
         return json.dumps({"triples": payload}), "bare_list_wrapped"
     if isinstance(payload, dict) and "triples" not in payload:
+        named = [v for k, v in payload.items() if "triple" in k.lower() and isinstance(v, list)]
+        if len(named) == 1:
+            return json.dumps({"triples": named[0]}), "triple_field_renamed"
         lists = [v for v in payload.values() if isinstance(v, list)]
+        if lists and not any(lists):
+            return json.dumps({"triples": []}), "all_empty_lists"
         if len(lists) == 1:
             return json.dumps({"triples": lists[0]}), "single_list_field_renamed"
     return content, None
