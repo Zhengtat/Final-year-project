@@ -13,6 +13,7 @@
  "file_mtime": "2026-10-13 07:20:05",
  "recorded_at": "2026-10-13 07:21:21",
  "provenance_label": "MODEL_GENERATED_DIAGNOSTIC",
- "note": "Owner reviewed and edited the model draft (review_decision column) and saved it as the pilot gold on 2026-10-13. The owner has not stated whether the review was human; label kept conservative (MODEL_GENERATED_DIAGNOSTIC) until the owner states it, then upgrade to HUMAN_REVIEWED_MODEL_DRAFT. Original unreviewed draft preserved in data/interim/suggestions/ (committed).",
- "raw_file_committed": false
+ "note": "Pipeline model draft (gpt-6-sol, cr015_gold_draft v1) -> reviewed/edited by a non-human process (325 edited rows) -> saved as pilot gold on 2026-10-13. Label is final: MODEL_GENERATED_DIAGNOSTIC. Results against it are 'agreement with frozen benchmark', not human-validated accuracy. Original unreviewed draft preserved in data/interim/suggestions/ (committed).",
+ "raw_file_committed": false,
+ "review_mode": "not human (owner statement, 2026-10-13): the draft's review/edits were model-assisted, not performed by a human"
 }
