@@ -270,3 +270,6 @@ Format: date · decision · reason · alternatives considered.
 
 - **2026-10-14 · CR-016 STOP 2B ($0 consumer-impact audit).** Decision (Research after STOP 2): STOP-2 retrieval hypothesis passes (small but supported HippoRAG advantage, clear associative-slice advantage); pipeline integration not justified; similarity gate and review band unchanged; alternative consumers deferred to a future CR; STOP 3 on hold. Audit result: 58 residual cases need the embedding+LLM path; memory adds the target to the candidate list in 0 of them and changes no decision under the frozen semantics; ~2.3% of production canonicalisation LLM calls are same-type decisions.
 - Reason: Research STOP-2 decision. Alternatives: bypass the gate/band (not made).
+
+- **2026-10-14 · CR-016 final (Research).** Final status DEVELOPMENT_ONLY_FEASIBILITY; production change NONE; STOP 3 NOT_RUN, STOP 4 NOT_REQUIRED, STOP 5 NOT_RUN, STOP 6 NOT_REQUIRED; fresh sections (4.3, 6.2, 5.2, 6.5, 9.1, 9.4, 5.1, 8.1) preserved untouched; spend about $0.81; merged to main, tag `cr-016-complete`. Similarity gates unchanged; an alternative memory consumer is deferred to a future CR. Evidence: `reports/cr016/FINAL_DECISION_EVIDENCE.md`.
+- Reason: Research decision after STOP 2/2B. Alternatives: pipeline ablation with a gate bypass (rejected by Research).

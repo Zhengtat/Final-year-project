@@ -82,3 +82,6 @@ STOPs 1-5 done. Outcome (Research): scientific success, production adoption fail
 
 ## CR-015 precision recovery and nested boundary calibration (2026-10-13)
 Complete, NO_ELIGIBLE_DEVELOPMENT_ARM. Development (10 exposed P&D sections, model-generated gold): U0 P/R/F1 0.764/0.513/0.614; A0 (frozen V3) 0.699/0.624/0.659; A1 (nested-aware placement) 0.697/0.664/0.680; A2 (family selector) 0.665/0.785/0.720; A3 0.680/0.709/0.694; B1 0.587/0.831/0.688; B2 0.597/0.837/0.697. No arm passes the precision, distinct-surface-precision or over-long gates. Frozen: scorer + manifest (`cr015-scorer-frozen`), A2 (`cr015-a2-frozen`), Stage-B design (`cr015-stageb-design-frozen`). Spend about $2.5. Reports in `reports/cr015/`.
+
+## CR-016 cross-section associative memory with HippoRAG 2 (2026-10-13/14)
+Complete: DEVELOPMENT_ONLY_FEASIBILITY, no production change. STOP 1 (isolated environment, stubbed smoke test), STOP 2 (1,140 causal retrieval cases: HippoRAG vs dense Recall@5 0.659 vs 0.632, MRR 0.530 vs 0.492, associative slice +0.128), STOP 2B ($0 audit: candidate injection is inert under the frozen canonicalisation gate and band). STOP 3-6 not run; fresh sections untouched; spend about $0.81. Reports in `reports/cr016/`.
