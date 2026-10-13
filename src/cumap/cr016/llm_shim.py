@@ -62,7 +62,41 @@ def normalise(task: str, content: str) -> tuple[str, str | None]:
     return content, None
 
 
+def valid(task: str, text: str) -> bool:
+    if task == "cr016_hipporag_filter":
+        return True
+    try:
+        p = json.loads(text)
+    except json.JSONDecodeError:
+        return False
+    if task == "cr016_hipporag_triples":
+        return isinstance(p, dict) and isinstance(p.get("triples"), list)
+    return isinstance(p, list) or (
+        isinstance(p, dict) and isinstance(p.get("named_entities"), list)
+    )
+
+
 class Handler(http.server.BaseHTTPRequestHandler):
+    def answer(self, task: str, msgs: list, note: str):
+        r = self.client.parse(
+            task=task,
+            prompt_version=PROMPT_VERSION,
+            messages=[*msgs, {"role": "system", "content": note}],
+            schema=RawTextLLM,
+            model_tier="bulk",
+            allow_escalation=False,
+        )
+        out, how = normalise(task, r.output.content)
+        if how:
+            with self.lock:
+                self.stats["normalised"] += 1
+                if len(self.stats["normalised_examples"]) < 5:
+                    self.stats["normalised_examples"].append(r.output.content[:160])
+        return out, {
+            "input_tokens": r.usage.get("input_tokens", 0),
+            "output_tokens": r.usage.get("output_tokens", 0),
+        }
+
     client: LLMClient
     stats = {"requests": 0, "errors": 0, "normalised": 0, "normalised_examples": []}  # noqa: RUF012
     max_usd = 3.5
@@ -99,32 +133,35 @@ class Handler(http.server.BaseHTTPRequestHandler):
             )
             return
         try:
-            r = self.client.parse(
-                task=task,
-                prompt_version=PROMPT_VERSION,
-                messages=[*msgs, {"role": "system", "content": NOTE}],
-                schema=RawTextLLM,
-                model_tier="bulk",
-                allow_escalation=False,
-            )
-            out, how = normalise(task, r.output.content)
-            bad = False
-            if task == "cr016_hipporag_triples":
-                try:
-                    bad = not isinstance(json.loads(out), dict) or "triples" not in json.loads(out)
-                except json.JSONDecodeError:
-                    bad = True
-            if bad:
+            out, u = self.answer(task, msgs, NOTE)
+            if not valid(
+                task, out
+            ):  # one deterministic retry with a validity reminder, then a counted empty fallback
+                out2, u2 = self.answer(
+                    task,
+                    msgs,
+                    NOTE + " The answer must be a single valid JSON value and nothing else.",
+                )
                 with self.lock:
-                    self.stats.setdefault("unparsed_examples", [])
-                    if len(self.stats["unparsed_examples"]) < 5:
-                        self.stats["unparsed_examples"].append(out[:300])
-            if how:
-                with self.lock:
-                    self.stats["normalised"] += 1
-                    if len(self.stats["normalised_examples"]) < 5:
-                        self.stats["normalised_examples"].append(r.output.content[:160])
-            u = r.usage
+                    self.stats["retried_invalid_json"] = (
+                        self.stats.get("retried_invalid_json", 0) + 1
+                    )
+                u = {k: u.get(k, 0) + u2.get(k, 0) for k in ("input_tokens", "output_tokens")}
+                if valid(task, out2):
+                    out = out2
+                else:
+                    with self.lock:
+                        self.stats["extraction_failures_empty_fallback"] = (
+                            self.stats.get("extraction_failures_empty_fallback", 0) + 1
+                        )
+                        self.stats.setdefault("unparsed_examples", [])
+                        if len(self.stats["unparsed_examples"]) < 5:
+                            self.stats["unparsed_examples"].append(out2[:300])
+                    out = (
+                        json.dumps({"triples": []})
+                        if task == "cr016_hipporag_triples"
+                        else json.dumps({"named_entities": []})
+                    )
         except Exception as e:  # noqa: BLE001
             with self.lock:
                 self.stats["errors"] += 1
