@@ -50,6 +50,10 @@ def normalise(task: str, content: str) -> tuple[str, str | None]:
         return content, None
     if isinstance(payload, list):
         return json.dumps({"triples": payload}), "bare_list_wrapped"
+    if isinstance(payload, dict) and "triples" not in payload:
+        lists = [v for v in payload.values() if isinstance(v, list)]
+        if len(lists) == 1:
+            return json.dumps({"triples": lists[0]}), "single_list_field_renamed"
     return content, None
 
 
@@ -99,6 +103,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 allow_escalation=False,
             )
             out, how = normalise(task, r.output.content)
+            if task == "cr016_hipporag_triples" and '"triples"' not in out:
+                with self.lock:
+                    self.stats.setdefault("unparsed_examples", [])
+                    if len(self.stats["unparsed_examples"]) < 5:
+                        self.stats["unparsed_examples"].append(out[:300])
             if how:
                 with self.lock:
                     self.stats["normalised"] += 1
