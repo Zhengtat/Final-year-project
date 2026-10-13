@@ -108,7 +108,13 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 allow_escalation=False,
             )
             out, how = normalise(task, r.output.content)
-            if task == "cr016_hipporag_triples" and '"triples"' not in out:
+            bad = False
+            if task == "cr016_hipporag_triples":
+                try:
+                    bad = not isinstance(json.loads(out), dict) or "triples" not in json.loads(out)
+                except json.JSONDecodeError:
+                    bad = True
+            if bad:
                 with self.lock:
                     self.stats.setdefault("unparsed_examples", [])
                     if len(self.stats["unparsed_examples"]) < 5:
