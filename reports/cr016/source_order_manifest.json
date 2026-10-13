@@ -1,0 +1,522 @@
+{
+ "sections": [
+  {
+   "source_order": 0,
+   "section_id": "x-foreword",
+   "chapter": null,
+   "words": 556,
+   "paragraphs": 7,
+   "source_hash": "ba6de1a2909de0fa"
+  },
+  {
+   "source_order": 1,
+   "section_id": "x-foreword-to-the-first-edition",
+   "chapter": null,
+   "words": 485,
+   "paragraphs": 6,
+   "source_hash": "7c9f9cabf362c2d8"
+  },
+  {
+   "source_order": 2,
+   "section_id": "x-preface",
+   "chapter": null,
+   "words": 1535,
+   "paragraphs": 35,
+   "source_hash": "4e3a5bcc6da8a483"
+  },
+  {
+   "source_order": 3,
+   "section_id": "1-problem-building-a-network",
+   "chapter": 1,
+   "words": 563,
+   "paragraphs": 6,
+   "source_hash": "ee0e7ab145757c8c"
+  },
+  {
+   "source_order": 4,
+   "section_id": "1.1",
+   "chapter": 1,
+   "words": 1253,
+   "paragraphs": 17,
+   "source_hash": "74578dffa4e3640c"
+  },
+  {
+   "source_order": 5,
+   "section_id": "1.2",
+   "chapter": 1,
+   "words": 5523,
+   "paragraphs": 55,
+   "source_hash": "270edcf3641c7dab"
+  },
+  {
+   "source_order": 6,
+   "section_id": "1.3",
+   "chapter": 1,
+   "words": 3585,
+   "paragraphs": 36,
+   "source_hash": "73ae1406fd524ce1"
+  },
+  {
+   "source_order": 7,
+   "section_id": "1.4",
+   "chapter": 1,
+   "words": 1714,
+   "paragraphs": 25,
+   "source_hash": "9669c1f03bf35f26"
+  },
+  {
+   "source_order": 8,
+   "section_id": "1.5",
+   "chapter": 1,
+   "words": 3643,
+   "paragraphs": 39,
+   "source_hash": "75f5d129909e90ef"
+  },
+  {
+   "source_order": 9,
+   "section_id": "1-perspective-feature-velocity",
+   "chapter": 1,
+   "words": 702,
+   "paragraphs": 8,
+   "source_hash": "46238d84015217a1"
+  },
+  {
+   "source_order": 10,
+   "section_id": "2-problem-connecting-to-a-network",
+   "chapter": 2,
+   "words": 504,
+   "paragraphs": 6,
+   "source_hash": "8ce3e70eb2cd7812"
+  },
+  {
+   "source_order": 11,
+   "section_id": "2.1",
+   "chapter": 2,
+   "words": 1462,
+   "paragraphs": 15,
+   "source_hash": "34b9d1f51f60bbe2"
+  },
+  {
+   "source_order": 12,
+   "section_id": "2.2",
+   "chapter": 2,
+   "words": 1412,
+   "paragraphs": 10,
+   "source_hash": "2866ab044ab240bd"
+  },
+  {
+   "source_order": 13,
+   "section_id": "2.3",
+   "chapter": 2,
+   "words": 2655,
+   "paragraphs": 25,
+   "source_hash": "327e7fc802f4388b"
+  },
+  {
+   "source_order": 14,
+   "section_id": "2.4",
+   "chapter": 2,
+   "words": 3388,
+   "paragraphs": 47,
+   "source_hash": "05ce59e857ec0c3c"
+  },
+  {
+   "source_order": 15,
+   "section_id": "2.5",
+   "chapter": 2,
+   "words": 4146,
+   "paragraphs": 53,
+   "source_hash": "51007f5082b643aa"
+  },
+  {
+   "source_order": 16,
+   "section_id": "2.6",
+   "chapter": 2,
+   "words": 2921,
+   "paragraphs": 36,
+   "source_hash": "ea61355c9c1d605e"
+  },
+  {
+   "source_order": 17,
+   "section_id": "2.7",
+   "chapter": 2,
+   "words": 4596,
+   "paragraphs": 63,
+   "source_hash": "adce600d7f8893ef"
+  },
+  {
+   "source_order": 18,
+   "section_id": "2.8",
+   "chapter": 2,
+   "words": 2349,
+   "paragraphs": 30,
+   "source_hash": "4e8c47857a757fb6"
+  },
+  {
+   "source_order": 19,
+   "section_id": "2-perspective-race-to-the-edge",
+   "chapter": 2,
+   "words": 807,
+   "paragraphs": 11,
+   "source_hash": "19b088df4012093e"
+  },
+  {
+   "source_order": 20,
+   "section_id": "3-problem-not-all-networks-are-directly-connected",
+   "chapter": 3,
+   "words": 507,
+   "paragraphs": 6,
+   "source_hash": "3d024802e551a3e0"
+  },
+  {
+   "source_order": 21,
+   "section_id": "3.1",
+   "chapter": 3,
+   "words": 5593,
+   "paragraphs": 72,
+   "source_hash": "f83c82024ead621e"
+  },
+  {
+   "source_order": 22,
+   "section_id": "3.2",
+   "chapter": 3,
+   "words": 4073,
+   "paragraphs": 59,
+   "source_hash": "cde8bfc0cd96cb7f"
+  },
+  {
+   "source_order": 23,
+   "section_id": "3.3",
+   "chapter": 3,
+   "words": 11708,
+   "paragraphs": 128,
+   "source_hash": "3d9bc8dd6a9116e0"
+  },
+  {
+   "source_order": 24,
+   "section_id": "3.4",
+   "chapter": 3,
+   "words": 7805,
+   "paragraphs": 99,
+   "source_hash": "9f3c705df200f871"
+  },
+  {
+   "source_order": 25,
+   "section_id": "3.5",
+   "chapter": 3,
+   "words": 2469,
+   "paragraphs": 25,
+   "source_hash": "e219603ffa62b6f8"
+  },
+  {
+   "source_order": 26,
+   "section_id": "3-perspective-virtual-networks-all-the-way-down",
+   "chapter": 3,
+   "words": 893,
+   "paragraphs": 10,
+   "source_hash": "4ff38ef82b2438b0"
+  },
+  {
+   "source_order": 27,
+   "section_id": "4-problem-scaling-to-billions",
+   "chapter": 4,
+   "words": 411,
+   "paragraphs": 4,
+   "source_hash": "1673df2e7d0c42f2"
+  },
+  {
+   "source_order": 28,
+   "section_id": "4.1",
+   "chapter": 4,
+   "words": 5032,
+   "paragraphs": 56,
+   "source_hash": "bf3318e1ee06911f"
+  },
+  {
+   "source_order": 29,
+   "section_id": "4.2",
+   "chapter": 4,
+   "words": 3724,
+   "paragraphs": 57,
+   "source_hash": "4ee8ff056630fbb8"
+  },
+  {
+   "source_order": 30,
+   "section_id": "4.3",
+   "chapter": 4,
+   "words": 5338,
+   "paragraphs": 62,
+   "source_hash": "89f7181093fd7b34"
+  },
+  {
+   "source_order": 31,
+   "section_id": "4.4",
+   "chapter": 4,
+   "words": 4091,
+   "paragraphs": 52,
+   "source_hash": "e1cbaaeeac413e55"
+  },
+  {
+   "source_order": 32,
+   "section_id": "4.5",
+   "chapter": 4,
+   "words": 3255,
+   "paragraphs": 39,
+   "source_hash": "ff35a281853a2945"
+  },
+  {
+   "source_order": 33,
+   "section_id": "4-perspective-the-cloud-is-eating-the-internet",
+   "chapter": 4,
+   "words": 583,
+   "paragraphs": 5,
+   "source_hash": "86e87f09631af285"
+  },
+  {
+   "source_order": 34,
+   "section_id": "5-problem-getting-processes-to-communicate",
+   "chapter": 5,
+   "words": 501,
+   "paragraphs": 20,
+   "source_hash": "df5232401e262e77"
+  },
+  {
+   "source_order": 35,
+   "section_id": "5.1",
+   "chapter": 5,
+   "words": 957,
+   "paragraphs": 8,
+   "source_hash": "c7beebb922e91fb7"
+  },
+  {
+   "source_order": 36,
+   "section_id": "5.2",
+   "chapter": 5,
+   "words": 12799,
+   "paragraphs": 150,
+   "source_hash": "27c583a415e76318"
+  },
+  {
+   "source_order": 37,
+   "section_id": "5.3",
+   "chapter": 5,
+   "words": 6523,
+   "paragraphs": 82,
+   "source_hash": "01ab687a87be13e3"
+  },
+  {
+   "source_order": 38,
+   "section_id": "5.4",
+   "chapter": 5,
+   "words": 4597,
+   "paragraphs": 67,
+   "source_hash": "da26b407e2041715"
+  },
+  {
+   "source_order": 39,
+   "section_id": "5-perspective-http-is-the-new-narrow-waist",
+   "chapter": 5,
+   "words": 569,
+   "paragraphs": 10,
+   "source_hash": "ec8c425a57b23842"
+  },
+  {
+   "source_order": 40,
+   "section_id": "6-problem-allocating-resources",
+   "chapter": 6,
+   "words": 584,
+   "paragraphs": 4,
+   "source_hash": "871f62a809e5689e"
+  },
+  {
+   "source_order": 41,
+   "section_id": "6.1",
+   "chapter": 6,
+   "words": 3638,
+   "paragraphs": 50,
+   "source_hash": "7a70d8f1dddf9768"
+  },
+  {
+   "source_order": 42,
+   "section_id": "6.2",
+   "chapter": 6,
+   "words": 2619,
+   "paragraphs": 26,
+   "source_hash": "326b90fa792a26a5"
+  },
+  {
+   "source_order": 43,
+   "section_id": "6.3",
+   "chapter": 6,
+   "words": 4108,
+   "paragraphs": 49,
+   "source_hash": "8e284f0473298897"
+  },
+  {
+   "source_order": 44,
+   "section_id": "6.4",
+   "chapter": 6,
+   "words": 5254,
+   "paragraphs": 67,
+   "source_hash": "2120cda98bd5036a"
+  },
+  {
+   "source_order": 45,
+   "section_id": "6.5",
+   "chapter": 6,
+   "words": 9160,
+   "paragraphs": 96,
+   "source_hash": "ac5a999955334098"
+  },
+  {
+   "source_order": 46,
+   "section_id": "6-perspective-software-defined-traffic-engineering",
+   "chapter": 6,
+   "words": 787,
+   "paragraphs": 7,
+   "source_hash": "5e43b7257a6cd117"
+  },
+  {
+   "source_order": 47,
+   "section_id": "7-problem-what-do-we-do-with-the-data",
+   "chapter": 7,
+   "words": 762,
+   "paragraphs": 7,
+   "source_hash": "d64d44876ff4d245"
+  },
+  {
+   "source_order": 48,
+   "section_id": "7.1",
+   "chapter": 7,
+   "words": 4799,
+   "paragraphs": 76,
+   "source_hash": "c6116e93c8e0ea06"
+  },
+  {
+   "source_order": 49,
+   "section_id": "7.2",
+   "chapter": 7,
+   "words": 8174,
+   "paragraphs": 94,
+   "source_hash": "e997cb9ed9dbe983"
+  },
+  {
+   "source_order": 50,
+   "section_id": "7-perspective-big-data-and-analytics",
+   "chapter": 7,
+   "words": 999,
+   "paragraphs": 9,
+   "source_hash": "ed7db462a8852d3e"
+  },
+  {
+   "source_order": 51,
+   "section_id": "8-problem-security-attacks",
+   "chapter": 8,
+   "words": 582,
+   "paragraphs": 6,
+   "source_hash": "87d7706c93973642"
+  },
+  {
+   "source_order": 52,
+   "section_id": "8.1",
+   "chapter": 8,
+   "words": 662,
+   "paragraphs": 6,
+   "source_hash": "7dd74b791c766eac"
+  },
+  {
+   "source_order": 53,
+   "section_id": "8.2",
+   "chapter": 8,
+   "words": 4110,
+   "paragraphs": 43,
+   "source_hash": "28c211a7ffc74972"
+  },
+  {
+   "source_order": 54,
+   "section_id": "8.3",
+   "chapter": 8,
+   "words": 3323,
+   "paragraphs": 61,
+   "source_hash": "8f3d8d5337fd0e2f"
+  },
+  {
+   "source_order": 55,
+   "section_id": "8.4",
+   "chapter": 8,
+   "words": 1876,
+   "paragraphs": 24,
+   "source_hash": "74682b50c77e7be9"
+  },
+  {
+   "source_order": 56,
+   "section_id": "8.5",
+   "chapter": 8,
+   "words": 7546,
+   "paragraphs": 98,
+   "source_hash": "6b8c4ad282efcfb2"
+  },
+  {
+   "source_order": 57,
+   "section_id": "8-perspective-is-security-getting-worse-or-better",
+   "chapter": 8,
+   "words": 854,
+   "paragraphs": 9,
+   "source_hash": "f881b9dcd4949b74"
+  },
+  {
+   "source_order": 58,
+   "section_id": "9-problem-applications-need-their-own-protocols",
+   "chapter": 9,
+   "words": 397,
+   "paragraphs": 3,
+   "source_hash": "0160df92edaec3dc"
+  },
+  {
+   "source_order": 59,
+   "section_id": "9.1",
+   "chapter": 9,
+   "words": 10197,
+   "paragraphs": 128,
+   "source_hash": "b626eb62bd59bd80"
+  },
+  {
+   "source_order": 60,
+   "section_id": "9.2",
+   "chapter": 9,
+   "words": 5433,
+   "paragraphs": 68,
+   "source_hash": "a0939d672282a9f9"
+  },
+  {
+   "source_order": 61,
+   "section_id": "9.3",
+   "chapter": 9,
+   "words": 5093,
+   "paragraphs": 69,
+   "source_hash": "be99d114d5379921"
+  },
+  {
+   "source_order": 62,
+   "section_id": "9.4",
+   "chapter": 9,
+   "words": 9676,
+   "paragraphs": 107,
+   "source_hash": "7543dc15ac2cd7d9"
+  },
+  {
+   "source_order": 63,
+   "section_id": "9-perspective-the-cloud-is-the-new-internet",
+   "chapter": 9,
+   "words": 591,
+   "paragraphs": 6,
+   "source_hash": "15dbe1031d08049f"
+  }
+ ],
+ "n_sections": 64,
+ "total_words": 216451,
+ "total_paragraphs": 2654,
+ "paragraph_words_mean": 81.55651846269781,
+ "paragraphs_over_300_words": 2,
+ "manifest_sha256": "eee8789f0197ef933ff50d63f83a7267757de062356fa491aa102d971e44c136"
+}

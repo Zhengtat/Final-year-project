@@ -1,0 +1,74 @@
+{
+ "all": {
+  "n": 200,
+  "top5": 173,
+  "gate_ge_0.6": 157,
+  "band_ge_0.7": 144,
+  "outside_top5_but_ge_0.7": 0,
+  "sim": 0.7880338684131424,
+  "top5_rate": 0.865,
+  "gate_ge_0.6_rate": 0.785,
+  "band_ge_0.7_rate": 0.72,
+  "outside_top5_but_ge_0.7_rate": 0.0
+ },
+ "one_token": {
+  "n": 131,
+  "top5": 106,
+  "gate_ge_0.6": 90,
+  "band_ge_0.7": 78,
+  "outside_top5_but_ge_0.7": 0,
+  "sim": 0.7271451238273635,
+  "top5_rate": 0.8091603053435115,
+  "gate_ge_0.6_rate": 0.6870229007633588,
+  "band_ge_0.7_rate": 0.5954198473282443,
+  "outside_top5_but_ge_0.7_rate": 0.0
+ },
+ "acronym": {
+  "n": 25,
+  "top5": 6,
+  "gate_ge_0.6": 3,
+  "band_ge_0.7": 0,
+  "outside_top5_but_ge_0.7": 0,
+  "sim": 0.46592441167387505,
+  "top5_rate": 0.24,
+  "gate_ge_0.6_rate": 0.12,
+  "band_ge_0.7_rate": 0.0,
+  "outside_top5_but_ge_0.7_rate": 0.0
+ },
+ "alias": {
+  "n": 9,
+  "top5": 8,
+  "gate_ge_0.6": 8,
+  "band_ge_0.7": 8,
+  "outside_top5_but_ge_0.7": 0,
+  "sim": 0.7988368497629525,
+  "top5_rate": 0.8888888888888888,
+  "gate_ge_0.6_rate": 0.8888888888888888,
+  "band_ge_0.7_rate": 0.8888888888888888,
+  "outside_top5_but_ge_0.7_rate": 0.0
+ },
+ "associative_low_lexical_overlap": {
+  "n": 19,
+  "top5": 18,
+  "gate_ge_0.6": 18,
+  "band_ge_0.7": 18,
+  "outside_top5_but_ge_0.7": 0,
+  "sim": 0.8781414735146915,
+  "top5_rate": 0.9473684210526315,
+  "gate_ge_0.6_rate": 0.9473684210526315,
+  "band_ge_0.7_rate": 0.9473684210526315,
+  "outside_top5_but_ge_0.7_rate": 0.0
+ },
+ "different_boundary": {
+  "n": 4,
+  "top5": 4,
+  "gate_ge_0.6": 4,
+  "band_ge_0.7": 4,
+  "outside_top5_but_ge_0.7": 0,
+  "sim": 0.8203760119023067,
+  "top5_rate": 1.0,
+  "gate_ge_0.6_rate": 1.0,
+  "band_ge_0.7_rate": 1.0,
+  "outside_top5_but_ge_0.7_rate": 0.0
+ }
+}
