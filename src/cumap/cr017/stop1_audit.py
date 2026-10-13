@@ -79,7 +79,6 @@ def max_depth(edges: set[tuple[str, str]]) -> int:
 def main() -> dict:
     secs = {r["section_id"]: r["text"] for r in PD.load_sections()}
     reg = PD.registry()
-    sym = {r.name for r in reg.all_relations() if r.symmetric}
     out: dict = {
         "hierarchy_gold": {},
         "predicted_is_a": {},
