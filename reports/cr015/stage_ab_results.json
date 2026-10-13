@@ -1,0 +1,625 @@
+{
+ "n_sections": 10,
+ "n_gold": 9050,
+ "words": 50523,
+ "arms": {
+  "U0": {
+   "mention": {
+    "precision": 0.763729036501151,
+    "recall": 0.5132596685082873,
+    "f1": 0.6139307427967223,
+    "tp": 4645,
+    "fp": 1437,
+    "fn": 4405
+   },
+   "one_token": {
+    "gold": 6438,
+    "recall": 0.4958061509785648,
+    "predicted": 4319,
+    "precision": 0.7390599675850892
+   },
+   "nested_gold_recall": {
+    "n": 1984,
+    "recall": 0.22379032258064516
+   },
+   "non_nested_gold_recall": {
+    "n": 7066,
+    "recall": 0.5945372204924992
+   },
+   "predicted_nested": {
+    "n": 0,
+    "precision": null
+   },
+   "over_long_fp": 207,
+   "under_long_fp": 259,
+   "distinct_surface": {
+    "tp": 1068,
+    "fp": 361,
+    "fn": 1178,
+    "precision": 0.7473757872638208,
+    "recall": 0.4755120213713268,
+    "f1": 0.5812244897959185
+   },
+   "fp_categories": {
+    "over_general_inside_gold": 259,
+    "no_overlap": 971,
+    "over_specific_contains_gold": 207
+   },
+   "macro_section_f1": 0.605979276734048
+  },
+  "A0": {
+   "mention": {
+    "precision": 0.6994670962944602,
+    "recall": 0.623646408839779,
+    "f1": 0.6593843098311817,
+    "tp": 5644,
+    "fp": 2425,
+    "fn": 3406
+   },
+   "one_token": {
+    "gold": 6438,
+    "recall": 0.5680335507921714,
+    "predicted": 5337,
+    "precision": 0.6852164137155705
+   },
+   "nested_gold_recall": {
+    "n": 1984,
+    "recall": 0.07661290322580645
+   },
+   "non_nested_gold_recall": {
+    "n": 7066,
+    "recall": 0.7772431361449194
+   },
+   "predicted_nested": {
+    "n": 0,
+    "precision": null
+   },
+   "over_long_fp": 553,
+   "under_long_fp": 216,
+   "distinct_surface": {
+    "tp": 1630,
+    "fp": 1069,
+    "fn": 616,
+    "precision": 0.6039273805113005,
+    "recall": 0.7257346393588602,
+    "f1": 0.6592517694641052
+   },
+   "fp_categories": {
+    "over_specific_contains_gold": 553,
+    "no_overlap": 1654,
+    "over_general_inside_gold": 216,
+    "shifted_partial_overlap": 2
+   },
+   "macro_section_f1": 0.6703278457684795,
+   "vs_U0": {
+    "delta": 0.04545356703445946,
+    "lo95": 0.01816670332479408,
+    "hi95": 0.08090533885216634
+   },
+   "vs_A0": null,
+   "gates": {
+    "1_f1_gain_ge_0.02_or_ci_gt_0_vs_U0": true,
+    "2_precision_ge_U0_minus_0.02": false,
+    "3_recall_ge_U0_plus_0.05": true,
+    "4_one_token_recall_ge_U0_minus_0.02": true,
+    "5_distinct_precision_ge_U0_minus_0.05": false,
+    "6_distinct_recall_ge_U0_plus_0.05_or_within_0.03_of_V3": true,
+    "7_overlong_fp_reduced_25pct_vs_V3": false,
+    "8_9_no_identity_provenance_violation_or_leakage": true
+   },
+   "eligible": false,
+   "miss_taxonomy": {
+    "B3 valid nested concept suppressed (an enclosing span was kept)": 1506,
+    "M0 accepted, not placed at this mention": 490,
+    "V0 valid bounded concept rejected by verifier": 486,
+    "BS selector kept no overlapping span (rejected/unanswered)": 32,
+    "B1 selector chose an over-long boundary": 540,
+    "B0 only a wrong-boundary candidate": 184,
+    "P0 not proposed": 123,
+    "B2 selector chose an under-long boundary": 45
+   },
+   "fp_taxonomy": {
+    "F2 over-long technical span": 553,
+    "F0/F1/F7 no overlap with gold (generic, descriptive or unsupported; unreviewed)": 1656,
+    "F3 under-long / partial span": 216
+   },
+   "cost_usd": 0.428,
+   "calls": 526
+  },
+  "A1": {
+   "mention": {
+    "precision": 0.6973989781699954,
+    "recall": 0.663646408839779,
+    "f1": 0.6801041784622354,
+    "tp": 6006,
+    "fp": 2606,
+    "fn": 3044
+   },
+   "one_token": {
+    "gold": 6438,
+    "recall": 0.6062441752096924,
+    "predicted": 5714,
+    "precision": 0.6830591529576479
+   },
+   "nested_gold_recall": {
+    "n": 1984,
+    "recall": 0.20110887096774194
+   },
+   "non_nested_gold_recall": {
+    "n": 7066,
+    "recall": 0.7935182564392868
+   },
+   "predicted_nested": {
+    "n": 1039,
+    "precision": 0.6881616939364774
+   },
+   "over_long_fp": 588,
+   "under_long_fp": 337,
+   "distinct_surface": {
+    "tp": 1656,
+    "fp": 1105,
+    "fn": 590,
+    "precision": 0.5997826874320898,
+    "recall": 0.7373107747105966,
+    "f1": 0.6614739364889155
+   },
+   "fp_categories": {
+    "over_specific_contains_gold": 588,
+    "no_overlap": 1678,
+    "over_general_inside_gold": 337,
+    "shifted_partial_overlap": 3
+   },
+   "macro_section_f1": 0.6925535946240124,
+   "vs_U0": {
+    "delta": 0.06617343566551304,
+    "lo95": 0.039886593220641225,
+    "hi95": 0.10230434702043012
+   },
+   "vs_A0": {
+    "delta": 0.020719868631053573,
+    "lo95": 0.013384368945803976,
+    "hi95": 0.028714791602010892
+   },
+   "gates": {
+    "1_f1_gain_ge_0.02_or_ci_gt_0_vs_U0": true,
+    "2_precision_ge_U0_minus_0.02": false,
+    "3_recall_ge_U0_plus_0.05": true,
+    "4_one_token_recall_ge_U0_minus_0.02": true,
+    "5_distinct_precision_ge_U0_minus_0.05": false,
+    "6_distinct_recall_ge_U0_plus_0.05_or_within_0.03_of_V3": true,
+    "7_overlong_fp_reduced_25pct_vs_V3": false,
+    "8_9_no_identity_provenance_violation_or_leakage": true
+   },
+   "eligible": false,
+   "miss_taxonomy": {
+    "B3 valid nested concept suppressed (an enclosing span was kept)": 1506,
+    "V0 valid bounded concept rejected by verifier": 486,
+    "M0 accepted, not placed at this mention": 128,
+    "BS selector kept no overlapping span (rejected/unanswered)": 32,
+    "B1 selector chose an over-long boundary": 540,
+    "B0 only a wrong-boundary candidate": 184,
+    "P0 not proposed": 123,
+    "B2 selector chose an under-long boundary": 45
+   },
+   "fp_taxonomy": {
+    "F2 over-long technical span": 588,
+    "F0/F1/F7 no overlap with gold (generic, descriptive or unsupported; unreviewed)": 1681,
+    "F3 under-long / partial span": 215,
+    "F4 invalid nested substring": 122
+   },
+   "cost_usd": 0.0
+  },
+  "A2": {
+   "mention": {
+    "precision": 0.6651990632318501,
+    "recall": 0.7846408839779005,
+    "f1": 0.72,
+    "tp": 7101,
+    "fp": 3574,
+    "fn": 1949
+   },
+   "one_token": {
+    "gold": 6438,
+    "recall": 0.7659210935073004,
+    "predicted": 7563,
+    "precision": 0.6519899510776147
+   },
+   "nested_gold_recall": {
+    "n": 1984,
+    "recall": 0.703125
+   },
+   "non_nested_gold_recall": {
+    "n": 7066,
+    "recall": 0.8075290121709595
+   },
+   "predicted_nested": {
+    "n": 5090,
+    "precision": 0.6316306483300589
+   },
+   "over_long_fp": 695,
+   "under_long_fp": 1129,
+   "distinct_surface": {
+    "tp": 1771,
+    "fp": 1389,
+    "fn": 475,
+    "precision": 0.5604430379746835,
+    "recall": 0.788512911843277,
+    "f1": 0.655197928227895
+   },
+   "fp_categories": {
+    "no_overlap": 1741,
+    "over_general_inside_gold": 1129,
+    "over_specific_contains_gold": 695,
+    "shifted_partial_overlap": 9
+   },
+   "macro_section_f1": 0.7356467483510486,
+   "vs_U0": {
+    "delta": 0.10606925720327776,
+    "lo95": 0.0620955962554634,
+    "hi95": 0.15505472422632802
+   },
+   "vs_A0": {
+    "delta": 0.06061569016881829,
+    "lo95": 0.023652380781699553,
+    "hi95": 0.09993042417034481
+   },
+   "gates": {
+    "1_f1_gain_ge_0.02_or_ci_gt_0_vs_U0": true,
+    "2_precision_ge_U0_minus_0.02": false,
+    "3_recall_ge_U0_plus_0.05": true,
+    "4_one_token_recall_ge_U0_minus_0.02": true,
+    "5_distinct_precision_ge_U0_minus_0.05": false,
+    "6_distinct_recall_ge_U0_plus_0.05_or_within_0.03_of_V3": true,
+    "7_overlong_fp_reduced_25pct_vs_V3": false,
+    "8_9_no_identity_provenance_violation_or_leakage": true
+   },
+   "eligible": false,
+   "miss_taxonomy": {
+    "B3 valid nested concept suppressed (an enclosing span was kept)": 437,
+    "V0 valid bounded concept rejected by verifier": 584,
+    "B1 selector chose an over-long boundary": 213,
+    "B0 only a wrong-boundary candidate": 320,
+    "P0 not proposed": 292,
+    "BS selector kept no overlapping span (rejected/unanswered)": 57,
+    "B2 selector chose an under-long boundary": 46
+   },
+   "fp_taxonomy": {
+    "F0/F1/F7 no overlap with gold (generic, descriptive or unsupported; unreviewed)": 1750,
+    "F4 invalid nested substring": 913,
+    "F2 over-long technical span": 695,
+    "F3 under-long / partial span": 216
+   },
+   "boundary_confusion": {
+    "EXPAND_TO|exact_gold": 67,
+    "EXPAND_TO|no_gold_overlap": 166,
+    "EXPAND_TO|over_long": 141,
+    "EXPAND_TO|under_long": 242,
+    "KEEP_NESTED|exact_gold": 1820,
+    "KEEP_NESTED|no_gold_overlap": 695,
+    "KEEP_NESTED|over_long": 231,
+    "KEEP_NESTED|under_long": 1155,
+    "KEEP_PRIMARY|exact_gold": 1421,
+    "KEEP_PRIMARY|no_gold_overlap": 528,
+    "KEEP_PRIMARY|over_long": 617,
+    "KEEP_PRIMARY|under_long": 39,
+    "REJECT_DESCRIPTIVE|exact_gold": 91,
+    "REJECT_DESCRIPTIVE|no_gold_overlap": 1319,
+    "REJECT_DESCRIPTIVE|over_long": 512,
+    "REJECT_DESCRIPTIVE|under_long": 273,
+    "REJECT_GENERIC|exact_gold": 118,
+    "REJECT_GENERIC|no_gold_overlap": 1210,
+    "REJECT_GENERIC|under_long": 554,
+    "REJECT_UNSUPPORTED|exact_gold": 14,
+    "REJECT_UNSUPPORTED|no_gold_overlap": 221,
+    "REJECT_UNSUPPORTED|over_long": 83,
+    "REJECT_UNSUPPORTED|under_long": 117,
+    "SHRINK_TO|exact_gold": 41,
+    "SHRINK_TO|no_gold_overlap": 226,
+    "SHRINK_TO|over_long": 425,
+    "SHRINK_TO|under_long": 21
+   },
+   "cost_usd": 0.5806,
+   "calls": 550,
+   "seconds": 7300,
+   "unanswered_candidates": 1,
+   "invalid_targets": 1,
+   "errors": 0
+  },
+  "A3": {
+   "mention": {
+    "precision": 0.6798812804748781,
+    "recall": 0.7087292817679558,
+    "f1": 0.6940056264877732,
+    "tp": 6414,
+    "fp": 3020,
+    "fn": 2636
+   },
+   "one_token": {
+    "gold": 6438,
+    "recall": 0.6683752718235477,
+    "predicted": 6374,
+    "precision": 0.6750862880451836
+   },
+   "nested_gold_recall": {
+    "n": 1984,
+    "recall": 0.4722782258064516
+   },
+   "non_nested_gold_recall": {
+    "n": 7066,
+    "recall": 0.7751202943673932
+   },
+   "predicted_nested": {
+    "n": 3551,
+    "precision": 0.6240495635032385
+   },
+   "over_long_fp": 688,
+   "under_long_fp": 796,
+   "distinct_surface": {
+    "tp": 1750,
+    "fp": 1313,
+    "fn": 496,
+    "precision": 0.5713352921971923,
+    "recall": 0.7791629563668745,
+    "f1": 0.6592578640045207
+   },
+   "fp_categories": {
+    "over_general_inside_gold": 796,
+    "no_overlap": 1526,
+    "over_specific_contains_gold": 688,
+    "shifted_partial_overlap": 10
+   },
+   "macro_section_f1": 0.7109745020315195,
+   "vs_U0": {
+    "delta": 0.08007488369105098,
+    "lo95": 0.04149334123084125,
+    "hi95": 0.12865766420810468
+   },
+   "vs_A0": {
+    "delta": 0.034621316656591516,
+    "lo95": 0.006529182387121792,
+    "hi95": 0.0663522561905315
+   },
+   "gates": {
+    "1_f1_gain_ge_0.02_or_ci_gt_0_vs_U0": true,
+    "2_precision_ge_U0_minus_0.02": false,
+    "3_recall_ge_U0_plus_0.05": true,
+    "4_one_token_recall_ge_U0_minus_0.02": true,
+    "5_distinct_precision_ge_U0_minus_0.05": false,
+    "6_distinct_recall_ge_U0_plus_0.05_or_within_0.03_of_V3": true,
+    "7_overlong_fp_reduced_25pct_vs_V3": false,
+    "8_9_no_identity_provenance_violation_or_leakage": true
+   },
+   "eligible": false,
+   "miss_taxonomy": {
+    "B1 selector chose an over-long boundary": 449,
+    "B3 valid nested concept suppressed (an enclosing span was kept)": 932,
+    "V0 valid bounded concept rejected by verifier": 554,
+    "B0 only a wrong-boundary candidate": 317,
+    "P0 not proposed": 292,
+    "BS selector kept no overlapping span (rejected/unanswered)": 66,
+    "B2 selector chose an under-long boundary": 25,
+    "M0 accepted, not placed at this mention": 1
+   },
+   "fp_taxonomy": {
+    "F4 invalid nested substring": 607,
+    "F0/F1/F7 no overlap with gold (generic, descriptive or unsupported; unreviewed)": 1536,
+    "F3 under-long / partial span": 189,
+    "F2 over-long technical span": 688
+   },
+   "boundary_confusion": {
+    "EXPAND_TO|exact_gold": 522,
+    "EXPAND_TO|no_gold_overlap": 592,
+    "EXPAND_TO|over_long": 215,
+    "EXPAND_TO|under_long": 857,
+    "KEEP_NESTED|exact_gold": 1356,
+    "KEEP_NESTED|no_gold_overlap": 488,
+    "KEEP_NESTED|over_long": 219,
+    "KEEP_NESTED|under_long": 671,
+    "KEEP_PRIMARY|exact_gold": 1382,
+    "KEEP_PRIMARY|no_gold_overlap": 631,
+    "KEEP_PRIMARY|over_long": 692,
+    "KEEP_PRIMARY|under_long": 35,
+    "REJECT_DESCRIPTIVE|exact_gold": 88,
+    "REJECT_DESCRIPTIVE|no_gold_overlap": 1199,
+    "REJECT_DESCRIPTIVE|over_long": 428,
+    "REJECT_DESCRIPTIVE|under_long": 220,
+    "REJECT_GENERIC|exact_gold": 110,
+    "REJECT_GENERIC|no_gold_overlap": 996,
+    "REJECT_GENERIC|under_long": 386,
+    "REJECT_UNSUPPORTED|exact_gold": 31,
+    "REJECT_UNSUPPORTED|no_gold_overlap": 201,
+    "REJECT_UNSUPPORTED|over_long": 52,
+    "REJECT_UNSUPPORTED|under_long": 137,
+    "SHRINK_TO|exact_gold": 83,
+    "SHRINK_TO|no_gold_overlap": 258,
+    "SHRINK_TO|over_long": 404,
+    "SHRINK_TO|under_long": 95
+   },
+   "cost_usd": 0.5843,
+   "calls": 550,
+   "seconds": 8577,
+   "unanswered_candidates": 0,
+   "invalid_targets": 2,
+   "errors": 0
+  },
+  "B1": {
+   "mention": {
+    "precision": 0.5870650647526915,
+    "recall": 0.8314917127071824,
+    "f1": 0.6882202304737516,
+    "tp": 7525,
+    "fp": 5293,
+    "fn": 1525
+   },
+   "one_token": {
+    "gold": 6438,
+    "recall": 0.8103448275862069,
+    "predicted": 9101,
+    "precision": 0.5732337105812548
+   },
+   "nested_gold_recall": {
+    "n": 1984,
+    "recall": 0.7494959677419355
+   },
+   "non_nested_gold_recall": {
+    "n": 7066,
+    "recall": 0.8545145768468724
+   },
+   "predicted_nested": {
+    "n": 7021,
+    "precision": 0.5529126904999287
+   },
+   "over_long_fp": 1023,
+   "under_long_fp": 1648,
+   "distinct_surface": {
+    "tp": 1951,
+    "fp": 2322,
+    "fn": 295,
+    "precision": 0.4565878773695296,
+    "recall": 0.8686553873552983,
+    "f1": 0.5985580610523086
+   },
+   "fp_categories": {
+    "over_general_inside_gold": 1648,
+    "no_overlap": 2604,
+    "over_specific_contains_gold": 1023,
+    "shifted_partial_overlap": 18
+   },
+   "macro_section_f1": 0.7079429707214099,
+   "vs_U0": {
+    "delta": 0.07428948767702936,
+    "lo95": 0.026902111201867134,
+    "hi95": 0.1288671142781416
+   },
+   "vs_A0": {
+    "delta": 0.0288359206425699,
+    "lo95": -0.010752988088950515,
+    "hi95": 0.07349629733377573
+   },
+   "gates": {
+    "1_f1_gain_ge_0.02_or_ci_gt_0_vs_U0": true,
+    "2_precision_ge_U0_minus_0.02": false,
+    "3_recall_ge_U0_plus_0.05": true,
+    "4_one_token_recall_ge_U0_minus_0.02": true,
+    "5_distinct_precision_ge_U0_minus_0.05": false,
+    "6_distinct_recall_ge_U0_plus_0.05_or_within_0.03_of_V3": true,
+    "7_overlong_fp_reduced_25pct_vs_V3": false,
+    "8_9_no_identity_provenance_violation_or_leakage": true
+   },
+   "eligible": false,
+   "miss_taxonomy": {
+    "B3 valid nested concept suppressed (an enclosing span was kept)": 437,
+    "V0 valid bounded concept rejected by verifier": 160,
+    "B1 selector chose an over-long boundary": 213,
+    "B0 only a wrong-boundary candidate": 320,
+    "P0 not proposed": 292,
+    "BS selector kept no overlapping span (rejected/unanswered)": 57,
+    "B2 selector chose an under-long boundary": 46
+   },
+   "fp_taxonomy": {
+    "F4 invalid nested substring": 1430,
+    "F0/F1/F7 no overlap with gold (generic, descriptive or unsupported; unreviewed)": 2622,
+    "F3 under-long / partial span": 218,
+    "F2 over-long technical span": 1023
+   },
+   "cost_usd": 0.2443,
+   "calls": 299,
+   "seconds": 3332,
+   "unanswered_candidates": 1,
+   "invalid_targets": 0,
+   "errors": 0
+  },
+  "B2": {
+   "mention": {
+    "precision": 0.5970525652139649,
+    "recall": 0.8371270718232044,
+    "f1": 0.6969961819770919,
+    "tp": 7576,
+    "fp": 5113,
+    "fn": 1474
+   },
+   "one_token": {
+    "gold": 6438,
+    "recall": 0.8165579372475924,
+    "predicted": 8902,
+    "precision": 0.5905414513592451
+   },
+   "nested_gold_recall": {
+    "n": 1984,
+    "recall": 0.7570564516129032
+   },
+   "non_nested_gold_recall": {
+    "n": 7066,
+    "recall": 0.8596093971129352
+   },
+   "predicted_nested": {
+    "n": 7097,
+    "precision": 0.5547414400450895
+   },
+   "over_long_fp": 1070,
+   "under_long_fp": 1614,
+   "distinct_surface": {
+    "tp": 1970,
+    "fp": 2286,
+    "fn": 276,
+    "precision": 0.46287593984962405,
+    "recall": 0.8771148708815673,
+    "f1": 0.6059673946478006
+   },
+   "fp_categories": {
+    "over_general_inside_gold": 1614,
+    "over_specific_contains_gold": 1070,
+    "no_overlap": 2410,
+    "shifted_partial_overlap": 19
+   },
+   "macro_section_f1": 0.714531283181627,
+   "vs_U0": {
+    "delta": 0.08306543918036968,
+    "lo95": 0.03515705745148365,
+    "hi95": 0.13579733581550427
+   },
+   "vs_A0": {
+    "delta": 0.03761187214591022,
+    "lo95": -0.0020437901691938948,
+    "hi95": 0.08109142530781374
+   },
+   "gates": {
+    "1_f1_gain_ge_0.02_or_ci_gt_0_vs_U0": true,
+    "2_precision_ge_U0_minus_0.02": false,
+    "3_recall_ge_U0_plus_0.05": true,
+    "4_one_token_recall_ge_U0_minus_0.02": true,
+    "5_distinct_precision_ge_U0_minus_0.05": false,
+    "6_distinct_recall_ge_U0_plus_0.05_or_within_0.03_of_V3": true,
+    "7_overlong_fp_reduced_25pct_vs_V3": false,
+    "8_9_no_identity_provenance_violation_or_leakage": true
+   },
+   "eligible": false,
+   "miss_taxonomy": {
+    "B3 valid nested concept suppressed (an enclosing span was kept)": 437,
+    "V0 valid bounded concept rejected by verifier": 109,
+    "B1 selector chose an over-long boundary": 213,
+    "B0 only a wrong-boundary candidate": 320,
+    "P0 not proposed": 292,
+    "BS selector kept no overlapping span (rejected/unanswered)": 57,
+    "B2 selector chose an under-long boundary": 46
+   },
+   "fp_taxonomy": {
+    "F4 invalid nested substring": 1408,
+    "F2 over-long technical span": 1070,
+    "F0/F1/F7 no overlap with gold (generic, descriptive or unsupported; unreviewed)": 2429,
+    "F3 under-long / partial span": 206
+   },
+   "cost_usd": 0.2581,
+   "calls": 299,
+   "seconds": 3279,
+   "unanswered_candidates": 1,
+   "invalid_targets": 0,
+   "errors": 0
+  }
+ },
+ "families": {
+  "families": 8327,
+  "candidates": 10761,
+  "multi_member": 3699
+ }
+}
