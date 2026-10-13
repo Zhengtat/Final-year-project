@@ -15,7 +15,7 @@ from cumap.cr015.stage_a import OUT, compare, evaluate, local_arms, saved_arm, u
 
 norm = PL.norm
 ROOT = Path(".")
-REPORT = ROOT / "reports/cr015/stage_a_results.json"
+REPORT = ROOT / "reports/cr015/stage_ab_results.json"
 
 
 def v3_selected(d: DevSection, u) -> dict[str, set[str]]:
@@ -122,7 +122,7 @@ def main() -> dict:
     dev = load_dev()
     us = unions(dev)
     arms = local_arms(dev, us)
-    live = [a for a in ("A2", "A3") if all((OUT / f"{a}_{d.sid}.json").exists() for d in dev)]
+    live = [a for a in ("A2", "A3", "B1", "B2") if all((OUT / f"{a}_{d.sid}.json").exists() for d in dev)]
     saved = {
         a: {d.sid: json.loads((OUT / f"{a}_{d.sid}.json").read_text()) for d in dev} for a in live
     }
