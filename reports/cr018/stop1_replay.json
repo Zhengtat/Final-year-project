@@ -1,0 +1,68 @@
+{
+ "sections": [
+  "4.1",
+  "9.2",
+  "4.2",
+  "5.3",
+  "6.1",
+  "6.4",
+  "7.2",
+  "8.3",
+  "8.4",
+  "8.5"
+ ],
+ "gold_mentions": 9050,
+ "a2_spans_equal_family_grounded_replay": true,
+ "scores": {
+  "U0": {
+   "P": 0.764,
+   "R": 0.513,
+   "F1": 0.614,
+   "nested_gold_recall": 0.224,
+   "over_long_fp": 207,
+   "predicted": null
+  },
+  "A0": {
+   "P": 0.699,
+   "R": 0.624,
+   "F1": 0.659,
+   "nested_gold_recall": 0.077,
+   "over_long_fp": 553,
+   "predicted": null
+  },
+  "A2_saved": {
+   "P": 0.665,
+   "R": 0.785,
+   "F1": 0.72,
+   "nested_gold_recall": 0.703,
+   "over_long_fp": 695,
+   "predicted": null
+  },
+  "A2_replayed": {
+   "P": 0.665,
+   "R": 0.785,
+   "F1": 0.72,
+   "nested_gold_recall": 0.703,
+   "over_long_fp": 695,
+   "predicted": null
+  },
+  "BA1_selector_only": {
+   "P": 0.439,
+   "R": 0.849,
+   "F1": 0.579,
+   "nested_gold_recall": 0.763,
+   "over_long_fp": 1679,
+   "predicted": null
+  }
+ },
+ "volumes": {
+  "words": 50523,
+  "candidates": 10761,
+  "families": 8327,
+  "multi_member_families": 3699,
+  "selected_distinct": 7320,
+  "accepted_distinct": 3160,
+  "placed_A2": 10675,
+  "placed_BA1": 17490
+ }
+}
