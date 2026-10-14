@@ -282,3 +282,8 @@ Format: date · decision · reason · alternatives considered.
 - **Test guard:** `tests/test_cr012_stop1.py` isolation list now allows `cr017` (scoring-only, builds no prompts, calls no model), alongside `cr012`/`explain`.
 - **Reason:** compatibility check without inventing gold; SciNLP has no per-class classifier outcomes at mention level.
 - **Alternatives:** defining SciNLP macro F1 silently (rejected); pooling with P&D (forbidden).
+
+## 2026-10-14 · CR-017 STOP 5: report/UI integration
+- **Decision:** scorecard generated from the machine-readable replay outputs (`cumap.cr017.scorecard`) into `reports/cr017/scorecard.md` and a separate `scorecard-gz` payload in the KG explorer evaluation overlay (new default tab "Scorecard": HEADLINE five cards / DIAGNOSTICS expandable / AUDIT pointers / ORGANISATION panel marked "not accuracy"). Intervals over fewer than 3 sections are not shown; 3-9 sections are marked descriptive. Legacy detailed metrics and the CR-013 overlay payload are unchanged.
+- **Reason:** spec §24 separation of semantic accuracy from organisation, no composite score, old detail kept.
+- **Alternatives:** adding the scorecard to the CR-013 eval payload (rejected: that payload is pinned equal to `build_eval_payload()`); recomputing in JS (rejected: single source of numbers).
