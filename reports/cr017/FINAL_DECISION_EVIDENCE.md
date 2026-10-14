@@ -32,7 +32,7 @@ Sequential reading (not additive): concepts are found (0.643), loss is large at 
 ## Open items for Research
 1. Repo-wide lint: leave the 12 pre-existing CR-014/015/016 findings (recommended; editing frozen code risks hash drift) or lint-only commit with freeze re-verification.
 2. SciNLP Relation Macro F1: define at mention level (needs per-class outcomes the frozen scorer does not retain) or keep NOT_COMPUTED.
-3. Merge: on approval, `git merge --no-ff cr-017-simplified-evaluation` into `master` (mainline is `master`, not `main`) and tag `cr-017-complete`. Not done. CR-018 stays on hold pending its own STOP 1.
+3. Merge: on approval, `git merge --no-ff cr-017-simplified-evaluation` into `main` (the local mainline branch; the session git status named `master`, which does not exist locally) and tag `cr-017-complete`. Not done. CR-018 stays on hold pending its own STOP 1.
 
 ## Status
 CR-017: **READY_FOR_CLOSURE** (all STOP 6 checks pass; merge awaits Research).
