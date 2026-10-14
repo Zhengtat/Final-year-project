@@ -10,7 +10,7 @@ headline:
   composite_score: false          # the five metrics are never averaged or weighted into one number
 
 concept_f1:
-  variant: OPEN_RESEARCH_DECISION   # canonical_node (untyped, 0.643 frozen E0) vs canonical_node_typed (0.473); to be fixed before STOP 3
+  variant: canonical_node_untyped   # Research ruling 2026-10-14 (STOP 2 PASS): untyped canonical-node F1 (frozen E0 held-out 0.643); the typed variant (0.473) is a diagnostic
 
 hierarchy:
   relations: [is_a]               # registry v1.3: the only subsumption relation; part_of / has_property / connected_to / uses / requires / causes excluded
