@@ -313,6 +313,22 @@ def build(out: Path | None = None) -> Path:
     except FileNotFoundError:
         eval_b64 = ""
     html = html.replace("/*__EVAL_B64__*/", eval_b64)
+    score_b64 = ""
+    try:  # CR-017 STOP 5: the scorecard has its OWN payload, rendered from reports/cr017/*.json (nothing recomputed)
+        from cumap.cr017.scorecard import build_scorecard
+
+        score_b64 = base64.b64encode(
+            gzip.compress(
+                json.dumps(build_scorecard(), separators=(",", ":"), ensure_ascii=False).encode(
+                    "utf-8"
+                ),
+                9,
+                mtime=0,
+            )
+        ).decode()
+    except FileNotFoundError:
+        score_b64 = ""
+    html = html.replace("/*__SCORECARD_B64__*/", score_b64)
     target.write_text(
         html.replace(
             "/*__DATA__*/null", json.dumps(data, ensure_ascii=False).replace("</", "<\\/")

@@ -1,0 +1,36 @@
+Scorecard EVALUATION scorer cr017-1
+P&amp;D-E2E held-out (7 sections, headline) P&amp;D-E2E pilot (development) SciNLP held-out (3 documents; separate benchmark)
+E0 E1 E3 E4
+Mention-level benchmark without identity gold: Concept F1 is the entity-strict analogue and Pair Recall the endpoints-present analogue; hierarchy is not evaluable; Relation Macro F1 is not computed. Never pooled with P&amp;D.
+HEADLINE — five metrics only · no composite score
+Concept F1
+0.352
+203/184/562 (tp/fp/fn)
+mention-level analogue
+Ancestor Hierarchy F1
+NOT_EVALUABLE
+NOT_SUPPORTED_NO_IDENTITY_GOLD
+Pair Recall
+0.545
+18/33
+mention-level analogue
+Relation Macro F1
+NOT_COMPUTED
+RESEARCH_DECISION_REQUIRED: scorer keeps no per-class classifier outcomes for mention-level gold
+Strict E2E Edge F1
+0.050
+8/14/287 (tp/fp/fn)
+mention-level analogue
+Section-bootstrap intervals are descriptive when fewer than 10 units. † = descriptive section-bootstrap interval. Sections: 2021.acl-long.353, 2024.acl-long.108-1-9.grobid, P17-1058.grobid. Levels E1–E4 are oracle diagnostics (gold injected at one stage), not independent systems.
+DIAGNOSTICS — detailed components, not headline
+Legacy detailed metrics (typed canonical node, typed mentions, identity, relation confusion, qualifiers, alignment) remain in diagnostics.json.
+AUDIT
+Per-item traces and the frozen failure attribution are in the Failure map and Gold relations tabs; provenance and hashes are in reports/cr017/diagnostics.json and historical_replay.md .
+ORGANISATION — structural view, not accuracy
+Organisation metrics describe how the graph is arranged. They are not accuracy metrics and never enter a headline card.
+community modularity and stability
+centrality / PageRank / k-core
+centre / inner / middle / outer rings
+principle / core / detail distribution
+chapter importance trajectories
+Open the production graph and choose the Rings layout to see these structures; they are not scored here.

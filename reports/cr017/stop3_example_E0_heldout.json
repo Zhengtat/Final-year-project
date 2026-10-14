@@ -1,0 +1,1256 @@
+{
+ "headline": {
+  "concept_f1": {
+   "precision": 0.540506329113924,
+   "recall": 0.7922077922077922,
+   "f1": 0.6425884123401053,
+   "tp": 427,
+   "fp": 363,
+   "fn": 112,
+   "ci95": [
+    0.5893877551020408,
+    0.6981981981981982
+   ],
+   "ci_status": "NOT_EVALUABLE_SMALL_N",
+   "bootstrap": {
+    "unit": "section",
+    "units": 7,
+    "resamples": 10000,
+    "seed": 20261011,
+    "valid_resamples": 10000
+   },
+   "variant": "canonical_node_untyped"
+  },
+  "ancestor_hierarchy_f1": {
+   "precision": 0.14583333333333334,
+   "recall": 0.09333333333333334,
+   "f1": 0.11382113821138211,
+   "tp": 7,
+   "fp": 41,
+   "fn": 68,
+   "ci95": [
+    0.07741935483870967,
+    0.15602836879432624
+   ],
+   "ci_status": "NOT_EVALUABLE_SMALL_N",
+   "bootstrap": {
+    "unit": "section",
+    "units": 7,
+    "resamples": 10000,
+    "seed": 20261011,
+    "valid_resamples": 10000
+   },
+   "status": "OK",
+   "gold_ancestor_pairs": 75
+  },
+  "pair_recall": {
+   "recall": 0.16257668711656442,
+   "reached": 53,
+   "denominator": 326,
+   "missing_endpoint_excluded": 100,
+   "ci95": [
+    0.1393939393939394,
+    0.1855072463768116
+   ],
+   "ci_status": "NOT_EVALUABLE_SMALL_N",
+   "bootstrap": {
+    "unit": "section",
+    "units": 7,
+    "resamples": 10000,
+    "seed": 20261011,
+    "valid_resamples": 10000
+   }
+  },
+  "relation_macro_f1": {
+   "f1": 0.4840141798346133,
+   "classes": {
+    "acts_on": {
+     "support": 12,
+     "tp": 4,
+     "fp": 0,
+     "fn": 8,
+     "precision": 1.0,
+     "recall": 0.3333333333333333,
+     "f1": 0.5,
+     "low_support": false
+    },
+    "connected_to": {
+     "support": 1,
+     "tp": 0,
+     "fp": 0,
+     "fn": 1,
+     "precision": null,
+     "recall": 0.0,
+     "f1": 0.0,
+     "low_support": true
+    },
+    "contrasts_with": {
+     "support": 7,
+     "tp": 1,
+     "fp": 0,
+     "fn": 6,
+     "precision": 1.0,
+     "recall": 0.14285714285714285,
+     "f1": 0.25,
+     "low_support": false
+    },
+    "decreases": {
+     "support": 1,
+     "tp": 1,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "low_support": true
+    },
+    "has_property": {
+     "support": 1,
+     "tp": 1,
+     "fp": 0,
+     "fn": 0,
+     "precision": 1.0,
+     "recall": 1.0,
+     "f1": 1.0,
+     "low_support": true
+    },
+    "has_purpose": {
+     "support": 6,
+     "tp": 1,
+     "fp": 0,
+     "fn": 5,
+     "precision": 1.0,
+     "recall": 0.16666666666666666,
+     "f1": 0.2857142857142857,
+     "low_support": false
+    },
+    "increases": {
+     "support": 1,
+     "tp": 0,
+     "fp": 0,
+     "fn": 1,
+     "precision": null,
+     "recall": 0.0,
+     "f1": 0.0,
+     "low_support": true
+    },
+    "is_a": {
+     "support": 8,
+     "tp": 7,
+     "fp": 2,
+     "fn": 1,
+     "precision": 0.7777777777777778,
+     "recall": 0.875,
+     "f1": 0.823529411764706,
+     "low_support": false
+    },
+    "part_of": {
+     "support": 3,
+     "tp": 1,
+     "fp": 2,
+     "fn": 2,
+     "precision": 0.3333333333333333,
+     "recall": 0.3333333333333333,
+     "f1": 0.3333333333333333,
+     "low_support": true
+    },
+    "performs": {
+     "support": 1,
+     "tp": 1,
+     "fp": 2,
+     "fn": 0,
+     "precision": 0.3333333333333333,
+     "recall": 1.0,
+     "f1": 0.5,
+     "low_support": true
+    },
+    "requires": {
+     "support": 0,
+     "tp": 0,
+     "fp": 2,
+     "fn": 0,
+     "precision": 0.0,
+     "recall": null,
+     "f1": null,
+     "low_support": false
+    },
+    "uses": {
+     "support": 12,
+     "tp": 6,
+     "fp": 1,
+     "fn": 6,
+     "precision": 0.8571428571428571,
+     "recall": 0.5,
+     "f1": 0.631578947368421,
+     "low_support": false
+    }
+   },
+   "population": 53,
+   "classes_in_macro": 11,
+   "ci95": [
+    0.3020833333333333,
+    0.6322915180058037
+   ],
+   "ci_status": "NOT_EVALUABLE_SMALL_N",
+   "bootstrap": {
+    "unit": "section",
+    "units": 7,
+    "resamples": 10000,
+    "seed": 20261011,
+    "valid_resamples": 10000
+   }
+  },
+  "strict_e2e_edge_f1": {
+   "precision": 0.09195402298850575,
+   "recall": 0.03755868544600939,
+   "f1": 0.05333333333333334,
+   "tp": 16,
+   "fp": 158,
+   "fn": 410,
+   "ci95": [
+    0.03018867924528302,
+    0.07631160572337042
+   ],
+   "ci_status": "NOT_EVALUABLE_SMALL_N",
+   "bootstrap": {
+    "unit": "section",
+    "units": 7,
+    "resamples": 10000,
+    "seed": 20261011,
+    "valid_resamples": 10000
+   }
+  }
+ },
+ "diagnostics": {
+  "relation": {
+   "micro": {
+    "precision": 0.71875,
+    "recall": 0.4339622641509434,
+    "f1": 0.5411764705882353
+   },
+   "direction_accuracy_given_correct_label": 0.9565217391304348,
+   "no_prediction_by_outcome": {
+    "other": 8,
+    "no_relation": 6,
+    "rejected": 7
+   },
+   "low_support_classes": [
+    "connected_to",
+    "decreases",
+    "has_property",
+    "increases",
+    "part_of",
+    "performs"
+   ]
+  },
+  "hierarchy": {
+   "direct_parent_f1_pooled": {
+    "tp": 7,
+    "fp": 39,
+    "fn": 57,
+    "precision": 0.15217391304347827,
+    "recall": 0.109375,
+    "f1": 0.1272727272727273
+   },
+   "predicted_cycles": {},
+   "gold_cycles": {}
+  },
+  "legacy": {
+   "4.4": {
+    "canonical_node_typed": {
+     "tp": 70,
+     "fp": 46,
+     "fn": 27,
+     "precision": 0.603448275862069,
+     "recall": 0.7216494845360825,
+     "f1": 0.6572769953051643
+    },
+    "concept_mentions_typed": {
+     "tp": 102,
+     "fp": 44,
+     "fn": 398,
+     "precision": 0.6986301369863014,
+     "recall": 0.204,
+     "f1": 0.3157894736842105
+    },
+    "identity": {
+     "pairwise": {
+      "tp": 45,
+      "fp": 0,
+      "fn": 4877,
+      "precision": 1.0,
+      "recall": 0.00914262494920764,
+      "f1": 0.018119589289309443
+     },
+     "bcubed": {
+      "precision": 1.0,
+      "recall": 0.2186924552301954,
+      "f1": 0.35889687228577644
+     }
+    },
+    "relation_conditional": {
+     "gold_with_proposed_edge": 4,
+     "relation_correct": 3,
+     "direction_correct": 3
+    },
+    "relation_confusion": {
+     "has_purpose->uses": 1,
+     "is_a->is_a": 1,
+     "performs->performs": 1,
+     "uses->uses": 1
+    },
+    "qualifier_accuracy": {
+     "matched_edges_needing_a_qualifier": 0,
+     "qualifier_correct": 0
+    },
+    "alignment": {
+     "false_merge_nodes": [],
+     "unmatched_nodes": [
+      "c_array",
+      "c_atm_capability",
+      "c_circuit_emulation",
+      "c_constraint",
+      "c_customer_site",
+      "c_end_user",
+      "c_fish_network",
+      "c_head_router",
+      "c_input_port",
+      "c_ip_datagram_network",
+      "c_ip_prefix",
+      "c_label_stacking",
+      "c_layer_3_header",
+      "c_link",
+      "c_network_resilience",
+      "c_non_ip_packet",
+      "c_optical_network",
+      "c_output_port",
+      "c_remote_label",
+      "c_rerouting",
+      "c_routing_algorithm",
+      "c_routing_neighbor",
+      "c_routing_protocol_message",
+      "c_scaling_capability",
+      "c_service_provider_network",
+      "c_shim",
+      "c_ships_in_the_night_mode",
+      "c_tail_router",
+      "c_throughput",
+      "c_traffic_flow",
+      "c_tunnel_payload"
+     ],
+     "split_concepts": [
+      "C0004",
+      "C0011",
+      "C0014",
+      "C0015",
+      "C0030"
+     ]
+    }
+   },
+   "4.5": {
+    "canonical_node_typed": {
+     "tp": 33,
+     "fp": 67,
+     "fn": 31,
+     "precision": 0.33,
+     "recall": 0.515625,
+     "f1": 0.40243902439024387
+    },
+    "concept_mentions_typed": {
+     "tp": 54,
+     "fp": 65,
+     "fn": 279,
+     "precision": 0.453781512605042,
+     "recall": 0.16216216216216217,
+     "f1": 0.23893805309734514
+    },
+    "identity": {
+     "pairwise": {
+      "tp": 14,
+      "fp": 0,
+      "fn": 3135,
+      "precision": 1.0,
+      "recall": 0.004445855827246745,
+      "f1": 0.008852355358836548
+     },
+     "bcubed": {
+      "precision": 1.0,
+      "recall": 0.20376324086469055,
+      "f1": 0.3385437168164776
+     }
+    },
+    "relation_conditional": {
+     "gold_with_proposed_edge": 3,
+     "relation_correct": 3,
+     "direction_correct": 3
+    },
+    "relation_confusion": {
+     "acts_on->acts_on": 1,
+     "has_property->has_property": 1,
+     "is_a->is_a": 1
+    },
+    "qualifier_accuracy": {
+     "matched_edges_needing_a_qualifier": 2,
+     "qualifier_correct": 0
+    },
+    "alignment": {
+     "false_merge_nodes": [],
+     "unmatched_nodes": [
+      "c_access_point",
+      "c_address_space",
+      "c_application",
+      "c_attacker",
+      "c_binding",
+      "c_binding_update_message",
+      "c_chrome",
+      "c_destination_address",
+      "c_dns_server",
+      "c_drone",
+      "c_emergency_response_team",
+      "c_endpoint",
+      "c_fixed_infrastructure",
+      "c_fixed_node",
+      "c_higher_layer_protocol",
+      "c_http",
+      "c_incremental_deployment_problem",
+      "c_internet",
+      "c_internetwork",
+      "c_ip_forwarding",
+      "c_ipv4",
+      "c_ipv6",
+      "c_laptop",
+      "c_mobile_networking",
+      "c_mobile_node_address",
+      "c_mobility_support",
+      "c_netflix",
+      "c_network",
+      "c_network_prefix",
+      "c_registration",
+      "c_route_optimization",
+      "c_router",
+      "c_smartphone",
+      "c_suboptimal_route",
+      "c_tunneling",
+      "c_voice_over_ip_telephone_call",
+      "c_web_browser",
+      "c_wireless_networking_protocol",
+      "c_wireless_technology"
+     ],
+     "split_concepts": [
+      "C0098",
+      "C0101",
+      "C0110",
+      "C0114",
+      "C0122",
+      "C0130",
+      "C0136",
+      "C0141",
+      "C0145"
+     ]
+    }
+   },
+   "5.4": {
+    "canonical_node_typed": {
+     "tp": 44,
+     "fp": 78,
+     "fn": 32,
+     "precision": 0.36065573770491804,
+     "recall": 0.5789473684210527,
+     "f1": 0.4444444444444445
+    },
+    "concept_mentions_typed": {
+     "tp": 61,
+     "fp": 96,
+     "fn": 271,
+     "precision": 0.3885350318471338,
+     "recall": 0.18373493975903615,
+     "f1": 0.24948875255623726
+    },
+    "identity": {
+     "pairwise": {
+      "tp": 21,
+      "fp": 0,
+      "fn": 1569,
+      "precision": 1.0,
+      "recall": 0.013207547169811321,
+      "f1": 0.026070763500931095
+     },
+     "bcubed": {
+      "precision": 1.0,
+      "recall": 0.2473032480800393,
+      "f1": 0.3965406944313031
+     }
+    },
+    "relation_conditional": {
+     "gold_with_proposed_edge": 7,
+     "relation_correct": 5,
+     "direction_correct": 5
+    },
+    "relation_confusion": {
+     "acts_on->part_of": 1,
+     "decreases->decreases": 1,
+     "has_purpose->has_purpose": 1,
+     "has_purpose->performs": 1,
+     "is_a->is_a": 1,
+     "part_of->part_of": 1,
+     "uses->uses": 1
+    },
+    "qualifier_accuracy": {
+     "matched_edges_needing_a_qualifier": 0,
+     "qualifier_correct": 0
+    },
+    "alignment": {
+     "false_merge_nodes": [],
+     "unmatched_nodes": [
+      "c_7_bit_payload_type_field",
+      "c_abstraction",
+      "c_atm_cell",
+      "c_audio",
+      "c_audio_packet",
+      "c_audio_stream",
+      "c_audioconferencing_application",
+      "c_b_frame",
+      "c_bandwidth_requirement",
+      "c_byte",
+      "c_camera",
+      "c_client",
+      "c_clock_drift",
+      "c_computational_cost",
+      "c_conference",
+      "c_contributing_source_identifier",
+      "c_cumulative_count",
+      "c_data",
+      "c_digitized_voice_samples",
+      "c_encoding",
+      "c_encryption_algorithm",
+      "c_example_conferencing_tool",
+      "c_extension_bit",
+      "c_i_frame",
+      "c_interarrival_spacing",
+      "c_internet",
+      "c_interoperability",
+      "c_ip_address",
+      "c_lower_layer_protocol",
+      "c_media_stream",
+      "c_mpeg_encoded_video_stream",
+      "c_mpeg_encoding",
+      "c_netflix",
+      "c_network_address",
+      "c_p_frame",
+      "c_packet",
+      "c_packetization",
+      "c_padding_bit",
+      "c_report_packet",
+      "c_reporting_period",
+      "c_rtp_format",
+      "c_sample",
+      "c_server",
+      "c_silence_detection",
+      "c_source_identifier",
+      "c_spotify",
+      "c_subversion_field",
+      "c_temporal_relationship",
+      "c_tick",
+      "c_timely_delivery",
+      "c_timing_information",
+      "c_transport_address",
+      "c_udp_header",
+      "c_udp_port_number",
+      "c_vat",
+      "c_vic",
+      "c_video",
+      "c_youtube"
+     ],
+     "split_concepts": [
+      "C0181",
+      "C0191",
+      "C0200",
+      "C0205",
+      "C0206",
+      "C0216",
+      "C0218",
+      "C0229"
+     ]
+    }
+   },
+   "6.3": {
+    "canonical_node_typed": {
+     "tp": 26,
+     "fp": 59,
+     "fn": 30,
+     "precision": 0.3058823529411765,
+     "recall": 0.4642857142857143,
+     "f1": 0.3687943262411348
+    },
+    "concept_mentions_typed": {
+     "tp": 44,
+     "fp": 71,
+     "fn": 439,
+     "precision": 0.3826086956521739,
+     "recall": 0.09109730848861283,
+     "f1": 0.1471571906354515
+    },
+    "identity": {
+     "pairwise": {
+      "tp": 17,
+      "fp": 0,
+      "fn": 8315,
+      "precision": 1.0,
+      "recall": 0.0020403264522323573,
+      "f1": 0.00407234399329261
+     },
+     "bcubed": {
+      "precision": 1.0,
+      "recall": 0.12544477569806572,
+      "f1": 0.22292479987791075
+     }
+    },
+    "relation_conditional": {
+     "gold_with_proposed_edge": 1
+    },
+    "relation_confusion": {
+     "uses->performs": 1
+    },
+    "qualifier_accuracy": {
+     "matched_edges_needing_a_qualifier": 0,
+     "qualifier_correct": 0
+    },
+    "alignment": {
+     "false_merge_nodes": [],
+     "unmatched_nodes": [
+      "c_additive_increase_additive_decrease_strategy",
+      "c_bandwidth",
+      "c_big_windows_extension",
+      "c_buffer_space",
+      "c_clock",
+      "c_coarse_grained_clock",
+      "c_concave_function",
+      "c_congestion_control_mechanism",
+      "c_congestion_event",
+      "c_connection",
+      "c_destination",
+      "c_end_to_end_path",
+      "c_flow",
+      "c_heuristic",
+      "c_host",
+      "c_internet",
+      "c_ip_option",
+      "c_linear_increase",
+      "c_link",
+      "c_maximum_congestion_window_size",
+      "c_missing_packet",
+      "c_network",
+      "c_packet_in_transit",
+      "c_pipe",
+      "c_plateau",
+      "c_queuing_strategy",
+      "c_receiving_side",
+      "c_research_networks",
+      "c_sender",
+      "c_sending_rate",
+      "c_sequence_number",
+      "c_session",
+      "c_short_rtt_flow",
+      "c_slow_start_phase",
+      "c_source",
+      "c_standard_slow_start",
+      "c_target_congestion_window",
+      "c_tcp_ip_protocol_stack",
+      "c_tcp_maxwin",
+      "c_tcp_timeouts",
+      "c_timer",
+      "c_van_jacobson"
+     ],
+     "split_concepts": [
+      "C0239",
+      "C0240",
+      "C0250",
+      "C0256",
+      "C0293"
+     ]
+    }
+   },
+   "7.1": {
+    "canonical_node_typed": {
+     "tp": 47,
+     "fp": 101,
+     "fn": 42,
+     "precision": 0.31756756756756754,
+     "recall": 0.5280898876404494,
+     "f1": 0.39662447257383965
+    },
+    "concept_mentions_typed": {
+     "tp": 79,
+     "fp": 116,
+     "fn": 455,
+     "precision": 0.40512820512820513,
+     "recall": 0.14794007490636704,
+     "f1": 0.2167352537722908
+    },
+    "identity": {
+     "pairwise": {
+      "tp": 38,
+      "fp": 2,
+      "fn": 3885,
+      "precision": 0.95,
+      "recall": 0.009686464440479225,
+      "f1": 0.01917739086550593
+     },
+     "bcubed": {
+      "precision": 0.9975031210986268,
+      "recall": 0.19222824740739938,
+      "f1": 0.3223387763457607
+     }
+    },
+    "relation_conditional": {
+     "gold_with_proposed_edge": 5,
+     "relation_correct": 3,
+     "direction_correct": 2
+    },
+    "relation_confusion": {
+     "acts_on->acts_on": 1,
+     "has_purpose->is_a": 1,
+     "is_a->is_a": 1,
+     "uses->part_of": 1,
+     "uses->uses": 1
+    },
+    "qualifier_accuracy": {
+     "matched_edges_needing_a_qualifier": 0,
+     "qualifier_correct": 0
+    },
+    "alignment": {
+     "false_merge_nodes": [
+      "c_structure"
+     ],
+     "unmatched_nodes": [
+      "c_application_program",
+      "c_architecture",
+      "c_argument_marshalling_mechanism",
+      "c_argument_marshalling_system",
+      "c_arm",
+      "c_bit",
+      "c_browser",
+      "c_byte",
+      "c_character",
+      "c_character_string",
+      "c_charrep",
+      "c_client_side",
+      "c_compilation_based_approach",
+      "c_context_variable",
+      "c_contiguous_message",
+      "c_cray",
+      "c_data_encoder",
+      "c_data_rate",
+      "c_decimal",
+      "c_decoding",
+      "c_emp",
+      "c_emp_title",
+      "c_encoding_process",
+      "c_font_size",
+      "c_function_pointer",
+      "c_globally_unique_identifier",
+      "c_grpc",
+      "c_host",
+      "c_http_url",
+      "c_ibm",
+      "c_image",
+      "c_intel_x86_family",
+      "c_intermediate_agent",
+      "c_international_standards_organization",
+      "c_interpretation_based_approach",
+      "c_iso_standard",
+      "c_least_significant_group",
+      "c_length_field",
+      "c_lower_seven_bits",
+      "c_memory_bandwidth",
+      "c_modularity",
+      "c_multibyte_tag",
+      "c_parser",
+      "c_powerpc_processor",
+      "c_primitive_type",
+      "c_procedure_interface",
+      "c_programming_language",
+      "c_proto_file",
+      "c_protocol_header",
+      "c_rpc_protocol",
+      "c_server_side",
+      "c_signed_integer",
+      "c_string",
+      "c_subfield",
+      "c_sunrpc",
+      "c_taxonomy",
+      "c_test_case",
+      "c_twos_complement_notation",
+      "c_typedef_struct",
+      "c_unmarshalling",
+      "c_unsigned_integer",
+      "c_upper_layer",
+      "c_value",
+      "c_variable",
+      "c_vax",
+      "c_word",
+      "c_word_boundary",
+      "c_world_wide_web_consortium",
+      "c_xdr_array",
+      "c_xdr_int",
+      "c_xdr_integer",
+      "c_xdr_string"
+     ],
+     "split_concepts": [
+      "C0304",
+      "C0323"
+     ]
+    }
+   },
+   "8.2": {
+    "canonical_node_typed": {
+     "tp": 44,
+     "fp": 44,
+     "fn": 25,
+     "precision": 0.5,
+     "recall": 0.6376811594202898,
+     "f1": 0.5605095541401274
+    },
+    "concept_mentions_typed": {
+     "tp": 60,
+     "fp": 53,
+     "fn": 430,
+     "precision": 0.5309734513274337,
+     "recall": 0.12244897959183673,
+     "f1": 0.19900497512437812
+    },
+    "identity": {
+     "pairwise": {
+      "tp": 22,
+      "fp": 0,
+      "fn": 5193,
+      "precision": 1.0,
+      "recall": 0.004218600191754554,
+      "f1": 0.008401756730952836
+     },
+     "bcubed": {
+      "precision": 1.0,
+      "recall": 0.15704268889938836,
+      "f1": 0.2714553065432215
+     }
+    },
+    "relation_conditional": {
+     "gold_with_proposed_edge": 8,
+     "relation_correct": 6,
+     "direction_correct": 6
+    },
+    "relation_confusion": {
+     "contrasts_with->contrasts_with": 1,
+     "is_a->is_a": 2,
+     "uses->requires": 2,
+     "uses->uses": 3
+    },
+    "qualifier_accuracy": {
+     "matched_edges_needing_a_qualifier": 1,
+     "qualifier_correct": 0
+    },
+    "alignment": {
+     "false_merge_nodes": [],
+     "unmatched_nodes": [
+      "c_adversary",
+      "c_attacker",
+      "c_authenticity",
+      "c_bit_error",
+      "c_brute_force_search",
+      "c_collision_resistance",
+      "c_communication_channel",
+      "c_counter",
+      "c_cryptanalysis",
+      "c_cryptanalyst",
+      "c_cryptographer",
+      "c_eavesdropper",
+      "c_electronic_codebook_mode_encryption",
+      "c_factoring",
+      "c_input_pad",
+      "c_legacy_system",
+      "c_output_pad",
+      "c_parity_bit",
+      "c_protocol",
+      "c_redundant_information",
+      "c_secret_decryption_function",
+      "c_secure_communication",
+      "c_tampering",
+      "c_xor"
+     ],
+     "split_concepts": [
+      "C0394",
+      "C0413",
+      "C0414",
+      "C0454"
+     ]
+    }
+   },
+   "9.3": {
+    "canonical_node_typed": {
+     "tp": 50,
+     "fp": 81,
+     "fn": 38,
+     "precision": 0.3816793893129771,
+     "recall": 0.5681818181818182,
+     "f1": 0.4566210045662101
+    },
+    "concept_mentions_typed": {
+     "tp": 72,
+     "fp": 101,
+     "fn": 412,
+     "precision": 0.4161849710982659,
+     "recall": 0.1487603305785124,
+     "f1": 0.21917808219178087
+    },
+    "identity": {
+     "pairwise": {
+      "tp": 31,
+      "fp": 0,
+      "fn": 2768,
+      "precision": 1.0,
+      "recall": 0.011075384065737763,
+      "f1": 0.021908127208480562
+     },
+     "bcubed": {
+      "precision": 1.0,
+      "recall": 0.20508800156281165,
+      "f1": 0.3403701659909391
+     }
+    },
+    "relation_conditional": {
+     "gold_with_proposed_edge": 4,
+     "relation_correct": 3,
+     "direction_correct": 3
+    },
+    "relation_confusion": {
+     "acts_on->acts_on": 2,
+     "contrasts_with->is_a": 1,
+     "is_a->is_a": 1
+    },
+    "qualifier_accuracy": {
+     "matched_edges_needing_a_qualifier": 2,
+     "qualifier_correct": 0
+    },
+    "alignment": {
+     "false_merge_nodes": [],
+     "unmatched_nodes": [
+      "c_5_tuple",
+      "c_address",
+      "c_address_resolution_protocol",
+      "c_alias",
+      "c_application",
+      "c_application_protocol",
+      "c_bootstrapping",
+      "c_client_server_interaction",
+      "c_cname_record",
+      "c_compound_variable",
+      "c_configuration_information",
+      "c_connection",
+      "c_faulty_hardware",
+      "c_flat_address",
+      "c_garbage_collection",
+      "c_globally_unique_identifier",
+      "c_icmp",
+      "c_in",
+      "c_integer",
+      "c_internet",
+      "c_internet_host",
+      "c_internet_object",
+      "c_ip_group",
+      "c_layered_model",
+      "c_local_variable",
+      "c_machine_learning",
+      "c_mail_exchange_record",
+      "c_memory_location",
+      "c_misbehaving_software",
+      "c_mx_record",
+      "c_name_field",
+      "c_name_to_address_mapping",
+      "c_network_device",
+      "c_node",
+      "c_object_identification_scheme",
+      "c_packet",
+      "c_physical_address",
+      "c_recursive_process",
+      "c_redundancy",
+      "c_router",
+      "c_rpc_mechanism",
+      "c_schema",
+      "c_search_engine",
+      "c_semantics",
+      "c_site_administrator",
+      "c_structure",
+      "c_subtable",
+      "c_tcp",
+      "c_timeout",
+      "c_top_level_domain_name_server",
+      "c_transport_protocol",
+      "c_tree",
+      "c_unix_file_name",
+      "c_url",
+      "c_value",
+      "c_value_field"
+     ],
+     "split_concepts": [
+      "C0457",
+      "C0469",
+      "C0498"
+     ]
+    }
+   }
+  },
+  "per_section": {
+   "4.4": {
+    "concept": {
+     "tp": 80,
+     "fp": 36,
+     "fn": 17,
+     "precision": 0.6896551724137931,
+     "recall": 0.8247422680412371,
+     "f1": 0.7511737089201878
+    },
+    "hierarchy": {
+     "tp": 1,
+     "fp": 7,
+     "fn": 6,
+     "precision": 0.125,
+     "recall": 0.14285714285714285,
+     "f1": 0.13333333333333333
+    },
+    "pair_recall": [
+     9,
+     49
+    ],
+    "relation_population": 9,
+    "strict": {
+     "tp": 3,
+     "fp": 20,
+     "fn": 60,
+     "precision": 0.13043478260869565,
+     "recall": 0.047619047619047616,
+     "f1": 0.06976744186046512
+    }
+   },
+   "4.5": {
+    "concept": {
+     "tp": 52,
+     "fp": 48,
+     "fn": 12,
+     "precision": 0.52,
+     "recall": 0.8125,
+     "f1": 0.6341463414634146
+    },
+    "hierarchy": {
+     "tp": 1,
+     "fp": 3,
+     "fn": 6,
+     "precision": 0.25,
+     "recall": 0.14285714285714285,
+     "f1": 0.18181818181818182
+    },
+    "pair_recall": [
+     5,
+     41
+    ],
+    "relation_population": 5,
+    "strict": {
+     "tp": 2,
+     "fp": 13,
+     "fn": 47,
+     "precision": 0.13333333333333333,
+     "recall": 0.04081632653061224,
+     "f1": 0.0625
+    }
+   },
+   "5.4": {
+    "concept": {
+     "tp": 56,
+     "fp": 66,
+     "fn": 20,
+     "precision": 0.45901639344262296,
+     "recall": 0.7368421052631579,
+     "f1": 0.5656565656565656
+    },
+    "hierarchy": {
+     "tp": 1,
+     "fp": 5,
+     "fn": 5,
+     "precision": 0.16666666666666666,
+     "recall": 0.16666666666666666,
+     "f1": 0.16666666666666666
+    },
+    "pair_recall": [
+     8,
+     37
+    ],
+    "relation_population": 8,
+    "strict": {
+     "tp": 4,
+     "fp": 23,
+     "fn": 52,
+     "precision": 0.14814814814814814,
+     "recall": 0.07142857142857142,
+     "f1": 0.0963855421686747
+    }
+   },
+   "6.3": {
+    "concept": {
+     "tp": 37,
+     "fp": 48,
+     "fn": 19,
+     "precision": 0.43529411764705883,
+     "recall": 0.6607142857142857,
+     "f1": 0.5248226950354609
+    },
+    "hierarchy": {
+     "tp": 0,
+     "fp": 7,
+     "fn": 1,
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0
+    },
+    "pair_recall": [
+     4,
+     34
+    ],
+    "relation_population": 4,
+    "strict": {
+     "tp": 0,
+     "fp": 26,
+     "fn": 47,
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0
+    }
+   },
+   "7.1": {
+    "concept": {
+     "tp": 72,
+     "fp": 76,
+     "fn": 17,
+     "precision": 0.4864864864864865,
+     "recall": 0.8089887640449438,
+     "f1": 0.6075949367088608
+    },
+    "hierarchy": {
+     "tp": 1,
+     "fp": 7,
+     "fn": 18,
+     "precision": 0.125,
+     "recall": 0.05263157894736842,
+     "f1": 0.07407407407407407
+    },
+    "pair_recall": [
+     10,
+     55
+    ],
+    "relation_population": 10,
+    "strict": {
+     "tp": 1,
+     "fp": 27,
+     "fn": 68,
+     "precision": 0.03571428571428571,
+     "recall": 0.014492753623188406,
+     "f1": 0.020618556701030924
+    }
+   },
+   "8.2": {
+    "concept": {
+     "tp": 59,
+     "fp": 29,
+     "fn": 10,
+     "precision": 0.6704545454545454,
+     "recall": 0.855072463768116,
+     "f1": 0.7515923566878981
+    },
+    "hierarchy": {
+     "tp": 2,
+     "fp": 4,
+     "fn": 15,
+     "precision": 0.3333333333333333,
+     "recall": 0.11764705882352941,
+     "f1": 0.1739130434782609
+    },
+    "pair_recall": [
+     9,
+     51
+    ],
+    "relation_population": 9,
+    "strict": {
+     "tp": 4,
+     "fp": 26,
+     "fn": 60,
+     "precision": 0.13333333333333333,
+     "recall": 0.0625,
+     "f1": 0.0851063829787234
+    }
+   },
+   "9.3": {
+    "concept": {
+     "tp": 71,
+     "fp": 60,
+     "fn": 17,
+     "precision": 0.5419847328244275,
+     "recall": 0.8068181818181818,
+     "f1": 0.6484018264840183
+    },
+    "hierarchy": {
+     "tp": 1,
+     "fp": 8,
+     "fn": 17,
+     "precision": 0.1111111111111111,
+     "recall": 0.05555555555555555,
+     "f1": 0.07407407407407407
+    },
+    "pair_recall": [
+     8,
+     59
+    ],
+    "relation_population": 8,
+    "strict": {
+     "tp": 2,
+     "fp": 23,
+     "fn": 76,
+     "precision": 0.08,
+     "recall": 0.02564102564102564,
+     "f1": 0.038834951456310676
+    }
+   }
+  }
+ },
+ "schema_version": "cr017-v1",
+ "run_id": "cr012_heldout_*_E0",
+ "benchmark": "P&D-E2E (canonical graph)",
+ "sections": [
+  "4.4",
+  "4.5",
+  "5.4",
+  "6.3",
+  "7.1",
+  "8.2",
+  "9.3"
+ ],
+ "prediction_artifact": [
+  "/Users/wongzhengtat/Desktop/h420020-mapper/data/processed/kg/cr012_heldout_4_4_E0/checkpoint.json",
+  "/Users/wongzhengtat/Desktop/h420020-mapper/data/processed/kg/cr012_heldout_4_5_E0/checkpoint.json",
+  "/Users/wongzhengtat/Desktop/h420020-mapper/data/processed/kg/cr012_heldout_5_4_E0/checkpoint.json",
+  "/Users/wongzhengtat/Desktop/h420020-mapper/data/processed/kg/cr012_heldout_6_3_E0/checkpoint.json",
+  "/Users/wongzhengtat/Desktop/h420020-mapper/data/processed/kg/cr012_heldout_7_1_E0/checkpoint.json",
+  "/Users/wongzhengtat/Desktop/h420020-mapper/data/processed/kg/cr012_heldout_8_2_E0/checkpoint.json",
+  "/Users/wongzhengtat/Desktop/h420020-mapper/data/processed/kg/cr012_heldout_9_3_E0/checkpoint.json"
+ ],
+ "gold_artifact": "data/gold/pd_e2e_test_blind.csv",
+ "scorer_version": "cr017-1",
+ "provenance": {
+  "prediction_hash": "27b49b9ae590b70f04a38b24f5e8231a4ab8520b46492e52b55702b559d1519b",
+  "gold_hash": "44ff0383b3144a7a441e6746cfcc4d5793b661166fb6f45a268e3d1e1cf976fa",
+  "config_hash": "41100298d0e2c31e863f027a8bb9c5bccfad7e0fcb7bd4451ec595aeffc85105",
+  "code_revision": "313b023276c6950b1873f15523d4cddc203313f6",
+  "scorer_files_sha256": {
+   "src/cumap/cr012/scoring.py": "f64e1b65c5fa38c0",
+   "src/cumap/cr017/hierarchy.py": "b1523a34fe369a25",
+   "src/cumap/cr017/headline.py": "f335336a475b3215"
+  }
+ }
+}

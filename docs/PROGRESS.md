@@ -85,3 +85,6 @@ Complete, NO_ELIGIBLE_DEVELOPMENT_ARM. Development (10 exposed P&D sections, mod
 
 ## CR-016 cross-section associative memory with HippoRAG 2 (2026-10-13/14)
 Complete: DEVELOPMENT_ONLY_FEASIBILITY, no production change. STOP 1 (isolated environment, stubbed smoke test), STOP 2 (1,140 causal retrieval cases: HippoRAG vs dense Recall@5 0.659 vs 0.632, MRR 0.530 vs 0.492, associative slice +0.128), STOP 2B ($0 audit: candidate injection is inert under the frozen canonicalisation gate and band). STOP 3-6 not run; fresh sections untouched; spend about $0.81. Reports in `reports/cr016/`.
+
+## CR-017 simplified end-to-end evaluation framework (2026-10-14)
+READY_FOR_CLOSURE (merge awaiting Research). Five frozen headline metrics (Concept F1, Ancestor Hierarchy F1, Pair Recall, Relation Macro F1 with low-support warning, Strict E2E Edge F1); replay over frozen CR-012 artefacts with 0 model calls and 0 of 118 frozen files changed; held-out E0 = 0.643 / 0.114 / 0.163 / 0.484 / 0.053, strict/concept/pair recall exactly equal to frozen CR-012 at E0-E4; scorecard (HEADLINE/DIAGNOSTICS/AUDIT/ORGANISATION) in report and explorer; 826 tests pass; repo-wide ruff has 12 pre-existing CR-014/015/016 findings identical to mainline. Open: lint policy, SciNLP Relation Macro definition. Evidence: reports/cr017/FINAL_DECISION_EVIDENCE.md.

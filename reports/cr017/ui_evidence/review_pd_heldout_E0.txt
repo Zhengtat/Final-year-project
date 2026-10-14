@@ -1,0 +1,63 @@
+Scorecard EVALUATION scorer cr017-1
+P&amp;D-E2E held-out (7 sections, headline) P&amp;D-E2E pilot (development) SciNLP held-out (3 documents; separate benchmark)
+E0 E1 E2 E3 E4
+HEADLINE — five metrics only · no composite score
+Concept F1
+0.643
+0.589 – 0.698 †
+427/363/112 (tp/fp/fn)
+Ancestor Hierarchy F1
+0.114
+0.077 – 0.156 †
+7/41/68 (tp/fp/fn)
+Pair Recall
+0.163
+0.139 – 0.186 †
+53/326
+Relation Macro F1
+0.484
+0.302 – 0.632 †
+⚠ low support: 6 of 12 classes ≤3 gold edges
+Strict E2E Edge F1
+0.053
+0.030 – 0.076 †
+16/158/410 (tp/fp/fn)
+Section-bootstrap intervals are descriptive when fewer than 10 units. † = descriptive section-bootstrap interval. Sections: 4.4, 4.5, 5.4, 6.3, 7.1, 8.2, 9.3. Levels E1–E4 are oracle diagnostics (gold injected at one stage), not independent systems.
+DIAGNOSTICS — detailed components, not headline
+Relation Macro F1 — per-class support table
+relation support tp fp fn F1
+acts_on 12 4 0 8 0.500
+connected_to 1 0 0 1 0.000 ⚠ low support
+contrasts_with 7 1 0 6 0.250
+decreases 1 1 0 0 1.000 ⚠ low support
+has_property 1 1 0 0 1.000 ⚠ low support
+has_purpose 6 1 0 5 0.286
+increases 1 0 0 1 0.000 ⚠ low support
+is_a 8 7 2 1 0.824
+part_of 3 1 2 2 0.333 ⚠ low support
+performs 1 1 2 0 0.500 ⚠ low support
+requires 0 0 2 0 — excluded (no gold)
+uses 12 6 1 6 0.632
+Micro P/R/F1 0.719 / 0.434 / 0.541 · direction accuracy 0.957
+Per-section components
+section concept F1 hierarchy F1 pair recall strict F1
+4.4 0.751 0.133 9 / 49 0.070
+4.5 0.634 0.182 5 / 41 0.063
+5.4 0.566 0.167 8 / 37 0.096
+6.3 0.525 0.000 4 / 34 0.000
+7.1 0.608 0.074 10 / 55 0.021
+8.2 0.752 0.174 9 / 51 0.085
+9.3 0.648 0.074 8 / 59 0.039
+Hierarchy — direct-parent F1
+7 / 39 / 57 (tp/fp/fn) → F1 0.127
+Legacy detailed metrics (typed canonical node, typed mentions, identity, relation confusion, qualifiers, alignment) remain in diagnostics.json.
+AUDIT
+Per-item traces and the frozen failure attribution are in the Failure map and Gold relations tabs; provenance and hashes are in reports/cr017/diagnostics.json and historical_replay.md .
+ORGANISATION — structural view, not accuracy
+Organisation metrics describe how the graph is arranged. They are not accuracy metrics and never enter a headline card.
+community modularity and stability
+centrality / PageRank / k-core
+centre / inner / middle / outer rings
+principle / core / detail distribution
+chapter importance trajectories
+Open the production graph and choose the Rings layout to see these structures; they are not scored here.

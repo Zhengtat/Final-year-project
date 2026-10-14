@@ -273,3 +273,17 @@ Format: date · decision · reason · alternatives considered.
 
 - **2026-10-14 · CR-016 final (Research).** Final status DEVELOPMENT_ONLY_FEASIBILITY; production change NONE; STOP 3 NOT_RUN, STOP 4 NOT_REQUIRED, STOP 5 NOT_RUN, STOP 6 NOT_REQUIRED; fresh sections (4.3, 6.2, 5.2, 6.5, 9.1, 9.4, 5.1, 8.1) preserved untouched; spend about $0.81; merged to main, tag `cr-016-complete`. Similarity gates unchanged; an alternative memory consumer is deferred to a future CR. Evidence: `reports/cr016/FINAL_DECISION_EVIDENCE.md`.
 - Reason: Research decision after STOP 2/2B. Alternatives: pipeline ablation with a gate bypass (rejected by Research).
+
+- **2026-10-14 · CR-017 STOP 1/2.** Decision (Research): STOP 1 PASS; hierarchy gold supported for P&D-E2E (79 is_a edges, 8 of 9 sections), HIERARCHY_GOLD_GAP / NOT_EVALUABLE for SciNLP; no extra hierarchy annotation; STOP 3 relation-scorer semantics frozen as proposed (other / no_relation / rejected = false negative for the gold class, no ontology false positive; direction and micro F1 as diagnostics). STOP 2 implemented: `cumap/cr017/hierarchy.py`, `configs/cr017_eval.yaml`, 16 fixtures; frozen hierarchy relation set {is_a}, per-section closure, set semantics, cycles detected and reported. Open: headline Concept F1 variant.
+- Reason: Research rulings 2026-10-14. Alternatives: include instantiates / part_of (rejected by spec); direct-parent scoring (too brittle).
+
+## 2026-10-14 · CR-017 STOP 4: historical replay and SciNLP scope
+- **Decision:** replay the unified evaluator over frozen CR-012 artefacts (`cumap.cr017.replay`, 0 model calls, 118 frozen files hashed before/after, 0 changed). P&D held-out values for strict F1, concept F1 and pair recall equal the frozen CR-012 numbers exactly at E0–E4. SciNLP is reported separately with mention-level analogues only (entity strict as concept analogue, reached/endpoint-ok pair recall, relation strict); hierarchy `NOT_EVALUABLE` (no identity gold); Relation Macro F1 `NOT_COMPUTED`, flagged for a Research decision.
+- **Test guard:** `tests/test_cr012_stop1.py` isolation list now allows `cr017` (scoring-only, builds no prompts, calls no model), alongside `cr012`/`explain`.
+- **Reason:** compatibility check without inventing gold; SciNLP has no per-class classifier outcomes at mention level.
+- **Alternatives:** defining SciNLP macro F1 silently (rejected); pooling with P&D (forbidden).
+
+## 2026-10-14 · CR-017 STOP 5: report/UI integration
+- **Decision:** scorecard generated from the machine-readable replay outputs (`cumap.cr017.scorecard`) into `reports/cr017/scorecard.md` and a separate `scorecard-gz` payload in the KG explorer evaluation overlay (new default tab "Scorecard": HEADLINE five cards / DIAGNOSTICS expandable / AUDIT pointers / ORGANISATION panel marked "not accuracy"). Intervals over fewer than 3 sections are not shown; 3-9 sections are marked descriptive. Legacy detailed metrics and the CR-013 overlay payload are unchanged.
+- **Reason:** spec §24 separation of semantic accuracy from organisation, no composite score, old detail kept.
+- **Alternatives:** adding the scorecard to the CR-013 eval payload (rejected: that payload is pinned equal to `build_eval_payload()`); recomputing in JS (rejected: single source of numbers).

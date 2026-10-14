@@ -4,8 +4,8 @@
 // own payload, and is never reachable from the production P&D views. Codes are observations of where a benchmark object was
 // lost in the frozen run; they are not decision rules for the production pipeline.
 // ====================================================================================================================
-const EV_TABS = [['evmap','Failure map'],['evlist','Gold relations']];
-const EV_PANES = ['evmap','evlist'];
+const EV_TABS = [['evscore','Scorecard'],['evmap','Failure map'],['evlist','Gold relations']];
+const EV_PANES = ['evscore','evmap','evlist'];
 const EV_COL = {N0:'#C23B3B',N1:'#D55E00',C0:'#B8A400',C1:'#2E8B8B',P0:'#E69F00',R0:'#56B4E9',R1:'#0072B2',R2:'#8C4FD8',R3:'#7A7A7A',E0:'#A0522D',recovered:'#009E73'};
 const EV_SHORT = {N0:'endpoint never extracted',N1:'endpoint span wrong',C0:'concept split',C1:'false merge',P0:'pair never sent to the classifier',R0:'classifier said no relation',R1:'wrong relation',R2:'wrong direction',R3:'type / qualifier',E0:'evidence invalid'};
 let EV = null, EVLOAD = null;
@@ -27,8 +27,8 @@ const pct = (a,b) => b? (100*a/b).toFixed(1)+'%' : '—';
 
 // ---------------------------------------------------------------- entering / leaving the mode (explicit, opt-in)
 function evEnter(){
-  S.mode='ev'; S.sel=null; S.tab='evmap'; S.G=null; S.doc=null;
-  chrome(); banner(); evSide(); tabs(); showTab('evmap'); renderDetail(true); hashWrite();
+  S.mode='ev'; S.sel=null; S.tab='evscore'; S.G=null; S.doc=null;
+  chrome(); banner(); evSide(); tabs(); showTab('evscore'); renderDetail(true); hashWrite();
 }
 function evBanner(){
   const names={scinlp:'SciNLP held-out test documents',pd:'P&D held-out sections (not the Chapters 1–3 graph)'};
@@ -49,6 +49,7 @@ async function renderEvalTab(k){
   const el=$('v-'+k); if(!el) return;
   el.innerHTML='<p class="na">Loading the evaluation overlay…</p>';
   try{ await loadEval(); }catch(e){ el.innerHTML='<p class="na">The overlay could not be loaded in this browser ('+esc(e&&e.message||e)+').</p>'; return; }
+  if(k==='evscore'){ await renderScorecard(el); return; }
   (k==='evmap'?viewEvMap:viewEvList)(el);
 }
 function codeChip(c){ return c? '<span class="chip" style="border-left:4px solid '+EV_COL[c]+'" title="'+esc(EV.codes[c]||'')+'">'+esc(c)+'</span>' : '<span class="chip" style="border-left:4px solid '+EV_COL.recovered+'">no node-level loss</span>'; }
@@ -114,4 +115,56 @@ function evDetailHTML(){
 }
 function wireEvDetail(box){
   const b=box.querySelector('#ev-opengraph'); if(b) b.onclick=()=>{ const doc=DATA.sci.docs.find(x=>x.doc_id===b.dataset.d); setMode('sci',doc); S.F.missed=true; side(); const e=S.G.edges.find(x=>x.id===b.dataset.e); if(e) selectEdge(e); draw(); };
+}
+
+// ====================================================================================================================
+// CR-017 STOP 5: SCORECARD. HEADLINE (five metrics) / DIAGNOSTICS (expandable) / AUDIT (pointer) / ORGANISATION (separate, not accuracy).
+// Rendered from its own payload (reports/cr017/*.json via cumap.cr017.scorecard); no number is computed in the page.
+// ====================================================================================================================
+let SC = null;
+const SCS = {set:'pd_heldout', level:'E0'};
+async function loadScorecard(){
+  if(SC) return SC;
+  const raw=(($('scorecard-gz')||{}).textContent||'').trim(); if(raw.length<10) return null;
+  const bin=Uint8Array.from(atob(raw),c=>c.charCodeAt(0));
+  const stream=new Blob([bin]).stream().pipeThrough(new DecompressionStream('gzip'));
+  SC=JSON.parse(await new Response(stream).text()); return SC;
+}
+const n3 = v => v==null? '—' : v.toFixed(3);
+function scCard(c){
+  const val = c.value==null? '<b class="na">'+esc(c.status)+'</b>' : '<b>'+n3(c.value)+'</b>';
+  const ci = c.ci95? '<div class="small">'+n3(c.ci95[0])+' – '+n3(c.ci95[1])+' †</div>' : '';
+  const warn = c.key==='relation_macro_f1' && c.low_support_classes.length ? '<div class="small" style="color:var(--warn)">⚠ low support: '+c.low_support_classes.length+' of '+c.n_classes+' classes ≤3 gold edges</div>' : '';
+  const an = c.analogue? '<div class="small">mention-level analogue</div>' : '';
+  const why = c.reason? '<div class="small">'+esc(c.reason)+'</div>' : '';
+  return '<div class="card sccard" data-metric="'+esc(c.key)+'"><div class="small">'+esc(c.label)+'</div><div class="big"><div>'+val+'</div></div>'+ci+'<div class="small">'+esc(c.counts)+'</div>'+warn+an+why+'</div>';
+}
+async function renderScorecard(el){
+  const P=await loadScorecard();
+  if(!P){ el.innerHTML='<p class="na">The scorecard payload is not present in this build (run <code>cumap.cr017.replay</code> first).</p>'; return; }
+  const d=P.datasets[SCS.set]; if(!d.levels[SCS.level]) SCS.level=Object.keys(d.levels)[0]; const L=d.levels[SCS.level];
+  let o='<h2 class="vh">Scorecard <span class="chip">EVALUATION</span> <span class="chip">scorer '+esc(P.meta.scorer_version)+'</span></h2>';
+  o+='<div class="tour" style="margin-bottom:8px">'+Object.entries(P.datasets).map(([k,v])=>'<button data-sc-set="'+k+'" class="'+(k===SCS.set?'on':'')+'">'+esc(v.label)+'</button>').join('')+'</div>';
+  o+='<div class="tour" style="margin-bottom:8px">'+Object.keys(d.levels).map(k=>'<button data-sc-level="'+k+'" class="'+(k===SCS.level?'on':'')+'">'+k+'</button>').join('')+'</div>';
+  if(d.note) o+='<div class="banner warn">'+esc(d.note)+'</div>';
+  o+='<h3 class="jh">HEADLINE <span class="small">— five metrics only · no composite score</span></h3><div class="scgrid" style="display:flex;flex-wrap:wrap;gap:10px">'+L.headline.map(scCard).join('')+'</div>';
+  o+='<p class="small">'+esc(P.meta.interval_note)+' † = descriptive section-bootstrap interval. Sections: '+esc(L.sections.join(', '))+'. Levels E1–E4 are oracle diagnostics (gold injected at one stage), not independent systems.</p>';
+  const dg=L.diagnostics||{};
+  o+='<h3 class="jh">DIAGNOSTICS <span class="small">— detailed components, not headline</span></h3>';
+  if(dg.relation_classes&&dg.relation_classes.length){
+    o+='<details class="scdiag"><summary>Relation Macro F1 — per-class support table</summary><table class="t"><tr><th>relation</th><th>support</th><th>tp</th><th>fp</th><th>fn</th><th>F1</th><th></th></tr>'+dg.relation_classes.map(r=>'<tr><td>'+esc(r.relation)+'</td><td>'+r.support+'</td><td>'+r.tp+'</td><td>'+r.fp+'</td><td>'+r.fn+'</td><td>'+n3(r.f1)+'</td><td>'+(!r.support?'excluded (no gold)':(r.low_support?'⚠ low support':''))+'</td></tr>').join('')+'</table>'+
+      (dg.relation_micro?'<p class="small">Micro P/R/F1 '+n3(dg.relation_micro.precision)+' / '+n3(dg.relation_micro.recall)+' / '+n3(dg.relation_micro.f1)+' · direction accuracy '+n3(dg.direction_accuracy)+'</p>':'')+'</details>';
+  }
+  if(dg.per_section&&Object.keys(dg.per_section).length){
+    o+='<details class="scdiag"><summary>Per-section components</summary><table class="t"><tr><th>section</th><th>concept F1</th><th>hierarchy F1</th><th>pair recall</th><th>strict F1</th></tr>'+Object.entries(dg.per_section).map(([s,v])=>'<tr><td>'+esc(s)+'</td><td>'+n3(v.concept_f1)+'</td><td>'+(v.hierarchy_f1==null?'—':n3(v.hierarchy_f1))+'</td><td>'+(v.pair_recall?v.pair_recall[0]+' / '+v.pair_recall[1]:'—')+'</td><td>'+n3(v.strict_f1)+'</td></tr>').join('')+'</table></details>';
+  }
+  if(dg.direct_parent_f1) o+='<details class="scdiag"><summary>Hierarchy — direct-parent F1</summary><p class="small">'+dg.direct_parent_f1.tp+' / '+dg.direct_parent_f1.fp+' / '+dg.direct_parent_f1.fn+' (tp/fp/fn) → F1 '+n3(dg.direct_parent_f1.f1)+'</p></details>';
+  o+='<p class="small">'+esc(P.meta.legacy_note)+'</p>';
+  o+='<h3 class="jh">AUDIT</h3><p class="small">Per-item traces and the frozen failure attribution are in the <a class="lnk" id="sc-to-map">Failure map</a> and <a class="lnk" id="sc-to-list">Gold relations</a> tabs; provenance and hashes are in <code>reports/cr017/diagnostics.json</code> and <code>historical_replay.md</code>.</p>';
+  const og=P.organisation;
+  o+='<div class="card scorg" style="border-style:dashed"><h3 class="jh" style="margin-top:0">'+esc(og.title)+'</h3><p class="small">'+esc(og.note)+'</p><ul class="small">'+og.items.map(i=>'<li>'+esc(i)+'</li>').join('')+'</ul><p class="small">Open the production graph and choose the Rings layout to see these structures; they are not scored here.</p></div>';
+  el.innerHTML=o;
+  el.querySelectorAll('button[data-sc-set]').forEach(b=>b.onclick=()=>{ SCS.set=b.dataset.scSet; renderScorecard(el); });
+  el.querySelectorAll('button[data-sc-level]').forEach(b=>b.onclick=()=>{ SCS.level=b.dataset.scLevel; renderScorecard(el); });
+  const m=el.querySelector('#sc-to-map'); if(m) m.onclick=()=>showTab('evmap'); const l=el.querySelector('#sc-to-list'); if(l) l.onclick=()=>showTab('evlist');
 }
