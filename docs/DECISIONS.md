@@ -276,3 +276,9 @@ Format: date · decision · reason · alternatives considered.
 
 - **2026-10-14 · CR-017 STOP 1/2.** Decision (Research): STOP 1 PASS; hierarchy gold supported for P&D-E2E (79 is_a edges, 8 of 9 sections), HIERARCHY_GOLD_GAP / NOT_EVALUABLE for SciNLP; no extra hierarchy annotation; STOP 3 relation-scorer semantics frozen as proposed (other / no_relation / rejected = false negative for the gold class, no ontology false positive; direction and micro F1 as diagnostics). STOP 2 implemented: `cumap/cr017/hierarchy.py`, `configs/cr017_eval.yaml`, 16 fixtures; frozen hierarchy relation set {is_a}, per-section closure, set semantics, cycles detected and reported. Open: headline Concept F1 variant.
 - Reason: Research rulings 2026-10-14. Alternatives: include instantiates / part_of (rejected by spec); direct-parent scoring (too brittle).
+
+## 2026-10-14 · CR-017 STOP 4: historical replay and SciNLP scope
+- **Decision:** replay the unified evaluator over frozen CR-012 artefacts (`cumap.cr017.replay`, 0 model calls, 118 frozen files hashed before/after, 0 changed). P&D held-out values for strict F1, concept F1 and pair recall equal the frozen CR-012 numbers exactly at E0–E4. SciNLP is reported separately with mention-level analogues only (entity strict as concept analogue, reached/endpoint-ok pair recall, relation strict); hierarchy `NOT_EVALUABLE` (no identity gold); Relation Macro F1 `NOT_COMPUTED`, flagged for a Research decision.
+- **Test guard:** `tests/test_cr012_stop1.py` isolation list now allows `cr017` (scoring-only, builds no prompts, calls no model), alongside `cr012`/`explain`.
+- **Reason:** compatibility check without inventing gold; SciNLP has no per-class classifier outcomes at mention level.
+- **Alternatives:** defining SciNLP macro F1 silently (rejected); pooling with P&D (forbidden).
