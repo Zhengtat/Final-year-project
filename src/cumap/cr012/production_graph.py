@@ -59,7 +59,9 @@ def grounded_spans(
             stats["nodes_with_no_locatable_evidence_quote"] += 1
             continue
         forms = [c["canonical_name"], *c.get("aliases", [])]
-        matcher = MentionMatcher({f.lower(): c["concept_id"] for f in forms if f})
+        matcher = MentionMatcher(
+            {f.lower(): c["concept_id"] for f in forms if f}, mode="token"
+        )  # frozen CR-012 scorer
         for a, b in wins:
             for m in matcher.find(text[a:b]):
                 cands.append((a + m.start, a + m.end, c["concept_id"]))

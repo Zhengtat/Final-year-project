@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import copy
 import hashlib
+import os
 from pathlib import Path
 
 from cumap.config import REPO_ROOT
@@ -41,9 +42,19 @@ def replay_pair_pool(
     retained_stats = copy.deepcopy(cp.selection_stats)
 
     cp2 = load_checkpoint(run_dir)  # an independent copy that select_stage may overwrite in memory
-    stats = sr.select_stage(
-        cp2, sections, registry, embed_fn, budget=budget, use_anchors=use_anchors
-    )
+    prev = os.environ.get("CUMAP_MATCHING")
+    os.environ["CUMAP_MATCHING"] = retained_stats.get(
+        "matching_mode", "token"
+    )  # CR-020: replay with the run's own matching
+    try:
+        stats = sr.select_stage(
+            cp2, sections, registry, embed_fn, budget=budget, use_anchors=use_anchors
+        )
+    finally:
+        if prev is None:
+            os.environ.pop("CUMAP_MATCHING", None)
+        else:
+            os.environ["CUMAP_MATCHING"] = prev
     mismatches: list[str] = []
     if [p["pair_id"] for p in cp2.selected_pairs] != retained_selected:
         mismatches.append("selected_pairs ids/order differ from the retained selected set")

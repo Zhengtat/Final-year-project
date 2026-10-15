@@ -1,0 +1,4 @@
+# CR-020 (adopted 2026-10-15): text matching for NEW production runs. token = rule 17 as of CR-007; r1key = spans and forms
+# match when they share the CR-008 R1 name key ("prefixtuning" = "Prefix tuning" = "prefix-tuning"). Older runs record nothing and
+# replay with token; a run made with r1key records `matching_mode` in its selection_stats. CUMAP_MATCHING overrides this file.
+production_mode: r1key
