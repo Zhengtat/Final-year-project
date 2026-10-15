@@ -128,7 +128,7 @@ function wireEvDetail(box){
 // Rendered from its own payload (reports/cr017/*.json via cumap.cr017.scorecard); no number is computed in the page.
 // ====================================================================================================================
 let SC = null;
-const SCS = {set:'pd_heldout', level:'E0'};
+const SCS = {set:'pd_heldout', level:'E0', variant:'frozen'};
 async function loadScorecard(){
   if(SC) return SC;
   const raw=(($('scorecard-gz')||{}).textContent||'').trim(); if(raw.length<10) return null;
@@ -151,11 +151,14 @@ function scCard(c){
 async function renderScorecard(el){
   const P=await loadScorecard();
   if(!P){ el.innerHTML='<p class="na">The scorecard payload is not present in this build (run <code>cumap.cr017.replay</code> first).</p>'; return; }
-  const d=P.datasets[SCS.set]; if(!d.levels[SCS.level]) SCS.level=Object.keys(d.levels)[0]; const L=d.levels[SCS.level];
+  const d=P.datasets[SCS.set]; const V19=(SCS.variant==='cr019'&&P.cr019)?P.cr019.datasets[SCS.set]||null:null; const LV=V19||d.levels;
+  if(!LV[SCS.level]) SCS.level=Object.keys(LV)[0]; const L=LV[SCS.level];
   let o='<h2 class="vh">Scorecard <span class="chip">EVALUATION</span> <span class="tier">scorer '+esc(P.meta.scorer_version)+'</span></h2><p class="lede">Five scores, each from 0 (none right) to 1 (perfect). Most are <b>F1</b> scores, which balance <b>precision</b> (how many of its answers are right) and <b>recall</b> (how many of the right answers it found). Pick a dataset and a level below.</p>';
+  if(P.cr019) o+='<div class="small" style="margin-bottom:4px">Scoring</div><div class="tour" style="margin-bottom:10px;flex-direction:row;flex-wrap:wrap">'+[['frozen','Frozen (CR-017)'],['cr019','Grounding-consistent (CR-019)']].map(([k,l])=>'<button data-sc-var="'+k+'" class="'+(k===SCS.variant?'on':'')+'">'+l+'</button>').join('')+'</div>';
   o+='<div class="small" style="margin-bottom:4px">Dataset</div><div class="tour" style="margin-bottom:10px;flex-direction:row;flex-wrap:wrap">'+Object.entries(P.datasets).map(([k,v])=>'<button data-sc-set="'+k+'" title="'+esc(v.label)+'" class="'+(k===SCS.set?'on':'')+'">'+esc(SET_PLAIN[k]||v.label)+'</button>').join('')+'</div>';
-  o+='<div class="small" style="margin-bottom:4px">Level <span class="gl" title="E0 is the system on its own; E1–E4 give it the correct answer for one more step each">(E0 = the real system)</span></div><div class="tour" style="margin-bottom:10px;flex-direction:row;flex-wrap:wrap">'+Object.keys(d.levels).map(k=>'<button data-sc-level="'+k+'" class="'+(k===SCS.level?'on':'')+'">'+k+'</button>').join('')+'</div>';
+  o+='<div class="small" style="margin-bottom:4px">Level <span class="gl" title="E0 is the system on its own; E1–E4 give it the correct answer for one more step each">(E0 = the real system)</span></div><div class="tour" style="margin-bottom:10px;flex-direction:row;flex-wrap:wrap">'+Object.keys(LV).map(k=>'<button data-sc-level="'+k+'" class="'+(k===SCS.level?'on':'')+'">'+k+'</button>').join('')+'</div>';
   if(d.note) o+='<div class="banner warn">'+esc(d.note)+'</div>';
+  if(V19) o+='<div class="banner">'+esc(P.cr019.note)+'</div>';
   o+='<h3 class="jh">Main scores <span class="tier">HEADLINE</span> <span class="small" style="font-weight:400">· five scores, never added up into one (no composite score)</span></h3><div class="scgrid" style="display:flex;flex-wrap:wrap;gap:10px">'+L.headline.map(scCard).join('')+'</div>';
   o+='<p class="small">† A rough range from resampling the test sections; with fewer than 10 sections it is only a guide. Tested on: '+esc(L.sections.join(', '))+'.</p>';
   o+='<details class="scdiag" open><summary>What do the levels E0 – E4 mean?</summary><table class="t"><tr><th>level</th><th>meaning</th></tr>'+
@@ -181,6 +184,7 @@ async function renderScorecard(el){
   o+='<div class="card scorg" style="border-style:dashed"><h3 class="jh" style="margin-top:0">'+esc(og.title)+'</h3><p class="small">'+esc(og.note)+'</p><ul class="small">'+og.items.map(i=>'<li>'+esc(i)+'</li>').join('')+'</ul><p class="small">To see these, open the P&amp;D graph and choose the Rings layout. They are not scored here.</p></div>';
   el.innerHTML=o;
   el.querySelectorAll('button[data-sc-set]').forEach(b=>b.onclick=()=>{ SCS.set=b.dataset.scSet; if(S.mode==='ev'){ if(DS_OF_SET[SCS.set]){ ES.ds=DS_OF_SET[SCS.set]; ES.code=''; ES.unit=''; ES.sel=null; evSide(); } evBanner(); } renderScorecard(el); });
+  el.querySelectorAll('button[data-sc-var]').forEach(b=>b.onclick=()=>{ SCS.variant=b.dataset.scVar; renderScorecard(el); });
   el.querySelectorAll('button[data-sc-level]').forEach(b=>b.onclick=()=>{ SCS.level=b.dataset.scLevel; renderScorecard(el); });
   const m=el.querySelector('#sc-to-map'); if(m) m.onclick=()=>showTab('evmap'); const l=el.querySelector('#sc-to-list'); if(l) l.onclick=()=>showTab('evlist');
 }

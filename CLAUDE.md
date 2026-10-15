@@ -79,6 +79,7 @@ uv run streamlit run src/cumap/app/review_app.py
 32. **(CR-013) Replayed and joined data are labelled.** A `REPLAYED` layer (frozen deterministic code, no model call) is valid only if it reproduces the retained selected set exactly, and is never described as originally recorded; joins are exact, run-scoped and deterministic (`RECOVERABLE_BY_DETERMINISTIC_JOIN` with method and key), otherwise ambiguous/unavailable.
 33. **(CR-013) Explanation text is deterministic and gold-free in production.** Text comes from fixed templates over trace fields (no LLM, no private reasoning); production explain modules must not import gold or `cumap.cr012`; the evaluation overlay lives only in `why_not_eval.py`.
 34. **(CR-013) Evaluation overlays are separate and frozen.** Gold-derived explanation (failure codes, gold comparison) lives only in `eval_adapter.py` / `why_not_eval.py` / `eval_report.py` and the opt-in evaluation mode with its own payload; it consumes frozen CR-012 outputs, never reruns or reinterprets them, never pools datasets, and never presents failure codes as production decision rules.
+35. **(CR-019) Scores name their grounding variant.** The occurrence index (`cr019/occurrences.py`) is a separate layer that never writes mentions; every rescored number states its variant (`FROZEN`, `IDX-P1`, ...) and is reported beside, never instead of, the frozen CR-012 / CR-017 number; a predicted edge that cannot be placed is counted as a false positive, never silently dropped.
 
 ## OpenAI usage
 - Use the Responses API with Structured Outputs:

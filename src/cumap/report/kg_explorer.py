@@ -136,6 +136,7 @@ def build_scinlp() -> dict:
     from cumap.cr012 import scoring as S
     from cumap.cr012.adapters import SciNLPAdapter
     from cumap.cr012.stop4_score import sc_attribution
+    from cumap.cr019 import variants as V19
 
     res = json.loads((REPO_ROOT / "reports/cr012/stop4_heldout_results.json").read_text())[
         "scinlp"
@@ -143,12 +144,16 @@ def build_scinlp() -> dict:
     ad = SciNLPAdapter()
     sym = ad.symmetric_relations()
     gold_all = ad.gold("test")
+    c19_path = REPO_ROOT / "reports/cr019/stage_a.json"
+    c19 = json.loads(c19_path.read_text())["stage_a"]["scinlp"] if c19_path.exists() else None
     docs = []
     for doc in ad.load_documents("test", paragraph_every=SR.PARAGRAPH_EVERY):
         rid = f"cr012_scinlp_heldout_{doc.doc_key.replace('.', '_').replace('-', '_')}_E0"
         path = KG / rid / "checkpoint.json"
         cp = json.loads(path.read_text())
         pred = SR.predict(doc, cp)
+        # CR-019 occurrence index (labelled; the frozen view is unchanged)
+        ipred = V19.sc_predict_indexed(doc, cp)
         g = gold_all[doc.doc_key]
         gold_spans = {m.span for m in g.mentions}
         gold_typed = {(m.span, m.type) for m in g.mentions}
@@ -183,11 +188,23 @@ def build_scinlp() -> dict:
             })  # fmt: skip
             for s0 in n.mentions:
                 span_node.setdefault(s0, n.node_id)
+        frozen_ids = {n.node_id for n in pred["nodes"]}
+        index_node = {
+            s0: n.node_id
+            for n in ipred["nodes"]
+            if n.node_id in frozen_ids
+            for s0 in n.mentions
+            if s0 not in span_node
+        }
+        iedge = {(e.src, e.tgt, e.relation): e for e in ipred["edges"]}
         edges, matched_keys = [], set()
         for i, e in enumerate(pred["edges"]):
             proj, _ = S.project_edges_to_mentions(pred["nodes"], [e])
             keys = [S._rel_key(a, b, rel, sym) for a, b, rel, _st, _tt in proj]
             match = any(k in gold_keys for k in keys)
+            ie = iedge.get((e.src, e.tgt, e.relation))
+            iproj = S.project_edges_to_mentions(ipred["nodes"], [ie])[0] if ie else []
+            match19 = any(S._rel_key(a, b, rel, sym) in gold_keys for a, b, rel, _st, _tt in iproj)
             matched_keys |= {k for k in keys if k in gold_keys}
             cands = [
                 r for r in by_pair.get(frozenset((e.src, e.tgt)), []) if r["relation"] == e.relation
@@ -196,7 +213,7 @@ def build_scinlp() -> dict:
             edges.append({
                 "id": f"{doc.doc_key}-e{i}", "kind": "pred", "s": e.src, "t": e.tgt, "rel": e.relation, "statement": r.get("statement", NA), "quote": r.get("evidence_quote", NA),
                 "sentence": r.get("pair", {}).get("sentence", NA), "qual": r.get("qualifiers", NA), "model_direction": r.get("direction", NA),
-                "matches_gold": match, "grounded": bool(proj), "confidence": NA, "family_reason": r.get("family_reason", NA),
+                "matches_gold": match, "grounded": bool(proj), "matches_gold_cr019": match19, "placed_cr019": bool(iproj), "confidence": NA, "family_reason": r.get("family_reason", NA),
                 "grounding": r.get("grounding", NA), "hashes": r.get("prompt_hashes", NA),
             })  # fmt: skip
         # gold relations: matched / missed with the earliest-failure code (frozen attribution)
@@ -213,10 +230,14 @@ def build_scinlp() -> dict:
             gold_rels.append(item)
             if matched:
                 continue
-            ends = []
+            ends, by_index = [], False
             for sp in (r.src_span, r.tgt_span):
                 if sp in span_node:
                     ends.append(span_node[sp])
+                # CR-019: the occurrence belongs to a predicted node, so no grey duplicate is drawn
+                elif sp in index_node:
+                    ends.append(index_node[sp])
+                    by_index = True
                 else:
                     gid = f"ghost-{sp[0]}-{sp[1]}"
                     ghosts.setdefault(gid, {
@@ -226,7 +247,7 @@ def build_scinlp() -> dict:
                     ends.append(gid)
             edges.append({
                 "id": f"{doc.doc_key}-g{miss_i}", "kind": "gold_missed", "s": ends[0], "t": ends[1], "rel": r.relation, "statement": NA, "quote": NA,
-                "sentence": item["sentence"], "qual": NA, "model_direction": NA, "matches_gold": False, "grounded": True, "confidence": NA, "code": item["code"],
+                "sentence": item["sentence"], "qual": NA, "model_direction": NA, "matches_gold": False, "grounded": True, "confidence": NA, "code": item["code"], "attached_by_index": by_index,
             })  # fmt: skip
             miss_i += 1
         nodes += list(ghosts.values())
@@ -248,6 +269,8 @@ def build_scinlp() -> dict:
             "pred_spans": [[a, b, n.node_id] for n in pred["nodes"] for a, b in n.mentions],
             "gold_spans": [[m.span[0], m.span[1], m.type] for m in g.mentions], "gold_rels": gold_rels,
             "nodes": nodes, "edges": edges,
+            "cr019": ({"variant": V19.PRIMARY, "rel_prf": [c19[V19.PRIMARY]["strict_relation_per_document"][doc.doc_key][k] for k in ("precision", "recall", "f1")],
+                       "edges_matching": sum(1 for e in edges if e.get("matches_gold_cr019")), "edges_not_scored_frozen": sum(1 for e in edges if e["kind"] == "pred" and not e["grounded"])} if c19 else None),
         })  # fmt: skip
     micro = res["aggregates"]["rel"]["micro"]
     return {
@@ -259,6 +282,16 @@ def build_scinlp() -> dict:
             "recall": micro["recall"],
             "ci_status": res["CI_status"],
         },
+        "cr019": (
+            {
+                "variant": V19.PRIMARY,
+                **{
+                    k: c19[V19.PRIMARY]["strict_relation"][k] for k in ("precision", "recall", "f1")
+                },
+            }
+            if c19
+            else None
+        ),
     }
 
 
