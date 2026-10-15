@@ -53,17 +53,28 @@ def _card(key: str, label: str, field: str, m: dict, analogue: bool = False) -> 
         m.get("ci95") if units >= MIN_CI_UNITS else None
     )  # 1-2 sections give a degenerate interval: show none
     classes = m.get("classes") or {}
+    precision, recall = m.get("precision"), m.get("recall")
+    # macro P/R: same class set and zero-fill rule as the macro F1
+    if key == "relation_macro_f1" and classes:
+        scored = [v for v in classes.values() if v["support"] > 0]
+        precision = sum(v["precision"] or 0.0 for v in scored) / len(scored) if scored else None
+        recall = sum(v["recall"] or 0.0 for v in scored) / len(scored) if scored else None
+    if status in ("NOT_EVALUABLE", "NOT_COMPUTED"):
+        precision = recall = None
     low = sorted(c for c, v in classes.items() if v.get("low_support"))
     return {
         "key": key,
         "label": label,
         "value": value,
+        "precision": precision,
+        "recall": recall,
         "status": status or "OK",
         "reason": m.get("reason"),
         "ci95": ci,
         "ci_status": m.get("ci_status"),
         "units": units,
         "counts": counts,
+        **{k: m[k] for k in ("tp", "fp", "fn", "reached", "denominator") if k in m},
         "analogue": analogue,
         "low_support_classes": low,
         "n_classes": len(classes),
