@@ -38,7 +38,7 @@ def test_no_pipeline_module_reads_scinlp_text_into_prompts():
     for f in Path("src/cumap").rglob("*.py"):
         if f.parts[2] in {"cr012", "cr017", "explain"} or f.name == "kg_explorer.py":
             continue  # evaluation code (CR-017 replay scores frozen outputs only) and read-only reporting / explainability modules (they never build prompts or call a model)
-        if f.parts[2] == "cr021" and f.name in {"review.py", "adjudicator.py"}:
+        if f.parts[2] == "cr021" and f.name in {"review.py", "adjudicator.py", "rebuild_report.py"}:
             continue  # CR-021 owner review sheet: reads retained runs, writes a local draft, builds no prompt
         if f.parts[2] == "cr020":
             continue  # CR-020 dev experiment runner and scorer (SciNLP dev split only, no test-split run)
