@@ -336,3 +336,7 @@ residual candidate space is dominated by related-but-distinct concepts (natural 
 the remaining duplicates (AUC 0.40-0.55). The production canonicalisation architecture is therefore unchanged. No automatic ML/LLM merging is
 eligible. One finding is kept for future work: a hard node-type guard can reject a genuine SAME pair when the type labels are noisy
 (`TYPE_GUARD_FALSE_NEGATIVE`); a soft type conflict routed to review is a possible future design, not part of the current architecture.
+
+## Occurrence index and grounding-consistent evaluation (CR-019)
+`src/cumap/cr019/occurrences.py` lists, for a text unit, every longest-match occurrence (rule 17) of every name and alias of each node with a recorded mention there, with a position marker (unit, paragraph, sentence, character span). A surface shared by several nodes is owned by the node whose recorded evidence windows contain it, else it is ambiguous and owned by none (keeps the CR-012 `invalid_runs.md` fix). It is a separate layer: it never writes mentions or aliases (rule 24 unchanged). `cr019/variants.py` feeds it to the frozen CR-012 / CR-017 scorers as node positions; the pre-registered SciNLP variant `IDX-P1` places each edge in its own evidence sentence and counts every unplaced edge as a false positive. Frozen results are never replaced; variants are reported beside them (`reports/cr019/`).
+

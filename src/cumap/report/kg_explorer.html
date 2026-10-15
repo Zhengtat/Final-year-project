@@ -254,7 +254,7 @@ function banner(){
   } else {
     const h=DATA.sci.headline;
     b.innerHTML='<div class="banner warn"><b>SciNLP dataset — a test run, not the main graph.</b> The same system was run on 3 scientific papers to see how well it works outside networking. Its output is compared with a human answer key and is not part of the P&amp;D graph.'+
-    '<details><summary>Overall score</summary>Relation score (F1, from 0 to 1) <b>'+h.relation_f1.toFixed(3)+'</b> · precision '+h.precision.toFixed(3)+' · recall '+h.recall.toFixed(3)+', over all 3 papers (system as-is, level E0; scores frozen in CR-012). '+ciPlain(h.ci_status)+'</details></div>';
+    '<details><summary>Overall score</summary>Relation score (F1, from 0 to 1) <b>'+h.relation_f1.toFixed(3)+'</b> · precision '+h.precision.toFixed(3)+' · recall '+h.recall.toFixed(3)+', over all 3 papers (system as-is, level E0; scores frozen in CR-012). '+ciPlain(h.ci_status)+(DATA.sci.cr019?'<br>CR-019 grounding-consistent scoring (finds every occurrence of a concept and counts every predicted relation): F1 <b>'+DATA.sci.cr019.f1.toFixed(3)+'</b> · precision '+DATA.sci.cr019.precision.toFixed(3)+' · recall '+DATA.sci.cr019.recall.toFixed(3)+'. The frozen scorer left most predicted relations unscored.':'')+'</details></div>';
   }
 }
 
@@ -408,8 +408,12 @@ function detNode(n,dbg){
 function detEdge(e,dbg){
   const a=byId[e.s], b=byId[e.t], d=defs()[e.rel]||{}, tpl=fillTemplate(e,a,b);
   let h='<h2>'+esc(a.name)+' <span style="border-bottom:3px solid '+(e.kind==='gold_missed'?'#8b919d':relCol(e.rel))+'">— '+esc(e.rel)+' →</span> '+esc(b.name)+'</h2>';
-  if(e.kind==='gold_missed') h+='<div class="card"><h4>Missed by the system</h4>This relation is in the human answer key, but the system did not find it. Where it first went wrong: <b>'+esc(CODE_LABEL[e.code]||e.code)+'</b> <span class="small">('+esc(e.code)+')</span>.</div>';
-  else if(S.mode==='sci') h+='<span class="chip">'+(e.matches_gold?'matches the answer key':'not in the answer key')+'</span>';
+  if(e.kind==='gold_missed') h+='<div class="card"><h4>Missed by the system</h4>This relation is in the human answer key, but the system did not find it. Where it first went wrong: <b>'+esc(CODE_LABEL[e.code]||e.code)+'</b> <span class="small">('+esc(e.code)+')</span>.'+(e.attached_by_index?'<div class="small" style="margin-top:6px">It is drawn to the system\'s own concept: the system has this concept, but did not record this occurrence of it (CR-019 occurrence index).</div>':'')+'</div>';
+  else if(S.mode==='sci'){
+    h+=(e.grounded?'<span class="chip">'+(e.matches_gold?'matches the answer key':'not in the answer key')+'</span>':'<span class="chip" title="frozen CR-012 scorer: ungrounded edge, excluded">not scored</span>')+
+       (e.matches_gold_cr019!==undefined?' <span class="chip" title="CR-019 grounding-consistent scoring (IDX-P1)">CR-019: '+(e.matches_gold_cr019?'matches the answer key':(e.placed_cr019?'no match':'not placed'))+'</span>':'');
+    if(!e.grounded) h+='<div class="card" style="margin-top:8px"><h4>Why “not scored”</h4><span class="small">The frozen scorer only counts a relation if both concepts have a <i>recorded</i> mention inside the quoted sentence, and the concept stage records only a few mentions per concept. This relation could not be placed, so the frozen score counts it as neither right nor wrong. CR-019 scoring finds every occurrence of the concept names and counts every relation.</span></div>';
+  }
   h+='<dl>'+(tpl?'<dt>In plain words</dt><dd>'+tpl+'</dd>':'')+(d.definition&&d.definition!==NA?'<dt>What “'+esc(e.rel)+'” means</dt><dd class="small">'+esc(d.definition)+'</dd>':'')+
   '<dt>From the text</dt><dd><div class="sent">'+highlight(e.sentence,e.quote,a,b)+'</div><span class="small"><mark class="a" style="padding:0 4px">first concept</mark> <mark class="b" style="padding:0 4px">second concept</mark> <u>exact words the system quoted</u></span></dd>';
   if(e.statement&&e.statement!==NA) h+='<dt>The system\'s summary</dt><dd>'+esc(e.statement)+'</dd>';
@@ -447,6 +451,7 @@ function sciCard(){
   const att=Object.entries(d.attribution).filter(([c,v])=>v>0), tot=att.reduce((s,[c,v])=>s+v,0);
   let h='<h3>How it did on this paper</h3><div class="big"><div><b>'+f.toFixed(3)+'</b>relation score (F1)</div><div><b>'+p.toFixed(2)+'</b>precision</div><div><b>'+r.toFixed(2)+'</b>recall</div></div>'+
   '<div class="small">Found '+tp+' of the '+d.gold_relations+' relations in the answer key, plus '+fp+' that the answer key does not have. Concept score (F1) '+d.e0_entity_prf[2].toFixed(3)+'.</div>'+
+  (d.cr019?'<div class="small" style="margin-top:4px">With CR-019 scoring (every occurrence found, every relation counted): relation score (F1) <b>'+d.cr019.rel_prf[2].toFixed(3)+'</b> · precision '+d.cr019.rel_prf[0].toFixed(2)+' · recall '+d.cr019.rel_prf[1].toFixed(2)+'. '+d.cr019.edges_not_scored_frozen+' of its relations were not scored by the frozen scorer.</div>':'')+
   '<div class="small" style="margin-top:4px"><b>Precision</b>: how many of its answers were right. <b>Recall</b>: how many of the right answers it found. <b>F1</b> balances the two (1 is perfect).</div>';
   if(tot){ h+='<h3>Why relations were missed</h3><div class="bar">'+att.map(([c,v])=>'<span title="'+esc(c)+': '+v+'" style="width:'+(100*v/tot)+'%;background:'+(CODE_COL[c]||'#7A7A7A')+'"></span>').join('')+'</div><div class="leg">'+att.sort((a,b)=>b[1]-a[1]).map(([c,v])=>'<span><i style="background:'+(CODE_COL[c]||'#7A7A7A')+'"></i>'+(S.view==='debug'?esc(c)+' ':'')+esc(CODE_LABEL[c]||c)+' · '+v+'</span>').join('')+'</div>'; }
   h+='<div class="card" style="margin-top:10px"><h4>Keep in mind</h4><span class="small">The answer key marks only a few concepts in each paper, but the system marks every concept it finds. Low scores here are expected for a system built for textbooks; they are not a display error.'+(d.gold_relations<5?' This paper has only '+d.gold_relations+' relation'+(d.gold_relations===1?'':'s')+' in the answer key, so its score means very little.':'')+'</span></div>';

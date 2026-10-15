@@ -303,3 +303,13 @@ Format: date · decision · reason · alternatives considered.
 - **Unchanged:** every number, all payloads, the frozen CR-013 explanation templates (rule 33) and the evaluation codes' frozen meanings; the trace layer still contains no evaluation vocabulary; production views stay free of evaluation text.
 - **Reason:** owner request; the page was readable only with project vocabulary.
 - **Alternatives:** renaming the datasets (rejected by the owner); rewriting the trace templates too (needs `cumap.explain` changes and regenerated outputs; out of scope).
+
+## 2026-10-15 · CR-018 marked INCOMPLETE; CR-019 opened on the same branch (owner decision)
+- **Decision:** CR-018 stays at STOP 2 (`AWAITING_HUMAN_ANNOTATOR`) and is marked **INCOMPLETE / paused**. CR-019 (occurrence index and grounding-consistent evaluation) runs on `cr-018-boundary-identity` by owner instruction, overriding the "one CR at a time, branch from the mainline" workflow for this case.
+- **Reason:** CR-018 is blocked on a human; the evaluation defect found on 2026-10-15 affects every reported SciNLP number and possibly P&D.
+- **Alternatives:** a `cr-019-*` branch from `main` (recommended, declined by the owner); waiting for CR-018.
+
+## 2026-10-15 · CR-019 pre-registration (written before any test-split rescoring)
+- **Decision:** primary SciNLP variant `IDX-P1` (occurrence index + the edge's own evidence sentence; unplaced edges count as one FP each); secondary `FROZEN-UNPLACED-FP` and `IDX-P3`; P&D variant `IDX` (CR-017 five metrics with indexed node spans); N0 split into `N0-absent` / `N0-unrecorded` as an added field. Shared surfaces are owned by the node whose recorded evidence windows contain the occurrence, otherwise unassigned (keeps the CR-012 `invalid_runs.md` fix). The index never writes mentions (rule 24 unchanged). Frozen CR-012 / CR-017 numbers stay frozen and are printed beside every variant.
+- **Reason:** on SciNLP train/dev the answer key is 100% intra-sentence; projection ceilings P1 0.903 / 0.955 and P3 0.900 / 0.967 (train / dev) tie within 0.02, so the simpler, evidence-preserving P1 is primary; ±1 / ±3-sentence windows fall to 0.649 / 0.471 (train) and are rejected.
+- **Alternatives:** paragraph-proximity projection (rejected by the ceilings); rewriting rule 24 so string occurrences become mentions (rejected: the index is a separate layer).
