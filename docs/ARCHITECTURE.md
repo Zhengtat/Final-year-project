@@ -343,3 +343,6 @@ eligible. One finding is kept for future work: a hard node-type guard can reject
 ## Matching mode (CR-020)
 `MentionMatcher` has two modes. `token` (code default; rule 17 as of CR-007) matches lemma-token sequences. `r1key` also matches a text window whose CR-008 R1 key equals a form's key (case, hyphens, spaces collapsed), never starting a window with an article, requiring token-exact matches for keys under 4 characters, and applying the R1 acronym guard. New production runs use the mode in `configs/matching.yaml` (`r1key`); a run made with it records `matching_mode` in `selection_stats`; replays use the recorded mode; the frozen CR-012 scorer pins `token`.
 
+## Rejected-link adjudicator (CR-021)
+When the rule-based strict G-link check rejects a generator link, new production runs (`configs/concept_policy.yaml`) ask a strong-tier adjudicator (`prompts/rejected_link_adjudicator/v2`, schema in `concepts_v4/rejected_links.py`) whether the form is a new concept (it becomes its own node, or a mention of the node that already has that name), the same concept (a mention and an alias on the node) or not a concept (dropped). Its evidence quote must be in the sentence; every decision is logged as `G-link-adjudicated`. It never touches a link the rules accepted.
+

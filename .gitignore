@@ -54,3 +54,4 @@ reports/cr013/screenshots/_*
 
 # CR-021 owner review sheet (contains CC BY-NC SciNLP text; local only)
 data/interim/suggestions/cr021_*
+reports/cr021/adjudicator_results.jsonl

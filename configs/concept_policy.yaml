@@ -1,5 +1,9 @@
-# CR-021: concept-stage policy switches for NEW production runs.
-# promote_rejected_links: when the strict G-link check (CR-009) rejects a link whose surface is a MORE SPECIFIC term than the chosen node
-# ("adapter-tuning" vs "adapter"), create a node for it instead of dropping it. False until the owner review and the adoption rule in
-# docs/change-requests/CR-021-promote-rejected-links.md say otherwise.
+# CR-021: concept-stage policy switches for NEW production runs (older runs are unchanged; a run's merges log records what was applied).
+# rejected_link_policy: what happens when the strict G-link check (CR-009) rejects a link.
+#   off        -> dropped (CR-009 behaviour)
+#   adjudicate -> the strong-tier rejected-link adjudicator (prompts/rejected_link_adjudicator/v2) decides: new_concept -> its own node;
+#                 same_as_target -> mention + alias on the node; not_a_concept / failed quote -> dropped. ADOPTED 2026-10-15 after the
+#                 measured held-out test (DECISIONS.md; reports/cr021/adjudicator.md).
+rejected_link_policy: adjudicate
+# promote_rejected_links: the name-only "more specific" rule. NOT adopted (owner review: 7 of 33 promotions would split a concept).
 promote_rejected_links: false

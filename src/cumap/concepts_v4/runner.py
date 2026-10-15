@@ -24,6 +24,7 @@ from cumap.concepts_v4.loop import LoopConfig, SectionResult, SectionRunner, ren
 from cumap.concepts_v4.pruner import is_value_like, norm
 from cumap.concepts_v4.schema import DEFAULT_SCHEMAS, GeneratorSchemas
 from cumap.concepts_v4.verifier import VerifyCtx, drop_flagged, verify
+from cumap.config import REPO_ROOT
 from cumap.expert_kg.alias_rules import AliasConfig, r1_key
 from cumap.expert_kg.lexicon import Lexicon
 from cumap.expert_kg.mentions import MentionMatcher
@@ -115,6 +116,7 @@ class ConceptRun:
         m5: bool = False,
         strict_g_links: bool = False,
         promote_rejected: bool = False,
+        rejected_link_policy: str = "off",
         emphasised: dict[str, set[str]] | None = None,
         retriever_k: int = 30,
         card_cap: int = 120,
@@ -243,7 +245,9 @@ class ConceptRun:
                         "trivial": False,
                     }
                 )
-                if self.promote_rejected and more_specific(m["surface"], node):
+                if self.rejected_link_policy == "adjudicate":
+                    self._adjudicate(out, meta, sid, order, m, node, paras)
+                elif self.promote_rejected and more_specific(m["surface"], node):
                     self._promote(out, meta, sid, order, m, node)
                 continue
             node.mentions.append(
@@ -380,6 +384,52 @@ class ConceptRun:
         out.store.add(node)
         meta["new_nodes"].append(node.id)
         out.merges.append({"rule_id": "G-link-rejected-promoted", "node_id": node.id, "rejected_target": rejected.id, "surface": m["surface"], "section_id": sid, "evidence": m["evidence"], "trivial": False})  # fmt: skip
+
+    def _adjudicate(
+        self,
+        out: RunOutput,
+        meta: dict,
+        sid: str,
+        order: int,
+        m: dict,
+        rejected: Node,
+        paras: dict[str, str],
+    ) -> None:
+        """CR-021 (adopted 2026-10-15 after the measured held-out test): the strong-tier rejected-link adjudicator (prompt v2) decides a
+        rejected link. new_concept -> its own node (or the node that already has that name); same_as_target -> the generator's mention is
+        recorded on the node and the form becomes an alias; not_a_concept or a failed evidence quote -> dropped, as before. Logged."""
+        from cumap.concepts_v4.rejected_links import ADOPTED_VERSION, AdjudicationLLM
+        from cumap.expert_kg.relations import split_sentences
+        from cumap.gold.validate import verify_quote
+        from cumap.llm.prompts import load_prompt
+
+        ev = " ".join(m["evidence"].split())
+        sentence = next(
+            (
+                " ".join(s.split())
+                for s in split_sentences(" ".join(paras.values()))
+                if ev and ev in " ".join(s.split())
+            ),
+            m["evidence"],
+        )
+        prompt = load_prompt(REPO_ROOT / "prompts", "rejected_link_adjudicator", ADOPTED_VERSION)
+        res = self.client.parse(
+            task="rejected_link_adjudicator", prompt_version=prompt.version, model_tier="strong", schema=AdjudicationLLM,
+            messages=[{"role": "user", "content": prompt.render(
+                domain=self.domain, surface=m["surface"], target_name=rejected.name, target_aliases=", ".join(rejected.aliases) or "none",
+                target_type=rejected.node_type, target_gloss=rejected.definition or rejected.gloss or "none", evidence=sentence)}],
+        )  # fmt: skip
+        o = res.output
+        decision = o.decision if verify_quote(o.evidence_quote, sentence) else "no_decision"
+        out.merges.append({"rule_id": "G-link-adjudicated", "decision": decision, "node_id": rejected.id, "surface": m["surface"], "section_id": sid,
+                           "evidence": m["evidence"], "reason": o.reason, "input_hash": res.input_hash, "trivial": False})  # fmt: skip
+        if decision == "new_concept":
+            self._promote(out, meta, sid, order, m, rejected)
+        elif decision == "same_as_target":
+            rejected.mentions.append({"section_id": sid, "order": order, "role": m["role"], "para": m["para"], "evidence": m["evidence"], "surface": m["surface"], "linked_by": "generator"})  # fmt: skip
+            meta["mentions"].append(rejected.id)
+            if m["surface"] not in rejected.aliases:
+                rejected.aliases.append(m["surface"])
 
     # ---------------------------------------------------------------- backfill (CR-009 §3.7)
     def _backfill(
