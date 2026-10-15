@@ -70,11 +70,11 @@ def sc_sentences(doc) -> list[Span]:
     return out
 
 
-def sc_predict_indexed(doc, cp: dict) -> dict:
+def sc_predict_indexed(doc, cp: dict, matching: str = "token") -> dict:
     """Same contract as `scinlp_run.predict`, with node spans = recorded-window spans ∪ occurrence index."""
     by_id = {c["concept_id"]: c for c in cp["concepts"]}
     rec, _ = PG.grounded_spans(cp["concepts"], doc.text, doc.doc_key)
-    occ, istats = build_index(cp["concepts"], doc.text, doc.doc_key, sc_sentences(doc))
+    occ, istats = build_index(cp["concepts"], doc.text, doc.doc_key, sc_sentences(doc), matching)
     idx = spans_by_node(occ)
     chars = {
         cid: sorted(set(rec.get(cid, [])) | set(idx.get(cid, []))) for cid in set(rec) | set(idx)
@@ -135,11 +135,11 @@ def sc_score(doc, gold, cp: dict, sym: set[str], variant: str) -> dict:
         dropped_before = pred["stats"]["ungrounded_dropped"]
         rels, unplaced = S.project_edges_to_mentions(pred["nodes"], pred["edges"])
     else:
-        pred = sc_predict_indexed(doc, cp)
+        pred = sc_predict_indexed(doc, cp, "r1key" if variant.startswith("IDXR1") else "token")
         dropped_before = pred["stats"]["edges_without_node_or_quote"]
         rels, unplaced = (
             S.project_edges_to_mentions
-            if variant == "IDX-P1"
+            if variant.endswith("-P1")
             else lambda n, e: project_p3(doc, n, e)
         )(pred["nodes"], pred["edges"])
     res = S.score_scinlp_unit(gold, S.project_nodes_to_mentions(pred["nodes"]), rels, sym)
@@ -178,9 +178,11 @@ def n0_split(doc, gold, codes: list[str | None], occ) -> dict:
 
 
 # ---------------------------------------------------------------- P&D (canonical graph, character spans)
-def pd_graph_indexed(cp: dict, sid: str, text: str, sentences: list[Span]) -> dict:
+def pd_graph_indexed(
+    cp: dict, sid: str, text: str, sentences: list[Span], matching: str = "token"
+) -> dict:
     base = PG.graph_for_sections(cp, {sid: text})[sid]
-    occ, istats = build_index(cp["concepts"], text, sid, sentences)
+    occ, istats = build_index(cp["concepts"], text, sid, sentences, matching)
     idx = spans_by_node(occ)
     nodes = [PredNode(n.node_id, n.unit, n.type, n.name, tuple(sorted(set(n.mentions) | set(idx.get(n.node_id, []))))) for n in base["nodes"]]  # fmt: skip
     spans = {n.node_id: list(n.mentions) for n in nodes}
