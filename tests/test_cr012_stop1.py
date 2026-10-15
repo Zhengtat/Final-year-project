@@ -38,8 +38,14 @@ def test_no_pipeline_module_reads_scinlp_text_into_prompts():
     for f in Path("src/cumap").rglob("*.py"):
         if f.parts[2] in {"cr012", "cr017", "explain"} or f.name == "kg_explorer.py":
             continue  # evaluation code (CR-017 replay scores frozen outputs only) and read-only reporting / explainability modules (they never build prompts or call a model)
-        if f.parts[2] == "cr019" and f.name in {"run.py", "variants.py"}:
-            continue  # CR-019 evaluation variants (rescore frozen outputs, no model); the gold-free occurrence index stays guarded
+        if f.parts[2] == "cr019" and f.name in {
+            "run.py",
+            "variants.py",
+            "stage_b.py",
+            "stage_b_score.py",
+        }:
+            continue  # CR-019 evaluation code: rescoring (no model) and the Stage B dev-split runner (like cr012/scinlp_run, test split
+            # locked by split_allowed); the gold-free occurrence index stays guarded
         assert "scinlp" not in f.read_text().lower(), f
 
 

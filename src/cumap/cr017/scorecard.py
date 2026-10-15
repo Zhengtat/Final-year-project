@@ -147,11 +147,60 @@ def cr019_variant() -> dict | None:
         }
     }
     return {
+        "stage_b": stage_b_rows(),
         "label": "CR-019 grounding-consistent",
         "variant": "IDX (P&D) / IDX-P1 (SciNLP)",
         "note": CR019_NOTE,
         "datasets": sets,
     }
+
+
+def stage_b_rows() -> dict | None:
+    """CR-019 Stage B (development data only): SINGLE vs MULTI rows for the explorer, read from reports/cr019/stage_b.json."""
+    path = Path("reports/cr019/stage_b.json")
+    if not path.exists():
+        return None
+    b = json.loads(path.read_text())
+    rows = []
+    for arm in ("SINGLE", "MULTI"):
+        for v, x in b["scinlp"].get(arm, {}).get("variants", {}).items():
+            if v in ("IDX-P1", "IDX-P3", "FROZEN"):
+                r = x["strict_relation"]
+                rows.append(
+                    {
+                        "dataset": "SciNLP dev",
+                        "arm": arm,
+                        "measure": f"strict relation ({v})",
+                        "precision": r["precision"],
+                        "recall": r["recall"],
+                        "f1": r["f1"],
+                    }
+                )
+        for pos, x in b["pd"].get(arm, {}).items():
+            h = x["headline"]
+            se = h["strict_e2e_edge_f1"]
+            rows.append(
+                {
+                    "dataset": "P&D dev",
+                    "arm": arm,
+                    "measure": f"Strict E2E Edge ({pos})",
+                    "precision": se["precision"],
+                    "recall": se["recall"],
+                    "f1": se["f1"],
+                }
+            )
+            rows.append(
+                {
+                    "dataset": "P&D dev",
+                    "arm": arm,
+                    "measure": f"Relation Macro F1 ({pos})",
+                    "precision": None,
+                    "recall": None,
+                    "f1": h["relation_macro_f1"]["f1"],
+                }
+            )
+    return {"rows": rows, "recommendation": b["recommendation"], "spend_usd": b["spend"]["total_usd"], "cap_usd": b["spend"]["cap_usd"],
+            "note": "Development data only (SciNLP dev papers, P&D sections 1.5 and 2.6). SINGLE = production relation stage; MULTI = the classifier sees up to 3 sentences where both concepts occur. Same concepts and pairs in both arms."}  # fmt: skip
 
 
 def build_scorecard() -> dict:
