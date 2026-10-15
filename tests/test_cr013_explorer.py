@@ -209,10 +209,7 @@ def test_every_code_has_an_explanation_with_decisive_stage_and_frozen_wording(pa
 
     for ds in ("scinlp", "pd"):
         for code, html in res["ev"][ds]["details"].items():
-            assert (
-                "Earliest failure (frozen CR-012 attribution order)" in html
-                and "earliest failure" in html.lower()
-            )
+            assert "Where it was first lost" in html and "earliest failure" in html.lower()
             assert EVAL_TEXT[code].replace("'", "&#39;") in html or EVAL_TEXT[code] in html
             assert "not evaluated" in html or code == "N0"
         assert "N0" in res["ev"][ds]["details"] and "P0" in res["ev"][ds]["details"]

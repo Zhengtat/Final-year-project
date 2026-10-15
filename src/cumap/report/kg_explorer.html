@@ -13,7 +13,7 @@
 @media (prefers-color-scheme:dark){:root{--bg:#121418;--panel:#1b1e24;--ink:#eceef2;--ink2:#a3aab8;--line:#31353d;--accent:#56B4E9;--accent-ink:#0b1117;--warn:#ffb27a;--warnbg:#33261a;--okbg:#17262f;--chip:#262a32;--code:#23262d}}
 *{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;display:flex;flex-direction:column}
+body{margin:0;background:var(--bg);color:var(--ink);font:14.5px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;display:flex;flex-direction:column}
 button,select,input{font:inherit;color:inherit}
 .small select,.small input,.whyform select,.whyform input{color:var(--ink)}
 select.tsec{background:var(--bg);border:1px solid var(--line);border-radius:7px;padding:4px 8px;max-width:100%}
@@ -29,22 +29,26 @@ h1{font-size:15px;margin:0;font-weight:600;letter-spacing:-.005em}
 .seg button{border:0;border-radius:0;padding:5px 13px}
 .seg button+button{border-left:1px solid var(--line)}
 .sp{flex:1}
-.banner{margin-top:8px;padding:8px 11px;border-radius:7px;font-size:13px;border:1px solid var(--line)}
-.banner.warn{background:var(--warnbg);color:var(--warn);border-color:var(--warn)}
+.banner{margin-top:8px;padding:8px 13px;border-radius:6px;font-size:13.5px;border:0;border-left:4px solid var(--accent);background:var(--okbg)}
+.banner.warn{background:var(--warnbg);color:var(--ink);border-left-color:var(--warn)}
 .banner.ok{background:var(--okbg)}
+.banner details{margin-top:4px}.banner summary{font-size:12.5px}
+.tier{display:inline-block;font-size:10px;letter-spacing:.05em;color:var(--ink2);border:1px solid var(--line);border-radius:4px;padding:0 5px;margin-left:6px;vertical-align:middle;font-weight:500}
+.lede{max-width:820px;color:var(--ink2);font-size:13.5px;margin:2px 0 10px}
+.mdesc{font-size:12.5px;color:var(--ink);margin:2px 0 6px;max-width:240px}
 .banner b{font-weight:600}
 main{flex:1;display:flex;min-height:0}
-#side{width:300px;padding:12px;overflow:auto;border-right:1px solid var(--line);background:var(--panel);flex:none}
-#side h3{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink2);margin:16px 0 5px;font-weight:600}
+#side{width:316px;padding:16px;overflow:auto;border-right:1px solid var(--line);background:var(--panel);flex:none}
+#side h3{font-size:12.5px;color:var(--ink);margin:20px 0 6px;font-weight:600}
 #side h3:first-child{margin-top:0}
 #side label{display:flex;align-items:center;gap:7px;margin:2px 0;font-size:13px}
 #side input[type=search],#side select{width:100%;padding:6px 8px;border:1px solid var(--line);border-radius:7px;background:var(--bg)}
 .sw{width:11px;height:11px;border-radius:50%;display:inline-block;flex:none}
 .rl{max-height:190px;overflow:auto;border:1px solid var(--line);border-radius:7px;padding:3px 7px}
 .small{font-size:12px;color:var(--ink2)}
-.card{border:1px solid var(--line);border-radius:9px;padding:10px 12px;background:var(--bg);margin-bottom:10px}
+.card{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--bg);margin-bottom:10px}
 .card .close{float:right;border:0;background:none;padding:0 4px;font-size:16px;color:var(--ink2)}
-.card h4{margin:0 0 4px;font-size:13px}
+.card h4{margin:0 0 6px;font-size:13.5px}
 .card ul{margin:4px 0 0 16px;padding:0}
 .tour{display:flex;flex-direction:column;gap:6px}
 .tour button{text-align:left;padding:7px 10px}
@@ -58,19 +62,19 @@ main{flex:1;display:flex;min-height:0}
 .leg i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px}
 #stage{flex:1;min-width:0;display:flex;flex-direction:column}
 .tabs{display:flex;gap:2px;padding:6px 10px 0;border-bottom:1px solid var(--line);background:var(--panel)}
-.tabs button{border:1px solid transparent;border-bottom:0;border-radius:7px 7px 0 0;background:none;padding:5px 14px}
+.tabs button{border:1px solid transparent;border-bottom:0;border-radius:7px 7px 0 0;background:none;padding:7px 16px;color:var(--ink2)}
 .tabs button.on{background:var(--bg);border-color:var(--line);color:var(--ink)}
 .pane{flex:1;min-height:0;position:relative;display:none}
 .pane.on{display:block}
 canvas{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
 #status{position:absolute;left:10px;bottom:8px;font-size:12px;color:var(--ink2);background:var(--panel);padding:2px 9px;border-radius:6px;border:1px solid var(--line)}
 #hint{position:absolute;right:10px;top:8px;font-size:11px;color:var(--ink2)}
-.scroll{position:absolute;inset:0;overflow:auto;padding:14px 18px;background:var(--bg)}
-#detail{width:380px;padding:14px;overflow:auto;border-left:1px solid var(--line);background:var(--panel);flex:none;font-size:13px}
+.scroll{position:absolute;inset:0;overflow:auto;padding:18px 24px;background:var(--bg)}
+#detail{width:390px;padding:16px 18px;overflow:auto;border-left:1px solid var(--line);background:var(--panel);flex:none;font-size:13.5px}
 #detail .in{transition:opacity 180ms var(--ease-out),transform 180ms var(--ease-out)}
 #detail .in.pre{opacity:0;transform:translateY(6px)}
-#detail h2{font-size:15px;margin:0 0 6px;font-weight:600;line-height:1.3}
-#detail dt{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink2);margin-top:11px}
+#detail h2{font-size:16px;margin:0 0 8px;font-weight:600;line-height:1.3}
+#detail dt{font-size:12px;font-weight:600;color:var(--ink2);margin-top:14px}
 #detail dd{margin:2px 0 0}
 .chip{display:inline-block;padding:1px 8px;border-radius:10px;background:var(--chip);font-size:12px;margin:1px 2px 1px 0}
 .na{color:var(--ink2);font-style:italic}
@@ -111,7 +115,7 @@ body.debug #detail .in{transition:none}
 body.debug .reviewonly{display:none}body.debug .debugonly{display:block}
 
 /* ---- CR-013 trace layer */
-.vh{font-size:16px;margin:0 0 6px;font-weight:600}
+.vh{font-size:18px;margin:0 0 6px;font-weight:600}
 .ribbon{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:6px;margin:10px 0}
 .ribbon button{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;padding:7px 10px;width:100%}
 .ribbon button .n{font-size:10px;color:var(--ink2)}
@@ -155,9 +159,9 @@ button.evchip{font-size:12px;padding:3px 9px;border-radius:12px}button.evchip.on
 <header>
   <div class="top">
     <h1>Knowledge graph explorer</h1>
-    <div class="seg" id="modeseg"><button id="m-pd">P&amp;D Expert KG</button><button id="m-sci">SciNLP Evaluation Graph</button><button id="m-ev" class="evbtn" title="Opt-in: gold-derived frozen CR-012 evaluation. Not the production graph.">CR-012 evaluation overlay</button></div>
+    <div class="seg" id="modeseg"><button id="m-pd" title="The knowledge graph built from the P&amp;D networking textbook">P&amp;D dataset</button><button id="m-sci" title="A test run on scientific papers, to see how the system does outside networking">SciNLP dataset</button><button id="m-ev" class="evbtn" title="Compare the system's output with human-made answer keys (test results only)">How well it scores</button></div>
     <div class="sp"></div>
-    <div class="seg" id="viewseg" title="Review: a guided reading for examiners. Debug: every field, tables and ids."><button id="v-review">Review</button><button id="v-debug">Debug</button></div>
+    <div class="seg" id="viewseg" title="Simple: the essentials, with guidance. Detailed: every field, tables and ids."><button id="v-review">Simple</button><button id="v-debug">Detailed</button></div>
   </div>
   <div id="banner"></div>
 </header>
@@ -190,13 +194,15 @@ const NA = DATA.na;
 const PAL = ['#0072B2','#E69F00','#009E73','#CC79A7','#D55E00','#56B4E9','#B8A400','#7A7A7A','#8C4FD8','#C23B3B','#2E8B8B','#A0522D','#5B6EE1','#4F7F2F'];
 const TYPE_IDX = {Concept:7,Protocol:0,Component:1,Mechanism:3,DataUnit:2,Parameter:4,Property:5,Event:9,State:6,Layer:12,Identifier:8,task:0,method:1,dataset:2,metric:3};
 const RING_COL = {centre:'#C23B3B',inner:'#D55E00',middle:'#E69F00',outer:'#56B4E9',unlinked:'#B5B9C2'};
-const CODE_LABEL = {N0:'the endpoint was never extracted',N1:'the endpoint span was wrong',P0:'the pair was never considered',R0:'the classifier said "no relation"',R1:'wrong relation chosen',R2:'wrong direction',R3:'type or qualifier problem',E0:'evidence invalid',C0:'concept split',C1:'false merge',NODE_LEVEL_ONLY:'matched at node level only'};
+const CODE_LABEL = {N0:'one of the two concepts was never found',N1:'a concept was found, but with the wrong words',P0:'the two concepts were never checked as a pair',R0:'checked, but the model said "no relation"',R1:'wrong kind of relation',R2:'right relation, wrong direction',R3:'wrong type or condition',E0:'the quoted evidence failed the check',C0:'one concept was split in two',C1:'two different concepts were merged',NODE_LEVEL_ONLY:'only the concepts matched, not the exact words'};
+const CI_PLAIN = {NOT_EVALUABLE_SMALL_N:'Too few test documents or sections to give a reliable range.',DESCRIPTIVE_SMALL_N:'The range is rough: it rests on only a few sections.'};
+const ciPlain = s => '<span title="'+esc(s)+'">'+esc(CI_PLAIN[s]||s)+'</span>';
 const CODE_COL = {N0:'#C23B3B',N1:'#D55E00',P0:'#E69F00',R0:'#56B4E9',R1:'#0072B2',R2:'#8C4FD8',R3:'#7A7A7A',E0:'#7A7A7A'};
 const REDUCED = typeof matchMedia==='function' && matchMedia('(prefers-reduced-motion:reduce)').matches;
 const DARK = () => typeof matchMedia==='function' && matchMedia('(prefers-color-scheme:dark)').matches;
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const val = v => (v===null||v===undefined||v===NA||(Array.isArray(v)&&!v.length)) ? '<span class="na">'+NA+'</span>' : (typeof v==='object' ? '<code>'+esc(JSON.stringify(v))+'</code>' : esc(v));
+const val = v => (v===null||v===undefined||v===NA||(Array.isArray(v)&&!v.length)) ? (S.view==='debug'?'<span class="na">'+NA+'</span>':'<span class="na" title="'+NA+'">not saved by this run</span>') : (typeof v==='object' ? '<code>'+esc(JSON.stringify(v))+'</code>' : esc(v));
 const relCache = {}; const relCol = r => (r in relCache) ? relCache[r] : (relCache[r]=PAL[Object.keys(relCache).length%PAL.length]);
 const typeCol = t => PAL[(t in TYPE_IDX)?TYPE_IDX[t]:7];
 const store = {get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
@@ -243,12 +249,12 @@ function banner(){
   if(S.mode==='ev'){ evBanner(); return; }
   const b=$('banner');
   if(S.mode==='pd'){
-    b.innerHTML='<div class="banner ok"><b>P&amp;D Expert KG — production/development graph. Peterson &amp; Davie, Chapters 1–3.</b> This is the project\'s current networking Expert KG product graph. It currently covers the P&amp;D Chapters 1–3 development slice (run <code>'+esc(DATA.pd.run_id)+'</code>).<br>'+
-    '<b>CR-012 held-out P&amp;D E0 strict F1 = '+DATA.pd_heldout.e0_strict_f1.toFixed(3)+'</b> — measured on separate held-out P&amp;D sections ('+DATA.pd_heldout.sections.join(', ')+'), <b>not</b> the score of the graph shown here.</div>';
+    b.innerHTML='<div class="banner ok"><b>P&amp;D dataset</b> — the ideas in the networking textbook <i>Computer Networks: A Systems Approach</i> (Peterson &amp; Davie), chapters 1–3, and how they connect. Every link comes with the sentence from the book that supports it.'+
+    '<details><summary>About this graph</summary>Built by run <code>'+esc(DATA.pd.run_id)+'</code> (chapters 1–3 are the development set). When the same system was tested on other P&amp;D sections ('+DATA.pd_heldout.sections.join(', ')+'), its strictest end-to-end relation score (F1, from 0 to 1) was <b>'+DATA.pd_heldout.e0_strict_f1.toFixed(3)+'</b>. That score belongs to those test sections, not to the graph shown here.</details></div>';
   } else {
     const h=DATA.sci.headline;
-    b.innerHTML='<div class="banner warn"><b>CR-012 SciNLP held-out E0 graph — EVALUATION OUTPUT — NOT the production Expert KG.</b> This graph was produced only for CR-012 external held-out evaluation. It is not incorporated into the production Expert KG.<br>'+
-    '<b>Frozen headline: E0 strict relation F1 = '+h.relation_f1.toFixed(3)+'</b> (micro over 3 test documents; precision '+h.precision.toFixed(3)+', recall '+h.recall.toFixed(3)+'). CI status = <b>'+esc(h.ci_status)+'</b>.</div>';
+    b.innerHTML='<div class="banner warn"><b>SciNLP dataset — a test run, not the main graph.</b> The same system was run on 3 scientific papers to see how well it works outside networking. Its output is compared with a human answer key and is not part of the P&amp;D graph.'+
+    '<details><summary>Overall score</summary>Relation score (F1, from 0 to 1) <b>'+h.relation_f1.toFixed(3)+'</b> · precision '+h.precision.toFixed(3)+' · recall '+h.recall.toFixed(3)+', over all 3 papers (system as-is, level E0; scores frozen in CR-012). '+ciPlain(h.ci_status)+'</details></div>';
   }
 }
 
@@ -335,8 +341,8 @@ function paint(){
     labels.sort((a,b)=>a.prio-b.prio||b.w-a.w).forEach(L=>{ ctx.font=(L.isSel?'600 ':'')+'11px sans-serif'; const w=ctx.measureText(L.n.name).width, bx=L.x+L.rr+4, box=[bx-1,L.y-9,bx+w+1,L.y+4];
       if(L.prio>1&&placed.some(b=>box[0]<b[2]&&box[2]>b[0]&&box[1]<b[3]&&box[3]>b[1])) return; placed.push(box); ctx.fillText(L.n.name,bx,L.y+4); }); }
   ctx.globalAlpha=1;
-  $('status').textContent=v.nodes.filter(n=>!n.ghost).length+' nodes · '+v.edges.filter(e=>e.kind!=='gold_missed').length+' edges'+(S.F.missed?' · '+v.edges.filter(e=>e.kind==='gold_missed').length+' missed gold':'')+(S.mode==='pd'&&!S.F.unlinked?' · unlinked hidden':'');
-  $('hint').textContent=S.view==='debug'?'/ search · arrows: neighbours · Esc clear':'drag to pan · scroll to zoom · click a node or edge';
+  $('status').textContent=v.nodes.filter(n=>!n.ghost).length+' concepts · '+v.edges.filter(e=>e.kind!=='gold_missed').length+' relations'+(S.F.missed?' · '+v.edges.filter(e=>e.kind==='gold_missed').length+' missed':'')+(S.mode==='pd'&&!S.F.unlinked?' · concepts with no relations hidden':'');
+  $('hint').textContent=S.view==='debug'?'/ search · ← → step through neighbours · Esc clear':'drag to move · scroll to zoom · click a dot or a line';
 }
 function nodeAt(mx,my){ const v=visible(); let best=null,bd=1e9; v.nodes.forEach(n=>{const p=pos(n),d=Math.hypot(sx(p)-mx,sy(p)-my),rr=Math.max(nodeR(n),6); if(d<rr+2&&d<bd){bd=d;best=n;}}); return best; }
 function edgeAt(mx,my){ const v=visible(); let best=null,bd=6; v.edges.forEach(e=>{const a=pos(byId[e.s]),b=pos(byId[e.t]);const x1=sx(a),y1=sy(a),x2=sx(b),y2=sy(b),L2=(x2-x1)**2+(y2-y1)**2||1;let t=((mx-x1)*(x2-x1)+(my-y1)*(y2-y1))/L2;t=Math.max(0,Math.min(1,t));const d=Math.hypot(mx-(x1+t*(x2-x1)),my-(y1+t*(y2-y1)));if(d<bd){bd=d;best=e;}}); return best; }
@@ -360,8 +366,8 @@ function renderDetail(instant){
   if(S.mode==='ev'){ box.className='in'; box.innerHTML=evDetailHTML(); wireEvDetail(box); return; }
   let h='';
   if(!S.sel){
-    h = '<p class="na">Click a node or an edge to see what it is, where it came from, and the sentence that supports it.</p>';
-    if(S.view==='review') h+='<div class="card"><h4>How to read this</h4><ul><li>Each <b>dot</b> is a concept; colour = its type.</li><li>Each <b>arrow</b> is a relation, pointing from source to target.</li><li>Every edge carries the sentence it was read from.</li></ul></div>';
+    h = '<p class="na">Click a dot or a line to see what it is, where it came from, and the sentence that supports it.</p>';
+    if(S.view==='review') h+='<div class="card"><h4>How to read the map</h4><ul><li>Each <b>dot</b> is a <b>concept</b>: an idea from the text, such as “router” or “bandwidth”. Its colour shows what kind of concept it is.</li><li>Each <b>arrow</b> is a <b>relation</b>: how two concepts are connected, read from the first concept to the second.</li><li>Every relation keeps the exact sentence it was taken from, so you can check it.</li></ul></div>';
   } else if(S.sel.kind==='node') h=detNode(byId[S.sel.id],dbg); else h=detEdge(S.sel.e,dbg);
   const swap=()=>{ box.innerHTML=h; wireDetail(box); };
   if(instant||!animOK()){ box.className='in'; swap(); return; }
@@ -376,22 +382,22 @@ function wireDetail(box){
 }
 function edgeLines(n){
   const es=(adj[n.id]||[]).filter(e=>e.kind!=='gold_missed'||S.F.missed);
-  return es.slice(0,60).map(e=>{const o=e.s===n.id; const other=byId[o?e.t:e.s]; return '<div>'+(o?'':'← ')+'<a class="lnk" data-e="'+esc(e.id)+'">'+esc(e.rel)+'</a> '+(o?'→ ':'from ')+'<a class="lnk" data-n="'+esc(other.id)+'">'+esc(other.name)+'</a>'+(e.kind==='gold_missed'?' <span class="chip">missed gold</span>':'')+'</div>';}).join('')+(es.length>60?'<div class="na">… '+(es.length-60)+' more</div>':'');
+  return es.slice(0,60).map(e=>{const o=e.s===n.id; const other=byId[o?e.t:e.s]; return '<div>'+(o?'':'← ')+'<a class="lnk" data-e="'+esc(e.id)+'">'+esc(e.rel)+'</a> '+(o?'→ ':'from ')+'<a class="lnk" data-n="'+esc(other.id)+'">'+esc(other.name)+'</a>'+(e.kind==='gold_missed'?' <span class="chip">missed</span>':'')+'</div>';}).join('')+(es.length>60?'<div class="na">… '+(es.length-60)+' more</div>':'');
 }
 function detNode(n,dbg){
-  let h='<h2>'+esc(n.name)+'</h2><span class="chip" style="border-left:4px solid '+typeCol(n.type)+'">'+esc(n.type)+'</span>'+(n.ghost?' <span class="chip">in gold, not predicted</span>':'');
+  let h='<h2>'+esc(n.name)+'</h2><span class="chip" style="border-left:4px solid '+typeCol(n.type)+'">'+esc(n.type)+'</span>'+(n.ghost?' <span class="chip">in the answer key, missed by the system</span>':'');
   if(S.mode==='pd'){
-    const ringTxt={centre:'among the most connected, central concepts',inner:'well connected, close to the centre',middle:'moderately connected',outer:'weakly connected, towards the periphery',unlinked:'extracted, but no accepted relation yet'}[n.ring]||'';
-    h+='<dl><dt>Also called</dt><dd>'+(n.aliases.length?n.aliases.map(a=>'<span class="chip">'+esc(a)+'</span>').join(''):'<span class="na">no aliases recorded</span>')+'</dd>'+
-    '<dt>Introduced</dt><dd>chapter '+n.ch+', first seen in <code>'+esc(n.first_section)+'</code>; mentioned '+n.n_mentions+'× across '+n.sections.length+' section(s)</dd>'+
-    '<dt>Position in the graph</dt><dd><b>'+esc(n.ring)+' ring</b> — '+ringTxt+(dbg?'<br>importance '+(n.importance==null?NA:n.importance.toFixed(4))+' · community '+esc(n.comm)+' / '+esc(n.comm_fine):'')+'</dd>'+
+    const ringTxt={centre:'one of the most connected, central concepts',inner:'well connected, near the centre',middle:'moderately connected',outer:'few connections, near the edge',unlinked:'found in the text, but not linked to any other concept yet'}[n.ring]||'';
+    h+='<dl><dt>Also called</dt><dd>'+(n.aliases.length?n.aliases.map(a=>'<span class="chip">'+esc(a)+'</span>').join(''):'<span class="na">no other names recorded</span>')+'</dd>'+
+    '<dt>First appears</dt><dd>chapter '+n.ch+', section '+esc(n.first_section)+' · mentioned '+n.n_mentions+' time'+(n.n_mentions===1?'':'s')+' in '+n.sections.length+' section'+(n.sections.length===1?'':'s')+'</dd>'+
+    '<dt>How central it is</dt><dd><b>'+esc(n.ring)+'</b> — '+ringTxt+(dbg?'<br>importance '+(n.importance==null?NA:n.importance.toFixed(4))+' · cluster '+esc(n.comm)+' / '+esc(n.comm_fine):'')+'</dd>'+
     (n.definition!==NA?'<dt>Definition</dt><dd>'+esc(n.definition)+'</dd>':'')+
-    '<dt>Source text</dt>'+n.quotes.map(q=>'<dd><div class="sent">'+esc(q.q)+'</div><span class="small">'+esc(q.sec)+' · '+esc(q.role)+'</span></dd>').join('');
-    if(dbg) h+='<dt>Ring by chapter</dt><dd>'+Object.entries(n.ring_by_chapter).map(([c,r])=>'ch'+c+': '+esc(r)).join(' → ')+'</dd><dt>Alias provenance</dt><dd>'+val(n.alias_provenance)+'</dd><dt>Merged from</dt><dd>'+val(n.merged_from)+'</dd><dt>Concept id</dt><dd><code>'+esc(n.id)+'</code>'+copyBtn(n.id)+'</dd>';
+    '<dt>From the book</dt>'+n.quotes.map(q=>'<dd><div class="sent">'+esc(q.q)+'</div><span class="small">'+esc(q.sec)+' · '+esc(q.role)+'</span></dd>').join('');
+    if(dbg) h+='<dt>Ring by chapter</dt><dd>'+Object.entries(n.ring_by_chapter).map(([c,r])=>'ch'+c+': '+esc(r)).join(' → ')+'</dd><dt>Where the other names came from</dt><dd>'+val(n.alias_provenance)+'</dd><dt>Merged from (earlier duplicates)</dt><dd>'+val(n.merged_from)+'</dd><dt>Concept id</dt><dd><code>'+esc(n.id)+'</code>'+copyBtn(n.id)+'</dd>';
     h+='</dl>';
   } else {
-    h+=(n.ghost?'':' <span class="chip">'+(n.gold_entity_match?'span matches a gold entity':'no gold entity at this span')+'</span>')+'<dl><dt>Text in the document</dt><dd>'+(n.surfaces||[]).map(s=>'<span class="chip">'+esc(s)+'</span>').join('')+'</dd><dt>Sentence</dt><dd><div class="sent">'+highlight(n.sentence,null,n,{})+'</div></dd>';
-    if(dbg) h+='<dt>Spans (token start–end)</dt><dd>'+esc((n.spans||[]).map(s=>s[0]+'–'+s[1]).join(', '))+'</dd><dt>Canonical node name</dt><dd>'+val(n.canonical_name)+'</dd><dt>Typed match</dt><dd>'+(n.gold_entity_typed_match?'yes':'no')+'</dd><dt>Node id</dt><dd><code>'+esc(n.id)+'</code>'+copyBtn(n.id)+'</dd>';
+    h+=(n.ghost?'':' <span class="chip">'+(n.gold_entity_match?'matches the answer key':'not in the answer key')+'</span>')+'<dl><dt>Text in the document</dt><dd>'+(n.surfaces||[]).map(s=>'<span class="chip">'+esc(s)+'</span>').join('')+'</dd><dt>Sentence</dt><dd><div class="sent">'+highlight(n.sentence,null,n,{})+'</div></dd>';
+    if(dbg) h+='<dt>Spans (token start–end)</dt><dd>'+esc((n.spans||[]).map(s=>s[0]+'–'+s[1]).join(', '))+'</dd><dt>Merged concept name</dt><dd>'+val(n.canonical_name)+'</dd><dt>Type also matches the answer key</dt><dd>'+(n.gold_entity_typed_match?'yes':'no')+'</dd><dt>Node id</dt><dd><code>'+esc(n.id)+'</code>'+copyBtn(n.id)+'</dd>';
     h+='</dl>';
   }
   h+='<dl><dt>Relations ('+(adj[n.id]||[]).length+')</dt><dd>'+edgeLines(n)+'</dd></dl>';
@@ -402,19 +408,19 @@ function detNode(n,dbg){
 function detEdge(e,dbg){
   const a=byId[e.s], b=byId[e.t], d=defs()[e.rel]||{}, tpl=fillTemplate(e,a,b);
   let h='<h2>'+esc(a.name)+' <span style="border-bottom:3px solid '+(e.kind==='gold_missed'?'#8b919d':relCol(e.rel))+'">— '+esc(e.rel)+' →</span> '+esc(b.name)+'</h2>';
-  if(e.kind==='gold_missed') h+='<div class="card"><h4>Missed by the system</h4>This relation is in the gold annotation but was not predicted. Earliest cause: <b>'+esc(CODE_LABEL[e.code]||e.code)+'</b> <span class="small">('+esc(e.code)+')</span>.</div>';
-  else if(S.mode==='sci') h+='<span class="chip">'+(e.matches_gold?'matches a gold relation':'not in the gold annotation')+'</span>';
-  h+='<dl>'+(tpl?'<dt>Reads as</dt><dd>'+tpl+'</dd>':'')+(d.definition&&d.definition!==NA?'<dt>What “'+esc(e.rel)+'” means</dt><dd class="small">'+esc(d.definition)+'</dd>':'')+
-  '<dt>Evidence</dt><dd><div class="sent">'+highlight(e.sentence,e.quote,a,b)+'</div><span class="small"><mark class="a" style="padding:0 4px">source</mark> <mark class="b" style="padding:0 4px">target</mark> <u>exact quote the model cited</u></span></dd>';
-  if(e.statement&&e.statement!==NA) h+='<dt>Model statement</dt><dd>'+esc(e.statement)+'</dd>';
-  if(S.mode==='pd') h+='<dt>Where it comes from</dt><dd>section <code>'+esc(e.section)+'</code> · chapter '+e.ch+' · family '+esc(e.family)+'</dd>';
+  if(e.kind==='gold_missed') h+='<div class="card"><h4>Missed by the system</h4>This relation is in the human answer key, but the system did not find it. Where it first went wrong: <b>'+esc(CODE_LABEL[e.code]||e.code)+'</b> <span class="small">('+esc(e.code)+')</span>.</div>';
+  else if(S.mode==='sci') h+='<span class="chip">'+(e.matches_gold?'matches the answer key':'not in the answer key')+'</span>';
+  h+='<dl>'+(tpl?'<dt>In plain words</dt><dd>'+tpl+'</dd>':'')+(d.definition&&d.definition!==NA?'<dt>What “'+esc(e.rel)+'” means</dt><dd class="small">'+esc(d.definition)+'</dd>':'')+
+  '<dt>From the text</dt><dd><div class="sent">'+highlight(e.sentence,e.quote,a,b)+'</div><span class="small"><mark class="a" style="padding:0 4px">first concept</mark> <mark class="b" style="padding:0 4px">second concept</mark> <u>exact words the system quoted</u></span></dd>';
+  if(e.statement&&e.statement!==NA) h+='<dt>The system\'s summary</dt><dd>'+esc(e.statement)+'</dd>';
+  if(S.mode==='pd') h+='<dt>Where it comes from</dt><dd>chapter '+e.ch+', section '+esc(e.section)+' · relation group: '+esc(e.family)+'</dd>';
   if(dbg||S.view==='review'){
     const q=e.qual&&e.qual!==NA?e.qual:null;
-    if(q) h+='<dt>Qualifiers</dt><dd>'+Object.entries(q).filter(([k,v])=>v!==null&&!(Array.isArray(v)&&!v.length)).map(([k,v])=>'<span class="chip">'+esc(k)+': '+esc(Array.isArray(v)?v.join('; '):v)+'</span>').join('')+'</dd>';
+    if(q) h+='<dt>Extra conditions</dt><dd>'+Object.entries(q).filter(([k,v])=>v!==null&&!(Array.isArray(v)&&!v.length)).map(([k,v])=>'<span class="chip">'+esc(k)+': '+esc(Array.isArray(v)?v.join('; '):v)+'</span>').join('')+'</dd>';
   }
-  h+='<dt>Confidence</dt><dd>'+val(e.confidence)+'</dd>';
+  h+='<dt>How sure the system was</dt><dd>'+val(e.confidence)+'</dd>';
   if(dbg){
-    h+='<dt>Direction (model flag)</dt><dd>'+val(e.model_direction)+'</dd><dt>Grounding checks</dt><dd>'+val(e.grounding)+'</dd><dt>Family reason</dt><dd>'+val(e.family_reason)+'</dd><dt>Prompt hashes</dt><dd>'+val(e.hashes)+'</dd><dt>Selection group</dt><dd>'+val(e.selection_group)+'</dd><dt>Edge id</dt><dd><code>'+esc(e.id)+'</code>'+copyBtn(e.id)+'</dd>';
+    h+='<dt>Direction (as flagged by the model)</dt><dd>'+val(e.model_direction)+'</dd><dt>Evidence checks</dt><dd>'+val(e.grounding)+'</dd><dt>Why this relation group</dt><dd>'+val(e.family_reason)+'</dd><dt>Prompt hashes</dt><dd>'+val(e.hashes)+'</dd><dt>Pair-selection group</dt><dd>'+val(e.selection_group)+'</dd><dt>Edge id</dt><dd><code>'+esc(e.id)+'</code>'+copyBtn(e.id)+'</dd>';
     h+='</dl><details open><summary>raw record</summary><pre class="json" tabindex="0">'+esc(JSON.stringify(e,null,1))+'</pre></details>';
   } else h+='</dl>';
   if(S.mode==='pd'&&e.kind!=='gold_missed') h+=journeySlot('edge:'+e.id);
@@ -439,40 +445,41 @@ function neighbours(){ if(!S.sel||S.sel.kind!=='node') return []; return [...new
 function sciCard(){
   const d=S.doc, [p,r,f]=d.e0_relation_prf, [tp,fp,fn]=d.e0_relation_tp_fp_fn;
   const att=Object.entries(d.attribution).filter(([c,v])=>v>0), tot=att.reduce((s,[c,v])=>s+v,0);
-  let h='<h3>This document, at a glance</h3><div class="big"><div><b>'+f.toFixed(3)+'</b>relation F1</div><div><b>'+p.toFixed(2)+'</b>precision</div><div><b>'+r.toFixed(2)+'</b>recall</div></div>'+
-  '<div class="small">'+tp+' of '+d.gold_relations+' gold relations recovered · '+fp+' extra predictions · entity F1 '+d.e0_entity_prf[2].toFixed(3)+'</div>';
-  if(tot){ h+='<h3>Why gold relations were missed</h3><div class="bar">'+att.map(([c,v])=>'<span title="'+esc(c)+': '+v+'" style="width:'+(100*v/tot)+'%;background:'+(CODE_COL[c]||'#7A7A7A')+'"></span>').join('')+'</div><div class="leg">'+att.sort((a,b)=>b[1]-a[1]).map(([c,v])=>'<span><i style="background:'+(CODE_COL[c]||'#7A7A7A')+'"></i>'+(S.view==='debug'?esc(c)+' ':'')+esc(CODE_LABEL[c]||c)+' · '+v+'</span>').join('')+'</div>'; }
-  h+='<div class="card" style="margin-top:10px"><h4>Reading this fairly</h4><span class="small">The benchmark annotates a few concepts per document, while this system extracts every concept it finds. Low precision and recall are an expected architecture-transfer outcome, not a rendering error.'+(d.gold_relations<5?' This document has only '+d.gold_relations+' gold relation(s), so its score says very little.':'')+'</span></div>';
+  let h='<h3>How it did on this paper</h3><div class="big"><div><b>'+f.toFixed(3)+'</b>relation score (F1)</div><div><b>'+p.toFixed(2)+'</b>precision</div><div><b>'+r.toFixed(2)+'</b>recall</div></div>'+
+  '<div class="small">Found '+tp+' of the '+d.gold_relations+' relations in the answer key, plus '+fp+' that the answer key does not have. Concept score (F1) '+d.e0_entity_prf[2].toFixed(3)+'.</div>'+
+  '<div class="small" style="margin-top:4px"><b>Precision</b>: how many of its answers were right. <b>Recall</b>: how many of the right answers it found. <b>F1</b> balances the two (1 is perfect).</div>';
+  if(tot){ h+='<h3>Why relations were missed</h3><div class="bar">'+att.map(([c,v])=>'<span title="'+esc(c)+': '+v+'" style="width:'+(100*v/tot)+'%;background:'+(CODE_COL[c]||'#7A7A7A')+'"></span>').join('')+'</div><div class="leg">'+att.sort((a,b)=>b[1]-a[1]).map(([c,v])=>'<span><i style="background:'+(CODE_COL[c]||'#7A7A7A')+'"></i>'+(S.view==='debug'?esc(c)+' ':'')+esc(CODE_LABEL[c]||c)+' · '+v+'</span>').join('')+'</div>'; }
+  h+='<div class="card" style="margin-top:10px"><h4>Keep in mind</h4><span class="small">The answer key marks only a few concepts in each paper, but the system marks every concept it finds. Low scores here are expected for a system built for textbooks; they are not a display error.'+(d.gold_relations<5?' This paper has only '+d.gold_relations+' relation'+(d.gold_relations===1?'':'s')+' in the answer key, so its score means very little.':'')+'</span></div>';
   return h;
 }
 function side(){
   const s=$('side'), dbg=S.view==='debug', G=S.G; let h='';
   if(S.view==='review' && store.get('kg_intro')!=='off'){
-    h+='<div class="card" id="intro"><button class="close" id="intro-x" title="Dismiss">×</button><h4>Start here</h4><span class="small">'+(S.mode==='pd'?'A knowledge graph built from the textbook: concepts connected by typed relations, each backed by a sentence. Try the guided views below.':'The same pipeline run on a scientific-paper benchmark, to test it outside networking. Compare what it found with the human gold annotation.')+'</span></div>';
+    h+='<div class="card" id="intro"><button class="close" id="intro-x" title="Dismiss">×</button><h4>Start here</h4><span class="small">'+(S.mode==='pd'?'This is a map of the ideas in a networking textbook. Dots are concepts, arrows show how they relate, and each arrow keeps the sentence it came from. Try a guided view below, or click any dot.':'The same system, run on scientific papers to test it outside networking. Blue means it agrees with the human answer key; orange means the answer key does not have it.')+'</span></div>';
   }
   if(S.mode==='sci'){
-    h+='<h3>Test documents</h3><table class="docs"><tr><th>document</th><th>pred</th><th>gold</th><th>F1</th></tr>'+DATA.sci.docs.map(d=>'<tr data-d="'+esc(d.doc_id)+'" class="'+(d===S.doc?'sel':'')+'"><td>'+esc(d.doc_id.replace('.grobid',''))+'</td><td>'+d.predicted_nodes+'n / '+d.predicted_edges+'e</td><td>'+d.gold_entities+'e / '+d.gold_relations+'r</td><td>'+d.e0_strict_relation_f1.toFixed(3)+'</td></tr>').join('')+'</table>'+sciCard();
+    h+='<h3>Test papers</h3><table class="docs"><tr><th>paper</th><th title="concepts / relations the system found">found</th><th title="concepts / relations in the human answer key">answer key</th><th title="relation score (F1)">score</th></tr>'+DATA.sci.docs.map(d=>'<tr data-d="'+esc(d.doc_id)+'" class="'+(d===S.doc?'sel':'')+'"><td>'+esc(d.doc_id.replace('.grobid',''))+'</td><td title="concepts / relations">'+d.predicted_nodes+' / '+d.predicted_edges+'</td><td title="concepts / relations">'+d.gold_entities+' / '+d.gold_relations+'</td><td>'+d.e0_strict_relation_f1.toFixed(3)+'</td></tr>').join('')+'</table>'+sciCard();
   } else {
     const st=G.stats;
-    h+='<h3>This graph</h3><div class="big"><div><b>'+st.canonical_nodes+'</b>concepts</div><div><b>'+st.accepted_edges+'</b>relations</div><div><b>'+st.aliases+'</b>aliases</div></div><div class="small">'+st.nodes_with_edges+' concepts are connected; '+st.unlinked_nodes+' were extracted but have no accepted relation yet.</div>'+
-    '<h3>Guided views</h3><div class="tour stag"><button data-tour="centre">1 · The centre of the graph<small>most connected concepts, ring layout</small></button><button data-tour="growth">2 · How it grew<small>chapter 1 first; widen the chapter filter</small></button><button data-tour="evidence">3 · One relation with its evidence<small>see the sentence it was read from</small></button></div>'+
-    '<h3>Chapter (cumulative)</h3><select id="f-ch" aria-label="Chapter (cumulative)">'+[1,2,3].map(c=>'<option value="'+c+'"'+(c===S.F.chapter?' selected':'')+'>up to chapter '+c+'</option>').join('')+'</select>'+
-    '<h3>Layout</h3><select id="f-lay" aria-label="Layout"><option value="force"'+(S.F.layout==='force'?' selected':'')+'>Force — shows connections</option><option value="rings"'+(S.F.layout==='rings'?' selected':'')+'>Rings — centre to periphery</option></select>'+
-    '<h3>Colour by</h3><select id="f-col" aria-label="Colour nodes by"><option value="type">concept type</option><option value="ring"'+(S.F.colour==='ring'?' selected':'')+'>ring (size = importance)</option></select>'+
-    '<label style="margin-top:6px"><input type="checkbox" id="f-unl"'+(S.F.unlinked?' checked':'')+'> show the '+st.unlinked_nodes+' unlinked concepts</label>';
-    if(dbg) h+='<h3>Min. importance</h3><input type="range" id="f-top" aria-label="Minimum importance" min="0" max="1" step="0.05" value="'+S.F.top+'"> <span class="small" id="f-top-v">'+S.F.top+'</span>';
+    h+='<h3>This graph</h3><div class="big"><div><b>'+st.canonical_nodes+'</b>concepts</div><div><b>'+st.accepted_edges+'</b>relations</div><div><b>'+st.aliases+'</b>other names</div></div><div class="small">'+st.nodes_with_edges+' concepts are linked to at least one other; '+st.unlinked_nodes+' were found in the text but have no relations yet.</div>'+
+    '<h3>Guided views</h3><div class="tour stag"><button data-tour="centre">1 · The most central ideas<small>the best-connected concepts, in rings</small></button><button data-tour="growth">2 · How the map grows<small>start with chapter 1, then add chapters</small></button><button data-tour="evidence">3 · One relation and its source<small>see the sentence it came from</small></button></div>'+
+    '<h3>Show chapters</h3><select id="f-ch" aria-label="Show chapters">'+[1,2,3].map(c=>'<option value="'+c+'"'+(c===S.F.chapter?' selected':'')+'>'+(c===1?'chapter 1 only':'chapters 1–'+c)+'</option>').join('')+'</select>'+
+    '<h3>Layout</h3><select id="f-lay" aria-label="Layout"><option value="force"'+(S.F.layout==='force'?' selected':'')+'>Spread out — shows connections</option><option value="rings"'+(S.F.layout==='rings'?' selected':'')+'>Rings — most central in the middle</option></select>'+
+    '<h3>Colour by</h3><select id="f-col" aria-label="Colour nodes by"><option value="type">kind of concept</option><option value="ring"'+(S.F.colour==='ring'?' selected':'')+'>how central (bigger = more important)</option></select>'+
+    '<label style="margin-top:6px"><input type="checkbox" id="f-unl"'+(S.F.unlinked?' checked':'')+'> also show the '+st.unlinked_nodes+' concepts with no relations</label>';
+    if(dbg) h+='<h3>Hide less important concepts</h3><input type="range" id="f-top" aria-label="Minimum importance" min="0" max="1" step="0.05" value="'+S.F.top+'"> <span class="small" id="f-top-v">'+S.F.top+'</span>';
   }
   if(S.mode==='sci'){
-    h+='<h3>Guided views</h3><div class="tour stag"><button data-tour="found">1 · What it found<small>blue = matches gold, orange = not in gold</small></button><button data-tour="missed">2 · What it missed<small>dashed grey = gold relations not predicted</small></button><button data-tour="text">3 · Why: the document<small>predictions highlighted on the source text</small></button></div>'+
-    '<label style="margin-top:8px"><input type="checkbox" id="f-miss"'+(S.F.missed?' checked':'')+'> show missed gold relations</label>'+
-    '<h3>Colour by</h3><select id="f-col" aria-label="Colour nodes by"><option value="gold"'+(S.F.colour==='gold'?' selected':'')+'>match with gold</option><option value="type"'+(S.F.colour==='type'?' selected':'')+'>concept type</option></select>';
+    h+='<h3>Guided views</h3><div class="tour stag"><button data-tour="found">1 · What it found<small>blue = in the answer key, orange = not in it</small></button><button data-tour="missed">2 · What it missed<small>dashed grey lines = answer-key relations it did not find</small></button><button data-tour="text">3 · Read the paper<small>what it found, highlighted in the text</small></button></div>'+
+    '<label style="margin-top:8px"><input type="checkbox" id="f-miss"'+(S.F.missed?' checked':'')+'> show the relations it missed</label>'+
+    '<h3>Colour by</h3><select id="f-col" aria-label="Colour nodes by"><option value="gold"'+(S.F.colour==='gold'?' selected':'')+'>agrees with the answer key</option><option value="type"'+(S.F.colour==='type'?' selected':'')+'>kind of concept</option></select>';
   }
-  h+='<h3>Search</h3><input type="search" id="f-q" aria-label="Search concepts by name or alias" placeholder="concept name or alias  ( / )" value="'+esc(S.F.query)+'" list="dl"><datalist id="dl">'+G.nodes.filter(n=>!n.ghost).slice(0,2500).map(n=>'<option value="'+esc(n.name)+'">').join('')+'</datalist>';
+  h+='<h3>Search</h3><input type="search" id="f-q" aria-label="Search concepts by name or alias" placeholder="concept or other name  (press /)" value="'+esc(S.F.query)+'" list="dl"><datalist id="dl">'+G.nodes.filter(n=>!n.ghost).slice(0,2500).map(n=>'<option value="'+esc(n.name)+'">').join('')+'</datalist>';
   const types=[...new Set(G.nodes.filter(n=>!n.ghost).map(n=>n.type))].sort();
-  h+='<h3>Concept types</h3><div class="stag">'+types.map(t=>'<label><input type="checkbox" data-t="'+esc(t)+'"'+(S.F.types.has(t)?' checked':'')+'><span class="sw" style="background:'+typeCol(t)+'"></span>'+esc(t)+' <span class="small">'+G.nodes.filter(n=>n.type===t&&!n.ghost).length+'</span></label>').join('')+'</div>';
+  h+='<h3>Kinds of concept</h3><div class="stag">'+types.map(t=>'<label><input type="checkbox" data-t="'+esc(t)+'"'+(S.F.types.has(t)?' checked':'')+'><span class="sw" style="background:'+typeCol(t)+'"></span>'+esc(t)+' <span class="small">'+G.nodes.filter(n=>n.type===t&&!n.ghost).length+'</span></label>').join('')+'</div>';
   const cnt={}; G.edges.filter(e=>e.kind!=='gold_missed').forEach(e=>cnt[e.rel]=(cnt[e.rel]||0)+1); const rels=Object.keys(cnt).sort((a,b)=>cnt[b]-cnt[a]);
-  h+='<h3>Relations</h3><div class="rl" tabindex="0" aria-label="Relation filters">'+rels.map(r=>{const d=defs()[r]||{}; return '<label title="'+esc(d.definition||'')+'"><input type="checkbox" data-r="'+esc(r)+'"'+(S.F.rels.has(r)?' checked':'')+'><span class="sw" style="background:'+relCol(r)+'"></span>'+esc(r)+' <span class="small">'+cnt[r]+'</span></label>';}).join('')+'</div><div style="margin-top:4px"><button id="b-all">all</button> <button id="b-none">none</button></div>'+
-  '<h3>View</h3><label><input type="checkbox" id="f-lab"'+(S.F.labels?' checked':'')+'> label every concept</label><div style="margin-top:4px"><button id="b-fit">Fit to screen</button> <button id="b-reset">Reset</button></div>';
+  h+='<h3>Kinds of relation <span class="small" style="font-weight:400">· hover for a definition</span></h3><div class="rl" tabindex="0" aria-label="Relation filters">'+rels.map(r=>{const d=defs()[r]||{}; return '<label title="'+esc(d.definition||'')+'"><input type="checkbox" data-r="'+esc(r)+'"'+(S.F.rels.has(r)?' checked':'')+'><span class="sw" style="background:'+relCol(r)+'"></span>'+esc(r)+' <span class="small">'+cnt[r]+'</span></label>';}).join('')+'</div><div style="margin-top:4px"><button id="b-all">Select all</button> <button id="b-none">Clear</button></div>'+
+  '<h3>View</h3><label><input type="checkbox" id="f-lab"'+(S.F.labels?' checked':'')+'> label every concept</label><div style="margin-top:4px"><button id="b-fit">Fit to screen</button> <button id="b-reset">Reset filters</button></div>';
   s.innerHTML=h; wireSide(s);
 }
 function wireSide(s){
@@ -506,7 +513,7 @@ function tour(name){
 
 // ---------------------------------------------------------------- tabs: graph / document / tables
 function tabs(){
-  let t=[['graph','Graph']]; if(S.mode==='ev') t=[...EV_TABS]; else { if(S.mode==='sci') t.push(['doc','Document']); if(traceAvailable()) t.push(...TRACE_TABS); if(S.view==='debug') t.push(['table','Tables']); if(S.view==='debug'&&traceAvailable()) t.push(['trace','Trace table']); }
+  let t=[['graph','Graph']]; if(S.mode==='ev') t=[...EV_TABS]; else { if(S.mode==='sci') t.push(['doc','Document']); if(traceAvailable()) t.push(...TRACE_TABS); if(S.view==='debug') t.push(['table','Tables']); if(S.view==='debug'&&traceAvailable()) t.push(['trace','Full log']); }
   $('tabs').innerHTML=t.map(([k,l])=>'<button data-tab="'+k+'" class="'+(S.tab===k?'on':'')+'">'+l+'</button>').join('');
   document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>showTab(b.dataset.tab));
 }
@@ -518,13 +525,13 @@ function showTab(k){
 function renderDoc(){
   const d=S.doc, goldSet=new Set(d.gold_spans.map(g=>g[0]+'-'+g[1])), predSet=new Map(d.pred_spans.map(p=>[p[0]+'-'+p[1],p[2]]));
   const startAt=new Map(), gOnly=new Map(); d.pred_spans.forEach(p=>startAt.set(p[0],p)); d.gold_spans.forEach(g=>{ if(!predSet.has(g[0]+'-'+g[1])) gOnly.set(g[0],g); });
-  let h='<p class="small" style="max-width:900px"><span class="doc"><s class="pg">predicted and in gold</s> <s class="pf">predicted, not in gold</s> <s class="gm">gold, not predicted</s></span> Click a predicted span to open its node. ' +
-    d.pred_spans.filter(p=>goldSet.has(p[0]+'-'+p[1])).length+' of '+d.pred_spans.length+' predicted spans are in the gold; '+d.gold_spans.filter(g=>!predSet.has(g[0]+'-'+g[1])).length+' of '+d.gold_spans.length+' gold entities were not predicted.</p><div class="doc">';
+  let h='<p class="small" style="max-width:900px"><span class="doc"><s class="pg">found, and in the answer key</s> <s class="pf">found, not in the answer key</s> <s class="gm">in the answer key, missed</s></span> Click a highlighted phrase to open it. ' +
+    d.pred_spans.filter(p=>goldSet.has(p[0]+'-'+p[1])).length+' of the '+d.pred_spans.length+' phrases it found are in the answer key; it missed '+d.gold_spans.filter(g=>!predSet.has(g[0]+'-'+g[1])).length+' of the '+d.gold_spans.length+' answer-key concepts.</p><div class="doc">';
   let sentI=0, i=0; const T=d.tokens;
   while(i<T.length){
     const p=startAt.get(i), g=gOnly.get(i);
     if(p){ const cls=goldSet.has(p[0]+'-'+p[1])?'pg':'pf'; h+='<s class="'+cls+'" data-n="'+esc(p[2])+'">'+esc(T.slice(p[0],p[1]).join(' '))+'</s> '; i=p[1]; }
-    else if(g){ h+='<s class="gm" title="gold '+esc(g[2])+'">'+esc(T.slice(g[0],g[1]).join(' '))+'</s> '; i=g[1]; }
+    else if(g){ h+='<s class="gm" title="answer key: '+esc(g[2])+'">'+esc(T.slice(g[0],g[1]).join(' '))+'</s> '; i=g[1]; }
     else { h+=esc(T[i])+' '; i++; }
     if(i>=d.sentence_ends[sentI]){ h+='<span class="sentbreak"></span>'; sentI++; }
   }
@@ -535,9 +542,9 @@ function renderTables(){
   const el=$('tableview'); let h='';
   const nodesRows=S.G.nodes.filter(n=>!n.ghost).map(n=>({id:n.id,name:n.name,type:n.type,ch:n.ch??'',ring:n.ring??'',imp:n.importance??'',deg:(adj[n.id]||[]).length,al:(n.aliases||[]).length}));
   const edgesRows=S.G.edges.map(e=>({id:e.id,s:byId[e.s].name,rel:e.rel,t:byId[e.t].name,kind:e.kind||'accepted',m:e.kind==='gold_missed'?e.code:(S.mode==='sci'?(e.matches_gold?'match':'no match'):('ch'+e.ch+' '+e.section))}));
-  h+='<h3 style="margin-top:0">Concepts ('+nodesRows.length+')</h3>'+tbl(nodesRows,['name','type','ch','ring','imp','deg','al'],['concept','type','chapter','ring','importance','degree','aliases'],'n');
-  h+='<h3>Relations ('+edgesRows.length+')</h3>'+tbl(edgesRows,['s','rel','t','kind','m'],['source','relation','target','kind','match / code / section'],'e');
-  if(S.mode==='sci') h+='<h3>Gold relations ('+S.doc.gold_rels.length+')</h3>'+tbl(S.doc.gold_rels.map((r,i)=>({id:'gold'+i,a:r.src_text,rel:r.rel,b:r.tgt_text,m:r.matched?'MATCHED':'missed',c:r.code})),['a','rel','b','m','c'],['gold source','relation','gold target','status','earliest failure'],'g');
+  h+='<h3 style="margin-top:0">Concepts ('+nodesRows.length+')</h3>'+tbl(nodesRows,['name','type','ch','ring','imp','deg','al'],['concept','kind','chapter','ring','importance','links','other names'],'n');
+  h+='<h3>Relations ('+edgesRows.length+')</h3>'+tbl(edgesRows,['s','rel','t','kind','m'],['first concept','relation','second concept','status','match / reason / section'],'e');
+  if(S.mode==='sci') h+='<h3>Answer-key relations ('+S.doc.gold_rels.length+')</h3>'+tbl(S.doc.gold_rels.map((r,i)=>({id:'gold'+i,a:r.src_text,rel:r.rel,b:r.tgt_text,m:r.matched?'found':'missed',c:r.code})),['a','rel','b','m','c'],['first concept','relation','second concept','status','where it went wrong'],'g');
   el.innerHTML=h; wireTables(el);
 }
 function tbl(rows,keys,heads,kind){
