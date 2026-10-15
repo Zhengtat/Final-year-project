@@ -79,6 +79,22 @@ def g_link_ok(
     return any(lem(surface) == lem(f) for f in node.forms())
 
 
+_BRACKETS = re.compile(r"\s*\([^)]*\)")
+
+
+def more_specific(surface: str, node: Node) -> bool:
+    """CR-021: the surface names a MORE SPECIFIC term than the node: after bracketed parts are removed, its lemma tokens strictly contain
+    every lemma token of one of the node's forms ("adapter-tuning" vs "adapter", "File Transfer Protocol" vs "protocol"). A shortened form
+    ("summarization" vs "text summarization"), a different word ("hosts" vs "node") or a bracketed acronym variant is not."""
+    from cumap.expert_kg.mentions import default_lemma
+
+    lem = lambda f: [
+        default_lemma(t) for t in re.findall(r"[a-z0-9]+", _BRACKETS.sub("", f).lower())
+    ]
+    s = lem(surface)
+    return any(t and len(s) > len(t) and set(t) < set(s) for t in (lem(f) for f in node.forms()))
+
+
 class ConceptRun:
     def __init__(
         self,
@@ -98,6 +114,7 @@ class ConceptRun:
         m4: bool = False,
         m5: bool = False,
         strict_g_links: bool = False,
+        promote_rejected: bool = False,
         emphasised: dict[str, set[str]] | None = None,
         retriever_k: int = 30,
         card_cap: int = 120,
@@ -226,6 +243,8 @@ class ConceptRun:
                         "trivial": False,
                     }
                 )
+                if self.promote_rejected and more_specific(m["surface"], node):
+                    self._promote(out, meta, sid, order, m, node)
                 continue
             node.mentions.append(
                 {
@@ -330,6 +349,37 @@ class ConceptRun:
                 out.pruned.append(rec)
                 meta["pruned"].append(c["name"])
         out.section_meta[sid] = meta
+
+    def _promote(
+        self, out: RunOutput, meta: dict, sid: str, order: int, m: dict, rejected: Node
+    ) -> None:
+        """CR-021: a rejected link whose surface is a MORE SPECIFIC term becomes its own node (or a mention of the node that already has
+        that name), instead of being dropped. The mention is the generator's own, with its evidence (rule 24); the node inherits the type
+        of the node the generator first chose; every promotion is logged with its rule."""
+        key = r1_key(m["surface"], self.alias_cfg)
+        mention = {"section_id": sid, "order": order, "role": m["role"], "para": m["para"], "evidence": m["evidence"], "surface": m["surface"], "linked_by": "generator"}  # fmt: skip
+        same = next(
+            (
+                n
+                for n in out.store.nodes.values()
+                if key in {r1_key(f, self.alias_cfg) for f in n.forms()}
+            ),
+            None,
+        )
+        if same is not None:
+            same.mentions.append(mention)
+            out.merges.append({"rule_id": "G-link-rejected-rerouted", "node_id": same.id, "rejected_target": rejected.id, "surface": m["surface"], "section_id": sid, "evidence": m["evidence"], "trivial": False})  # fmt: skip
+            meta["mentions"].append(same.id)
+            return
+        node = Node(
+            id=out.store.new_id(), name=m["surface"], aliases=[], node_type=rejected.node_type, first_section=sid, first_order=order,
+            definition=m["evidence"] if m["role"] == "defined" else None, def_section=sid if m["role"] == "defined" else None,
+            gloss=make_gloss(m["evidence"]), added_via_hint="promoted_rejected_link",
+        )  # fmt: skip
+        node.mentions.append(mention)
+        out.store.add(node)
+        meta["new_nodes"].append(node.id)
+        out.merges.append({"rule_id": "G-link-rejected-promoted", "node_id": node.id, "rejected_target": rejected.id, "surface": m["surface"], "section_id": sid, "evidence": m["evidence"], "trivial": False})  # fmt: skip
 
     # ---------------------------------------------------------------- backfill (CR-009 §3.7)
     def _backfill(

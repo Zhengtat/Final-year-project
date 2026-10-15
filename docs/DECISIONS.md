@@ -341,3 +341,9 @@ Format: date · decision · reason · alternatives considered.
 - **Adoption:** `configs/matching.yaml` `production_mode: r1key`, applied by `mentions.use_production_matching()` in the cr009_run stages and the CR-012 unit runner (CUMAP_MATCHING still overrides). The code default (`DEFAULT_MATCHING`) stays `token`, so scorers, replays and older runs are unchanged; a run made with r1key records `matching_mode` in `selection_stats`, and the CR-013 pair-pool replay uses the recorded mode. Rule 17 amended in CLAUDE.md. `configs/default.yaml` is not touched (its hash is frozen in the CR-011 handoff).
 - **Caveats:** small dev sample (6 SciNLP papers, ~4 more correct relations); held-out sets not run; the gain comes from PDF-text spelling variants, so textbook (P&D) runs are expected to be unaffected.
 
+
+
+## 2026-10-15 · CR-021 opened (owner: "do option 3"): promote only rejected links that name a MORE SPECIFIC term; switch off pending review
+- **Decision:** built `more_specific` + `ConceptRun._promote` behind `configs/concept_policy.yaml` `promote_rejected_links: false`. Adoption rule (pre-registered): owner marks the 33 rule-selected rejected links; adopt if the "distinct concept" share has a Wilson 95% lower bound >= 0.70, then measure on a new-run-id re-run before any graph is replaced.
+- **Reason:** of 140 rejected links (P&D production 124, SciNLP 16), 33 are more specific terms (adapter-tuning, File Transfer Protocol, physical link); 32 are shortened forms that would split one concept, and 75 are different words (often generic). The dev data cannot measure the change (P&D development sections 0 cases, SciNLP dev 2), so a human review is the honest test (rule 2 / 👤).
+- **Alternatives:** promote every rejected link (rejected: splits and generic nodes); a paid dev experiment now (rejected: no signal).

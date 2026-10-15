@@ -51,3 +51,6 @@ reports/kg_explorer/
 # CR-013: the SciNLP-mode screenshot contains CC BY-NC text
 reports/cr013/screenshots/_*
 .venv-hipporag/
+
+# CR-021 owner review sheet (contains CC BY-NC SciNLP text; local only)
+data/interim/suggestions/cr021_*
