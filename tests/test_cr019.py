@@ -8,6 +8,7 @@ import pytest
 
 from cumap.cr012.adapters import SciNLPDoc, detokenise
 from cumap.cr012.types import PredEdge, PredNode
+from cumap.cr019 import stage_b as SB
 from cumap.cr019 import variants as V
 from cumap.cr019.occurrences import AMBIGUOUS, UNIQUE, WINDOW, build_index, spans_by_node
 
@@ -114,3 +115,43 @@ def test_stage_a_reproduces_frozen_numbers_accounts_for_every_edge_and_leaves_so
         assert e["placed"] + e["unplaced"] == e["predicted"]
     assert sa["FROZEN"]["edges"]["unplaced_counted_as_fp"] is False
     assert all(sa[v]["edges"]["unplaced_counted_as_fp"] for v in V.SC_VARIANTS if v != "FROZEN")
+
+
+# ---------------------------------------------------------------- Stage B (multi-sentence evidence)
+
+
+def test_passage_puts_the_original_sentence_first_then_others_in_text_order_capped_at_k():
+    sents = ["A then B.", "Only A.", "B and A again.", "A, B once more.", "B with A last."]
+    cids = [{"a", "b"}, {"a"}, {"a", "b"}, {"a", "b"}, {"a", "b"}]
+    pair = {"concept_x_id": "a", "concept_y_id": "b", "sentence": "B and A again."}
+    text, n = SB.passage(sents, cids, pair, k=3)
+    assert text.split("\n") == ["B and A again.", "A then B.", "A, B once more."] and n == 3
+
+
+def test_passage_keeps_a_sentence_span_evidence_as_the_first_line():
+    sents = ["A here.", "B there.", "A and B."]
+    pair = {"concept_x_id": "a", "concept_y_id": "b", "sentence": "A here. B there."}
+    text, n = SB.passage(sents, [{"a"}, {"b"}, {"a", "b"}], pair, k=3)
+    assert text.split("\n") == ["A here. B there.", "A and B."] and n == 2
+
+
+def test_new_prompt_versions_exist_and_keep_the_render_slots():
+    from cumap.llm.prompts import load_prompt
+
+    for task, v in zip(
+        ("relation_family", "relation_choice", "relation_qualifiers"),
+        SB.MULTI_VERSIONS,
+        strict=True,
+    ):
+        p = load_prompt(Path("prompts"), task, v)
+        assert p.version == v and "{sentence}" in p.body
+
+
+def test_relations_stage_defaults_are_the_production_versions():
+    import inspect
+
+    from cumap.expert_kg.slice_rerun import relations_stage
+
+    sig = inspect.signature(relations_stage)
+    assert sig.parameters["prompt_versions"].default == ("v3", "v4", "v4")
+    assert sig.parameters["evidence_fn"].default is None and sig.parameters["limit"].default is None

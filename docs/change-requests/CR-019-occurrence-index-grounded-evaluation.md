@@ -1,6 +1,6 @@
 # CR-019 — Occurrence index and grounding-consistent evaluation
 
-**Status:** specification approved by the owner 2026-10-15 ("yes, and then execute it"). Stage A ($0) executed in this CR; Stage B (paid pilot) stops for approval.
+**Status:** Stage A done (STOP 1 answered: IDX-P1 reported beside frozen numbers, IDX-P3 secondary). Stage B done under the $25 cap ($6.49): KEEP_SINGLE by the pre-registered rule (`reports/cr019/stage_b.md`). Ready for merge review.
 **Branch:** `cr-018-boundary-identity` (owner decision 2026-10-15: CR-018 is marked INCOMPLETE, paused at STOP 2 awaiting a human annotator; CR-019 runs on the same branch). Tag `cr-019-complete` when merged.
 **Scope:** evaluation, reporting and the explorer. Stage A changes no model behaviour, extraction, pair selection, relation semantics or canonicalisation, and no frozen artefact.
 

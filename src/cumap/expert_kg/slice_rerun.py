@@ -180,16 +180,21 @@ def relations_stage(
     *,
     save_every: int = 20,
     progress=None,
+    prompt_versions: tuple[str, str, str] = ("v3", "v4", "v4"),
+    evidence_fn=None,
+    limit: int | None = None,
 ) -> Checkpoint:
+    """`prompt_versions` (family, choice, qualifiers), `evidence_fn` (pair dict -> pair dict with the evidence text in `sentence`)
+    and `limit` (classify at most this many new pairs, then stop) exist for CR-019 Stage B; the defaults are the production stage."""
     concepts = {c.concept_id: c for c in _restore_concept_registry(cp, embed_fn).all()}
     matcher = MentionMatcher(concept_vocab(list(concepts.values())))
     # CR-008: choice v4 (adds `same_concept`, no edge), qualifiers v4 (no corrects_intuition / intuition)
     fam, rel, qual = (
         load_prompt(prompts_dir, t, v)
-        for t, v in (
-            ("relation_family", "v3"),
-            ("relation_choice", "v4"),
-            ("relation_qualifiers", "v4"),
+        for t, v in zip(
+            ("relation_family", "relation_choice", "relation_qualifiers"),
+            prompt_versions,
+            strict=True,
         )
     )
     done = {
@@ -200,11 +205,16 @@ def relations_stage(
         frozenset((a["concept_id"], a["anchor_id"])) for a in getattr(cp, "anchors", [])
     }
     todo = [("selected", p) for p in cp.selected_pairs] + [("sample", p) for p in cp.sample_pairs]
+    new = 0
     for i, (group, p) in enumerate(todo):
         key = frozenset((p["concept_x_id"], p["concept_y_id"]))
         if key in done:
             continue
-        pair = CandidatePair(**p)
+        if limit is not None and new >= limit:
+            save_checkpoint(cp, run_dir)
+            return cp
+        new += 1
+        pair = CandidatePair(**(evidence_fn(p) if evidence_fn else p))
         try:
             res = classify_pair_v3(
                 client,
