@@ -1,0 +1,22 @@
+# CR-018 STOP 2 — boundary-convention audit: frozen decision rule (PROPOSED by implementation; Research may amend BEFORE the completed sheet is returned).
+# Comparison: human span judgement (valid = VALID_EXACT or VALID_NESTED) vs the development-gold convention (span is a gold mention, exact offsets).
+version: cr018-audit-1
+labels: [VALID_EXACT, VALID_NESTED, OVERLONG, UNDERLONG, INVALID_NESTED, DESCRIPTIVE_WRAPPER, UNCERTAIN]
+valid_labels: [VALID_EXACT, VALID_NESTED]
+q1_by_label: {VALID_EXACT: "yes", VALID_NESTED: "yes", OVERLONG: "no", UNDERLONG: "no", INVALID_NESTED: "no", DESCRIPTIVE_WRAPPER: "no", UNCERTAIN: "unsure"}
+material:                       # the convention is MATERIALLY different if ANY rule fires ...
+  min_span_agreement: 0.80      # R1: span-level agreement (UNCERTAIN excluded)
+  max_gold_unmarked_judged_valid: 0.20   # R2: share of gold-unmarked candidate spans the human calls valid (gold under-annotation)
+  max_gold_marked_judged_invalid: 0.15   # R3: share of gold-marked spans the human calls invalid (gold over-annotation)
+  min_stratum_agreement: 0.70   # R4: agreement within any one sampling stratum
+systematic_direction_share: 0.70   # ... and SYSTEMATIC if >= this share of disagreements go one way (and there are >= min_disagreements)
+min_disagreements: 20
+max_uncertain_rate: 0.15        # above this the sheet itself is reported as unreliable
+bootstrap: {unit: family, resamples: 10000, seed: 20261015}
+outcomes:
+  both_material_and_systematic: STOPPED_BOUNDARY_GOLD_AMBIGUOUS
+  material_not_systematic: MIXED_RESEARCH_REVIEW
+  not_material: CONVENTION_COMPATIBLE
+provenance:
+  required_sidecar: data/interim/checks/cr018/boundary_audit_annotator.json   # {annotator_id, role: human, model_assistance: none, completed_on}
+  refuse_filenames_containing: [model, llm, gpt, filled_by_model]

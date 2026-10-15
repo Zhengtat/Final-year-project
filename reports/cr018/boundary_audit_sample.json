@@ -1,0 +1,33 @@
+{
+ "seed": "cr018-boundary-audit-v1",
+ "families": 120,
+ "rows": 480,
+ "per_stratum": {
+  "OVERLONG": 30,
+  "UNDERLONG_PARTIAL": 30,
+  "INVALID_NESTED": 30,
+  "NESTED_PAIR": 15,
+  "GOLD_SILENT": 15
+ },
+ "available_per_stratum": {
+  "OVERLONG": 596,
+  "UNDERLONG_PARTIAL": 232,
+  "INVALID_NESTED": 104,
+  "NESTED_PAIR": 761,
+  "GOLD_SILENT": 469
+ },
+ "sections": [
+  "4.1",
+  "4.2",
+  "5.3",
+  "6.1",
+  "6.4",
+  "7.2",
+  "8.3",
+  "8.4",
+  "8.5",
+  "9.2"
+ ],
+ "blind_sheet_sha256": "fdf3ea648886a01f52f11dcf0837c08b6a84f73a165018d350ebc020b2652340",
+ "key_sha256": "1dc0c1f4f550432d7807ea51c6118c0724b5533daf3a54bb9444d41290b981aa"
+}

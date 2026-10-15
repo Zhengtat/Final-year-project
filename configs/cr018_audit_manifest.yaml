@@ -1,0 +1,24 @@
+version: cr018-audit-manifest-1
+status: AWAITING_HUMAN_ANNOTATOR
+seed: cr018-boundary-audit-v1
+hashes:
+  data/interim/checks/cr018/boundary_audit_blind.csv: fdf3ea648886a01f52f11dcf0837c08b6a84f73a165018d350ebc020b2652340
+  data/processed/cr018/boundary_audit_key.csv: 1dc0c1f4f550432d7807ea51c6118c0724b5533daf3a54bb9444d41290b981aa
+  docs/cr018/BOUNDARY_AUDIT_INSTRUCTIONS.md: 0b683c2394cc863ff0a9820b145a83d16c7286837e51040d93934c4ccfb868ce
+  configs/cr018_audit.yaml: 4c89e0f0d822afae71ffc7ba662f0ec4ffb44766553c3ca147c319e073fc4cd4
+  src/cumap/cr018/audit_sample.py: ec8a6a2ce8acf725bb390d4b2b6617ad54b380ae6139eaaccec815bb21e7ae1e
+  src/cumap/cr018/audit_score.py: 75dbc67f7d2e518110dc9a973a6338bfeaa96650493338aac851a8f25e73a002
+rule: sheet and key are deterministic from the seed and the saved CR-014/CR-015 development
+  artefacts; the key is gitignored and recoverable by re-running audit_sample (hash
+  must match). No fresh section is used. Nothing may be filled by implementation.
+freeze_note: instructions, decision rule and scorer are frozen with this manifest;
+  changes need a Research amendment before the completed sheet is returned
+sample:
+  families: 120
+  spans: 480
+  strata:
+    OVERLONG: 30
+    UNDERLONG_PARTIAL: 30
+    INVALID_NESTED: 30
+    NESTED_PAIR: 15
+    GOLD_SILENT: 15

@@ -292,3 +292,8 @@ Format: date · decision · reason · alternatives considered.
 - **Decision:** CR-018 started on branch `cr-018-boundary-identity` from `main` (`9337cec`); spec and handover copied into `docs/`. STOP 1 is read-only: Track A seam = `selector.verify_selected` / `placement.family_grounded` (saved A2 spans reproduce exactly); BA1 (selector only, no verifier) computed from saved artefacts, P 0.439 / R 0.849 / F1 0.579; fresh-section audit found 4.3 and 6.2 carry model-drafted CR-015 pilot gold (no predictions), so they are development-level, while 5.2, 6.5, 9.1, 9.4 are untouched; Track B cannot meet the Wilson auto-link gate with the available identity cases (n >= 73 error-free links needed; 58 residual dev cases).
 - **Reason:** spec STOP 1 requirement; no proposal, selector, verifier or canonicalisation code changed, no model call.
 - **Open (Research):** D1-D6 in `reports/cr018/STOP1_RECONCILIATION.md`.
+
+## 2026-10-15 · CR-018 STOP 2: boundary convention audit prepared, awaiting a human annotator
+- **Decision:** froze a new 120-family / 480-span blind sheet (seed `cr018-boundary-audit-v1`, exposed CR-014 sections only), annotator instructions, a proposed decision rule (`configs/cr018_audit.yaml`) and a scorer that refuses non-human sheets. Status `AWAITING_HUMAN_ANNOTATOR`; nothing filled, no model labels, sample not reduced, no model call. The earlier CR-015 model-filled sheet is not used.
+- **Reason:** spec STOP 2 and the instruction that a human must complete the audit before any boundary-prompt tuning.
+- **Alternatives:** model-filled or 30-family audit (rejected without a new Research decision). Thresholds R1-R4 are implementation proposals pending Research confirmation.
