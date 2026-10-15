@@ -1,0 +1,530 @@
+{
+ "scinlp_test": {
+  "before": {
+   "documents": [
+    "2021.acl-long.353",
+    "2024.acl-long.108-1-9.grobid",
+    "P17-1058.grobid"
+   ],
+   "relation": {
+    "FROZEN": {
+     "tp": 8,
+     "fp": 14,
+     "fn": 287,
+     "precision": 0.36363636363636365,
+     "recall": 0.02711864406779661,
+     "f1": 0.050473186119873815
+    },
+    "FROZEN-UNPLACED-FP": {
+     "tp": 8,
+     "fp": 105,
+     "fn": 287,
+     "precision": 0.07079646017699115,
+     "recall": 0.02711864406779661,
+     "f1": 0.0392156862745098
+    },
+    "IDX-P1": {
+     "tp": 40,
+     "fp": 75,
+     "fn": 255,
+     "precision": 0.34782608695652173,
+     "recall": 0.13559322033898305,
+     "f1": 0.1951219512195122
+    },
+    "IDXR1-P1": {
+     "tp": 40,
+     "fp": 76,
+     "fn": 255,
+     "precision": 0.3448275862068966,
+     "recall": 0.13559322033898305,
+     "f1": 0.19464720194647206
+    },
+    "IDXR1-P3": {
+     "tp": 102,
+     "fp": 166,
+     "fn": 193,
+     "precision": 0.3805970149253731,
+     "recall": 0.34576271186440677,
+     "f1": 0.3623445825932504
+    }
+   },
+   "concept_entity_strict": {
+    "FROZEN": {
+     "tp": 203,
+     "fp": 184,
+     "fn": 562,
+     "precision": 0.524547803617571,
+     "recall": 0.265359477124183,
+     "f1": 0.3524305555555556
+    },
+    "IDXR1-P1": {
+     "tp": 632,
+     "fp": 636,
+     "fn": 133,
+     "precision": 0.49842271293375395,
+     "recall": 0.8261437908496732,
+     "f1": 0.6217412690605016
+    }
+   },
+   "graphs": {
+    "2021.acl-long.353": {
+     "concepts": 86,
+     "aliases": 14,
+     "edges": 48,
+     "selected_pairs": 97,
+     "rejected_links": 2,
+     "adjudicated": {},
+     "matching_mode": "token",
+     "spend_usd": 0.6642
+    },
+    "2024.acl-long.108-1-9.grobid": {
+     "concepts": 74,
+     "aliases": 11,
+     "edges": 49,
+     "selected_pairs": 102,
+     "rejected_links": 2,
+     "adjudicated": {},
+     "matching_mode": "token",
+     "spend_usd": 0.7159
+    },
+    "P17-1058.grobid": {
+     "concepts": 68,
+     "aliases": 16,
+     "edges": 15,
+     "selected_pairs": 93,
+     "rejected_links": 2,
+     "adjudicated": {},
+     "matching_mode": "token",
+     "spend_usd": 0.5514
+    }
+   }
+  },
+  "rebuild": {
+   "documents": [
+    "2021.acl-long.353",
+    "2024.acl-long.108-1-9.grobid",
+    "P17-1058.grobid"
+   ],
+   "relation": {
+    "FROZEN": {
+     "tp": 7,
+     "fp": 17,
+     "fn": 288,
+     "precision": 0.2916666666666667,
+     "recall": 0.023728813559322035,
+     "f1": 0.0438871473354232
+    },
+    "FROZEN-UNPLACED-FP": {
+     "tp": 7,
+     "fp": 102,
+     "fn": 288,
+     "precision": 0.06422018348623854,
+     "recall": 0.023728813559322035,
+     "f1": 0.034653465346534656
+    },
+    "IDX-P1": {
+     "tp": 29,
+     "fp": 83,
+     "fn": 266,
+     "precision": 0.25892857142857145,
+     "recall": 0.09830508474576272,
+     "f1": 0.14250614250614252
+    },
+    "IDXR1-P1": {
+     "tp": 30,
+     "fp": 83,
+     "fn": 265,
+     "precision": 0.26548672566371684,
+     "recall": 0.1016949152542373,
+     "f1": 0.14705882352941177
+    },
+    "IDXR1-P3": {
+     "tp": 97,
+     "fp": 191,
+     "fn": 198,
+     "precision": 0.3368055555555556,
+     "recall": 0.3288135593220339,
+     "f1": 0.33276157804459694
+    }
+   },
+   "concept_entity_strict": {
+    "FROZEN": {
+     "tp": 200,
+     "fp": 174,
+     "fn": 565,
+     "precision": 0.5347593582887701,
+     "recall": 0.26143790849673204,
+     "f1": 0.35118525021949076
+    },
+    "IDXR1-P1": {
+     "tp": 638,
+     "fp": 548,
+     "fn": 127,
+     "precision": 0.5379426644182125,
+     "recall": 0.8339869281045752,
+     "f1": 0.6540235776524859
+    }
+   },
+   "graphs": {
+    "2021.acl-long.353": {
+     "concepts": 85,
+     "aliases": 15,
+     "edges": 48,
+     "selected_pairs": 97,
+     "rejected_links": 2,
+     "adjudicated": {
+      "same_as_target": 2
+     },
+     "matching_mode": "r1key",
+     "spend_usd": 0.082
+    },
+    "2024.acl-long.108-1-9.grobid": {
+     "concepts": 71,
+     "aliases": 13,
+     "edges": 45,
+     "selected_pairs": 102,
+     "rejected_links": 2,
+     "adjudicated": {
+      "same_as_target": 2
+     },
+     "matching_mode": "r1key",
+     "spend_usd": 0.1095
+    },
+    "P17-1058.grobid": {
+     "concepts": 59,
+     "aliases": 18,
+     "edges": 16,
+     "selected_pairs": 93,
+     "rejected_links": 2,
+     "adjudicated": {
+      "new_concept": 2
+     },
+     "matching_mode": "r1key",
+     "spend_usd": 0.3917
+    }
+   }
+  }
+ },
+ "scinlp_dev": {
+  "before": {
+   "documents": [
+    "2021.acl-long.295",
+    "2024.acl-long.144-1-9.grobid",
+    "P02-1004.grobid",
+    "P03-1014.grobid",
+    "P05-1008.grobid",
+    "P16-1007.grobid"
+   ],
+   "relation": {
+    "FROZEN": {
+     "tp": 8,
+     "fp": 44,
+     "fn": 171,
+     "precision": 0.15384615384615385,
+     "recall": 0.0446927374301676,
+     "f1": 0.06926406926406926
+    },
+    "FROZEN-UNPLACED-FP": {
+     "tp": 8,
+     "fp": 123,
+     "fn": 171,
+     "precision": 0.061068702290076333,
+     "recall": 0.0446927374301676,
+     "f1": 0.05161290322580645
+    },
+    "IDX-P1": {
+     "tp": 15,
+     "fp": 117,
+     "fn": 164,
+     "precision": 0.11363636363636363,
+     "recall": 0.08379888268156424,
+     "f1": 0.09646302250803859
+    },
+    "IDXR1-P1": {
+     "tp": 15,
+     "fp": 117,
+     "fn": 164,
+     "precision": 0.11363636363636363,
+     "recall": 0.08379888268156424,
+     "f1": 0.09646302250803859
+    },
+    "IDXR1-P3": {
+     "tp": 20,
+     "fp": 156,
+     "fn": 159,
+     "precision": 0.11363636363636363,
+     "recall": 0.11173184357541899,
+     "f1": 0.11267605633802816
+    }
+   },
+   "concept_entity_strict": {
+    "FROZEN": {
+     "tp": 206,
+     "fp": 414,
+     "fn": 465,
+     "precision": 0.33225806451612905,
+     "recall": 0.30700447093889716,
+     "f1": 0.31913245546088304
+    },
+    "IDXR1-P1": {
+     "tp": 433,
+     "fp": 897,
+     "fn": 238,
+     "precision": 0.3255639097744361,
+     "recall": 0.6453055141579732,
+     "f1": 0.43278360819590206
+    }
+   },
+   "graphs": {
+    "2021.acl-long.295": {
+     "concepts": 68,
+     "aliases": 3,
+     "edges": 22,
+     "selected_pairs": 104,
+     "rejected_links": 4,
+     "adjudicated": {},
+     "matching_mode": "token",
+     "spend_usd": 0.5975
+    },
+    "2024.acl-long.144-1-9.grobid": {
+     "concepts": 94,
+     "aliases": 14,
+     "edges": 39,
+     "selected_pairs": 81,
+     "rejected_links": 1,
+     "adjudicated": {},
+     "matching_mode": "token",
+     "spend_usd": 0.701
+    },
+    "P05-1008.grobid": {
+     "concepts": 48,
+     "aliases": 3,
+     "edges": 5,
+     "selected_pairs": 45,
+     "rejected_links": 1,
+     "adjudicated": {},
+     "matching_mode": "token",
+     "spend_usd": 0.0
+    },
+    "P16-1007.grobid": {
+     "concepts": 82,
+     "aliases": 12,
+     "edges": 29,
+     "selected_pairs": 88,
+     "rejected_links": 2,
+     "adjudicated": {},
+     "matching_mode": "token",
+     "spend_usd": 0.5856
+    },
+    "P02-1004.grobid": {
+     "concepts": 65,
+     "aliases": 2,
+     "edges": 21,
+     "selected_pairs": 62,
+     "rejected_links": 0,
+     "adjudicated": {},
+     "matching_mode": "token",
+     "spend_usd": 0.0032
+    },
+    "P03-1014.grobid": {
+     "concepts": 66,
+     "aliases": 5,
+     "edges": 16,
+     "selected_pairs": 76,
+     "rejected_links": 2,
+     "adjudicated": {},
+     "matching_mode": "token",
+     "spend_usd": 0.5507
+    }
+   }
+  },
+  "rebuild": {
+   "documents": [
+    "2021.acl-long.295",
+    "2024.acl-long.144-1-9.grobid",
+    "P02-1004.grobid",
+    "P03-1014.grobid",
+    "P05-1008.grobid",
+    "P16-1007.grobid"
+   ],
+   "relation": {
+    "FROZEN": {
+     "tp": 6,
+     "fp": 42,
+     "fn": 173,
+     "precision": 0.125,
+     "recall": 0.0335195530726257,
+     "f1": 0.05286343612334802
+    },
+    "FROZEN-UNPLACED-FP": {
+     "tp": 6,
+     "fp": 126,
+     "fn": 173,
+     "precision": 0.045454545454545456,
+     "recall": 0.0335195530726257,
+     "f1": 0.03858520900321543
+    },
+    "IDX-P1": {
+     "tp": 13,
+     "fp": 121,
+     "fn": 166,
+     "precision": 0.09701492537313433,
+     "recall": 0.07262569832402235,
+     "f1": 0.0830670926517572
+    },
+    "IDXR1-P1": {
+     "tp": 17,
+     "fp": 116,
+     "fn": 162,
+     "precision": 0.12781954887218044,
+     "recall": 0.09497206703910614,
+     "f1": 0.10897435897435898
+    },
+    "IDXR1-P3": {
+     "tp": 22,
+     "fp": 159,
+     "fn": 157,
+     "precision": 0.12154696132596685,
+     "recall": 0.12290502793296089,
+     "f1": 0.1222222222222222
+    }
+   },
+   "concept_entity_strict": {
+    "FROZEN": {
+     "tp": 212,
+     "fp": 438,
+     "fn": 459,
+     "precision": 0.3261538461538461,
+     "recall": 0.31594634873323396,
+     "f1": 0.32096896290688864
+    },
+    "IDXR1-P1": {
+     "tp": 448,
+     "fp": 1015,
+     "fn": 223,
+     "precision": 0.3062200956937799,
+     "recall": 0.6676602086438153,
+     "f1": 0.4198687910028116
+    }
+   },
+   "graphs": {
+    "2021.acl-long.295": {
+     "concepts": 84,
+     "aliases": 8,
+     "edges": 22,
+     "selected_pairs": 104,
+     "rejected_links": 3,
+     "adjudicated": {
+      "same_as_target": 1,
+      "new_concept": 2
+     },
+     "matching_mode": "r1key",
+     "spend_usd": 0.3882
+    },
+    "2024.acl-long.144-1-9.grobid": {
+     "concepts": 98,
+     "aliases": 13,
+     "edges": 43,
+     "selected_pairs": 81,
+     "rejected_links": 1,
+     "adjudicated": {
+      "new_concept": 1
+     },
+     "matching_mode": "r1key",
+     "spend_usd": 0.0891
+    },
+    "P05-1008.grobid": {
+     "concepts": 48,
+     "aliases": 4,
+     "edges": 5,
+     "selected_pairs": 45,
+     "rejected_links": 1,
+     "adjudicated": {
+      "new_concept": 1
+     },
+     "matching_mode": "r1key",
+     "spend_usd": 0.0475
+    },
+    "P16-1007.grobid": {
+     "concepts": 82,
+     "aliases": 14,
+     "edges": 27,
+     "selected_pairs": 88,
+     "rejected_links": 2,
+     "adjudicated": {
+      "same_as_target": 2
+     },
+     "matching_mode": "r1key",
+     "spend_usd": 0.0535
+    },
+    "P02-1004.grobid": {
+     "concepts": 65,
+     "aliases": 2,
+     "edges": 21,
+     "selected_pairs": 62,
+     "rejected_links": 0,
+     "adjudicated": {},
+     "matching_mode": "r1key",
+     "spend_usd": 0.0059
+    },
+    "P03-1014.grobid": {
+     "concepts": 62,
+     "aliases": 6,
+     "edges": 14,
+     "selected_pairs": 66,
+     "rejected_links": 2,
+     "adjudicated": {
+      "same_as_target": 2
+     },
+     "matching_mode": "r1key",
+     "spend_usd": 0.047
+    }
+   }
+  }
+ },
+ "pd": {
+  "graphs": {
+   "slice3_c2": {
+    "concepts": 1243,
+    "aliases": 188,
+    "edges": 529,
+    "selected_pairs": 1100,
+    "rejected_links": 124,
+    "adjudicated": {},
+    "matching_mode": "token",
+    "spend_usd": 10.2899
+   },
+   "slice3_c3": {
+    "concepts": 1351,
+    "aliases": 239,
+    "edges": 518,
+    "selected_pairs": 1100,
+    "rejected_links": 147,
+    "adjudicated": {
+     "new_concept": 77,
+     "same_as_target": 27,
+     "not_a_concept": 43
+    },
+    "matching_mode": "r1key",
+    "spend_usd": 7.0455
+   }
+  },
+  "dev_sections": {
+   "slice3_c2": {
+    "concept_f1": 0.5519287833827893,
+    "ancestor_hierarchy_f1": 0.22727272727272727,
+    "pair_recall": 0.22727272727272727,
+    "relation_macro_f1": 0.725925925925926,
+    "strict_e2e_edge_f1": 0.12903225806451613
+   },
+   "slice3_c3": {
+    "concept_f1": 0.547945205479452,
+    "ancestor_hierarchy_f1": 0.2,
+    "pair_recall": 0.2571428571428571,
+    "relation_macro_f1": 0.5381944444444444,
+    "strict_e2e_edge_f1": 0.14012738853503184
+   }
+  }
+ },
+ "spend_usd": 8.2599
+}
