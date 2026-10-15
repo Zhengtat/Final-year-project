@@ -1,0 +1,95 @@
+{
+ "version": "v2",
+ "gold": "data/gold/cr021_rejected_links_review_marked.csv",
+ "gold_provenance": "model-assisted, checked by the owner",
+ "spent_usd": 0.5944,
+ "label_counts": {
+  "dev": {
+   "new_concept": 44,
+   "same_as_target": 25,
+   "not_a_concept": 3
+  },
+  "heldout": {
+   "same_as_target": 22,
+   "not_a_concept": 2,
+   "new_concept": 44
+  }
+ },
+ "dev": {
+  "n": 72,
+  "confusion": {
+   "new_concept->new_concept": 40,
+   "new_concept->not_a_concept": 1,
+   "new_concept->same_as_target": 3,
+   "not_a_concept->new_concept": 2,
+   "not_a_concept->not_a_concept": 1,
+   "same_as_target->new_concept": 2,
+   "same_as_target->not_a_concept": 2,
+   "same_as_target->same_as_target": 21
+  },
+  "precision_new_concept": {
+   "correct": 40,
+   "decided": 44,
+   "precision": 0.9090909090909091,
+   "wilson_lb": 0.7884048060208251
+  },
+  "precision_same_as_target": {
+   "correct": 21,
+   "decided": 24,
+   "precision": 0.875,
+   "wilson_lb": 0.6899571185214244
+  },
+  "precision_not_a_concept": {
+   "correct": 1,
+   "decided": 4,
+   "precision": 0.25,
+   "wilson_lb": 0.045586062644636216
+  },
+  "same_rows_decided_new": {
+   "count": 2,
+   "of": 25,
+   "rate": 0.08
+  },
+  "accuracy": 0.8611111111111112,
+  "adopt_promotion": true,
+  "adopt_aliasing": false
+ },
+ "heldout": {
+  "n": 68,
+  "confusion": {
+   "new_concept->new_concept": 42,
+   "new_concept->not_a_concept": 1,
+   "new_concept->same_as_target": 1,
+   "not_a_concept->not_a_concept": 2,
+   "same_as_target->new_concept": 1,
+   "same_as_target->not_a_concept": 1,
+   "same_as_target->same_as_target": 20
+  },
+  "precision_new_concept": {
+   "correct": 42,
+   "decided": 43,
+   "precision": 0.9767441860465116,
+   "wilson_lb": 0.8794073213878312
+  },
+  "precision_same_as_target": {
+   "correct": 20,
+   "decided": 21,
+   "precision": 0.9523809523809523,
+   "wilson_lb": 0.7733018341376451
+  },
+  "precision_not_a_concept": {
+   "correct": 2,
+   "decided": 4,
+   "precision": 0.5,
+   "wilson_lb": 0.15003570882017145
+  },
+  "same_rows_decided_new": {
+   "count": 1,
+   "of": 22,
+   "rate": 0.045454545454545456
+  },
+  "accuracy": 0.9411764705882353,
+  "adopt_promotion": true,
+  "adopt_aliasing": true
+ }
+}
