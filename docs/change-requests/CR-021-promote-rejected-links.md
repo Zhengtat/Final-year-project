@@ -1,6 +1,6 @@
 # CR-021 — Promote a rejected link that names a more specific term
 
-**Status:** built 2026-10-15 (owner: "do option 3"), switch OFF; 👤 STOP 1 = owner review of the candidates. Runs on `cr-018-boundary-identity`.
+**Status:** STOP 1 answered 2026-10-15: switch stays OFF (7 of 33 promotions would split a concept; correct 25/33, Wilson LB 0.59). See DECISIONS. Runs on `cr-018-boundary-identity`.
 **Scope:** concept stage (`concepts_v4/runner.py`). No change to production until the adoption rule in §4 passes.
 
 ## 1. Problem
