@@ -27,6 +27,17 @@ from cumap.schemas.relations import RelationRegistry
 KG = REPO_ROOT / "data" / "processed" / "kg"
 
 
+def _promote_rejected() -> bool:
+    """CR-021: `configs/concept_policy.yaml` `promote_rejected_links` (production switch; false until adopted)."""
+    import yaml
+
+    return bool(
+        yaml.safe_load((REPO_ROOT / "configs/concept_policy.yaml").read_text())[
+            "promote_rejected_links"
+        ]
+    )
+
+
 def stage_concepts(
     run: str,
     *,
@@ -35,6 +46,7 @@ def stage_concepts(
     max_usd: float,
     tau: float = 0.1,
     strict_g_links: bool = False,
+    promote_rejected: bool | None = None,
 ) -> dict:
     use_production_matching()
     settings = get_settings()
@@ -101,6 +113,7 @@ def stage_concepts(
         tau=tau,
         rho=1.5,
         strict_g_links=strict_g_links,
+        promote_rejected=_promote_rejected() if promote_rejected is None else promote_rejected,
         progress=print,
         schemas=make_schemas(profile.entity_types if profile else None),
     )

@@ -1,0 +1,5 @@
+# CR-021: concept-stage policy switches for NEW production runs.
+# promote_rejected_links: when the strict G-link check (CR-009) rejects a link whose surface is a MORE SPECIFIC term than the chosen node
+# ("adapter-tuning" vs "adapter"), create a node for it instead of dropping it. False until the owner review and the adoption rule in
+# docs/change-requests/CR-021-promote-rejected-links.md say otherwise.
+promote_rejected_links: false
