@@ -116,7 +116,9 @@ def passage(
 
 
 def evidence_fn_for(cp_concepts: list[dict], section_texts: dict[str, str]):
-    matcher = MentionMatcher(build_vocab(cp_concepts))
+    matcher = MentionMatcher(
+        build_vocab(cp_concepts), mode="token"
+    )  # Stage B was run with token matching
     cache: dict[str, tuple[list[str], list[set[str]]]] = {}
 
     def fn(p: dict) -> dict:

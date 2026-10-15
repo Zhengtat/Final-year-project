@@ -18,6 +18,7 @@ from cumap.config import REPO_ROOT, get_settings, load_demo_slice
 from cumap.expert_kg import slice_rerun as sr
 from cumap.expert_kg.canonicalize import CanonicalOverrides
 from cumap.expert_kg.lexicon import Lexicon
+from cumap.expert_kg.mentions import use_production_matching
 from cumap.expert_kg.pipeline import load_checkpoint, save_checkpoint
 from cumap.llm.client import LLMClient
 from cumap.llm.prompts import load_prompt
@@ -35,6 +36,7 @@ def stage_concepts(
     tau: float = 0.1,
     strict_g_links: bool = False,
 ) -> dict:
+    use_production_matching()
     settings = get_settings()
     slice_cfg = load_demo_slice()
     sections = sr.load_sections(REPO_ROOT / slice_cfg.pd.source_jsonl, list(slice_cfg.pd.chapters))
@@ -142,6 +144,7 @@ def stage_concepts(
 
 
 def stage_select(run: str, budget: int) -> dict:
+    use_production_matching()
     settings = get_settings()
     slice_cfg = load_demo_slice()
     sections = sr.load_sections(REPO_ROOT / slice_cfg.pd.source_jsonl, list(slice_cfg.pd.chapters))
@@ -156,6 +159,7 @@ def stage_select(run: str, budget: int) -> dict:
 
 
 def stage_relations(run: str, *, dry_run: bool, max_usd: float) -> dict:
+    use_production_matching()
     settings = get_settings()
     run_dir = KG / run
     cp = load_checkpoint(run_dir)
@@ -179,6 +183,7 @@ def stage_relations(run: str, *, dry_run: bool, max_usd: float) -> dict:
 def stage_snapshots(run: str) -> dict:
     import numpy as np
 
+    use_production_matching()
     settings = get_settings()
     slice_cfg = load_demo_slice()
     sections = sr.load_sections(REPO_ROOT / slice_cfg.pd.source_jsonl, list(slice_cfg.pd.chapters))

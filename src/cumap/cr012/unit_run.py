@@ -58,6 +58,9 @@ def select_without_sample(run_id: str, budget: int) -> dict:
     from cumap.schemas.relations import RelationRegistry
 
     settings = get_settings()
+    from cumap.expert_kg.mentions import use_production_matching
+
+    use_production_matching()  # CR-020
     cfg = load_demo_slice()
     sections = sr.load_sections(REPO_ROOT / cfg.pd.source_jsonl, list(cfg.pd.chapters))
     run_dir = REPO_ROOT / "data/processed/kg" / run_id
