@@ -155,3 +155,34 @@ def test_relations_stage_defaults_are_the_production_versions():
     sig = inspect.signature(relations_stage)
     assert sig.parameters["prompt_versions"].default == ("v3", "v4", "v4")
     assert sig.parameters["evidence_fn"].default is None and sig.parameters["limit"].default is None
+
+
+# ---------------------------------------------------------------- R1-key matching (spelling variants)
+from cumap.cr019.occurrences import R1KeyMatcher
+from cumap.expert_kg.alias_rules import AliasConfig
+
+
+def test_r1_key_matcher_finds_hyphen_space_and_concatenated_variants_with_guards():
+    m = R1KeyMatcher(
+        {"prefix-tuning": "p", "IT": "it", "adapter": "a", "LMs": "lm", "LM": "lm"},
+        AliasConfig.load(),
+    )
+    t = "We propose prefixtuning. Prefix tuning and Prefix-Tuning beat it; the adapter, adapter-tuning; an LM and LMs."
+    got = [(x.surface, x.concept_id) for x in m.find(t)]
+    assert got == [
+        ("prefixtuning", "p"),
+        ("Prefix tuning", "p"),
+        ("Prefix-Tuning", "p"),
+        ("adapter", "a"),
+        ("LM", "lm"),
+        ("LMs", "lm"),
+    ]
+
+
+def test_index_r1key_mode_matches_variants_but_token_mode_is_unchanged():
+    cs = [concept("c_p", "prefix-tuning", ["we propose prefix-tuning"])]
+    text = "we propose prefix-tuning. Later prefixtuning wins."
+    tok, _ = build_index(cs, text, "u", [(0, 25), (26, 50)])
+    r1, _ = build_index(cs, text, "u", [(0, 25), (26, 50)], matching="r1key")
+    assert [text[o.start : o.end] for o in tok] == ["prefix-tuning"]
+    assert [text[o.start : o.end] for o in r1] == ["prefix-tuning", "prefixtuning"]
