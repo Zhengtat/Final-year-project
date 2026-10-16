@@ -14,12 +14,12 @@ let TR = null, TRLOAD = null;
 const TS = {stage:'pair_selection', sectionAll:true, section:null, step:0, snap:2, whyA:'', whyB:'', whyOut:null, lostMore:{}, evFilter:{stage:'',outcome:'',layer:'',q:''}};
 
 // ---------------------------------------------------------------- loading (gzip + base64, decoded lazily on first use)
-function traceAvailable(){ return S.mode==='pd' && !!$('trace-gz') && ($('trace-gz').textContent||'').length>10; }
+function traceAvailable(){ return S.mode==='pd' && !!$(TRACE_ID) && ($(TRACE_ID).textContent||'').length>10; }
 function loadTrace(){
   if(TR) return Promise.resolve(TR);
   if(TRLOAD) return TRLOAD;
   TRLOAD = (async()=>{
-    const b64=($('trace-gz').textContent||'').trim(); const bin=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
+    const b64=($(TRACE_ID).textContent||'').trim(); const bin=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
     const stream=new Blob([bin]).stream().pipeThrough(new DecompressionStream('gzip'));
     TR=JSON.parse(await new Response(stream).text()); indexTrace(); return TR;
   })();
@@ -62,7 +62,7 @@ function renderEv(ev){
 }
 function poolEv(i, kind){
   const [pid,x,y,rank,sel,si,cue,cooc,sr,sp]=TR.pool[i]; const ids=TR.pool_ids[i];
-  const base={stage:kind==='gen'?'pair_generation':'pair_selection', object_id:'pair:'+pid, section_id:TR.pool_sections[si], layer:'REPLAYED', authority:'SCORE', score:cue, eligible_count:TR.eligible, budget:TR.meta.replay.budget, event_id:'te_'+(kind==='gen'?ids[0]:ids[1]), source_artifact:'data/processed/kg/slice3_c2/checkpoint.json', source_locator:'selection_stats'};
+  const base={stage:kind==='gen'?'pair_generation':'pair_selection', object_id:'pair:'+pid, section_id:TR.pool_sections[si], layer:'REPLAYED', authority:'SCORE', score:cue, eligible_count:TR.eligible, budget:TR.meta.replay.budget, event_id:'te_'+(kind==='gen'?ids[0]:ids[1]), source_artifact:'data/processed/kg/'+TR.meta.run+'/checkpoint.json', source_locator:'selection_stats'};
   return kind==='gen' ? {...base, action:'pool_pair_replayed', outcome:'emitted', attrs:{cooccurrence_count:cooc, section_pool:sp, section_rank:sr}}
                       : {...base, action:'rank_replayed', outcome:sel?'selected':'not_selected', rank, input_refs:['concept:'+x,'concept:'+y], attrs:{section_rank:sr, section_pool:sp}};
 }

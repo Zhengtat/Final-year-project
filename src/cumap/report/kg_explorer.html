@@ -185,11 +185,24 @@ button.evchip{font-size:12px;padding:3px 9px;border-radius:12px}button.evchip.on
   <aside id="detail" tabindex="0" aria-label="Details of the selected item"><div class="in" id="detailin"></div></aside>
 </main>
 <script type="application/octet-stream" id="trace-gz">/*__TRACE_B64__*/</script>
+<!--__TRACE_ALT__-->
 <script type="application/octet-stream" id="eval-gz">/*__EVAL_B64__*/</script>
 <script type="application/octet-stream" id="scorecard-gz">/*__SCORECARD_B64__*/</script>
 <script>
 const DATA = /*__DATA__*/null;
 const NA = DATA.na;
+// 2026-10-16 rebuild (comparison only): alternative P&D graph(s) and the rebuilt SciNLP run, switchable; the defaults are unchanged
+DATA.pd_sets = Object.assign({[DATA.pd.run_id]: DATA.pd}, DATA.pd_alt||{});
+DATA.sci_sets = Object.assign({frozen: DATA.sci}, DATA.sci_alt||{});
+const PROD_RUN = DATA.pd.run_id;
+let TRACE_ID = 'trace-gz';
+function usePdRun(k){ if(!DATA.pd_sets[k]) return; DATA.pd=DATA.pd_sets[k]; TRACE_ID = k===PROD_RUN ? 'trace-gz' : 'trace-gz-'+k; TR=null; TRLOAD=null; S.sel=null; setMode('pd'); }
+function useSciRun(k){ if(!DATA.sci_sets[k]) return; const id=S.doc&&S.doc.doc_id; DATA.sci=DATA.sci_sets[k]; S.sel=null; setMode('sci', DATA.sci.docs.find(d=>d.doc_id===id)||DATA.sci.docs[0]); }
+function runSwitch(){
+  if(S.mode==='pd'&&Object.keys(DATA.pd_sets).length>1) return '<h3>Graph</h3><div class="seg" style="display:flex">'+Object.keys(DATA.pd_sets).map(k=>'<button data-pdrun="'+esc(k)+'" class="'+(DATA.pd.run_id===k?'on':'')+'" style="flex:1">'+esc(k)+(k===PROD_RUN?' · production':' · rebuild')+'</button>').join('')+'</div>';
+  if(S.mode==='sci'&&Object.keys(DATA.sci_sets).length>1) return '<h3>Run</h3><div class="seg" style="display:flex">'+Object.keys(DATA.sci_sets).map(k=>'<button data-scirun="'+esc(k)+'" class="'+(DATA.sci===DATA.sci_sets[k]?'on':'')+'" style="flex:1">'+(k==='frozen'?'Frozen (CR-012)':'Rebuilt 2026-10-16')+'</button>').join('')+'</div>';
+  return '';
+}
 // Okabe-Ito based palette (colour-blind safe)
 const PAL = ['#0072B2','#E69F00','#009E73','#CC79A7','#D55E00','#56B4E9','#B8A400','#7A7A7A','#8C4FD8','#C23B3B','#2E8B8B','#A0522D','#5B6EE1','#4F7F2F'];
 const TYPE_IDX = {Concept:7,Protocol:0,Component:1,Mechanism:3,DataUnit:2,Parameter:4,Property:5,Event:9,State:6,Layer:12,Identifier:8,task:0,method:1,dataset:2,metric:3};
@@ -249,11 +262,13 @@ function banner(){
   if(S.mode==='ev'){ evBanner(); return; }
   const b=$('banner');
   if(S.mode==='pd'){
-    b.innerHTML='<div class="banner ok"><b>P&amp;D dataset</b> — the ideas in the networking textbook <i>Computer Networks: A Systems Approach</i> (Peterson &amp; Davie), chapters 1–3, and how they connect. Every link comes with the sentence from the book that supports it.'+
+    const alt = DATA.pd.run_id!==PROD_RUN;
+    b.innerHTML='<div class="banner'+(alt?' warn':' ok')+'"><b>P&amp;D dataset'+(alt?' · rebuild '+esc(DATA.pd.run_id)+' (comparison only; the production graph is '+esc(PROD_RUN)+')':'')+'</b> — the ideas in the networking textbook <i>Computer Networks: A Systems Approach</i> (Peterson &amp; Davie), chapters 1–3, and how they connect. Every link comes with the sentence from the book that supports it.'+
     '<details><summary>About this graph</summary>Built by run <code>'+esc(DATA.pd.run_id)+'</code> (chapters 1–3 are the development set). When the same system was tested on other P&amp;D sections ('+DATA.pd_heldout.sections.join(', ')+'), its strictest end-to-end relation score (F1, from 0 to 1) was <b>'+DATA.pd_heldout.e0_strict_f1.toFixed(3)+'</b>. That score belongs to those test sections, not to the graph shown here.</details></div>';
   } else {
     const h=DATA.sci.headline;
-    b.innerHTML='<div class="banner warn"><b>SciNLP dataset — a test run, not the main graph.</b> The same system was run on 3 scientific papers to see how well it works outside networking. Its output is compared with a human answer key and is not part of the P&amp;D graph.'+
+    const reb = DATA.sci!==DATA.sci_sets.frozen;
+    b.innerHTML='<div class="banner warn"><b>SciNLP dataset — a test run, not the main graph.'+(reb?' Rebuilt 2026-10-16 with spelling-variant matching and the rejected-link adjudicator; the frozen CR-012 scores are not replaced.':'')+'</b> The same system was run on 3 scientific papers to see how well it works outside networking. Its output is compared with a human answer key and is not part of the P&amp;D graph.'+
     '<details><summary>Overall score</summary>Relation score (F1, from 0 to 1) <b>'+h.relation_f1.toFixed(3)+'</b> · precision '+h.precision.toFixed(3)+' · recall '+h.recall.toFixed(3)+', over all 3 papers (system as-is, level E0; scores frozen in CR-012). '+ciPlain(h.ci_status)+(DATA.sci.cr019?'<br>CR-019 grounding-consistent scoring (finds every occurrence of a concept and counts every predicted relation): F1 <b>'+DATA.sci.cr019.f1.toFixed(3)+'</b> · precision '+DATA.sci.cr019.precision.toFixed(3)+' · recall '+DATA.sci.cr019.recall.toFixed(3)+'. The frozen scorer left most predicted relations unscored.':'')+'</details></div>';
   }
 }
@@ -462,6 +477,7 @@ function side(){
   if(S.view==='review' && store.get('kg_intro')!=='off'){
     h+='<div class="card" id="intro"><button class="close" id="intro-x" title="Dismiss">×</button><h4>Start here</h4><span class="small">'+(S.mode==='pd'?'This is a map of the ideas in a networking textbook. Dots are concepts, arrows show how they relate, and each arrow keeps the sentence it came from. Try a guided view below, or click any dot.':'The same system, run on scientific papers to test it outside networking. Blue means it agrees with the human answer key; orange means the answer key does not have it.')+'</span></div>';
   }
+  h+=runSwitch();
   if(S.mode==='sci'){
     h+='<h3>Test papers</h3><table class="docs"><tr><th>paper</th><th title="concepts / relations the system found">found</th><th title="concepts / relations in the human answer key">answer key</th><th title="relation score (F1)">score</th></tr>'+DATA.sci.docs.map(d=>'<tr data-d="'+esc(d.doc_id)+'" class="'+(d===S.doc?'sel':'')+'"><td>'+esc(d.doc_id.replace('.grobid',''))+'</td><td title="concepts / relations">'+d.predicted_nodes+' / '+d.predicted_edges+'</td><td title="concepts / relations">'+d.gold_entities+' / '+d.gold_relations+'</td><td>'+d.e0_strict_relation_f1.toFixed(3)+'</td></tr>').join('')+'</table>'+sciCard();
   } else {
@@ -493,6 +509,8 @@ function wireSide(s){
   $$('input[data-t]').forEach(i=>i.onchange=()=>{i.checked?S.F.types.add(i.dataset.t):S.F.types.delete(i.dataset.t);draw();});
   $$('input[data-r]').forEach(i=>i.onchange=()=>{i.checked?S.F.rels.add(i.dataset.r):S.F.rels.delete(i.dataset.r);draw();});
   $$('button[data-tour]').forEach(b=>b.onclick=()=>tour(b.dataset.tour));
+  $$('button[data-pdrun]').forEach(b=>b.onclick=()=>usePdRun(b.dataset.pdrun));
+  $$('button[data-scirun]').forEach(b=>b.onclick=()=>useSciRun(b.dataset.scirun));
   const q=one('#f-q'); if(q){ q.oninput=()=>{S.F.query=q.value; const m=S.G.nodes.find(n=>!n.ghost&&n.name.toLowerCase()===q.value.trim().toLowerCase()); if(m){S.kb=true; selectNode(m.id,true);} else draw();}; q.onkeydown=ev=>{ if(ev.key==='Enter'){ const t=S.F.query.trim().toLowerCase(); const m=S.G.nodes.find(n=>!n.ghost&&(n.name.toLowerCase().includes(t)||(n.aliases||[]).some(a=>a.toLowerCase().includes(t)))); if(m) selectNode(m.id,true);} }; }
   const ch=one('#f-ch'); if(ch) ch.onchange=()=>{S.F.chapter=+ch.value; fit(true); hashWrite();};
   const lay=one('#f-lay'); if(lay) lay.onchange=()=>{S.F.layout=lay.value; fit(true);};

@@ -23,6 +23,9 @@ from cumap.config import REPO_ROOT
 NA = "NOT_AVAILABLE_IN_RETAINED_OUTPUT"
 KG = REPO_ROOT / "data/processed/kg"
 PD_RUN, ORG = "slice3_c2", "org_b6ebb5bc"
+PD_ALT = {
+    "slice3_c3": "org_25ea37b5"
+}  # 2026-10-16 rebuild with the current production settings (comparison only)
 OUT = REPO_ROOT / "reports/kg_explorer/index.html"
 
 
@@ -61,8 +64,8 @@ def relation_defs(path: str) -> dict:
 
 
 # ------------------------------------------------------------------ P&D production graph
-def build_pd() -> dict:
-    base = KG / PD_RUN
+def build_pd(run: str = PD_RUN, org_id: str = ORG) -> dict:
+    base = KG / run
     cp = json.loads((base / "checkpoint.json").read_text())
     concepts = {c["concept_id"]: c for c in cp["concepts"]}
     results = {r["pair"]["pair_id"]: r for r in cp["relation_results_v3"] if r["outcome"] == "edge"}
@@ -75,7 +78,7 @@ def build_pd() -> dict:
             edges[e["edge_id"]] = e
     org = {}
     for ch in (1, 2, 3):
-        for r in jl(base / f"organisation/{ORG}/ch{ch}/org_nodes.jsonl"):
+        for r in jl(base / f"organisation/{org_id}/ch{ch}/org_nodes.jsonl"):
             org.setdefault(r["concept_id"], {})[ch] = r
     linked = {x for e in edges.values() for x in (e["source_concept_id"], e["target_concept_id"])}
     ids = sorted(nodes)
@@ -117,21 +120,22 @@ def build_pd() -> dict:
             "model_direction": r.get("direction", NA),
         })  # fmt: skip
     rel_counts = Counter(e["rel"] for e in out_edges)
-    manifest = json.loads((base / f"organisation/{ORG}/manifest.json").read_text())
+    manifest = json.loads((base / f"organisation/{org_id}/manifest.json").read_text())
     return {
         "title": "P&D Expert KG — production/development graph (Peterson & Davie, Chapters 1–3)",
-        "run_id": PD_RUN, "snapshot_path": f"data/processed/kg/{PD_RUN}/snapshots/ch1..ch3 (per-chapter additions; union shown)",
-        "organisation_path": f"data/processed/kg/{PD_RUN}/organisation/{ORG}/ch3/org_nodes.jsonl",
+        "run_id": run, "snapshot_path": f"data/processed/kg/{run}/snapshots/ch1..ch3 (per-chapter additions; union shown)",
+        "organisation_path": f"data/processed/kg/{run}/organisation/{org_id}/ch3/org_nodes.jsonl",
         "stats": {"canonical_nodes": len(out_nodes), "accepted_edges": len(out_edges), "nodes_with_edges": len(linked), "unlinked_nodes": len(out_nodes) - len(linked),
                   "aliases": sum(len(n["aliases"]) for n in out_nodes), "relation_counts": dict(rel_counts.most_common()),
                   "ring_counts": dict(Counter(n["ring"] for n in out_nodes)), "chapters": [1, 2, 3],
-                  "organisation": {"org_id": ORG, "label_source": manifest["label_source"], "modularity_fine": manifest["chapters"]["3"]["modularity_fine"]}},
+                  "organisation": {"org_id": org_id, "label_source": manifest["label_source"], "modularity_fine": manifest["chapters"]["3"]["modularity_fine"]}},
         "defs": relation_defs("configs/relations_v1.3.yaml"), "nodes": out_nodes, "edges": out_edges,
     }  # fmt: skip
 
 
 # ------------------------------------------------------------------ SciNLP held-out E0 graphs (retained checkpoints)
-def build_scinlp() -> dict:
+def build_scinlp(tag: str = "heldout", frozen: bool = True) -> dict:
+    from cumap.cr012 import attribution as A
     from cumap.cr012 import scinlp_run as SR
     from cumap.cr012 import scoring as S
     from cumap.cr012.adapters import SciNLPAdapter
@@ -141,6 +145,8 @@ def build_scinlp() -> dict:
     res = json.loads((REPO_ROOT / "reports/cr012/stop4_heldout_results.json").read_text())[
         "scinlp"
     ]["levels"]["E0"]
+    idx19: dict = {}
+    computed: dict = {}  # tag != heldout: scores computed with the same frozen scorer (a rebuild has no frozen results)
     ad = SciNLPAdapter()
     sym = ad.symmetric_relations()
     gold_all = ad.gold("test")
@@ -148,7 +154,7 @@ def build_scinlp() -> dict:
     c19 = json.loads(c19_path.read_text())["stage_a"]["scinlp"] if c19_path.exists() else None
     docs = []
     for doc in ad.load_documents("test", paragraph_every=SR.PARAGRAPH_EVERY):
-        rid = f"cr012_scinlp_heldout_{doc.doc_key.replace('.', '_').replace('-', '_')}_E0"
+        rid = f"cr012_scinlp_{tag}_{doc.doc_key.replace('.', '_').replace('-', '_')}_E0"
         path = KG / rid / "checkpoint.json"
         cp = json.loads(path.read_text())
         pred = SR.predict(doc, cp)
@@ -220,6 +226,8 @@ def build_scinlp() -> dict:
             })  # fmt: skip
         # gold relations: matched / missed with the earliest-failure code (frozen attribution)
         codes = sc_attribution(doc, g, pred, cp, sym)
+        if not frozen:
+            idx19[doc.doc_key] = V19.sc_score(doc, g, cp, sym, V19.PRIMARY)["scores"]["rel"]
         ghosts: dict = {}
         gold_rels, miss_i = [], 0
         for r, code in zip(g.relations, codes, strict=True):
@@ -258,8 +266,15 @@ def build_scinlp() -> dict:
         lay = force_layout([n["id"] for n in nodes], [(e["s"], e["t"]) for e in edges], seed=7)
         for n in nodes:
             n["fx"], n["fy"] = lay[n["id"]]
-        sc = res["per_document"][doc.doc_key]["scores"]
-        att = res["per_document"][doc.doc_key]["attribution"]
+        if frozen:
+            sc = res["per_document"][doc.doc_key]["scores"]
+            att = res["per_document"][doc.doc_key]["attribution"]
+        else:
+            rels_all, _ = S.project_edges_to_mentions(pred["nodes"], pred["edges"])
+            scp = S.score_scinlp_unit(g, S.project_nodes_to_mentions(pred["nodes"]), rels_all, sym)
+            computed[doc.doc_key] = scp
+            sc = {k: v.to_dict() for k, v in scp.items()}
+            att = A.distribution(codes)
         docs.append({
             "doc_id": doc.doc_key, "retained_prediction_path": f"data/processed/kg/{rid}/checkpoint.json",
             "predicted_nodes": len(pred["nodes"]), "predicted_entity_mentions": sum(len(n.mentions) for n in pred["nodes"]), "predicted_edges": len(pred["edges"]),
@@ -271,10 +286,14 @@ def build_scinlp() -> dict:
             "pred_spans": [[a, b, n.node_id] for n in pred["nodes"] for a, b in n.mentions],
             "gold_spans": [[m.span[0], m.span[1], m.type] for m in g.mentions], "gold_rels": gold_rels,
             "nodes": nodes, "edges": edges,
-            "cr019": ({"variant": V19.PRIMARY, "rel_prf": [c19[V19.PRIMARY]["strict_relation_per_document"][doc.doc_key][k] for k in ("precision", "recall", "f1")],
+            "cr019": ({"variant": V19.PRIMARY, "rel_prf": [c19[V19.PRIMARY]["strict_relation_per_document"][doc.doc_key][k] for k in ("precision", "recall", "f1")] if frozen else [idx19[doc.doc_key].precision, idx19[doc.doc_key].recall, idx19[doc.doc_key].f1],
                        "edges_matching": sum(1 for e in edges if e.get("matches_gold_cr019")), "edges_not_scored_frozen": sum(1 for e in edges if e["kind"] == "pred" and not e["grounded"])} if c19 else None),
         })  # fmt: skip
-    micro = res["aggregates"]["rel"]["micro"]
+    micro = (
+        res["aggregates"]["rel"]["micro"]
+        if frozen
+        else S.aggregate_documents(computed, "rel")["micro"]
+    )
     return {
         "docs": docs,
         "defs": relation_defs("configs/relations_scinlp.yaml"),
@@ -282,8 +301,9 @@ def build_scinlp() -> dict:
             "relation_f1": micro["f1"],
             "precision": micro["precision"],
             "recall": micro["recall"],
-            "ci_status": res["CI_status"],
+            "ci_status": res["CI_status"] if frozen else "NOT_EVALUABLE_SMALL_N",
         },
+        "run": "frozen" if frozen else tag,
         "cr019": (
             {
                 "variant": V19.PRIMARY,
@@ -291,7 +311,22 @@ def build_scinlp() -> dict:
                     k: c19[V19.PRIMARY]["strict_relation"][k] for k in ("precision", "recall", "f1")
                 },
             }
-            if c19
+            if c19 and frozen
+            else {
+                "variant": V19.PRIMARY,
+                **{
+                    k: v
+                    for k, v in S.prf(
+                        sum(x.tp for x in idx19.values()),
+                        sum(x.fp for x in idx19.values()),
+                        sum(x.fn for x in idx19.values()),
+                    )
+                    .to_dict()
+                    .items()
+                    if k in ("precision", "recall", "f1")
+                },
+            }
+            if idx19
             else None
         ),
     }
@@ -300,6 +335,8 @@ def build_scinlp() -> dict:
 def build(out: Path | None = None) -> Path:
     data = {
         "pd": build_pd(), "sci": build_scinlp(),
+        "pd_alt": {r: build_pd(r, o) for r, o in PD_ALT.items() if (KG / r / "organisation" / o).exists()},
+        "sci_alt": {"rebuilt": build_scinlp("cr021test", frozen=False)} if (KG / "cr012_scinlp_cr021test_2021_acl_long_353_E0").exists() else {},
         "pd_heldout": {"e0_strict_f1": 0.053, "sections": ["4.4", "4.5", "5.4", "6.3", "7.1", "8.2", "9.3"]},
         "na": NA,
     }  # fmt: skip
@@ -328,6 +365,26 @@ def build(out: Path | None = None) -> Path:
     except FileNotFoundError:
         trace_b64 = ""
     html = html.replace("/*__TRACE_B64__*/", trace_b64)
+    alt_tags = ""
+    for r in data["pd_alt"]:  # a comparison run's own derived trace, in its own blob
+        try:
+            from cumap.explain.viewer_adapter import build_trace_payload
+
+            pl = build_trace_payload(run=r)
+        except FileNotFoundError:
+            pl = None
+        if pl:
+            b = base64.b64encode(
+                gzip.compress(
+                    json.dumps(pl, separators=(",", ":"), ensure_ascii=False, default=list).encode(
+                        "utf-8"
+                    ),
+                    9,
+                    mtime=0,
+                )
+            ).decode()
+            alt_tags += f'<script type="application/octet-stream" id="trace-gz-{r}">{b}</script>\n'
+    html = html.replace("<!--__TRACE_ALT__-->", alt_tags)
     html = html.replace(
         "/*__EVAL_JS__*/",
         (Path(__file__).with_name("kg_explorer_eval.js")).read_text(encoding="utf-8"),
