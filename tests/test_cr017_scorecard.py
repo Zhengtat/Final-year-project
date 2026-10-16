@@ -97,16 +97,26 @@ def test_page_renders_the_scorecard_for_every_dataset_level_and_view(page_out):
     assert r["after_leaving_has_scorecard"] is False
 
 
-def test_page_separates_headline_diagnostics_audit_organisation_and_matches_values(page_out):
+def test_page_separates_headline_diagnostics_audit_and_matches_values(page_out):
     h = page_out["renders"]["review|pd_heldout|E0"]
-    pos = [h.index(x) for x in ("HEADLINE", "DIAGNOSTICS", "AUDIT", "ORGANISATION")]
+    pos = [h.index(x) for x in ("HEADLINE", "DIAGNOSTICS", "AUDIT")]
     assert pos == sorted(pos)
+    # owner 2026-10-16: no metric outside the five headline metrics is shown in the explorer
+    for gone in (
+        "ORGANISATION",
+        "modularity",
+        "Micro",
+        "micro)",
+        "direction right",
+        "direct parent",
+        "Legacy detailed metrics",
+    ):
+        assert gone not in h, gone
     head = h[pos[0] : pos[1]]
     assert head.count('class="card sccard"') == 5
     for needle in ("0.643", "0.114", "0.163", "0.484", "0.053", "low support"):
         assert needle in head, needle
     assert "modularity" not in head and "no composite score" in head
-    assert "not accuracy" in h[pos[3] :]
     assert "excluded (no gold)" in h and "<details" in h
     sc = page_out["renders"]["review|scinlp|E0"]
     assert "mention-level analogue" in sc and "NOT_EVALUABLE" in sc and "NOT_COMPUTED" in sc

@@ -264,12 +264,12 @@ function banner(){
   if(S.mode==='pd'){
     const alt = DATA.pd.run_id!==PROD_RUN;
     b.innerHTML='<div class="banner'+(alt?' warn':' ok')+'"><b>P&amp;D dataset'+(alt?' · rebuild '+esc(DATA.pd.run_id)+' (comparison only; the production graph is '+esc(PROD_RUN)+')':'')+'</b> — the ideas in the networking textbook <i>Computer Networks: A Systems Approach</i> (Peterson &amp; Davie), chapters 1–3, and how they connect. Every link comes with the sentence from the book that supports it.'+
-    '<details><summary>About this graph</summary>Built by run <code>'+esc(DATA.pd.run_id)+'</code> (chapters 1–3 are the development set). When the same system was tested on other P&amp;D sections ('+DATA.pd_heldout.sections.join(', ')+'), its strictest end-to-end relation score (F1, from 0 to 1) was <b>'+DATA.pd_heldout.e0_strict_f1.toFixed(3)+'</b>. That score belongs to those test sections, not to the graph shown here.</details></div>';
+    '<details><summary>About this graph</summary>Built by run <code>'+esc(DATA.pd.run_id)+'</code> (chapters 1–3 are the development set). When the same system was tested on other P&amp;D sections ('+DATA.pd_heldout.sections.join(', ')+'), its Strict E2E Edge F1 (from 0 to 1) was <b>'+DATA.pd_heldout.e0_strict_f1.toFixed(3)+'</b>. That score belongs to those test sections, not to the graph shown here.</details></div>';
   } else {
     const h=DATA.sci.headline;
     const reb = DATA.sci!==DATA.sci_sets.frozen;
     b.innerHTML='<div class="banner warn"><b>SciNLP dataset — a test run, not the main graph.'+(reb?' Rebuilt 2026-10-16 with spelling-variant matching and the rejected-link adjudicator; the frozen CR-012 scores are not replaced.':'')+'</b> The same system was run on 3 scientific papers to see how well it works outside networking. Its output is compared with a human answer key and is not part of the P&amp;D graph.'+
-    '<details><summary>Overall score</summary>Relation score (F1, from 0 to 1) <b>'+h.relation_f1.toFixed(3)+'</b> · precision '+h.precision.toFixed(3)+' · recall '+h.recall.toFixed(3)+', over all 3 papers (system as-is, level E0; scores frozen in CR-012). '+ciPlain(h.ci_status)+(DATA.sci.cr019?'<br>CR-019 grounding-consistent scoring (finds every occurrence of a concept and counts every predicted relation): F1 <b>'+DATA.sci.cr019.f1.toFixed(3)+'</b> · precision '+DATA.sci.cr019.precision.toFixed(3)+' · recall '+DATA.sci.cr019.recall.toFixed(3)+'. The frozen scorer left most predicted relations unscored.':'')+'</details></div>';
+    '<details><summary>Overall score</summary>'+(DATA.sci.cr019?'Strict E2E Edge F1 (CR-019 scoring, every predicted relation counted) <b>'+DATA.sci.cr019.f1.toFixed(3)+'</b> · precision '+DATA.sci.cr019.precision.toFixed(3)+' · recall '+DATA.sci.cr019.recall.toFixed(3)+', over all 3 papers. ':'')+ciPlain(h.ci_status)+'<br><span class="small">Frozen CR-012 scorer: Strict E2E Edge F1 '+h.relation_f1.toFixed(3)+' (precision '+h.precision.toFixed(3)+', recall '+h.recall.toFixed(3)+'); it leaves most predicted relations unscored.</span></details></div>';
   }
 }
 
@@ -405,7 +405,7 @@ function detNode(n,dbg){
     const ringTxt={centre:'one of the most connected, central concepts',inner:'well connected, near the centre',middle:'moderately connected',outer:'few connections, near the edge',unlinked:'found in the text, but not linked to any other concept yet'}[n.ring]||'';
     h+='<dl><dt>Also called</dt><dd>'+(n.aliases.length?n.aliases.map(a=>'<span class="chip">'+esc(a)+'</span>').join(''):'<span class="na">no other names recorded</span>')+'</dd>'+
     '<dt>First appears</dt><dd>chapter '+n.ch+', section '+esc(n.first_section)+' · mentioned '+n.n_mentions+' time'+(n.n_mentions===1?'':'s')+' in '+n.sections.length+' section'+(n.sections.length===1?'':'s')+'</dd>'+
-    '<dt>How central it is</dt><dd><b>'+esc(n.ring)+'</b> — '+ringTxt+(dbg?'<br>importance '+(n.importance==null?NA:n.importance.toFixed(4))+' · cluster '+esc(n.comm)+' / '+esc(n.comm_fine):'')+'</dd>'+
+    '<dt>How central it is</dt><dd><b>'+esc(n.ring)+'</b> — '+ringTxt+(dbg?'<br>cluster '+esc(n.comm)+' / '+esc(n.comm_fine):'')+'</dd>'+
     (n.definition!==NA?'<dt>Definition</dt><dd>'+esc(n.definition)+'</dd>':'')+
     '<dt>From the book</dt>'+n.quotes.map(q=>'<dd><div class="sent">'+esc(q.q)+'</div><span class="small">'+esc(q.sec)+' · '+esc(q.role)+'</span></dd>').join('');
     if(dbg) h+='<dt>Ring by chapter</dt><dd>'+Object.entries(n.ring_by_chapter).map(([c,r])=>'ch'+c+': '+esc(r)).join(' → ')+'</dd><dt>Where the other names came from</dt><dd>'+val(n.alias_provenance)+'</dd><dt>Merged from (earlier duplicates)</dt><dd>'+val(n.merged_from)+'</dd><dt>Concept id</dt><dd><code>'+esc(n.id)+'</code>'+copyBtn(n.id)+'</dd>';
@@ -463,12 +463,14 @@ function neighbours(){ if(!S.sel||S.sel.kind!=='node') return []; return [...new
 // ---------------------------------------------------------------- side panel
 function sciCard(){
   const d=S.doc, [p,r,f]=d.e0_relation_prf, [tp,fp,fn]=d.e0_relation_tp_fp_fn;
-  const att=Object.entries(d.attribution).filter(([c,v])=>v>0), tot=att.reduce((s,[c,v])=>s+v,0);
-  let h='<h3>How it did on this paper</h3><div class="big"><div><b>'+f.toFixed(3)+'</b>relation score (F1)</div><div><b>'+p.toFixed(2)+'</b>precision</div><div><b>'+r.toFixed(2)+'</b>recall</div></div>'+
-  '<div class="small">Found '+tp+' of the '+d.gold_relations+' relations in the answer key, plus '+fp+' that the answer key does not have. Concept score (F1) '+d.e0_entity_prf[2].toFixed(3)+'.</div>'+
-  (d.cr019?'<div class="small" style="margin-top:4px">With CR-019 scoring (every occurrence found, every relation counted): relation score (F1) <b>'+d.cr019.rel_prf[2].toFixed(3)+'</b> · precision '+d.cr019.rel_prf[0].toFixed(2)+' · recall '+d.cr019.rel_prf[1].toFixed(2)+'. '+d.cr019.edges_not_scored_frozen+' of its relations were not scored by the frozen scorer.</div>':'')+
+  const att=Object.entries(d.cr019?d.cr019.attribution:d.attribution).filter(([c,v])=>v>0), tot=att.reduce((s,[c,v])=>s+v,0);
+  const c=d.cr019, rp=c?c.rel_prf:[p,r,f], rc=c?c.rel_counts:[tp,fp,fn], cp=c?c.concept_prf:d.e0_entity_prf;
+  let h='<h3>How it did on this paper</h3><div class="small" style="margin-bottom:2px">Strict E2E Edge F1 <span class="tier" title="mention-level analogue, CR-019 scoring (IDX-P1)">CR-019</span></div><div class="big"><div><b>'+rp[2].toFixed(3)+'</b>F1</div><div><b>'+rp[0].toFixed(2)+'</b>precision</div><div><b>'+rp[1].toFixed(2)+'</b>recall</div></div>'+
+  '<div class="small">Found '+rc[0]+' of the '+d.gold_relations+' relations in the answer key; '+rc[1]+' of its relation placements are not in the answer key.</div>'+
+  '<div class="small" style="margin-top:6px">Concept F1 <span class="tier">CR-019</span> <b>'+cp[2].toFixed(3)+'</b> · precision '+cp[0].toFixed(2)+' · recall '+cp[1].toFixed(2)+'</div>'+
+  (c?'<details class="small"><summary>Frozen CR-012 scorer</summary>Strict E2E Edge F1 '+f.toFixed(3)+' (precision '+p.toFixed(2)+', recall '+r.toFixed(2)+'), concept F1 '+d.e0_entity_prf[2].toFixed(3)+'. It scores only the relations it can place on recorded mentions: '+(d.predicted_edges-c.edges_not_scored_frozen)+' of '+d.predicted_edges+' here.</details>':'')+
   '<div class="small" style="margin-top:4px"><b>Precision</b>: how many of its answers were right. <b>Recall</b>: how many of the right answers it found. <b>F1</b> balances the two (1 is perfect).</div>';
-  if(tot){ h+='<h3>Why relations were missed</h3><div class="bar">'+att.map(([c,v])=>'<span title="'+esc(c)+': '+v+'" style="width:'+(100*v/tot)+'%;background:'+(CODE_COL[c]||'#7A7A7A')+'"></span>').join('')+'</div><div class="leg">'+att.sort((a,b)=>b[1]-a[1]).map(([c,v])=>'<span><i style="background:'+(CODE_COL[c]||'#7A7A7A')+'"></i>'+(S.view==='debug'?esc(c)+' ':'')+esc(CODE_LABEL[c]||c)+' · '+v+'</span>').join('')+'</div>'; }
+  if(tot){ h+='<h3>Why relations were missed'+(d.cr019?' <span class="tier">CR-019</span>':'')+'</h3><div class="bar">'+att.map(([c,v])=>'<span title="'+esc(c)+': '+v+'" style="width:'+(100*v/tot)+'%;background:'+(CODE_COL[c]||'#7A7A7A')+'"></span>').join('')+'</div><div class="leg">'+att.sort((a,b)=>b[1]-a[1]).map(([c,v])=>'<span><i style="background:'+(CODE_COL[c]||'#7A7A7A')+'"></i>'+(S.view==='debug'?esc(c)+' ':'')+esc(CODE_LABEL[c]||c)+' · '+v+'</span>').join('')+'</div>'; }
   h+='<div class="card" style="margin-top:10px"><h4>Keep in mind</h4><span class="small">The answer key marks only a few concepts in each paper, but the system marks every concept it finds. Low scores here are expected for a system built for textbooks; they are not a display error.'+(d.gold_relations<5?' This paper has only '+d.gold_relations+' relation'+(d.gold_relations===1?'':'s')+' in the answer key, so its score means very little.':'')+'</span></div>';
   return h;
 }
@@ -479,16 +481,15 @@ function side(){
   }
   h+=runSwitch();
   if(S.mode==='sci'){
-    h+='<h3>Test papers</h3><table class="docs"><tr><th>paper</th><th title="concepts / relations the system found">found</th><th title="concepts / relations in the human answer key">answer key</th><th title="relation score (F1)">score</th></tr>'+DATA.sci.docs.map(d=>'<tr data-d="'+esc(d.doc_id)+'" class="'+(d===S.doc?'sel':'')+'"><td>'+esc(d.doc_id.replace('.grobid',''))+'</td><td title="concepts / relations">'+d.predicted_nodes+' / '+d.predicted_edges+'</td><td title="concepts / relations">'+d.gold_entities+' / '+d.gold_relations+'</td><td>'+d.e0_strict_relation_f1.toFixed(3)+'</td></tr>').join('')+'</table>'+sciCard();
+    h+='<h3>Test papers</h3><table class="docs"><tr><th>paper</th><th title="concepts / relations the system found">found</th><th title="concepts / relations in the human answer key">answer key</th><th title="Strict E2E Edge F1, CR-019 scoring">F1</th></tr>'+DATA.sci.docs.map(d=>'<tr data-d="'+esc(d.doc_id)+'" class="'+(d===S.doc?'sel':'')+'"><td>'+esc(d.doc_id.replace('.grobid',''))+'</td><td title="concepts / relations">'+d.predicted_nodes+' / '+d.predicted_edges+'</td><td title="concepts / relations">'+d.gold_entities+' / '+d.gold_relations+'</td><td>'+(d.cr019?d.cr019.rel_prf[2]:d.e0_strict_relation_f1).toFixed(3)+'</td></tr>').join('')+'</table>'+sciCard();
   } else {
     const st=G.stats;
     h+='<h3>This graph</h3><div class="big"><div><b>'+st.canonical_nodes+'</b>concepts</div><div><b>'+st.accepted_edges+'</b>relations</div><div><b>'+st.aliases+'</b>other names</div></div><div class="small">'+st.nodes_with_edges+' concepts are linked to at least one other; '+st.unlinked_nodes+' were found in the text but have no relations yet.</div>'+
     '<h3>Guided views</h3><div class="tour stag"><button data-tour="centre">1 · The most central ideas<small>the best-connected concepts, in rings</small></button><button data-tour="growth">2 · How the map grows<small>start with chapter 1, then add chapters</small></button><button data-tour="evidence">3 · One relation and its source<small>see the sentence it came from</small></button></div>'+
     '<h3>Show chapters</h3><select id="f-ch" aria-label="Show chapters">'+[1,2,3].map(c=>'<option value="'+c+'"'+(c===S.F.chapter?' selected':'')+'>'+(c===1?'chapter 1 only':'chapters 1–'+c)+'</option>').join('')+'</select>'+
     '<h3>Layout</h3><select id="f-lay" aria-label="Layout"><option value="force"'+(S.F.layout==='force'?' selected':'')+'>Spread out — shows connections</option><option value="rings"'+(S.F.layout==='rings'?' selected':'')+'>Rings — most central in the middle</option></select>'+
-    '<h3>Colour by</h3><select id="f-col" aria-label="Colour nodes by"><option value="type">kind of concept</option><option value="ring"'+(S.F.colour==='ring'?' selected':'')+'>how central (bigger = more important)</option></select>'+
+    '<h3>Colour by</h3><select id="f-col" aria-label="Colour nodes by"><option value="type">kind of concept</option><option value="ring"'+(S.F.colour==='ring'?' selected':'')+'>ring (centre to edge)</option></select>'+
     '<label style="margin-top:6px"><input type="checkbox" id="f-unl"'+(S.F.unlinked?' checked':'')+'> also show the '+st.unlinked_nodes+' concepts with no relations</label>';
-    if(dbg) h+='<h3>Hide less important concepts</h3><input type="range" id="f-top" aria-label="Minimum importance" min="0" max="1" step="0.05" value="'+S.F.top+'"> <span class="small" id="f-top-v">'+S.F.top+'</span>';
   }
   if(S.mode==='sci'){
     h+='<h3>Guided views</h3><div class="tour stag"><button data-tour="found">1 · What it found<small>blue = in the answer key, orange = not in it</small></button><button data-tour="missed">2 · What it missed<small>dashed grey lines = answer-key relations it did not find</small></button><button data-tour="text">3 · Read the paper<small>what it found, highlighted in the text</small></button></div>'+
@@ -563,9 +564,9 @@ function renderDoc(){
 }
 function renderTables(){
   const el=$('tableview'); let h='';
-  const nodesRows=S.G.nodes.filter(n=>!n.ghost).map(n=>({id:n.id,name:n.name,type:n.type,ch:n.ch??'',ring:n.ring??'',imp:n.importance??'',deg:(adj[n.id]||[]).length,al:(n.aliases||[]).length}));
+  const nodesRows=S.G.nodes.filter(n=>!n.ghost).map(n=>({id:n.id,name:n.name,type:n.type,ch:n.ch??'',ring:n.ring??'',deg:(adj[n.id]||[]).length,al:(n.aliases||[]).length}));
   const edgesRows=S.G.edges.map(e=>({id:e.id,s:byId[e.s].name,rel:e.rel,t:byId[e.t].name,kind:e.kind||'accepted',m:e.kind==='gold_missed'?e.code:(S.mode==='sci'?(e.matches_gold?'match':'no match'):('ch'+e.ch+' '+e.section))}));
-  h+='<h3 style="margin-top:0">Concepts ('+nodesRows.length+')</h3>'+tbl(nodesRows,['name','type','ch','ring','imp','deg','al'],['concept','kind','chapter','ring','importance','links','other names'],'n');
+  h+='<h3 style="margin-top:0">Concepts ('+nodesRows.length+')</h3>'+tbl(nodesRows,['name','type','ch','ring','deg','al'],['concept','kind','chapter','ring','links','other names'],'n');
   h+='<h3>Relations ('+edgesRows.length+')</h3>'+tbl(edgesRows,['s','rel','t','kind','m'],['first concept','relation','second concept','status','match / reason / section'],'e');
   if(S.mode==='sci') h+='<h3>Answer-key relations ('+S.doc.gold_rels.length+')</h3>'+tbl(S.doc.gold_rels.map((r,i)=>({id:'gold'+i,a:r.src_text,rel:r.rel,b:r.tgt_text,m:r.matched?'found':'missed',c:r.code})),['a','rel','b','m','c'],['first concept','relation','second concept','status','where it went wrong'],'g');
   el.innerHTML=h; wireTables(el);
