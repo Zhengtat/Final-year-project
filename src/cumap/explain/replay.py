@@ -11,6 +11,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import os
+from contextlib import contextmanager
 from pathlib import Path
 
 from cumap.config import REPO_ROOT
@@ -25,6 +26,20 @@ CODE_FILES = [
     "src/cumap/expert_kg/slice_rerun.py",
     "src/cumap/expert_kg/relations.py",
 ]
+
+
+@contextmanager
+def _matching(mode: str):
+    """Temporarily set CUMAP_MATCHING (CR-020), restoring the previous value."""
+    prev = os.environ.get("CUMAP_MATCHING")
+    os.environ["CUMAP_MATCHING"] = mode
+    try:
+        yield
+    finally:
+        if prev is None:
+            os.environ.pop("CUMAP_MATCHING", None)
+        else:
+            os.environ["CUMAP_MATCHING"] = prev
 
 
 def replay_pair_pool(
@@ -42,19 +57,13 @@ def replay_pair_pool(
     retained_stats = copy.deepcopy(cp.selection_stats)
 
     cp2 = load_checkpoint(run_dir)  # an independent copy that select_stage may overwrite in memory
-    prev = os.environ.get("CUMAP_MATCHING")
-    os.environ["CUMAP_MATCHING"] = retained_stats.get(
+    mode = retained_stats.get(
         "matching_mode", "token"
     )  # CR-020: replay with the run's own matching
-    try:
+    with _matching(mode):
         stats = sr.select_stage(
             cp2, sections, registry, embed_fn, budget=budget, use_anchors=use_anchors
         )
-    finally:
-        if prev is None:
-            os.environ.pop("CUMAP_MATCHING", None)
-        else:
-            os.environ["CUMAP_MATCHING"] = prev
     mismatches: list[str] = []
     if [p["pair_id"] for p in cp2.selected_pairs] != retained_selected:
         mismatches.append("selected_pairs ids/order differ from the retained selected set")
@@ -64,10 +73,11 @@ def replay_pair_pool(
         mismatches.append("selection_stats differ from the retained stats")
 
     concepts = sr._restore_concept_registry(cp, embed_fn).all()
-    per = {
-        s.section_id: enumerate_candidates(s.section_id, s.text, concepts, registry)
-        for s in sections
-    }
+    with _matching(mode):  # the pool must be enumerated with the same matching as the selection
+        per = {
+            s.section_id: enumerate_candidates(s.section_id, s.text, concepts, registry)
+            for s in sections
+        }
     pool = dedupe(per)
     if len(pool) != retained_stats["unique_candidate_pairs"]:
         mismatches.append(

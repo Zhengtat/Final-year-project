@@ -120,7 +120,7 @@ function evDetailHTML(){
   return h;
 }
 function wireEvDetail(box){
-  const b=box.querySelector('#ev-opengraph'); if(b) b.onclick=()=>{ const doc=DATA.sci.docs.find(x=>x.doc_id===b.dataset.d); setMode('sci',doc); S.F.missed=true; side(); const e=S.G.edges.find(x=>x.id===b.dataset.e); if(e) selectEdge(e); draw(); };
+  const b=box.querySelector('#ev-opengraph'); if(b) b.onclick=()=>{ DATA.sci=DATA.sci_sets.frozen; const doc=DATA.sci.docs.find(x=>x.doc_id===b.dataset.d); setMode('sci',doc); S.F.missed=true; side(); const e=S.G.edges.find(x=>x.id===b.dataset.e); if(e) selectEdge(e); draw(); };
 }
 
 // ====================================================================================================================
@@ -168,6 +168,9 @@ async function renderScorecard(el){
     o+='<h3 class="jh">CR-020: matching spelling variants <span class="tier">DEVELOPMENT DATA</span></h3><p class="small">'+esc(c.note)+' Spend $'+c.spend_usd.toFixed(2)+'.</p>'+
       '<div class="banner'+(dc.status==='ADOPT_R1KEY'?'':' warn')+'"><b>'+(dc.status==='ADOPT_R1KEY'?'Adopted: production matches spelling variants (R1KEY)':'Kept whole-word matching (TOKEN)')+'</b> · SciNLP dev F1 change '+(dc.scinlp_dev_idxr1_p1_f1_delta>=0?'+':'')+dc.scinlp_dev_idxr1_p1_f1_delta.toFixed(3)+' · P&amp;D dev strict F1 change '+(dc.pd_dev_strict_f1_delta>=0?'+':'')+dc.pd_dev_strict_f1_delta.toFixed(3)+'<div class="small">'+esc(dc.rule)+'</div></div>'+
       '<table class="t" style="margin-top:8px"><tr><th>dataset</th><th>measure</th><th>arm</th><th>precision</th><th>recall</th><th>F1</th></tr>'+c.rows.map(r=>'<tr><td>'+esc(r.dataset)+'</td><td>'+esc(r.measure)+'</td><td>'+esc(r.arm)+'</td><td>'+n3(r.precision)+'</td><td>'+n3(r.recall)+'</td><td><b>'+n3(r.f1)+'</b></td></tr>').join('')+'</table>'; }
+  if(V19&&P.cr019.rebuild){ const rb=P.cr019.rebuild;
+    o+='<h3 class="jh">Rebuild with the current settings <span class="tier">2026-10-16</span></h3><p class="small">'+esc(rb.note)+' Spend $'+rb.spend_usd.toFixed(2)+'. Explore the rebuilt graphs with the Run / Graph switch in the SciNLP and P&amp;D views.</p>'+
+      '<table class="t"><tr><th>dataset</th><th>measure</th><th>before</th><th>rebuilt</th><th>change</th></tr>'+rb.rows.map(r=>{ const d=(r.rebuilt!=null&&r.before!=null)?r.rebuilt-r.before:null; return '<tr><td>'+esc(r.dataset)+'</td><td>'+esc(r.measure)+'</td><td>'+n3(r.before)+'</td><td><b>'+n3(r.rebuilt)+'</b></td><td>'+(d==null?'—':(d>=0?'+':'')+d.toFixed(3))+'</td></tr>'; }).join('')+'</table>'; }
   o+='<p class="small">† A rough range from resampling the test sections; with fewer than 10 sections it is only a guide. Tested on: '+esc(L.sections.join(', '))+'.</p>';
   o+='<details class="scdiag" open><summary>What do the levels E0 – E4 mean?</summary><table class="t"><tr><th>level</th><th>meaning</th></tr>'+
     '<tr><td><b>E0</b></td><td>The real system on its own: it finds concepts, merges duplicate names, chooses pairs and decides relations by itself. <b>This is the main score.</b></td></tr>'+
