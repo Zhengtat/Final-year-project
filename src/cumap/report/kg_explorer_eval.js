@@ -124,7 +124,7 @@ function wireEvDetail(box){
 }
 
 // ====================================================================================================================
-// CR-017 STOP 5: SCORECARD. HEADLINE (five metrics) / DIAGNOSTICS (expandable) / AUDIT (pointer) / ORGANISATION (separate, not accuracy).
+// CR-017 STOP 5: SCORECARD. HEADLINE (five metrics) / DIAGNOSTICS (breakdowns of the five) / AUDIT (pointer). Owner 2026-10-16: no metric outside the five is shown.
 // Rendered from its own payload (reports/cr017/*.json via cumap.cr017.scorecard); no number is computed in the page.
 // ====================================================================================================================
 let SC = null;
@@ -180,19 +180,15 @@ async function renderScorecard(el){
     '<tr><td><b>E4</b></td><td>Only the correct pairs are given; the model still picks the relation and direction itself. This is the best the relation step can do. On SciNLP this is called E4-M.</td></tr></table>'+
     '<p class="small">Comparing E0 with E1–E4 shows which step loses the most (finding concepts → merging names → choosing pairs → picking the relation). These are test settings, not separate systems, and the gaps do not simply add up.</p></details>';
   const dg=L.diagnostics||{};
-  o+='<h3 class="jh">More detail <span class="tier">DIAGNOSTICS</span> <span class="small" style="font-weight:400">· breakdowns behind the main scores</span></h3>';
+  o+='<h3 class="jh">More detail <span class="tier">DIAGNOSTICS</span> <span class="small" style="font-weight:400">· the five scores broken down (by relation kind, by section)</span></h3>';
   if(dg.relation_classes&&dg.relation_classes.length){
     o+='<details class="scdiag"><summary>Relation score by kind of relation</summary><table class="t"><tr><th>relation</th><th title="support: examples in the answer key">examples</th><th title="true positives">right</th><th title="false positives">wrong</th><th title="false negatives">missed</th><th>F1</th><th></th></tr>'+dg.relation_classes.map(r=>'<tr><td>'+esc(r.relation)+'</td><td>'+r.support+'</td><td>'+r.tp+'</td><td>'+r.fp+'</td><td>'+r.fn+'</td><td>'+n3(r.f1)+'</td><td>'+(!r.support?'<span title="excluded (no gold)">not scored: no examples</span>':(r.low_support?'<span title="low support">⚠ few examples</span>':''))+'</td></tr>').join('')+'</table>'+
-      (dg.relation_micro?'<p class="small">All kinds pooled (micro) precision / recall / F1: '+n3(dg.relation_micro.precision)+' / '+n3(dg.relation_micro.recall)+' / '+n3(dg.relation_micro.f1)+' · direction right (when the relation was right): '+n3(dg.direction_accuracy)+'</p>':'')+'</details>';
+      '</details>';
   }
   if(dg.per_section&&Object.keys(dg.per_section).length){
     o+='<details class="scdiag"><summary>Scores for each test section</summary><table class="t"><tr><th>section</th><th>concepts (F1)</th><th>hierarchy (F1)</th><th>pairs reached</th><th>strict relations (F1)</th></tr>'+Object.entries(dg.per_section).map(([s,v])=>'<tr><td>'+esc(s)+'</td><td>'+n3(v.concept_f1)+'</td><td>'+(v.hierarchy_f1==null?'—':n3(v.hierarchy_f1))+'</td><td>'+(v.pair_recall?v.pair_recall[0]+' / '+v.pair_recall[1]:'—')+'</td><td>'+n3(v.strict_f1)+'</td></tr>').join('')+'</table></details>';
   }
-  if(dg.direct_parent_f1) o+='<details class="scdiag"><summary>Hierarchy: direct parent only</summary><p class="small">'+dg.direct_parent_f1.tp+' right · '+dg.direct_parent_f1.fp+' wrong · '+dg.direct_parent_f1.fn+' missed → F1 '+n3(dg.direct_parent_f1.f1)+'</p></details>';
-  o+='<p class="small">'+esc(P.meta.legacy_note)+'</p>';
   o+='<h3 class="jh">Check the details <span class="tier">AUDIT</span></h3><p class="small">To see individual examples, open <a class="lnk" id="sc-to-map">Where it goes wrong</a> or <a class="lnk" id="sc-to-list">Answer-key relations</a>. Sources and file hashes are in <code>reports/cr017/diagnostics.json</code> and <code>historical_replay.md</code>.</p>';
-  const og=P.organisation;
-  o+='<div class="card scorg" style="border-style:dashed"><h3 class="jh" style="margin-top:0">'+esc(og.title)+'</h3><p class="small">'+esc(og.note)+'</p><ul class="small">'+og.items.map(i=>'<li>'+esc(i)+'</li>').join('')+'</ul><p class="small">To see these, open the P&amp;D graph and choose the Rings layout. They are not scored here.</p></div>';
   el.innerHTML=o;
   el.querySelectorAll('button[data-sc-set]').forEach(b=>b.onclick=()=>{ SCS.set=b.dataset.scSet; if(S.mode==='ev'){ if(DS_OF_SET[SCS.set]){ ES.ds=DS_OF_SET[SCS.set]; ES.code=''; ES.unit=''; ES.sel=null; evSide(); } evBanner(); } renderScorecard(el); });
   el.querySelectorAll('button[data-sc-var]').forEach(b=>b.onclick=()=>{ SCS.variant=b.dataset.scVar; renderScorecard(el); });

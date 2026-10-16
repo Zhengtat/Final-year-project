@@ -226,8 +226,11 @@ def build_scinlp(tag: str = "heldout", frozen: bool = True) -> dict:
             })  # fmt: skip
         # gold relations: matched / missed with the earliest-failure code (frozen attribution)
         codes = sc_attribution(doc, g, pred, cp, sym)
+        r19 = V19.sc_score(doc, g, cp, sym, V19.PRIMARY)
+        s19 = r19["scores"]
+        att19 = A.distribution(sc_attribution(doc, g, r19["pred"], cp, sym))
         if not frozen:
-            idx19[doc.doc_key] = V19.sc_score(doc, g, cp, sym, V19.PRIMARY)["scores"]["rel"]
+            idx19[doc.doc_key] = s19["rel"]
         ghosts: dict = {}
         gold_rels, miss_i = [], 0
         for r, code in zip(g.relations, codes, strict=True):
@@ -287,7 +290,8 @@ def build_scinlp(tag: str = "heldout", frozen: bool = True) -> dict:
             "gold_spans": [[m.span[0], m.span[1], m.type] for m in g.mentions], "gold_rels": gold_rels,
             "nodes": nodes, "edges": edges,
             "cr019": ({"variant": V19.PRIMARY, "rel_prf": [c19[V19.PRIMARY]["strict_relation_per_document"][doc.doc_key][k] for k in ("precision", "recall", "f1")] if frozen else [idx19[doc.doc_key].precision, idx19[doc.doc_key].recall, idx19[doc.doc_key].f1],
-                       "edges_matching": sum(1 for e in edges if e.get("matches_gold_cr019")), "edges_not_scored_frozen": sum(1 for e in edges if e["kind"] == "pred" and not e["grounded"])} if c19 else None),
+                       "edges_matching": sum(1 for e in edges if e.get("matches_gold_cr019")),
+                       "rel_counts": [s19["rel"].tp, s19["rel"].fp, s19["rel"].fn], "attribution": att19["by_code"], "concept_prf": [s19["entity_strict"].precision, s19["entity_strict"].recall, s19["entity_strict"].f1], "edges_not_scored_frozen": sum(1 for e in edges if e["kind"] == "pred" and not e["grounded"])} if c19 else None),
         })  # fmt: skip
     micro = (
         res["aggregates"]["rel"]["micro"]
