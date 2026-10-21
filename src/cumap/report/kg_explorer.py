@@ -134,6 +134,28 @@ def build_pd(run: str = PD_RUN, org_id: str = ORG) -> dict:
 
 
 # ------------------------------------------------------------------ SciNLP held-out E0 graphs (retained checkpoints)
+def sci_node_funnel(rid: str, cp: dict, nodes: list[dict], edges: list[dict]) -> dict | None:
+    """Concept counts of one SciNLP paper from its retained concept-stage file; None when the file is absent."""
+    path = KG / rid / "v4_concepts.json"
+    if not path.exists():
+        return None
+    v4 = json.loads(path.read_text(encoding="utf-8"))
+    rejected_new = sum(
+        1
+        for s in v4.get("sections", {}).values()
+        for r in s.get("rejected", [])
+        if r.get("kind") == "new_concepts"
+    )
+    ends = {e[k] for e in edges if e.get("kind") == "pred" for k in ("s", "t")}
+    return {
+        "rejected_new": rejected_new,
+        "proposed": len(v4["nodes"]),
+        "pruned": len(v4.get("pruned", [])),
+        "concepts": len(cp["concepts"]),
+        "linked": len({n["id"] for n in nodes if not n.get("ghost")} & ends),
+    }
+
+
 def build_scinlp(tag: str = "heldout", frozen: bool = True) -> dict:
     from cumap.cr012 import attribution as A
     from cumap.cr012 import scinlp_run as SR
@@ -279,6 +301,7 @@ def build_scinlp(tag: str = "heldout", frozen: bool = True) -> dict:
             sc = {k: v.to_dict() for k, v in scp.items()}
             att = A.distribution(codes)
         docs.append({
+            "node_funnel": sci_node_funnel(rid, cp, nodes, edges),
             "doc_id": doc.doc_key, "retained_prediction_path": f"data/processed/kg/{rid}/checkpoint.json",
             "predicted_nodes": len(pred["nodes"]), "predicted_entity_mentions": sum(len(n.mentions) for n in pred["nodes"]), "predicted_edges": len(pred["edges"]),
             "gold_entities": len(g.mentions), "gold_relations": len(g.relations), "e0_strict_relation_f1": sc["rel"]["f1"],
