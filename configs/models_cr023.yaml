@@ -1,0 +1,7 @@
+# CR-023 model profile: lower-cost strong tier. Layered over configs/default.yaml when CUMAP_MODELS_CONFIG=configs/models_cr023.yaml.
+# Unset the variable (and OPENAI_MODEL_STRONG=gpt-6-sol) to get the baseline back. default.yaml is untouched because the closed
+# CR-011 handoff pins its hash. Bulk stays gpt-6-luna: at $0.10 / $0.50 per 1M tokens it is already about 11x cheaper than o4-mini.
+llm:
+  tiers:
+    # list price o4-mini $1.10 in / $4.40 out per 1M tokens (third-party aggregators, 2026-10-22; confirm on OpenAI's pricing page)
+    strong: {model: o4-mini, reasoning_effort: medium, usd_per_1m_input_tokens: 1.10, usd_per_1m_output_tokens: 4.40}

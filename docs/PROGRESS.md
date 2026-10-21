@@ -121,3 +121,6 @@ Right-hand panel funnel for P&D (slice3_c2 / slice3_c3, whole book or section) a
 
 ## CR-022 SciNLP hierarchy and relation scoring, Part A (2026-10-22)
 Part A built and run ($0, no model call; branch `cr-022-scinlp-hierarchy-scoring`). Determinism gate PASSED (frozen test E0 concept F1 0.352, pair-recall analogue 0.545, strict edge F1 0.050, IDX-P1 0.195; 20 source files hash-identical). SciNLP test, frozen run: A1 direct hierarchy F1 (H2 {subclassOf, subtaskOf}, 46 gold relations) FROZEN 0.037 / IDX-P1 0.114; A2 surface-ancestor F1 FROZEN 0.043 / IDX-P1 0.159; A3 relation macro F1 FROZEN 0.333 / IDX-P1 0.317 (10 classes, `partOf` low support). Report `reports/cr022/part_a.md`. Part B (paid registry transfer) not approved and not run; E1/E3-M/E4-M not rescored. Open owner decisions: hierarchy set, whether to run Part B, mapping table approval.
+
+## CR-023 lower-cost strong tier (2026-10-22)
+Profile `configs/models_cr023.yaml` active locally (strong = o4-mini, verified by one live call); baseline archived (tag `cr023-models-pre-change`, tarball SHA-256 7715f8f3...). 865 tests pass, ruff clean. Comparison run not started (estimate about $4.3 vs $8.26), awaiting owner approval.
