@@ -1,0 +1,7 @@
+# CR-025 one-model arm: BOTH tiers run gpt-6-sol (tier efforts as in production: strong medium, bulk low), escalation off (it would only retry the same model).
+# Used with OPENAI_MODEL_STRONG=OPENAI_MODEL_BULK=gpt-6-sol and CUMAP_MODELS_CONFIG=configs/models_cr025_sol.yaml (the runner sets both).
+llm:
+  tiers:
+    strong: {model: gpt-6-sol, reasoning_effort: medium, usd_per_1m_input_tokens: 2.0, usd_per_1m_output_tokens: 10.0}
+    bulk:   {model: gpt-6-sol, reasoning_effort: low,    usd_per_1m_input_tokens: 2.0, usd_per_1m_output_tokens: 10.0}
+  escalation: {enabled: false}

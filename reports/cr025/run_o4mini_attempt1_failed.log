@@ -1,0 +1,2 @@
+{"arm": "o4mini", "doc": "2021.acl-long.295", "returncode": 1, "seconds": 284, "tail": "^^^^^^^^^^^^^^^^^^\n  File \"/Users/wongzhengtat/Desktop/h420020-mapper/src/cumap/llm/client.py\", line 425, in _call_openai\n    raise ValueError(\nValueError: canonicalize: no parsed output (status=incomplete, output_tokens=768 of max 800); raise llm.max_output_tokens for this task if it was truncated\n"}
+o4mini 2021.acl-long.295 failed

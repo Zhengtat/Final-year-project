@@ -126,6 +126,9 @@ def load_settings(config_path: Path | None = None, *, env_file: Path | None = No
         )
         for tier_name, tier in profile["llm"]["tiers"].items():
             tiers_raw[tier_name] = {**tiers_raw.get(tier_name, {}), **tier}
+        for key, val in profile["llm"].items():  # other llm keys (CR-025: escalation off for a one-model arm)
+            if key != "tiers":
+                llm_raw[key] = {**llm_raw.get(key, {}), **val}
     llm_raw["tiers"] = tiers_raw
     raw = {**raw, "llm": llm_raw}
 

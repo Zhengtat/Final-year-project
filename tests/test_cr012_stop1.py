@@ -40,6 +40,8 @@ def test_no_pipeline_module_reads_scinlp_text_into_prompts():
             continue  # evaluation code (CR-017 replay scores frozen outputs only) and read-only reporting / explainability modules (they never build prompts or call a model)
         if f.parts[2] == "cr021" and f.name in {"review.py", "adjudicator.py", "rebuild_report.py"}:
             continue  # CR-021 owner review sheet: reads retained runs, writes a local draft, builds no prompt
+        if f.parts[2] == "cr025":
+            continue  # CR-025 model comparison: launches the existing SciNLP dev runner per model and scores retained runs (dev split only)
         if f.parts[2] == "cr022":
             continue  # CR-022 Part A: rescoring of retained SciNLP runs and a mapping helper (no prompt, no model call)
         if f.parts[2] == "cr020":
