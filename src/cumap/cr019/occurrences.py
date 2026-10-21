@@ -44,69 +44,11 @@ def paragraph_starts(text: str) -> list[int]:
     return starts
 
 
-_ARTICLES = {"a", "an", "the"}
+class R1KeyMatcher(MentionMatcher):
+    """The CR-020 `r1key` mode of `MentionMatcher` (kept under this name for the CR-019 index and its tests)."""
 
-
-class R1KeyMatcher:
-    """Longest-match over token windows whose R1 key (`alias_rules.r1_key`: casefold, hyphen / space / punctuation collapsed, spelling map,
-    head singularised) equals the R1 key of a vocabulary form, so "prefixtuning", "Prefix tuning" and "prefix-tuning" are one surface. The
-    R1 acronym guard applies (an all-caps acronym never matches its lower-case common-word twin); keys shorter than `min_key` characters must
-    match a form exactly (case-insensitive) instead. Same `find` contract as `MentionMatcher`."""
-
-    def __init__(self, vocab: dict[str, str], cfg, min_key: int = 4, extra_tokens: int = 1):
-        from cumap.expert_kg.alias_rules import r1_key
-
-        self._r1, self._cfg, self._min = r1_key, cfg, min_key
-        self._by_key: dict[str, tuple[str, str]] = {}
-        self._exact: dict[
-            str, set[tuple[str, ...]]
-        ] = {}  # key -> lemma-token forms (for short keys)
-        self._max = 1
-        for surface, cid in vocab.items():
-            k = r1_key(surface, cfg)
-            if k:
-                self._by_key.setdefault(k, (cid, surface))
-                self._exact.setdefault(k, set()).add(
-                    tuple(t for _, _, t in tokenize(surface, default_lemma))
-                )
-                self._max = max(self._max, len(tokenize(surface, default_lemma)) + extra_tokens)
-
-    def find(self, text: str) -> list:
-        from cumap.expert_kg.alias_rules import acronym_collision
-        from cumap.expert_kg.mentions import Mention
-
-        toks = tokenize(text, default_lemma)
-        out, i = [], 0
-        while i < len(toks):
-            best = None
-            if (
-                toks[i][2] in _ARTICLES
-            ):  # r1_key strips a leading article; a span never starts with one
-                i += 1
-                continue
-            for j in range(min(len(toks), i + self._max), i, -1):
-                a, b = toks[i][0], toks[j - 1][1]
-                span = text[a:b]
-                key = self._r1(span, self._cfg)
-                hit = self._by_key.get(key)
-                if hit is None:
-                    continue
-                cid, form = hit
-                if (
-                    len(key) < self._min
-                    and tuple(t for _, _, t in toks[i:j]) not in self._exact[key]
-                ):
-                    continue
-                if acronym_collision(form, span, self._cfg):
-                    continue
-                best = (j, Mention(a, b, span, cid, form.lower()))
-                break
-            if best is None:
-                i += 1
-                continue
-            out.append(best[1])
-            i = best[0]
-        return out
+    def __init__(self, vocab: dict[str, str], cfg=None):
+        super().__init__(vocab, mode="r1key")
 
 
 def _key(surface: str) -> tuple[str, ...]:
@@ -148,7 +90,7 @@ def build_index(
         by_group = {group_id[r]: tuple(sorted(v)) for r, v in rk.items()}
         matcher = R1KeyMatcher({f: group_id[r1_key(f, cfg)] for f, _ in sorted(forms)}, cfg)
     else:
-        matcher = MentionMatcher({shown[k].lower(): group_id[k] for k in owners})
+        matcher = MentionMatcher({shown[k].lower(): group_id[k] for k in owners}, mode="token")
     windows = {
         c["concept_id"]: _windows(
             {m["quote"] for m in c["mentions"] if m["section_id"] == unit}, text

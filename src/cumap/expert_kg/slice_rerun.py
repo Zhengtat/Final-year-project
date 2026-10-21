@@ -160,6 +160,12 @@ def select_stage(
         "min_per_section": min_per_section,
         "candidate_pairs_before_dedup": sum(len(v) for v in per.values()),
     }
+    from cumap.expert_kg.mentions import matching_mode
+
+    if (
+        matching_mode() != "token"
+    ):  # CR-020: recorded only when not the historical default, so older runs replay byte-identically
+        cp.selection_stats["matching_mode"] = matching_mode()
     return cp.selection_stats
 
 

@@ -148,6 +148,7 @@ def cr019_variant() -> dict | None:
     }
     return {
         "stage_b": stage_b_rows(),
+        "cr020": cr020_rows(),
         "label": "CR-019 grounding-consistent",
         "variant": "IDX (P&D) / IDX-P1 (SciNLP)",
         "note": CR019_NOTE,
@@ -201,6 +202,53 @@ def stage_b_rows() -> dict | None:
             )
     return {"rows": rows, "recommendation": b["recommendation"], "spend_usd": b["spend"]["total_usd"], "cap_usd": b["spend"]["cap_usd"],
             "note": "Development data only (SciNLP dev papers, P&D sections 1.5 and 2.6). SINGLE = production relation stage; MULTI = the classifier sees up to 3 sentences where both concepts occur. Same concepts and pairs in both arms."}  # fmt: skip
+
+
+def cr020_rows() -> dict | None:
+    """CR-020 (R1-key matching in production, dev data): TOKEN vs R1KEY rows, read from reports/cr020/results.json."""
+    path = Path("reports/cr020/results.json")
+    if not path.exists():
+        return None
+    r = json.loads(path.read_text())
+    rows = []
+    for arm in ("TOKEN", "R1KEY"):
+        x = r["scinlp"][arm]
+        for v, m in x["relation"].items():
+            rows.append(
+                {
+                    "dataset": "SciNLP dev",
+                    "arm": arm,
+                    "measure": f"strict relation ({v})",
+                    "precision": m["precision"],
+                    "recall": m["recall"],
+                    "f1": m["f1"],
+                }
+            )
+        pr = x["pair_recall_analogue"]
+        rows.append(
+            {
+                "dataset": "SciNLP dev",
+                "arm": arm,
+                "measure": "pair-recall analogue",
+                "precision": None,
+                "recall": pr["recall"],
+                "f1": None,
+            }
+        )
+        h = r["pd"][arm]["headline"]
+        se = h["strict_e2e_edge_f1"]
+        rows.append(
+            {
+                "dataset": "P&D dev",
+                "arm": arm,
+                "measure": "Strict E2E Edge",
+                "precision": se["precision"],
+                "recall": se["recall"],
+                "f1": se["f1"],
+            }
+        )
+    return {"rows": rows, "decision": r["decision"], "spend_usd": r["spend"]["total_usd"],
+            "note": "Production text matching: TOKEN = whole-word matching; R1KEY = spelling variants that share the R1 name key match too (prefixtuning = Prefix tuning = prefix-tuning). Concepts unchanged; pairs and relations re-run. Development data only."}  # fmt: skip
 
 
 def build_scorecard() -> dict:

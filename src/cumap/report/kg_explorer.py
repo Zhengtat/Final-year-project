@@ -189,9 +189,11 @@ def build_scinlp() -> dict:
             for s0 in n.mentions:
                 span_node.setdefault(s0, n.node_id)
         frozen_ids = {n.node_id for n in pred["nodes"]}
+        # CR-020: spelling variants ("prefixtuning") attach through R1-key matching
+        rpred = V19.sc_predict_indexed(doc, cp, "r1key")
         index_node = {
             s0: n.node_id
-            for n in ipred["nodes"]
+            for n in rpred["nodes"]
             if n.node_id in frozen_ids
             for s0 in n.mentions
             if s0 not in span_node
