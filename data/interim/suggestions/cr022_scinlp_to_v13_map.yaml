@@ -1,0 +1,16 @@
+# CR-022 Part B: DRAFT mapping from SciNLP labels to registry v1.3 relations. Written by Claude; the OWNER approves it.
+# Nothing here takes effect: only entries with `status: approved` in configs/scinlp_to_v13_map.yaml (owner-created) are ever applied.
+# Test supports are from the frozen release SciNLP-repo-e78342be (counted 2026-10-19); the spec's proposal table is the source of every row.
+version: draft-1
+entries:
+  subclassOf:   {target: is_a,          swap: false, fit: clean,  status: draft, test_support: 31}
+  partOf:       {target: part_of,       swap: false, fit: clean,  status: draft, test_support: 8}
+  UsedFor:      {target: has_purpose,   swap: false, fit: clean,  status: draft, test_support: 75}
+  compareWith:  {target: contrasts_with, swap: false, fit: close, status: draft, test_support: 52, note: "SciNLP label is symmetric; check the v1.3 direction rule"}
+  trainedWith:  {target: uses,          swap: false, fit: close,  status: draft, test_support: 11}
+  subtaskOf:    {target: null,          swap: false, fit: owner_decides, status: draft, test_support: 15, options: [part_of, is_a]}
+  enhancedBy:   {target: null,          swap: false, fit: owner_decides, status: draft, test_support: 43, options: [uses, increases]}
+  MeasuredBy:   {target: null,          swap: false, fit: unmapped, status: draft, test_support: 18, note: "no evaluation relation in v1.3"}
+  evaluatedOn:  {target: null,          swap: false, fit: unmapped, status: draft, test_support: 16, note: "no evaluation relation in v1.3"}
+  evaluatedBy:  {target: null,          swap: false, fit: unmapped, status: draft, test_support: 8,  note: "no evaluation relation in v1.3"}
+  similarWith:  {target: null,          swap: false, fit: unmapped, status: draft, test_support: 18, note: "equivalence retired in v1.3"}

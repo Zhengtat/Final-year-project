@@ -118,3 +118,6 @@ Explorer 2026-10-16: P&D Graph switch (slice3_c2 production / slice3_c3 rebuild,
 
 ## Explorer concept-count funnel (2026-10-22)
 Right-hand panel funnel for P&D (slice3_c2 / slice3_c3, whole book or section) and SciNLP papers; JS/Python parity on all sections; screenshots `reports/kg_explorer/node_funnel_{light,dark}.png`. slice3_c2 reconciles exactly (1,393 -> 1,275 -> 1,243 -> 598 linked); slice3_c3 shows 1 unaccounted concept. 860 tests pass, ruff clean on changed files.
+
+## CR-022 SciNLP hierarchy and relation scoring, Part A (2026-10-22)
+Part A built and run ($0, no model call; branch `cr-022-scinlp-hierarchy-scoring`). Determinism gate PASSED (frozen test E0 concept F1 0.352, pair-recall analogue 0.545, strict edge F1 0.050, IDX-P1 0.195; 20 source files hash-identical). SciNLP test, frozen run: A1 direct hierarchy F1 (H2 {subclassOf, subtaskOf}, 46 gold relations) FROZEN 0.037 / IDX-P1 0.114; A2 surface-ancestor F1 FROZEN 0.043 / IDX-P1 0.159; A3 relation macro F1 FROZEN 0.333 / IDX-P1 0.317 (10 classes, `partOf` low support). Report `reports/cr022/part_a.md`. Part B (paid registry transfer) not approved and not run; E1/E3-M/E4-M not rescored. Open owner decisions: hierarchy set, whether to run Part B, mapping table approval.
