@@ -124,3 +124,6 @@ Part A built and run ($0, no model call; branch `cr-022-scinlp-hierarchy-scoring
 
 ## CR-023 lower-cost strong tier (2026-10-22)
 Profile `configs/models_cr023.yaml` active locally (strong = o4-mini, verified by one live call); baseline archived (tag `cr023-models-pre-change`, tarball SHA-256 7715f8f3...). 865 tests pass, ruff clean. Comparison run not started (estimate about $4.3 vs $8.26), awaiting owner approval.
+
+## CR-024 merged relation registry v1.4 (2026-10-22)
+`configs/relations_v1.4.yaml` (23 relations: v1.3's 17 + 6; 5 SciNLP labels merged into existing relations, 6 added); generated from a patch, 6 new tests, 871 tests pass, ruff clean. Hierarchy set from the registry = {is_a, subtask_of}. Not adopted in production; definitions of the six new relations await owner review.
