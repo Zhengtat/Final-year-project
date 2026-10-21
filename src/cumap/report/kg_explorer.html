@@ -114,6 +114,16 @@ body.debug #detail .in{transition:none}
 .reviewonly{display:block}.debugonly{display:none}
 body.debug .reviewonly{display:none}body.debug .debugonly{display:block}
 
+/* ---- node funnel (right-hand panel) */
+.nf{border:1px solid var(--line);border-radius:8px;padding:6px 10px 8px;margin:0 0 14px;background:var(--bg)}
+.nf summary{cursor:pointer;font-weight:600;font-size:13px}
+.nfr{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) 44px 74px;align-items:center;gap:6px;font-size:12px;margin:4px 0}
+.nfl{color:var(--ink2);line-height:1.2}.nfb{height:10px;background:var(--chip);border-radius:5px;overflow:hidden}.nfb i{display:block;height:100%;background:var(--accent)}
+.nfv{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}.nfd{color:var(--ink2);font-variant-numeric:tabular-nums;font-size:11px}
+.nfu{font-size:11.5px;color:var(--warn);background:var(--warnbg);border:1px solid var(--warn);border-radius:6px;padding:3px 7px;margin:3px 0}
+.nfn{font-size:11.5px;color:var(--ink2);margin:3px 0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
 /* ---- CR-013 trace layer */
 .vh{font-size:18px;margin:0 0 6px;font-weight:600}
 .ribbon{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:6px;margin:10px 0}
@@ -182,7 +192,7 @@ button.evchip{font-size:12px;padding:3px 9px;border-radius:12px}button.evchip.on
     <div class="pane" id="p-evmap"><div class="scroll" id="v-evmap" tabindex="0" role="region" aria-label="Evaluation failure map"></div></div>
     <div class="pane" id="p-evlist"><div class="scroll" id="v-evlist" tabindex="0" role="region" aria-label="Evaluation gold relations"></div></div>
   </div>
-  <aside id="detail" tabindex="0" aria-label="Details of the selected item"><div class="in" id="detailin"></div></aside>
+  <aside id="detail" tabindex="0" aria-label="Details of the selected item"><div id="nodefunnel"></div><div class="in" id="detailin"></div></aside>
 </main>
 <script type="application/octet-stream" id="trace-gz">/*__TRACE_B64__*/</script>
 <!--__TRACE_ALT__-->
@@ -378,6 +388,7 @@ function fillTemplate(e,a,b){ const d=defs()[e.rel]; if(!d||!d.template||d.templ
 function copyBtn(t){ return ' <a class="lnk" data-copy="'+esc(t)+'">copy</a>'; }
 function renderDetail(instant){
   const box=$('detailin'), dbg=S.view==='debug';
+  if(typeof renderNodeFunnel==='function') renderNodeFunnel();
   if(S.mode==='ev'){ box.className='in'; box.innerHTML=evDetailHTML(); wireEvDetail(box); return; }
   let h='';
   if(!S.sel){
