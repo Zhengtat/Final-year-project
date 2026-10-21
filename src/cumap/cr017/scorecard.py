@@ -150,6 +150,7 @@ def cr019_variant() -> dict | None:
         "stage_b": stage_b_rows(),
         "cr020": cr020_rows(),
         "rebuild": rebuild_rows(),
+        "cr022": cr022_rows(),
         "label": "CR-019 grounding-consistent",
         "variant": "IDX (P&D) / IDX-P1 (SciNLP)",
         "note": CR019_NOTE,
@@ -250,6 +251,58 @@ def cr020_rows() -> dict | None:
         )
     return {"rows": rows, "decision": r["decision"], "spend_usd": r["spend"]["total_usd"],
             "note": "Production text matching: TOKEN = whole-word matching; R1KEY = spelling variants that share the R1 name key match too (prefixtuning = Prefix tuning = prefix-tuning). Concepts unchanged; pairs and relations re-run. Development data only."}  # fmt: skip
+
+
+def cr022_rows() -> dict | None:
+    """CR-022 Part A (SciNLP hierarchy and relation scoring), read from reports/cr022/part_a.json. Labelled variants, never headline cards."""
+    path = Path("reports/cr022/part_a.json")
+    if not path.exists():
+        return None
+    r = json.loads(path.read_text())
+    if not r.get("gate", {}).get("passed"):
+        return None
+    rows = []
+    for s in r["sets"].values():
+        if s["split"] != "test" or not s["label"].startswith("frozen"):
+            continue
+        for v in ("FROZEN", "IDX-P1"):
+            x = s["variants"].get(v)
+            if not x:
+                continue
+            for h, a in x["A1_HIER_DIRECT"].items():
+                rows.append(
+                    {
+                        "measure": f"direct hierarchy edges, {h}",
+                        "variant": v,
+                        "precision": a["precision"],
+                        "recall": a["recall"],
+                        "f1": a["f1"],
+                    }
+                )
+            for h, a in x["A2_HIER_ANC_SURF"].items():
+                rows.append(
+                    {
+                        "measure": f"ancestor hierarchy on surface nodes, {h}",
+                        "variant": v,
+                        "precision": a["precision"],
+                        "recall": a["recall"],
+                        "f1": a["f1"],
+                    }
+                )
+            m = x["A3_REL_MACRO_SCINLP"]
+            rows.append(
+                {
+                    "measure": f"relation macro F1 ({m['classes_in_macro']} labels)",
+                    "variant": v,
+                    "precision": None,
+                    "recall": None,
+                    "f1": m["macro_f1"],
+                }
+            )
+    return {
+        "note": "CR-022 Part A, SciNLP test, frozen CR-012 run. These fill the two SciNLP gaps without changing the five main scores above: hierarchy is measured on surface strings (identity is inferred from text, so it is a labelled variant, not a main score) and the relation macro F1 covers gold relations whose two ends were found. FROZEN = frozen grounding; IDX-P1 = occurrence-index grounding. Full tables: reports/cr022/part_a.md.",
+        "rows": rows,
+    }  # fmt: skip
 
 
 def rebuild_rows() -> dict | None:
