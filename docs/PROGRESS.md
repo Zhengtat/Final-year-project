@@ -127,3 +127,6 @@ Profile `configs/models_cr023.yaml` active locally (strong = o4-mini, verified b
 
 ## CR-024 merged relation registry v1.4 (2026-10-22)
 `configs/relations_v1.4.yaml` (23 relations: v1.3's 17 + 6; 5 SciNLP labels merged into existing relations, 6 added); generated from a patch, 6 new tests, 871 tests pass, ruff clean. Hierarchy set from the registry = {is_a, subtask_of}. Not adopted in production; definitions of the six new relations await owner review.
+
+## CR-025 model comparison on SciNLP dev (2026-10-22)
+luna / o4-mini / sol, both tiers, 6 dev papers: relation F1 (IDXR1-P1) 0.114 / 0.081 / 0.154, concept F1 0.420 / 0.369 / 0.502, cost $0.18 / $1.98 / $3.63 (about $5.8 total). o4-mini ran with effort low and caps x3 after two truncation failures. Single runs, reference spread about 0.013. 872 tests pass, ruff clean. Report `reports/cr025/comparison.md`.
