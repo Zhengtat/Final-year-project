@@ -130,3 +130,6 @@ Profile `configs/models_cr023.yaml` active locally (strong = o4-mini, verified b
 
 ## CR-025 model comparison on SciNLP dev (2026-10-22)
 luna / o4-mini / sol, both tiers, 6 dev papers: relation F1 (IDXR1-P1) 0.114 / 0.081 / 0.154, concept F1 0.420 / 0.369 / 0.502, cost $0.18 / $1.98 / $3.63 (about $5.8 total). o4-mini ran with effort low and caps x3 after two truncation failures. Single runs, reference spread about 0.013. 872 tests pass, ruff clean. Report `reports/cr025/comparison.md`.
+
+## CR-026 luna default (2026-10-22)
+Local `.env` now selects `configs/models_luna_default.yaml`: every tier gpt-6-luna, gpt-6-sol only via escalation (verified by live calls and 5 new tests). 876 tests pass, ruff clean. Baseline restorable by unsetting `CUMAP_MODELS_CONFIG` and `OPENAI_MODEL_STRONG=gpt-6-sol`.
