@@ -164,7 +164,7 @@ def main() -> None:
             ]
     shutil.rmtree(WORK, ignore_errors=True)
     WORK.mkdir(parents=True)
-    common = dict(llm_model_name="stub-llm", embedding_model_name=EMB, llm_base_url=base)
+    common = {"llm_model_name": "stub-llm", "embedding_model_name": EMB, "llm_base_url": base}
     arms = {
         "P2_hipporag": HippoRAG(save_dir=str(WORK / "P2_hipporag"), **common),
         "P1_dense": DenseArm(str(WORK / "P1_dense"), **common),

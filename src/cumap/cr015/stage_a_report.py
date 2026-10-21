@@ -143,7 +143,7 @@ def main() -> dict:
                 "predicted_nested": r["predicted_nested"], "over_long_fp": r["over_long_fp"], "under_long_fp": r["under_long_fp"], "distinct_surface": r["distinct_surface"], "fp_categories": r["false_positive_boundary_categories"]}  # fmt: skip
         # macro section F1
         f1s = []
-        for sid, (tp, fp, fn) in r["by_section_counts"].items():
+        for tp, fp, fn in r["by_section_counts"].values():
             f1s.append(2 * tp / (2 * tp + fp + fn) if tp else 0.0)
         info["macro_section_f1"] = sum(f1s) / len(f1s)
         if arm != "U0":

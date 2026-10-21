@@ -60,7 +60,6 @@ def evaluate(arm_spans: dict[str, dict[str, list]], dev: list[DevSection]) -> di
     texts = {d.sid: d.text for d in dev}
     gold = [m for d in dev for m in d.gold]
     res = {}
-    base = None
     for arm, spans in arm_spans.items():
         r = score_mentions(spans, gold, texts)
         r["by_section_counts"] = counts_by_section(spans, dev)

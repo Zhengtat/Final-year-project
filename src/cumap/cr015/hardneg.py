@@ -81,7 +81,15 @@ def build_bank(dev: list[DevSection]) -> dict:
                 negs: list[tuple[int, int, str, str]] = []
 
                 def add(
-                    x: int, y: int, why: str, expect: str, i=i, j=j, toks=toks, negs=negs
+                    x: int,
+                    y: int,
+                    why: str,
+                    expect: str,
+                    i=i,
+                    j=j,
+                    toks=toks,
+                    negs=negs,
+                    gold_spans=gold_spans,
                 ) -> None:
                     if x < 0 or y >= len(toks) or x > y:
                         return
