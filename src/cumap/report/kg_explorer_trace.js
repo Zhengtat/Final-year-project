@@ -3,11 +3,12 @@
 // (events, journeys, per-section data, precomputed Why-not answers). Text comes from the same templates as the Python
 // renderer (DATA.trace templates); a parity test proves the two outputs are identical. No gold data is present.
 // ====================================================================================================================
-const TRACE_TABS = [['pipeline','Pipeline'],['section','Explain a section'],['why','Why not?'],['lost','Rejected / lost'],['snap','Stage snapshots']];
+const TRACE_TABS = [['pipeline','Pipeline'],['section','Step through a section'],['why','Why not?'],['lost','What was left out'],['snap','Section at each step']];
 const TRACE_PANES = ['pipeline','section','why','lost','snap','trace'];
 const RIBBON = ['source','generator','verifier','pruner','canonicalisation','pair_generation','pair_selection','relation_classification','validation','graph_commit','organisation'];
-const STAGE_NAME = {source:'Source text',generator:'Concept generator',verifier:'Verifier / correction',pruner:'Pruner',canonicalisation:'Canonicalisation',pair_generation:'Pair generation',pair_selection:'Pair ranking + budget',relation_classification:'Relation classification',validation:'Validation',graph_commit:'Graph commit',organisation:'Organisation (read-only)'};
-const STEPS = [['source','1 · Source text'],['generator','2 · Concepts proposed'],['verifier','3 · Verification'],['pruner','4 · Pruning'],['canonicalisation','5 · Canonicalisation'],['pair_generation','6 · Eligible pairs'],['pair_selection','7 · Budget boundary'],['relation_classification','8 · Relation decision'],['validation','9 · Validation'],['graph_commit','10 · Local graph']];
+const STAGE_NAME = {source:'Source text',generator:'Concept generator',verifier:'Checks and fixes',pruner:'Filter',canonicalisation:'Merging duplicate names',pair_generation:'Finding concept pairs',pair_selection:'Pair ranking + budget',relation_classification:'Relation classification',validation:'Validation',graph_commit:'Graph commit',organisation:'Arranging the graph (read-only)'};
+const AUTH_PLAIN = {RULE:'decided by a fixed rule',MODEL:'decided by the AI model',SCORE:'decided by a score',STRUCTURAL:'follows from the shape of the graph',HUMAN:'decided by a person',UNKNOWN:'who decided was not recorded'};
+const STEPS = [['source','1 · Source text'],['generator','2 · Concepts suggested'],['verifier','3 · Checks'],['pruner','4 · Filter'],['canonicalisation','5 · Merging names'],['pair_generation','6 · Possible pairs'],['pair_selection','7 · Choosing pairs'],['relation_classification','8 · Relation decision'],['validation','9 · Final checks'],['graph_commit','10 · Section graph']];
 const NOT_REC = 'NOT_RECORDED';
 let TR = null, TRLOAD = null;
 const TS = {stage:'pair_selection', sectionAll:true, section:null, step:0, snap:2, whyA:'', whyB:'', whyOut:null, lostMore:{}, evFilter:{stage:'',outcome:'',layer:'',q:''}};
@@ -65,7 +66,7 @@ function poolEv(i, kind){
   return kind==='gen' ? {...base, action:'pool_pair_replayed', outcome:'emitted', attrs:{cooccurrence_count:cooc, section_pool:sp, section_rank:sr}}
                       : {...base, action:'rank_replayed', outcome:sel?'selected':'not_selected', rank, input_refs:['concept:'+x,'concept:'+y], attrs:{section_rank:sr, section_pool:sp}};
 }
-const badge = ev => '<span class="chip auth auth-'+ev.authority+'" title="who decided: '+ev.authority+'">'+ev.authority+'</span>'+(ev.layer&&ev.layer!=='RECORDED'?'<span class="chip layer-'+ev.layer+'" title="'+(ev.layer==='REPLAYED'?'recomputed by the frozen deterministic code and verified against the retained selection; not originally recorded':'exact deterministic join')+'">'+ev.layer+'</span>':'');
+const badge = ev => '<span class="chip auth auth-'+ev.authority+'" title="'+esc(AUTH_PLAIN[ev.authority]||ev.authority)+'">'+ev.authority+'</span>'+(ev.layer&&ev.layer!=='RECORDED'?'<span class="chip layer-'+ev.layer+'" title="'+(ev.layer==='REPLAYED'?'not saved in the original run: recalculated afterwards by the same fixed code (no AI model) and checked against the saved result':'linked by an exact match between saved files')+'">'+ev.layer+'</span>':'');
 function evCard(ev, dbg){
   const r=renderEv(ev);
   let h='<div class="evc"><div class="evh"><b>'+esc(STAGE_NAME[ev.stage]||ev.stage)+'</b> '+badge(ev)+'<span class="chip">'+esc(ev.outcome)+'</span></div><div>'+esc(r.text)+'</div>';
@@ -81,17 +82,17 @@ function counts(scope){
   const ev=scopeEvents(scope), c=(st,ac,oc)=>ev.filter(e=>e.stage===st&&(!ac||String(e.action).split(':')[0]===ac)&&(!oc||e.outcome===oc)).length;
   const pool=scopePool(scope), selPool=pool.filter(i=>TR.pool[i][4]).length, rows=scopeRows(scope).filter(r=>r.g!=='sample');
   const out={
-    source:[['text units',c('source')]],
+    source:[['pieces of text',c('source')]],
     generator:[['mentions recorded',c('generator','mention_recorded')],['concepts proposed',c('generator','proposed')]],
-    verifier:[['flags raised',c('verifier','flag_raised')],['automatic corrections',c('verifier','autofix')],['candidates rejected',c('verifier','candidate_rejected')],['hints rejected',c('verifier','hint_rejected')]],
-    pruner:[['candidates scored',c('pruner','prune_score')],['pruned',0]],
-    canonicalisation:[['names linked to a concept',c('canonicalisation','alias_link','merged')+c('generator','alias_link','merged')],['kept separate (taxonomy decisions)',c('canonicalisation','taxonomy_candidate')]],
-    pair_generation:[['eligible candidate pairs (replayed)',pool.length],['anchor pairs (recorded)',ev.filter(e=>e.stage==='pair_generation'&&e.action==='anchor_pair_join').length]],
-    pair_selection:[['selected from the pool',selPool],['eligible but not selected',pool.length-selPool],['anchor pairs selected',ev.filter(e=>e.stage==='pair_selection'&&e.action==='selected_recorded'&&String(e.object_id).startsWith('pair:AP-')).length]],
-    relation_classification:[['pairs classified',rows.length],['relation proposed',rows.filter(r=>r.o==='emitted').length],['no relation / other',rows.filter(r=>r.o==='no_relation').length]],
+    verifier:[['warnings',c('verifier','flag_raised')],['automatic corrections',c('verifier','autofix')],['concepts rejected',c('verifier','candidate_rejected')],['hints rejected',c('verifier','hint_rejected')]],
+    pruner:[['concepts scored',c('pruner','prune_score')],['pruned',0]],
+    canonicalisation:[['other names linked',c('canonicalisation','alias_link','merged')+c('generator','alias_link','merged')],['kept separate (judged different)',c('canonicalisation','taxonomy_candidate')]],
+    pair_generation:[['possible pairs',pool.length],['priority pairs',ev.filter(e=>e.stage==='pair_generation'&&e.action==='anchor_pair_join').length]],
+    pair_selection:[['chosen',selPool],['not chosen',pool.length-selPool],['priority pairs chosen',ev.filter(e=>e.stage==='pair_selection'&&e.action==='selected_recorded'&&String(e.object_id).startsWith('pair:AP-')).length]],
+    relation_classification:[['pairs checked',rows.length],['relation found',rows.filter(r=>r.o==='emitted').length],['no relation',rows.filter(r=>r.o==='no_relation').length]],
     validation:[['accepted',rows.filter(r=>r.vo==='accepted').length],['rejected',rows.filter(r=>r.vo==='rejected').length]],
-    graph_commit:[['edges committed',scope?(TR.sections[scope].edges||[]).length:TR.final_edges.length],['concepts in the final graph',scope?TR.sections[scope].concepts.filter(x=>TR.finalSet.has(x)).length:TR.final_concepts.length]],
-    organisation:[['organisation events',scope?'only for the whole graph':c('organisation')]],
+    graph_commit:[['relations added',scope?(TR.sections[scope].edges||[]).length:TR.final_edges.length],['concepts in the final graph',scope?TR.sections[scope].concepts.filter(x=>TR.finalSet.has(x)).length:TR.final_concepts.length]],
+    organisation:[['layout steps',scope?'only for the whole graph':c('organisation')]],
   };
   return out;
 }
@@ -99,7 +100,7 @@ function counts(scope){
 // ---------------------------------------------------------------- tab rendering entry
 async function renderTraceTab(k){
   const el=$('v-'+k); if(!el) return;
-  el.innerHTML='<p class="na">Loading the trace…</p>';
+  el.innerHTML='<p class="na">Loading…</p>';
   try{ await loadTrace(); }catch(e){ el.innerHTML='<p class="na">The trace could not be loaded in this browser ('+esc(e&&e.message||e)+'). It needs DecompressionStream support.</p>'; return; }
   ({pipeline:viewPipeline, section:viewSection, why:viewWhy, lost:viewLost, snap:viewSnap, trace:viewTrace})[k](el);
 }
@@ -112,7 +113,7 @@ function wireSecSelect(el, rerender, allowAll){
 }
 const scopeOf = withAll => (withAll&&TS.sectionAll)?null:TS.section;
 function funnelBar(c){
-  const f=[['eligible',c.pair_generation[0][1]],['selected',c.pair_selection[0][1]+c.pair_selection[2][1]],['classified',c.relation_classification[0][1]],['relation proposed',c.relation_classification[1][1]],['validated',c.validation[0][1]],['committed',c.graph_commit[0][1]]];
+  const f=[['possible pairs',c.pair_generation[0][1]],['chosen to check',c.pair_selection[0][1]+c.pair_selection[2][1]],['checked by the model',c.relation_classification[0][1]],['relation found',c.relation_classification[1][1]],['passed final checks',c.validation[0][1]],['added to the graph',c.graph_commit[0][1]]];
   const mx=Math.max(1,...f.map(x=>x[1]));
   return '<div class="funnel">'+f.map(([l,v])=>'<div class="fr"><span class="fl">'+l+'</span><span class="fb"><i style="width:'+(100*v/mx)+'%"></i></span><span class="fv">'+v+'</span></div>').join('')+'</div>';
 }
@@ -120,17 +121,17 @@ function funnelBar(c){
 // ---------------------------------------------------------------- Pipeline
 function viewPipeline(el){
   const scope=scopeOf(true), c=counts(scope), st=TS.stage, ex=scopeEvents(scope);
-  let h='<h2 class="vh">Pipeline</h2><p class="small">How a textbook becomes a graph, stage by stage. Pick a stage to see what it does, what happened here and why it matters. '+secSelect(true).replace('class="small"','')+'</p>';
-  h+='<div class="ribbon" role="tablist" aria-label="Pipeline stages" id="ribbon">'+RIBBON.map((s,i)=>'<button role="tab" aria-selected="'+(s===st)+'" tabindex="'+(s===st?0:-1)+'" data-st="'+s+'" class="'+(s===st?'on':'')+'"><span class="n">'+(i+1)+'</span>'+esc(STAGE_NAME[s])+'<small>'+esc(c[s].map(x=>x[1]+' '+x[0]).slice(0,2).join(' · '))+'</small></button>').join('')+'</div>';
+  let h='<h2 class="vh">Pipeline</h2><p class="lede">How the textbook is turned into a graph, one step at a time. Pick a step to see what it does, what happened, and why it matters. '+secSelect(true).replace('class="small"','')+'</p>';
+  h+='<div class="ribbon" role="tablist" aria-label="Pipeline stages" id="ribbon">'+RIBBON.map((s,i)=>'<button role="tab" aria-selected="'+(s===st)+'" tabindex="'+(s===st?0:-1)+'" data-st="'+s+'" title="'+esc(TR.stage_info[s]||'')+'" class="'+(s===st?'on':'')+'"><span class="n">'+(i+1)+'</span>'+esc(STAGE_NAME[s])+'<small>'+esc(c[s].map(x=>x[1]+' '+x[0]).slice(0,2).join(' · '))+'</small></button>').join('')+'</div>';
   h+=funnelBar(c);
-  h+='<div class="card"><h4>What does this stage do?</h4>'+esc(TR.stage_info[st==='verifier'?'verifier':st])+'</div>';
-  h+='<div class="card"><h4>What happened here? <span class="small">('+(scope?esc(scope):'whole graph')+')</span></h4><ul>'+c[st].map(([l,v])=>'<li><b>'+esc(v)+'</b> '+esc(l)+'</li>').join('')+'</ul>';
+  h+='<div class="card"><h4>What this step does</h4>'+esc(TR.stage_info[st==='verifier'?'verifier':st])+'</div>';
+  h+='<div class="card"><h4>What happened <span class="small">('+(scope?'section '+esc(scope):'whole book')+')</span></h4><ul>'+c[st].map(([l,v])=>'<li><b>'+esc(v)+'</b> '+esc(l)+'</li>').join('')+'</ul>';
   const samples=ex.filter(e=>e.stage===st||(st==='verifier'&&e.stage==='correction')).slice(0,3);
   if(st==='pair_selection'){ const p=scopePool(scope).slice(0,3); h+=p.map(i=>evCard(poolEv(i,'sel'),S.view==='debug')).join(''); }
   else if(st==='pair_generation'){ const p=scopePool(scope).slice(0,2); h+=p.map(i=>evCard(poolEv(i,'gen'),S.view==='debug')).join('')+samples.map(e=>evCard(e,S.view==='debug')).join(''); }
-  else h+=samples.map(e=>evCard(e,S.view==='debug')).join('')||'<p class="na">No retained event of this stage in this scope.</p>';
-  h+='</div><div class="card"><h4>Why does it matter?</h4>'+esc(TR.stage_matters[st])+'</div>';
-  if(st==='pair_selection') h+='<div class="card warn"><h4>Replayed ranks</h4>Ranks come from the REPLAYED layer: the frozen selection code was re-run (no model call) and verified to reproduce the retained selected set exactly. They were not originally recorded. Replay valid: <b>'+TR.meta.replay.valid+'</b>, deterministic: <b>'+TR.meta.replay.deterministic+'</b>.</div>';
+  else h+=samples.map(e=>evCard(e,S.view==='debug')).join('')||'<p class="na">Nothing was recorded for this step here.</p>';
+  h+='</div><div class="card"><h4>Why it matters</h4>'+esc(TR.stage_matters[st])+'</div>';
+  if(st==='pair_selection') h+='<div class="card warn"><h4>About these rankings <span class="chip layer-REPLAYED">REPLAYED</span></h4>The original run did not save these ranks. They were recalculated afterwards by re-running the same fixed selection code (no AI model involved), and the result matched the saved selection exactly. Matches the saved selection: <b>'+(TR.meta.replay.valid?'yes':'no')+'</b> · same result every time: <b>'+(TR.meta.replay.deterministic?'yes':'no')+'</b>.</div>';
   el.innerHTML=h; wireSecSelect(el,()=>viewPipeline(el),true);
   const rb=el.querySelector('#ribbon'); rb.querySelectorAll('button').forEach(b=>b.onclick=()=>{TS.stage=b.dataset.st; viewPipeline(el); const nb=$('v-pipeline').querySelector('#ribbon button.on'); if(nb) nb.focus();});
   rb.onkeydown=ev=>{ if(ev.key!=='ArrowRight'&&ev.key!=='ArrowLeft') return; ev.preventDefault(); const i=RIBBON.indexOf(TS.stage), j=(i+(ev.key==='ArrowRight'?1:-1)+RIBBON.length)%RIBBON.length; TS.stage=RIBBON[j]; S.kb=true; viewPipeline(el); S.kb=false; const nb=el.querySelector('#ribbon button.on'); if(nb) nb.focus(); };
@@ -146,26 +147,26 @@ function mentionHighlight(sec){
 }
 function stepContent(sec, id, dbg){
   const ev=sec.ev.map(i=>TR.events[i]), by=(st,ac)=>ev.filter(e=>e.stage===st&&(!ac||String(e.action).split(':')[0]===ac));
-  const list=(arr,n)=>arr.slice(0,n).map(e=>evCard(e,dbg)).join('')+(arr.length>n?'<p class="small">… '+(arr.length-n)+' more (Rejected / lost tab lists them)</p>':'');
+  const list=(arr,n)=>arr.slice(0,n).map(e=>evCard(e,dbg)).join('')+(arr.length>n?'<p class="small">… '+(arr.length-n)+' more (see the What was left out tab)</p>':'');
   const rows=(sec.rowrecs||[]).filter(r=>r.g!=='sample');
   const rowLink=(r)=>'<a class="lnk" data-pair="'+esc(r.p)+'">'+esc(cn(r.x))+' ⟷ '+esc(cn(r.y))+'</a>';
   switch(id){
-    case 'source': { const h=mentionHighlight(sec); return '<p class="small">Section <b>'+esc(sec.id)+'</b>, '+esc(sec.title)+' (chapter '+esc(sec.chapter)+'). Highlighted: the sentences the generator cited as evidence for a concept ('+h.found+' located).</p><div class="srcbox" tabindex="0">'+h.html+'</div>'; }
-    case 'generator': return '<p class="small">The generator proposed '+(sec.proposed||[]).length+' new candidate concepts in this section and recorded '+(sec.mentions||[]).length+' mentions. A proposal is not yet a graph node.</p>'+'<table class="t"><tr><th>proposed concept</th><th>type</th><th>recorded model reason</th><th>final concept</th></tr>'+(sec.proposed||[]).slice(0,60).map(p=>'<tr><td>'+esc(p[1])+'</td><td>'+esc(p[2])+'</td><td>'+(p[3]?esc(p[3]):'<span class="na">'+NOT_REC+'</span>')+'</td><td>'+(p[4]?'<a class="lnk" data-c="'+esc(p[4])+'">'+esc(cn(p[4]))+'</a>':'<span class="na">no unique join</span>')+'</td></tr>').join('')+'</table>';
-    case 'verifier': return '<p class="small">Deterministic checks on the proposals: '+by('verifier','flag_raised').length+' flags, '+by('verifier','autofix').length+' automatic corrections, '+by('verifier','candidate_rejected').length+' rejected candidates, '+by('verifier','hint_rejected').length+' rejected hints.</p>'+list(by('verifier','candidate_rejected'),8)+list(by('verifier','autofix'),6)+list(by('verifier','hint_rejected'),4);
-    case 'pruner': return '<p class="small">The pruner scored '+by('pruner').length+' candidates. In this run it was configured not to drop any (threshold: <span class="na">'+NOT_REC+'</span> in the artifact), so everything scored here was kept.</p><table class="t"><tr><th>candidate</th><th>score</th><th>outcome</th></tr>'+by('pruner').slice(0,40).map(e=>'<tr><td>'+esc(getp(e,'attrs.name'))+'</td><td>'+esc(fmtv(e.score,'score'))+'</td><td>'+esc(e.outcome)+'</td></tr>').join('')+'</table>';
-    case 'canonicalisation': return '<p class="small">Identity decisions (which names are one concept). '+by('canonicalisation','alias_link').length+' name links, '+by('canonicalisation','taxonomy_candidate').length+' taxonomy decisions that kept concepts separate. Blocked merges are <span class="na">'+NOT_REC+'</span> in this run.</p>'+list(by('canonicalisation','alias_link'),6)+list(by('canonicalisation','taxonomy_candidate'),6);
-    case 'pair_generation': { const ps=sec.pairs; return '<p class="small"><b>'+ps.length+'</b> eligible candidate pairs are attributed to this section (REPLAYED layer: recomputed by the frozen code, verified against the retained selection).</p><table class="t"><tr><th>pair</th><th>cue</th><th>co-occurrence</th><th>global rank</th><th>selected</th></tr>'+ps.slice(0,25).map(i=>{const r=TR.pool[i]; return '<tr><td><a class="lnk" data-pair="'+esc(r[0])+'">'+esc(cn(r[1]))+' ⟷ '+esc(cn(r[2]))+'</a></td><td>'+r[6]+'</td><td>'+r[7]+'</td><td>'+r[3]+'</td><td>'+(r[4]?'yes':'no')+'</td></tr>';}).join('')+'</table>'+(ps.length>25?'<p class="small">… '+(ps.length-25)+' more</p>':''); }
-    case 'pair_selection': { const B=TR.meta.replay.budget, ps=sec.pairs.map(i=>TR.pool[i]).sort((a,b)=>a[3]-b[3]); const inside=ps.filter(r=>r[4]).length; return '<p class="small">Budget for the whole run: <b>'+B+'</b> pairs out of <b>'+TR.eligible+'</b> eligible. In this section <b>'+inside+'</b> of '+ps.length+' eligible pairs were selected. Selection also applies a per-section minimum, an anchor phase and a coverage phase, so the global rank alone is not a cut-off.</p><div class="boundary">'+ps.slice(0,30).map(r=>'<div class="'+(r[4]?'in':'out')+'"><span class="rk">#'+r[3]+'</span> '+(r[4]?'selected':'<b>not selected</b>')+' · <a class="lnk" data-pair="'+esc(r[0])+'">'+esc(cn(r[1]))+' ⟷ '+esc(cn(r[2]))+'</a></div>').join('')+'</div>'; }
-    case 'relation_classification': return '<p class="small">The classifier decided '+rows.length+' pairs of this section ('+rows.filter(r=>r.o==='emitted').length+' with a relation proposed, '+rows.filter(r=>r.o==='no_relation').length+' with no accepted relation).</p><table class="t"><tr><th>pair</th><th>outcome</th><th>relation</th><th>direction</th><th>reason code</th></tr>'+rows.slice(0,40).map(r=>'<tr><td>'+rowLink(r)+'</td><td>'+esc(r.o)+'</td><td>'+esc(r.rel||'—')+'</td><td>'+esc(r.d||'—')+'</td><td>'+esc(r.rc||'—')+'</td></tr>').join('')+'</table>'+(rows.length>40?'<p class="small">… '+(rows.length-40)+' more</p>':'');
-    case 'validation': return '<p class="small">Proposed relations are checked for grounding and type constraints: '+rows.filter(r=>r.vo==='accepted').length+' accepted, '+rows.filter(r=>r.vo==='rejected').length+' rejected.</p>'+list(sec.ev.map(i=>TR.events[i]).filter(e=>e.stage==='validation'&&e.outcome==='rejected'),10);
-    case 'graph_commit': return '<p class="small">The local final graph of this section: '+(sec.edges||[]).length+' committed edges in this section (the section mentions '+sec.concepts.filter(c=>TR.finalSet.has(c)).length+' final concepts). Red dashed = proposed but rejected at validation. Open a relation to see its journey.</p><canvas id="cv-sec" class="mini"></canvas><div class="small" id="sec-edges">'+(sec.edges||[]).slice(0,20).map(e=>'<a class="lnk" data-edge="'+esc(e)+'">'+esc(e)+'</a>').join(' · ')+'</div>';
+    case 'source': { const h=mentionHighlight(sec); return '<p class="small">Section <b>'+esc(sec.id)+'</b>, '+esc(sec.title)+' (chapter '+esc(sec.chapter)+'). Highlighted: the sentences the system quoted as evidence for a concept ('+h.found+' found).</p><div class="srcbox" tabindex="0">'+h.html+'</div>'; }
+    case 'generator': return '<p class="small">The AI model suggested '+(sec.proposed||[]).length+' new concepts in this section and noted '+(sec.mentions||[]).length+' mentions. A suggestion is not in the graph yet: it still has to pass the next steps.</p>'+'<table class="t"><tr><th>suggested concept</th><th>kind</th><th>the model\'s reason</th><th>final concept</th></tr>'+(sec.proposed||[]).slice(0,60).map(p=>'<tr><td>'+esc(p[1])+'</td><td>'+esc(p[2])+'</td><td>'+(p[3]?esc(p[3]):'<span class="na">'+NOT_REC+'</span>')+'</td><td>'+(p[4]?'<a class="lnk" data-c="'+esc(p[4])+'">'+esc(cn(p[4]))+'</a>':'<span class="na">no single match</span>')+'</td></tr>').join('')+'</table>';
+    case 'verifier': return '<p class="small">Fixed rules check every suggestion: '+by('verifier','flag_raised').length+' warnings, '+by('verifier','autofix').length+' automatic fixes, '+by('verifier','candidate_rejected').length+' concepts rejected, '+by('verifier','hint_rejected').length+' hints rejected.</p>'+list(by('verifier','candidate_rejected'),8)+list(by('verifier','autofix'),6)+list(by('verifier','hint_rejected'),4);
+    case 'pruner': return '<p class="small">The filter scored '+by('pruner').length+' concepts. In this run it was set not to remove any (threshold: <span class="na">'+NOT_REC+'</span> in the saved files), so all of them were kept.</p><table class="t"><tr><th>concept</th><th>score</th><th>outcome</th></tr>'+by('pruner').slice(0,40).map(e=>'<tr><td>'+esc(getp(e,'attrs.name'))+'</td><td>'+esc(fmtv(e.score,'score'))+'</td><td>'+esc(e.outcome)+'</td></tr>').join('')+'</table>';
+    case 'canonicalisation': return '<p class="small">Deciding which names mean the same concept: '+by('canonicalisation','alias_link').length+' names linked to an existing concept, '+by('canonicalisation','taxonomy_candidate').length+' pairs kept as separate concepts. Blocked merges were <span class="na">'+NOT_REC+'</span> in this run.</p>'+list(by('canonicalisation','alias_link'),6)+list(by('canonicalisation','taxonomy_candidate'),6);
+    case 'pair_generation': { const ps=sec.pairs; return '<p class="small"><b>'+ps.length+'</b> possible concept pairs come from this section. <span class="chip layer-REPLAYED" title="not saved in the original run: recalculated afterwards by the same fixed code and checked against the saved result">REPLAYED</span></p><table class="t"><tr><th>pair</th><th>cue score</th><th>times seen together</th><th>overall rank</th><th>chosen</th></tr>'+ps.slice(0,25).map(i=>{const r=TR.pool[i]; return '<tr><td><a class="lnk" data-pair="'+esc(r[0])+'">'+esc(cn(r[1]))+' ⟷ '+esc(cn(r[2]))+'</a></td><td>'+r[6]+'</td><td>'+r[7]+'</td><td>'+r[3]+'</td><td>'+(r[4]?'yes':'no')+'</td></tr>';}).join('')+'</table>'+(ps.length>25?'<p class="small">… '+(ps.length-25)+' more</p>':''); }
+    case 'pair_selection': { const B=TR.meta.replay.budget, ps=sec.pairs.map(i=>TR.pool[i]).sort((a,b)=>a[3]-b[3]); const inside=ps.filter(r=>r[4]).length; return '<p class="small">Only <b>'+B+'</b> of the <b>'+TR.eligible+'</b> possible pairs could be checked in the whole run. In this section <b>'+inside+'</b> of '+ps.length+' were chosen. Each section is also guaranteed a minimum share, and there are priority and coverage rounds, so the overall rank alone does not decide.</p><div class="boundary">'+ps.slice(0,30).map(r=>'<div class="'+(r[4]?'in':'out')+'"><span class="rk">#'+r[3]+'</span> '+(r[4]?'chosen':'<b>not chosen</b>')+' · <a class="lnk" data-pair="'+esc(r[0])+'">'+esc(cn(r[1]))+' ⟷ '+esc(cn(r[2]))+'</a></div>').join('')+'</div>'; }
+    case 'relation_classification': return '<p class="small">The AI model looked at '+rows.length+' pairs from this section: '+rows.filter(r=>r.o==='emitted').length+' got a relation, '+rows.filter(r=>r.o==='no_relation').length+' got none.</p><table class="t"><tr><th>pair</th><th>result</th><th>relation</th><th>direction</th><th>reason code</th></tr>'+rows.slice(0,40).map(r=>'<tr><td>'+rowLink(r)+'</td><td>'+esc(r.o)+'</td><td>'+esc(r.rel||'—')+'</td><td>'+esc(r.d||'—')+'</td><td>'+esc(r.rc||'—')+'</td></tr>').join('')+'</table>'+(rows.length>40?'<p class="small">… '+(rows.length-40)+' more</p>':'');
+    case 'validation': return '<p class="small">Each suggested relation is checked against the quoted text and the allowed kinds of concept: '+rows.filter(r=>r.vo==='accepted').length+' accepted, '+rows.filter(r=>r.vo==='rejected').length+' rejected.</p>'+list(sec.ev.map(i=>TR.events[i]).filter(e=>e.stage==='validation'&&e.outcome==='rejected'),10);
+    case 'graph_commit': return '<p class="small">This section\'s part of the final graph: '+(sec.edges||[]).length+' relations, among the '+sec.concepts.filter(c=>TR.finalSet.has(c)).length+' final concepts it mentions. Red dashed lines were suggested but rejected in the final checks. Click a relation to see how it got here.</p><canvas id="cv-sec" class="mini"></canvas><div class="small" id="sec-edges">'+(sec.edges||[]).slice(0,20).map(e=>'<a class="lnk" data-edge="'+esc(e)+'">'+esc(e)+'</a>').join(' · ')+'</div>';
   }
   return '';
 }
 function viewSection(el){
   const sec=TR.sections[TS.section], dbg=S.view==='debug', id=STEPS[TS.step][0];
-  let h='<h2 class="vh">Explain a section</h2><p class="small">Walk from the source text to the local final graph. '+secSelect(false)+'</p><div class="stepper" role="tablist" aria-label="Walkthrough steps" id="stepper">'+STEPS.map((s,i)=>'<button role="tab" aria-selected="'+(i===TS.step)+'" tabindex="'+(i===TS.step?0:-1)+'" data-i="'+i+'" class="'+(i===TS.step?'on':'')+'">'+esc(s[1])+'</button>').join('')+'</div>';
+  let h='<h2 class="vh">Step through a section</h2><p class="lede">Follow one section from its text to its piece of the final graph. '+secSelect(false)+'</p><div class="stepper" role="tablist" aria-label="Walkthrough steps" id="stepper">'+STEPS.map((s,i)=>'<button role="tab" aria-selected="'+(i===TS.step)+'" tabindex="'+(i===TS.step?0:-1)+'" data-i="'+i+'" class="'+(i===TS.step?'on':'')+'">'+esc(s[1])+'</button>').join('')+'</div>';
   h+='<div class="card stepbody" id="stepbody"><h4>'+esc(STEPS[TS.step][1].slice(4))+' <span class="small">— '+esc(TR.stage_info[id==='verifier'?'verifier':id])+'</span></h4>'+stepContent(sec,id,dbg)+'</div>';
   h+='<div class="nav"><button id="prev">← Previous</button> <button id="next">Next →</button></div>';
   el.innerHTML=h;
@@ -211,7 +212,7 @@ function frLayout(ids, edges, init, iters){
 function drawLocal(cvs, sid, stage){
   if(!cvs) return; const sec=TR.sections[sid], lay=TR.layouts[sid]||{}; const W=cvs.clientWidth||cvs.getBoundingClientRect().width||700, H=440; cvs.width=W; cvs.height=H; cvs.style.height=H+'px';
   const c=cvs.getContext('2d'); c.clearRect(0,0,W,H); const dark=DARK(), ink=dark?'#e8e8ea':'#15171c';
-  const all=Object.keys(lay); if(!all.length){ c.fillStyle=ink; c.fillText('no local concepts retained for this section',10,20); return; }
+  const all=Object.keys(lay); if(!all.length){ c.fillStyle=ink; c.fillText('no concepts saved for this section',10,20); return; }
   const rows=(sec.rowrecs||[]).filter(r=>r.g!=='sample'&&r.x&&r.y&&lay[r.x]&&lay[r.y]);
   const pairsSel=sec.pairs.map(i=>TR.pool[i]).filter(r=>r[4]&&lay[r[1]]&&lay[r[2]]);
   const committed=rows.filter(r=>r.ce);
@@ -234,10 +235,10 @@ function drawLocal(cvs, sid, stage){
   [...vis].sort((a,b)=>(deg[b]||0)-(deg[a]||0)).forEach(id=>{ if(!showAll&&(deg[id]||0)<2) return; const [x,y]=P(id), label=cn(id), w=c.measureText(label).width; const box=[x+7,y-9,x+7+w,y+3]; if(placed.some(b=>box[0]<b[2]&&box[2]>b[0]&&box[1]<b[3]&&box[3]>b[1])) return; placed.push(box); c.fillText(label,x+7,y+3); });
   c.fillStyle=dark?'#a3aab8':'#5a6070'; c.fillText(vis.length+' concepts · '+edges.length+' pairs shown',10,H-8);
 }
-const SNAP_STAGES=['After extraction (concepts in the section)','After canonicalisation (identity settled)','After pair selection (dashed = pairs sent to the classifier)','After relation classification (coloured = relation proposed, dotted = no relation)','After validation (thick = committed edge, red = rejected)'];
+const SNAP_STAGES=['After finding concepts','After merging duplicate names','After choosing pairs (dashed = pairs sent to the model)','After the model\'s decisions (coloured = relation found, dotted = no relation)','After final checks (thick = added to the graph, red = rejected)'];
 function viewSnap(el){
   const sec=TR.sections[TS.section];
-  el.innerHTML='<h2 class="vh">Stage snapshots</h2><p class="small">The local state of one section after each stage. '+secSelect(false)+'</p><div class="snapctl"><label>Stage <input type="range" id="snapr" min="0" max="4" step="1" value="'+TS.snap+'" aria-label="pipeline stage"></label> <b id="snapl">'+esc(SNAP_STAGES[TS.snap])+'</b></div><canvas id="cv-snap" class="mini"></canvas><p class="small">'+sec.concepts.length+' concepts, '+(sec.rowrecs||[]).filter(r=>r.g!=='sample').length+' classified pairs, '+(sec.edges||[]).length+' committed edges in section '+esc(sec.id)+'. Intermediate candidates appear only here; the normal graph shows the final result.</p>';
+  el.innerHTML='<h2 class="vh">Section at each step</h2><p class="lede">What one section looks like after each step. Drag the slider to move through the steps. '+secSelect(false)+'</p><div class="snapctl"><label>Step <input type="range" id="snapr" min="0" max="4" step="1" value="'+TS.snap+'" aria-label="pipeline stage"></label> <b id="snapl">'+esc(SNAP_STAGES[TS.snap])+'</b></div><canvas id="cv-snap" class="mini"></canvas><p class="small">'+sec.concepts.length+' concepts, '+(sec.rowrecs||[]).filter(r=>r.g!=='sample').length+' pairs checked and '+(sec.edges||[]).length+' relations added in section '+esc(sec.id)+'. In-between results appear only here; the main map shows the final result.</p>';
   wireSecSelect(el,()=>viewSnap(el));
   const r=el.querySelector('#snapr'); r.oninput=()=>{ TS.snap=+r.value; el.querySelector('#snapl').textContent=SNAP_STAGES[TS.snap]; drawLocal(el.querySelector('#cv-snap'),TS.section,TS.snap); };
   drawLocal(el.querySelector('#cv-snap'),TS.section,TS.snap);
@@ -265,12 +266,12 @@ function conceptOptions(){ return TR.final_concepts.map(c=>'<option value="'+esc
 function resolveName(s){ s=(s||'').trim().toLowerCase(); if(!s) return ''; if(TR.finalSet.has(s)) return s; return TR.final_concepts.find(c=>cn(c).toLowerCase()===s)||''; }
 function viewWhy(el){
   const A=resolveName(TS.whyA)||'', B=resolveName(TS.whyB)||'';
-  let h='<h2 class="vh">Why not?</h2><p class="small">Pick two concepts. The explorer walks the observable stages and stops at the earliest loss. It uses only retained or replayed trace data and never claims that a missing relation <i>should</i> exist.</p>'+
+  let h='<h2 class="vh">Why not?</h2><p class="lede">Pick two concepts to see why they are not linked. The explorer follows the steps in order and stops at the first step where the pair dropped out. It uses only what the run recorded (or recalculated), and it never claims that a link <i>should</i> exist.</p>'+
    '<div class="whyform"><label>Concept A <input id="wa" list="wl" value="'+esc(A?cn(A):TS.whyA)+'"></label> <label>Concept B <input id="wb" list="wl" value="'+esc(B?cn(B):TS.whyB)+'"></label> <button id="wgo">Explain</button> <button id="wswap" title="swap A and B">⇄</button><datalist id="wl">'+conceptOptions()+'</datalist></div>';
-  const ex=lostExamples(); h+='<p class="small">Try: '+ex.map(e=>'<a class="lnk" data-why="'+esc(e[0]+'|'+e[1])+'">'+esc(cn(e[0])+' ⟷ '+cn(e[1]))+'</a>').join(' · ')+'</p>';
+  const ex=lostExamples(); h+='<p class="small">Examples: '+ex.map(e=>'<a class="lnk" data-why="'+esc(e[0]+'|'+e[1])+'">'+esc(cn(e[0])+' ⟷ '+cn(e[1]))+'</a>').join(' · ')+'</p>';
   h+='<div id="whyout">';
   if(A&&B&&A!==B){ const w=whyAnswer(A,B); TS.whyOut=w; h+=renderWhy(w,A,B); }
-  else if(TS.whyA||TS.whyB) h+='<p class="na">Choose two different concepts of the final graph (type a name and pick from the list).</p>';
+  else if(TS.whyA||TS.whyB) h+='<p class="na">Choose two different concepts from the final graph (type a name and pick it from the list).</p>';
   el.innerHTML=h+'</div>'; wireLinks(el);
   const go=()=>{ TS.whyA=el.querySelector('#wa').value; TS.whyB=el.querySelector('#wb').value; viewWhy(el); };
   el.querySelector('#wgo').onclick=go; el.querySelector('#wswap').onclick=()=>{ const t=el.querySelector('#wa').value; el.querySelector('#wa').value=el.querySelector('#wb').value; el.querySelector('#wb').value=t; go(); };
@@ -279,12 +280,12 @@ function viewWhy(el){
 function renderWhy(w, a, b){
   const dbg=S.view==='debug';
   let h='<div class="card"><h4>'+esc(cn(a))+' ⟷ '+esc(cn(b))+'</h4><ol class="checks">'+w.checks.map(c=>'<li class="ck-'+c.answer+'"><span class="ans">'+esc(c.answer.replace(/_/g,' '))+'</span> '+esc(c.label)+'</li>').join('')+'</ol>';
-  if(w.code){ h+='<div class="fail"><b>Earliest observable failure: '+esc(w.code)+'</b><br>'+w.sentences.map(s=>esc(s)).join(' ')+'</div>'; }
-  else if(w.status==='edge_exists') h+='<div class="okk"><b>An edge exists between these concepts.</b> See its journey in the graph view.</div>';
-  else h+='<div class="fail"><b>Unknown.</b> The trace does not retain enough to decide ('+NOT_REC+').</div>';
-  if(w.rank!==null&&w.rank!==undefined) h+='<p class="small">Replayed rank <b>'+w.rank+'</b> of '+w.elig+' · budget '+w.budget+' (REPLAYED layer, not originally recorded).</p>';
+  if(w.code){ h+='<div class="fail"><b>Where it dropped out</b> <span class="chip">'+esc(w.code)+'</span><br>'+w.sentences.map(s=>esc(s)).join(' ')+'</div>'; }
+  else if(w.status==='edge_exists') h+='<div class="okk"><b>These two concepts are already linked.</b> Open the map to see how the link got there.</div>';
+  else h+='<div class="fail"><b>Unknown.</b> The run did not save enough to tell ('+NOT_REC+').</div>';
+  if(w.rank!==null&&w.rank!==undefined) h+='<p class="small">Recalculated rank <b>'+w.rank+'</b> of '+w.elig+' possible pairs; only '+w.budget+' could be checked <span class="chip layer-REPLAYED">REPLAYED</span></p>';
   const pid=pairIdOf(a,b); if(pid) h+='<p class="small">Pair <code>'+esc(pid)+'</code>'+(dbg?' · <a class="lnk" data-copy="'+esc(pid)+'">copy id</a>':'')+'</p>';
-  h+='<p class="small">Identity (C0/C1) and wrong relation or direction (R1/R2) need a reference; they exist only in the evaluation overlay.</p></div>';
+  h+='<p class="small">Two other kinds of problem, concepts wrongly merged or split (C0/C1) and a wrong relation or direction (R1/R2), can only be spotted against a human answer key, so they appear only under “How well it scores”.</p></div>';
   return h;
 }
 function pairIdOf(a,b){ const k=[a,b].sort().join('|'); for(let i=0;i<TR.pool.length;i++){ const r=TR.pool[i]; if([r[1],r[2]].sort().join('|')===k) return r[0]; } return null; }
@@ -298,19 +299,19 @@ function viewLost(el){
   const more=k=>TS.lostMore[k]?200:12;
   const sec=(k,title,n,body,note)=>'<details class="card" '+(n?'open':'')+'><summary><b>'+esc(title)+'</b> <span class="chip">'+n+'</span></summary>'+(note?'<p class="small">'+note+'</p>':'')+body+'</details>';
   const evl=(arr,k)=>arr.slice(0,more(k)).map(e=>evCard(e,dbg)).join('')+(arr.length>more(k)?'<button data-more="'+k+'">show all '+arr.length+'</button>':'');
-  let h='<h2 class="vh">Rejected / lost items</h2><p class="small">What did not make it, and where it was lost. '+secSelect(true)+'</p>';
-  h+=sec('rej','Rejected concepts (verifier)',by('verifier','candidate_rejected').length,evl(by('verifier','candidate_rejected'),'rej'));
-  h+=sec('fix','Corrected proposals (automatic corrections)',by('verifier','autofix').length,evl(by('verifier','autofix'),'fix'));
+  let h='<h2 class="vh">What was left out</h2><p class="lede">Everything that did not make it into the graph, and the step where it dropped out. '+secSelect(true)+'</p>';
+  h+=sec('rej','Concepts rejected by the checks',by('verifier','candidate_rejected').length,evl(by('verifier','candidate_rejected'),'rej'));
+  h+=sec('fix','Suggestions fixed automatically',by('verifier','autofix').length,evl(by('verifier','autofix'),'fix'));
   h+=sec('hint','Rejected hints',by('verifier','hint_rejected').length,evl(by('verifier','hint_rejected'),'hint'));
-  h+=sec('prn','Pruned concepts',0,'<p class="small">None: the pruner was configured not to drop candidates in this run.</p>');
-  h+=sec('blk','Concepts kept separate by a taxonomy decision',by('canonicalisation','taxonomy_candidate').length,evl(by('canonicalisation','taxonomy_candidate'),'blk'),'Blocked merges (the lexicon veto) are '+NOT_REC+' in this run.');
-  h+=sec('out','Eligible pairs outside the selection (not sent to the classifier)',pool.length,'<table class="t"><tr><th>pair</th><th>replayed rank</th><th>cue</th><th></th></tr>'+pool.slice(0,more('out')).map(r=>'<tr><td>'+esc(cn(r[1]))+' ⟷ '+esc(cn(r[2]))+'</td><td>'+r[3]+' / '+TR.eligible+'</td><td>'+r[6]+'</td><td><a class="lnk" data-why="'+esc(r[1]+'|'+r[2])+'">Why not?</a></td></tr>').join('')+'</table>'+(pool.length>more('out')?'<button data-more="out">show more</button>':''),'REPLAYED layer. Selection also uses a per-section minimum, anchor and coverage phases.');
+  h+=sec('prn','Concepts removed by the filter',0,'<p class="small">None: in this run the filter was set not to remove anything.</p>');
+  h+=sec('blk','Concepts kept separate (judged to be different)',by('canonicalisation','taxonomy_candidate').length,evl(by('canonicalisation','taxonomy_candidate'),'blk'),'Merges blocked by the term list were '+NOT_REC+' in this run.');
+  h+=sec('out','Possible pairs that were not chosen (never shown to the model)',pool.length,'<table class="t"><tr><th>pair</th><th>rank</th><th>cue score</th><th></th></tr>'+pool.slice(0,more('out')).map(r=>'<tr><td>'+esc(cn(r[1]))+' ⟷ '+esc(cn(r[2]))+'</td><td>'+r[3]+' / '+TR.eligible+'</td><td>'+r[6]+'</td><td><a class="lnk" data-why="'+esc(r[1]+'|'+r[2])+'">Why not?</a></td></tr>').join('')+'</table>'+(pool.length>more('out')?'<button data-more="out">show more</button>':''),'Ranks were recalculated afterwards (REPLAYED). Each section is also guaranteed a minimum share, with priority and coverage rounds.');
   const nr=rows.filter(r=>r.o==='no_relation');
-  h+=sec('nr','Pairs the classifier judged to have no accepted relation',nr.length,'<table class="t"><tr><th>pair</th><th>reason code</th><th></th></tr>'+nr.slice(0,more('nr')).map(r=>'<tr><td>'+esc(cn(r.x))+' ⟷ '+esc(cn(r.y))+'</td><td>'+esc(r.rc||NOT_REC)+'</td><td><a class="lnk" data-why="'+esc(r.x+'|'+r.y)+'">Why not?</a></td></tr>').join('')+'</table>'+(nr.length>more('nr')?'<button data-more="nr">show more</button>':''));
+  h+=sec('nr','Pairs the model said have no relation',nr.length,'<table class="t"><tr><th>pair</th><th>reason code</th><th></th></tr>'+nr.slice(0,more('nr')).map(r=>'<tr><td>'+esc(cn(r.x))+' ⟷ '+esc(cn(r.y))+'</td><td>'+esc(r.rc||NOT_REC)+'</td><td><a class="lnk" data-why="'+esc(r.x+'|'+r.y)+'">Why not?</a></td></tr>').join('')+'</table>'+(nr.length>more('nr')?'<button data-more="nr">show more</button>':''));
   const vr=rows.filter(r=>r.vo==='rejected');
-  h+=sec('vr','Relations rejected at validation',vr.length,'<table class="t"><tr><th>pair</th><th>proposed relation</th><th>reason</th></tr>'+vr.slice(0,more('vr')).map(r=>'<tr><td>'+esc(cn(r.x))+' ⟷ '+esc(cn(r.y))+'</td><td>'+esc(r.rel||'—')+'</td><td>'+esc(r.vr||NOT_REC)+'</td></tr>').join('')+'</table>');
+  h+=sec('vr','Relations rejected in the final checks',vr.length,'<table class="t"><tr><th>pair</th><th>suggested relation</th><th>reason</th></tr>'+vr.slice(0,more('vr')).map(r=>'<tr><td>'+esc(cn(r.x))+' ⟷ '+esc(cn(r.y))+'</td><td>'+esc(r.rel||'—')+'</td><td>'+esc(r.vr||NOT_REC)+'</td></tr>').join('')+'</table>');
   const gaps=TR.gaps.filter(g=>g.scope==='run'||(scope&&g.object_id&&String(g.object_id).includes(scope)));
-  h+=sec('gap','Objects and fields with missing trace data',gaps.length,'<ul class="small">'+gaps.slice(0,more('gap')+10).map(g=>'<li><b>'+esc(g.status)+'</b> · '+esc(g.stage)+' · '+esc(g.field)+(g.object_id?' · <code>'+esc(g.object_id)+'</code>':'')+' — '+esc(g.detail)+'</li>').join('')+'</ul>');
+  h+=sec('gap','Things the run did not record',gaps.length,'<ul class="small">'+gaps.slice(0,more('gap')+10).map(g=>'<li><b>'+esc(g.status)+'</b> · '+esc(g.stage)+' · '+esc(g.field)+(g.object_id?' · <code>'+esc(g.object_id)+'</code>':'')+' — '+esc(g.detail)+'</li>').join('')+'</ul>');
   el.innerHTML=h; wireSecSelect(el,()=>viewLost(el),true); wireLinks(el);
   el.querySelectorAll('button[data-more]').forEach(b=>b.onclick=()=>{ TS.lostMore[b.dataset.more]=true; viewLost(el); });
 }
@@ -323,7 +324,7 @@ function viewTrace(el){
   else evs=scopeEvents(scopeOf(true));
   const q=f.q.toLowerCase(); evs=evs.filter(e=>(!f.stage||e.stage===f.stage)&&(!f.outcome||e.outcome===f.outcome)&&(!f.layer||(e.layer||'RECORDED')===f.layer)&&(!q||JSON.stringify(e).toLowerCase().includes(q)));
   const cols=['event_id','stage','outcome','authority','reason_code','rule_id','source_artifact','source_locator','evidence_refs','score','threshold','rank','eligible_count','budget','model_id','prompt_version','config_hash','registry_version','layer'];
-  let h='<h2 class="vh">Trace table</h2><p class="small">'+(obj?'Events in the lineage of <code>'+esc(obj)+'</code>':'Events of '+(scopeOf(true)?'section '+esc(scopeOf(true)):'the whole run'))+' · '+evs.length+' shown (max 500). '+secSelect(true)+'</p>'+
+  let h='<h2 class="vh">Full log</h2><p class="small">'+(obj?'Events in the lineage of <code>'+esc(obj)+'</code>':'Events of '+(scopeOf(true)?'section '+esc(scopeOf(true)):'the whole run'))+' · '+evs.length+' shown (max 500). '+secSelect(true)+'</p>'+
    '<div class="whyform"><select id="ts" aria-label="Filter by stage"><option value="">stage</option>'+TR.stages.map(s=>'<option'+(f.stage===s?' selected':'')+'>'+s+'</option>').join('')+'</select> <select id="to" aria-label="Filter by outcome"><option value="">outcome</option>'+['accepted','corrected','rejected','merged','blocked','selected','not_selected','no_relation','emitted','not_recorded'].map(s=>'<option'+(f.outcome===s?' selected':'')+'>'+s+'</option>').join('')+'</select> <select id="tl" aria-label="Filter by layer"><option value="">layer</option>'+['RECORDED','REPLAYED','JOINED'].map(s=>'<option'+(f.layer===s?' selected':'')+'>'+s+'</option>').join('')+'</select> <input id="tq" type="search" aria-label="Search any field" placeholder="search any field" value="'+esc(f.q)+'"></div>';
   h+='<table class="t"><tr>'+cols.map(c=>'<th>'+c+'</th>').join('')+'</tr>'+evs.slice(0,500).map(e=>'<tr>'+cols.map(c=>'<td>'+esc(c==='evidence_refs'?(e.evidence_refs||[]).map(r=>r.split('::')[1]).join(' | '):fmtv(e[c],c).replace(NOT_REC,'')) +'</td>').join('')+'</tr>').join('')+'</table>';
   el.innerHTML=h; wireSecSelect(el,()=>viewTrace(el),true);
@@ -333,20 +334,20 @@ function viewTrace(el){
 
 // ---------------------------------------------------------------- Journeys (Node / Edge) in the detail panel
 function journeyHTML(oid, dbg){
-  const j=TR.journeys[oid]; if(!j) return '<p class="na">No trace lineage is retained for this object ('+NOT_REC+').</p>';
+  const j=TR.journeys[oid]; if(!j) return '<p class="na">The run kept no history for this item ('+NOT_REC+').</p>';
   const evs=j.ev.map(i=>TR.events[i]); const by={}; evs.forEach(e=>{ (by[e.stage]=by[e.stage]||[]).push(e); });
   j.pairs.forEach(p=>{ const i=TR.pairIdx[p]; if(i!==undefined){ (by.pair_generation=by.pair_generation||[]).push(poolEv(i,'gen')); (by.pair_selection=by.pair_selection||[]).push(poolEv(i,'sel')); } });
   const present=RIBBON.filter(s=>by[s]||(s==='verifier'&&by.correction));
-  let h='<div class="journey"><div class="small">Chronological journey, from retained or replayed trace data. '+evs.length+' events · '+j.nodes+' lineage objects.</div>';
-  RIBBON.forEach(s=>{ const arr=by[s]; if(!arr||!arr.length){ h+='<div class="jst"><b>'+esc(STAGE_NAME[s])+'</b> <span class="na">'+(s==='verifier'?'verifier events attach to a text unit, not to this object (see the section walkthrough)':NOT_REC+' / not applicable to this object')+'</span></div>'; return; }
+  let h='<div class="journey"><div class="small">Step by step, from what the run recorded (or recalculated). '+evs.length+' recorded steps · '+j.nodes+' linked items.</div>';
+  RIBBON.forEach(s=>{ const arr=by[s]; if(!arr||!arr.length){ h+='<div class="jst"><b>'+esc(STAGE_NAME[s])+'</b> <span class="na">'+(s==='verifier'?'checks run on whole pieces of text, not on single items (see Step through a section)':'nothing recorded, or does not apply here')+'</span></div>'; return; }
     const mention=arr.filter(e=>e.action==='mention_recorded'), rest=arr.filter(e=>e.action!=='mention_recorded'&&e.stage!=='source');
     const units=arr.filter(e=>e.stage==='source');
-    if(units.length) h+='<div class="jst"><b>'+esc(STAGE_NAME[s])+'</b> <span class="small">'+esc(TR.stage_info[s]||'')+'</span><div class="evc"><div class="evh"><b>Text units</b> '+badge(units[0])+'</div>'+esc(units.length+' unit(s) of source text contributed (sections: '+[...new Set(units.map(u=>u.section_id))].join(", ")+').')+'</div></div>';
+    if(units.length) h+='<div class="jst"><b>'+esc(STAGE_NAME[s])+'</b> <span class="small">'+esc(TR.stage_info[s]||'')+'</span><div class="evc"><div class="evh"><b>Pieces of text</b> '+badge(units[0])+'</div>'+esc(units.length+' piece(s) of the book were used (sections: '+[...new Set(units.map(u=>u.section_id))].join(", ")+').')+'</div></div>';
     if(units.length&&!rest.length&&!mention.length) return;
     if(s!=='source') h+='<div class="jst"><b>'+esc(STAGE_NAME[s])+'</b> <span class="small">'+esc(TR.stage_info[s]||'')+'</span>';
-    if(mention.length) h+='<div class="evc"><div class="evh"><b>Mentions</b> '+badge(mention[0])+'</div>'+esc(mention.length+' mention(s) recorded; first: '+renderEv(mention[0]).text)+(dbg?'<details><summary>all mentions</summary>'+mention.map(e=>'<div class="small">'+esc(renderEv(e).text)+'</div>').join('')+'</details>':'')+'</div>';
+    if(mention.length) h+='<div class="evc"><div class="evh"><b>Mentions</b> '+badge(mention[0])+'</div>'+esc(mention.length+' mention(s) noted; first: '+renderEv(mention[0]).text)+(dbg?'<details><summary>all mentions</summary>'+mention.map(e=>'<div class="small">'+esc(renderEv(e).text)+'</div>').join('')+'</details>':'')+'</div>';
     h+=rest.slice(0,3).map(e=>evCard(e,dbg)).join('');
-    if(rest.length>3) h+='<details><summary>'+(rest.length-3)+' more '+esc(STAGE_NAME[s])+' event(s)</summary>'+rest.slice(3,60).map(e=>evCard(e,dbg)).join('')+'</details>';
+    if(rest.length>3) h+='<details><summary>'+(rest.length-3)+' more step(s) in '+esc(STAGE_NAME[s])+'</summary>'+rest.slice(3,60).map(e=>evCard(e,dbg)).join('')+'</details>';
     h+='</div>'; });
   if(j.evid.length) h+='<div class="jst"><b>Source evidence</b>'+j.evid.slice(0,6).map(([r,t])=>'<div class="sent">'+esc(t)+(dbg?'<div class="small"><code>'+esc(r)+'</code></div>':'')+'</div>').join('')+'</div>';
   const runGaps=TR.gaps.filter(g=>g.scope==='run'); if(runGaps.length) h+='<details><summary>Not recorded for this run ('+runGaps.length+')</summary><ul class="small">'+runGaps.map(g=>'<li>'+esc(g.stage+' · '+g.field+': '+g.detail)+'</li>').join('')+'</ul></details>';
@@ -354,9 +355,9 @@ function journeyHTML(oid, dbg){
 }
 async function fillJourney(box){
   const slot=box.querySelector('#journey'); if(!slot) return;
-  slot.innerHTML='<p class="na">Loading the trace…</p>';
-  try{ await loadTrace(); }catch(e){ slot.innerHTML='<p class="na">The trace is not available in this browser.</p>'; return; }
+  slot.innerHTML='<p class="na">Loading…</p>';
+  try{ await loadTrace(); }catch(e){ slot.innerHTML='<p class="na">This history cannot be shown in this browser.</p>'; return; }
   slot.innerHTML=journeyHTML(slot.dataset.oid, S.view==='debug'); wireLinks(slot);
   slot.querySelectorAll('a[data-copy]').forEach(a=>a.onclick=()=>{ try{navigator.clipboard.writeText(a.dataset.copy);}catch(e){} });
 }
-function journeySlot(oid){ return traceAvailable() ? '<h3 class="jh">'+(oid.startsWith('edge:')?'Edge journey':'Node journey')+' <span class="small">how we got here</span></h3><div id="journey" data-oid="'+esc(oid)+'"></div>'+(oid.startsWith('concept:')?'<p class="small"><a class="lnk" id="whyfrom" data-whya="'+esc(oid.slice(8))+'">Why not a relation from this concept to another?</a></p>':''):''; }
+function journeySlot(oid){ return traceAvailable() ? '<h3 class="jh">'+(oid.startsWith('edge:')?'How this relation got here':'How this concept got here')+'</h3><div id="journey" data-oid="'+esc(oid)+'"></div>'+(oid.startsWith('concept:')?'<p class="small"><a class="lnk" id="whyfrom" data-whya="'+esc(oid.slice(8))+'">Why is this concept not linked to another one?</a></p>':''):''; }

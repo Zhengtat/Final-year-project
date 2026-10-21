@@ -53,17 +53,28 @@ def _card(key: str, label: str, field: str, m: dict, analogue: bool = False) -> 
         m.get("ci95") if units >= MIN_CI_UNITS else None
     )  # 1-2 sections give a degenerate interval: show none
     classes = m.get("classes") or {}
+    precision, recall = m.get("precision"), m.get("recall")
+    # macro P/R: same class set and zero-fill rule as the macro F1
+    if key == "relation_macro_f1" and classes:
+        scored = [v for v in classes.values() if v["support"] > 0]
+        precision = sum(v["precision"] or 0.0 for v in scored) / len(scored) if scored else None
+        recall = sum(v["recall"] or 0.0 for v in scored) / len(scored) if scored else None
+    if status in ("NOT_EVALUABLE", "NOT_COMPUTED"):
+        precision = recall = None
     low = sorted(c for c, v in classes.items() if v.get("low_support"))
     return {
         "key": key,
         "label": label,
         "value": value,
+        "precision": precision,
+        "recall": recall,
         "status": status or "OK",
         "reason": m.get("reason"),
         "ci95": ci,
         "ci_status": m.get("ci_status"),
         "units": units,
         "counts": counts,
+        **{k: m[k] for k in ("tp", "fp", "fn", "reached", "denominator") if k in m},
         "analogue": analogue,
         "low_support_classes": low,
         "n_classes": len(classes),
@@ -75,6 +86,121 @@ def _relation_table(m: dict) -> list[dict]:
         {"relation": c, **{k: v[k] for k in ("support", "tp", "fp", "fn", "precision", "recall", "f1", "low_support")}}
         for c, v in sorted((m.get("classes") or {}).items())
     ]  # fmt: skip
+
+
+CR019 = Path("reports/cr019/stage_a.json")
+CR019_NOTE = (
+    "CR-019 grounding-consistent scoring (pre-registered 2026-10-15): a concept's positions are every occurrence of its names "
+    "(occurrence index) plus the recorded ones, and every predicted relation is counted (one that cannot be placed is a false "
+    "positive). E0 only; the frozen CR-017 scorecard is unchanged and stays the default."
+)
+
+
+def cr019_variant() -> dict | None:
+    """The CR-019 Stage A variant as scorecard cards, or None when Stage A has not been run. Read from reports/cr019/stage_a.json only."""
+    if not CR019.exists():
+        return None
+    sa = json.loads(CR019.read_text())["stage_a"]
+    sets = {}
+    for tag in ("heldout", "pilot"):
+        x = sa["pd"][tag]
+        if "IDX" not in x:
+            continue
+        h = x["IDX"]["headline"]
+        sets[f"pd_{tag}"] = {
+            "E0": {
+                "sections": sorted(x["IDX"]["occurrence_index_stats"]),
+                "headline": [_card(k, lab, f, h[k]) for k, lab, f in METRICS],
+                "diagnostics": {},
+            }
+        }
+    sc = sa["scinlp"]["IDX-P1"]
+    s = {
+        "concept_f1": sc["concept_f1_entity_strict"],
+        "ancestor_hierarchy_f1": {
+            "status": "NOT_EVALUABLE",
+            "reason": "NOT_SUPPORTED_NO_IDENTITY_GOLD",
+            "f1": None,
+        },
+        "pair_recall": sc["pair_recall_analogue"],
+        "relation_macro_f1": {
+            "status": "NOT_COMPUTED",
+            "reason": "RESEARCH_DECISION_REQUIRED: scorer keeps no per-class classifier outcomes for mention-level gold",
+            "f1": None,
+        },
+        "strict_e2e_edge_f1": sc["strict_relation"],
+    }
+    sets["scinlp"] = {
+        "E0": {
+            "sections": sorted(sc["strict_relation_per_document"]),
+            "headline": [
+                _card(
+                    k,
+                    lab,
+                    f,
+                    s[k],
+                    analogue=k in ("concept_f1", "pair_recall", "strict_e2e_edge_f1"),
+                )
+                for k, lab, f in METRICS
+            ],
+            "diagnostics": {},
+        }
+    }
+    return {
+        "stage_b": stage_b_rows(),
+        "label": "CR-019 grounding-consistent",
+        "variant": "IDX (P&D) / IDX-P1 (SciNLP)",
+        "note": CR019_NOTE,
+        "datasets": sets,
+    }
+
+
+def stage_b_rows() -> dict | None:
+    """CR-019 Stage B (development data only): SINGLE vs MULTI rows for the explorer, read from reports/cr019/stage_b.json."""
+    path = Path("reports/cr019/stage_b.json")
+    if not path.exists():
+        return None
+    b = json.loads(path.read_text())
+    rows = []
+    for arm in ("SINGLE", "MULTI"):
+        for v, x in b["scinlp"].get(arm, {}).get("variants", {}).items():
+            if v in ("IDX-P1", "IDX-P3", "FROZEN"):
+                r = x["strict_relation"]
+                rows.append(
+                    {
+                        "dataset": "SciNLP dev",
+                        "arm": arm,
+                        "measure": f"strict relation ({v})",
+                        "precision": r["precision"],
+                        "recall": r["recall"],
+                        "f1": r["f1"],
+                    }
+                )
+        for pos, x in b["pd"].get(arm, {}).items():
+            h = x["headline"]
+            se = h["strict_e2e_edge_f1"]
+            rows.append(
+                {
+                    "dataset": "P&D dev",
+                    "arm": arm,
+                    "measure": f"Strict E2E Edge ({pos})",
+                    "precision": se["precision"],
+                    "recall": se["recall"],
+                    "f1": se["f1"],
+                }
+            )
+            rows.append(
+                {
+                    "dataset": "P&D dev",
+                    "arm": arm,
+                    "measure": f"Relation Macro F1 ({pos})",
+                    "precision": None,
+                    "recall": None,
+                    "f1": h["relation_macro_f1"]["f1"],
+                }
+            )
+    return {"rows": rows, "recommendation": b["recommendation"], "spend_usd": b["spend"]["total_usd"], "cap_usd": b["spend"]["cap_usd"],
+            "note": "Development data only (SciNLP dev papers, P&D sections 1.5 and 2.6). SINGLE = production relation stage; MULTI = the classifier sees up to 3 sentences where both concepts occur. Same concepts and pairs in both arms."}  # fmt: skip
 
 
 def build_scorecard() -> dict:
@@ -130,6 +256,7 @@ def build_scorecard() -> dict:
         "levels": sc,
     }
     return {
+        "cr019": cr019_variant(),
         "meta": {
             "scorer_version": hm["meta"]["scorer_version"],
             "sources": ["reports/cr017/headline_metrics.json", "reports/cr017/diagnostics.json"],
