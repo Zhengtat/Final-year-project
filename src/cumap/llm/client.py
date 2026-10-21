@@ -220,7 +220,14 @@ class LLMClient:
         """
         escalation = self._settings.llm.escalation
         can_escalate = (
-            allow_escalation and escalation.enabled and model_tier == escalation.from_tier
+            allow_escalation
+            and escalation.enabled
+            and model_tier
+            in (
+                [escalation.from_tier]
+                if isinstance(escalation.from_tier, str)
+                else escalation.from_tier
+            )
         )  # CR-009: the concept loop keeps one tier
 
         try:
@@ -374,8 +381,14 @@ class LLMClient:
         if input_hash in self._logged_prompt_hashes:
             return
         self._logged_prompt_hashes.add(input_hash)
-        record = {"input_hash": input_hash, "task": task, "prompt_version": prompt_version,
-                  "model": model, "model_tier": model_tier, "messages": messages}
+        record = {
+            "input_hash": input_hash,
+            "task": task,
+            "prompt_version": prompt_version,
+            "model": model,
+            "model_tier": model_tier,
+            "messages": messages,
+        }
         with self._prompt_log_path.open("a") as f:
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
 

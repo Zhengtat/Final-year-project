@@ -94,6 +94,7 @@ uv run streamlit run src/cumap/app/review_app.py
   - `strong` (default `gpt-6-sol`): KG construction, propositions, judging, gold-drafting (`suggest-expert`/`suggest-student`).
   - `bulk` (default `gpt-6-luna`): per-answer labelling and extraction (M4, M6).
   - `ceiling` (default `gpt-6-astra`): **opt-in only** — a model bake-off (`cumap eval model-bakeoff`) or similar. Never a default `model_tier` anywhere in the code.
+- **(CR-026) Model profile in use:** the local `.env` selects `configs/models_luna_default.yaml` (`CUMAP_MODELS_CONFIG`) with `OPENAI_MODEL_STRONG=OPENAI_MODEL_BULK=gpt-6-luna`: every tier runs `gpt-6-luna`; `gpt-6-sol` is the `escalate` tier, reached only by escalation (`strong` and `bulk` calls, same triggers, at most one retry). The listed tier defaults above are the baseline in `default.yaml` (pinned by the CR-011 handoff); unset the variable to get them back. A run states its profile; results from different profiles are never pooled.
 - **(CR-001) Escalation:** a `bulk`-tier call retries once on `strong` when the schema fails to validate, the output's own `confidence` field is below `llm.escalation.confidence_threshold`, or the caller's `escalate_check` predicate says so (e.g. a failed evidence check). Never more than one retry. Logged with `escalated`/`escalation_reason`; the run manifest reports the escalation rate and cost split by tier.
 - **(CR-001) Batch API:** for full-split bulk runs, submit via `--batch` and read results back through the *same* cache (`canonical_input_hash` has no batch-vs-live parameter by construction, so this is safe) — not yet implemented; build it when M4/M6 have a real bulk workload, not speculatively.
 - **(CR-001) Prompt layout for caching:** in any new prompt, put static content (instructions, the registry guideline block, few-shot examples) **first** and per-item content **last**, so provider-side prefix caching helps at bulk-run scale.
@@ -102,7 +103,7 @@ uv run streamlit run src/cumap/app/review_app.py
 
 ## Repo map (target)
 ```
-configs/            default.yaml, models_cr023.yaml (CR-023 o4-mini profile, opt-in), relations_v0.yaml (history), relations_v1.yaml (CR-001), relations_v1.3.yaml (CR-008, production), relations_v1.4.yaml (CR-024 merged with SciNLP, built, not adopted), term_lexicon.yaml, alias_rules.yaml, misconception_cues.yaml
+configs/            default.yaml, models_luna_default.yaml (CR-026 luna-default profile, active in the local .env), models_cr023.yaml (o4-mini profile, opt-in), models_cr025_*.yaml (comparison arms), relations_v0.yaml (history), relations_v1.yaml (CR-001), relations_v1.3.yaml (CR-008, production), relations_v1.4.yaml (CR-024 merged with SciNLP, built, not adopted), term_lexicon.yaml, alias_rules.yaml, misconception_cues.yaml
 data/raw/           downloaded datasets + textbook clone        (gitignored)
 data/interim/       parsed sections, ID tables, suggestions/     (suggestions are drafts)
 data/gold/          HUMAN-OWNED annotations                      (committed)

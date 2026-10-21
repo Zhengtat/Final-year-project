@@ -410,3 +410,9 @@ Format: date · decision · reason · alternatives considered.
 - **Result (IDXR1-P1, pooled):** relation F1 luna 0.114 ($0.18), o4-mini 0.081 ($1.98), sol 0.154 ($3.63); concept F1 0.420 / 0.369 / 0.502; reference mixed-tier runs 0.109 and 0.096 (spread about 0.013). Report `reports/cr025/comparison.md`.
 - **Reading:** price does not rank quality here: luna is about 20x cheaper than sol for about 0.04 lower relation F1 (about 3x the reference spread, one run, 6 papers); o4-mini is dearer than luna and scored lowest, but only under the deviating settings. No default changed.
 - **Alternatives:** o4-mini at medium effort with raised caps only (still truncated); a different third model.
+
+## 2026-10-22 · CR-026: luna default, sol only on escalation (owner instruction)
+- **Decision:** profile `configs/models_luna_default.yaml` active via the local `.env`: all tiers gpt-6-luna, gpt-6-sol as the `escalate` tier; `EscalationConfig.from_tier` accepts a list.
+- **Reason:** CR-025 showed luna at about 1/20 of sol's cost for a smaller quality loss than the price gap suggests; sol stays available where a call is flagged.
+- **Alternatives:** keep strong = sol (baseline, about 5x dearer per run); o4-mini (CR-025: dearer and lower, and it truncates at the production caps); editing `default.yaml` (breaks the CR-011 handoff hash).
+- **Caveat:** escalation never fires for calls with `allow_escalation=False`, and the pipeline's main strong-tier stages escalate only on the existing triggers, so some calls that used sol before now stay on luna even if weak.

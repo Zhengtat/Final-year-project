@@ -1,0 +1,16 @@
+# CR-026 model profile: gpt-6-luna is the default for EVERY tier; gpt-6-sol only when a call escalates.
+# Layered over configs/default.yaml by CUMAP_MODELS_CONFIG=configs/models_luna_default.yaml (set in the local .env, together with
+# OPENAI_MODEL_STRONG=OPENAI_MODEL_BULK=gpt-6-luna, because those variables win over a profile). default.yaml is untouched (the CR-011 handoff pins its hash).
+# Evidence: CR-025 (SciNLP dev, 6 papers): luna both tiers relation F1 0.114 at $0.18 vs sol both tiers 0.154 at $3.63.
+# `escalate` is a new tier name (the opt-in `ceiling` tier is unchanged). Strong- and bulk-tier calls retry ONCE on it when the schema
+# fails, confidence < 0.6 or the caller's evidence check fails (unchanged triggers). Calls that already opt out (allow_escalation=False,
+# e.g. the concept loop and the CR-014/015 stages) stay on luna.
+llm:
+  tiers:
+    strong:   {model: gpt-6-luna, reasoning_effort: medium, usd_per_1m_input_tokens: 0.10, usd_per_1m_output_tokens: 0.50}
+    bulk:     {model: gpt-6-luna, reasoning_effort: low,    usd_per_1m_input_tokens: 0.10, usd_per_1m_output_tokens: 0.50}
+    escalate: {model: gpt-6-sol,  reasoning_effort: medium, usd_per_1m_input_tokens: 2.0,  usd_per_1m_output_tokens: 10.0}
+  escalation:
+    enabled: true
+    from_tier: [strong, bulk]
+    to_tier: escalate

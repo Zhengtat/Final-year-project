@@ -47,3 +47,9 @@ def tmp_settings(tmp_path, monkeypatch):
 def _baseline_models(monkeypatch):
     """CR-023: tests run on the baseline tier models whatever the developer's .env says (an empty value is not re-read by dotenv)."""
     monkeypatch.setenv("CUMAP_MODELS_CONFIG", "")
+    for var, model in (
+        ("OPENAI_MODEL_STRONG", "gpt-6-sol"),
+        ("OPENAI_MODEL_BULK", "gpt-6-luna"),
+        ("OPENAI_MODEL_CEILING", "gpt-6-astra"),
+    ):
+        monkeypatch.setenv(var, model)
