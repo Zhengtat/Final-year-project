@@ -45,6 +45,20 @@ def apply_patch(base: dict, patch: dict) -> dict:
             if f["name"] == fam:
                 f["gloss"] = gloss
 
+    fams = {f["name"] for f in out["families"]}
+    for fam in adds.get("families", []):  # CR-024: new families
+        if fam["name"] in fams:
+            raise ValueError(f"family {fam['name']!r} already exists in the base registry")
+        out["families"].insert(
+            max((i for i, f in enumerate(out["families"]) if f["name"] != "pedagogical"), default=-1) + 1,
+            fam,
+        )
+        fams.add(fam["name"])
+    for rel_name, labels in adds.get("external_labels", {}).items():  # CR-024: merge another list's labels into a relation
+        target = next((r for r in out["relations"] if r["name"] == rel_name), None)
+        if target is None:
+            raise ValueError(f"external_labels names unknown relation {rel_name!r}")
+        target["external_labels"] = {**target.get("external_labels", {}), **labels}
     existing = {r["name"] for r in out["relations"]}
     for rel in adds.get("relations", []):
         if rel["name"] in existing:

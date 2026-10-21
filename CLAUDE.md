@@ -102,7 +102,7 @@ uv run streamlit run src/cumap/app/review_app.py
 
 ## Repo map (target)
 ```
-configs/            default.yaml, relations_v0.yaml (history), relations_v1.yaml (CR-001), relations_v1.3.yaml (CR-008, current), term_lexicon.yaml, alias_rules.yaml, misconception_cues.yaml
+configs/            default.yaml, models_cr023.yaml (CR-023 o4-mini profile, opt-in), relations_v0.yaml (history), relations_v1.yaml (CR-001), relations_v1.3.yaml (CR-008, production), relations_v1.4.yaml (CR-024 merged with SciNLP, built, not adopted), term_lexicon.yaml, alias_rules.yaml, misconception_cues.yaml
 data/raw/           downloaded datasets + textbook clone        (gitignored)
 data/interim/       parsed sections, ID tables, suggestions/     (suggestions are drafts)
 data/gold/          HUMAN-OWNED annotations                      (committed)

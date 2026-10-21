@@ -63,6 +63,8 @@ class RelationType(BaseModel):
     # CR-007 (registry v1.1): 'core' relations are added unconditionally; 'gated' ones are kept only
     # if the slice re-run yields >= 5 instances and the owner marks >= 80% of up to 8 correct.
     gate: str | None = None
+    # CR-024 (registry v1.4): labels of other benchmarks' relation lists that this relation absorbs, {source: [labels]}.
+    external_labels: dict[str, list[str]] = {}
 
 
 class FamilyDef(BaseModel):
