@@ -42,7 +42,7 @@ def normalise(task: str, content: str) -> tuple[str, str | None]:
     t = content.strip()
     if t.startswith("```"):
         t = t.strip("`")
-        t = t[4:] if t.startswith("json") else t
+        t = t.removeprefix("json")
         t = t.strip()
     try:
         payload = json.loads(t) if t else []

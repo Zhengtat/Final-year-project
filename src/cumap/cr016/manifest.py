@@ -20,8 +20,8 @@ def build() -> dict:
         json.loads(line)
         for line in (ROOT / "data/interim/textbook_sections.jsonl").read_text().splitlines()
     ]
-    rows, order = [], 0
-    for r in secs:
+    rows = []
+    for order, r in enumerate(secs):
         ps = paragraphs(r["text"])
         rows.append(
             {
@@ -29,7 +29,6 @@ def build() -> dict:
                 "paragraph_words": [len(p.split()) for p in ps], "source_hash": hashlib.sha256(r["text"].encode()).hexdigest()[:16],
             }
         )  # fmt: skip
-        order += 1
     total_words = sum(x["words"] for x in rows)
     all_p = [w for x in rows for w in x["paragraph_words"]]
     for x in rows:

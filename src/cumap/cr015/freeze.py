@@ -60,7 +60,8 @@ def gold_manifest(kind: str, path: str, provenance: str, note: str) -> dict:
     import csv
     import time as _t
 
-    rows = list(csv.DictReader(Path(path).open(encoding="utf-8-sig")))
+    with Path(path).open(encoding="utf-8-sig") as fh:
+        rows = list(csv.DictReader(fh))
     from collections import Counter
 
     rec = {

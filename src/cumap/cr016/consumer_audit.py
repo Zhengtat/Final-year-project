@@ -68,19 +68,13 @@ def main() -> dict:
     kidx = {k: i for i, k in enumerate(keys)}
     mat = np.stack([emb(canon[k]) / (np.linalg.norm(emb(canon[k])) + 1e-9) for k in keys])
     first_arr = np.array([first[k] for k in keys])
-    key_rows = [
-        json.loads(x) for x in gzip.open(ROOT / "reports/cr016/records/answer_key.jsonl.gz", "rt")
-    ]
-    qrows = {
-        q["query_id"]: q
-        for q in (
-            json.loads(x) for x in gzip.open(ROOT / "reports/cr016/records/queries.jsonl.gz", "rt")
-        )
-    }
+    with gzip.open(ROOT / "reports/cr016/records/answer_key.jsonl.gz", "rt") as fh:
+        key_rows = [json.loads(x) for x in fh]
     recs: dict[str, dict[str, list[str]]] = defaultdict(dict)
-    for line in gzip.open(ROOT / "reports/cr016/records/retrieval_records.jsonl.gz", "rt"):
-        r = json.loads(line)
-        recs[r["backend"]][r["query_id"]] = [x["chunk_id"] for x in r["retrieved"][:5]]
+    with gzip.open(ROOT / "reports/cr016/records/retrieval_records.jsonl.gz", "rt") as fh:
+        for line in fh:
+            r = json.loads(line)
+            recs[r["backend"]][r["query_id"]] = [x["chunk_id"] for x in r["retrieved"][:5]]
     sl_names = [
         "all",
         "alias",

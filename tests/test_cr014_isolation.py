@@ -34,7 +34,7 @@ def test_audit_hook_blocks_gold_opens():
         "except PermissionError as e:\n print('BLOCKED')\n"
         "except FileNotFoundError:\n print('NOTFOUND')\n"
     )
-    out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True).stdout.strip()
+    out = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True, check=False).stdout.strip()
     assert out == "BLOCKED", out
 
 
