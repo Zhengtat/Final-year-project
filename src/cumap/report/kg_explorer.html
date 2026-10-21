@@ -114,6 +114,16 @@ body.debug #detail .in{transition:none}
 .reviewonly{display:block}.debugonly{display:none}
 body.debug .reviewonly{display:none}body.debug .debugonly{display:block}
 
+/* ---- node funnel (right-hand panel) */
+.nf{border:1px solid var(--line);border-radius:8px;padding:6px 10px 8px;margin:0 0 14px;background:var(--bg)}
+.nf summary{cursor:pointer;font-weight:600;font-size:13px}
+.nfr{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) 44px 74px;align-items:center;gap:6px;font-size:12px;margin:4px 0}
+.nfl{color:var(--ink2);line-height:1.2}.nfb{height:10px;background:var(--chip);border-radius:5px;overflow:hidden}.nfb i{display:block;height:100%;background:var(--accent)}
+.nfv{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}.nfd{color:var(--ink2);font-variant-numeric:tabular-nums;font-size:11px}
+.nfu{font-size:11.5px;color:var(--warn);background:var(--warnbg);border:1px solid var(--warn);border-radius:6px;padding:3px 7px;margin:3px 0}
+.nfn{font-size:11.5px;color:var(--ink2);margin:3px 0}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
 /* ---- CR-013 trace layer */
 .vh{font-size:18px;margin:0 0 6px;font-weight:600}
 .ribbon{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:6px;margin:10px 0}
@@ -182,14 +192,27 @@ button.evchip{font-size:12px;padding:3px 9px;border-radius:12px}button.evchip.on
     <div class="pane" id="p-evmap"><div class="scroll" id="v-evmap" tabindex="0" role="region" aria-label="Evaluation failure map"></div></div>
     <div class="pane" id="p-evlist"><div class="scroll" id="v-evlist" tabindex="0" role="region" aria-label="Evaluation gold relations"></div></div>
   </div>
-  <aside id="detail" tabindex="0" aria-label="Details of the selected item"><div class="in" id="detailin"></div></aside>
+  <aside id="detail" tabindex="0" aria-label="Details of the selected item"><div id="nodefunnel"></div><div class="in" id="detailin"></div></aside>
 </main>
 <script type="application/octet-stream" id="trace-gz">/*__TRACE_B64__*/</script>
+<!--__TRACE_ALT__-->
 <script type="application/octet-stream" id="eval-gz">/*__EVAL_B64__*/</script>
 <script type="application/octet-stream" id="scorecard-gz">/*__SCORECARD_B64__*/</script>
 <script>
 const DATA = /*__DATA__*/null;
 const NA = DATA.na;
+// 2026-10-16 rebuild (comparison only): alternative P&D graph(s) and the rebuilt SciNLP run, switchable; the defaults are unchanged
+DATA.pd_sets = Object.assign({[DATA.pd.run_id]: DATA.pd}, DATA.pd_alt||{});
+DATA.sci_sets = Object.assign({frozen: DATA.sci}, DATA.sci_alt||{});
+const PROD_RUN = DATA.pd.run_id;
+let TRACE_ID = 'trace-gz';
+function usePdRun(k){ if(!DATA.pd_sets[k]) return; DATA.pd=DATA.pd_sets[k]; TRACE_ID = k===PROD_RUN ? 'trace-gz' : 'trace-gz-'+k; TR=null; TRLOAD=null; S.sel=null; setMode('pd'); }
+function useSciRun(k){ if(!DATA.sci_sets[k]) return; const id=S.doc&&S.doc.doc_id; DATA.sci=DATA.sci_sets[k]; S.sel=null; setMode('sci', DATA.sci.docs.find(d=>d.doc_id===id)||DATA.sci.docs[0]); }
+function runSwitch(){
+  if(S.mode==='pd'&&Object.keys(DATA.pd_sets).length>1) return '<h3>Graph</h3><div class="seg" style="display:flex">'+Object.keys(DATA.pd_sets).map(k=>'<button data-pdrun="'+esc(k)+'" class="'+(DATA.pd.run_id===k?'on':'')+'" style="flex:1">'+esc(k)+(k===PROD_RUN?' · production':' · rebuild')+'</button>').join('')+'</div>';
+  if(S.mode==='sci'&&Object.keys(DATA.sci_sets).length>1) return '<h3>Run</h3><div class="seg" style="display:flex">'+Object.keys(DATA.sci_sets).map(k=>'<button data-scirun="'+esc(k)+'" class="'+(DATA.sci===DATA.sci_sets[k]?'on':'')+'" style="flex:1">'+(k==='frozen'?'Frozen (CR-012)':'Rebuilt 2026-10-16')+'</button>').join('')+'</div>';
+  return '';
+}
 // Okabe-Ito based palette (colour-blind safe)
 const PAL = ['#0072B2','#E69F00','#009E73','#CC79A7','#D55E00','#56B4E9','#B8A400','#7A7A7A','#8C4FD8','#C23B3B','#2E8B8B','#A0522D','#5B6EE1','#4F7F2F'];
 const TYPE_IDX = {Concept:7,Protocol:0,Component:1,Mechanism:3,DataUnit:2,Parameter:4,Property:5,Event:9,State:6,Layer:12,Identifier:8,task:0,method:1,dataset:2,metric:3};
@@ -249,12 +272,14 @@ function banner(){
   if(S.mode==='ev'){ evBanner(); return; }
   const b=$('banner');
   if(S.mode==='pd'){
-    b.innerHTML='<div class="banner ok"><b>P&amp;D dataset</b> — the ideas in the networking textbook <i>Computer Networks: A Systems Approach</i> (Peterson &amp; Davie), chapters 1–3, and how they connect. Every link comes with the sentence from the book that supports it.'+
-    '<details><summary>About this graph</summary>Built by run <code>'+esc(DATA.pd.run_id)+'</code> (chapters 1–3 are the development set). When the same system was tested on other P&amp;D sections ('+DATA.pd_heldout.sections.join(', ')+'), its strictest end-to-end relation score (F1, from 0 to 1) was <b>'+DATA.pd_heldout.e0_strict_f1.toFixed(3)+'</b>. That score belongs to those test sections, not to the graph shown here.</details></div>';
+    const alt = DATA.pd.run_id!==PROD_RUN;
+    b.innerHTML='<div class="banner'+(alt?' warn':' ok')+'"><b>P&amp;D dataset'+(alt?' · rebuild '+esc(DATA.pd.run_id)+' (comparison only; the production graph is '+esc(PROD_RUN)+')':'')+'</b> — the ideas in the networking textbook <i>Computer Networks: A Systems Approach</i> (Peterson &amp; Davie), chapters 1–3, and how they connect. Every link comes with the sentence from the book that supports it.'+
+    '<details><summary>About this graph</summary>Built by run <code>'+esc(DATA.pd.run_id)+'</code> (chapters 1–3 are the development set). When the same system was tested on other P&amp;D sections ('+DATA.pd_heldout.sections.join(', ')+'), its Strict E2E Edge F1 (from 0 to 1) was <b>'+DATA.pd_heldout.e0_strict_f1.toFixed(3)+'</b>. That score belongs to those test sections, not to the graph shown here.</details></div>';
   } else {
     const h=DATA.sci.headline;
-    b.innerHTML='<div class="banner warn"><b>SciNLP dataset — a test run, not the main graph.</b> The same system was run on 3 scientific papers to see how well it works outside networking. Its output is compared with a human answer key and is not part of the P&amp;D graph.'+
-    '<details><summary>Overall score</summary>Relation score (F1, from 0 to 1) <b>'+h.relation_f1.toFixed(3)+'</b> · precision '+h.precision.toFixed(3)+' · recall '+h.recall.toFixed(3)+', over all 3 papers (system as-is, level E0; scores frozen in CR-012). '+ciPlain(h.ci_status)+(DATA.sci.cr019?'<br>CR-019 grounding-consistent scoring (finds every occurrence of a concept and counts every predicted relation): F1 <b>'+DATA.sci.cr019.f1.toFixed(3)+'</b> · precision '+DATA.sci.cr019.precision.toFixed(3)+' · recall '+DATA.sci.cr019.recall.toFixed(3)+'. The frozen scorer left most predicted relations unscored.':'')+'</details></div>';
+    const reb = DATA.sci!==DATA.sci_sets.frozen;
+    b.innerHTML='<div class="banner warn"><b>SciNLP dataset — a test run, not the main graph.'+(reb?' Rebuilt 2026-10-16 with spelling-variant matching and the rejected-link adjudicator; the frozen CR-012 scores are not replaced.':'')+'</b> The same system was run on 3 scientific papers to see how well it works outside networking. Its output is compared with a human answer key and is not part of the P&amp;D graph.'+
+    '<details><summary>Overall score</summary>'+(DATA.sci.cr019?'Strict E2E Edge F1 (CR-019 scoring, every predicted relation counted) <b>'+DATA.sci.cr019.f1.toFixed(3)+'</b> · precision '+DATA.sci.cr019.precision.toFixed(3)+' · recall '+DATA.sci.cr019.recall.toFixed(3)+', over all 3 papers. ':'')+ciPlain(h.ci_status)+'<br><span class="small">Frozen CR-012 scorer: Strict E2E Edge F1 '+h.relation_f1.toFixed(3)+' (precision '+h.precision.toFixed(3)+', recall '+h.recall.toFixed(3)+'); it leaves most predicted relations unscored.</span></details></div>';
   }
 }
 
@@ -363,6 +388,7 @@ function fillTemplate(e,a,b){ const d=defs()[e.rel]; if(!d||!d.template||d.templ
 function copyBtn(t){ return ' <a class="lnk" data-copy="'+esc(t)+'">copy</a>'; }
 function renderDetail(instant){
   const box=$('detailin'), dbg=S.view==='debug';
+  if(typeof renderNodeFunnel==='function') renderNodeFunnel();
   if(S.mode==='ev'){ box.className='in'; box.innerHTML=evDetailHTML(); wireEvDetail(box); return; }
   let h='';
   if(!S.sel){
@@ -390,7 +416,7 @@ function detNode(n,dbg){
     const ringTxt={centre:'one of the most connected, central concepts',inner:'well connected, near the centre',middle:'moderately connected',outer:'few connections, near the edge',unlinked:'found in the text, but not linked to any other concept yet'}[n.ring]||'';
     h+='<dl><dt>Also called</dt><dd>'+(n.aliases.length?n.aliases.map(a=>'<span class="chip">'+esc(a)+'</span>').join(''):'<span class="na">no other names recorded</span>')+'</dd>'+
     '<dt>First appears</dt><dd>chapter '+n.ch+', section '+esc(n.first_section)+' · mentioned '+n.n_mentions+' time'+(n.n_mentions===1?'':'s')+' in '+n.sections.length+' section'+(n.sections.length===1?'':'s')+'</dd>'+
-    '<dt>How central it is</dt><dd><b>'+esc(n.ring)+'</b> — '+ringTxt+(dbg?'<br>importance '+(n.importance==null?NA:n.importance.toFixed(4))+' · cluster '+esc(n.comm)+' / '+esc(n.comm_fine):'')+'</dd>'+
+    '<dt>How central it is</dt><dd><b>'+esc(n.ring)+'</b> — '+ringTxt+(dbg?'<br>cluster '+esc(n.comm)+' / '+esc(n.comm_fine):'')+'</dd>'+
     (n.definition!==NA?'<dt>Definition</dt><dd>'+esc(n.definition)+'</dd>':'')+
     '<dt>From the book</dt>'+n.quotes.map(q=>'<dd><div class="sent">'+esc(q.q)+'</div><span class="small">'+esc(q.sec)+' · '+esc(q.role)+'</span></dd>').join('');
     if(dbg) h+='<dt>Ring by chapter</dt><dd>'+Object.entries(n.ring_by_chapter).map(([c,r])=>'ch'+c+': '+esc(r)).join(' → ')+'</dd><dt>Where the other names came from</dt><dd>'+val(n.alias_provenance)+'</dd><dt>Merged from (earlier duplicates)</dt><dd>'+val(n.merged_from)+'</dd><dt>Concept id</dt><dd><code>'+esc(n.id)+'</code>'+copyBtn(n.id)+'</dd>';
@@ -448,12 +474,14 @@ function neighbours(){ if(!S.sel||S.sel.kind!=='node') return []; return [...new
 // ---------------------------------------------------------------- side panel
 function sciCard(){
   const d=S.doc, [p,r,f]=d.e0_relation_prf, [tp,fp,fn]=d.e0_relation_tp_fp_fn;
-  const att=Object.entries(d.attribution).filter(([c,v])=>v>0), tot=att.reduce((s,[c,v])=>s+v,0);
-  let h='<h3>How it did on this paper</h3><div class="big"><div><b>'+f.toFixed(3)+'</b>relation score (F1)</div><div><b>'+p.toFixed(2)+'</b>precision</div><div><b>'+r.toFixed(2)+'</b>recall</div></div>'+
-  '<div class="small">Found '+tp+' of the '+d.gold_relations+' relations in the answer key, plus '+fp+' that the answer key does not have. Concept score (F1) '+d.e0_entity_prf[2].toFixed(3)+'.</div>'+
-  (d.cr019?'<div class="small" style="margin-top:4px">With CR-019 scoring (every occurrence found, every relation counted): relation score (F1) <b>'+d.cr019.rel_prf[2].toFixed(3)+'</b> · precision '+d.cr019.rel_prf[0].toFixed(2)+' · recall '+d.cr019.rel_prf[1].toFixed(2)+'. '+d.cr019.edges_not_scored_frozen+' of its relations were not scored by the frozen scorer.</div>':'')+
+  const att=Object.entries(d.cr019?d.cr019.attribution:d.attribution).filter(([c,v])=>v>0), tot=att.reduce((s,[c,v])=>s+v,0);
+  const c=d.cr019, rp=c?c.rel_prf:[p,r,f], rc=c?c.rel_counts:[tp,fp,fn], cp=c?c.concept_prf:d.e0_entity_prf;
+  let h='<h3>How it did on this paper</h3><div class="small" style="margin-bottom:2px">Strict E2E Edge F1 <span class="tier" title="mention-level analogue, CR-019 scoring (IDX-P1)">CR-019</span></div><div class="big"><div><b>'+rp[2].toFixed(3)+'</b>F1</div><div><b>'+rp[0].toFixed(2)+'</b>precision</div><div><b>'+rp[1].toFixed(2)+'</b>recall</div></div>'+
+  '<div class="small">Found '+rc[0]+' of the '+d.gold_relations+' relations in the answer key; '+rc[1]+' of its relation placements are not in the answer key.</div>'+
+  '<div class="small" style="margin-top:6px">Concept F1 <span class="tier">CR-019</span> <b>'+cp[2].toFixed(3)+'</b> · precision '+cp[0].toFixed(2)+' · recall '+cp[1].toFixed(2)+'</div>'+
+  (c?'<details class="small"><summary>Frozen CR-012 scorer</summary>Strict E2E Edge F1 '+f.toFixed(3)+' (precision '+p.toFixed(2)+', recall '+r.toFixed(2)+'), concept F1 '+d.e0_entity_prf[2].toFixed(3)+'. It scores only the relations it can place on recorded mentions: '+(d.predicted_edges-c.edges_not_scored_frozen)+' of '+d.predicted_edges+' here.</details>':'')+
   '<div class="small" style="margin-top:4px"><b>Precision</b>: how many of its answers were right. <b>Recall</b>: how many of the right answers it found. <b>F1</b> balances the two (1 is perfect).</div>';
-  if(tot){ h+='<h3>Why relations were missed</h3><div class="bar">'+att.map(([c,v])=>'<span title="'+esc(c)+': '+v+'" style="width:'+(100*v/tot)+'%;background:'+(CODE_COL[c]||'#7A7A7A')+'"></span>').join('')+'</div><div class="leg">'+att.sort((a,b)=>b[1]-a[1]).map(([c,v])=>'<span><i style="background:'+(CODE_COL[c]||'#7A7A7A')+'"></i>'+(S.view==='debug'?esc(c)+' ':'')+esc(CODE_LABEL[c]||c)+' · '+v+'</span>').join('')+'</div>'; }
+  if(tot){ h+='<h3>Why relations were missed'+(d.cr019?' <span class="tier">CR-019</span>':'')+'</h3><div class="bar">'+att.map(([c,v])=>'<span title="'+esc(c)+': '+v+'" style="width:'+(100*v/tot)+'%;background:'+(CODE_COL[c]||'#7A7A7A')+'"></span>').join('')+'</div><div class="leg">'+att.sort((a,b)=>b[1]-a[1]).map(([c,v])=>'<span><i style="background:'+(CODE_COL[c]||'#7A7A7A')+'"></i>'+(S.view==='debug'?esc(c)+' ':'')+esc(CODE_LABEL[c]||c)+' · '+v+'</span>').join('')+'</div>'; }
   h+='<div class="card" style="margin-top:10px"><h4>Keep in mind</h4><span class="small">The answer key marks only a few concepts in each paper, but the system marks every concept it finds. Low scores here are expected for a system built for textbooks; they are not a display error.'+(d.gold_relations<5?' This paper has only '+d.gold_relations+' relation'+(d.gold_relations===1?'':'s')+' in the answer key, so its score means very little.':'')+'</span></div>';
   return h;
 }
@@ -462,17 +490,17 @@ function side(){
   if(S.view==='review' && store.get('kg_intro')!=='off'){
     h+='<div class="card" id="intro"><button class="close" id="intro-x" title="Dismiss">×</button><h4>Start here</h4><span class="small">'+(S.mode==='pd'?'This is a map of the ideas in a networking textbook. Dots are concepts, arrows show how they relate, and each arrow keeps the sentence it came from. Try a guided view below, or click any dot.':'The same system, run on scientific papers to test it outside networking. Blue means it agrees with the human answer key; orange means the answer key does not have it.')+'</span></div>';
   }
+  h+=runSwitch();
   if(S.mode==='sci'){
-    h+='<h3>Test papers</h3><table class="docs"><tr><th>paper</th><th title="concepts / relations the system found">found</th><th title="concepts / relations in the human answer key">answer key</th><th title="relation score (F1)">score</th></tr>'+DATA.sci.docs.map(d=>'<tr data-d="'+esc(d.doc_id)+'" class="'+(d===S.doc?'sel':'')+'"><td>'+esc(d.doc_id.replace('.grobid',''))+'</td><td title="concepts / relations">'+d.predicted_nodes+' / '+d.predicted_edges+'</td><td title="concepts / relations">'+d.gold_entities+' / '+d.gold_relations+'</td><td>'+d.e0_strict_relation_f1.toFixed(3)+'</td></tr>').join('')+'</table>'+sciCard();
+    h+='<h3>Test papers</h3><table class="docs"><tr><th>paper</th><th title="concepts / relations the system found">found</th><th title="concepts / relations in the human answer key">answer key</th><th title="Strict E2E Edge F1, CR-019 scoring">F1</th></tr>'+DATA.sci.docs.map(d=>'<tr data-d="'+esc(d.doc_id)+'" class="'+(d===S.doc?'sel':'')+'"><td>'+esc(d.doc_id.replace('.grobid',''))+'</td><td title="concepts / relations">'+d.predicted_nodes+' / '+d.predicted_edges+'</td><td title="concepts / relations">'+d.gold_entities+' / '+d.gold_relations+'</td><td>'+(d.cr019?d.cr019.rel_prf[2]:d.e0_strict_relation_f1).toFixed(3)+'</td></tr>').join('')+'</table>'+sciCard();
   } else {
     const st=G.stats;
     h+='<h3>This graph</h3><div class="big"><div><b>'+st.canonical_nodes+'</b>concepts</div><div><b>'+st.accepted_edges+'</b>relations</div><div><b>'+st.aliases+'</b>other names</div></div><div class="small">'+st.nodes_with_edges+' concepts are linked to at least one other; '+st.unlinked_nodes+' were found in the text but have no relations yet.</div>'+
     '<h3>Guided views</h3><div class="tour stag"><button data-tour="centre">1 · The most central ideas<small>the best-connected concepts, in rings</small></button><button data-tour="growth">2 · How the map grows<small>start with chapter 1, then add chapters</small></button><button data-tour="evidence">3 · One relation and its source<small>see the sentence it came from</small></button></div>'+
     '<h3>Show chapters</h3><select id="f-ch" aria-label="Show chapters">'+[1,2,3].map(c=>'<option value="'+c+'"'+(c===S.F.chapter?' selected':'')+'>'+(c===1?'chapter 1 only':'chapters 1–'+c)+'</option>').join('')+'</select>'+
     '<h3>Layout</h3><select id="f-lay" aria-label="Layout"><option value="force"'+(S.F.layout==='force'?' selected':'')+'>Spread out — shows connections</option><option value="rings"'+(S.F.layout==='rings'?' selected':'')+'>Rings — most central in the middle</option></select>'+
-    '<h3>Colour by</h3><select id="f-col" aria-label="Colour nodes by"><option value="type">kind of concept</option><option value="ring"'+(S.F.colour==='ring'?' selected':'')+'>how central (bigger = more important)</option></select>'+
+    '<h3>Colour by</h3><select id="f-col" aria-label="Colour nodes by"><option value="type">kind of concept</option><option value="ring"'+(S.F.colour==='ring'?' selected':'')+'>ring (centre to edge)</option></select>'+
     '<label style="margin-top:6px"><input type="checkbox" id="f-unl"'+(S.F.unlinked?' checked':'')+'> also show the '+st.unlinked_nodes+' concepts with no relations</label>';
-    if(dbg) h+='<h3>Hide less important concepts</h3><input type="range" id="f-top" aria-label="Minimum importance" min="0" max="1" step="0.05" value="'+S.F.top+'"> <span class="small" id="f-top-v">'+S.F.top+'</span>';
   }
   if(S.mode==='sci'){
     h+='<h3>Guided views</h3><div class="tour stag"><button data-tour="found">1 · What it found<small>blue = in the answer key, orange = not in it</small></button><button data-tour="missed">2 · What it missed<small>dashed grey lines = answer-key relations it did not find</small></button><button data-tour="text">3 · Read the paper<small>what it found, highlighted in the text</small></button></div>'+
@@ -493,6 +521,8 @@ function wireSide(s){
   $$('input[data-t]').forEach(i=>i.onchange=()=>{i.checked?S.F.types.add(i.dataset.t):S.F.types.delete(i.dataset.t);draw();});
   $$('input[data-r]').forEach(i=>i.onchange=()=>{i.checked?S.F.rels.add(i.dataset.r):S.F.rels.delete(i.dataset.r);draw();});
   $$('button[data-tour]').forEach(b=>b.onclick=()=>tour(b.dataset.tour));
+  $$('button[data-pdrun]').forEach(b=>b.onclick=()=>usePdRun(b.dataset.pdrun));
+  $$('button[data-scirun]').forEach(b=>b.onclick=()=>useSciRun(b.dataset.scirun));
   const q=one('#f-q'); if(q){ q.oninput=()=>{S.F.query=q.value; const m=S.G.nodes.find(n=>!n.ghost&&n.name.toLowerCase()===q.value.trim().toLowerCase()); if(m){S.kb=true; selectNode(m.id,true);} else draw();}; q.onkeydown=ev=>{ if(ev.key==='Enter'){ const t=S.F.query.trim().toLowerCase(); const m=S.G.nodes.find(n=>!n.ghost&&(n.name.toLowerCase().includes(t)||(n.aliases||[]).some(a=>a.toLowerCase().includes(t)))); if(m) selectNode(m.id,true);} }; }
   const ch=one('#f-ch'); if(ch) ch.onchange=()=>{S.F.chapter=+ch.value; fit(true); hashWrite();};
   const lay=one('#f-lay'); if(lay) lay.onchange=()=>{S.F.layout=lay.value; fit(true);};
@@ -545,9 +575,9 @@ function renderDoc(){
 }
 function renderTables(){
   const el=$('tableview'); let h='';
-  const nodesRows=S.G.nodes.filter(n=>!n.ghost).map(n=>({id:n.id,name:n.name,type:n.type,ch:n.ch??'',ring:n.ring??'',imp:n.importance??'',deg:(adj[n.id]||[]).length,al:(n.aliases||[]).length}));
+  const nodesRows=S.G.nodes.filter(n=>!n.ghost).map(n=>({id:n.id,name:n.name,type:n.type,ch:n.ch??'',ring:n.ring??'',deg:(adj[n.id]||[]).length,al:(n.aliases||[]).length}));
   const edgesRows=S.G.edges.map(e=>({id:e.id,s:byId[e.s].name,rel:e.rel,t:byId[e.t].name,kind:e.kind||'accepted',m:e.kind==='gold_missed'?e.code:(S.mode==='sci'?(e.matches_gold?'match':'no match'):('ch'+e.ch+' '+e.section))}));
-  h+='<h3 style="margin-top:0">Concepts ('+nodesRows.length+')</h3>'+tbl(nodesRows,['name','type','ch','ring','imp','deg','al'],['concept','kind','chapter','ring','importance','links','other names'],'n');
+  h+='<h3 style="margin-top:0">Concepts ('+nodesRows.length+')</h3>'+tbl(nodesRows,['name','type','ch','ring','deg','al'],['concept','kind','chapter','ring','links','other names'],'n');
   h+='<h3>Relations ('+edgesRows.length+')</h3>'+tbl(edgesRows,['s','rel','t','kind','m'],['first concept','relation','second concept','status','match / reason / section'],'e');
   if(S.mode==='sci') h+='<h3>Answer-key relations ('+S.doc.gold_rels.length+')</h3>'+tbl(S.doc.gold_rels.map((r,i)=>({id:'gold'+i,a:r.src_text,rel:r.rel,b:r.tgt_text,m:r.matched?'found':'missed',c:r.code})),['a','rel','b','m','c'],['first concept','relation','second concept','status','where it went wrong'],'g');
   el.innerHTML=h; wireTables(el);

@@ -14,12 +14,12 @@ let TR = null, TRLOAD = null;
 const TS = {stage:'pair_selection', sectionAll:true, section:null, step:0, snap:2, whyA:'', whyB:'', whyOut:null, lostMore:{}, evFilter:{stage:'',outcome:'',layer:'',q:''}};
 
 // ---------------------------------------------------------------- loading (gzip + base64, decoded lazily on first use)
-function traceAvailable(){ return S.mode==='pd' && !!$('trace-gz') && ($('trace-gz').textContent||'').length>10; }
+function traceAvailable(){ return S.mode==='pd' && !!$(TRACE_ID) && ($(TRACE_ID).textContent||'').length>10; }
 function loadTrace(){
   if(TR) return Promise.resolve(TR);
   if(TRLOAD) return TRLOAD;
   TRLOAD = (async()=>{
-    const b64=($('trace-gz').textContent||'').trim(); const bin=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
+    const b64=($(TRACE_ID).textContent||'').trim(); const bin=Uint8Array.from(atob(b64),c=>c.charCodeAt(0));
     const stream=new Blob([bin]).stream().pipeThrough(new DecompressionStream('gzip'));
     TR=JSON.parse(await new Response(stream).text()); indexTrace(); return TR;
   })();
@@ -62,7 +62,7 @@ function renderEv(ev){
 }
 function poolEv(i, kind){
   const [pid,x,y,rank,sel,si,cue,cooc,sr,sp]=TR.pool[i]; const ids=TR.pool_ids[i];
-  const base={stage:kind==='gen'?'pair_generation':'pair_selection', object_id:'pair:'+pid, section_id:TR.pool_sections[si], layer:'REPLAYED', authority:'SCORE', score:cue, eligible_count:TR.eligible, budget:TR.meta.replay.budget, event_id:'te_'+(kind==='gen'?ids[0]:ids[1]), source_artifact:'data/processed/kg/slice3_c2/checkpoint.json', source_locator:'selection_stats'};
+  const base={stage:kind==='gen'?'pair_generation':'pair_selection', object_id:'pair:'+pid, section_id:TR.pool_sections[si], layer:'REPLAYED', authority:'SCORE', score:cue, eligible_count:TR.eligible, budget:TR.meta.replay.budget, event_id:'te_'+(kind==='gen'?ids[0]:ids[1]), source_artifact:'data/processed/kg/'+TR.meta.run+'/checkpoint.json', source_locator:'selection_stats'};
   return kind==='gen' ? {...base, action:'pool_pair_replayed', outcome:'emitted', attrs:{cooccurrence_count:cooc, section_pool:sp, section_rank:sr}}
                       : {...base, action:'rank_replayed', outcome:sel?'selected':'not_selected', rank, input_refs:['concept:'+x,'concept:'+y], attrs:{section_rank:sr, section_pool:sp}};
 }
@@ -97,6 +97,74 @@ function counts(scope){
   return out;
 }
 
+// ---------------------------------------------------------------- concept-count funnel (right-hand panel). Mirror of explain/funnel.py (parity-tested).
+const FUNNEL_LABELS = {
+  candidates:['Candidate concepts offered','Concepts the AI suggested while reading, counting the ones the checks later threw out as new concepts. (Rejected mentions of concepts that already exist are not counted.)'],
+  after_checks:['After the checks','Suggestions that passed the rule-based checks and became nodes.'],
+  after_filter:['After the filter','Nodes left after the importance filter. The retained runs record no pruned concept, so this normally equals the line above.'],
+  after_merge:['After merging duplicate names','Nodes that mean the same thing are joined into one concept (the other names are kept as aliases).'],
+  final:['In the final graph','Concepts in the finished graph.'],
+  linked:['With at least one relation','Final concepts that take part in at least one relation. The rest are on the map but not yet connected.']
+};
+function conceptFunnel(scope){
+  const sc=scope||null, secs=TR.sections, chosen=sc?[sc]:Object.keys(secs);
+  const base=e=>String(e.section_id||'').split('#')[0], inScope=e=>!sc||base(e)===sc;
+  const proposed=chosen.flatMap(s=>secs[s].proposed||[]);
+  const ev=TR.events;
+  const rejectedNew=ev.filter(e=>e.stage==='verifier'&&String(e.action).split(':')[0]==='candidate_rejected'&&(e.attrs||{}).kind==='new_concepts'&&inScope(e)).length;
+  const pruned=ev.filter(e=>e.stage==='pruner'&&e.outcome==='rejected'&&inScope(e)).length;
+  const prunedUnrec=ev.filter(e=>e.stage==='pruner'&&e.outcome==='not_recorded'&&inScope(e)).length;
+  const mapped=new Set(proposed.filter(p=>p[4]).map(p=>p[4])), unmapped=proposed.filter(p=>!p[4]).length;
+  const afterMerge=mapped.size+unmapped;
+  const fin=sc?[...mapped].filter(c=>TR.finalSet.has(c)).length:TR.final_concepts.length;
+  if(!TR.edgeEnds){ TR.edgeEnds={}; ev.forEach(e=>{ if(e.stage==='graph_commit'&&String(e.action)==='commit_edge'){ const a=e.attrs||{}; TR.edgeEnds[e.object_id.split(':').slice(1).join(':')]=[a.source_concept_id,a.target_concept_id]; } }); }
+  let linked=new Set();
+  if(sc){ const all=new Set(); Object.values(TR.edgeEnds).forEach(p=>{all.add(p[0]);all.add(p[1]);}); [...mapped].forEach(c=>{ if(TR.finalSet.has(c)&&all.has(c)) linked.add(c); }); }
+  else (TR.final_edges).forEach(i=>(TR.edgeEnds[i]||[]).forEach(c=>{ if(TR.finalSet.has(c)) linked.add(c); }));
+  const n=proposed.length;
+  const steps=[
+    {key:'candidates',n:n+rejectedNew,removed:null,unaccounted:0},
+    {key:'after_checks',n:n,removed:rejectedNew,unaccounted:0},
+    {key:'after_filter',n:n-pruned,removed:pruned,unaccounted:0},
+    {key:'after_merge',n:afterMerge,removed:n-pruned-afterMerge,unaccounted:0},
+    {key:'final',n:fin,removed:afterMerge-fin,unaccounted:afterMerge-fin},
+    {key:'linked',n:linked.size,removed:fin-linked.size,unaccounted:0}
+  ];
+  return {scope:sc||'all',steps:steps,pruned_unrecorded:prunedUnrec,unmapped_nodes:unmapped};
+}
+function funnelHTML(F, title, note){
+  const mx=Math.max(1,...F.steps.map(s=>s.n));
+  let rows='', tbl='';
+  F.steps.forEach((s,i)=>{
+    const lab=FUNNEL_LABELS[s.key], prev=i?F.steps[i-1].n:null;
+    const drop=s.removed===null?'':(s.removed? '−'+s.removed+(prev?' ('+(100*s.removed/prev).toFixed(1)+'%)':'') : '±0');
+    const txt=lab[0]+': '+s.n+(drop?', '+drop:'');
+    rows+='<div class="nfr" role="img" aria-label="'+esc(txt)+'" title="'+esc(lab[1])+'"><span class="nfl">'+esc(lab[0])+'</span><span class="nfb"><i style="width:'+(100*s.n/mx)+'%"></i></span><span class="nfv">'+s.n+'</span><span class="nfd">'+esc(drop)+'</span></div>';
+    if(s.unaccounted) rows+='<div class="nfu">Unaccounted difference: '+(s.unaccounted>0?'−':'+')+Math.abs(s.unaccounted)+' (no recorded cause for this change)</div>';
+    tbl+='<tr><th scope="row">'+esc(lab[0])+'</th><td>'+s.n+'</td><td>'+esc(drop)+'</td></tr>';
+  });
+  if(F.pruned_unrecorded) rows+='<div class="nfu">Filter: '+F.pruned_unrecorded+' score records say the pruned list could not be matched to concepts (NOT_RECORDED).</div>';
+  if(F.unmapped_nodes) rows+='<div class="nfn">'+F.unmapped_nodes+' node(s) have no recorded link to a final concept; each is counted as its own concept in the merge line.</div>';
+  return '<details class="nf" open><summary>'+esc(title)+'</summary>'+(note?'<p class="small">'+note+'</p>':'')+rows+'<table class="sr-only"><caption>'+esc(title)+'</caption><tbody>'+tbl+'</tbody></table></details>';
+}
+function sciFunnel(d){
+  const f=d&&d.node_funnel; if(!f) return '<details class="nf" open><summary>How the concept count shrinks</summary><p class="na">Not recorded for this run.</p></details>';
+  const steps=[['candidates',f.proposed+f.rejected_new],['after_checks',f.proposed],['after_filter',f.proposed-f.pruned],['after_merge',f.concepts],['linked',f.linked]];
+  const F={steps:[],pruned_unrecorded:0,unmapped_nodes:0}; let prev=null;
+  steps.forEach(([k,v])=>{ F.steps.push({key:k,n:v,removed:prev===null?null:prev-v,unaccounted:0}); prev=v; });
+  return funnelHTML(F,'How the concept count shrinks','Counted from this paper\'s saved concept-stage files. The last line counts concepts that appear in a predicted relation.');
+}
+async function renderNodeFunnel(){
+  const box=$('nodefunnel'); if(!box) return;
+  if(S.mode==='sci'){ box.innerHTML=sciFunnel(S.doc); return; }
+  if(S.mode!=='pd'||!traceAvailable()){ box.innerHTML=''; return; }
+  if(!TR) box.innerHTML='<details class="nf" open><summary>How the concept count shrinks</summary><p class="na">Loading…</p></details>';
+  try{ await loadTrace(); }catch(e){ box.innerHTML='<p class="na">The funnel needs DecompressionStream support.</p>'; return; }
+  if(S.mode!=='pd') return;
+  const sc=(TS.sectionAll||!TS.section)?null:TS.section;
+  box.innerHTML=funnelHTML(conceptFunnel(sc),'How the concept count shrinks',sc?'Section '+esc(sc)+'. Pick "All sections" in the Pipeline tab to see the whole book.':'Whole book ('+esc(DATA.pd.run_id)+').');
+}
+
 // ---------------------------------------------------------------- tab rendering entry
 async function renderTraceTab(k){
   const el=$('v-'+k); if(!el) return;
@@ -109,7 +177,7 @@ function secSelect(withAll){
   return '<label class="small">Section <select class="tsec">'+(withAll?'<option value=""'+(allSel?' selected':'')+'>All sections</option>':'')+TR.secList.map(s=>'<option value="'+esc(s.id)+'"'+(!allSel&&s.id===TS.section?' selected':'')+'>'+esc(s.id)+' · '+esc(s.title)+'</option>').join('')+'</select></label>';
 }
 function wireSecSelect(el, rerender, allowAll){
-  const s=el.querySelector('.tsec'); if(s) s.onchange=()=>{ if(s.value){ TS.section=s.value; TS.sectionAll=false; } else if(allowAll){ TS.sectionAll=true; } rerender(); };
+  const s=el.querySelector('.tsec'); if(s) s.onchange=()=>{ if(s.value){ TS.section=s.value; TS.sectionAll=false; } else if(allowAll){ TS.sectionAll=true; } rerender(); renderNodeFunnel(); };
 }
 const scopeOf = withAll => (withAll&&TS.sectionAll)?null:TS.section;
 function funnelBar(c){

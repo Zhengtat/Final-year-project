@@ -54,8 +54,16 @@ def code_hash() -> str:
     return h.hexdigest()[:16]
 
 
-def build(run: str, *, replay_enabled: bool = True, out_root: Path | None = None) -> dict:
-    is_pd = run == CFG["production"]["run_id"]
+def build(
+    run: str,
+    *,
+    replay_enabled: bool = True,
+    out_root: Path | None = None,
+    pd: bool | None = None,
+    org_id: str | None = None,
+) -> dict:
+    """`pd` / `org_id` let a P&D comparison run (e.g. slice3_c3) use the production recipe; the defaults are unchanged."""
+    is_pd = (run == CFG["production"]["run_id"]) if pd is None else pd
     cfgp = CFG["production"] if is_pd else CFG["evaluation_example"]
     sections_source = CFG["production"]["sections_source"] if is_pd else None
     files = source_files(run, sections_source)
@@ -108,7 +116,7 @@ def build(run: str, *, replay_enabled: bool = True, out_root: Path | None = None
         ad = PDAdapter(
             run,
             cfgp["dataset_mode"],
-            org_id=CFG["production"]["organisation_id"] if is_pd else None,
+            org_id=(org_id or CFG["production"]["organisation_id"]) if is_pd else None,
             sections_source=sections_source,
             registry_version=str(reg_ver) if reg_ver else None,
         )
@@ -221,10 +229,14 @@ def build(run: str, *, replay_enabled: bool = True, out_root: Path | None = None
 
 def main() -> None:
     ap = argparse.ArgumentParser()
+    ap.add_argument(
+        "--pd", action="store_true", help="treat --run as a P&D run with the production recipe"
+    )
+    ap.add_argument("--org-id")
     ap.add_argument("--run", default=CFG["production"]["run_id"])
     ap.add_argument("--no-replay", action="store_true")
     a = ap.parse_args()
-    r = build(a.run, replay_enabled=not a.no_replay)
+    r = build(a.run, replay_enabled=not a.no_replay, pd=True if a.pd else None, org_id=a.org_id)
     m = r["manifest"]
     print(
         json.dumps(

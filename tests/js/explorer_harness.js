@@ -46,6 +46,14 @@ vm.runInThisContext(main);
     out['journey_node_' + view] = journeyHTML('concept:' + node, view === 'debug');
     S.mode === 'pd' && selectNode(node); const eobj = S.G.edges.find(x => x.id === edge); selectEdge(eobj);
   }
+  // ---- node funnel (right-hand panel)
+  setMode('pd'); TS.sectionAll = true; await renderNodeFunnel(); out.funnel_html_all = $('nodefunnel').innerHTML;
+  out.funnel = { all: conceptFunnel(null), sections: Object.fromEntries(TR.secList.map(s => [s.id, conceptFunnel(s.id)])) };
+  TS.sectionAll = false; TS.section = '3.3'; await renderNodeFunnel(); out.funnel_html_33 = $('nodefunnel').innerHTML;
+  out.funnel_unacc_html = funnelHTML({ steps: [{ key: 'candidates', n: 10, removed: null, unaccounted: 0 }, { key: 'final', n: 7, removed: 3, unaccounted: 3 }], pruned_unrecorded: 0, unmapped_nodes: 0 }, 't', '');
+  setMode('sci'); out.sci_funnel_html = $('nodefunnel').innerHTML;
+  out.sci_funnel_missing_html = sciFunnel({});
+  setMode('pd'); TS.sectionAll = true;
   setMode('sci'); out.sci_tabs = $('tabs').innerHTML; out.sci_trace_available = traceAvailable(); setMode('pd'); out.pd_tabs_after = $('tabs').innerHTML;
   // ---- evaluation overlay: opt-in, dataset-scoped, separate payload
   out.ev_null_before_opt_in = (EV === null);

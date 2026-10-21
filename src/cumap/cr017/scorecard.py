@@ -149,6 +149,7 @@ def cr019_variant() -> dict | None:
     return {
         "stage_b": stage_b_rows(),
         "cr020": cr020_rows(),
+        "rebuild": rebuild_rows(),
         "label": "CR-019 grounding-consistent",
         "variant": "IDX (P&D) / IDX-P1 (SciNLP)",
         "note": CR019_NOTE,
@@ -249,6 +250,58 @@ def cr020_rows() -> dict | None:
         )
     return {"rows": rows, "decision": r["decision"], "spend_usd": r["spend"]["total_usd"],
             "note": "Production text matching: TOKEN = whole-word matching; R1KEY = spelling variants that share the R1 name key match too (prefixtuning = Prefix tuning = prefix-tuning). Concepts unchanged; pairs and relations re-run. Development data only."}  # fmt: skip
+
+
+def rebuild_rows() -> dict | None:
+    """2026-10-16 rebuild with the current production settings: before vs rebuilt, read from reports/cr021/rebuild.json."""
+    path = Path("reports/cr021/rebuild.json")
+    if not path.exists():
+        return None
+    r = json.loads(path.read_text())
+    rows = []
+    for key, name in (("scinlp_test", "SciNLP test"), ("scinlp_dev", "SciNLP dev")):
+        for v in ("FROZEN", "IDXR1-P1", "IDXR1-P3"):
+            b, a = r[key]["before"]["relation"].get(v), r[key]["rebuild"]["relation"].get(v)
+            if b and a:
+                rows.append(
+                    {
+                        "dataset": name,
+                        "measure": f"strict relation F1 ({v})",
+                        "before": b["f1"],
+                        "rebuilt": a["f1"],
+                    }
+                )
+        b, a = (
+            r[key]["before"]["concept_entity_strict"].get("IDXR1-P1"),
+            r[key]["rebuild"]["concept_entity_strict"].get("IDXR1-P1"),
+        )
+        if b and a:
+            rows.append(
+                {
+                    "dataset": name,
+                    "measure": "concept F1 (IDXR1)",
+                    "before": b["f1"],
+                    "rebuilt": a["f1"],
+                }
+            )
+    d = r["pd"]["dev_sections"]
+    if "slice3_c2" in d and "slice3_c3" in d:
+        for k, lab in (
+            ("concept_f1", "Concept F1"),
+            ("pair_recall", "Pair Recall"),
+            ("relation_macro_f1", "Relation Macro F1"),
+            ("strict_e2e_edge_f1", "Strict E2E Edge F1"),
+        ):
+            rows.append(
+                {
+                    "dataset": "P&D dev sections 1.5, 2.6",
+                    "measure": lab,
+                    "before": d["slice3_c2"][k],
+                    "rebuilt": d["slice3_c3"][k],
+                }
+            )
+    return {"rows": rows, "spend_usd": r["spend_usd"],
+            "note": "Rebuilt with spelling-variant matching (CR-020) and the rejected-link adjudicator (CR-021) under new run ids; before = the existing runs (SciNLP test: frozen CR-012). A full re-run also changes concepts and pairs downstream and adds run-to-run variation, so differences are not a clean measure of the two settings."}  # fmt: skip
 
 
 def build_scorecard() -> dict:

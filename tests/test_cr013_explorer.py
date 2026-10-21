@@ -237,3 +237,38 @@ def test_the_two_payload_blobs_are_separate_and_the_overlay_blob_matches_python(
     from cumap.explain.eval_adapter import build_eval_payload
 
     assert json.dumps(build_eval_payload(), sort_keys=True) == json.dumps(ev, sort_keys=True)
+
+
+# ---- node funnel (right-hand panel)
+def test_funnel_container_is_in_the_detail_panel_above_the_selection(page):
+    html = Path(page[0]).read_text(encoding="utf-8")
+    assert re.search(r'<aside id="detail"[^>]*><div id="nodefunnel"></div><div class="in" id="detailin">', html)
+
+
+def test_funnel_counts_in_javascript_equal_the_python_reference_for_every_scope(page):
+    from cumap.explain.funnel import concept_funnel
+    from cumap.explain.viewer_adapter import build_trace_payload
+
+    _, res, *_ = page
+    payload = build_trace_payload()
+    assert res["funnel"]["all"] == concept_funnel(payload, None)
+    assert set(res["funnel"]["sections"]) == set(payload["sections"])
+    for sid, f in res["funnel"]["sections"].items():
+        assert f == concept_funnel(payload, sid), sid
+    steps = {s["key"]: s["n"] for s in res["funnel"]["all"]["steps"]}
+    assert steps["final"] == len(payload["final_concepts"]) == 1243
+    assert steps["after_checks"] == 1275 and steps["candidates"] - steps["after_checks"] == 118
+
+
+def test_funnel_renders_per_scope_and_never_hides_an_unaccounted_difference(page):
+    _, res, *_ = page
+    assert "Whole book" in res["funnel_html_all"] and "Section 3.3" in res["funnel_html_33"]
+    assert res["funnel_html_all"].count('class="nfr"') == 6
+    assert "Unaccounted" not in res["funnel_html_all"]  # slice3_c2 reconciles exactly
+    assert "Unaccounted difference: −3" in res["funnel_unacc_html"]
+
+
+def test_funnel_for_scinlp_uses_saved_counts_or_says_not_recorded(page):
+    _, res, *_ = page
+    assert res["sci_funnel_html"].count('class="nfr"') == 5
+    assert "Not recorded for this run" in res["sci_funnel_missing_html"]
