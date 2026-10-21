@@ -41,3 +41,9 @@ def tmp_settings(tmp_path, monkeypatch):
         }
     )
     return settings
+
+
+@pytest.fixture(autouse=True)
+def _baseline_models(monkeypatch):
+    """CR-023: tests run on the baseline tier models whatever the developer's .env says (an empty value is not re-read by dotenv)."""
+    monkeypatch.setenv("CUMAP_MODELS_CONFIG", "")

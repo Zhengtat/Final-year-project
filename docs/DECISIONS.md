@@ -392,3 +392,9 @@ Format: date · decision · reason · alternatives considered.
 - **Decision:** the CR-019 scorecard view shows a labelled "hierarchy and relation scores for SciNLP" table (A1 direct hierarchy, A2 surface-ancestor hierarchy, A3 relation macro F1; FROZEN and IDX-P1; test, frozen run), read from `reports/cr022/part_a.json`. The five headline cards are unchanged (SciNLP Ancestor Hierarchy F1 stays `NOT_EVALUABLE` there, because A2 infers identity from strings and must not be a headline, CR-012 ruling D2); the "five metrics only" rule of 2026-10-16 still holds for the headline.
 - **Reason:** spec A2 allows only a labelled variant. **Alternatives:** filling the headline cards (rejected, D2).
 - **Guard test:** `tests/test_cr012_stop1.py` exempts `src/cumap/cr022` (evaluation rescoring, no prompt, no model call), as for earlier CRs.
+
+## 2026-10-22 · CR-023: lower-cost strong tier via a model profile (owner request)
+- **Decision:** strong tier -> `o4-mini` through `configs/models_cr023.yaml` (`CUMAP_MODELS_CONFIG`), bulk stays `gpt-6-luna`; baseline saved first (archive branch/tag `cr023-models-pre-change`, local tarball SHA-256 `7715f8f3...`).
+- **Reason:** owner wants a cheaper base and a before/after comparison. o4-mini ($1.10 / $4.40) is about 45% below gpt-6-sol ($2 / $10) but about 11x above gpt-6-luna ($0.10 / $0.50), so only the strong tier moves. `default.yaml` is not edited because the CR-011 handoff pins its hash.
+- **Alternatives:** editing `default.yaml` (breaks the frozen handoff); o4-mini for both tiers (raises bulk cost, makes escalation a same-model retry); env-only override (cannot carry the price for dry-run estimates).
+- **Open:** the paid comparison (about $4.3) is awaiting approval.

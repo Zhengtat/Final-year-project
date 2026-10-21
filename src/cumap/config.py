@@ -118,6 +118,14 @@ def load_settings(config_path: Path | None = None, *, env_file: Path | None = No
     for tier_name, env_var in env_override.items():
         if tier_name in tiers_raw and os.environ.get(env_var):
             tiers_raw[tier_name] = {**tiers_raw[tier_name], "model": os.environ[env_var]}
+    if os.environ.get(
+        "CUMAP_MODELS_CONFIG"
+    ):  # CR-023: a model profile (tier models, prices, efforts) layered over the default; unset = the baseline
+        profile = yaml.safe_load(
+            (REPO_ROOT / os.environ["CUMAP_MODELS_CONFIG"]).read_text(encoding="utf-8")
+        )
+        for tier_name, tier in profile["llm"]["tiers"].items():
+            tiers_raw[tier_name] = {**tiers_raw.get(tier_name, {}), **tier}
     llm_raw["tiers"] = tiers_raw
     raw = {**raw, "llm": llm_raw}
 
