@@ -1,0 +1,2629 @@
+{
+ "release": "SciNLP-repo-e78342be",
+ "gate": {
+  "checks": {
+   "A1_all_labels_equals_cr019_per_document_for_all_three_variants": true,
+   "frozen_strict_relation_micro_equals_cr012_json": true,
+   "idx_p1_micro_equals_cr019_stage_a_json": true,
+   "frozen_concept_f1_0.352": true,
+   "frozen_pair_recall_0.545": true,
+   "frozen_strict_edge_f1_0.050": true,
+   "idx_p1_f1_0.195": true
+  },
+  "passed": true,
+  "figures": {
+   "FROZEN": {
+    "tp": 8,
+    "fp": 14,
+    "fn": 287,
+    "precision": 0.36363636363636365,
+    "recall": 0.02711864406779661,
+    "f1": 0.050473186119873815
+   },
+   "FROZEN-UNPLACED-FP": {
+    "tp": 8,
+    "fp": 105,
+    "fn": 287,
+    "precision": 0.07079646017699115,
+    "recall": 0.02711864406779661,
+    "f1": 0.0392156862745098
+   },
+   "IDX-P1": {
+    "tp": 40,
+    "fp": 75,
+    "fn": 255,
+    "precision": 0.34782608695652173,
+    "recall": 0.13559322033898305,
+    "f1": 0.1951219512195122
+   }
+  }
+ },
+ "sets": {
+  "test:frozen CR-012 STOP 4 (token matching)": {
+   "split": "test",
+   "label": "frozen CR-012 STOP 4 (token matching)",
+   "documents": [
+    "2021.acl-long.353",
+    "2024.acl-long.108-1-9.grobid",
+    "P17-1058.grobid"
+   ],
+   "variants": {
+    "FROZEN": {
+     "relation_all_labels": {
+      "tp": 8,
+      "fp": 14,
+      "fn": 287,
+      "precision": 0.36363636363636365,
+      "recall": 0.02711864406779661,
+      "f1": 0.050473186119873815
+     },
+     "A1_HIER_DIRECT": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 1,
+       "fp": 7,
+       "fn": 45,
+       "precision": 0.125,
+       "recall": 0.021739130434782608,
+       "f1": 0.03703703703703704,
+       "gold_relations_in_set": 46
+      },
+      "H1 {subclassOf}": {
+       "tp": 1,
+       "fp": 7,
+       "fn": 30,
+       "precision": 0.125,
+       "recall": 0.03225806451612903,
+       "f1": 0.05128205128205128,
+       "gold_relations_in_set": 31
+      }
+     },
+     "A2_HIER_ANC_SURF": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 1,
+       "fp": 7,
+       "fn": 38,
+       "precision": 0.125,
+       "recall": 0.02564102564102564,
+       "f1": 0.0425531914893617,
+       "gold_direct_edges": 38,
+       "gold_closure_pairs": 39,
+       "gold_pairs_added_by_closure": 1,
+       "pred_direct_edges": 8,
+       "pred_closure_pairs": 8,
+       "gold_mentions": 765,
+       "gold_surface_nodes": 238,
+       "gold_surface_collisions": 527,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 0,
+       "cycles": []
+      },
+      "H1 {subclassOf}": {
+       "tp": 1,
+       "fp": 7,
+       "fn": 29,
+       "precision": 0.125,
+       "recall": 0.03333333333333333,
+       "f1": 0.052631578947368425,
+       "gold_direct_edges": 29,
+       "gold_closure_pairs": 30,
+       "gold_pairs_added_by_closure": 1,
+       "pred_direct_edges": 8,
+       "pred_closure_pairs": 8,
+       "gold_mentions": 765,
+       "gold_surface_nodes": 238,
+       "gold_surface_collisions": 527,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 0,
+       "cycles": []
+      }
+     },
+     "A3_REL_MACRO_SCINLP": {
+      "macro_f1": 0.33333333333333337,
+      "classes_in_macro": 8,
+      "classes": {
+       "MeasuredBy": {
+        "support": 2,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "UsedFor": {
+        "support": 6,
+        "tp": 3,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "low_support": false
+       },
+       "compareWith": {
+        "support": 2,
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "low_support": true
+       },
+       "enhancedBy": {
+        "support": 2,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "evaluatedBy": {
+        "support": 2,
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "low_support": true
+       },
+       "evaluatedOn": {
+        "support": 7,
+        "tp": 2,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1.0,
+        "recall": 0.2857142857142857,
+        "f1": 0.4444444444444445,
+        "low_support": false
+       },
+       "similarWith": {
+        "support": 7,
+        "tp": 0,
+        "fp": 0,
+        "fn": 7,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "subclassOf": {
+        "support": 5,
+        "tp": 1,
+        "fp": 3,
+        "fn": 4,
+        "precision": 0.25,
+        "recall": 0.2,
+        "f1": 0.22222222222222224,
+        "low_support": false
+       }
+      },
+      "population": 33,
+      "micro": {
+       "precision": 0.7272727272727273,
+       "recall": 0.24242424242424243,
+       "f1": 0.36363636363636365
+      },
+      "direction_accuracy_given_correct_label": 1.0,
+      "no_prediction_by_outcome": {
+       "no_edge_at_pair": 22
+      }
+     }
+    },
+    "FROZEN-UNPLACED-FP": {
+     "relation_all_labels": {
+      "tp": 8,
+      "fp": 105,
+      "fn": 287,
+      "precision": 0.07079646017699115,
+      "recall": 0.02711864406779661,
+      "f1": 0.0392156862745098
+     },
+     "A1_HIER_DIRECT": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 1,
+       "fp": 22,
+       "fn": 45,
+       "precision": 0.043478260869565216,
+       "recall": 0.021739130434782608,
+       "f1": 0.02898550724637681,
+       "gold_relations_in_set": 46
+      },
+      "H1 {subclassOf}": {
+       "tp": 1,
+       "fp": 17,
+       "fn": 30,
+       "precision": 0.05555555555555555,
+       "recall": 0.03225806451612903,
+       "f1": 0.04081632653061224,
+       "gold_relations_in_set": 31
+      }
+     },
+     "A2_HIER_ANC_SURF": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 1,
+       "fp": 22,
+       "fn": 38,
+       "precision": 0.043478260869565216,
+       "recall": 0.02564102564102564,
+       "f1": 0.03225806451612904,
+       "gold_direct_edges": 38,
+       "gold_closure_pairs": 39,
+       "gold_pairs_added_by_closure": 1,
+       "pred_direct_edges": 8,
+       "pred_closure_pairs": 8,
+       "gold_mentions": 765,
+       "gold_surface_nodes": 238,
+       "gold_surface_collisions": 527,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 15,
+       "cycles": []
+      },
+      "H1 {subclassOf}": {
+       "tp": 1,
+       "fp": 17,
+       "fn": 29,
+       "precision": 0.05555555555555555,
+       "recall": 0.03333333333333333,
+       "f1": 0.04166666666666667,
+       "gold_direct_edges": 29,
+       "gold_closure_pairs": 30,
+       "gold_pairs_added_by_closure": 1,
+       "pred_direct_edges": 8,
+       "pred_closure_pairs": 8,
+       "gold_mentions": 765,
+       "gold_surface_nodes": 238,
+       "gold_surface_collisions": 527,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 10,
+       "cycles": []
+      }
+     },
+     "A3_REL_MACRO_SCINLP": {
+      "macro_f1": 0.33333333333333337,
+      "classes_in_macro": 8,
+      "classes": {
+       "MeasuredBy": {
+        "support": 2,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "UsedFor": {
+        "support": 6,
+        "tp": 3,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "low_support": false
+       },
+       "compareWith": {
+        "support": 2,
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "low_support": true
+       },
+       "enhancedBy": {
+        "support": 2,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "evaluatedBy": {
+        "support": 2,
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "low_support": true
+       },
+       "evaluatedOn": {
+        "support": 7,
+        "tp": 2,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1.0,
+        "recall": 0.2857142857142857,
+        "f1": 0.4444444444444445,
+        "low_support": false
+       },
+       "similarWith": {
+        "support": 7,
+        "tp": 0,
+        "fp": 0,
+        "fn": 7,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "subclassOf": {
+        "support": 5,
+        "tp": 1,
+        "fp": 3,
+        "fn": 4,
+        "precision": 0.25,
+        "recall": 0.2,
+        "f1": 0.22222222222222224,
+        "low_support": false
+       }
+      },
+      "population": 33,
+      "micro": {
+       "precision": 0.7272727272727273,
+       "recall": 0.24242424242424243,
+       "f1": 0.36363636363636365
+      },
+      "direction_accuracy_given_correct_label": 1.0,
+      "no_prediction_by_outcome": {
+       "no_edge_at_pair": 22
+      }
+     }
+    },
+    "IDX-P1": {
+     "relation_all_labels": {
+      "tp": 40,
+      "fp": 75,
+      "fn": 255,
+      "precision": 0.34782608695652173,
+      "recall": 0.13559322033898305,
+      "f1": 0.1951219512195122
+     },
+     "A1_HIER_DIRECT": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 4,
+       "fp": 20,
+       "fn": 42,
+       "precision": 0.16666666666666666,
+       "recall": 0.08695652173913043,
+       "f1": 0.11428571428571427,
+       "gold_relations_in_set": 46
+      },
+      "H1 {subclassOf}": {
+       "tp": 4,
+       "fp": 15,
+       "fn": 27,
+       "precision": 0.21052631578947367,
+       "recall": 0.12903225806451613,
+       "f1": 0.15999999999999998,
+       "gold_relations_in_set": 31
+      }
+     },
+     "A2_HIER_ANC_SURF": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 5,
+       "fp": 19,
+       "fn": 34,
+       "precision": 0.20833333333333334,
+       "recall": 0.1282051282051282,
+       "f1": 0.15873015873015872,
+       "gold_direct_edges": 38,
+       "gold_closure_pairs": 39,
+       "gold_pairs_added_by_closure": 1,
+       "pred_direct_edges": 22,
+       "pred_closure_pairs": 22,
+       "gold_mentions": 765,
+       "gold_surface_nodes": 238,
+       "gold_surface_collisions": 527,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 2,
+       "cycles": []
+      },
+      "H1 {subclassOf}": {
+       "tp": 5,
+       "fp": 14,
+       "fn": 25,
+       "precision": 0.2631578947368421,
+       "recall": 0.16666666666666666,
+       "f1": 0.2040816326530612,
+       "gold_direct_edges": 29,
+       "gold_closure_pairs": 30,
+       "gold_pairs_added_by_closure": 1,
+       "pred_direct_edges": 17,
+       "pred_closure_pairs": 17,
+       "gold_mentions": 765,
+       "gold_surface_nodes": 238,
+       "gold_surface_collisions": 527,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 2,
+       "cycles": []
+      }
+     },
+     "A3_REL_MACRO_SCINLP": {
+      "macro_f1": 0.3168843901196842,
+      "classes_in_macro": 10,
+      "classes": {
+       "MeasuredBy": {
+        "support": 8,
+        "tp": 3,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1.0,
+        "recall": 0.375,
+        "f1": 0.5454545454545454,
+        "low_support": false
+       },
+       "UsedFor": {
+        "support": 46,
+        "tp": 14,
+        "fp": 0,
+        "fn": 32,
+        "precision": 1.0,
+        "recall": 0.30434782608695654,
+        "f1": 0.4666666666666667,
+        "low_support": false
+       },
+       "compareWith": {
+        "support": 29,
+        "tp": 5,
+        "fp": 1,
+        "fn": 24,
+        "precision": 0.8333333333333334,
+        "recall": 0.1724137931034483,
+        "f1": 0.28571428571428575,
+        "low_support": false
+       },
+       "enhancedBy": {
+        "support": 33,
+        "tp": 7,
+        "fp": 0,
+        "fn": 26,
+        "precision": 1.0,
+        "recall": 0.21212121212121213,
+        "f1": 0.35,
+        "low_support": false
+       },
+       "evaluatedBy": {
+        "support": 6,
+        "tp": 3,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "low_support": false
+       },
+       "evaluatedOn": {
+        "support": 15,
+        "tp": 3,
+        "fp": 0,
+        "fn": 12,
+        "precision": 1.0,
+        "recall": 0.2,
+        "f1": 0.33333333333333337,
+        "low_support": false
+       },
+       "partOf": {
+        "support": 2,
+        "tp": 0,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "similarWith": {
+        "support": 12,
+        "tp": 0,
+        "fp": 0,
+        "fn": 12,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "subclassOf": {
+        "support": 27,
+        "tp": 4,
+        "fp": 3,
+        "fn": 23,
+        "precision": 0.5714285714285714,
+        "recall": 0.14814814814814814,
+        "f1": 0.23529411764705882,
+        "low_support": false
+       },
+       "trainedWith": {
+        "support": 6,
+        "tp": 1,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1.0,
+        "recall": 0.16666666666666666,
+        "f1": 0.2857142857142857,
+        "low_support": false
+       }
+      },
+      "population": 184,
+      "micro": {
+       "precision": 0.8888888888888888,
+       "recall": 0.21739130434782608,
+       "f1": 0.34934497816593885
+      },
+      "direction_accuracy_given_correct_label": 1.0,
+      "no_prediction_by_outcome": {
+       "no_edge_at_pair": 139
+      }
+     }
+    }
+   }
+  },
+  "test:CR-021 rebuild `cr021test` (r1key matching)": {
+   "split": "test",
+   "label": "CR-021 rebuild `cr021test` (r1key matching)",
+   "documents": [
+    "2021.acl-long.353",
+    "2024.acl-long.108-1-9.grobid",
+    "P17-1058.grobid"
+   ],
+   "variants": {
+    "FROZEN": {
+     "relation_all_labels": {
+      "tp": 7,
+      "fp": 17,
+      "fn": 288,
+      "precision": 0.2916666666666667,
+      "recall": 0.023728813559322035,
+      "f1": 0.0438871473354232
+     },
+     "A1_HIER_DIRECT": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 0,
+       "fp": 7,
+       "fn": 46,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 46
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 7,
+       "fn": 31,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 31
+      }
+     },
+     "A2_HIER_ANC_SURF": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 0,
+       "fp": 7,
+       "fn": 39,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_direct_edges": 38,
+       "gold_closure_pairs": 39,
+       "gold_pairs_added_by_closure": 1,
+       "pred_direct_edges": 7,
+       "pred_closure_pairs": 7,
+       "gold_mentions": 765,
+       "gold_surface_nodes": 238,
+       "gold_surface_collisions": 527,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 0,
+       "cycles": []
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 7,
+       "fn": 30,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_direct_edges": 29,
+       "gold_closure_pairs": 30,
+       "gold_pairs_added_by_closure": 1,
+       "pred_direct_edges": 7,
+       "pred_closure_pairs": 7,
+       "gold_mentions": 765,
+       "gold_surface_nodes": 238,
+       "gold_surface_collisions": 527,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 0,
+       "cycles": []
+      }
+     },
+     "A3_REL_MACRO_SCINLP": {
+      "macro_f1": 0.2763888888888889,
+      "classes_in_macro": 8,
+      "classes": {
+       "MeasuredBy": {
+        "support": 4,
+        "tp": 0,
+        "fp": 0,
+        "fn": 4,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "UsedFor": {
+        "support": 7,
+        "tp": 3,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1.0,
+        "recall": 0.42857142857142855,
+        "f1": 0.6,
+        "low_support": false
+       },
+       "compareWith": {
+        "support": 3,
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "f1": 0.5,
+        "low_support": true
+       },
+       "enhancedBy": {
+        "support": 2,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "evaluatedBy": {
+        "support": 2,
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "low_support": true
+       },
+       "evaluatedOn": {
+        "support": 7,
+        "tp": 2,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1.0,
+        "recall": 0.2857142857142857,
+        "f1": 0.4444444444444445,
+        "low_support": false
+       },
+       "similarWith": {
+        "support": 8,
+        "tp": 0,
+        "fp": 0,
+        "fn": 8,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "subclassOf": {
+        "support": 4,
+        "tp": 0,
+        "fp": 3,
+        "fn": 4,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       }
+      },
+      "population": 37,
+      "micro": {
+       "precision": 0.7,
+       "recall": 0.1891891891891892,
+       "f1": 0.2978723404255319
+      },
+      "direction_accuracy_given_correct_label": 1.0,
+      "no_prediction_by_outcome": {
+       "no_edge_at_pair": 27
+      }
+     }
+    },
+    "FROZEN-UNPLACED-FP": {
+     "relation_all_labels": {
+      "tp": 7,
+      "fp": 102,
+      "fn": 288,
+      "precision": 0.06422018348623854,
+      "recall": 0.023728813559322035,
+      "f1": 0.034653465346534656
+     },
+     "A1_HIER_DIRECT": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 0,
+       "fp": 19,
+       "fn": 46,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 46
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 14,
+       "fn": 31,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 31
+      }
+     },
+     "A2_HIER_ANC_SURF": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 0,
+       "fp": 19,
+       "fn": 39,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_direct_edges": 38,
+       "gold_closure_pairs": 39,
+       "gold_pairs_added_by_closure": 1,
+       "pred_direct_edges": 7,
+       "pred_closure_pairs": 7,
+       "gold_mentions": 765,
+       "gold_surface_nodes": 238,
+       "gold_surface_collisions": 527,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 12,
+       "cycles": []
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 14,
+       "fn": 30,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_direct_edges": 29,
+       "gold_closure_pairs": 30,
+       "gold_pairs_added_by_closure": 1,
+       "pred_direct_edges": 7,
+       "pred_closure_pairs": 7,
+       "gold_mentions": 765,
+       "gold_surface_nodes": 238,
+       "gold_surface_collisions": 527,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 7,
+       "cycles": []
+      }
+     },
+     "A3_REL_MACRO_SCINLP": {
+      "macro_f1": 0.2763888888888889,
+      "classes_in_macro": 8,
+      "classes": {
+       "MeasuredBy": {
+        "support": 4,
+        "tp": 0,
+        "fp": 0,
+        "fn": 4,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "UsedFor": {
+        "support": 7,
+        "tp": 3,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1.0,
+        "recall": 0.42857142857142855,
+        "f1": 0.6,
+        "low_support": false
+       },
+       "compareWith": {
+        "support": 3,
+        "tp": 1,
+        "fp": 0,
+        "fn": 2,
+        "precision": 1.0,
+        "recall": 0.3333333333333333,
+        "f1": 0.5,
+        "low_support": true
+       },
+       "enhancedBy": {
+        "support": 2,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "evaluatedBy": {
+        "support": 2,
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "low_support": true
+       },
+       "evaluatedOn": {
+        "support": 7,
+        "tp": 2,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1.0,
+        "recall": 0.2857142857142857,
+        "f1": 0.4444444444444445,
+        "low_support": false
+       },
+       "similarWith": {
+        "support": 8,
+        "tp": 0,
+        "fp": 0,
+        "fn": 8,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "subclassOf": {
+        "support": 4,
+        "tp": 0,
+        "fp": 3,
+        "fn": 4,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       }
+      },
+      "population": 37,
+      "micro": {
+       "precision": 0.7,
+       "recall": 0.1891891891891892,
+       "f1": 0.2978723404255319
+      },
+      "direction_accuracy_given_correct_label": 1.0,
+      "no_prediction_by_outcome": {
+       "no_edge_at_pair": 27
+      }
+     }
+    },
+    "IDX-P1": {
+     "relation_all_labels": {
+      "tp": 29,
+      "fp": 83,
+      "fn": 266,
+      "precision": 0.25892857142857145,
+      "recall": 0.09830508474576272,
+      "f1": 0.14250614250614252
+     },
+     "A1_HIER_DIRECT": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 1,
+       "fp": 19,
+       "fn": 45,
+       "precision": 0.05,
+       "recall": 0.021739130434782608,
+       "f1": 0.030303030303030304,
+       "gold_relations_in_set": 46
+      },
+      "H1 {subclassOf}": {
+       "tp": 1,
+       "fp": 14,
+       "fn": 30,
+       "precision": 0.06666666666666667,
+       "recall": 0.03225806451612903,
+       "f1": 0.043478260869565216,
+       "gold_relations_in_set": 31
+      }
+     },
+     "A2_HIER_ANC_SURF": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 2,
+       "fp": 18,
+       "fn": 37,
+       "precision": 0.1,
+       "recall": 0.05128205128205128,
+       "f1": 0.06779661016949151,
+       "gold_direct_edges": 38,
+       "gold_closure_pairs": 39,
+       "gold_pairs_added_by_closure": 1,
+       "pred_direct_edges": 18,
+       "pred_closure_pairs": 18,
+       "gold_mentions": 765,
+       "gold_surface_nodes": 238,
+       "gold_surface_collisions": 527,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 2,
+       "cycles": []
+      },
+      "H1 {subclassOf}": {
+       "tp": 2,
+       "fp": 13,
+       "fn": 28,
+       "precision": 0.13333333333333333,
+       "recall": 0.06666666666666667,
+       "f1": 0.08888888888888888,
+       "gold_direct_edges": 29,
+       "gold_closure_pairs": 30,
+       "gold_pairs_added_by_closure": 1,
+       "pred_direct_edges": 13,
+       "pred_closure_pairs": 13,
+       "gold_mentions": 765,
+       "gold_surface_nodes": 238,
+       "gold_surface_collisions": 527,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 2,
+       "cycles": []
+      }
+     },
+     "A3_REL_MACRO_SCINLP": {
+      "macro_f1": 0.2585632183908046,
+      "classes_in_macro": 10,
+      "classes": {
+       "MeasuredBy": {
+        "support": 8,
+        "tp": 2,
+        "fp": 0,
+        "fn": 6,
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4,
+        "low_support": false
+       },
+       "UsedFor": {
+        "support": 52,
+        "tp": 13,
+        "fp": 0,
+        "fn": 39,
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4,
+        "low_support": false
+       },
+       "compareWith": {
+        "support": 34,
+        "tp": 5,
+        "fp": 1,
+        "fn": 29,
+        "precision": 0.8333333333333334,
+        "recall": 0.14705882352941177,
+        "f1": 0.25,
+        "low_support": false
+       },
+       "enhancedBy": {
+        "support": 33,
+        "tp": 2,
+        "fp": 0,
+        "fn": 31,
+        "precision": 1.0,
+        "recall": 0.06060606060606061,
+        "f1": 0.1142857142857143,
+        "low_support": false
+       },
+       "evaluatedBy": {
+        "support": 6,
+        "tp": 3,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "low_support": false
+       },
+       "evaluatedOn": {
+        "support": 12,
+        "tp": 2,
+        "fp": 0,
+        "fn": 10,
+        "precision": 1.0,
+        "recall": 0.16666666666666666,
+        "f1": 0.2857142857142857,
+        "low_support": false
+       },
+       "partOf": {
+        "support": 2,
+        "tp": 0,
+        "fp": 2,
+        "fn": 2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "similarWith": {
+        "support": 13,
+        "tp": 0,
+        "fp": 0,
+        "fn": 13,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "subclassOf": {
+        "support": 25,
+        "tp": 1,
+        "fp": 3,
+        "fn": 24,
+        "precision": 0.25,
+        "recall": 0.04,
+        "f1": 0.06896551724137932,
+        "low_support": false
+       },
+       "trainedWith": {
+        "support": 4,
+        "tp": 1,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4,
+        "low_support": false
+       }
+      },
+      "population": 189,
+      "micro": {
+       "precision": 0.8285714285714286,
+       "recall": 0.15343915343915343,
+       "f1": 0.2589285714285714
+      },
+      "direction_accuracy_given_correct_label": 1.0,
+      "no_prediction_by_outcome": {
+       "no_edge_at_pair": 154
+      }
+     }
+    },
+    "IDXR1-P1": {
+     "relation_all_labels": {
+      "tp": 30,
+      "fp": 83,
+      "fn": 265,
+      "precision": 0.26548672566371684,
+      "recall": 0.1016949152542373,
+      "f1": 0.14705882352941177
+     },
+     "A1_HIER_DIRECT": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 2,
+       "fp": 19,
+       "fn": 44,
+       "precision": 0.09523809523809523,
+       "recall": 0.043478260869565216,
+       "f1": 0.059701492537313425,
+       "gold_relations_in_set": 46
+      },
+      "H1 {subclassOf}": {
+       "tp": 2,
+       "fp": 14,
+       "fn": 29,
+       "precision": 0.125,
+       "recall": 0.06451612903225806,
+       "f1": 0.0851063829787234,
+       "gold_relations_in_set": 31
+      }
+     },
+     "A2_HIER_ANC_SURF": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 3,
+       "fp": 18,
+       "fn": 36,
+       "precision": 0.14285714285714285,
+       "recall": 0.07692307692307693,
+       "f1": 0.1,
+       "gold_direct_edges": 38,
+       "gold_closure_pairs": 39,
+       "gold_pairs_added_by_closure": 1,
+       "pred_direct_edges": 21,
+       "pred_closure_pairs": 21,
+       "gold_mentions": 765,
+       "gold_surface_nodes": 238,
+       "gold_surface_collisions": 527,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 0,
+       "cycles": []
+      },
+      "H1 {subclassOf}": {
+       "tp": 3,
+       "fp": 13,
+       "fn": 27,
+       "precision": 0.1875,
+       "recall": 0.1,
+       "f1": 0.13043478260869568,
+       "gold_direct_edges": 29,
+       "gold_closure_pairs": 30,
+       "gold_pairs_added_by_closure": 1,
+       "pred_direct_edges": 16,
+       "pred_closure_pairs": 16,
+       "gold_mentions": 765,
+       "gold_surface_nodes": 238,
+       "gold_surface_collisions": 527,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 0,
+       "cycles": []
+      }
+     },
+     "A3_REL_MACRO_SCINLP": {
+      "macro_f1": 0.23230149404062445,
+      "classes_in_macro": 10,
+      "classes": {
+       "MeasuredBy": {
+        "support": 10,
+        "tp": 2,
+        "fp": 0,
+        "fn": 8,
+        "precision": 1.0,
+        "recall": 0.2,
+        "f1": 0.33333333333333337,
+        "low_support": false
+       },
+       "UsedFor": {
+        "support": 56,
+        "tp": 13,
+        "fp": 0,
+        "fn": 43,
+        "precision": 1.0,
+        "recall": 0.23214285714285715,
+        "f1": 0.37681159420289856,
+        "low_support": false
+       },
+       "compareWith": {
+        "support": 42,
+        "tp": 5,
+        "fp": 1,
+        "fn": 37,
+        "precision": 0.8333333333333334,
+        "recall": 0.11904761904761904,
+        "f1": 0.20833333333333331,
+        "low_support": false
+       },
+       "enhancedBy": {
+        "support": 34,
+        "tp": 2,
+        "fp": 1,
+        "fn": 32,
+        "precision": 0.6666666666666666,
+        "recall": 0.058823529411764705,
+        "f1": 0.10810810810810811,
+        "low_support": false
+       },
+       "evaluatedBy": {
+        "support": 7,
+        "tp": 3,
+        "fp": 0,
+        "fn": 4,
+        "precision": 1.0,
+        "recall": 0.42857142857142855,
+        "f1": 0.6,
+        "low_support": false
+       },
+       "evaluatedOn": {
+        "support": 12,
+        "tp": 2,
+        "fp": 0,
+        "fn": 10,
+        "precision": 1.0,
+        "recall": 0.16666666666666666,
+        "f1": 0.2857142857142857,
+        "low_support": false
+       },
+       "partOf": {
+        "support": 2,
+        "tp": 0,
+        "fp": 2,
+        "fn": 2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "similarWith": {
+        "support": 14,
+        "tp": 0,
+        "fp": 0,
+        "fn": 14,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "subclassOf": {
+        "support": 26,
+        "tp": 2,
+        "fp": 4,
+        "fn": 24,
+        "precision": 0.3333333333333333,
+        "recall": 0.07692307692307693,
+        "f1": 0.125,
+        "low_support": false
+       },
+       "trainedWith": {
+        "support": 6,
+        "tp": 1,
+        "fp": 0,
+        "fn": 5,
+        "precision": 1.0,
+        "recall": 0.16666666666666666,
+        "f1": 0.2857142857142857,
+        "low_support": false
+       }
+      },
+      "population": 209,
+      "micro": {
+       "precision": 0.7894736842105263,
+       "recall": 0.14354066985645933,
+       "f1": 0.24291497975708504
+      },
+      "direction_accuracy_given_correct_label": 1.0,
+      "no_prediction_by_outcome": {
+       "no_edge_at_pair": 171
+      }
+     }
+    }
+   }
+  },
+  "dev:CR-019 dev runs `cr019dev` (token matching)": {
+   "split": "dev",
+   "label": "CR-019 dev runs `cr019dev` (token matching)",
+   "documents": [
+    "2021.acl-long.295",
+    "2024.acl-long.144-1-9.grobid",
+    "P05-1008.grobid",
+    "P16-1007.grobid",
+    "P02-1004.grobid",
+    "P03-1014.grobid"
+   ],
+   "variants": {
+    "FROZEN": {
+     "relation_all_labels": {
+      "tp": 8,
+      "fp": 44,
+      "fn": 171,
+      "precision": 0.15384615384615385,
+      "recall": 0.0446927374301676,
+      "f1": 0.06926406926406926
+     },
+     "A1_HIER_DIRECT": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 0,
+       "fp": 8,
+       "fn": 20,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 20
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 8,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 8
+      }
+     },
+     "A2_HIER_ANC_SURF": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 0,
+       "fp": 8,
+       "fn": 20,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_direct_edges": 20,
+       "gold_closure_pairs": 20,
+       "gold_pairs_added_by_closure": 0,
+       "pred_direct_edges": 8,
+       "pred_closure_pairs": 8,
+       "gold_mentions": 671,
+       "gold_surface_nodes": 310,
+       "gold_surface_collisions": 361,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 0,
+       "cycles": []
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 8,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_direct_edges": 8,
+       "gold_closure_pairs": 8,
+       "gold_pairs_added_by_closure": 0,
+       "pred_direct_edges": 8,
+       "pred_closure_pairs": 8,
+       "gold_mentions": 671,
+       "gold_surface_nodes": 310,
+       "gold_surface_collisions": 361,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 0,
+       "cycles": []
+      }
+     },
+     "A3_REL_MACRO_SCINLP": {
+      "macro_f1": 0.3317460317460318,
+      "classes_in_macro": 8,
+      "classes": {
+       "MeasuredBy": {
+        "support": 5,
+        "tp": 2,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1.0,
+        "recall": 0.4,
+        "f1": 0.5714285714285715,
+        "low_support": false
+       },
+       "UsedFor": {
+        "support": 4,
+        "tp": 1,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4,
+        "low_support": false
+       },
+       "compareWith": {
+        "support": 5,
+        "tp": 2,
+        "fp": 2,
+        "fn": 3,
+        "precision": 0.5,
+        "recall": 0.4,
+        "f1": 0.4444444444444445,
+        "low_support": false
+       },
+       "enhancedBy": {
+        "support": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "evaluatedBy": {
+        "support": 1,
+        "tp": 1,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1": 0.6666666666666666,
+        "low_support": true
+       },
+       "evaluatedOn": {
+        "support": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "partOf": {
+        "support": 4,
+        "tp": 2,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.6666666666666666,
+        "recall": 0.5,
+        "f1": 0.5714285714285715,
+        "low_support": false
+       },
+       "similarWith": {
+        "support": 3,
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "subclassOf": {
+        "support": 0,
+        "tp": 0,
+        "fp": 3,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": null,
+        "f1": null,
+        "low_support": false
+       }
+      },
+      "population": 24,
+      "micro": {
+       "precision": 0.5333333333333333,
+       "recall": 0.3333333333333333,
+       "f1": 0.4102564102564102
+      },
+      "direction_accuracy_given_correct_label": 1.0,
+      "no_prediction_by_outcome": {
+       "no_edge_at_pair": 9
+      }
+     }
+    },
+    "FROZEN-UNPLACED-FP": {
+     "relation_all_labels": {
+      "tp": 8,
+      "fp": 123,
+      "fn": 171,
+      "precision": 0.061068702290076333,
+      "recall": 0.0446927374301676,
+      "f1": 0.05161290322580645
+     },
+     "A1_HIER_DIRECT": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 0,
+       "fp": 18,
+       "fn": 20,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 20
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 16,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 8
+      }
+     },
+     "A2_HIER_ANC_SURF": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 0,
+       "fp": 18,
+       "fn": 20,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_direct_edges": 20,
+       "gold_closure_pairs": 20,
+       "gold_pairs_added_by_closure": 0,
+       "pred_direct_edges": 8,
+       "pred_closure_pairs": 8,
+       "gold_mentions": 671,
+       "gold_surface_nodes": 310,
+       "gold_surface_collisions": 361,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 10,
+       "cycles": []
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 16,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_direct_edges": 8,
+       "gold_closure_pairs": 8,
+       "gold_pairs_added_by_closure": 0,
+       "pred_direct_edges": 8,
+       "pred_closure_pairs": 8,
+       "gold_mentions": 671,
+       "gold_surface_nodes": 310,
+       "gold_surface_collisions": 361,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 8,
+       "cycles": []
+      }
+     },
+     "A3_REL_MACRO_SCINLP": {
+      "macro_f1": 0.3317460317460318,
+      "classes_in_macro": 8,
+      "classes": {
+       "MeasuredBy": {
+        "support": 5,
+        "tp": 2,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1.0,
+        "recall": 0.4,
+        "f1": 0.5714285714285715,
+        "low_support": false
+       },
+       "UsedFor": {
+        "support": 4,
+        "tp": 1,
+        "fp": 0,
+        "fn": 3,
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4,
+        "low_support": false
+       },
+       "compareWith": {
+        "support": 5,
+        "tp": 2,
+        "fp": 2,
+        "fn": 3,
+        "precision": 0.5,
+        "recall": 0.4,
+        "f1": 0.4444444444444445,
+        "low_support": false
+       },
+       "enhancedBy": {
+        "support": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "evaluatedBy": {
+        "support": 1,
+        "tp": 1,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1": 0.6666666666666666,
+        "low_support": true
+       },
+       "evaluatedOn": {
+        "support": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "partOf": {
+        "support": 4,
+        "tp": 2,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.6666666666666666,
+        "recall": 0.5,
+        "f1": 0.5714285714285715,
+        "low_support": false
+       },
+       "similarWith": {
+        "support": 3,
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "subclassOf": {
+        "support": 0,
+        "tp": 0,
+        "fp": 3,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": null,
+        "f1": null,
+        "low_support": false
+       }
+      },
+      "population": 24,
+      "micro": {
+       "precision": 0.5333333333333333,
+       "recall": 0.3333333333333333,
+       "f1": 0.4102564102564102
+      },
+      "direction_accuracy_given_correct_label": 1.0,
+      "no_prediction_by_outcome": {
+       "no_edge_at_pair": 9
+      }
+     }
+    },
+    "IDX-P1": {
+     "relation_all_labels": {
+      "tp": 15,
+      "fp": 117,
+      "fn": 164,
+      "precision": 0.11363636363636363,
+      "recall": 0.08379888268156424,
+      "f1": 0.09646302250803859
+     },
+     "A1_HIER_DIRECT": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 0,
+       "fp": 18,
+       "fn": 20,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 20
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 16,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 8
+      }
+     },
+     "A2_HIER_ANC_SURF": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 1,
+       "fp": 17,
+       "fn": 19,
+       "precision": 0.05555555555555555,
+       "recall": 0.05,
+       "f1": 0.052631578947368425,
+       "gold_direct_edges": 20,
+       "gold_closure_pairs": 20,
+       "gold_pairs_added_by_closure": 0,
+       "pred_direct_edges": 13,
+       "pred_closure_pairs": 13,
+       "gold_mentions": 671,
+       "gold_surface_nodes": 310,
+       "gold_surface_collisions": 361,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 5,
+       "cycles": []
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 16,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_direct_edges": 8,
+       "gold_closure_pairs": 8,
+       "gold_pairs_added_by_closure": 0,
+       "pred_direct_edges": 12,
+       "pred_closure_pairs": 12,
+       "gold_mentions": 671,
+       "gold_surface_nodes": 310,
+       "gold_surface_collisions": 361,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 4,
+       "cycles": []
+      }
+     },
+     "A3_REL_MACRO_SCINLP": {
+      "macro_f1": 0.29285714285714287,
+      "classes_in_macro": 11,
+      "classes": {
+       "MeasuredBy": {
+        "support": 12,
+        "tp": 3,
+        "fp": 0,
+        "fn": 9,
+        "precision": 1.0,
+        "recall": 0.25,
+        "f1": 0.4,
+        "low_support": false
+       },
+       "UsedFor": {
+        "support": 13,
+        "tp": 2,
+        "fp": 1,
+        "fn": 11,
+        "precision": 0.6666666666666666,
+        "recall": 0.15384615384615385,
+        "f1": 0.25,
+        "low_support": false
+       },
+       "compareWith": {
+        "support": 13,
+        "tp": 3,
+        "fp": 2,
+        "fn": 10,
+        "precision": 0.6,
+        "recall": 0.23076923076923078,
+        "f1": 0.33333333333333337,
+        "low_support": false
+       },
+       "enhancedBy": {
+        "support": 5,
+        "tp": 0,
+        "fp": 0,
+        "fn": 5,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "evaluatedBy": {
+        "support": 3,
+        "tp": 2,
+        "fp": 2,
+        "fn": 1,
+        "precision": 0.5,
+        "recall": 0.6666666666666666,
+        "f1": 0.5714285714285715,
+        "low_support": true
+       },
+       "evaluatedOn": {
+        "support": 2,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "partOf": {
+        "support": 5,
+        "tp": 3,
+        "fp": 1,
+        "fn": 2,
+        "precision": 0.75,
+        "recall": 0.6,
+        "f1": 0.6666666666666665,
+        "low_support": false
+       },
+       "similarWith": {
+        "support": 4,
+        "tp": 0,
+        "fp": 0,
+        "fn": 4,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "subclassOf": {
+        "support": 2,
+        "tp": 0,
+        "fp": 4,
+        "fn": 2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "subtaskOf": {
+        "support": 4,
+        "tp": 0,
+        "fp": 1,
+        "fn": 4,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "trainedWith": {
+        "support": 2,
+        "tp": 2,
+        "fp": 0,
+        "fn": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "low_support": true
+       }
+      },
+      "population": 65,
+      "micro": {
+       "precision": 0.5769230769230769,
+       "recall": 0.23076923076923078,
+       "f1": 0.3296703296703296
+      },
+      "direction_accuracy_given_correct_label": 1.0,
+      "no_prediction_by_outcome": {
+       "no_edge_at_pair": 39
+      }
+     }
+    }
+   }
+  },
+  "dev:CR-021 dev rebuild `cr021dev` (r1key matching)": {
+   "split": "dev",
+   "label": "CR-021 dev rebuild `cr021dev` (r1key matching)",
+   "documents": [
+    "2021.acl-long.295",
+    "2024.acl-long.144-1-9.grobid",
+    "P05-1008.grobid",
+    "P16-1007.grobid",
+    "P02-1004.grobid",
+    "P03-1014.grobid"
+   ],
+   "variants": {
+    "FROZEN": {
+     "relation_all_labels": {
+      "tp": 6,
+      "fp": 42,
+      "fn": 173,
+      "precision": 0.125,
+      "recall": 0.0335195530726257,
+      "f1": 0.05286343612334802
+     },
+     "A1_HIER_DIRECT": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 0,
+       "fp": 8,
+       "fn": 20,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 20
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 8,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 8
+      }
+     },
+     "A2_HIER_ANC_SURF": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 0,
+       "fp": 8,
+       "fn": 20,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_direct_edges": 20,
+       "gold_closure_pairs": 20,
+       "gold_pairs_added_by_closure": 0,
+       "pred_direct_edges": 8,
+       "pred_closure_pairs": 8,
+       "gold_mentions": 671,
+       "gold_surface_nodes": 310,
+       "gold_surface_collisions": 361,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 0,
+       "cycles": []
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 8,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_direct_edges": 8,
+       "gold_closure_pairs": 8,
+       "gold_pairs_added_by_closure": 0,
+       "pred_direct_edges": 8,
+       "pred_closure_pairs": 8,
+       "gold_mentions": 671,
+       "gold_surface_nodes": 310,
+       "gold_surface_collisions": 361,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 0,
+       "cycles": []
+      }
+     },
+     "A3_REL_MACRO_SCINLP": {
+      "macro_f1": 0.20061728395061726,
+      "classes_in_macro": 9,
+      "classes": {
+       "MeasuredBy": {
+        "support": 3,
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "UsedFor": {
+        "support": 7,
+        "tp": 1,
+        "fp": 0,
+        "fn": 6,
+        "precision": 1.0,
+        "recall": 0.14285714285714285,
+        "f1": 0.25,
+        "low_support": false
+       },
+       "compareWith": {
+        "support": 5,
+        "tp": 4,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "low_support": false
+       },
+       "enhancedBy": {
+        "support": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "evaluatedBy": {
+        "support": 1,
+        "tp": 1,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1": 0.6666666666666666,
+        "low_support": true
+       },
+       "evaluatedOn": {
+        "support": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "partOf": {
+        "support": 4,
+        "tp": 0,
+        "fp": 1,
+        "fn": 4,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "similarWith": {
+        "support": 3,
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "subclassOf": {
+        "support": 0,
+        "tp": 0,
+        "fp": 3,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": null,
+        "f1": null,
+        "low_support": false
+       },
+       "subtaskOf": {
+        "support": 2,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       }
+      },
+      "population": 27,
+      "micro": {
+       "precision": 0.5454545454545454,
+       "recall": 0.2222222222222222,
+       "f1": 0.3157894736842105
+      },
+      "direction_accuracy_given_correct_label": 1.0,
+      "no_prediction_by_outcome": {
+       "no_edge_at_pair": 16
+      }
+     }
+    },
+    "FROZEN-UNPLACED-FP": {
+     "relation_all_labels": {
+      "tp": 6,
+      "fp": 126,
+      "fn": 173,
+      "precision": 0.045454545454545456,
+      "recall": 0.0335195530726257,
+      "f1": 0.03858520900321543
+     },
+     "A1_HIER_DIRECT": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 0,
+       "fp": 18,
+       "fn": 20,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 20
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 16,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 8
+      }
+     },
+     "A2_HIER_ANC_SURF": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 0,
+       "fp": 18,
+       "fn": 20,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_direct_edges": 20,
+       "gold_closure_pairs": 20,
+       "gold_pairs_added_by_closure": 0,
+       "pred_direct_edges": 8,
+       "pred_closure_pairs": 8,
+       "gold_mentions": 671,
+       "gold_surface_nodes": 310,
+       "gold_surface_collisions": 361,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 10,
+       "cycles": []
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 16,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_direct_edges": 8,
+       "gold_closure_pairs": 8,
+       "gold_pairs_added_by_closure": 0,
+       "pred_direct_edges": 8,
+       "pred_closure_pairs": 8,
+       "gold_mentions": 671,
+       "gold_surface_nodes": 310,
+       "gold_surface_collisions": 361,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 8,
+       "cycles": []
+      }
+     },
+     "A3_REL_MACRO_SCINLP": {
+      "macro_f1": 0.20061728395061726,
+      "classes_in_macro": 9,
+      "classes": {
+       "MeasuredBy": {
+        "support": 3,
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "UsedFor": {
+        "support": 7,
+        "tp": 1,
+        "fp": 0,
+        "fn": 6,
+        "precision": 1.0,
+        "recall": 0.14285714285714285,
+        "f1": 0.25,
+        "low_support": false
+       },
+       "compareWith": {
+        "support": 5,
+        "tp": 4,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.8,
+        "f1": 0.888888888888889,
+        "low_support": false
+       },
+       "enhancedBy": {
+        "support": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "evaluatedBy": {
+        "support": 1,
+        "tp": 1,
+        "fp": 1,
+        "fn": 0,
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1": 0.6666666666666666,
+        "low_support": true
+       },
+       "evaluatedOn": {
+        "support": 1,
+        "tp": 0,
+        "fp": 0,
+        "fn": 1,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "partOf": {
+        "support": 4,
+        "tp": 0,
+        "fp": 1,
+        "fn": 4,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "similarWith": {
+        "support": 3,
+        "tp": 0,
+        "fp": 0,
+        "fn": 3,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "subclassOf": {
+        "support": 0,
+        "tp": 0,
+        "fp": 3,
+        "fn": 0,
+        "precision": 0.0,
+        "recall": null,
+        "f1": null,
+        "low_support": false
+       },
+       "subtaskOf": {
+        "support": 2,
+        "tp": 0,
+        "fp": 0,
+        "fn": 2,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       }
+      },
+      "population": 27,
+      "micro": {
+       "precision": 0.5454545454545454,
+       "recall": 0.2222222222222222,
+       "f1": 0.3157894736842105
+      },
+      "direction_accuracy_given_correct_label": 1.0,
+      "no_prediction_by_outcome": {
+       "no_edge_at_pair": 16
+      }
+     }
+    },
+    "IDX-P1": {
+     "relation_all_labels": {
+      "tp": 13,
+      "fp": 121,
+      "fn": 166,
+      "precision": 0.09701492537313433,
+      "recall": 0.07262569832402235,
+      "f1": 0.0830670926517572
+     },
+     "A1_HIER_DIRECT": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 0,
+       "fp": 18,
+       "fn": 20,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 20
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 16,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 8
+      }
+     },
+     "A2_HIER_ANC_SURF": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 1,
+       "fp": 17,
+       "fn": 19,
+       "precision": 0.05555555555555555,
+       "recall": 0.05,
+       "f1": 0.052631578947368425,
+       "gold_direct_edges": 20,
+       "gold_closure_pairs": 20,
+       "gold_pairs_added_by_closure": 0,
+       "pred_direct_edges": 13,
+       "pred_closure_pairs": 13,
+       "gold_mentions": 671,
+       "gold_surface_nodes": 310,
+       "gold_surface_collisions": 361,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 5,
+       "cycles": []
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 16,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_direct_edges": 8,
+       "gold_closure_pairs": 8,
+       "gold_pairs_added_by_closure": 0,
+       "pred_direct_edges": 12,
+       "pred_closure_pairs": 12,
+       "gold_mentions": 671,
+       "gold_surface_nodes": 310,
+       "gold_surface_collisions": 361,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 4,
+       "cycles": []
+      }
+     },
+     "A3_REL_MACRO_SCINLP": {
+      "macro_f1": 0.23600288600288602,
+      "classes_in_macro": 11,
+      "classes": {
+       "MeasuredBy": {
+        "support": 13,
+        "tp": 2,
+        "fp": 0,
+        "fn": 11,
+        "precision": 1.0,
+        "recall": 0.15384615384615385,
+        "f1": 0.2666666666666667,
+        "low_support": false
+       },
+       "UsedFor": {
+        "support": 14,
+        "tp": 2,
+        "fp": 0,
+        "fn": 12,
+        "precision": 1.0,
+        "recall": 0.14285714285714285,
+        "f1": 0.25,
+        "low_support": false
+       },
+       "compareWith": {
+        "support": 13,
+        "tp": 5,
+        "fp": 0,
+        "fn": 8,
+        "precision": 1.0,
+        "recall": 0.38461538461538464,
+        "f1": 0.5555555555555556,
+        "low_support": false
+       },
+       "enhancedBy": {
+        "support": 5,
+        "tp": 0,
+        "fp": 0,
+        "fn": 5,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "evaluatedBy": {
+        "support": 3,
+        "tp": 2,
+        "fp": 2,
+        "fn": 1,
+        "precision": 0.5,
+        "recall": 0.6666666666666666,
+        "f1": 0.5714285714285715,
+        "low_support": true
+       },
+       "evaluatedOn": {
+        "support": 5,
+        "tp": 0,
+        "fp": 0,
+        "fn": 5,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "partOf": {
+        "support": 5,
+        "tp": 1,
+        "fp": 1,
+        "fn": 4,
+        "precision": 0.5,
+        "recall": 0.2,
+        "f1": 0.28571428571428575,
+        "low_support": false
+       },
+       "similarWith": {
+        "support": 4,
+        "tp": 0,
+        "fp": 0,
+        "fn": 4,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "subclassOf": {
+        "support": 2,
+        "tp": 0,
+        "fp": 4,
+        "fn": 2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "subtaskOf": {
+        "support": 4,
+        "tp": 0,
+        "fp": 1,
+        "fn": 4,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "trainedWith": {
+        "support": 2,
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "low_support": true
+       }
+      },
+      "population": 70,
+      "micro": {
+       "precision": 0.6190476190476191,
+       "recall": 0.18571428571428572,
+       "f1": 0.28571428571428575
+      },
+      "direction_accuracy_given_correct_label": 1.0,
+      "no_prediction_by_outcome": {
+       "no_edge_at_pair": 49
+      }
+     }
+    },
+    "IDXR1-P1": {
+     "relation_all_labels": {
+      "tp": 17,
+      "fp": 116,
+      "fn": 162,
+      "precision": 0.12781954887218044,
+      "recall": 0.09497206703910614,
+      "f1": 0.10897435897435898
+     },
+     "A1_HIER_DIRECT": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 0,
+       "fp": 18,
+       "fn": 20,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 20
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 16,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_relations_in_set": 8
+      }
+     },
+     "A2_HIER_ANC_SURF": {
+      "H2 {subclassOf, subtaskOf}": {
+       "tp": 1,
+       "fp": 17,
+       "fn": 19,
+       "precision": 0.05555555555555555,
+       "recall": 0.05,
+       "f1": 0.052631578947368425,
+       "gold_direct_edges": 20,
+       "gold_closure_pairs": 20,
+       "gold_pairs_added_by_closure": 0,
+       "pred_direct_edges": 13,
+       "pred_closure_pairs": 13,
+       "gold_mentions": 671,
+       "gold_surface_nodes": 310,
+       "gold_surface_collisions": 361,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 5,
+       "cycles": []
+      },
+      "H1 {subclassOf}": {
+       "tp": 0,
+       "fp": 16,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0,
+       "gold_direct_edges": 8,
+       "gold_closure_pairs": 8,
+       "gold_pairs_added_by_closure": 0,
+       "pred_direct_edges": 12,
+       "pred_closure_pairs": 12,
+       "gold_mentions": 671,
+       "gold_surface_nodes": 310,
+       "gold_surface_collisions": 361,
+       "gold_self_relations": 0,
+       "unplaced_counted_as_fp": 4,
+       "cycles": []
+      }
+     },
+     "A3_REL_MACRO_SCINLP": {
+      "macro_f1": 0.2523376623376623,
+      "classes_in_macro": 11,
+      "classes": {
+       "MeasuredBy": {
+        "support": 13,
+        "tp": 2,
+        "fp": 0,
+        "fn": 11,
+        "precision": 1.0,
+        "recall": 0.15384615384615385,
+        "f1": 0.2666666666666667,
+        "low_support": false
+       },
+       "UsedFor": {
+        "support": 14,
+        "tp": 2,
+        "fp": 0,
+        "fn": 12,
+        "precision": 1.0,
+        "recall": 0.14285714285714285,
+        "f1": 0.25,
+        "low_support": false
+       },
+       "compareWith": {
+        "support": 16,
+        "tp": 8,
+        "fp": 1,
+        "fn": 8,
+        "precision": 0.8888888888888888,
+        "recall": 0.5,
+        "f1": 0.64,
+        "low_support": false
+       },
+       "enhancedBy": {
+        "support": 5,
+        "tp": 0,
+        "fp": 0,
+        "fn": 5,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "evaluatedBy": {
+        "support": 4,
+        "tp": 3,
+        "fp": 2,
+        "fn": 1,
+        "precision": 0.6,
+        "recall": 0.75,
+        "f1": 0.6666666666666665,
+        "low_support": false
+       },
+       "evaluatedOn": {
+        "support": 5,
+        "tp": 0,
+        "fp": 0,
+        "fn": 5,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "partOf": {
+        "support": 5,
+        "tp": 1,
+        "fp": 1,
+        "fn": 4,
+        "precision": 0.5,
+        "recall": 0.2,
+        "f1": 0.28571428571428575,
+        "low_support": false
+       },
+       "similarWith": {
+        "support": 4,
+        "tp": 0,
+        "fp": 0,
+        "fn": 4,
+        "precision": null,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "subclassOf": {
+        "support": 3,
+        "tp": 0,
+        "fp": 4,
+        "fn": 3,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": true
+       },
+       "subtaskOf": {
+        "support": 4,
+        "tp": 0,
+        "fp": 1,
+        "fn": 4,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0,
+        "low_support": false
+       },
+       "trainedWith": {
+        "support": 2,
+        "tp": 1,
+        "fp": 0,
+        "fn": 1,
+        "precision": 1.0,
+        "recall": 0.5,
+        "f1": 0.6666666666666666,
+        "low_support": true
+       }
+      },
+      "population": 75,
+      "micro": {
+       "precision": 0.6538461538461539,
+       "recall": 0.22666666666666666,
+       "f1": 0.33663366336633666
+      },
+      "direction_accuracy_given_correct_label": 1.0,
+      "no_prediction_by_outcome": {
+       "no_edge_at_pair": 49
+      }
+     }
+    }
+   }
+  }
+ },
+ "hashes_unchanged": true,
+ "n_hashed": 20
+}
