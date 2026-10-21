@@ -141,3 +141,22 @@ def test_mapping_applies_only_approved_entries_with_direction_swap_and_counts_th
     assert excl == Counter(
         {"not_approved:UsedFor": 1, "unmapped:MeasuredBy": 1, "unmapped:similarWith": 1}
     )
+
+
+def test_scorecard_cr019_view_carries_the_cr022_table_as_labelled_variants_not_headline_cards():
+    from pathlib import Path
+
+    import pytest
+
+    from cumap.cr017.scorecard import build_scorecard
+
+    if not Path("reports/cr022/part_a.json").exists():
+        pytest.skip("Part A report absent")
+    sc = build_scorecard()["cr019"]
+    rows = sc["cr022"]["rows"]
+    assert {r["variant"] for r in rows} == {"FROZEN", "IDX-P1"} and len(rows) == 2 * (2 + 2 + 1)
+    assert any(r["measure"].startswith("ancestor hierarchy on surface nodes") for r in rows)
+    headline = sc["datasets"]["scinlp"]["E0"]["headline"]
+    assert all(
+        "surface" not in str(card).lower() for card in headline
+    )  # the surface variant never becomes a headline card
