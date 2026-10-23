@@ -549,3 +549,14 @@ Format: date · decision · reason · alternatives considered.
 - **Decision:** keep the D3 pair budget for SciNLP runs. The arm's runs stay as a comparison (KG explorer Run option "CR-043 all-pairs arm (not adopted)").
 - **Reason:** the rule was written before the run; classifying every pair raised recall but added about as many unmarked edges, so pair delivery is not the main bottleneck. The next target is concept spans (N0 + N1 = 55% of losses).
 - **Alternatives:** adopting on the recall gain (refused: no post-hoc change of the rule).
+
+## 2026-10-24 · CR-044: term lexicon v0.5 (owner ruling on intake row 10) and the owner's review decisions on the handoff drafts
+- **Decision:** `configs/term_lexicon_v0.5.yaml` = v0.4 + one approved `same` entry, "data link protocol / link-level protocol" (intake sheet `lexicon_intake_slice3_c2.csv` row 10; owner ruling "same", 2026-10-24). It joins the existing v0.4 entry "link-layer protocol / link-level protocol" into one same-set. New production runs load v0.5 (`concept_policy.yaml` `term_lexicon`); v0.3 (frozen, hash-pinned) and v0.4 are unchanged. Written with `write_lexicon_version` (never in place).
+- **Reason:** the owner's ruling settles the cross-sheet conflict v0.4 left out (CR-007 sheet row 8 "different", v0.2 "neither list"); the latest owner ruling wins for this pair.
+- **Owner review of the handoff drafts (recorded, 2026-10-24; no switch changed in this CR):**
+  - CR-038 qualifier amendments (registry v1.5, relation_choice v6, relation_qualifiers v6): **approved** for their pre-registered measurement.
+  - CR-039 misconception family (registry v1.6, relation_family v5, relation_choice v7): **approved for now, may be refined later**, for its measurement.
+  - CR-040 v1.4 wording review: **approved**; the wording goes into a new registry version (v1.4 is not edited in place).
+  - CR-037 identity judge: the owner asked for elements of GraphJudge (Huang et al., EMNLP 2025) to be brought in; a v2 prompt follows in its own CR. Measurement cap about $3.
+  - Switches (`qualifier_checks`, `identity_resolver`, `assembly`): the owner asked for a recommendation; recommended `qualifier_checks` v1 on, `identity_resolver` u1 after the judge measurement, `assembly` legacy for now. Awaiting the owner's on/off.
+- **Alternatives:** editing v0.4 in place (refused: lexicon versions are never edited); a separate entry kept apart from the link-layer set (not possible: same-sets are transitive in the loader).
