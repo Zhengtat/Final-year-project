@@ -1,0 +1,1 @@
+{"decision": "same", "evidence_quote": "this quote is not in the sentence", "reason": "Invented quote.", "confidence": 0.8, "_usage": {"input_tokens": 100, "output_tokens": 30}}

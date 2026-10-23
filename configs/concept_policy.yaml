@@ -18,3 +18,7 @@ backfill: false
 # review rows. A pair the rules cannot decide falls back to today's LLM path. NOT adopted: `legacy` stays the default. A run made with `u1`
 # records it in v4_concepts.json extra.
 identity_resolver: legacy
+# identity_judge (CR-037): "off" | "v1". DRAFT, never run. With identity_resolver: u1 and identity_judge: "v1" the U5 judge (prompts/identity_judge/v1,
+# schema built from configs/identity_rules.yaml judge.options) decides a pair that U0-U4 could not decide, instead of the rejected-link adjudicator
+# (generator links) and canonicalize v2 (new concepts). Quote the value (an unquoted off is a YAML boolean). Waits for the owner's review of the prompt.
+identity_judge: "off"

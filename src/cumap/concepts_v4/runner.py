@@ -118,6 +118,7 @@ class ConceptRun:
         promote_rejected: bool = False,
         rejected_link_policy: str = "off",
         identity_resolver: str = "legacy",
+        identity_judge: str = "off",
         emphasised: dict[str, set[str]] | None = None,
         retriever_k: int = 30,
         card_cap: int = 120,
@@ -301,7 +302,9 @@ class ConceptRun:
                         "trivial": False,
                     }
                 )
-                if self.rejected_link_policy == "adjudicate":
+                if self.identity_resolver == "u1" and self.identity_judge == "v1":
+                    self._judge_link(out, meta, sid, order, m, node, paras)  # CR-037 DRAFT (U5), never run
+                elif self.rejected_link_policy == "adjudicate":
                     self._adjudicate(out, meta, sid, order, m, node, paras)
                 elif self.promote_rejected and more_specific(m["surface"], node):
                     self._promote(out, meta, sid, order, m, node)
@@ -441,6 +444,51 @@ class ConceptRun:
         out.store.add(node)
         meta["new_nodes"].append(node.id)
         out.merges.append({"rule_id": "G-link-rejected-promoted", "node_id": node.id, "rejected_target": rejected.id, "surface": m["surface"], "section_id": sid, "evidence": m["evidence"], "trivial": False})  # fmt: skip
+
+    def _judge_link(
+        self,
+        out: RunOutput,
+        meta: dict,
+        sid: str,
+        order: int,
+        m: dict,
+        node: Node,
+        paras: dict[str, str],
+    ) -> None:
+        """CR-037 DRAFT, `identity_resolver: u1` + `identity_judge: "v1"`: the U5 judge decides a link U0-U4 could not (instead of the rejected-link
+        adjudicator). same -> the mention is recorded and the form becomes an alias; narrower / broader / new -> its own node (`_promote`), the answer
+        logged; not_a_concept (input A drops the item), a failed evidence quote, or incompatible node types -> not linked. Every decision is logged."""
+        from cumap.expert_kg.canonical_rules import types_compatible
+        from cumap.expert_kg.identity_judge import judge_pair, load_judge_prompt
+        from cumap.expert_kg.relations import split_sentences
+
+        ev = " ".join(m["evidence"].split())
+        sentence = next(
+            (
+                " ".join(s.split())
+                for s in split_sentences(" ".join(paras.values()))
+                if ev and ev in " ".join(s.split())
+            ),
+            m["evidence"],
+        )
+        log = {"rule_id": "G-link-judged", "node_id": node.id, "surface": m["surface"], "section_id": sid, "evidence": m["evidence"], "trivial": False}  # fmt: skip
+        if not types_compatible(m.get("node_type") or node.node_type, node.node_type):
+            out.merges.append({**log, "decision": "new", "reason": "node types incompatible, no call"})
+            self._promote(out, meta, sid, order, m, node)
+            return
+        r = judge_pair(
+            self.client, load_judge_prompt(), domain=self.domain, surface=m["surface"], target_name=node.name,
+            target_aliases=node.aliases, target_type=node.node_type, target_gloss=node.definition or node.gloss, sentence=sentence,
+            fixture_name=self.fixture,
+        )  # fmt: skip
+        out.merges.append({**log, "decision": r.decision, "raw_decision": r.raw_decision, "reason": r.reason, "input_hash": r.input_hash})
+        if r.decision == "same":
+            node.mentions.append({"section_id": sid, "order": order, "role": m["role"], "para": m["para"], "evidence": m["evidence"], "surface": m["surface"], "linked_by": "generator"})  # fmt: skip
+            meta["mentions"].append(node.id)
+            if m["surface"] not in node.aliases:
+                node.aliases.append(m["surface"])
+        elif r.decision in ("narrower", "broader", "new"):
+            self._promote(out, meta, sid, order, m, node)
 
     def _adjudicate(
         self,

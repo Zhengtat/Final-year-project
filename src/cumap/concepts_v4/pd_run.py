@@ -89,12 +89,21 @@ def canonicalise(
     *,
     progress=print,
     identity_resolver: str = "legacy",
+    identity_judge: str = "off",
+    domain: str = "computer networking",
 ) -> CanonResult:
     """R0-R4 over the v4 nodes in book order. A node whose first mention merges into an existing concept maps to it.
     CR-035 `identity_resolver="u1"`: the registry search embeds every form with the name + gloss recipe, merge-log entries carry U-ids (the old id in
     `legacy_rule_id`), weak alias cues become review rows and generator-stage entries keep their own rule id. "legacy" is byte-identical to before."""
     orig = {u["section_id"]: u["orig_section"] for u in units}
     chapter_of = {u["orig_section"]: int(u["chapter_num"]) for u in units}
+    judge_prompt = None
+    if identity_judge == "v1":  # CR-037 DRAFT: needs the u1 resolver; never run
+        if identity_resolver != "u1":
+            raise ValueError("identity_judge v1 needs identity_resolver u1")
+        from cumap.expert_kg.identity_judge import load_judge_prompt
+
+        judge_prompt = load_judge_prompt()
     texts: dict[str, str] = {}
     for u in units:
         texts[u["orig_section"]] = (texts.get(u["orig_section"], "") + "\n\n" + u["text"]).strip()
@@ -129,6 +138,8 @@ def canonicalise(
             review_below=0.70,
             alias_ctx=ctx,
             identity_resolver=identity_resolver,
+            judge_prompt=judge_prompt,
+            judge_domain=domain,
         )
         node_map[n.id] = o.concept_id
         concept = reg.get(o.concept_id)

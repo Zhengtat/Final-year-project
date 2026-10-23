@@ -94,6 +94,11 @@ def stage_concepts(
     nlp = spacy.load("en_core_web_sm")
     embed = X.Embedder(settings.embeddings.model)
     resolver = _identity_resolver()
+    from cumap.expert_kg.identity_judge import resolve_judge_mode
+
+    judge = resolve_judge_mode()
+    if judge != "off" and resolver != "u1":
+        raise ValueError("identity_judge needs identity_resolver: u1")
     from cumap.concepts_v4.schema import make_schemas
     from cumap.cr012.schema_profile import active_profile
 
@@ -132,6 +137,7 @@ def stage_concepts(
         promote_rejected=_promote_rejected() if promote_rejected is None else promote_rejected,
         rejected_link_policy=_policy()["rejected_link_policy"],
         identity_resolver=resolver,
+        identity_judge=judge,
         progress=print,
         schemas=make_schemas(profile.entity_types if profile else None),
     )
@@ -146,6 +152,7 @@ def stage_concepts(
             "spend_usd": round(client.spent_usd, 4),
             "backfill": do_backfill,
             **({"identity_resolver": resolver} if resolver != "legacy" else {}),
+            **({"identity_judge": judge} if judge != "off" else {}),
         },
     )
     overrides = (
@@ -162,6 +169,8 @@ def stage_concepts(
         embed,
         overrides,
         identity_resolver=resolver,
+        identity_judge=judge,
+        domain=profile.domain if profile else "computer networking",
     )
     texts = {}
     for u in units:

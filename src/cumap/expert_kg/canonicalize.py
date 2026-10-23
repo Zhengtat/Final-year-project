@@ -278,6 +278,8 @@ def canonicalize_mention(
     review_below: float | None = None,
     alias_ctx: AliasContext | None = None,
     identity_resolver: str = "legacy",
+    judge_prompt: PromptTemplate | None = None,
+    judge_domain: str = "computer networking",
 ) -> CanonicalizationOutcome:
     """CR-035: `identity_resolver="u1"` searches the registry with `top_k_similar_forms` (name + gloss, every form), logs the U-ids (the old id in
     `legacy_rule_id`) and records weak alias cues; "legacy" is the pre-CR-035 behaviour, byte-identical.
@@ -302,7 +304,7 @@ def canonicalize_mention(
         )
     outcome = _canonicalize(
         client, prompt_template, registry, mention, similarity_threshold, k, fixture_name,
-        overrides, type_aware, review_below, alias_ctx, identity_resolver, triples,
+        overrides, type_aware, review_below, alias_ctx, identity_resolver, triples, judge_prompt, judge_domain,
     )
     if triples is not None:
         outcome.weak_cue_ids = [c for c in (weak_ids or []) if c != outcome.concept_id]
@@ -337,6 +339,7 @@ def _weak_cue_ids(registry, mention, alias_ctx, type_aware) -> list[str]:
 def _canonicalize(
     client, prompt_template, registry, mention, similarity_threshold, k, fixture_name,
     overrides, type_aware, review_below, alias_ctx, identity_resolver="legacy", triples=None,
+    judge_prompt=None, judge_domain="computer networking",
 ) -> CanonicalizationOutcome:
     # Exact-string duplicate: auto-merge, no LLM call (unless a human has specifically
     # blocked this exact pair via never_merge).
@@ -423,6 +426,11 @@ def _canonicalize(
             related_ids=related_ids,
         )
 
+    if judge_prompt is not None:  # CR-037 DRAFT: the U5 judge replaces the canonicalize call (identity_resolver u1 + identity_judge v1)
+        return _judge_candidates(
+            client, judge_prompt, judge_domain, registry, mention, candidates, similarity_threshold, review_below, related_ids, fixture_name,
+        )
+
     candidates_block = "\n".join(
         f"{i}. {c.canonical_name} ({c.node_type}) — {c.definition or '(no definition)'}"
         for i, (c, _sim) in enumerate(candidates)
@@ -487,6 +495,51 @@ def _canonicalize(
         matched_concept_id=matched_concept_id,
         reason=result.output.reason,
     )
+
+
+def _judge_candidates(
+    client, judge_prompt, domain, registry, mention, candidates, threshold, review_below, related_ids, fixture_name
+) -> CanonicalizationOutcome:
+    """CR-037 DRAFT (U5 for input B): candidates at or above the offer threshold, best first; the first same / narrower / broader ends the search.
+    `new` goes on to the next candidate; `not_a_concept` is only a flag on this path (the node is kept, owner default D-5); a failed evidence quote
+    is `no_decision` and also goes on. Nothing matched: a new concept."""
+    from cumap.expert_kg.identity_judge import judge_pair
+
+    for cand, sim in candidates:
+        if sim < threshold:
+            break
+        gloss = cand.definition or (cand.mentions[0].quote if cand.mentions else None)
+        r = judge_pair(
+            client, judge_prompt, domain=domain, surface=mention.canonical_name, target_name=cand.canonical_name,
+            target_aliases=cand.aliases, target_type=cand.node_type, target_gloss=gloss, sentence=mention.evidence_quote,
+            fixture_name=fixture_name,
+        )  # fmt: skip
+        if r.decision == "same":
+            if review_below is not None and sim < review_below:
+                new_concept = registry.add_new(mention)
+                return CanonicalizationOutcome(
+                    decision="review", concept_id=new_concept.concept_id, llm_called=True, matched_concept_id=cand.concept_id,
+                    reason=r.reason, review=True, similarity=sim, related_ids=related_ids, rule_id="U5",
+                )  # fmt: skip
+            registry.merge_alias(cand.concept_id, mention)
+            return CanonicalizationOutcome(
+                decision="same", concept_id=cand.concept_id, llm_called=True, matched_concept_id=cand.concept_id,
+                reason=r.reason, similarity=sim, related_ids=related_ids, rule_id="U5", evidence_quote=r.evidence_quote,
+            )  # fmt: skip
+        if r.decision in ("narrower", "broader"):
+            new_concept = registry.add_new(mention)
+            return CanonicalizationOutcome(
+                decision=r.decision, concept_id=new_concept.concept_id, llm_called=True, matched_concept_id=cand.concept_id,
+                reason=r.reason, related_ids=related_ids, rule_id="U5",
+            )  # fmt: skip
+        if r.decision == "not_a_concept":
+            new_concept = registry.add_new(mention)
+            return CanonicalizationOutcome(
+                decision="different", concept_id=new_concept.concept_id, llm_called=True,
+                reason="not_a_concept (review flag, node kept): " + r.reason, related_ids=related_ids, rule_id="U5",
+            )  # fmt: skip
+    new_concept = registry.add_new(mention)
+    return CanonicalizationOutcome(decision="different", concept_id=new_concept.concept_id, llm_called=True, related_ids=related_ids)
 
 
 def write_merge_review_sheet(rows: list[dict], path: Path) -> None:

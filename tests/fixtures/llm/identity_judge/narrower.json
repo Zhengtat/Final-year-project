@@ -1,0 +1,1 @@
+{"decision": "narrower", "evidence_quote": "A hash table is a dictionary", "reason": "A hash table is one kind of dictionary.", "confidence": 0.8, "_usage": {"input_tokens": 100, "output_tokens": 30}}
