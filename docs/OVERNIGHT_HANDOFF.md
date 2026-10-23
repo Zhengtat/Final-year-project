@@ -133,6 +133,7 @@ Do these in order. Tasks marked "after" need the earlier one merged first.
 | T5 | cr-031-oracle-ladder-idx | see git log / cr-031-complete | 889 | $0 | merged; reports/cr031/ generated, acceptance table reproduced |
 | T6 | cr-032-hierarchy-t1 | see git log / cr-032-complete | 901 | $0 | merged; real-identity SciNLP figure awaits owner marks on scinlp_hier_identity_sheet.csv |
 | T7 | cr-033-fact-f1 | see git log / cr-033-complete | 906 | $0 | merged; pre-registration commit 6c1d7a1 precedes the test run |
+| T8 | cr-034-qualifier-checks | see git log / cr-034-complete | 924 | $0 | merged; switch default off |
 
 
 ### 0.7 Where the data is (all read-only for these tasks)

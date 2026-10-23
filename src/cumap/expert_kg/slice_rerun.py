@@ -189,11 +189,19 @@ def relations_stage(
     prompt_versions: tuple[str, str, str] = ("v3", "v4", "v4"),
     evidence_fn=None,
     limit: int | None = None,
+    qualifier_checks: str | None = None,
 ) -> Checkpoint:
-    """`prompt_versions` (family, choice, qualifiers), `evidence_fn` (pair dict -> pair dict with the evidence text in `sentence`)
+    """`qualifier_checks` (CR-034): None reads `configs/relation_policy.yaml` (default "off"). `prompt_versions` (family, choice, qualifiers), `evidence_fn` (pair dict -> pair dict with the evidence text in `sentence`)
     and `limit` (classify at most this many new pairs, then stop) exist for CR-019 Stage B; the defaults are the production stage."""
     concepts = {c.concept_id: c for c in _restore_concept_registry(cp, embed_fn).all()}
     matcher = MentionMatcher(concept_vocab(list(concepts.values())))
+    from cumap.expert_kg import qualifier_checks as QC
+
+    qc_mode = QC.resolve_mode(qualifier_checks)
+    if qc_mode != "off":
+        cp.selection_stats["qualifier_checks"] = (
+            qc_mode  # recorded only when on, so older runs and the default stay unchanged
+        )
     # CR-008: choice v4 (adds `same_concept`, no edge), qualifiers v4 (no corrects_intuition / intuition)
     fam, rel, qual = (
         load_prompt(prompts_dir, t, v)
@@ -235,6 +243,7 @@ def relations_stage(
                 same_concept=True,
                 containment_grounding=key
                 in anchor_pairs,  # CR-009: anchor pairs only (a code check, never shown to a model)
+                qualifier_checks=qc_mode,
             )
         except BudgetExceededError:
             save_checkpoint(cp, run_dir)
@@ -293,8 +302,10 @@ def build_pair_registry(cp: Checkpoint) -> PairRegistry:
                     polarity=q["polarity"],
                     modality=q["modality"],
                     conditions=q["conditions"],
-                    part_type=q["part_type"],
-                    dimension=q["dimension"],
+                    part_type=q.get("part_type"),
+                    dimension=q.get(
+                        "dimension"
+                    ),  # CR-034: later qualifier schemas have no dimension field
                     surface_phrase=q["surface_phrase"],
                 ),
             )

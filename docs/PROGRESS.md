@@ -158,3 +158,6 @@ Docs only: ARCHITECTURE dual-layer section marked historical; CLAUDE.md rules 28
 
 ## CR-033 SciNLP concept-level fact F1 (2026-10-23)
 `FACT-C1-SURF-R1`, pre-registered in `DECISIONS.md` before the test run. `uv run python -m cumap.cr033.run --split dev|test` ($0) wrote `reports/cr033/fact_f1_{dev,test}.{json,md}`. Test E0 (frozen run) fact F1 FROZEN 0.078 / IDX-P1 0.328 / IDX-P3 0.337 against strict relation F1 0.050 / 0.195 / 0.332; 211 gold facts from 295 mention-level relations; 53 of the IDX-P1 true-positive facts include 40 whose own quote also matches a gold mention relation (0.755). Dev E0 IDX-P1 0.109. 5 new tests (`tests/test_cr033.py`). Not done: explorer scorecard and presentation metric definitions.
+
+## CR-034 qualifier code checks (2026-10-23)
+`qualifier_checks: "off" | "v1"`, default off; `uv run python -m cumap.cr034.replay` ($0, read-only) wrote `reports/cr034/qualifier_replay_slice3_c2.{json,md}`: of 549 edges, 134 carry at least one flag; `v1` would reject 1 (the wrong negation; 2 of 3 negated edges have a cue), flag `qualifier_misfit:dimension` 7, `qualifier_misfit:part_type` 2, `surface_phrase_long` 128. 18 new tests (`tests/test_cr034.py`, mock backend), 924 tests pass, ruff clean. A YAML pitfall found and tested: an unquoted `off` parses as False.

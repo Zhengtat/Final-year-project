@@ -144,7 +144,7 @@ def build_growth(
                 continue
             seen.add(e.edge_id)
             raw = pair_edges[e.edge_id]
-            negated = raw["qualifiers"]["polarity"] == "negated"
+            negated = raw["qualifiers"].get("polarity") == "negated"
             edges.append(
                 GEdge(
                     id=e.edge_id,
@@ -167,8 +167,8 @@ def build_growth(
                 "sentence": raw["pair"]["sentence"],
                 "statement": raw["statement"],
                 "quote": raw["evidence_quote"],
-                "polarity": raw["qualifiers"]["polarity"],
-                "modality": raw["qualifiers"]["modality"],
+                "polarity": raw["qualifiers"].get("polarity", "affirmed"),
+                "modality": raw["qualifiers"].get("modality", ""),  # CR-034: any subset of the modality values (older runs keep `never`)
                 "chapter": snap.chapter_num,
                 "source_chapter": e.source_chapter,
                 "target_chapter": e.target_chapter,

@@ -196,9 +196,16 @@ class V3Result:
     grounding: dict = field(default_factory=dict)
     type_errors: list[str] = field(default_factory=list)
     prompt_hashes: dict = field(default_factory=dict)  # step -> input hash of the logged prompt
+    qualifier_flags: list[str] = field(
+        default_factory=list
+    )  # CR-034 (only with qualifier_checks="v1")
 
     def to_dict(self) -> dict:
         d = {k: v for k, v in self.__dict__.items() if k != "pair"}
+        if not d.get("qualifier_flags"):
+            d.pop(
+                "qualifier_flags", None
+            )  # older results (and the default switch) serialise byte-identically
         d["pair"] = self.pair.__dict__
         return d
 
@@ -218,6 +225,7 @@ def classify_pair_v3(
     same_concept: bool = False,  # CR-008: offer the `same_concept` outcome (relation_choice v4)
     model_tier: str = "strong",
     containment_grounding: bool = False,
+    qualifier_checks: str = "off",  # CR-034: "off" (today's behaviour) | "v1" (qualifier_checks.py)
     fixtures: tuple[str, str, str] = ("default", "default", "default"),
 ) -> V3Result:
     x, y = cx.canonical_name, cy.canonical_name
@@ -358,5 +366,12 @@ def classify_pair_v3(
     if o.relation == "acts_on" and not q.output.action_type:
         res.reason = "acts_on_without_action_type"
         return res
+    if qualifier_checks == "v1":
+        from cumap.expert_kg import qualifier_checks as QC
+
+        res.qualifier_flags = QC.check_edge(registry, o.relation, res.qualifiers, o.evidence_quote)
+        if QC.REJECT_REASON in res.qualifier_flags:  # owner default D-4: rejected and logged
+            res.reason = QC.REJECT_REASON
+            return res
     res.outcome, res.reason = "edge", None
     return res

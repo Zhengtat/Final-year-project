@@ -1,0 +1,6 @@
+# CR-034: relation-stage switches for NEW runs (older runs are unchanged; a run made with a switch on records it in `selection_stats`).
+# qualifier_checks:
+#   off -> today's behaviour
+#   v1  -> qualifier code checks (src/cumap/expert_kg/qualifier_checks.py): a negated edge whose evidence quote has no negation cue is rejected with
+#          reason `negation_without_cue` (owner default D-4, logged); qualifier misfit and a surface phrase as long as the quote are recorded as flags.
+qualifier_checks: "off"
