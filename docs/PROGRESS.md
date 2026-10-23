@@ -150,3 +150,8 @@ Docs only: ARCHITECTURE dual-layer section marked historical; CLAUDE.md rules 28
 
 ## CR-031 oracle ladder under IDX-P1 (2026-10-23)
 `uv run python -m cumap.cr031.oracle_ladder` ($0) wrote `reports/cr031/oracle_ladder.{json,md}`. Determinism gate PASSED: all `FROZEN` and acceptance-table figures reproduce to three decimals; E0 `FROZEN` / `IDX-P1` / `IDX-P3` match `reports/cr019/stage_a.json` to 1e-12; the 12 source checkpoints were hash-identical before and after. Earliest-failure codes under `IDX-P1` match Appendix A (E0 N0 76 / N1 35 / P0 67 / R0 12 / R1 8 / recovered 97 / strict TP 40; E3-M and E4-M P0 1, R0 99, recovered 169, TP 100). 3 new tests (plus a guard-test allowance for the read-only module); 889 tests pass.
+
+## CR-032 broader Hierarchy F1 (2026-10-23)
+`uv run python -m cumap.cr032.run` ($0) wrote `reports/cr032/hier_t1.{json,md}`; gate PASSED, 49 source files hash-identical before and after. P&D held-out `HIER-T1` F1 (frozen `is_a` F1) E0 0.081 (0.114), E1 0.171 (0.213), E2 0.157 (0.141), E3 0.502 (0.619), E4 0.610 (0.699); pilot has runs for E0 (2 sections) and one section for E1 to E4. SciNLP test, frozen run, `HIER-T1-SURF-R1` F1 FROZEN 0.036 / IDX-P1 0.143 (765 gold mentions -> 209 pseudo-nodes). 12 new tests (`tests/test_cr032.py`).
+- **Awaiting owner:** blind sheet `data/interim/suggestions/scinlp_hier_identity_sheet.csv` (90 rows; type the same `concept_group` label on rows naming one concept within a paper), copy the marked sheet to `data/gold/scinlp_hier_identity_sheet_marked.csv`; then rerun the module for the real-identity figure.
+- **Open:** explorer scorecard and presentation metric definition not updated; the registry has no explicit `hierarchy` flag.

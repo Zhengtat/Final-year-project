@@ -1,0 +1,26 @@
+version: 1
+# CR-032: broader Hierarchy F1 (transitive relations). New, named scorer variants reported BESIDE the frozen CR-017 / CR-022 numbers (rule 35);
+# the frozen `cr017-1` scorer is not changed. Scorer/reporting only: no model is run.
+variants:
+  HIER-T1: closure per hierarchy relation, pooled pairs keyed (relation, concept, ancestor); concept matching as in the frozen CR-017 scorer (P&D) or a scoped owner identity sheet (SciNLP)
+  HIER-T1-SURF-R1: SciNLP only; identity inferred from strings (CR-008 R1 name key plus acronym <-> long form within one paper); a labelled cross-check, never a headline
+
+hierarchy_relations:              # read from the registry, never hard-coded (rule 11)
+  source: registry
+  family: classification_structure
+  transitive: [true, within_same_part_type]
+  # note: precedes / causes / prerequisite_of are transitive but are ordering or causal relations (other families), so they stay out
+
+part_of_rule:
+  chain_within: part_type          # a chain never mixes relations; a within_same_part_type relation chains only inside one part_type
+  missing_part_type: direct_only   # owner 2026-10-23: scored as a direct edge, never chained (none exist on P&D today)
+
+pd:
+  registry: configs/relations_v1.3.yaml
+scinlp:
+  registry: configs/relations_v1.4.yaml   # external_labels.SciNLP gives subclassOf / subtaskOf / partOf
+  source: SciNLP
+  chain_typed_relations_as_one: true      # SciNLP partOf has no part type, so it chains as one relation
+  identity_surf_r1: r1_key_plus_acronym_same_paper
+  identity_sheet: data/interim/suggestions/scinlp_hier_identity_sheet.csv
+  identity_marks: data/gold/scinlp_hier_identity_sheet_marked.csv   # owner copy; read-only for code (rule 2)
