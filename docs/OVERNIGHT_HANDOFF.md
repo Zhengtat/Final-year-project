@@ -131,6 +131,7 @@ Do these in order. Tasks marked "after" need the earlier one merged first.
 | T3 | cr-029-review-intake | see git log / cr-029-complete | 886 | $0 | merged; sheet data/interim/suggestions/lexicon_intake_slice3_c2.csv awaits owner marks |
 | T4 | cr-030-retire-erst | see git log / cr-030-complete | 886 (unchanged, docs only) | $0 | merged |
 | T5 | cr-031-oracle-ladder-idx | see git log / cr-031-complete | 889 | $0 | merged; reports/cr031/ generated, acceptance table reproduced |
+| T6 | cr-032-hierarchy-t1 | see git log / cr-032-complete | 901 | $0 | merged; real-identity SciNLP figure awaits owner marks on scinlp_hier_identity_sheet.csv |
 
 
 ### 0.7 Where the data is (all read-only for these tasks)

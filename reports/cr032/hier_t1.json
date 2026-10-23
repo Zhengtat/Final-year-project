@@ -1,0 +1,1168 @@
+{
+ "hierarchy_set_pd": [
+  "is_a",
+  "part_of"
+ ],
+ "typed_relations_pd": [
+  "part_of"
+ ],
+ "hierarchy_set_scinlp": [
+  "is_a",
+  "part_of",
+  "subtask_of"
+ ],
+ "scinlp_labels": [
+  "partOf",
+  "subclassOf",
+  "subtaskOf"
+ ],
+ "gate": {
+  "checks": {
+   "pd_heldout_E0_generic_equals_frozen_per_section": true,
+   "pd_heldout_E0_equals_cr017_headline_json": true,
+   "pd_heldout_E1_generic_equals_frozen_per_section": true,
+   "pd_heldout_E1_equals_cr017_headline_json": true,
+   "pd_heldout_E2_generic_equals_frozen_per_section": true,
+   "pd_heldout_E2_equals_cr017_headline_json": true,
+   "pd_heldout_E3_generic_equals_frozen_per_section": true,
+   "pd_heldout_E3_equals_cr017_headline_json": true,
+   "pd_heldout_E4_generic_equals_frozen_per_section": true,
+   "pd_heldout_E4_equals_cr017_headline_json": true,
+   "pd_pilot_E0_generic_equals_frozen_per_section": true,
+   "pd_pilot_E0_equals_cr017_headline_json": true,
+   "pd_pilot_E1_generic_equals_frozen_per_section": true,
+   "pd_pilot_E2_generic_equals_frozen_per_section": true,
+   "pd_pilot_E3_generic_equals_frozen_per_section": true,
+   "pd_pilot_E4_generic_equals_frozen_per_section": true,
+   "scinlp_test_frozen_FROZEN_surface_H2_equals_cr022_part_a": true,
+   "scinlp_test_frozen_IDX-P1_surface_H2_equals_cr022_part_a": true
+  },
+  "passed": true
+ },
+ "hashes_unchanged": true,
+ "n_hashed": 49,
+ "pd": {
+  "heldout/E0": {
+   "sections": [
+    "4.4",
+    "4.5",
+    "5.4",
+    "6.3",
+    "7.1",
+    "8.2",
+    "9.3"
+   ],
+   "frozen_is_a_cr017": {
+    "tp": 7,
+    "fp": 41,
+    "fn": 68,
+    "precision": 0.14583333333333334,
+    "recall": 0.09333333333333334,
+    "f1": 0.11382113821138211
+   },
+   "generic_scorer_on_is_a": {
+    "tp": 7,
+    "fp": 41,
+    "fn": 68,
+    "precision": 0.14583333333333334,
+    "recall": 0.09333333333333334,
+    "f1": 0.11382113821138211
+   },
+   "HIER_T1": {
+    "tp": 8,
+    "fp": 71,
+    "fn": 111,
+    "precision": 0.10126582278481013,
+    "recall": 0.06722689075630252,
+    "f1": 0.0808080808080808
+   },
+   "HIER_T1_direct_edges": {
+    "tp": 8,
+    "fp": 66,
+    "fn": 97,
+    "precision": 0.10810810810810811,
+    "recall": 0.0761904761904762,
+    "f1": 0.0893854748603352
+   },
+   "HIER_T1_per_relation": {
+    "is_a": {
+     "tp": 7,
+     "fp": 41,
+     "fn": 68,
+     "precision": 0.14583333333333334,
+     "recall": 0.09333333333333334,
+     "f1": 0.11382113821138211
+    },
+    "part_of": {
+     "tp": 1,
+     "fp": 30,
+     "fn": 43,
+     "precision": 0.03225806451612903,
+     "recall": 0.022727272727272728,
+     "f1": 0.02666666666666667
+    }
+   },
+   "gold_pairs": 119,
+   "gold_direct_edges": 105,
+   "cycles": {},
+   "direct_only_edges": {
+    "gold": 0,
+    "predicted": 0
+   }
+  },
+  "heldout/E1": {
+   "sections": [
+    "4.4",
+    "4.5",
+    "5.4",
+    "6.3",
+    "7.1",
+    "8.2",
+    "9.3"
+   ],
+   "frozen_is_a_cr017": {
+    "tp": 10,
+    "fp": 9,
+    "fn": 65,
+    "precision": 0.5263157894736842,
+    "recall": 0.13333333333333333,
+    "f1": 0.2127659574468085
+   },
+   "generic_scorer_on_is_a": {
+    "tp": 10,
+    "fp": 9,
+    "fn": 65,
+    "precision": 0.5263157894736842,
+    "recall": 0.13333333333333333,
+    "f1": 0.2127659574468085
+   },
+   "HIER_T1": {
+    "tp": 14,
+    "fp": 31,
+    "fn": 105,
+    "precision": 0.3111111111111111,
+    "recall": 0.11764705882352941,
+    "f1": 0.17073170731707316
+   },
+   "HIER_T1_direct_edges": {
+    "tp": 13,
+    "fp": 32,
+    "fn": 92,
+    "precision": 0.28888888888888886,
+    "recall": 0.12380952380952381,
+    "f1": 0.17333333333333334
+   },
+   "HIER_T1_per_relation": {
+    "is_a": {
+     "tp": 10,
+     "fp": 9,
+     "fn": 65,
+     "precision": 0.5263157894736842,
+     "recall": 0.13333333333333333,
+     "f1": 0.2127659574468085
+    },
+    "part_of": {
+     "tp": 4,
+     "fp": 22,
+     "fn": 40,
+     "precision": 0.15384615384615385,
+     "recall": 0.09090909090909091,
+     "f1": 0.1142857142857143
+    }
+   },
+   "gold_pairs": 119,
+   "gold_direct_edges": 105,
+   "cycles": {},
+   "direct_only_edges": {
+    "gold": 0,
+    "predicted": 0
+   }
+  },
+  "heldout/E2": {
+   "sections": [
+    "4.4",
+    "4.5",
+    "5.4",
+    "6.3",
+    "7.1",
+    "8.2",
+    "9.3"
+   ],
+   "frozen_is_a_cr017": {
+    "tp": 7,
+    "fp": 17,
+    "fn": 68,
+    "precision": 0.2916666666666667,
+    "recall": 0.09333333333333334,
+    "f1": 0.1414141414141414
+   },
+   "generic_scorer_on_is_a": {
+    "tp": 7,
+    "fp": 17,
+    "fn": 68,
+    "precision": 0.2916666666666667,
+    "recall": 0.09333333333333334,
+    "f1": 0.1414141414141414
+   },
+   "HIER_T1": {
+    "tp": 14,
+    "fp": 45,
+    "fn": 105,
+    "precision": 0.23728813559322035,
+    "recall": 0.11764705882352941,
+    "f1": 0.15730337078651685
+   },
+   "HIER_T1_direct_edges": {
+    "tp": 14,
+    "fp": 45,
+    "fn": 91,
+    "precision": 0.23728813559322035,
+    "recall": 0.13333333333333333,
+    "f1": 0.17073170731707316
+   },
+   "HIER_T1_per_relation": {
+    "is_a": {
+     "tp": 7,
+     "fp": 17,
+     "fn": 68,
+     "precision": 0.2916666666666667,
+     "recall": 0.09333333333333334,
+     "f1": 0.1414141414141414
+    },
+    "part_of": {
+     "tp": 7,
+     "fp": 28,
+     "fn": 37,
+     "precision": 0.2,
+     "recall": 0.1590909090909091,
+     "f1": 0.17721518987341772
+    }
+   },
+   "gold_pairs": 119,
+   "gold_direct_edges": 105,
+   "cycles": {},
+   "direct_only_edges": {
+    "gold": 0,
+    "predicted": 0
+   }
+  },
+  "heldout/E3": {
+   "sections": [
+    "4.4",
+    "4.5",
+    "5.4",
+    "6.3",
+    "7.1",
+    "8.2",
+    "9.3"
+   ],
+   "frozen_is_a_cr017": {
+    "tp": 43,
+    "fp": 21,
+    "fn": 32,
+    "precision": 0.671875,
+    "recall": 0.5733333333333334,
+    "f1": 0.6187050359712232
+   },
+   "generic_scorer_on_is_a": {
+    "tp": 43,
+    "fp": 21,
+    "fn": 32,
+    "precision": 0.671875,
+    "recall": 0.5733333333333334,
+    "f1": 0.6187050359712232
+   },
+   "HIER_T1": {
+    "tp": 61,
+    "fp": 63,
+    "fn": 58,
+    "precision": 0.49193548387096775,
+    "recall": 0.5126050420168067,
+    "f1": 0.5020576131687242
+   },
+   "HIER_T1_direct_edges": {
+    "tp": 57,
+    "fp": 60,
+    "fn": 48,
+    "precision": 0.48717948717948717,
+    "recall": 0.5428571428571428,
+    "f1": 0.5135135135135135
+   },
+   "HIER_T1_per_relation": {
+    "is_a": {
+     "tp": 43,
+     "fp": 21,
+     "fn": 32,
+     "precision": 0.671875,
+     "recall": 0.5733333333333334,
+     "f1": 0.6187050359712232
+    },
+    "part_of": {
+     "tp": 18,
+     "fp": 42,
+     "fn": 26,
+     "precision": 0.3,
+     "recall": 0.4090909090909091,
+     "f1": 0.34615384615384615
+    }
+   },
+   "gold_pairs": 119,
+   "gold_direct_edges": 105,
+   "cycles": {},
+   "direct_only_edges": {
+    "gold": 0,
+    "predicted": 0
+   }
+  },
+  "heldout/E4": {
+   "sections": [
+    "4.4",
+    "4.5",
+    "5.4",
+    "6.3",
+    "7.1",
+    "8.2",
+    "9.3"
+   ],
+   "frozen_is_a_cr017": {
+    "tp": 43,
+    "fp": 5,
+    "fn": 32,
+    "precision": 0.8958333333333334,
+    "recall": 0.5733333333333334,
+    "f1": 0.6991869918699187
+   },
+   "generic_scorer_on_is_a": {
+    "tp": 43,
+    "fp": 5,
+    "fn": 32,
+    "precision": 0.8958333333333334,
+    "recall": 0.5733333333333334,
+    "f1": 0.6991869918699187
+   },
+   "HIER_T1": {
+    "tp": 61,
+    "fp": 20,
+    "fn": 58,
+    "precision": 0.7530864197530864,
+    "recall": 0.5126050420168067,
+    "f1": 0.61
+   },
+   "HIER_T1_direct_edges": {
+    "tp": 57,
+    "fp": 20,
+    "fn": 48,
+    "precision": 0.7402597402597403,
+    "recall": 0.5428571428571428,
+    "f1": 0.6263736263736264
+   },
+   "HIER_T1_per_relation": {
+    "is_a": {
+     "tp": 43,
+     "fp": 5,
+     "fn": 32,
+     "precision": 0.8958333333333334,
+     "recall": 0.5733333333333334,
+     "f1": 0.6991869918699187
+    },
+    "part_of": {
+     "tp": 18,
+     "fp": 15,
+     "fn": 26,
+     "precision": 0.5454545454545454,
+     "recall": 0.4090909090909091,
+     "f1": 0.4675324675324675
+    }
+   },
+   "gold_pairs": 119,
+   "gold_direct_edges": 105,
+   "cycles": {},
+   "direct_only_edges": {
+    "gold": 0,
+    "predicted": 0
+   }
+  },
+  "pilot/E0": {
+   "sections": [
+    "1.5",
+    "2.6"
+   ],
+   "frozen_is_a_cr017": {
+    "tp": 2,
+    "fp": 1,
+    "fn": 25,
+    "precision": 0.6666666666666666,
+    "recall": 0.07407407407407407,
+    "f1": 0.13333333333333333
+   },
+   "generic_scorer_on_is_a": {
+    "tp": 2,
+    "fp": 1,
+    "fn": 25,
+    "precision": 0.6666666666666666,
+    "recall": 0.07407407407407407,
+    "f1": 0.13333333333333333
+   },
+   "HIER_T1": {
+    "tp": 3,
+    "fp": 6,
+    "fn": 46,
+    "precision": 0.3333333333333333,
+    "recall": 0.061224489795918366,
+    "f1": 0.10344827586206896
+   },
+   "HIER_T1_direct_edges": {
+    "tp": 3,
+    "fp": 6,
+    "fn": 30,
+    "precision": 0.3333333333333333,
+    "recall": 0.09090909090909091,
+    "f1": 0.14285714285714288
+   },
+   "HIER_T1_per_relation": {
+    "is_a": {
+     "tp": 2,
+     "fp": 1,
+     "fn": 25,
+     "precision": 0.6666666666666666,
+     "recall": 0.07407407407407407,
+     "f1": 0.13333333333333333
+    },
+    "part_of": {
+     "tp": 1,
+     "fp": 5,
+     "fn": 21,
+     "precision": 0.16666666666666666,
+     "recall": 0.045454545454545456,
+     "f1": 0.07142857142857144
+    }
+   },
+   "gold_pairs": 49,
+   "gold_direct_edges": 33,
+   "cycles": {},
+   "direct_only_edges": {
+    "gold": 0,
+    "predicted": 0
+   }
+  },
+  "pilot/E1": {
+   "sections": [
+    "1.5"
+   ],
+   "frozen_is_a_cr017": {
+    "tp": 0,
+    "fp": 1,
+    "fn": 0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "generic_scorer_on_is_a": {
+    "tp": 0,
+    "fp": 1,
+    "fn": 0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "HIER_T1": {
+    "tp": 0,
+    "fp": 3,
+    "fn": 4,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "HIER_T1_direct_edges": {
+    "tp": 0,
+    "fp": 3,
+    "fn": 4,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "HIER_T1_per_relation": {
+    "is_a": {
+     "tp": 0,
+     "fp": 1,
+     "fn": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0
+    },
+    "part_of": {
+     "tp": 0,
+     "fp": 2,
+     "fn": 4,
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0
+    }
+   },
+   "gold_pairs": 4,
+   "gold_direct_edges": 4,
+   "cycles": {},
+   "direct_only_edges": {
+    "gold": 0,
+    "predicted": 0
+   }
+  },
+  "pilot/E2": {
+   "sections": [
+    "1.5"
+   ],
+   "frozen_is_a_cr017": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "generic_scorer_on_is_a": {
+    "tp": 0,
+    "fp": 0,
+    "fn": 0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "HIER_T1": {
+    "tp": 0,
+    "fp": 3,
+    "fn": 4,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "HIER_T1_direct_edges": {
+    "tp": 0,
+    "fp": 3,
+    "fn": 4,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "HIER_T1_per_relation": {
+    "part_of": {
+     "tp": 0,
+     "fp": 3,
+     "fn": 4,
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0
+    }
+   },
+   "gold_pairs": 4,
+   "gold_direct_edges": 4,
+   "cycles": {},
+   "direct_only_edges": {
+    "gold": 0,
+    "predicted": 0
+   }
+  },
+  "pilot/E3": {
+   "sections": [
+    "1.5"
+   ],
+   "frozen_is_a_cr017": {
+    "tp": 0,
+    "fp": 2,
+    "fn": 0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "generic_scorer_on_is_a": {
+    "tp": 0,
+    "fp": 2,
+    "fn": 0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "HIER_T1": {
+    "tp": 2,
+    "fp": 5,
+    "fn": 2,
+    "precision": 0.2857142857142857,
+    "recall": 0.5,
+    "f1": 0.36363636363636365
+   },
+   "HIER_T1_direct_edges": {
+    "tp": 2,
+    "fp": 5,
+    "fn": 2,
+    "precision": 0.2857142857142857,
+    "recall": 0.5,
+    "f1": 0.36363636363636365
+   },
+   "HIER_T1_per_relation": {
+    "is_a": {
+     "tp": 0,
+     "fp": 2,
+     "fn": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0
+    },
+    "part_of": {
+     "tp": 2,
+     "fp": 3,
+     "fn": 2,
+     "precision": 0.4,
+     "recall": 0.5,
+     "f1": 0.4444444444444445
+    }
+   },
+   "gold_pairs": 4,
+   "gold_direct_edges": 4,
+   "cycles": {},
+   "direct_only_edges": {
+    "gold": 0,
+    "predicted": 0
+   }
+  },
+  "pilot/E4": {
+   "sections": [
+    "1.5"
+   ],
+   "frozen_is_a_cr017": {
+    "tp": 0,
+    "fp": 2,
+    "fn": 0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "generic_scorer_on_is_a": {
+    "tp": 0,
+    "fp": 2,
+    "fn": 0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "HIER_T1": {
+    "tp": 2,
+    "fp": 2,
+    "fn": 2,
+    "precision": 0.5,
+    "recall": 0.5,
+    "f1": 0.5
+   },
+   "HIER_T1_direct_edges": {
+    "tp": 2,
+    "fp": 2,
+    "fn": 2,
+    "precision": 0.5,
+    "recall": 0.5,
+    "f1": 0.5
+   },
+   "HIER_T1_per_relation": {
+    "is_a": {
+     "tp": 0,
+     "fp": 2,
+     "fn": 0,
+     "precision": 0.0,
+     "recall": 0.0,
+     "f1": 0.0
+    },
+    "part_of": {
+     "tp": 2,
+     "fp": 0,
+     "fn": 2,
+     "precision": 1.0,
+     "recall": 0.5,
+     "f1": 0.6666666666666666
+    }
+   },
+   "gold_pairs": 4,
+   "gold_direct_edges": 4,
+   "cycles": {},
+   "direct_only_edges": {
+    "gold": 0,
+    "predicted": 0
+   }
+  }
+ },
+ "scinlp": {
+  "frozen CR-012 STOP 4 (token matching)": {
+   "documents": [
+    "2021.acl-long.353",
+    "2024.acl-long.108-1-9.grobid",
+    "P17-1058.grobid"
+   ],
+   "collisions": {
+    "2021.acl-long.353": {
+     "gold_mentions": 401,
+     "gold_nodes": 98,
+     "collisions": 303,
+     "nodes_merging_distinct_surfaces": 11,
+     "examples": [
+      [
+       "language models",
+       "lm",
+       "lms"
+      ],
+      [
+       "p * -tuning",
+       "p * tuning",
+       "p-tuning"
+      ],
+      [
+       "prefix tuning",
+       "prefix-tuning",
+       "prefixtuning"
+      ],
+      [
+       "adapter-tuning",
+       "adaptertuning"
+      ],
+      [
+       "embedding-only",
+       "embeddingonly"
+      ]
+     ],
+     "acronym_pairs_merged": 2
+    },
+    "2024.acl-long.108-1-9.grobid": {
+     "gold_mentions": 302,
+     "gold_nodes": 80,
+     "collisions": 222,
+     "nodes_merging_distinct_surfaces": 10,
+     "examples": [
+      [
+       "large language models",
+       "llm",
+       "llms"
+      ],
+      [
+       "rag",
+       "rags",
+       "retrieval-augmented generation"
+      ],
+      [
+       "deep q-networks",
+       "dqn"
+      ],
+      [
+       "inverted file index",
+       "ivf"
+      ],
+      [
+       "locality-sensitive hashing",
+       "lsh"
+      ]
+     ],
+     "acronym_pairs_merged": 10
+    },
+    "P17-1058.grobid": {
+     "gold_mentions": 62,
+     "gold_nodes": 31,
+     "collisions": 31,
+     "nodes_merging_distinct_surfaces": 3,
+     "examples": [
+      [
+       "fourier transform",
+       "fourier transforms"
+      ],
+      [
+       "interactive alignment model ( iam )",
+       "interactive-alignment model ( iam )"
+      ],
+      [
+       "map task",
+       "maptask"
+      ]
+     ],
+     "acronym_pairs_merged": 9
+    }
+   },
+   "variants": {
+    "FROZEN": {
+     "HIER_T1_SURF_R1": {
+      "tp": 1,
+      "fp": 8,
+      "fn": 45,
+      "precision": 0.1111111111111111,
+      "recall": 0.021739130434782608,
+      "f1": 0.03636363636363637
+     },
+     "HIER_T1_SURF_R1_direct_edges": {
+      "tp": 1,
+      "fp": 8,
+      "fn": 44,
+      "precision": 0.1111111111111111,
+      "recall": 0.022222222222222223,
+      "f1": 0.037037037037037035
+     },
+     "HIER_T1_SURF_R1_per_relation": {
+      "partOf": {
+       "tp": 0,
+       "fp": 2,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      },
+      "subclassOf": {
+       "tp": 1,
+       "fp": 6,
+       "fn": 28,
+       "precision": 0.14285714285714285,
+       "recall": 0.034482758620689655,
+       "f1": 0.05555555555555555
+      },
+      "subtaskOf": {
+       "tp": 0,
+       "fp": 0,
+       "fn": 9,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      }
+     },
+     "gold_pairs": 46,
+     "gold_direct_edges": 45,
+     "unplaced_counted_as_fp": 0,
+     "cycles": {},
+     "same_set_surface_identity": {
+      "tp": 1,
+      "fp": 9,
+      "fn": 46,
+      "precision": 0.1,
+      "recall": 0.02127659574468085,
+      "f1": 0.03508771929824561
+     },
+     "HIER_T1_real_identity": "AWAITING_OWNER_IDENTITY_SHEET"
+    },
+    "IDX-P1": {
+     "HIER_T1_SURF_R1": {
+      "tp": 6,
+      "fp": 32,
+      "fn": 40,
+      "precision": 0.15789473684210525,
+      "recall": 0.13043478260869565,
+      "f1": 0.14285714285714288
+     },
+     "HIER_T1_SURF_R1_direct_edges": {
+      "tp": 6,
+      "fp": 26,
+      "fn": 39,
+      "precision": 0.1875,
+      "recall": 0.13333333333333333,
+      "f1": 0.15584415584415587
+     },
+     "HIER_T1_SURF_R1_per_relation": {
+      "partOf": {
+       "tp": 0,
+       "fp": 15,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      },
+      "subclassOf": {
+       "tp": 6,
+       "fp": 9,
+       "fn": 23,
+       "precision": 0.4,
+       "recall": 0.20689655172413793,
+       "f1": 0.2727272727272727
+      },
+      "subtaskOf": {
+       "tp": 0,
+       "fp": 5,
+       "fn": 9,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      }
+     },
+     "gold_pairs": 46,
+     "gold_direct_edges": 45,
+     "unplaced_counted_as_fp": 3,
+     "cycles": {},
+     "same_set_surface_identity": {
+      "tp": 5,
+      "fp": 35,
+      "fn": 42,
+      "precision": 0.125,
+      "recall": 0.10638297872340426,
+      "f1": 0.1149425287356322
+     },
+     "HIER_T1_real_identity": "AWAITING_OWNER_IDENTITY_SHEET"
+    }
+   }
+  },
+  "CR-021 rebuild `cr021test` (r1key matching)": {
+   "documents": [
+    "2021.acl-long.353",
+    "2024.acl-long.108-1-9.grobid",
+    "P17-1058.grobid"
+   ],
+   "collisions": {
+    "2021.acl-long.353": {
+     "gold_mentions": 401,
+     "gold_nodes": 98,
+     "collisions": 303,
+     "nodes_merging_distinct_surfaces": 11,
+     "examples": [
+      [
+       "language models",
+       "lm",
+       "lms"
+      ],
+      [
+       "p * -tuning",
+       "p * tuning",
+       "p-tuning"
+      ],
+      [
+       "prefix tuning",
+       "prefix-tuning",
+       "prefixtuning"
+      ],
+      [
+       "adapter-tuning",
+       "adaptertuning"
+      ],
+      [
+       "embedding-only",
+       "embeddingonly"
+      ]
+     ],
+     "acronym_pairs_merged": 2
+    },
+    "2024.acl-long.108-1-9.grobid": {
+     "gold_mentions": 302,
+     "gold_nodes": 80,
+     "collisions": 222,
+     "nodes_merging_distinct_surfaces": 10,
+     "examples": [
+      [
+       "large language models",
+       "llm",
+       "llms"
+      ],
+      [
+       "rag",
+       "rags",
+       "retrieval-augmented generation"
+      ],
+      [
+       "deep q-networks",
+       "dqn"
+      ],
+      [
+       "inverted file index",
+       "ivf"
+      ],
+      [
+       "locality-sensitive hashing",
+       "lsh"
+      ]
+     ],
+     "acronym_pairs_merged": 10
+    },
+    "P17-1058.grobid": {
+     "gold_mentions": 62,
+     "gold_nodes": 31,
+     "collisions": 31,
+     "nodes_merging_distinct_surfaces": 3,
+     "examples": [
+      [
+       "fourier transform",
+       "fourier transforms"
+      ],
+      [
+       "interactive alignment model ( iam )",
+       "interactive-alignment model ( iam )"
+      ],
+      [
+       "map task",
+       "maptask"
+      ]
+     ],
+     "acronym_pairs_merged": 9
+    }
+   },
+   "variants": {
+    "FROZEN": {
+     "HIER_T1_SURF_R1": {
+      "tp": 0,
+      "fp": 8,
+      "fn": 46,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+     },
+     "HIER_T1_SURF_R1_direct_edges": {
+      "tp": 0,
+      "fp": 8,
+      "fn": 45,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+     },
+     "HIER_T1_SURF_R1_per_relation": {
+      "partOf": {
+       "tp": 0,
+       "fp": 2,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      },
+      "subclassOf": {
+       "tp": 0,
+       "fp": 6,
+       "fn": 29,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      },
+      "subtaskOf": {
+       "tp": 0,
+       "fp": 0,
+       "fn": 9,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      }
+     },
+     "gold_pairs": 46,
+     "gold_direct_edges": 45,
+     "unplaced_counted_as_fp": 0,
+     "cycles": {},
+     "same_set_surface_identity": {
+      "tp": 0,
+      "fp": 9,
+      "fn": 47,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+     },
+     "HIER_T1_real_identity": "AWAITING_OWNER_IDENTITY_SHEET"
+    },
+    "IDX-P1": {
+     "HIER_T1_SURF_R1": {
+      "tp": 3,
+      "fp": 36,
+      "fn": 43,
+      "precision": 0.07692307692307693,
+      "recall": 0.06521739130434782,
+      "f1": 0.07058823529411765
+     },
+     "HIER_T1_SURF_R1_direct_edges": {
+      "tp": 3,
+      "fp": 29,
+      "fn": 42,
+      "precision": 0.09375,
+      "recall": 0.06666666666666667,
+      "f1": 0.07792207792207793
+     },
+     "HIER_T1_SURF_R1_per_relation": {
+      "partOf": {
+       "tp": 0,
+       "fp": 19,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      },
+      "subclassOf": {
+       "tp": 3,
+       "fp": 8,
+       "fn": 26,
+       "precision": 0.2727272727272727,
+       "recall": 0.10344827586206896,
+       "f1": 0.15
+      },
+      "subtaskOf": {
+       "tp": 0,
+       "fp": 5,
+       "fn": 9,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      }
+     },
+     "gold_pairs": 46,
+     "gold_direct_edges": 45,
+     "unplaced_counted_as_fp": 4,
+     "cycles": {},
+     "same_set_surface_identity": {
+      "tp": 2,
+      "fp": 39,
+      "fn": 45,
+      "precision": 0.04878048780487805,
+      "recall": 0.0425531914893617,
+      "f1": 0.045454545454545456
+     },
+     "HIER_T1_real_identity": "AWAITING_OWNER_IDENTITY_SHEET"
+    },
+    "IDXR1-P1": {
+     "HIER_T1_SURF_R1": {
+      "tp": 4,
+      "fp": 35,
+      "fn": 42,
+      "precision": 0.10256410256410256,
+      "recall": 0.08695652173913043,
+      "f1": 0.09411764705882353
+     },
+     "HIER_T1_SURF_R1_direct_edges": {
+      "tp": 4,
+      "fp": 30,
+      "fn": 41,
+      "precision": 0.11764705882352941,
+      "recall": 0.08888888888888889,
+      "f1": 0.10126582278481014
+     },
+     "HIER_T1_SURF_R1_per_relation": {
+      "partOf": {
+       "tp": 0,
+       "fp": 19,
+       "fn": 8,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      },
+      "subclassOf": {
+       "tp": 4,
+       "fp": 9,
+       "fn": 25,
+       "precision": 0.3076923076923077,
+       "recall": 0.13793103448275862,
+       "f1": 0.1904761904761905
+      },
+      "subtaskOf": {
+       "tp": 0,
+       "fp": 5,
+       "fn": 9,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      }
+     },
+     "gold_pairs": 46,
+     "gold_direct_edges": 45,
+     "unplaced_counted_as_fp": 2,
+     "cycles": {},
+     "same_set_surface_identity": {
+      "tp": 3,
+      "fp": 39,
+      "fn": 44,
+      "precision": 0.07142857142857142,
+      "recall": 0.06382978723404255,
+      "f1": 0.06741573033707865
+     },
+     "HIER_T1_real_identity": "AWAITING_OWNER_IDENTITY_SHEET"
+    }
+   }
+  }
+ },
+ "identity_sheet_rows_written": 90,
+ "real_identity_marks": "AWAITING_OWNER_IDENTITY_SHEET"
+}
