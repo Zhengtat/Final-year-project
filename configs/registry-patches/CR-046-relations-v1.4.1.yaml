@@ -1,0 +1,114 @@
+# Registry patch from CR-046 (2026-10-24): registry v1.4.1 = v1.4 + the owner-approved wording (CR-040 review, owner: "Approved", 2026-10-24).
+# Copied field for field from docs/cr040/v14_wording_proposals.yaml (definition, template, examples, near_misses of the six relations v1.4 added).
+patch_for_registry_version: 1
+patch_for_registry_minor: 4
+new_version: 1.4.1
+header_note: 'CR-046 (2026-10-24): v1.4 with the owner-approved CR-040 wording for its six SciNLP-derived relations (docs/cr040/v14_wording_proposals.yaml).
+  Wording only: no relation, family, type or flag changes. measured_by and evaluated_by both kept (option A, the wording the
+  owner approved).'
+relation_updates:
+  subtask_of:
+    definition: Source is a narrower task, problem or function that belongs under the broader task named by target, in a task
+      hierarchy (source is one of the ways or parts of getting the target task done). Both ends are tasks or problems, not
+      methods, components or data.
+    template: '{X} is a subtask of {Y}'
+    examples:
+    - named entity recognition subtask_of information extraction
+    - machine translation subtask_of natural language generation
+    - error detection subtask_of reliable delivery
+    near_misses:
+    - relation: is_a
+      example: BERT is_a masked language model
+      why: a kind of method, not a narrower task
+    - relation: part_of
+      example: slow start part_of[phase] TCP congestion control
+      why: a stage of one process, not a narrower task of a wider task
+    - relation: has_purpose
+      example: a checksum has_purpose error detection
+      why: the purpose of a mechanism, not a task hierarchy between two tasks
+  enhanced_by:
+    definition: Source is a method, model or system whose performance or capability is improved by an add-on technique named
+      by target. The sentence must present the target as an addition to, or a modification of, the source, not as a basic
+      part or an ordinary means.
+    template: '{X} is enhanced by {Y}'
+    examples:
+    - an encoder-decoder model enhanced_by an attention mechanism
+    - a classifier enhanced_by data augmentation
+    - TCP enhanced_by selective acknowledgments
+    near_misses:
+    - relation: uses
+      example: TCP uses sliding window
+      why: the target is a basic means, not an add-on that improves it
+    - relation: increases
+      example: a larger window increases throughput
+      why: a quantity change, not an added technique
+    - relation: part_of
+      example: the encoder part_of[component] the encoder-decoder model
+      why: a structural component of the source, not an add-on
+    - relation: requires
+      example: TLS requires a certificate
+      why: a dependency, not an improvement
+  similar_to:
+    definition: 'Source and target are alike in a stated or clearly implied respect (a shared property, role or mechanism)
+      but are DIFFERENT concepts. Never a merge or an alias: two names for one thing are same_concept (a node property, CR-008).
+      Use contrasts_with when the sentence stresses a difference.'
+    template: '{X} is similar to {Y}'
+    examples:
+    - Adam similar_to RMSprop
+    - bit stuffing similar_to byte stuffing
+    near_misses:
+    - relation: contrasts_with
+      example: slow start contrasts_with congestion avoidance
+      why: stresses what differs, not what is alike
+    - relation: same_concept
+      example: a datagram, also called a message
+      why: two names for one thing; no edge, a merge candidate
+    - relation: is_a
+      example: Ethernet is_a link-layer technology
+      why: one is a kind of the other, not two alike things
+  measured_by:
+    definition: Source (a system, method, protocol, link or other thing that has a measurable quality) is quantified by the
+      metric named by target. The target is a metric or a unit of measurement, not a characteristic.
+    template: '{X} is measured by {Y}'
+    examples:
+    - a translation system measured_by BLEU
+    - a congestion control scheme measured_by goodput
+    - a link measured_by bandwidth
+    near_misses:
+    - relation: has_property
+      example: slow start has_property exponential cwnd growth
+      why: a characteristic, not a metric used to measure it
+    - relation: evaluated_by
+      example: question answering evaluated_by exact match
+      why: the source is a task assessed in benchmark practice
+    - relation: increases
+      example: a larger window increases throughput
+      why: a quantity change, not the measuring of something
+  evaluated_by:
+    definition: Source (a task or problem) is assessed with the metric named by target, as in benchmark practice ("the task
+      is evaluated by metric M"). Use measured_by when the source is a system, method or link whose quality the metric quantifies.
+    template: '{X} is evaluated by {Y}'
+    examples:
+    - question answering evaluated_by exact match
+    - routing evaluated_by convergence time
+    near_misses:
+    - relation: measured_by
+      example: a translation system measured_by BLEU
+      why: here the source is a method or system, not a task
+    - relation: evaluated_on
+      example: sentiment analysis evaluated_on SST-2
+      why: the target is data, not a metric
+  evaluated_on:
+    definition: Source (a task or method) is tested on the dataset, benchmark, workload or testbed named by target. The target
+      is data or a test setting, not a metric and not a means the source employs.
+    template: '{X} is evaluated on {Y}'
+    examples:
+    - sentiment analysis evaluated_on SST-2
+    - a routing protocol evaluated_on a 100-node testbed
+    near_misses:
+    - relation: uses
+      example: TCP uses sliding window
+      why: a means employed, not data it is tested on
+    - relation: evaluated_by
+      example: routing evaluated_by convergence time
+      why: the target is a metric, not data
