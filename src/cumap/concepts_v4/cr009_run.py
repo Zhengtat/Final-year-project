@@ -106,7 +106,12 @@ def stage_concepts(
         active_profile()
     )  # CR-012 benchmark-local schema; None leaves the CUM production path unchanged
     if profile is None:
-        lexicon = Lexicon.load(REPO_ROOT / "configs" / "term_lexicon.yaml")
+        from cumap.expert_kg.lexicon import production_lexicon_path
+
+        lexicon_path = (
+            production_lexicon_path()
+        )  # CR-041: the lexicon version new production runs use
+        lexicon = Lexicon.load(lexicon_path)
     else:  # the networking lexicon is disabled; the generic R1-R3 machinery stays (alias config)
         from cumap.expert_kg.alias_rules import AliasConfig
 
@@ -151,6 +156,19 @@ def stage_concepts(
             "units": len(units),
             "spend_usd": round(client.spent_usd, 4),
             "backfill": do_backfill,
+            **(
+                {
+                    "term_lexicon": {
+                        "path": str(lexicon_path.relative_to(REPO_ROOT)),
+                        "version": lexicon.version,
+                        "sha256": __import__("hashlib")
+                        .sha256(lexicon_path.read_bytes())
+                        .hexdigest(),
+                    }
+                }
+                if profile is None
+                else {}
+            ),
             **({"identity_resolver": resolver} if resolver != "legacy" else {}),
             **({"identity_judge": judge} if judge != "off" else {}),
         },
@@ -239,12 +257,16 @@ def stage_snapshots(run: str) -> dict:
     registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
     from cumap.expert_kg import edge_store as ES
 
-    if ES.resolve_assembly() == "v2":  # CR-036: the "save graph" export (no assembly checks); legacy below is unchanged
+    if (
+        ES.resolve_assembly() == "v2"
+    ):  # CR-036: the "save graph" export (no assembly checks); legacy below is unchanged
         out = sr.save_graph_stage(cp, run_dir, sections, registry, lambda t: np.zeros(1))
         save_checkpoint(cp, run_dir)
         return {
             "assembly": "v2",
-            "chapters": [(r.chapter_num, len(r.snapshot.nodes), len(r.snapshot.edges)) for r in out],
+            "chapters": [
+                (r.chapter_num, len(r.snapshot.nodes), len(r.snapshot.edges)) for r in out
+            ],
         }
     dropped = sr.mark_gated_dropped(cp, registry)
     out = sr.snapshots_stage(cp, run_dir, sections, registry, lambda t: np.zeros(1))

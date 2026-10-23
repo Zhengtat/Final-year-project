@@ -22,3 +22,7 @@ identity_resolver: legacy
 # schema built from configs/identity_rules.yaml judge.options) decides a pair that U0-U4 could not decide, instead of the rejected-link adjudicator
 # (generator links) and canonicalize v2 (new concepts). Quote the value (an unquoted off is a YAML boolean). Waits for the owner's review of the prompt.
 identity_judge: "off"
+# CR-041 (2026-10-23): the lexicon file NEW production runs load. configs/term_lexicon.yaml (v0.3) stays frozen (hash-pinned by
+# the CR-011 handoff) and is what older runs, frozen evaluation and replays use. v0.4 = v0.3 + the owner marks on
+# data/gold/lexicon_intake_slice3_c2.csv (cumap lexicon apply-marks).
+term_lexicon: configs/term_lexicon_v0.4.yaml

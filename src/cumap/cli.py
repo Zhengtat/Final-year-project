@@ -1045,7 +1045,9 @@ def lexicon_intake_cmd(
     cp = json.loads((run_dir / "checkpoint.json").read_text(encoding="utf-8"))
     v4p = run_dir / "v4_concepts.json"
     v4 = json.loads(v4p.read_text(encoding="utf-8")) if v4p.exists() else None
-    lex = Lexicon.load()
+    from cumap.expert_kg.lexicon import production_lexicon_path
+
+    lex = Lexicon.load(production_lexicon_path())  # CR-041: skip pairs the lexicon new runs use already covers
     texts = None
     if with_text:
         try:
@@ -1060,3 +1062,36 @@ def lexicon_intake_cmd(
     info["lexicon_version"] = lex.version
     csv_path, key_path = li.write_sheet(run, sheet, info, REPO_ROOT / "data" / "interim" / "suggestions")
     typer.echo(f"{len(sheet)} rows -> {csv_path}\nkey -> {key_path}\n{json.dumps(info['candidates_by_group'])} skipped {info['skipped']}")
+
+
+@lexicon_app.command("apply-marks")
+def lexicon_apply_marks_cmd(
+    sheet: str = typer.Option(..., "--sheet", help="the owner's marked intake sheet under data/gold/ (read-only)"),
+    version: str = typer.Option(..., "--version", help="new lexicon version, e.g. 0.4"),
+    base: str = typer.Option("configs/term_lexicon.yaml", "--base", help="lexicon file the new version is built on"),
+    out: str = typer.Option("", "--out", help="new file; default configs/term_lexicon_v<version>.yaml"),
+) -> None:
+    """CR-041: turn an owner-marked intake sheet into a NEW lexicon file (the CR-008 learning loop). Never edits the base file
+    or data/gold/; covered pairs and cross-sheet conflicts are left out and listed. $0, no API call."""
+    from cumap.config import REPO_ROOT
+    from cumap.expert_kg import lexicon_intake as li
+    from cumap.expert_kg.lexicon import Lexicon
+
+    sheet_p = REPO_ROOT / sheet
+    base_p = REPO_ROOT / base
+    out_p = REPO_ROOT / (out or f"configs/term_lexicon_v{version}.yaml")
+    lex = Lexicon.load(base_p)
+    name = "lexicon intake " + sheet_p.stem.removeprefix("lexicon_intake_")
+    prior = li.prior_owner_marks(REPO_ROOT / "data" / "gold", lex.cfg, exclude=sheet_p.name)
+    entries, left_out = li.entries_from_marks(sheet_p, name, lex, prior)
+    n_same = sum(e["id"].startswith("S-") for e in entries)
+    line = (
+        f"{version} {__import__('datetime').date.today().isoformat()}: owner marks on {sheet_p.name} -> {n_same} same, "
+        f"{len(entries) - n_same} different (CR-041); left out: covered {len(left_out['covered'])}, cross-sheet conflict "
+        f"{len(left_out['cross_sheet_conflict'])}, neither {len(left_out['neither'])}"
+    )
+    new = li.write_lexicon_version(base_p, out_p, version, entries, line)
+    typer.echo(f"wrote {out_p} (version {new.version}, {len(new.entries)} entries)\n{line}")
+    for k, rows in left_out.items():
+        for r in rows if k != "conflicting_marks" else [x for g in rows for x in g]:
+            typer.echo(f"  left out [{k}]: row {r.get('id')} {r.get('a')} / {r.get('b')}")

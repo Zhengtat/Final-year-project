@@ -207,3 +207,14 @@ class Lexicon:
             if c in {self._canon(f) for f in e.forms}:
                 out.update(f for f in e.forms if self._canon(f) != c)
         return out
+
+
+def production_lexicon_path(policy: dict | None = None) -> Path:
+    """CR-041: the lexicon file NEW production runs load (`configs/concept_policy.yaml` key `term_lexicon`). Without the key,
+    `configs/term_lexicon.yaml` (v0.3, hash-pinned by the CR-011 handoff), which frozen evaluation and replay code keep using."""
+    from cumap.config import REPO_ROOT
+
+    if policy is None:
+        p = REPO_ROOT / "configs" / "concept_policy.yaml"
+        policy = yaml.safe_load(p.read_text(encoding="utf-8")) if p.exists() else {}
+    return REPO_ROOT / str((policy or {}).get("term_lexicon", "configs/term_lexicon.yaml"))
