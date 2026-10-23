@@ -26,7 +26,7 @@ from cumap.cr043.run import TAG as BASE_TAG
 from cumap.cr043.run import recorded_spend, run_id
 
 TAG = "cr043allp"
-MAX_USD_PER_DOC = 1.0
+MAX_USD_PER_DOC = 3.0  # the relation stage's preflight bound uses sol-era per-pair prices; real luna spend is capped by --cap-usd
 
 
 def _cleared(cp: dict) -> dict:
@@ -116,6 +116,16 @@ def main() -> None:
                         "extra_pairs": extra,
                     }
                 )
+            )
+            continue
+        dck = PG.run_path(run_id(d, TAG)) / "checkpoint.json"
+        if dck.exists() and json.loads(dck.read_text()).get("stage") == "snapshots":
+            spent += recorded_spend(run_id(d, TAG))
+            print(
+                json.dumps(
+                    {"doc": d, "skipped": "already finished", "spent_so_far": round(spent, 4)}
+                ),
+                flush=True,
             )
             continue
         t0 = time.time()

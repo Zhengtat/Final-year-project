@@ -543,3 +543,9 @@ Format: date · decision · reason · alternatives considered.
 - **Papers:** the same 20 (6 dev + 14 train). **Metric:** pooled strict relation F1 under `IDXR1-P1`.
 - **Rule:** adopt the arm for SciNLP runs if pooled `IDXR1-P1` F1 rises by **at least 0.02** over `cr043base` (0.107) **and** precision falls by **at most 0.03** (from 0.118). Otherwise keep the D3 budget. Report every other objective beside it; no other metric decides.
 - **Cost:** dry run first, then 2 papers, then the rest; cap $2 for the arm.
+
+## 2026-10-24 · CR-043 result: the "all pairs" arm is not adopted (pre-registered rule)
+- **Result:** pooled strict relation `IDXR1-P1` F1 **0.118** (P 0.114, R 0.122) vs `cr043base` 0.107 (P 0.118, R 0.098): +0.011, below the pre-registered +0.02; precision fell 0.004 (within 0.03). Pair recall 0.680 -> 0.829, macro F1 0.302 -> 0.341, fact F1 0.133 -> 0.142; P0 losses 71 -> 38; 1846 pairs classified (all of the pool), 519 edges. Cost $0.158 (luna).
+- **Decision:** keep the D3 pair budget for SciNLP runs. The arm's runs stay as a comparison (KG explorer Run option "CR-043 all-pairs arm (not adopted)").
+- **Reason:** the rule was written before the run; classifying every pair raised recall but added about as many unmarked edges, so pair delivery is not the main bottleneck. The next target is concept spans (N0 + N1 = 55% of losses).
+- **Alternatives:** adopting on the recall gain (refused: no post-hoc change of the rule).

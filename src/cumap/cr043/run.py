@@ -48,7 +48,17 @@ def main() -> None:
         done = ck.exists() and json.loads(ck.read_text()).get("stage") == "snapshots"
         if done and not a.dry_run:
             spent += recorded_spend(rid)
-            print(json.dumps({"split": split, "doc": d, "skipped": "already finished", "spent_so_far": round(spent, 4)}), flush=True)
+            print(
+                json.dumps(
+                    {
+                        "split": split,
+                        "doc": d,
+                        "skipped": "already finished",
+                        "spent_so_far": round(spent, 4),
+                    }
+                ),
+                flush=True,
+            )
             continue
         cmd = [sys.executable, "-m", "cumap.cr012.scinlp_run", "run", "--split", split, "--doc", d, "--tag", a.tag,
                "--max-usd", str(MAX_USD_PER_DOC)] + (["--dry-run"] if a.dry_run else [])  # fmt: skip

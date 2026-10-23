@@ -181,7 +181,10 @@ def build_scinlp(
     sym = ad.symmetric_relations()
     papers = papers or [("test", d.doc_key) for d in ad.load_documents("test")]
     golds = {sp: ad.gold(sp) for sp in {s for s, _ in papers}}
-    docmaps = {sp: {d.doc_key: d for d in ad.load_documents(sp, paragraph_every=SR.PARAGRAPH_EVERY)} for sp in golds}
+    docmaps = {
+        sp: {d.doc_key: d for d in ad.load_documents(sp, paragraph_every=SR.PARAGRAPH_EVERY)}
+        for sp in golds
+    }
     c19_path = REPO_ROOT / "reports/cr019/stage_a.json"
     c19 = json.loads(c19_path.read_text())["stage_a"]["scinlp"] if c19_path.exists() else None
     docs = []
@@ -399,6 +402,9 @@ def build(out: Path | None = None) -> Path:
             **({"rebuilt": build_scinlp("cr021test", frozen=False)} if (KG / "cr012_scinlp_cr021test_2021_acl_long_353_E0").exists() else {}),
             **({"cr043base": build_scinlp("cr043base", frozen=False, papers=_cr043_papers(), label="CR-043 baseline (train + dev)",
                                           note="CR-043 development run: current production settings (gpt-6-luna) on SciNLP train and dev papers; scored with the frozen CR-012 scorer and the CR-019 index. Not the test split.")}
+               if _cr043_papers() else {}),
+            **({"cr043allp": build_scinlp("cr043allp", frozen=False, papers=_cr043_papers(), label="CR-043 all-pairs arm (not adopted)",
+                                          note="CR-043 arm: the baseline's concepts with every candidate pair classified (no pair budget). Pre-registered rule not met (F1 +0.011 < +0.02); kept for comparison only. Not the test split.")}
                if _cr043_papers() else {}),
         },
         "pd_heldout": {"e0_strict_f1": 0.053, "sections": ["4.4", "4.5", "5.4", "6.3", "7.1", "8.2", "9.3"]},
