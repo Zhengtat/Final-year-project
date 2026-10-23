@@ -1,0 +1,177 @@
+{
+ "split": "dev",
+ "gate": {
+  "checks": {
+   "placed_path_equals_cr019_sc_score_per_document": true
+  },
+  "passed": true
+ },
+ "sets": {
+  "CR-019 dev runs `cr019dev` E0 (token matching)": {
+   "documents": [
+    "2021.acl-long.295",
+    "2024.acl-long.144-1-9.grobid",
+    "P05-1008.grobid",
+    "P16-1007.grobid",
+    "P02-1004.grobid",
+    "P03-1014.grobid"
+   ],
+   "variants": {
+    "FROZEN": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 8,
+       "fp": 44,
+       "fn": 155,
+       "precision": 0.15384615384615385,
+       "recall": 0.049079754601226995,
+       "f1": 0.07441860465116279
+      },
+      "gold_facts": 163,
+      "gold_mention_relations": 179,
+      "pred_facts": 52,
+      "pred_facts_with_synthetic_concept": 30,
+      "tp_facts": 8,
+      "tp_facts_with_strict_evidence_match": 8,
+      "unplaced_counted_as_fp": 0,
+      "evidence_match_share": 1.0
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 8,
+      "fp": 44,
+      "fn": 171,
+      "precision": 0.15384615384615385,
+      "recall": 0.0446927374301676,
+      "f1": 0.06926406926406926
+     }
+    },
+    "IDX-P1": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 16,
+       "fp": 115,
+       "fn": 147,
+       "precision": 0.12213740458015267,
+       "recall": 0.09815950920245399,
+       "f1": 0.10884353741496598
+      },
+      "gold_facts": 163,
+      "gold_mention_relations": 179,
+      "pred_facts": 125,
+      "pred_facts_with_synthetic_concept": 76,
+      "tp_facts": 16,
+      "tp_facts_with_strict_evidence_match": 15,
+      "unplaced_counted_as_fp": 6,
+      "evidence_match_share": 0.9375
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 15,
+      "fp": 117,
+      "fn": 164,
+      "precision": 0.11363636363636363,
+      "recall": 0.08379888268156424,
+      "f1": 0.09646302250803859
+     }
+    }
+   }
+  },
+  "CR-021 dev rebuild `cr021dev` E0 (r1key matching)": {
+   "documents": [
+    "2021.acl-long.295",
+    "2024.acl-long.144-1-9.grobid",
+    "P05-1008.grobid",
+    "P16-1007.grobid",
+    "P02-1004.grobid",
+    "P03-1014.grobid"
+   ],
+   "variants": {
+    "FROZEN": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 6,
+       "fp": 42,
+       "fn": 157,
+       "precision": 0.125,
+       "recall": 0.03680981595092025,
+       "f1": 0.05687203791469194
+      },
+      "gold_facts": 163,
+      "gold_mention_relations": 179,
+      "pred_facts": 48,
+      "pred_facts_with_synthetic_concept": 26,
+      "tp_facts": 6,
+      "tp_facts_with_strict_evidence_match": 6,
+      "unplaced_counted_as_fp": 0,
+      "evidence_match_share": 1.0
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 6,
+      "fp": 42,
+      "fn": 173,
+      "precision": 0.125,
+      "recall": 0.0335195530726257,
+      "f1": 0.05286343612334802
+     }
+    },
+    "IDX-P1": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 14,
+       "fp": 118,
+       "fn": 149,
+       "precision": 0.10606060606060606,
+       "recall": 0.08588957055214724,
+       "f1": 0.09491525423728812
+      },
+      "gold_facts": 163,
+      "gold_mention_relations": 179,
+      "pred_facts": 120,
+      "pred_facts_with_synthetic_concept": 76,
+      "tp_facts": 14,
+      "tp_facts_with_strict_evidence_match": 13,
+      "unplaced_counted_as_fp": 12,
+      "evidence_match_share": 0.9285714285714286
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 13,
+      "fp": 121,
+      "fn": 166,
+      "precision": 0.09701492537313433,
+      "recall": 0.07262569832402235,
+      "f1": 0.0830670926517572
+     }
+    },
+    "IDXR1-P1": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 18,
+       "fp": 114,
+       "fn": 145,
+       "precision": 0.13636363636363635,
+       "recall": 0.11042944785276074,
+       "f1": 0.12203389830508475
+      },
+      "gold_facts": 163,
+      "gold_mention_relations": 179,
+      "pred_facts": 126,
+      "pred_facts_with_synthetic_concept": 76,
+      "tp_facts": 18,
+      "tp_facts_with_strict_evidence_match": 17,
+      "unplaced_counted_as_fp": 6,
+      "evidence_match_share": 0.9444444444444444
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 17,
+      "fp": 116,
+      "fn": 162,
+      "precision": 0.12781954887218044,
+      "recall": 0.09497206703910614,
+      "f1": 0.10897435897435898
+     }
+    }
+   }
+  }
+ },
+ "hashes_unchanged": true,
+ "n_hashed": 12
+}
