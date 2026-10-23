@@ -6,8 +6,9 @@ per-section cap with a global pair budget:
 
   phase 0  a small per-section minimum (the best-cue pairs of every section);
   phase 0b ANCHOR PAIRS (CR-009 §6.3): each new concept paired with the node it was anchored to (the cue sentence is
-           the evidence sentence); they go FIRST in the coverage phase. The anchor TYPE only sets this priority and is
-           never shown to the relation generator or verifier;
+           the evidence sentence); they go FIRST in the coverage phase, in book order. The anchor TYPE is never read here
+           (`anchor_family_map` is read only by the CR-009 STOP 3 report) and is never shown to the
+           relation generator or verifier;
   phase 1  COVERAGE: every `defined` / `used` concept gets its best-cue pair first; a pair that covers
            two uncovered concepts beats one that covers a single concept. Mentioned-only concepts are
            NOT covered in this phase;
