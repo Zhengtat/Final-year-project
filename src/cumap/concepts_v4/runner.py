@@ -117,6 +117,7 @@ class ConceptRun:
         strict_g_links: bool = False,
         promote_rejected: bool = False,
         rejected_link_policy: str = "off",
+        identity_resolver: str = "legacy",
         emphasised: dict[str, set[str]] | None = None,
         retriever_k: int = 30,
         card_cap: int = 120,
@@ -198,6 +199,39 @@ class ConceptRun:
                 self._backfill(out, sections, order, i, order_offset)
         return out
 
+    # ---------------------------------------------------------------- CR-035 identity resolver (input A)
+    def _u1_context(self, sec: dict, paras: dict[str, str], cards: list[Card], final: dict):
+        """Alias statements and abbreviations of the chunk the links were made in (the same local text the G-link rules read)."""
+        from cumap.expert_kg.canonical_rules import AliasContext
+
+        sid = sec["section_id"]
+        forms = [f for c in cards for f in c.node.forms()] + [
+            m["surface"] for m in final["existing_mentions"]
+        ]
+        lex = self.lexicon or Lexicon([], self.alias_cfg, "empty")
+        return AliasContext.build(
+            lex,
+            {sid: " ".join(paras.values())},
+            {sid: int(sec.get("chapter_num") or 0)},
+            forms,
+            self.alias_cfg,
+        )
+
+    def _u1_decision(self, m: dict, node: Node, sec: dict, cache: list, build):
+        """U0-U4 for one generator link against all forms of the card's node (`build` makes the chunk context on first use)."""
+        from cumap.expert_kg import identity as ID
+
+        if not cache:
+            cache.append(build())
+        return ID.resolve_against_forms(
+            cache[0],
+            m["surface"],
+            node.forms(),
+            chapter=int(sec.get("chapter_num") or 0),
+            surface_type=node.node_type,
+            node_type=node.node_type,
+        )
+
     # ---------------------------------------------------------------- apply one section to the store
     def _apply(
         self,
@@ -219,6 +253,7 @@ class ConceptRun:
         }
         by_id = {c.node.id: c.node for c in cards}
         final = res.final
+        u1_ctx: list = []  # CR-035: built lazily, once per chunk
         for m in final["existing_mentions"]:
             node = by_id.get(m["node_id"])
             if node is None:
@@ -226,9 +261,30 @@ class ConceptRun:
             nontrivial = r1_key(m["surface"], self.alias_cfg) not in {
                 r1_key(f, self.alias_cfg) for f in node.forms()
             }
+            u1_dec = None
+            if nontrivial and self.identity_resolver == "u1":
+                u1_dec = self._u1_decision(
+                    m, node, sec, u1_ctx, lambda: self._u1_context(sec, paras, cards, final)
+                )
+            if u1_dec is not None and u1_dec.decision == "keep_apart":
+                # CR-035 U0: a lexicon `different` pair is never linked, and never sent to the adjudicator
+                out.merges.append(
+                    {
+                        "rule_id": "G-link-rejected",
+                        "identity_rule": "U0",
+                        "node_id": node.id,
+                        "surface": m["surface"],
+                        "section_id": sid,
+                        "evidence": m["evidence"],
+                        "trivial": False,
+                    }
+                )
+                continue
+            u1_merge = u1_dec is not None and u1_dec.decision == "merge"
             if (
                 nontrivial
                 and self.strict_g_links
+                and not u1_merge
                 and not g_link_ok(
                     m["surface"], node, " ".join(paras.values()), self.lexicon, self.alias_cfg
                 )
@@ -267,12 +323,13 @@ class ConceptRun:
             }:  # G-link
                 out.merges.append(
                     {
-                        "rule_id": "G-link",
+                        "rule_id": u1_dec.rule_id if u1_merge else "G-link",
                         "node_id": node.id,
                         "surface": m["surface"],
                         "section_id": sid,
                         "evidence": m["evidence"],
                         "trivial": False,
+                        **({"identity_rule": u1_dec.rule_id} if u1_merge else {}),
                     }
                 )
                 if m["surface"] not in node.aliases:

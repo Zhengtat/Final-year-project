@@ -38,6 +38,14 @@ def _promote_rejected() -> bool:
     return bool(_policy()["promote_rejected_links"])
 
 
+def _identity_resolver(policy: dict | None = None) -> str:
+    """CR-035: `identity_resolver` in the policy file (`legacy` | `u1`); a file without the key keeps `legacy`."""
+    mode = (policy if policy is not None else _policy()).get("identity_resolver", "legacy")
+    if mode not in ("legacy", "u1"):
+        raise ValueError(f"identity_resolver must be legacy or u1, got {mode!r}")
+    return mode
+
+
 def _backfill_enabled(policy: dict | None = None) -> bool:
     """CR-027: backfill (the chapter-end mention pass) for NEW production runs. A policy file without the key keeps the
     pre-CR-027 behaviour (on)."""
@@ -85,6 +93,7 @@ def stage_concepts(
         raise SystemExit(f"preflight worst case ${est['usd_worst']} exceeds --max-usd {max_usd}")
     nlp = spacy.load("en_core_web_sm")
     embed = X.Embedder(settings.embeddings.model)
+    resolver = _identity_resolver()
     from cumap.concepts_v4.schema import make_schemas
     from cumap.cr012.schema_profile import active_profile
 
@@ -122,6 +131,7 @@ def stage_concepts(
         strict_g_links=strict_g_links,
         promote_rejected=_promote_rejected() if promote_rejected is None else promote_rejected,
         rejected_link_policy=_policy()["rejected_link_policy"],
+        identity_resolver=resolver,
         progress=print,
         schemas=make_schemas(profile.entity_types if profile else None),
     )
@@ -131,7 +141,12 @@ def stage_concepts(
     X.save_run(
         out,
         run_dir / "v4_concepts.json",
-        {"units": len(units), "spend_usd": round(client.spent_usd, 4), "backfill": do_backfill},
+        {
+            "units": len(units),
+            "spend_usd": round(client.spent_usd, 4),
+            "backfill": do_backfill,
+            **({"identity_resolver": resolver} if resolver != "legacy" else {}),
+        },
     )
     overrides = (
         CanonicalOverrides()
@@ -146,6 +161,7 @@ def stage_concepts(
         load_prompt(REPO_ROOT / "prompts", "canonicalize", "v2"),
         embed,
         overrides,
+        identity_resolver=resolver,
     )
     texts = {}
     for u in units:
