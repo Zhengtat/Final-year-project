@@ -640,6 +640,127 @@ def run_stage(
     return layer
 
 
+# ---------------------------------------------------------------- CR-039 DRAFT: items from relation classification
+def cue_pair_priority(cands: list[Candidate], matcher: MentionMatcher) -> set[frozenset[str]]:
+    """$0: concept pairs co-mentioned in a cue sentence of the (kept) cue scan. Used only as a SELECTION-PRIORITY signal for the relation stage, so
+    misconception-family pairs are likelier to be classified; it creates no item (the classification does)."""
+    out: set[frozenset[str]] = set()
+    for c in cands:
+        ids = sorted({m.concept_id for m in matcher.find(c.sentence)})
+        out.update(frozenset((a, b)) for i, a in enumerate(ids) for b in ids[i + 1 :])
+    return out
+
+
+def _find_edge(edges: dict[str, dict], s: str, rel: str, t: str, registry: RelationRegistry) -> str | None:
+    sym = rel in registry and registry.get(rel).symmetric
+    for eid, r in edges.items():
+        es, erel, et, _pol = _edge_triple(r)
+        if erel == rel and ((es, et) == (s, t) or (sym and (et, es) == (s, t))):
+            return eid
+    return None
+
+
+def layer_from_classification(
+    cp: dict,
+    registry: RelationRegistry,
+    sections: list[tuple[str, str]],
+    lexicon: Lexicon | None,
+    *,
+    verify=None,
+) -> dict:
+    """CR-039 DRAFT (`misconception_source: classification`): build the misconception layer from the classification results whose outcome is
+    `misconception`, with the SAME code checks as the legacy stage (verbatim quotes, grounded endpoints, wrong differs from correct, perturbation matches
+    the difference, the item links to the expert edge or lexicon `different` entry it contradicts). A correct edge not in the graph is classified by
+    `verify` (as `found_by: misconception_stage`) or the item waits as `needs_correct_edge`. A failure is logged for the owner; nothing is dropped
+    silently. The output has exactly the legacy layer's shape, so every reader is unchanged."""
+    from types import SimpleNamespace
+
+    text_by = dict(sections)
+    concepts = cp["concepts"]
+    matcher = MentionMatcher(
+        concept_vocab(
+            [
+                RegisteredConcept(c["concept_id"], c["canonical_name"], c["node_type"], None, "", list(c.get("aliases", [])))
+                for c in concepts
+            ]
+        )
+    )
+    edges = expert_edges(cp["relation_results_v3"])
+    layer = {"items": [], "not_warning": [], "needs_review": [], "needs_correct_edge": [], "proposed_lexicon": [], "stats": {}, "candidate_log": []}
+    n_results = 0
+    for r in list(cp["relation_results_v3"]):
+        pair = r["pair"]
+        if r.get("outcome") == "no_relation" and r.get("reason") == "not_a_misconception":
+            layer["not_warning"].append({"section_id": pair["section_id"], "sentence": pair["sentence"], "reason": r.get("family_reason"), "families": ["classification"]})
+            continue
+        if r.get("outcome") != "misconception":
+            continue
+        n_results += 1
+        ch = r["misconception"]
+        x, y = pair["concept_x_id"], pair["concept_y_id"]
+        ws, wt = (y, x) if ch["wrong_direction"] == "reversed" else (x, y)
+        cs, ct = (y, x) if ch["correct_direction"] == "reversed" else (x, y)
+        sec = pair["section_id"]
+        cand = Candidate(sec, pair["sentence"], pair["sentence"], ["classification"])
+        ctx = build_context(cand, concepts, matcher, edges, registry, lexicon)
+        contradicts: list[str] = []
+        if ch["wrong_relation"] == CONFLATED:
+            contradicts += [k for k, v in ctx.get("lex", {}).items() if set(v["nodes"]) == {x, y}]
+            contradicts += [e for e, rr in edges.items() if _edge_triple(rr)[1] == "contrasts_with" and {_edge_triple(rr)[0], _edge_triple(rr)[2]} == {x, y}]
+        elif ch["correct_relation"] != "none":
+            hit = _find_edge(edges, cs, ch["correct_relation"], ct, registry)
+            if hit:
+                contradicts.append(hit)
+        proposed = not contradicts and ch["correct_relation"] != "none"
+        out = SimpleNamespace(
+            is_warning=True, reason=ch["reason"], intuition=None, wrong_source=ws, wrong_relation=ch["wrong_relation"], wrong_target=wt,
+            wrong_polarity=ch["wrong_polarity"], wrong_modality=None, wrong_conditions=[], perturbation_type=ch["perturbation_type"],
+            prevalence_cue=ch["prevalence_cue"], misconception_quote=ch["misconception_quote"], correction_quote=ch["correction_quote"],
+            contradicts=contradicts, proposed_correct=proposed, pce_source=cs, pce_relation=ch["correct_relation"], pce_target=ct,
+            pce_polarity=ch["correct_polarity"], pce_quote=ch["correction_quote"],
+        )  # fmt: skip
+        text = text_by.get(sec, pair["sentence"])
+        errs = check_item(out, ctx, text, registry, lexicon) if not proposed else _check_proposed(out, ctx, text)
+        if errs:
+            layer["needs_review"].append({"section_id": sec, "sentence": pair["sentence"], "errors": errs})
+            continue
+        if proposed:
+            accepted = verify(out, cand) if verify else None
+            if not accepted:
+                layer["needs_correct_edge"].append({"section_id": sec, "sentence": pair["sentence"], "intuition": None, "proposed": ch})
+                continue
+            new_id = edge_id(accepted["pair"]["pair_id"])
+            out.contradicts = [new_id]
+            ctx = build_context(cand, concepts, matcher, {**edges, new_id: accepted}, registry, lexicon)
+            errs3 = check_item(out, ctx, text, registry, lexicon)
+            if errs3:
+                layer["needs_review"].append({"section_id": sec, "sentence": pair["sentence"], "errors": errs3})
+                continue
+            if all(rr is not accepted for rr in cp["relation_results_v3"]):
+                cp["relation_results_v3"].append(accepted)
+            edges[new_id] = accepted
+        item = _item(out, cand, text, ctx)
+        item["origin"] = "textbook_warning"
+        item["source"] = "relation_classification"
+        key = (item["source_id"], item["relation"], item["target_id"], item["polarity"])
+        twin = next((i for i in layer["items"] if (i["source_id"], i["relation"], i["target_id"], i["polarity"]) == key), None)
+        if twin:
+            twin.setdefault("additional_quotes", []).append({"section_id": sec, "misconception_quote": out.misconception_quote, "correction_quote": out.correction_quote})
+            continue
+        layer["items"].append(item)
+        if out.perturbation_type == "conflation":
+            layer["proposed_lexicon"].append({"forms": [item["source_name"], item["target_name"]], "kind": "confusable", "status": "proposed", "source": f"misconception classification {item['item_id']}", "quote": out.misconception_quote, "section": sec})  # fmt: skip
+    layer["stats"] = {
+        "source": "relation_classification",
+        "candidates": n_results,
+        "warnings": len(layer["items"]),
+        "not_warning": len(layer["not_warning"]),
+        "needs_review": len(layer["needs_review"]),
+        "needs_correct_edge": len(layer["needs_correct_edge"]),
+    }
+    return layer
+
+
 def _check_proposed(out, ctx: dict, text: str) -> list[str]:
     errs = []
     for fld in ("misconception_quote", "correction_quote", "pce_quote"):

@@ -175,3 +175,7 @@ Docs only: ARCHITECTURE dual-layer section marked historical; CLAUDE.md rules 28
 ## CR-038 qualifier amendments, part B (DRAFT) (2026-10-23)
 Registry `configs/relations_v1.5.yaml` (generated from v1.3 by `CR-038-relations-v1.5.yaml`), prompts `relation_choice/v6.md` and `relation_qualifiers/v6.md`, `relations_v6.py`, switch `qualifier_amendments: "off"`. 14 new tests (`tests/test_cr038.py`, mock fixtures only). Nothing was run against a model.
 **Awaiting owner review (drafts, not run):** `configs/relations_v1.5.yaml` and its patch, `prompts/relation_choice/v6.md`, `prompts/relation_qualifiers/v6.md`. The §10 measurement must not start before this review.
+
+## CR-039 misconception family in relation classification (DRAFT) (2026-10-23)
+Registry `configs/relations_v1.6.yaml` (patch `CR-039-relations-v1.6.yaml`), prompts `relation_family/v5.md` and `relation_choice/v7.md`, `relations_v7.py`, `misconception.layer_from_classification`, switch `misconception_source: "legacy"`. 14 new tests (`tests/test_cr039.py`, mock fixtures only). Nothing was run against a model.
+**Awaiting owner review (drafts, not run):** `configs/relations_v1.6.yaml` and its patch, `prompts/relation_family/v5.md`, `prompts/relation_choice/v7.md`, plus the CR-038 drafts they build on. The §14 measurement must not start before this review.
