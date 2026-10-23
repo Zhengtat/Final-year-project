@@ -470,3 +470,7 @@ Format: date · decision · reason · alternatives considered.
 - **Grounding variants reported:** `FROZEN` and `IDX-P1` (plus `IDXR1-P1` for the CR-021 rebuild), each beside the frozen CR-012 / CR-019 number.
 - **Validation order:** fixtures, then SciNLP dev numbers, then (after this entry is committed) the test split once: frozen E0 run, CR-021 rebuild, E1 / E3-M / E4-M oracle runs. Determinism gate: the frozen CR-012 and CR-019 SciNLP figures reproduce before any new figure.
 - **Alternatives rejected:** switching the headline to `IDX-P3` (credits edges from sentences the classifier never read, can count one edge as several true positives, and would be post-hoc); a full identity annotation of the 590 endpoint mentions (owner declined).
+
+## 2026-10-23 · CR-033: results recorded (definition as pre-registered above, unchanged)
+- **Built:** `src/cumap/cr033/fact_f1.py` (scorer), `run.py` (dev and test reports), `reports/cr033/fact_f1_{dev,test}.{json,md}`. Dev was computed first, test once after the pre-registration commit (`6c1d7a1`). Determinism gate passed on test (the CR-022 gate: frozen strict relation, IDX-P1, concept F1 0.352, pair recall 0.545); source checkpoints hash-identical before and after.
+- **Test fact F1 (`FACT-C1-SURF-R1`) FROZEN / IDX-P1:** E0 0.078 / 0.328 (IDX-P3 0.337); CR-021 rebuild 0.060 / 0.256 (IDXR1-P1 0.263); E1 0.397 / 0.405; E3-M 0.649 / 0.619; E4-M 0.651 / 0.659. Beside the IDX-P1 strict relation F1 (E0 0.195). Reporting only (rule 9); `IDX-P1` stays the headline.
