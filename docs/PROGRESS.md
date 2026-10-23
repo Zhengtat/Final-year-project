@@ -206,3 +206,6 @@ Owner ruling on intake row 10: "data link protocol / link-level protocol" = same
 
 ## CR-046 registry v1.4.1 and the qualifier-amendment measurement (2026-10-24) — complete
 Registry `configs/relations_v1.4.1.yaml` = v1.4 + the owner-approved CR-040 wording (not the default). Qualifier amendments (CR-038 v6) measured on P&D dev 1.5 + 2.6 (same pairs, luna, $0.071): Strict E2E F1 0.113 -> 0.111, macro F1 0.781 -> 0.781: passes the pre-registered rule (drops <= 0.01); 6 comparisons recovered as `contrasts_with` with a dimension quote; no surface phrase as long as its quote. Not switched on: it needs registry v1.5 as the default for new runs (owner decision). Report `reports/cr046/qualifier_amendments.md`.
+
+## CR-047 registry v1.5 and qualifier amendments on (2026-10-24) — complete
+New P&D runs load registry v1.5 (`relation_policy.yaml` `relation_registry`; `default.yaml` keeps v1.3). SciNLP: registry `relations_scinlp_v1.0.1.yaml` (frozen registry minus modality `never`) through profile v2 and `cumap.cr047.scinlp_run`. SciNLP check (20 papers, same pairs, $0.293): IDXR1-P1 F1 0.107 -> 0.114, macro F1 0.302 -> 0.324; P&D check (CR-046) passed. `qualifier_amendments: v6` on for new runs. Tests 1028 passed.
