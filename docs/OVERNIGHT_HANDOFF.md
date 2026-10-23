@@ -126,20 +126,20 @@ Do these in order. Tasks marked "after" need the earlier one merged first.
 
 | Task | Branch | Merge commit / tag | Tests passed | Spend | Status / notes |
 |---|---|---|---|---|---|
-| T1 | housekeeping-docs-sync | (merge commit see git log) / no tag | 876 | $0 | merged; docstring/comment fixes, DECISIONS rules entry, D-6 |
-| T2 | cr-027-remove-backfill | see git log / cr-027-complete | 879 | $0 | merged |
-| T3 | cr-029-review-intake | see git log / cr-029-complete | 886 | $0 | merged; sheet data/interim/suggestions/lexicon_intake_slice3_c2.csv awaits owner marks |
-| T4 | cr-030-retire-erst | see git log / cr-030-complete | 886 (unchanged, docs only) | $0 | merged |
-| T5 | cr-031-oracle-ladder-idx | see git log / cr-031-complete | 889 | $0 | merged; reports/cr031/ generated, acceptance table reproduced |
-| T6 | cr-032-hierarchy-t1 | see git log / cr-032-complete | 901 | $0 | merged; real-identity SciNLP figure awaits owner marks on scinlp_hier_identity_sheet.csv |
-| T7 | cr-033-fact-f1 | see git log / cr-033-complete | 906 | $0 | merged; pre-registration commit 6c1d7a1 precedes the test run |
-| T8 | cr-034-qualifier-checks | see git log / cr-034-complete | 924 | $0 | merged; switch default off |
-| T9 | cr-035-identity-resolver-a | see git log / cr-035-complete | 937 | $0 | merged; switch default legacy |
-| T10 | cr-036-save-graph | see git log / cr-036-complete | 952 | $0 | merged; switch default legacy; replay byte-identical |
-| T11 | cr-037-identity-judge-draft | see git log / cr-037-complete | 974 | $0 | merged as DRAFT, off by default; prompts/identity_judge/v1.md awaits owner review; measurement not run |
-| T12 | cr-038-qualifiers-draft | see git log / cr-038-complete | 988 | $0 | merged as DRAFT, off by default; registry v1.5 and prompts v6 await owner review |
-| T13 | cr-039-misconception-family-draft | see git log / cr-039-complete | 1002 | $0 | merged as DRAFT, off by default; registry v1.6 and prompts family v5 / choice v7 await owner review |
-| T14 | cr-040-v14-review-draft | see git log / cr-040-complete | 1005 | $0 | merged; docs/cr040/v14_relation_review.md awaits owner review; v1.4 file untouched |
+| T1 | housekeeping-docs-sync | fc10052 / no tag | 876 | $0 | merged; docstring/comment fixes, DECISIONS rules entry, D-6 |
+| T2 | cr-027-remove-backfill | 6a16466 / cr-027-complete | 879 | $0 | merged |
+| T3 | cr-029-review-intake | 0f689e4 / cr-029-complete | 886 | $0 | merged; sheet data/interim/suggestions/lexicon_intake_slice3_c2.csv awaits owner marks |
+| T4 | cr-030-retire-erst | 0793ce7 / cr-030-complete | 886 (unchanged, docs only) | $0 | merged |
+| T5 | cr-031-oracle-ladder-idx | 448a6bf / cr-031-complete | 889 | $0 | merged; reports/cr031/ generated, acceptance table reproduced |
+| T6 | cr-032-hierarchy-t1 | 66f329b / cr-032-complete | 901 | $0 | merged; real-identity SciNLP figure awaits owner marks on scinlp_hier_identity_sheet.csv |
+| T7 | cr-033-fact-f1 | b128dbd / cr-033-complete | 906 | $0 | merged; pre-registration commit 6c1d7a1 precedes the test run |
+| T8 | cr-034-qualifier-checks | 55523b4 / cr-034-complete | 924 | $0 | merged; switch default off |
+| T9 | cr-035-identity-resolver-a | 50a2b13 / cr-035-complete | 937 | $0 | merged; switch default legacy |
+| T10 | cr-036-save-graph | b2d3b51 / cr-036-complete | 952 | $0 | merged; switch default legacy; replay byte-identical |
+| T11 | cr-037-identity-judge-draft | 4fe3055 / cr-037-complete | 974 | $0 | merged as DRAFT, off by default; prompts/identity_judge/v1.md awaits owner review; measurement not run |
+| T12 | cr-038-qualifiers-draft | 0308132 / cr-038-complete | 988 | $0 | merged as DRAFT, off by default; registry v1.5 and prompts v6 await owner review |
+| T13 | cr-039-misconception-family-draft | e4e8b07 / cr-039-complete | 1002 | $0 | merged as DRAFT, off by default; registry v1.6 and prompts family v5 / choice v7 await owner review |
+| T14 | cr-040-v14-review-draft | bb5c499 / cr-040-complete | 1005 | $0 | merged; docs/cr040/v14_relation_review.md awaits owner review; v1.4 file untouched |
 
 
 ### 0.7 Where the data is (all read-only for these tasks)
