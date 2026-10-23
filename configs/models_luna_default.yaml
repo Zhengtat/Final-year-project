@@ -14,3 +14,7 @@ llm:
     enabled: true
     from_tier: [strong, bulk]
     to_tier: escalate
+  # CR-043 (2026-10-23): luna's hidden reasoning counts against max_output_tokens. On a SciNLP train paper (P08-1019) a
+  # relation_family call stopped at 800 of 800 tokens with no answer (status=incomplete). The three relation caps are raised x3,
+  # as CR-025 did for o4-mini; every other cap is unchanged. A cap is only a ceiling: calls that finish early cost the same.
+  max_output_tokens: {relation_family: 2400, relation_choice: 3000, relation_qualifiers: 2400}

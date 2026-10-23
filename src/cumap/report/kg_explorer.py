@@ -156,7 +156,15 @@ def sci_node_funnel(rid: str, cp: dict, nodes: list[dict], edges: list[dict]) ->
     }
 
 
-def build_scinlp(tag: str = "heldout", frozen: bool = True) -> dict:
+def build_scinlp(
+    tag: str = "heldout",
+    frozen: bool = True,
+    papers: list[tuple[str, str]] | None = None,
+    label: str | None = None,
+    note: str | None = None,
+) -> dict:
+    """SciNLP graphs of one run. `papers` = (split, doc_key) pairs; default the 3 test papers (the frozen and rebuilt views).
+    CR-043 passes its train / dev papers, scored with the same frozen scorer (no frozen results exist for them)."""
     from cumap.cr012 import attribution as A
     from cumap.cr012 import scinlp_run as SR
     from cumap.cr012 import scoring as S
@@ -171,18 +179,25 @@ def build_scinlp(tag: str = "heldout", frozen: bool = True) -> dict:
     computed: dict = {}  # tag != heldout: scores computed with the same frozen scorer (a rebuild has no frozen results)
     ad = SciNLPAdapter()
     sym = ad.symmetric_relations()
-    gold_all = ad.gold("test")
+    papers = papers or [("test", d.doc_key) for d in ad.load_documents("test")]
+    golds = {sp: ad.gold(sp) for sp in {s for s, _ in papers}}
+    docmaps = {sp: {d.doc_key: d for d in ad.load_documents(sp, paragraph_every=SR.PARAGRAPH_EVERY)} for sp in golds}
     c19_path = REPO_ROOT / "reports/cr019/stage_a.json"
     c19 = json.loads(c19_path.read_text())["stage_a"]["scinlp"] if c19_path.exists() else None
     docs = []
-    for doc in ad.load_documents("test", paragraph_every=SR.PARAGRAPH_EVERY):
+    for split, doc_key in papers:
+        doc = docmaps[split][doc_key]
         rid = f"cr012_scinlp_{tag}_{doc.doc_key.replace('.', '_').replace('-', '_')}_E0"
         path = KG / rid / "checkpoint.json"
+        if not frozen and not path.exists():
+            continue
         cp = json.loads(path.read_text())
+        if not frozen and cp.get("stage") != "snapshots":
+            continue  # a run that has not finished yet
         pred = SR.predict(doc, cp)
         # CR-019 occurrence index (labelled; the frozen view is unchanged)
         ipred = V19.sc_predict_indexed(doc, cp)
-        g = gold_all[doc.doc_key]
+        g = golds[split][doc.doc_key]
         gold_spans = {m.span for m in g.mentions}
         gold_typed = {(m.span, m.type) for m in g.mentions}
         gold_type = {m.span: m.type for m in g.mentions}
@@ -302,7 +317,7 @@ def build_scinlp(tag: str = "heldout", frozen: bool = True) -> dict:
             att = A.distribution(codes)
         docs.append({
             "node_funnel": sci_node_funnel(rid, cp, nodes, edges),
-            "doc_id": doc.doc_key, "retained_prediction_path": f"data/processed/kg/{rid}/checkpoint.json",
+            "doc_id": doc.doc_key, "split": split, "retained_prediction_path": f"data/processed/kg/{rid}/checkpoint.json",
             "predicted_nodes": len(pred["nodes"]), "predicted_entity_mentions": sum(len(n.mentions) for n in pred["nodes"]), "predicted_edges": len(pred["edges"]),
             "gold_entities": len(g.mentions), "gold_relations": len(g.relations), "e0_strict_relation_f1": sc["rel"]["f1"],
             "e0_relation_tp_fp_fn": [sc["rel"]["tp"], sc["rel"]["fp"], sc["rel"]["fn"]], "e0_relation_prf": [sc["rel"]["precision"], sc["rel"]["recall"], sc["rel"]["f1"]],
@@ -331,6 +346,8 @@ def build_scinlp(tag: str = "heldout", frozen: bool = True) -> dict:
             "ci_status": res["CI_status"] if frozen else "NOT_EVALUABLE_SMALL_N",
         },
         "run": "frozen" if frozen else tag,
+        "label": label,
+        "note": note,
         "cr019": (
             {
                 "variant": V19.PRIMARY,
@@ -359,11 +376,31 @@ def build_scinlp(tag: str = "heldout", frozen: bool = True) -> dict:
     }
 
 
+def _cr043_papers() -> list[tuple[str, str]]:
+    """CR-043 train / dev papers whose baseline run has finished (none: the option is left out)."""
+    try:
+        from cumap.cr043.papers import first_set
+        from cumap.cr043.run import TAG, run_id
+    except ImportError:
+        return []
+    out = []
+    for split, d in first_set():
+        f = KG / run_id(d, TAG) / "checkpoint.json"
+        if f.exists() and json.loads(f.read_text()).get("stage") == "snapshots":
+            out.append((split, d))
+    return out
+
+
 def build(out: Path | None = None) -> Path:
     data = {
         "pd": build_pd(), "sci": build_scinlp(),
         "pd_alt": {r: build_pd(r, o) for r, o in PD_ALT.items() if (KG / r / "organisation" / o).exists()},
-        "sci_alt": {"rebuilt": build_scinlp("cr021test", frozen=False)} if (KG / "cr012_scinlp_cr021test_2021_acl_long_353_E0").exists() else {},
+        "sci_alt": {
+            **({"rebuilt": build_scinlp("cr021test", frozen=False)} if (KG / "cr012_scinlp_cr021test_2021_acl_long_353_E0").exists() else {}),
+            **({"cr043base": build_scinlp("cr043base", frozen=False, papers=_cr043_papers(), label="CR-043 baseline (train + dev)",
+                                          note="CR-043 development run: current production settings (gpt-6-luna) on SciNLP train and dev papers; scored with the frozen CR-012 scorer and the CR-019 index. Not the test split.")}
+               if _cr043_papers() else {}),
+        },
         "pd_heldout": {"e0_strict_f1": 0.053, "sections": ["4.4", "4.5", "5.4", "6.3", "7.1", "8.2", "9.3"]},
         "na": NA,
     }  # fmt: skip

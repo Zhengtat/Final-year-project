@@ -54,6 +54,8 @@ def test_no_pipeline_module_reads_scinlp_text_into_prompts():
             continue  # CR-031: read-only rescoring of retained SciNLP oracle runs (no prompt, no model call)
         if f.parts[2] == "cr020":
             continue  # CR-020 dev experiment runner and scorer (SciNLP dev split only, no test-split run)
+        if f.parts[2] == "cr043":
+            continue  # CR-043: launches the existing SciNLP runner on train / dev papers and scores retained runs (no prompt, no test split)
         if f.parts[2] == "cr019" and f.name in {
             "run.py",
             "variants.py",

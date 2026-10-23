@@ -210,7 +210,7 @@ function usePdRun(k){ if(!DATA.pd_sets[k]) return; DATA.pd=DATA.pd_sets[k]; TRAC
 function useSciRun(k){ if(!DATA.sci_sets[k]) return; const id=S.doc&&S.doc.doc_id; DATA.sci=DATA.sci_sets[k]; S.sel=null; setMode('sci', DATA.sci.docs.find(d=>d.doc_id===id)||DATA.sci.docs[0]); }
 function runSwitch(){
   if(S.mode==='pd'&&Object.keys(DATA.pd_sets).length>1) return '<h3>Graph</h3><div class="seg" style="display:flex">'+Object.keys(DATA.pd_sets).map(k=>'<button data-pdrun="'+esc(k)+'" class="'+(DATA.pd.run_id===k?'on':'')+'" style="flex:1">'+esc(k)+(k===PROD_RUN?' · production':' · rebuild')+'</button>').join('')+'</div>';
-  if(S.mode==='sci'&&Object.keys(DATA.sci_sets).length>1) return '<h3>Run</h3><div class="seg" style="display:flex">'+Object.keys(DATA.sci_sets).map(k=>'<button data-scirun="'+esc(k)+'" class="'+(DATA.sci===DATA.sci_sets[k]?'on':'')+'" style="flex:1">'+(k==='frozen'?'Frozen (CR-012)':'Rebuilt 2026-10-16')+'</button>').join('')+'</div>';
+  if(S.mode==='sci'&&Object.keys(DATA.sci_sets).length>1) return '<h3>Run</h3><div class="seg" style="display:flex">'+Object.keys(DATA.sci_sets).map(k=>'<button data-scirun="'+esc(k)+'" class="'+(DATA.sci===DATA.sci_sets[k]?'on':'')+'" style="flex:1">'+(k==='frozen'?'Frozen (CR-012)':(DATA.sci_sets[k].label?esc(DATA.sci_sets[k].label):'Rebuilt 2026-10-16'))+'</button>').join('')+'</div>';
   return '';
 }
 // Okabe-Ito based palette (colour-blind safe)
@@ -278,8 +278,9 @@ function banner(){
   } else {
     const h=DATA.sci.headline;
     const reb = DATA.sci!==DATA.sci_sets.frozen;
-    b.innerHTML='<div class="banner warn"><b>SciNLP dataset — a test run, not the main graph.'+(reb?' Rebuilt 2026-10-16 with spelling-variant matching and the rejected-link adjudicator; the frozen CR-012 scores are not replaced.':'')+'</b> The same system was run on 3 scientific papers to see how well it works outside networking. Its output is compared with a human answer key and is not part of the P&amp;D graph.'+
-    '<details><summary>Overall score</summary>'+(DATA.sci.cr019?'Strict E2E Edge F1 (CR-019 scoring, every predicted relation counted) <b>'+DATA.sci.cr019.f1.toFixed(3)+'</b> · precision '+DATA.sci.cr019.precision.toFixed(3)+' · recall '+DATA.sci.cr019.recall.toFixed(3)+', over all 3 papers. ':'')+ciPlain(h.ci_status)+'<br><span class="small">Frozen CR-012 scorer: Strict E2E Edge F1 '+h.relation_f1.toFixed(3)+' (precision '+h.precision.toFixed(3)+', recall '+h.recall.toFixed(3)+'); it leaves most predicted relations unscored.</span></details></div>';
+    const nP = DATA.sci.docs.length;
+    b.innerHTML='<div class="banner warn"><b>SciNLP dataset — '+(DATA.sci.note?'a development run, not the main graph. '+esc(DATA.sci.note):'a test run, not the main graph.'+(reb?' Rebuilt 2026-10-16 with spelling-variant matching and the rejected-link adjudicator; the frozen CR-012 scores are not replaced.':''))+'</b> The same system was run on '+nP+' scientific paper'+(nP===1?'':'s')+' to see how well it works outside networking. Its output is compared with a human answer key and is not part of the P&amp;D graph.'+
+    '<details><summary>Overall score</summary>'+(DATA.sci.cr019?'Strict E2E Edge F1 (CR-019 scoring, every predicted relation counted) <b>'+DATA.sci.cr019.f1.toFixed(3)+'</b> · precision '+DATA.sci.cr019.precision.toFixed(3)+' · recall '+DATA.sci.cr019.recall.toFixed(3)+', over all '+nP+' papers. ':'')+ciPlain(h.ci_status)+'<br><span class="small">Frozen CR-012 scorer: Strict E2E Edge F1 '+h.relation_f1.toFixed(3)+' (precision '+h.precision.toFixed(3)+', recall '+h.recall.toFixed(3)+'); it leaves most predicted relations unscored.</span></details></div>';
   }
 }
 

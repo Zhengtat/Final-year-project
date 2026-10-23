@@ -194,3 +194,6 @@ T1-T14 of `docs/OVERNIGHT_HANDOFF.md` section 0.3 executed: 14 branches merged i
 ## CR-042 SciNLP Hierarchy F1 with real identity (2026-10-23)
 Owner's scoped sheet in `data/gold/scinlp_hier_identity_sheet_marked.csv` (90 rows, 19 groups) used by `cumap.cr032.run` ($0): SciNLP test, frozen run, `HIER-T1` real identity FROZEN 0.043 / IDX-P1 0.110 (string-based 0.036 / 0.143); rebuild IDXR1-P1 0.053. Gate passed, sources hash-identical, P&D unchanged. Report generator shows the real-identity column (`reports/cr032/hier_t1.md`). 2 new tests (`tests/test_cr042.py`). No model call.
 - **Open:** explorer scorecard and presentation metric definition still not updated (CR-032 open item).
+
+## CR-043 SciNLP expert KG, first 20 papers (2026-10-23) — in progress
+Baseline (`cr043base`, 6 dev + 14 train, luna, $0.535): strict relation `IDXR1-P1` F1 **0.107** (P 0.118, R 0.098); concept F1 0.419; pair recall 0.680; relation macro F1 0.302; fact F1 0.133. Losses: concepts / spans 55%, pairs not classified 14% (all same-sentence), classifier 15%. Report `reports/cr043/cr043base.md`; graphs in the KG explorer (SciNLP → Run "CR-043 baseline (train + dev)"). Relation output caps raised x3 in the luna profile after a truncated call. Next (awaiting owner): the "all pairs" arm (`cumap.cr043.arm_allpairs`, about $0.3).
