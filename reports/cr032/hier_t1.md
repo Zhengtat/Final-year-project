@@ -76,16 +76,16 @@ No cycles and no `part_of` edge without a part type.
 
 `HIER-T1-SURF-R1` infers identity from strings (R1 name key plus acronym <-> long form within one paper). It is a labelled cross-check, never a headline. Unplaced predicted edges are false positives in every variant except `FROZEN` (rule 35).
 
-Real concept matching (`HIER-T1` with the owner's scoped identity sheet): **AWAITING_OWNER_IDENTITY_SHEET**. The blind sheet has 90 rows.
+Real concept matching (`HIER-T1` with the owner's scoped identity sheet): **present**.
 
 ### frozen CR-012 STOP 4 (token matching)
 
 Documents (3): 2021.acl-long.353, 2024.acl-long.108-1-9.grobid, P17-1058.grobid.
 
-| variant | `HIER-T1-SURF-R1` P / R / F1 | direct edges | same set, surface identity (CR-022 A2 rule) | gold pairs (direct) | unplaced as FP |
-|---|---|---|---|---|---|
-| `FROZEN` | 0.111 / 0.022 / **0.036** (tp 1, fp 8, fn 45) | 0.111 / 0.022 / **0.037** (tp 1, fp 8, fn 44) | 0.100 / 0.021 / **0.035** (tp 1, fp 9, fn 46) | 46 (45) | 0 |
-| `IDX-P1` | 0.158 / 0.130 / **0.143** (tp 6, fp 32, fn 40) | 0.188 / 0.133 / **0.156** (tp 6, fp 26, fn 39) | 0.125 / 0.106 / **0.115** (tp 5, fp 35, fn 42) | 46 (45) | 3 |
+| variant | `HIER-T1` real identity P / R / F1 | `HIER-T1-SURF-R1` P / R / F1 | direct edges | same set, surface identity (CR-022 A2 rule) | gold pairs (direct) | unplaced as FP |
+|---|---|---|---|---|---|---|
+| `FROZEN` | 0.100 / 0.028 / **0.043** (tp 1, fp 9, fn 35) | 0.111 / 0.022 / **0.036** (tp 1, fp 8, fn 45) | 0.111 / 0.022 / **0.037** (tp 1, fp 8, fn 44) | 0.100 / 0.021 / **0.035** (tp 1, fp 9, fn 46) | 46 (45) | 0 |
+| `IDX-P1` | 0.108 / 0.111 / **0.110** (tp 4, fp 33, fn 32) | 0.158 / 0.130 / **0.143** (tp 6, fp 32, fn 40) | 0.188 / 0.133 / **0.156** (tp 6, fp 26, fn 39) | 0.125 / 0.106 / **0.115** (tp 5, fp 35, fn 42) | 46 (45) | 3 |
 
 Per-label F1 (first variant):
 
@@ -101,11 +101,11 @@ Identity cost (gold): 765 mentions -> 209 pseudo-nodes (556 collisions); 24 node
 
 Documents (3): 2021.acl-long.353, 2024.acl-long.108-1-9.grobid, P17-1058.grobid.
 
-| variant | `HIER-T1-SURF-R1` P / R / F1 | direct edges | same set, surface identity (CR-022 A2 rule) | gold pairs (direct) | unplaced as FP |
-|---|---|---|---|---|---|
-| `FROZEN` | 0.000 / 0.000 / **0.000** (tp 0, fp 8, fn 46) | 0.000 / 0.000 / **0.000** (tp 0, fp 8, fn 45) | 0.000 / 0.000 / **0.000** (tp 0, fp 9, fn 47) | 46 (45) | 0 |
-| `IDX-P1` | 0.077 / 0.065 / **0.071** (tp 3, fp 36, fn 43) | 0.094 / 0.067 / **0.078** (tp 3, fp 29, fn 42) | 0.049 / 0.043 / **0.045** (tp 2, fp 39, fn 45) | 46 (45) | 4 |
-| `IDXR1-P1` | 0.103 / 0.087 / **0.094** (tp 4, fp 35, fn 42) | 0.118 / 0.089 / **0.101** (tp 4, fp 30, fn 41) | 0.071 / 0.064 / **0.067** (tp 3, fp 39, fn 44) | 46 (45) | 2 |
+| variant | `HIER-T1` real identity P / R / F1 | `HIER-T1-SURF-R1` P / R / F1 | direct edges | same set, surface identity (CR-022 A2 rule) | gold pairs (direct) | unplaced as FP |
+|---|---|---|---|---|---|---|
+| `FROZEN` | 0.000 / 0.000 / **0.000** (tp 0, fp 9, fn 36) | 0.000 / 0.000 / **0.000** (tp 0, fp 8, fn 46) | 0.000 / 0.000 / **0.000** (tp 0, fp 8, fn 45) | 0.000 / 0.000 / **0.000** (tp 0, fp 9, fn 47) | 46 (45) | 0 |
+| `IDX-P1` | 0.026 / 0.028 / **0.027** (tp 1, fp 37, fn 35) | 0.077 / 0.065 / **0.071** (tp 3, fp 36, fn 43) | 0.094 / 0.067 / **0.078** (tp 3, fp 29, fn 42) | 0.049 / 0.043 / **0.045** (tp 2, fp 39, fn 45) | 46 (45) | 4 |
+| `IDXR1-P1` | 0.051 / 0.056 / **0.053** (tp 2, fp 37, fn 34) | 0.103 / 0.087 / **0.094** (tp 4, fp 35, fn 42) | 0.118 / 0.089 / **0.101** (tp 4, fp 30, fn 41) | 0.071 / 0.064 / **0.067** (tp 3, fp 39, fn 44) | 46 (45) | 2 |
 
 Per-label F1 (first variant):
 
@@ -119,6 +119,6 @@ Identity cost (gold): 765 mentions -> 209 pseudo-nodes (556 collisions); 24 node
 
 ## Limits
 
-- SciNLP identity is inferred from strings in this report; the real-identity figure waits for the owner's scoped identity sheet (hierarchy-relation endpoints only).
+- SciNLP real identity comes from the owner's scoped sheet (`data/gold/scinlp_hier_identity_sheet_marked.csv`; hierarchy-relation endpoints only; a blank group means a concept on its own). Its gold pair count differs from the string-based variant because grouped mentions collapse into one concept.
 - The explorer scorecard does not yet show these variants (not wired in this change).
 - P&D pilot has runs for fewer levels than held-out; only existing runs are reported. Small n: no confidence interval is attempted.

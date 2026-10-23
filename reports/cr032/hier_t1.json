@@ -835,7 +835,14 @@
       "recall": 0.02127659574468085,
       "f1": 0.03508771929824561
      },
-     "HIER_T1_real_identity": "AWAITING_OWNER_IDENTITY_SHEET"
+     "HIER_T1_real_identity": {
+      "tp": 1,
+      "fp": 9,
+      "fn": 35,
+      "precision": 0.1,
+      "recall": 0.027777777777777776,
+      "f1": 0.04347826086956522
+     }
     },
     "IDX-P1": {
      "HIER_T1_SURF_R1": {
@@ -892,7 +899,14 @@
       "recall": 0.10638297872340426,
       "f1": 0.1149425287356322
      },
-     "HIER_T1_real_identity": "AWAITING_OWNER_IDENTITY_SHEET"
+     "HIER_T1_real_identity": {
+      "tp": 4,
+      "fp": 33,
+      "fn": 32,
+      "precision": 0.10810810810810811,
+      "recall": 0.1111111111111111,
+      "f1": 0.1095890410958904
+     }
     }
    }
   },
@@ -1044,7 +1058,14 @@
       "recall": 0.0,
       "f1": 0.0
      },
-     "HIER_T1_real_identity": "AWAITING_OWNER_IDENTITY_SHEET"
+     "HIER_T1_real_identity": {
+      "tp": 0,
+      "fp": 9,
+      "fn": 36,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+     }
     },
     "IDX-P1": {
      "HIER_T1_SURF_R1": {
@@ -1101,7 +1122,14 @@
       "recall": 0.0425531914893617,
       "f1": 0.045454545454545456
      },
-     "HIER_T1_real_identity": "AWAITING_OWNER_IDENTITY_SHEET"
+     "HIER_T1_real_identity": {
+      "tp": 1,
+      "fp": 37,
+      "fn": 35,
+      "precision": 0.02631578947368421,
+      "recall": 0.027777777777777776,
+      "f1": 0.02702702702702703
+     }
     },
     "IDXR1-P1": {
      "HIER_T1_SURF_R1": {
@@ -1158,11 +1186,18 @@
       "recall": 0.06382978723404255,
       "f1": 0.06741573033707865
      },
-     "HIER_T1_real_identity": "AWAITING_OWNER_IDENTITY_SHEET"
+     "HIER_T1_real_identity": {
+      "tp": 2,
+      "fp": 37,
+      "fn": 34,
+      "precision": 0.05128205128205128,
+      "recall": 0.05555555555555555,
+      "f1": 0.05333333333333333
+     }
     }
    }
   }
  },
- "identity_sheet_rows_written": 90,
- "real_identity_marks": "AWAITING_OWNER_IDENTITY_SHEET"
+ "identity_sheet_rows_written": null,
+ "real_identity_marks": "present"
 }
