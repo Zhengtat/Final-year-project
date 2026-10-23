@@ -1,0 +1,165 @@
+cr: CR-010
+status: IMPLEMENTATION PACKAGE DRAFT — STOP 1 repository reconciliation required before
+  coding or paid runs
+baseline:
+  node: N0 = actual final selected CR-009 concept pipeline (discover at STOP 1; do
+    not reconstruct from draft)
+  relation: current = actual frozen CR-009 relation architecture (discover at STOP
+    1)
+node_experiment:
+  N0: frozen CR-009 concept pipeline
+  N1:
+    name: candidate_hint_rescue
+    candidate_sources:
+    - noun phrases
+    - technical noun heads
+    - headings/formatting
+    - acronym candidates
+    - definitional patterns
+    outcomes:
+    - add_new
+    - link_existing
+    - reject
+    accepted_path:
+    - CR-009 verifier
+    - canonicalisation
+    - pruner
+    one_token_focus: true
+  N2:
+    name: selective_independent_resampling
+    second_sample_sees_first_output: false
+    union_then:
+    - canonicalisation
+    - verification
+    - pruning
+    recall_warning_condition: FREEZE ON DEV BEFORE HELD-OUT EVALUATION; record exact
+      condition in DECISIONS/provenance
+  N3:
+    name: one_token_diagnostic_ablation
+    definition: selected rescue pipeline with one-token candidate hints disabled
+  selection:
+    primary: exact_micro_f1
+    qualify_if:
+    - delta_exact_micro_f1 >= +0.02
+    - paired_section_bootstrap_delta_f1_lower_bound > 0
+    precision_drop_max_abs: 0.02
+    simplicity_tie_band_f1: 0.02
+    no_change_allowed: true
+  report:
+  - lenient_f1
+  - precision
+  - recall
+  - macro_f1
+  - n_gram_recall
+  - partial_span_errors
+  - one_token_recall
+  - rescue_precision
+  - additional_candidates
+  - survive_verification
+  - survive_pruning
+  - incremental_api_cost
+relation_architectures:
+  current: frozen CR-009 relation architecture
+  erst_direct:
+    inputs: same candidate concept pair + supporting evidence as current
+    labels: paper-faithful eRST discourse inventory + NO_ERST_RELATION
+    forbidden_inputs:
+    - current predicted relation
+    - current relation family
+    - current→eRST research mapping
+    - mapping-derived hints
+    preserve:
+    - direction
+    - nuclearity where structurally defined
+    - concurrent relations
+    - signals
+  dual:
+    concept_edges: domain-semantic KG layer remains
+    discourse_edges: EDU/proposition/evidence-span eRST-compatible discourse relation
+      graph
+    claim_guard: Do not call this a complete eRST parse unless full structural requirements
+      are actually implemented
+    chainlink: Do not remove merely because eRST exists
+mapping_benchmark:
+  name: REL-MAP-180
+  strata:
+    accepted_current_concept_edges: 120
+    current_NO_RELATION_hard_negatives: 30
+    OTHER_difficult_rejected_near_miss: 30
+  split:
+    development: 60
+    held_out_test: 120
+  group_by: evidence_section_before_split
+  double_annotation_min: 60
+  blind_fields_forbidden:
+  - current model prediction
+  - eRST model prediction
+  - research mapping table
+  - model confidence
+  - architecture recommendation
+pair_selection:
+  pair_recall_definition: validated true edges whose endpoint pair reached classification
+    / validated true edges for which both endpoint nodes exist
+  P0: frozen CR-009/CR-007 strategy
+  P1: P0 + previously unhandled same-sentence / same-clause co-mentions
+  P2: P1 + high-confidence relation-cue expansion
+  P3: P2 + pairs prioritized because concepts occur across discourse units connected
+    by experimental eRST graph; eRST is pair-selection evidence only
+  report:
+  - pair_recall
+  - pairs_sent_to_classification
+  - relation_yield
+  - edge_precision
+  - edge_recall
+  - edge_f1
+  - api_cost
+full_replacement_gates:
+  erst_expressibility_min: 0.9
+  semantic_preservation_min: 0.9
+  mapping_loss_rate_max: 0.1
+  critical_loss_wilson95_upper_max: 0.15
+  reverse_mapping_macro_f1_min: 0.9
+  represented_relation_recall_min: 0.75
+  erst_direct_edge_f1_diff_min: -0.05
+  erst_direct_precision_diff_min: -0.05
+  mapping_kappa_min: 0.67
+  organisation_pedagogical_information: no silent loss
+stops:
+  STOP1:
+  - actual CR-009 completion state
+  - branch/tag
+  - active concept configuration
+  - active relation registry
+  - CR-008 alias/lexicon state
+  - misconception layer
+  - pair-selection implementation
+  - ChainLink status
+  - dry-run call counts + cost estimate
+  - owner approval before paid experiment
+  STOP2:
+  - run N0/N1/N2/N3 on development
+  - report metrics/failure slices/costs
+  - select by pre-registered rule
+  - held-out once; no tuning
+  STOP3:
+  - audit eRST inventory
+  - hierarchy
+  - direction/nuclearity
+  - signals
+  - SAME-UNIT
+  - no invented relations
+  - no CR-008 equivalence violation
+  STOP4:
+  - freeze REL-MAP-180
+  - blind mapping study
+  - P0-P3
+  - pair recall separate from conditional classifier accuracy
+  STOP5:
+  - run current/erst_direct/dual
+  - populate all gates
+  - loss + reverse recoverability
+  - return results to Research; implementation does not select architecture
+cost_control:
+  paid_runs_allowed_before_stop1_approval: false
+  hard_cap_usd: null
+  hard_cap_note: Set from STOP 1 preflight with owner approval; do not invent a cap.

@@ -1,0 +1,12 @@
+id,section,name_A,name_B,evidence,mark (same/different),note
+1,2.5,Negative acknowledgment,NAK,"Notice that, in this example, the receiver could have sent a negative acknowledgment (NAK) for frame 6 as soon as frame 7 arrived.",,
+2,1.2,Network File System,NFS,One of the earliest applications supported on any network is a file access program like the File Transfer Protocol (FTP) or Network File System (NFS).,,
+3,3.5,Network Operating System,NOS,"One of other key enablers for SDN’s success, as depicted in Figure, is the Network Operating System (NOS).",,
+4,2.8,Optical Line Terminal (OLT),OLT,Optical Line Terminal (OLT),,
+5,2.1,PON,Passive Optical Network,"DSL (Digital Subscriber Line), for example, is an older technology that was deployed over the existing twisted pair copper wires that already existed for plain old telephone services; G.Fast is a copper-based technology typically used within multi-dwelling apartment buildings, and PON (Passive Optical Network) is a newer technology that is commonly used to connect homes and businesses over recently deployed fiber.",,
+6,1.2,quality of service,QoS,A network that attempts to allocate bandwidth to particular flows is sometimes said to support quality of service (QoS).,,
+7,1.5,round-trip time (RTT),round-trip time,round-trip time (RTT),,
+8,3.4,Routing Information Protocol,RIP,Routing Information Protocol (RIP),,
+9,1-perspective-feature-velocity,SDN,Software Defined Network,"This new approach, known as Software Defined Networks (SDN), is a game changer, not so much in terms of how we address the fundamental technical challenges of framing, routing, fragmentation/reassembly, packet scheduling, congestion control, security, and so on, but in terms of how rapidly the network evolves to support new features.",,
+10,2.1,SONET,Synchronous Optical Network,"Modern backbone links are almost exclusively fiber today, and they typically use a technology called SONET (Synchronous Optical Network), which was originally developed to meet the demanding management requirements of telephone carriers.",,
+11,,end hosts,frames,"to the end node. This is the framing problem, and the messages delivered to the end hosts are often called frames (or sometimes packets). Third, because frames are sometimes corrupted during transm",,

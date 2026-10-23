@@ -1,0 +1,91 @@
+registry_tests:
+  expected_label_count: 32
+  expected_true_discourse_relation_count: 31
+  technical_labels:
+  - SAME-UNIT
+  must_include:
+  - ADVERSATIVE-ANTITHESIS
+  - ADVERSATIVE-CONCESSION
+  - ADVERSATIVE-CONTRAST
+  - ATTRIBUTION-NEGATIVE
+  - ATTRIBUTION-POSITIVE
+  - CAUSAL-CAUSE
+  - CAUSAL-RESULT
+  - CONTEXT-BACKGROUND
+  - CONTEXT-CIRCUMSTANCE
+  - CONTINGENCY-CONDITION
+  - ELABORATION-ADDITIONAL
+  - ELABORATION-ATTRIBUTE
+  - EVALUATION-COMMENT
+  - EXPLANATION-EVIDENCE
+  - EXPLANATION-JUSTIFY
+  - EXPLANATION-MOTIVATION
+  - JOINT-DISJUNCTION
+  - JOINT-LIST
+  - JOINT-OTHER
+  - JOINT-SEQUENCE
+  - MODE-MANNER
+  - MODE-MEANS
+  - ORGANIZATION-HEADING
+  - ORGANIZATION-PHATIC
+  - ORGANIZATION-PREPARATION
+  - PURPOSE-ATTRIBUTE
+  - PURPOSE-GOAL
+  - RESTATEMENT-PARTIAL
+  - RESTATEMENT-REPETITION
+  - SAME-UNIT
+  - TOPIC-QUESTION
+  - TOPIC-SOLUTIONHOOD
+  unknown_label_behavior: fail_closed
+semantic_guards:
+- id: same_unit_not_semantic
+  erst_label: SAME-UNIT
+  expect: technical_only_no_semantic_edge
+- id: restatement_no_auto_merge
+  erst_label: RESTATEMENT-REPETITION
+  expect: may_queue_same_concept_candidate_only
+- id: list_not_contrast
+  erst_label: JOINT-LIST
+  expect: must_not_auto_create_contrasts_with_or_trades_off_with
+- id: attribution_not_domain_edge
+  erst_label: ATTRIBUTION-POSITIVE
+  expect: no_domain_edge_without_independent_domain_semantic_evidence
+- id: organization_not_domain_edge
+  erst_label: ORGANIZATION-HEADING
+  expect: document_structure_only
+- id: condition_not_prerequisite
+  erst_label: CONTINGENCY-CONDITION
+  expect: must_not_auto_create_prerequisite_of
+- id: contrast_dimension_guard
+  erst_label: ADVERSATIVE-CONTRAST
+  expect: existing grounded-dimension requirement remains for contrasts/trades_off
+canonicalisation_regressions:
+- left: HDLC
+  right: SDLC
+  expected: different
+  note: run only if present in active term lexicon after STOP 1
+- left: Internet
+  right: internetworking
+  expected: different
+  note: run only if present in active term lexicon after STOP 1
+- left: CRC
+  right: error-detecting code
+  expected: different
+  note: run only if present in active term lexicon after STOP 1
+gold_guard:
+  forbidden_write_prefix: data/gold
+  expect: automatic pipeline writes rejected
+pair_recall_fixture:
+  validated_true_edges_both_nodes_exist: 4
+  pairs_reached_classification: 3
+  expected_pair_recall: 0.75
+  missing_endpoint_edges_excluded_from_denominator: true
+blind_split_guard:
+  group_key: evidence_section_id
+  expect: same evidence section never appears across development and held-out test
+erst_direct_blinding:
+  forbidden_features:
+  - current_prediction
+  - current_family
+  - current_to_erst_mapping
+  - mapping_hint

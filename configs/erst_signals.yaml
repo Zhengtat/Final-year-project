@@ -1,0 +1,18 @@
+# CR-010 STOP 3: eRST signal taxonomy, transcribed from Zeldes et al. (2024) Section 3.3 and Table 1 (arXiv:2403.13560v2).
+# A signal is evidence that anchors a DISCOURSE relation to tokens; it is never a domain-semantic relation.
+# Discourse markers (DMs) form a separate kind with no subtype list in the table; the non-DM signals have seven types.
+source: arXiv:2403.13560v2, Section 3.3 and Table 1
+signal_kinds:
+  discourse_marker: {subtypes: []}
+  graphical: {subtypes: [colon/dash/semicolon, layout, items in sequence, parentheses/quotation marks, question mark]}
+  lexical: {subtypes: [alternate expression, indicative word/phrase]}
+  morphological: {subtypes: [mood, tense]}
+  numerical: {subtypes: [same count]}
+  reference: {subtypes: [comparative, demonstrative/personal, propositional]}
+  semantic: {subtypes: [antonymy, attribution source, lexical chain, meronymy, negation, repetition/synonymy]}
+  syntactic: {subtypes: [infinitival/relative clause, interrupted matrix clause, modified head, nominal modifier, parallel syntactic construction, past/present participial clause, reported speech, subject auxiliary inversion]}
+# Some signals are not anchored to tokens (graphical layout, e.g. a heading identified by font/size); all others need an anchor.
+unanchored_allowed: [[graphical, layout]]
+# Semantic signals (antonymy, meronymy, repetition/synonymy, ...) are evidence for a discourse analysis only. They never license a
+# domain relation (synonym_of, part_of, equivalent_to, ...) and never merge two concepts.
+domain_relation_from_signal: forbidden

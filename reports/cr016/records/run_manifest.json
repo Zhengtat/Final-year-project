@@ -1,0 +1,593 @@
+{
+ "units": [
+  {
+   "source_order": 0,
+   "section_id": "x-foreword",
+   "paragraphs": 7,
+   "snapshots": {
+    "M1_dense": "M1_dense:x-foreword@99c3a58318daca73",
+    "M2_hipporag": "M2_hipporag:x-foreword@b6d3e96982338e62"
+   },
+   "seconds": 1.3
+  },
+  {
+   "source_order": 1,
+   "section_id": "x-foreword-to-the-first-edition",
+   "paragraphs": 6,
+   "snapshots": {
+    "M1_dense": "M1_dense:x-foreword-to-the-first-edition@ee6c024be3bdc767",
+    "M2_hipporag": "M2_hipporag:x-foreword-to-the-first-edition@90b1e303bd76f51f"
+   },
+   "seconds": 0.7
+  },
+  {
+   "source_order": 2,
+   "section_id": "x-preface",
+   "paragraphs": 35,
+   "snapshots": {
+    "M1_dense": "M1_dense:x-preface@bc8afab1d8ee6253",
+    "M2_hipporag": "M2_hipporag:x-preface@663bf19d1e62f8f4"
+   },
+   "seconds": 1.6
+  },
+  {
+   "source_order": 3,
+   "section_id": "1-problem-building-a-network",
+   "paragraphs": 6,
+   "snapshots": {
+    "M1_dense": "M1_dense:1-problem-building-a-network@8136e3f56a6ded16",
+    "M2_hipporag": "M2_hipporag:1-problem-building-a-network@1257da85fd04cbac"
+   },
+   "seconds": 0.5
+  },
+  {
+   "source_order": 4,
+   "section_id": "1.1",
+   "paragraphs": 17,
+   "snapshots": {
+    "M1_dense": "M1_dense:1.1@656921f0856ca51b",
+    "M2_hipporag": "M2_hipporag:1.1@60490af357ab277b"
+   },
+   "seconds": 1.3
+  },
+  {
+   "source_order": 5,
+   "section_id": "1.2",
+   "paragraphs": 55,
+   "snapshots": {
+    "M1_dense": "M1_dense:1.2@9af4adc94b59381a",
+    "M2_hipporag": "M2_hipporag:1.2@504489196cb438b2"
+   },
+   "seconds": 3.3
+  },
+  {
+   "source_order": 6,
+   "section_id": "1.3",
+   "paragraphs": 36,
+   "snapshots": {
+    "M1_dense": "M1_dense:1.3@8840fb6539ffd605",
+    "M2_hipporag": "M2_hipporag:1.3@0860eead7468652e"
+   },
+   "seconds": 2.2
+  },
+  {
+   "source_order": 7,
+   "section_id": "1.4",
+   "paragraphs": 25,
+   "snapshots": {
+    "M1_dense": "M1_dense:1.4@58c9d4d0e5a2286a",
+    "M2_hipporag": "M2_hipporag:1.4@7d06850eda9858dc"
+   },
+   "seconds": 1.7
+  },
+  {
+   "source_order": 8,
+   "section_id": "1.5",
+   "paragraphs": 39,
+   "snapshots": {
+    "M1_dense": "M1_dense:1.5@9d31828afdd77d94",
+    "M2_hipporag": "M2_hipporag:1.5@dac17fea7e55a0ec"
+   },
+   "seconds": 2.3
+  },
+  {
+   "source_order": 9,
+   "section_id": "1-perspective-feature-velocity",
+   "paragraphs": 8,
+   "snapshots": {
+    "M1_dense": "M1_dense:1-perspective-feature-velocity@23149af4308aaf4d",
+    "M2_hipporag": "M2_hipporag:1-perspective-feature-velocity@ee20accc08cd2259"
+   },
+   "seconds": 0.8
+  },
+  {
+   "source_order": 10,
+   "section_id": "2-problem-connecting-to-a-network",
+   "paragraphs": 6,
+   "snapshots": {
+    "M1_dense": "M1_dense:2-problem-connecting-to-a-network@b22500ee3ec06a25",
+    "M2_hipporag": "M2_hipporag:2-problem-connecting-to-a-network@2a79538f267ee3fa"
+   },
+   "seconds": 0.6
+  },
+  {
+   "source_order": 11,
+   "section_id": "2.1",
+   "paragraphs": 15,
+   "snapshots": {
+    "M1_dense": "M1_dense:2.1@96e617eac17bc9ec",
+    "M2_hipporag": "M2_hipporag:2.1@50402892817d7240"
+   },
+   "seconds": 1.4
+  },
+  {
+   "source_order": 12,
+   "section_id": "2.2",
+   "paragraphs": 10,
+   "snapshots": {
+    "M1_dense": "M1_dense:2.2@7a31d7b0aa82112c",
+    "M2_hipporag": "M2_hipporag:2.2@92f5cb75464dea4f"
+   },
+   "seconds": 1.1
+  },
+  {
+   "source_order": 13,
+   "section_id": "2.3",
+   "paragraphs": 25,
+   "snapshots": {
+    "M1_dense": "M1_dense:2.3@bdfa690bab57539e",
+    "M2_hipporag": "M2_hipporag:2.3@5bec0c3dda234b69"
+   },
+   "seconds": 1.9
+  },
+  {
+   "source_order": 14,
+   "section_id": "2.4",
+   "paragraphs": 47,
+   "snapshots": {
+    "M1_dense": "M1_dense:2.4@bee0cb9f7ee47ae0",
+    "M2_hipporag": "M2_hipporag:2.4@2c6a7e838120715c"
+   },
+   "seconds": 2.9
+  },
+  {
+   "source_order": 15,
+   "section_id": "2.5",
+   "paragraphs": 53,
+   "snapshots": {
+    "M1_dense": "M1_dense:2.5@e741842452b3352d",
+    "M2_hipporag": "M2_hipporag:2.5@9399c7f20022b9ce"
+   },
+   "seconds": 3.4
+  },
+  {
+   "source_order": 16,
+   "section_id": "2.6",
+   "paragraphs": 36,
+   "snapshots": {
+    "M1_dense": "M1_dense:2.6@66e42ab82a529068",
+    "M2_hipporag": "M2_hipporag:2.6@cd081092cfeb5796"
+   },
+   "seconds": 2.5
+  },
+  {
+   "source_order": 17,
+   "section_id": "2.7",
+   "paragraphs": 63,
+   "snapshots": {
+    "M1_dense": "M1_dense:2.7@cc01fbd9fca391c8",
+    "M2_hipporag": "M2_hipporag:2.7@7600bb6665d0107e"
+   },
+   "seconds": 9.1
+  },
+  {
+   "source_order": 18,
+   "section_id": "2.8",
+   "paragraphs": 30,
+   "snapshots": {
+    "M1_dense": "M1_dense:2.8@aed319206e79e804",
+    "M2_hipporag": "M2_hipporag:2.8@3334489e59edf669"
+   },
+   "seconds": 30.1
+  },
+  {
+   "source_order": 19,
+   "section_id": "2-perspective-race-to-the-edge",
+   "paragraphs": 11,
+   "snapshots": {
+    "M1_dense": "M1_dense:2-perspective-race-to-the-edge@98140bd614e4875e",
+    "M2_hipporag": "M2_hipporag:2-perspective-race-to-the-edge@fbeb9337d929b526"
+   },
+   "seconds": 13.7
+  },
+  {
+   "source_order": 20,
+   "section_id": "3-problem-not-all-networks-are-directly-connected",
+   "paragraphs": 6,
+   "snapshots": {
+    "M1_dense": "M1_dense:3-problem-not-all-networks-are-directly-connected@9f72745b2eb59165",
+    "M2_hipporag": "M2_hipporag:3-problem-not-all-networks-are-directly-connected@99f136a4c6d727c7"
+   },
+   "seconds": 7.6
+  },
+  {
+   "source_order": 21,
+   "section_id": "3.1",
+   "paragraphs": 72,
+   "snapshots": {
+    "M1_dense": "M1_dense:3.1@905c2395c9f5fe6e",
+    "M2_hipporag": "M2_hipporag:3.1@0896bcd40caf0226"
+   },
+   "seconds": 59.8
+  },
+  {
+   "source_order": 22,
+   "section_id": "3.2",
+   "paragraphs": 59,
+   "snapshots": {
+    "M1_dense": "M1_dense:3.2@ef901e5271573a61",
+    "M2_hipporag": "M2_hipporag:3.2@8144d64532a7071e"
+   },
+   "seconds": 56.4
+  },
+  {
+   "source_order": 23,
+   "section_id": "3.3",
+   "paragraphs": 128,
+   "snapshots": {
+    "M1_dense": "M1_dense:3.3@95d801a41f7e9d87",
+    "M2_hipporag": "M2_hipporag:3.3@260ac9d8ae4eea54"
+   },
+   "seconds": 106.1
+  },
+  {
+   "source_order": 24,
+   "section_id": "3.4",
+   "paragraphs": 99,
+   "snapshots": {
+    "M1_dense": "M1_dense:3.4@ca979d8ccf31dfb2",
+    "M2_hipporag": "M2_hipporag:3.4@f199f66e643879d8"
+   },
+   "seconds": 80.4
+  },
+  {
+   "source_order": 25,
+   "section_id": "3.5",
+   "paragraphs": 25,
+   "snapshots": {
+    "M1_dense": "M1_dense:3.5@5b1256e04008bd9a",
+    "M2_hipporag": "M2_hipporag:3.5@4159154c5d35fb88"
+   },
+   "seconds": 26.3
+  },
+  {
+   "source_order": 26,
+   "section_id": "3-perspective-virtual-networks-all-the-way-down",
+   "paragraphs": 10,
+   "snapshots": {
+    "M1_dense": "M1_dense:3-perspective-virtual-networks-all-the-way-down@5fbd4c2dfef80a49",
+    "M2_hipporag": "M2_hipporag:3-perspective-virtual-networks-all-the-way-down@70d61ea37062febb"
+   },
+   "seconds": 12.3
+  },
+  {
+   "source_order": 27,
+   "section_id": "4-problem-scaling-to-billions",
+   "paragraphs": 4,
+   "snapshots": {
+    "M1_dense": "M1_dense:4-problem-scaling-to-billions@69aa7eeefc623087",
+    "M2_hipporag": "M2_hipporag:4-problem-scaling-to-billions@0a7d0355a9090930"
+   },
+   "seconds": 15.5
+  },
+  {
+   "source_order": 28,
+   "section_id": "4.1",
+   "paragraphs": 56,
+   "snapshots": {
+    "M1_dense": "M1_dense:4.1@4244eaf6486285d3",
+    "M2_hipporag": "M2_hipporag:4.1@4b13007205496309"
+   },
+   "seconds": 50.7
+  },
+  {
+   "source_order": 29,
+   "section_id": "4.2",
+   "paragraphs": 57,
+   "snapshots": {
+    "M1_dense": "M1_dense:4.2@f4d248fb5b2c05a7",
+    "M2_hipporag": "M2_hipporag:4.2@7e70a2b5810dff78"
+   },
+   "seconds": 48.6
+  },
+  {
+   "source_order": 31,
+   "section_id": "4.4",
+   "paragraphs": 52,
+   "snapshots": {
+    "M1_dense": "M1_dense:4.4@0bff98d35304541f",
+    "M2_hipporag": "M2_hipporag:4.4@1940e60dfcce1d47"
+   },
+   "seconds": 52.7
+  },
+  {
+   "source_order": 32,
+   "section_id": "4.5",
+   "paragraphs": 39,
+   "snapshots": {
+    "M1_dense": "M1_dense:4.5@495428fa150c54aa",
+    "M2_hipporag": "M2_hipporag:4.5@2bc8415964d7b1f9"
+   },
+   "seconds": 48.6
+  },
+  {
+   "source_order": 33,
+   "section_id": "4-perspective-the-cloud-is-eating-the-internet",
+   "paragraphs": 5,
+   "snapshots": {
+    "M1_dense": "M1_dense:4-perspective-the-cloud-is-eating-the-internet@5d5b8b659cc909f1",
+    "M2_hipporag": "M2_hipporag:4-perspective-the-cloud-is-eating-the-internet@a98ac382ce10a4ba"
+   },
+   "seconds": 10.0
+  },
+  {
+   "source_order": 34,
+   "section_id": "5-problem-getting-processes-to-communicate",
+   "paragraphs": 20,
+   "snapshots": {
+    "M1_dense": "M1_dense:5-problem-getting-processes-to-communicate@c439023d42f86728",
+    "M2_hipporag": "M2_hipporag:5-problem-getting-processes-to-communicate@5dbf229237b85bfd"
+   },
+   "seconds": 20.9
+  },
+  {
+   "source_order": 37,
+   "section_id": "5.3",
+   "paragraphs": 82,
+   "snapshots": {
+    "M1_dense": "M1_dense:5.3@e18de37b1abdda4d",
+    "M2_hipporag": "M2_hipporag:5.3@5631cbd6169c82e2"
+   },
+   "seconds": 69.6
+  },
+  {
+   "source_order": 38,
+   "section_id": "5.4",
+   "paragraphs": 67,
+   "snapshots": {
+    "M1_dense": "M1_dense:5.4@a0e848dac3269762",
+    "M2_hipporag": "M2_hipporag:5.4@6cc90ab765a70284"
+   },
+   "seconds": 55.5
+  },
+  {
+   "source_order": 39,
+   "section_id": "5-perspective-http-is-the-new-narrow-waist",
+   "paragraphs": 10,
+   "snapshots": {
+    "M1_dense": "M1_dense:5-perspective-http-is-the-new-narrow-waist@a25ff9b954a9b2db",
+    "M2_hipporag": "M2_hipporag:5-perspective-http-is-the-new-narrow-waist@f4410c6d536a4240"
+   },
+   "seconds": 11.1
+  },
+  {
+   "source_order": 40,
+   "section_id": "6-problem-allocating-resources",
+   "paragraphs": 4,
+   "snapshots": {
+    "M1_dense": "M1_dense:6-problem-allocating-resources@0984dddc0d51d254",
+    "M2_hipporag": "M2_hipporag:6-problem-allocating-resources@1cfa84c2d65cb273"
+   },
+   "seconds": 8.0
+  },
+  {
+   "source_order": 41,
+   "section_id": "6.1",
+   "paragraphs": 50,
+   "snapshots": {
+    "M1_dense": "M1_dense:6.1@2de485354341abd1",
+    "M2_hipporag": "M2_hipporag:6.1@0aa33559ad2c9be5"
+   },
+   "seconds": 41.6
+  },
+  {
+   "source_order": 43,
+   "section_id": "6.3",
+   "paragraphs": 49,
+   "snapshots": {
+    "M1_dense": "M1_dense:6.3@df0a271721ccb486",
+    "M2_hipporag": "M2_hipporag:6.3@8fb6f5c45c6d32b8"
+   },
+   "seconds": 51.2
+  },
+  {
+   "source_order": 44,
+   "section_id": "6.4",
+   "paragraphs": 67,
+   "snapshots": {
+    "M1_dense": "M1_dense:6.4@8ec8850aba068803",
+    "M2_hipporag": "M2_hipporag:6.4@df3177625abd6a8d"
+   },
+   "seconds": 56.8
+  },
+  {
+   "source_order": 46,
+   "section_id": "6-perspective-software-defined-traffic-engineering",
+   "paragraphs": 7,
+   "snapshots": {
+    "M1_dense": "M1_dense:6-perspective-software-defined-traffic-engineering@3a9d977dd3e6c60d",
+    "M2_hipporag": "M2_hipporag:6-perspective-software-defined-traffic-engineering@7d5c8da897ce5818"
+   },
+   "seconds": 10.2
+  },
+  {
+   "source_order": 47,
+   "section_id": "7-problem-what-do-we-do-with-the-data",
+   "paragraphs": 7,
+   "snapshots": {
+    "M1_dense": "M1_dense:7-problem-what-do-we-do-with-the-data@13b82a79efc50cc1",
+    "M2_hipporag": "M2_hipporag:7-problem-what-do-we-do-with-the-data@75b16011c4adcc84"
+   },
+   "seconds": 8.1
+  },
+  {
+   "source_order": 48,
+   "section_id": "7.1",
+   "paragraphs": 76,
+   "snapshots": {
+    "M1_dense": "M1_dense:7.1@19a0b2572148110e",
+    "M2_hipporag": "M2_hipporag:7.1@d54ff402ce40b12e"
+   },
+   "seconds": 68.1
+  },
+  {
+   "source_order": 49,
+   "section_id": "7.2",
+   "paragraphs": 94,
+   "snapshots": {
+    "M1_dense": "M1_dense:7.2@a7e786d25b7a8a99",
+    "M2_hipporag": "M2_hipporag:7.2@f1638c5140238f5c"
+   },
+   "seconds": 79.1
+  },
+  {
+   "source_order": 50,
+   "section_id": "7-perspective-big-data-and-analytics",
+   "paragraphs": 9,
+   "snapshots": {
+    "M1_dense": "M1_dense:7-perspective-big-data-and-analytics@48f0e00f7873c342",
+    "M2_hipporag": "M2_hipporag:7-perspective-big-data-and-analytics@36a76994d9507845"
+   },
+   "seconds": 11.3
+  },
+  {
+   "source_order": 51,
+   "section_id": "8-problem-security-attacks",
+   "paragraphs": 6,
+   "snapshots": {
+    "M1_dense": "M1_dense:8-problem-security-attacks@2d4be666eb87387e",
+    "M2_hipporag": "M2_hipporag:8-problem-security-attacks@19253dfedd620e87"
+   },
+   "seconds": 17.3
+  },
+  {
+   "source_order": 53,
+   "section_id": "8.2",
+   "paragraphs": 43,
+   "snapshots": {
+    "M1_dense": "M1_dense:8.2@1e335217f12d40cc",
+    "M2_hipporag": "M2_hipporag:8.2@8afd8308fa90288c"
+   },
+   "seconds": 37.3
+  },
+  {
+   "source_order": 54,
+   "section_id": "8.3",
+   "paragraphs": 61,
+   "snapshots": {
+    "M1_dense": "M1_dense:8.3@b3b9ad0ce65790ac",
+    "M2_hipporag": "M2_hipporag:8.3@eb36abf5a3384b40"
+   },
+   "seconds": 53.2
+  },
+  {
+   "source_order": 55,
+   "section_id": "8.4",
+   "paragraphs": 24,
+   "snapshots": {
+    "M1_dense": "M1_dense:8.4@3f757d1704d807d4",
+    "M2_hipporag": "M2_hipporag:8.4@7222d271df211461"
+   },
+   "seconds": 25.7
+  },
+  {
+   "source_order": 56,
+   "section_id": "8.5",
+   "paragraphs": 98,
+   "snapshots": {
+    "M1_dense": "M1_dense:8.5@27b25ccd22ce088e",
+    "M2_hipporag": "M2_hipporag:8.5@65146f3d5524dc05"
+   },
+   "seconds": 88.7
+  },
+  {
+   "source_order": 57,
+   "section_id": "8-perspective-is-security-getting-worse-or-better",
+   "paragraphs": 9,
+   "snapshots": {
+    "M1_dense": "M1_dense:8-perspective-is-security-getting-worse-or-better@6d520d741b597227",
+    "M2_hipporag": "M2_hipporag:8-perspective-is-security-getting-worse-or-better@b6fd21e8000a5ce3"
+   },
+   "seconds": 10.6
+  },
+  {
+   "source_order": 58,
+   "section_id": "9-problem-applications-need-their-own-protocols",
+   "paragraphs": 3,
+   "snapshots": {
+    "M1_dense": "M1_dense:9-problem-applications-need-their-own-protocols@7923c90f681d03f1",
+    "M2_hipporag": "M2_hipporag:9-problem-applications-need-their-own-protocols@7b8a93f5f76ac8ff"
+   },
+   "seconds": 7.7
+  },
+  {
+   "source_order": 60,
+   "section_id": "9.2",
+   "paragraphs": 68,
+   "snapshots": {
+    "M1_dense": "M1_dense:9.2@c929d1888227f4fa",
+    "M2_hipporag": "M2_hipporag:9.2@cd8526951498bed1"
+   },
+   "seconds": 59.6
+  },
+  {
+   "source_order": 61,
+   "section_id": "9.3",
+   "paragraphs": 69,
+   "snapshots": {
+    "M1_dense": "M1_dense:9.3@6e1e2a2e21afb257",
+    "M2_hipporag": "M2_hipporag:9.3@2c660098ce4a8dd9"
+   },
+   "seconds": 73.3
+  },
+  {
+   "source_order": 63,
+   "section_id": "9-perspective-the-cloud-is-the-new-internet",
+   "paragraphs": 6,
+   "snapshots": {
+    "M1_dense": "M1_dense:9-perspective-the-cloud-is-the-new-internet@c4153e3a876bb1e7",
+    "M2_hipporag": "M2_hipporag:9-perspective-the-cloud-is-the-new-internet@2f1e9ec4817f7551"
+   },
+   "seconds": 8.4
+  }
+ ],
+ "embedding": "Transformers/sentence-transformers/all-MiniLM-L6-v2",
+ "llm_via": "LLMClient shim",
+ "top_k": 10,
+ "config_hash": "cf9787ed740b78c4",
+ "timings_s": {
+  "index_M1_dense": 37.56,
+  "index_M2_hipporag": 1493.03,
+  "M1_dense": 10.17,
+  "M2_hipporag": 2596.82
+ },
+ "query_counts": {
+  "M1_dense": 1140,
+  "M2_hipporag": 1140
+ },
+ "wall_seconds": 4138.3,
+ "final_snapshots": {
+  "M1_dense": "M1_dense:9-perspective-the-cloud-is-the-new-internet@c4153e3a876bb1e7",
+  "M2_hipporag": "M2_hipporag:9-perspective-the-cloud-is-the-new-internet@2f1e9ec4817f7551"
+ },
+ "environment": {
+  "hipporag": "2.0.0a5",
+  "torch": "2.5.1",
+  "transformers": "4.45.2",
+  "sentence-transformers": "5.7.0",
+  "networkx": "3.4.2",
+  "python-igraph": "0.11.8",
+  "litellm": "1.73.1",
+  "openai": "3.29.0"
+ }
+}

@@ -1,0 +1,59 @@
+# CR-012 evaluation configuration. FROZEN at STOP 3 (after scorer validation on SciNLP train/dev and the P&D pilot); until then
+# values are the Research decisions of 2026-10-09 (STOP 1 PASS, D1-D4). Nothing here may change after held-out inspection.
+version: stop3-frozen
+headline_metric: STRICT_E2E_EDGE_F1          # never replaced by a composite score
+
+benchmarks:
+  scinlp:
+    release_label: SciNLP-repo-e78342be       # repository AKADDC/SciNLP, commit e78342be517e, 60 docs, 51/6/3, 6,429 entities, 1,649 relations
+    paper_counts_for_context_only: {entities: 7072, relations: 1826, split: "8:1:1"}   # never mixed with repository results
+    scorer_name: CR-012 SciNLP strict scorer  # NOT the official scorer: the audited repository contains none
+    scoring_level: mention                     # exact source span (+ type for typed score); no identity clusters inferred
+    symmetric_relations: [compareWith, similarWith]
+    canonical_identity_gold: NOT_SUPPORTED
+    oracles: {E0: supported, E1: supported, E2: NOT_SUPPORTED_NO_IDENTITY_GOLD, E3_M: supported, E4_M: supported}
+    identity_metrics: NOT_SUPPORTED            # canonical-node F1, pairwise identity F1, B-cubed, C0/C1 attribution
+    ci: {status: NOT_EVALUABLE_SMALL_N, reason: "test split has 3 documents", report: [micro_prf, per_document_prf, macro_mean, min_max_document_f1], diagnostic_bootstrap_label: DESCRIPTIVE_SMALL_N_ONLY}
+    combine_dev_and_test: false
+    published_baselines: context_only_no_leaderboard_claim
+  pd_e2e:
+    scoring_level: canonical_graph
+    oracles: {E0: supported, E1: supported, E2: supported, E3: supported, E4: supported}
+    ci: {unit: section, method: bootstrap, level: 0.95, seed: 20261011, resamples: 10000}
+    pilot_sections: 2                          # already-developed chapters 1-3; never contributes to held-out scores
+    heldout_sections: 7                        # chapters 4-9; frozen before any final CUM prediction is viewed
+
+pair_budget:                                   # D3 (Research 2026-10-09): linear production-budget scaling, no benchmark-specific ranking
+  pairs_per_1000_words: 14.2
+  formula: "B(u) = min(candidate_pool_size, max(1, ceil(14.2 * word_count / 1000)))"
+  evaluation_unit: {scinlp: document, pd_e2e: section}
+  log_per_unit: [word_count, eligible_candidate_pairs, budget, selected_pairs, budget_saturated, gold_edge_pair_recall]
+
+caching:
+  e0_e1_e3_e4: byte_identical_calls_may_reuse_cache_when_the_oracle_did_not_alter_the_call
+  stability_repeats: MUST_NOT_REUSE_MODEL_OUTPUTS_ACROSS_RUNS
+
+stability:
+  repeats: 3
+  subset:                                    # frozen by a length rule (the two shortest), blind to any outcome
+    scinlp_documents: [P17-1058.grobid, 2021.acl-long.353]       # test split; 6,504 and 6,798 tokens
+    pd_sections: [4.5, 4.4]                                      # held-out; 3,255 and 4,091 words
+  never_select_best_run: true
+  report: [strict_e2e_edge_f1_mean_sd, node_set_jaccard, edge_set_jaccard, canonicalisation_disagreement_rate, relation_disagreement_rate]
+
+cr011:
+  pre_post: NOT_APPLICABLE_NO_ADOPTED_TRANSFORMATION   # no delta_F1_sleep = 0 is ever reported
+  production_baseline: slice3_c2 (unchanged, via CR-010 DUAL_LAYER)
+
+cost:                                          # D4: replaces the initial planning limits
+  soft_warning_usd: 40
+  hard_cap_usd: 50
+  mandatory_scope: [scinlp_primary, pd_e2e_primary, oracle_experiments, frozen_stability_repetitions]
+  optional_benchmarks_authorised: false        # SciERC / SciER / OSKGC / Text2KGBench need separate approval if paid
+  refresh_preflight_after: STOP 3
+  stop_and_return_to_research_if_projected_mandatory_total_exceeds_usd: 50
+
+safety:
+  gold_read_only_for_pipeline_code: true
+  heldout_labels_never_enter_prompts_thresholds_lexicon_cues_or_guards: true
+  no_method_change_after_heldout_inspection: true

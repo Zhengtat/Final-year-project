@@ -44,7 +44,7 @@ class TierConfig(BaseModel):
 
 class EscalationConfig(BaseModel):
     enabled: bool
-    from_tier: str
+    from_tier: str | list[str]  # CR-026: a list lets several tiers escalate (luna-default profile)
     to_tier: str
     when: list[str]  # "schema_error" | "evidence_check_failed" | "low_confidence"
     confidence_threshold: float
@@ -118,9 +118,30 @@ def load_settings(config_path: Path | None = None, *, env_file: Path | None = No
     for tier_name, env_var in env_override.items():
         if tier_name in tiers_raw and os.environ.get(env_var):
             tiers_raw[tier_name] = {**tiers_raw[tier_name], "model": os.environ[env_var]}
+    if os.environ.get(
+        "CUMAP_MODELS_CONFIG"
+    ):  # CR-023: a model profile (tier models, prices, efforts) layered over the default; unset = the baseline
+        profile = yaml.safe_load(
+            (REPO_ROOT / os.environ["CUMAP_MODELS_CONFIG"]).read_text(encoding="utf-8")
+        )
+        for tier_name, tier in profile["llm"]["tiers"].items():
+            tiers_raw[tier_name] = {**tiers_raw.get(tier_name, {}), **tier}
+        for key, val in profile[
+            "llm"
+        ].items():  # other llm keys (CR-025: escalation off for a one-model arm)
+            if key != "tiers":
+                llm_raw[key] = {**llm_raw.get(key, {}), **val}
     llm_raw["tiers"] = tiers_raw
     raw = {**raw, "llm": llm_raw}
 
+    if os.environ.get(
+        "CUMAP_RELATION_REGISTRY"
+    ):  # evaluation plumbing (CR-012): a benchmark-local registry instead of the CUM one
+        raw = {**raw, "relation_registry": os.environ["CUMAP_RELATION_REGISTRY"]}
+    if os.environ.get(
+        "CUMAP_LLM_CACHE_DIR"
+    ):  # evaluation plumbing (CR-012 stability): a private model-output cache per repeated run
+        raw = {**raw, "paths": {**raw["paths"], "data_cache": os.environ["CUMAP_LLM_CACHE_DIR"]}}
     return Settings(
         **raw,
         openai_api_key=os.environ.get("OPENAI_API_KEY"),
@@ -170,5 +191,10 @@ class DemoSliceConfig(BaseModel):
 
 
 def load_demo_slice(path: Path | None = None) -> DemoSliceConfig:
-    raw = yaml.safe_load((path or (REPO_ROOT / "configs" / "demo_slice.yaml")).read_text())
+    """`CUMAP_DEMO_SLICE` (a path) overrides the default slice file, so an evaluation unit (CR-012) can be run through the unchanged
+    production stages as its own one-section slice."""
+    env = os.environ.get("CUMAP_DEMO_SLICE")
+    raw = yaml.safe_load(
+        (path or (Path(env) if env else REPO_ROOT / "configs" / "demo_slice.yaml")).read_text()
+    )
     return DemoSliceConfig(**raw)

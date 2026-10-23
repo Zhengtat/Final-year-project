@@ -1,0 +1,200 @@
+{
+ "handoff_kind": "CR-011 no-op closure handoff for CR-012",
+ "cr011_status": "closed_no_production_change",
+ "sleep_adopted": false,
+ "automatic_merge_enabled": false,
+ "human_gated_review_adopted": false,
+ "stop4_executed": false,
+ "stop5_executed": false,
+ "production_adoption": "NO",
+ "source_run_id": "slice3_c2",
+ "sleep_id": null,
+ "pre_sleep_snapshot": {
+  "run_id": "slice3_c2",
+  "snapshot_dir": "data/processed/kg/slice3_c2",
+  "checkpoint_path": "data/processed/kg/slice3_c2/checkpoint.json",
+  "checkpoint_sha256": "54eb0f194ca0271da08d38500b781c17eefa6af79638e85e865bdcfedaafde99",
+  "files": {
+   "data/processed/kg/slice3_c2/checkpoint.json": "54eb0f194ca0271da08d38500b781c17eefa6af79638e85e865bdcfedaafde99",
+   "data/processed/kg/slice3_c2/misconceptions.jsonl": "b472c55b143d05b49d66f6ad2c62327dc985138770217a6da34d8c4958aed18f",
+   "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch1/communities.jsonl": "33f3aeba5452c3f70f82ec28c328a18bfc7d03fb48c71279cb2b3165454da355",
+   "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch1/events.jsonl": "6717d1d4556d9cefe3730ddb84142d155e2cb9bbb5e148a3b71a914fde6db7ac",
+   "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch1/org_nodes.jsonl": "bd10773eb7472f410734405515c2ba29ce5aed464b78ddd1a06f6c7297901c37",
+   "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch2/communities.jsonl": "fd8f9539dfebbcf1a4522ba9c6a30674095973269fc8b5945697cc9df265b37a",
+   "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch2/events.jsonl": "e59a5c361031656e29a0ba0c0b799b219a710a2b3f31def8060cfbeddaf10dc7",
+   "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch2/org_nodes.jsonl": "63fdcdc6388c29b0e41b8b00fb4faec2ee7e6037c877d61393f676b762ad8661",
+   "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch3/communities.jsonl": "35379fa73e424afae12e6a056280d1e4aa852f4136ae0235dc64a0e77cc1627f",
+   "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch3/events.jsonl": "ff52e22d07ca264e79977965b1e2e0471006e7d67919348d386f5bbbf6c4401f",
+   "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch3/org_nodes.jsonl": "38a5c945d85bf84376da7bbfbd970be9e6e808c79b260a18b48782238496861d",
+   "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/manifest.json": "0a649fd2e5cb19997681f93d1bce137cc1a5eca326d7b9479fef788bbb01db02",
+   "data/processed/kg/slice3_c2/snapshots/ch1/edges.jsonl": "cf3258abc1828272ab08e50047d72254ac2da05c282263c3318a01b5fb57aaeb",
+   "data/processed/kg/slice3_c2/snapshots/ch1/manifest.json": "9cd592288a8eba7af157df38acd6a0eebd33fb72c57d41531f0ee561a665b59f",
+   "data/processed/kg/slice3_c2/snapshots/ch1/merges.jsonl": "49dcc50ba869116001efb03a956fb57d6dc7907b3565d3afb1af4734059ff6f0",
+   "data/processed/kg/slice3_c2/snapshots/ch1/nodes.jsonl": "3ece4ff08706e95ac0efa613443faa46ed779452930f06029d421979e74df1e4",
+   "data/processed/kg/slice3_c2/snapshots/ch1/rejected.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "data/processed/kg/slice3_c2/snapshots/ch2/edges.jsonl": "9a6006d7076a0d0f2cacc9171271c3175d5e95b53e7a5b14a701f03de3cd050e",
+   "data/processed/kg/slice3_c2/snapshots/ch2/manifest.json": "03c37567b5cf7f6a5dae10e40cd69d6a3d27d120a378ed1b716f11b7fa4ba2f4",
+   "data/processed/kg/slice3_c2/snapshots/ch2/merges.jsonl": "1bb24bd1b690334f83c299df1a529a15b20324d82ba87aa5cd56ccb0cedcd0fc",
+   "data/processed/kg/slice3_c2/snapshots/ch2/nodes.jsonl": "f462655bfaf5fef0d9b0855030150343565b8a873ca1b7b19dd832464c71b5c8",
+   "data/processed/kg/slice3_c2/snapshots/ch2/rejected.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "data/processed/kg/slice3_c2/snapshots/ch3/edges.jsonl": "09936c9da878f7cb0a757e5bd8ebee73d4247ad20827f144a872832e8423a086",
+   "data/processed/kg/slice3_c2/snapshots/ch3/manifest.json": "d243bf5e2a748390430b590be150f989fe264aa2efe6b5bec7319c36dbe2c693",
+   "data/processed/kg/slice3_c2/snapshots/ch3/merges.jsonl": "27f6f1d1a0091062696c387be8a811e8b5d992d21e96695da7dc112ae9c574f8",
+   "data/processed/kg/slice3_c2/snapshots/ch3/nodes.jsonl": "0ee9fdd423a8ab1cddaecdabc7ba1f5c122f8b82764f85e337dc0159841fc929",
+   "data/processed/kg/slice3_c2/snapshots/ch3/rejected.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+   "data/processed/kg/slice3_c2/v4_concepts.json": "dd8f74b0d6974c661e209eddc48489ecc01e787e06a56a8fdd1d8805c6264c86"
+  },
+  "files_count": 28
+ },
+ "post_sleep_snapshot": {
+  "run_id": "slice3_c2",
+  "same_as_pre_sleep": true,
+  "checkpoint_sha256": "54eb0f194ca0271da08d38500b781c17eefa6af79638e85e865bdcfedaafde99"
+ },
+ "post_sleep_state": "no_op_same_as_pre_sleep",
+ "merge_transactions": [],
+ "edge_rewrites": [],
+ "id_map_status": "identity_no_change",
+ "rollback_status": "NOT_APPLICABLE_NO_MIGRATION",
+ "evidence_retention_status": "NOT_APPLICABLE_NO_MIGRATION",
+ "alias_provenance_migration_status": "NOT_APPLICABLE_NO_MIGRATION",
+ "suspected_splits": [],
+ "organisation": {
+  "pre": "data/processed/kg/slice3_c2/organisation",
+  "post": "data/processed/kg/slice3_c2/organisation",
+  "replayed": false
+ },
+ "gates": {
+  "automatic_merge_precision": "NOT_EVALUATED / NOT_APPLICABLE - no candidate architecture advanced",
+  "wilson_precision_gate": "NOT_EVALUATED / NOT_APPLICABLE",
+  "stop4_heldout_safety": "NOT_RUN",
+  "stop5_rollback": "NOT_APPLICABLE_NO_MIGRATION",
+  "stop5_evidence_retention": "NOT_APPLICABLE_NO_MIGRATION",
+  "stop5_alias_provenance_migration": "NOT_APPLICABLE_NO_MIGRATION",
+  "production_adoption": "NO"
+ },
+ "heldout_sets": {
+  "status": "sealed; held-out evaluation not executed because the frozen development continuation criterion was not met",
+  "sleep240_heldout_blind_sheet.csv": {
+   "path": "data/interim/checks/cr011/sleep240_heldout_blind_sheet.csv",
+   "sha256": "a45503573b9c06d4b2c931a47fe088af105e88f8c39b2dc9fde115342a75aadc",
+   "opened_by_any_pipeline": false,
+   "labels_exist": false
+  },
+  "sleep_pos160_heldout_blind_sheet.csv": {
+   "path": "data/interim/checks/cr011/sleep_pos160_heldout_blind_sheet.csv",
+   "sha256": "c275216fd1bcdd6f8a14417f95d439b3dec56c5653c55e55bddf0833862121d0",
+   "opened_by_any_pipeline": false,
+   "labels_exist": false
+  }
+ },
+ "configs": {
+  "cr009_concept_stage": {
+   "path": "configs/concept_gvp.yaml",
+   "sha256": "40d4c383cda1291d5f0fc6e2b473e64ff2621521a55f087ba7cba3f3e80c15ed"
+  },
+  "cr010_node": {
+   "path": "configs/cr010_node.yaml",
+   "sha256": "b579c9fad61b0d2a4af565d9b386b20b5c4431a7f2850f5aa3c136762508d5f5"
+  },
+  "cr010_experiments": {
+   "path": "configs/cr010_experiments.yaml",
+   "sha256": "a378c4ee73eaaaec7728ddc4da0e857a86ed5ccf79d9dc78b00d34a02edf3326"
+  },
+  "cr011_sleep": {
+   "path": "configs/sleep_consolidation_v1.yaml",
+   "sha256": "bd4cdff77105ab73ab74abe6d30a3a659497247e999120be680677226c9dbb65"
+  },
+  "relation_registry": {
+   "path": "configs/relations_v1.3.yaml",
+   "sha256": "e4ce5220061b3f0f0bf84b0b50fc3a047631af9db50a38e50ed434c3446caccf"
+  },
+  "term_lexicon": {
+   "path": "configs/term_lexicon.yaml",
+   "sha256": "edd563bbfe0d7ca0cb18b5e7716df038587df1a0f834feb7620cd59d39186a66"
+  },
+  "alias_rules": {
+   "path": "configs/alias_rules.yaml",
+   "sha256": "a703886ecd60fb1cb2a67d6bf1ebf603bb43db3b2a324a4c18e9c409b69f56ff"
+  },
+  "canonical_overrides": {
+   "path": "configs/canonical_overrides.yaml",
+   "sha256": "3fa2f9bc2977a21c1a3d958512fbfcf981aad40f94641a51cc342a679500d239"
+  },
+  "default": {
+   "path": "configs/default.yaml",
+   "sha256": "e8e3de66be54f14fe07d6a6017bee50aaf5f25f39e01e84fa7a25cbd46f1c813"
+  }
+ },
+ "registry_version": "relations v1.3 (configs/relations_v1.3.yaml)",
+ "term_lexicon_version": "0.3",
+ "alias_rules_version": "0.1-draft",
+ "cr011_config_status": "stop1_approved_2026-10-08",
+ "models": {
+  "strong": {
+   "model": "gpt-6-sol",
+   "reasoning_effort": "medium"
+  },
+  "bulk": {
+   "model": "gpt-6-luna",
+   "reasoning_effort": "low"
+  },
+  "ceiling": {
+   "model": "gpt-6-astra",
+   "reasoning_effort": "low"
+  }
+ },
+ "models_note": "CR-009 concept generator ran on the bulk tier; canonicalisation and relation classification on the strong tier; CR-011 ran no LLM call",
+ "prompts": {
+  "concept_generator": {
+   "version": "v4",
+   "path": "prompts/concept_generator/v4.md",
+   "sha256": "ba407e4d1293e57f0ae0b3473cbcc0e1df1e9696c0b041b523071c5b181b8a92"
+  },
+  "concept_backfill": {
+   "version": "v1",
+   "path": "prompts/concept_backfill/v1.md",
+   "sha256": "26363a2987e97cb1c26da851e2c3577777eb77bc1d05812723b69c009236025a"
+  },
+  "canonicalize": {
+   "version": "v2",
+   "path": "prompts/canonicalize/v2.md",
+   "sha256": "b4a83be786daf97c8def74d5f7342432be3ef8059cdc1b8b0e9889a9081f4e9f"
+  },
+  "relation_family": {
+   "version": "v3",
+   "path": "prompts/relation_family/v3.md",
+   "sha256": "c94062e9f88ac30d3a168ac04e8c16a02adb4ee6281547b06dc9c823caa18ca4"
+  },
+  "relation_choice": {
+   "version": "v4",
+   "path": "prompts/relation_choice/v4.md",
+   "sha256": "6d75c7b39048427f93b8062565dc579595aa1c9bd87fd817198a0dd9d3b4ce6c"
+  },
+  "relation_qualifiers": {
+   "version": "v4",
+   "path": "prompts/relation_qualifiers/v4.md",
+   "sha256": "7ab0f6b2e9a07fc085871d7a5c0e72e8fd5dce8b15e9e09c37088ded50f1485d"
+  },
+  "sleep_merge_adjudicator": {
+   "version": "v1 (never executed: no LLM arm ran)",
+   "path": "prompts/sleep_merge_adjudicator_v1.md",
+   "sha256": "33e8b8cdd708792df316f4670e7d6b8e26bd29190921820a83e0c74cffe1a2d2"
+  }
+ },
+ "seeds_and_determinism": {
+  "sleep240_seed": 20261009,
+  "sleep_pos160_seed": 20261010,
+  "scorer_seed": 20261008,
+  "llm": "every LLM call is disk-cached by (model, prompt version, input hash); CR-011 made no LLM call"
+ },
+ "git": {
+  "branch": "cr-011-sleep-consolidation",
+  "head_at_handoff": "437fcbff3ad71d4f4ab4688347d91eeca52ce280",
+  "tags": {
+   "cr-009-complete": "58251373060ded5ca1a3f21221a1cdbab6b72cc0",
+   "cr-010-complete": "089c895714a2b89cb04c2526d73479f66230de35"
+  }
+ },
+ "cr012_interpretation": "CR-011 adopted no production graph transformation, so no pre/post sleep accuracy experiment exists for the production pipeline; the final production graph is the pre-CR-011 graph. Do not claim a measured sleep delta of zero. Canonicalisation error attribution remains available through CR-012's oracle experiments (E2)."
+}

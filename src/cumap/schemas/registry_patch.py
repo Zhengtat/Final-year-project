@@ -1,0 +1,184 @@
+"""CR-007 §5.1: apply a registry patch (configs/registry-patches/*.yaml) to a base registry and write
+the next minor version. Nothing is changed in the base file (a registry change needs a new version and
+a DECISIONS entry). Usage:
+
+    uv run python -m cumap.schemas.registry_patch configs/relations_v1.yaml \\
+        configs/registry-patches/CR-007-relations-v1.1.yaml configs/relations_v1.1.yaml
+"""
+
+from __future__ import annotations
+
+import sys
+from pathlib import Path
+
+import yaml
+
+
+def apply_patch(base: dict, patch: dict) -> dict:
+    """Return a new registry dict = base + patch (never mutates its inputs)."""
+    if patch.get("patch_for_registry_version") != base.get("version"):
+        raise ValueError(
+            f"patch is for registry version {patch.get('patch_for_registry_version')!r}, "
+            f"base is {base.get('version')!r}"
+        )
+    if "patch_for_registry_minor" in patch and patch["patch_for_registry_minor"] != base.get("minor", 0):
+        raise ValueError(  # CR-038: a patch built on v1.3 must not be applied to v1.4 by accident
+            f"patch is for registry minor {patch['patch_for_registry_minor']!r}, base has minor {base.get('minor', 0)!r}"
+        )
+    out = yaml.safe_load(yaml.safe_dump(base, sort_keys=False))  # deep copy
+    adds = patch.get("adds", {})
+    new_minor = int(str(patch["new_version"]).split(".")[1])
+    out["minor"] = new_minor
+    out["node_types"] = list(dict.fromkeys([*out["node_types"], *adds.get("node_types", [])]))
+
+    for name, q in adds.get("qualifiers", {}).items():
+        if name in out["qualifiers"]:
+            raise ValueError(f"qualifier {name!r} already exists in the base registry")
+        out["qualifiers"][name] = q
+    updates = {
+        **patch.get("qualifier_applies_to_updates", {}),
+        **adds.get("qualifier_applies_to_updates", {}),
+    }
+    for name, upd in updates.items():
+        out["qualifiers"][name].update(upd)
+    for name in patch.get("drop_qualifiers", []):  # CR-038: a qualifier the registry no longer defines (v1.5: dimension)
+        if name not in out["qualifiers"]:
+            raise ValueError(f"cannot drop unknown qualifier {name!r}")
+        del out["qualifiers"][name]
+    for rel_name, upd in patch.get("relation_updates", {}).items():  # CR-038: wording of an existing relation (definition / template / examples only)
+        target = next((r for r in out["relations"] if r["name"] == rel_name), None)
+        if target is None:
+            raise ValueError(f"relation_updates names unknown relation {rel_name!r}")
+        if set(upd) - {"definition", "template", "examples"}:
+            raise ValueError(f"relation_updates may change definition, template and examples only, got {sorted(upd)}")
+        target.update(upd)
+
+    if adds.get("output_fields"):
+        out["output_fields"] = adds["output_fields"]
+    for fam, gloss in patch.get("family_gloss", {}).items():
+        for f in out["families"]:
+            if f["name"] == fam:
+                f["gloss"] = gloss
+
+    fams = {f["name"] for f in out["families"]}
+    for fam in adds.get("families", []):  # CR-024: new families
+        if fam["name"] in fams:
+            raise ValueError(f"family {fam['name']!r} already exists in the base registry")
+        out["families"].insert(
+            max((i for i, f in enumerate(out["families"]) if f["name"] != "pedagogical"), default=-1) + 1,
+            fam,
+        )
+        fams.add(fam["name"])
+    for rel_name, labels in adds.get("external_labels", {}).items():  # CR-024: merge another list's labels into a relation
+        target = next((r for r in out["relations"] if r["name"] == rel_name), None)
+        if target is None:
+            raise ValueError(f"external_labels names unknown relation {rel_name!r}")
+        target["external_labels"] = {**target.get("external_labels", {}), **labels}
+    existing = {r["name"] for r in out["relations"]}
+    for rel in adds.get("relations", []):
+        if rel["name"] in existing:
+            raise ValueError(f"relation {rel['name']!r} already exists in the base registry")
+        last = max(
+            (i for i, r in enumerate(out["relations"]) if r.get("family") == rel["family"]),
+            default=len(out["relations"]) - 1,
+        )
+        out["relations"].insert(last + 1, rel)
+        existing.add(rel["name"])
+    return out
+
+
+def drop_relations(base: dict, names: list[str], *, patch: int) -> dict:
+    """CR-007 STOP 5: a registry minus the relations that failed their gate (new patch version).
+    References to a dropped relation (near misses, conflicts, compatibility, qualifier scopes) are
+    pruned so the result validates. Never mutates the input."""
+    gone = set(names)
+    unknown = gone - {r["name"] for r in base["relations"]}
+    if unknown:
+        raise ValueError(f"cannot drop unknown relations: {sorted(unknown)}")
+    out = yaml.safe_load(yaml.safe_dump(base, sort_keys=False))
+    out["patch"] = patch
+    out["relations"] = [r for r in out["relations"] if r["name"] not in gone]
+    for r in out["relations"]:
+        r["near_misses"] = [m for m in r.get("near_misses", []) if m.get("relation") not in gone]
+        r["conflicts_with"] = [x for x in r.get("conflicts_with", []) if x not in gone]
+        r["compatible_with"] = {k: v for k, v in (r.get("compatible_with") or {}).items() if k not in gone}
+    for q in out["qualifiers"].values():
+        if isinstance(q.get("applies_to"), list):
+            q["applies_to"] = [x for x in q["applies_to"] if x not in gone]
+    return out
+
+
+def apply_drops(base: dict, patch: dict) -> dict:
+    """CR-008: a patch with `drops: [...]` -> base minus those relations, at `new_version` (x.minor)."""
+    if patch.get("patch_for_registry_version") != base.get("version"):
+        raise ValueError("patch is for another registry version")
+    out = drop_relations(base, patch["drops"], patch=0)
+    out["minor"] = int(str(patch["new_version"]).split(".")[1])
+    for q in patch.get("drop_qualifiers", []):
+        out["qualifiers"].pop(q, None)  # CR-008 item 2: corrects_intuition / intuition
+    return out
+
+
+def drops_main(argv: list[str]) -> None:
+    """uv run python -m cumap.schemas.registry_patch apply-drops BASE PATCH OUT"""
+    base_path, patch_path, out_path = (Path(a) for a in argv)
+    patch = yaml.safe_load(patch_path.read_text())
+    new = apply_drops(yaml.safe_load(base_path.read_text()), patch)
+    text = yaml.safe_dump(new, sort_keys=False, width=110, allow_unicode=True)
+    out_path.write_text(
+        f"# Relation registry v{patch['new_version']}: GENERATED by cumap.schemas.registry_patch "
+        f"(apply-drops) from {base_path.name} + {patch_path.name} (CR-008: equivalent_to and the "
+        "corrects_intuition / intuition qualifiers removed).\n"
+        f"# Do not hand-edit: change the patch file and regenerate. {base_path.name} is unchanged.\n\n"
+        + text,
+        encoding="utf-8",
+    )
+    print(f"wrote {out_path} ({len(new['relations'])} relations)")
+
+
+def header(base_path: Path, patch_path: Path, new_version: str, note: str | None = None) -> str:
+    return (
+        f"# Relation registry v{new_version}: GENERATED by cumap.schemas.registry_patch from "
+        f"{base_path.name} + {patch_path.name} (CR-007).\n"
+        + (f"# {note}\n" if note else "")
+        + f"# Do not hand-edit: change the patch file and regenerate. {base_path.name} is unchanged.\n"
+        "# Base design notes (families, qualifier rules, template/near-miss guideline design) live in "
+        f"{base_path.name}.\n\n"
+    )
+
+
+def drop_main(argv: list[str]) -> None:
+    """uv run python -m cumap.schemas.registry_patch drop BASE OUT PATCH_NO rel1,rel2,..."""
+    base_path, out_path = Path(argv[0]), Path(argv[1])
+    patch_no, names = int(argv[2]), argv[3].split(",")
+    new = drop_relations(yaml.safe_load(base_path.read_text()), names, patch=patch_no)
+    text = yaml.safe_dump(new, sort_keys=False, width=110, allow_unicode=True)
+    out_path.write_text(
+        f"# Relation registry v1.1.{patch_no}: GENERATED by cumap.schemas.registry_patch (drop) from "
+        f"{base_path.name} minus {', '.join(names)} (CR-007 STOP 5: failed the pre-registered gate).\n"
+        f"# Do not hand-edit. {base_path.name} is unchanged.\n\n" + text,
+        encoding="utf-8",
+    )
+    print(f"wrote {out_path} ({len(new['relations'])} relations)")
+
+
+def main(argv: list[str]) -> None:
+    base_path, patch_path, out_path = (Path(a) for a in argv)
+    base = yaml.safe_load(base_path.read_text())
+    patch = yaml.safe_load(patch_path.read_text())
+    new = apply_patch(base, patch)
+    text = yaml.safe_dump(new, sort_keys=False, width=110, allow_unicode=True)
+    out_path.write_text(
+        header(base_path, patch_path, str(patch["new_version"]), patch.get("header_note")) + text,
+        encoding="utf-8",
+    )
+    print(f"wrote {out_path} ({len(new['relations'])} relations)")
+
+
+if __name__ == "__main__":
+    if sys.argv[1] == "drop":
+        drop_main(sys.argv[2:])
+    elif sys.argv[1] == "apply-drops":
+        drops_main(sys.argv[2:])
+    else:
+        main(sys.argv[1:])

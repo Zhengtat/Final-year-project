@@ -1,0 +1,4597 @@
+{
+ "meta": {
+  "scorer_version": "cr017-1",
+  "model_calls": 0,
+  "frozen_artifacts_hashed": 118,
+  "frozen_artifacts_changed": [],
+  "relation_macro_low_support_warning": "classes with support <=3 are flagged low-support; read Relation Macro F1 with its per-class support table"
+ },
+ "pd": {
+  "pilot": {
+   "E0": {
+    "relation": {
+     "micro": {
+      "precision": 0.6363636363636364,
+      "recall": 0.5,
+      "f1": 0.56
+     },
+     "direction_accuracy_given_correct_label": 1.0,
+     "no_prediction_by_outcome": {
+      "other": 2,
+      "rejected": 1
+     },
+     "low_support_classes": [
+      "acts_on",
+      "connected_to",
+      "has_property",
+      "increases",
+      "is_a",
+      "part_of",
+      "uses"
+     ]
+    },
+    "hierarchy": {
+     "direct_parent_f1_pooled": {
+      "tp": 2,
+      "fp": 1,
+      "fn": 13,
+      "precision": 0.6666666666666666,
+      "recall": 0.13333333333333333,
+      "f1": 0.2222222222222222
+     },
+     "predicted_cycles": {},
+     "gold_cycles": {}
+    },
+    "legacy": {
+     "1.5": {
+      "canonical_node_typed": {
+       "tp": 31,
+       "fp": 37,
+       "fn": 25,
+       "precision": 0.45588235294117646,
+       "recall": 0.5535714285714286,
+       "f1": 0.5
+      },
+      "concept_mentions_typed": {
+       "tp": 47,
+       "fp": 39,
+       "fn": 386,
+       "precision": 0.5465116279069767,
+       "recall": 0.10854503464203233,
+       "f1": 0.18111753371868977
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 13,
+        "fp": 8,
+        "fn": 4556,
+        "precision": 0.6190476190476191,
+        "recall": 0.0028452615451958854,
+        "f1": 0.005664488017429194
+       },
+       "bcubed": {
+        "precision": 0.9913779830638952,
+        "recall": 0.13408441387095743,
+        "f1": 0.23621995038789184
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 3,
+       "relation_correct": 2,
+       "direction_correct": 2
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 1,
+       "acts_on->requires": 1,
+       "increases->increases": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 1,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [
+        "c_bandwidth",
+        "c_latency"
+       ],
+       "unmatched_nodes": [
+        "c_1_gbps_link",
+        "c_24_bit_color",
+        "c_compression_algorithm",
+        "c_digital_library_program",
+        "c_email_message",
+        "c_end_to_end_throughput",
+        "c_ethernet_link",
+        "c_file_transfer",
+        "c_in_flight_data",
+        "c_instantaneous_rate",
+        "c_instruction",
+        "c_instructions_per_mile",
+        "c_keystroke",
+        "c_logarithmic_scale",
+        "c_multihop_packet_switched_network",
+        "c_network_design",
+        "c_outbound_link",
+        "c_packet_stream",
+        "c_pixel",
+        "c_propagation",
+        "c_propagation_delay",
+        "c_pulse",
+        "c_resolution",
+        "c_retransmission",
+        "c_signal",
+        "c_size",
+        "c_throughput_rate"
+       ],
+       "split_concepts": [
+        "pd:communication_link",
+        "pd:process_channel"
+       ]
+      }
+     },
+     "2.6": {
+      "canonical_node_typed": {
+       "tp": 57,
+       "fp": 35,
+       "fn": 35,
+       "precision": 0.6195652173913043,
+       "recall": 0.6195652173913043,
+       "f1": 0.6195652173913043
+      },
+      "concept_mentions_typed": {
+       "tp": 68,
+       "fp": 28,
+       "fn": 355,
+       "precision": 0.7083333333333334,
+       "recall": 0.1607565011820331,
+       "f1": 0.26204238921001927
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 7,
+        "fp": 0,
+        "fn": 3926,
+        "precision": 1.0,
+        "recall": 0.001779811848461734,
+        "f1": 0.003553299492385787
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.2234604831091719,
+        "f1": 0.3652925226343123
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 8,
+       "relation_correct": 5,
+       "direction_correct": 5
+      },
+      "relation_confusion": {
+       "connected_to->part_of": 1,
+       "has_property->has_property": 1,
+       "has_property->increases": 1,
+       "is_a->contrasts_with": 1,
+       "is_a->is_a": 2,
+       "part_of->part_of": 1,
+       "uses->uses": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 1,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [
+        "c_algorithm",
+        "c_amplifier",
+        "c_backwards_compatibility",
+        "c_bus",
+        "c_busy_link",
+        "c_campus_networks",
+        "c_computer_communication",
+        "c_configuration_table",
+        "c_data_centers",
+        "c_demultiplexing_key",
+        "c_destination_address",
+        "c_frame_format",
+        "c_header",
+        "c_hexadecimal_digit",
+        "c_idle_link",
+        "c_jamming_sequence",
+        "c_multicast",
+        "c_nibble",
+        "c_receiver",
+        "c_retransmission_attempt",
+        "c_rom",
+        "c_routing",
+        "c_sender",
+        "c_source_address",
+        "c_star_configuration",
+        "c_tap",
+        "c_wireless_network"
+       ],
+       "split_concepts": [
+        "pd:ethernet_adaptor",
+        "pd:ethernet_frame",
+        "pd:exponential_backoff",
+        "pd:point_to_point_link",
+        "pd:wifi"
+       ]
+      }
+     }
+    },
+    "per_section": {
+     "1.5": {
+      "concept": {
+       "tp": 37,
+       "fp": 31,
+       "fn": 19,
+       "precision": 0.5441176470588235,
+       "recall": 0.6607142857142857,
+       "f1": 0.596774193548387
+      },
+      "hierarchy": {
+       "tp": 0,
+       "fp": 0,
+       "fn": 0,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      },
+      "pair_recall": [
+       4,
+       18
+      ],
+      "relation_population": 4,
+      "strict": {
+       "tp": 2,
+       "fp": 25,
+       "fn": 37,
+       "precision": 0.07407407407407407,
+       "recall": 0.05128205128205128,
+       "f1": 0.060606060606060615
+      }
+     },
+     "2.6": {
+      "concept": {
+       "tp": 60,
+       "fp": 32,
+       "fn": 32,
+       "precision": 0.6521739130434783,
+       "recall": 0.6521739130434783,
+       "f1": 0.6521739130434783
+      },
+      "hierarchy": {
+       "tp": 2,
+       "fp": 1,
+       "fn": 25,
+       "precision": 0.6666666666666666,
+       "recall": 0.07407407407407407,
+       "f1": 0.13333333333333333
+      },
+      "pair_recall": [
+       10,
+       48
+      ],
+      "relation_population": 10,
+      "strict": {
+       "tp": 5,
+       "fp": 12,
+       "fn": 74,
+       "precision": 0.29411764705882354,
+       "recall": 0.06329113924050633,
+       "f1": 0.10416666666666667
+      }
+     }
+    }
+   },
+   "E1": {
+    "relation": {
+     "micro": {
+      "precision": 1.0,
+      "recall": 0.6666666666666666,
+      "f1": 0.8
+     },
+     "direction_accuracy_given_correct_label": 1.0,
+     "no_prediction_by_outcome": {
+      "other": 1
+     },
+     "low_support_classes": [
+      "decreases",
+      "has_property"
+     ]
+    },
+    "hierarchy": {
+     "direct_parent_f1_pooled": {
+      "tp": 0,
+      "fp": 1,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+     },
+     "predicted_cycles": {},
+     "gold_cycles": {}
+    },
+    "legacy": {
+     "1.5": {
+      "canonical_node_typed": {
+       "tp": 54,
+       "fp": 31,
+       "fn": 2,
+       "precision": 0.6352941176470588,
+       "recall": 0.9642857142857143,
+       "f1": 0.7659574468085105
+      },
+      "concept_mentions_typed": {
+       "tp": 412,
+       "fp": 16,
+       "fn": 21,
+       "precision": 0.9626168224299065,
+       "recall": 0.9515011547344111,
+       "f1": 0.9570267131242741
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 3378,
+        "fp": 1281,
+        "fn": 1191,
+        "precision": 0.7250482936252415,
+        "recall": 0.7393302692055155,
+        "f1": 0.7321196358907672
+       },
+       "bcubed": {
+        "precision": 0.8919817721585058,
+        "recall": 0.7461604403513037,
+        "f1": 0.8125808697395269
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 2,
+       "relation_correct": 2,
+       "direction_correct": 2
+      },
+      "relation_confusion": {
+       "decreases->decreases": 1,
+       "has_property->has_property": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 0,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [
+        "c_bandwidth",
+        "c_latency"
+       ],
+       "unmatched_nodes": [],
+       "split_concepts": [
+        "pd:application",
+        "pd:average_rate",
+        "pd:bandwidth_requirement",
+        "pd:communication_link",
+        "pd:delay_bandwidth_product",
+        "pd:digital_image",
+        "pd:frequency_band",
+        "pd:implementation_efficiency",
+        "pd:in_flight_data",
+        "pd:inter_packet_gap",
+        "pd:jitter",
+        "pd:link_bandwidth",
+        "pd:network_performance",
+        "pd:process_channel",
+        "pd:propagation_delay",
+        "pd:receiver",
+        "pd:sender",
+        "pd:transfer_size",
+        "pd:transmission_delay",
+        "pd:video_compression",
+        "pd:video_frame"
+       ]
+      }
+     }
+    },
+    "per_section": {
+     "1.5": {
+      "concept": {
+       "tp": 54,
+       "fp": 31,
+       "fn": 2,
+       "precision": 0.6352941176470588,
+       "recall": 0.9642857142857143,
+       "f1": 0.7659574468085105
+      },
+      "hierarchy": {
+       "tp": 0,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      },
+      "pair_recall": [
+       3,
+       35
+      ],
+      "relation_population": 3,
+      "strict": {
+       "tp": 2,
+       "fp": 20,
+       "fn": 37,
+       "precision": 0.09090909090909091,
+       "recall": 0.05128205128205128,
+       "f1": 0.06557377049180327
+      }
+     }
+    }
+   },
+   "E2": {
+    "relation": {
+     "micro": {
+      "precision": 0.8888888888888888,
+      "recall": 0.6666666666666666,
+      "f1": 0.761904761904762
+     },
+     "direction_accuracy_given_correct_label": 1.0,
+     "no_prediction_by_outcome": {
+      "other": 2,
+      "no_relation": 1
+     },
+     "low_support_classes": [
+      "acts_on",
+      "contrasts_with",
+      "decreases",
+      "increases"
+     ]
+    },
+    "hierarchy": {
+     "direct_parent_f1_pooled": {
+      "tp": 0,
+      "fp": 0,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+     },
+     "predicted_cycles": {},
+     "gold_cycles": {}
+    },
+    "legacy": {
+     "1.5": {
+      "canonical_node_typed": {
+       "tp": 56,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 412,
+       "fp": 16,
+       "fn": 21,
+       "precision": 0.9626168224299065,
+       "recall": 0.9515011547344111,
+       "f1": 0.9570267131242741
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 4094,
+        "fp": 0,
+        "fn": 475,
+        "precision": 1.0,
+        "recall": 0.8960385204639965,
+        "f1": 0.9451691100080803
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9112698664480933,
+        "f1": 0.9535752982299653
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 9,
+       "relation_correct": 8,
+       "direction_correct": 8
+      },
+      "relation_confusion": {
+       "acts_on->requires": 1,
+       "decreases->decreases": 1,
+       "has_property->has_property": 6,
+       "increases->increases": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 0,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     }
+    },
+    "per_section": {
+     "1.5": {
+      "concept": {
+       "tp": 56,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 0,
+       "fp": 0,
+       "fn": 0,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      },
+      "pair_recall": [
+       12,
+       39
+      ],
+      "relation_population": 12,
+      "strict": {
+       "tp": 8,
+       "fp": 12,
+       "fn": 31,
+       "precision": 0.4,
+       "recall": 0.20512820512820512,
+       "f1": 0.27118644067796605
+      }
+     }
+    }
+   },
+   "E3": {
+    "relation": {
+     "micro": {
+      "precision": 0.84,
+      "recall": 0.5384615384615384,
+      "f1": 0.6562499999999999
+     },
+     "direction_accuracy_given_correct_label": 1.0,
+     "no_prediction_by_outcome": {
+      "other": 7,
+      "rejected": 3,
+      "no_relation": 4
+     },
+     "low_support_classes": [
+      "acts_on",
+      "causes",
+      "contrasts_with",
+      "decreases",
+      "uses"
+     ]
+    },
+    "hierarchy": {
+     "direct_parent_f1_pooled": {
+      "tp": 0,
+      "fp": 2,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+     },
+     "predicted_cycles": {},
+     "gold_cycles": {}
+    },
+    "legacy": {
+     "1.5": {
+      "canonical_node_typed": {
+       "tp": 56,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 412,
+       "fp": 16,
+       "fn": 21,
+       "precision": 0.9626168224299065,
+       "recall": 0.9515011547344111,
+       "f1": 0.9570267131242741
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 4094,
+        "fp": 0,
+        "fn": 475,
+        "precision": 1.0,
+        "recall": 0.8960385204639965,
+        "f1": 0.9451691100080803
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9112698664480933,
+        "f1": 0.9535752982299653
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 25,
+       "relation_correct": 21,
+       "direction_correct": 21
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 1,
+       "acts_on->requires": 1,
+       "causes->causes": 1,
+       "decreases->decreases": 1,
+       "decreases->requires": 1,
+       "has_property->has_property": 13,
+       "has_property->is_a": 2,
+       "increases->increases": 2,
+       "part_of->part_of": 2,
+       "uses->uses": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 3,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     }
+    },
+    "per_section": {
+     "1.5": {
+      "concept": {
+       "tp": 56,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 0,
+       "fp": 2,
+       "fn": 0,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      },
+      "pair_recall": [
+       39,
+       39
+      ],
+      "relation_population": 39,
+      "strict": {
+       "tp": 21,
+       "fp": 15,
+       "fn": 18,
+       "precision": 0.5833333333333334,
+       "recall": 0.5384615384615384,
+       "f1": 0.5599999999999999
+      }
+     }
+    }
+   },
+   "E4": {
+    "relation": {
+     "micro": {
+      "precision": 0.84,
+      "recall": 0.5384615384615384,
+      "f1": 0.6562499999999999
+     },
+     "direction_accuracy_given_correct_label": 1.0,
+     "no_prediction_by_outcome": {
+      "other": 7,
+      "rejected": 3,
+      "no_relation": 4
+     },
+     "low_support_classes": [
+      "acts_on",
+      "causes",
+      "contrasts_with",
+      "decreases",
+      "uses"
+     ]
+    },
+    "hierarchy": {
+     "direct_parent_f1_pooled": {
+      "tp": 0,
+      "fp": 2,
+      "fn": 0,
+      "precision": 0.0,
+      "recall": 0.0,
+      "f1": 0.0
+     },
+     "predicted_cycles": {},
+     "gold_cycles": {}
+    },
+    "legacy": {
+     "1.5": {
+      "canonical_node_typed": {
+       "tp": 56,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 412,
+       "fp": 16,
+       "fn": 21,
+       "precision": 0.9626168224299065,
+       "recall": 0.9515011547344111,
+       "f1": 0.9570267131242741
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 4094,
+        "fp": 0,
+        "fn": 475,
+        "precision": 1.0,
+        "recall": 0.8960385204639965,
+        "f1": 0.9451691100080803
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9112698664480933,
+        "f1": 0.9535752982299653
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 25,
+       "relation_correct": 21,
+       "direction_correct": 21
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 1,
+       "acts_on->requires": 1,
+       "causes->causes": 1,
+       "decreases->decreases": 1,
+       "decreases->requires": 1,
+       "has_property->has_property": 13,
+       "has_property->is_a": 2,
+       "increases->increases": 2,
+       "part_of->part_of": 2,
+       "uses->uses": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 3,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     }
+    },
+    "per_section": {
+     "1.5": {
+      "concept": {
+       "tp": 56,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 0,
+       "fp": 2,
+       "fn": 0,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      },
+      "pair_recall": [
+       39,
+       39
+      ],
+      "relation_population": 39,
+      "strict": {
+       "tp": 21,
+       "fp": 4,
+       "fn": 18,
+       "precision": 0.84,
+       "recall": 0.5384615384615384,
+       "f1": 0.6562499999999999
+      }
+     }
+    }
+   }
+  },
+  "heldout": {
+   "E0": {
+    "relation": {
+     "micro": {
+      "precision": 0.71875,
+      "recall": 0.4339622641509434,
+      "f1": 0.5411764705882353
+     },
+     "direction_accuracy_given_correct_label": 0.9565217391304348,
+     "no_prediction_by_outcome": {
+      "other": 8,
+      "no_relation": 6,
+      "rejected": 7
+     },
+     "low_support_classes": [
+      "connected_to",
+      "decreases",
+      "has_property",
+      "increases",
+      "part_of",
+      "performs"
+     ]
+    },
+    "hierarchy": {
+     "direct_parent_f1_pooled": {
+      "tp": 7,
+      "fp": 39,
+      "fn": 57,
+      "precision": 0.15217391304347827,
+      "recall": 0.109375,
+      "f1": 0.1272727272727273
+     },
+     "predicted_cycles": {},
+     "gold_cycles": {}
+    },
+    "legacy": {
+     "4.4": {
+      "canonical_node_typed": {
+       "tp": 70,
+       "fp": 46,
+       "fn": 27,
+       "precision": 0.603448275862069,
+       "recall": 0.7216494845360825,
+       "f1": 0.6572769953051643
+      },
+      "concept_mentions_typed": {
+       "tp": 102,
+       "fp": 44,
+       "fn": 398,
+       "precision": 0.6986301369863014,
+       "recall": 0.204,
+       "f1": 0.3157894736842105
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 45,
+        "fp": 0,
+        "fn": 4877,
+        "precision": 1.0,
+        "recall": 0.00914262494920764,
+        "f1": 0.018119589289309443
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.2186924552301954,
+        "f1": 0.35889687228577644
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 4,
+       "relation_correct": 3,
+       "direction_correct": 3
+      },
+      "relation_confusion": {
+       "has_purpose->uses": 1,
+       "is_a->is_a": 1,
+       "performs->performs": 1,
+       "uses->uses": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 0,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [
+        "c_array",
+        "c_atm_capability",
+        "c_circuit_emulation",
+        "c_constraint",
+        "c_customer_site",
+        "c_end_user",
+        "c_fish_network",
+        "c_head_router",
+        "c_input_port",
+        "c_ip_datagram_network",
+        "c_ip_prefix",
+        "c_label_stacking",
+        "c_layer_3_header",
+        "c_link",
+        "c_network_resilience",
+        "c_non_ip_packet",
+        "c_optical_network",
+        "c_output_port",
+        "c_remote_label",
+        "c_rerouting",
+        "c_routing_algorithm",
+        "c_routing_neighbor",
+        "c_routing_protocol_message",
+        "c_scaling_capability",
+        "c_service_provider_network",
+        "c_shim",
+        "c_ships_in_the_night_mode",
+        "c_tail_router",
+        "c_throughput",
+        "c_traffic_flow",
+        "c_tunnel_payload"
+       ],
+       "split_concepts": [
+        "C0004",
+        "C0011",
+        "C0014",
+        "C0015",
+        "C0030"
+       ]
+      }
+     },
+     "4.5": {
+      "canonical_node_typed": {
+       "tp": 33,
+       "fp": 67,
+       "fn": 31,
+       "precision": 0.33,
+       "recall": 0.515625,
+       "f1": 0.40243902439024387
+      },
+      "concept_mentions_typed": {
+       "tp": 54,
+       "fp": 65,
+       "fn": 279,
+       "precision": 0.453781512605042,
+       "recall": 0.16216216216216217,
+       "f1": 0.23893805309734514
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 14,
+        "fp": 0,
+        "fn": 3135,
+        "precision": 1.0,
+        "recall": 0.004445855827246745,
+        "f1": 0.008852355358836548
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.20376324086469055,
+        "f1": 0.3385437168164776
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 3,
+       "relation_correct": 3,
+       "direction_correct": 3
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 1,
+       "has_property->has_property": 1,
+       "is_a->is_a": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 2,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [
+        "c_access_point",
+        "c_address_space",
+        "c_application",
+        "c_attacker",
+        "c_binding",
+        "c_binding_update_message",
+        "c_chrome",
+        "c_destination_address",
+        "c_dns_server",
+        "c_drone",
+        "c_emergency_response_team",
+        "c_endpoint",
+        "c_fixed_infrastructure",
+        "c_fixed_node",
+        "c_higher_layer_protocol",
+        "c_http",
+        "c_incremental_deployment_problem",
+        "c_internet",
+        "c_internetwork",
+        "c_ip_forwarding",
+        "c_ipv4",
+        "c_ipv6",
+        "c_laptop",
+        "c_mobile_networking",
+        "c_mobile_node_address",
+        "c_mobility_support",
+        "c_netflix",
+        "c_network",
+        "c_network_prefix",
+        "c_registration",
+        "c_route_optimization",
+        "c_router",
+        "c_smartphone",
+        "c_suboptimal_route",
+        "c_tunneling",
+        "c_voice_over_ip_telephone_call",
+        "c_web_browser",
+        "c_wireless_networking_protocol",
+        "c_wireless_technology"
+       ],
+       "split_concepts": [
+        "C0098",
+        "C0101",
+        "C0110",
+        "C0114",
+        "C0122",
+        "C0130",
+        "C0136",
+        "C0141",
+        "C0145"
+       ]
+      }
+     },
+     "5.4": {
+      "canonical_node_typed": {
+       "tp": 44,
+       "fp": 78,
+       "fn": 32,
+       "precision": 0.36065573770491804,
+       "recall": 0.5789473684210527,
+       "f1": 0.4444444444444445
+      },
+      "concept_mentions_typed": {
+       "tp": 61,
+       "fp": 96,
+       "fn": 271,
+       "precision": 0.3885350318471338,
+       "recall": 0.18373493975903615,
+       "f1": 0.24948875255623726
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 21,
+        "fp": 0,
+        "fn": 1569,
+        "precision": 1.0,
+        "recall": 0.013207547169811321,
+        "f1": 0.026070763500931095
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.2473032480800393,
+        "f1": 0.3965406944313031
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 7,
+       "relation_correct": 5,
+       "direction_correct": 5
+      },
+      "relation_confusion": {
+       "acts_on->part_of": 1,
+       "decreases->decreases": 1,
+       "has_purpose->has_purpose": 1,
+       "has_purpose->performs": 1,
+       "is_a->is_a": 1,
+       "part_of->part_of": 1,
+       "uses->uses": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 0,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [
+        "c_7_bit_payload_type_field",
+        "c_abstraction",
+        "c_atm_cell",
+        "c_audio",
+        "c_audio_packet",
+        "c_audio_stream",
+        "c_audioconferencing_application",
+        "c_b_frame",
+        "c_bandwidth_requirement",
+        "c_byte",
+        "c_camera",
+        "c_client",
+        "c_clock_drift",
+        "c_computational_cost",
+        "c_conference",
+        "c_contributing_source_identifier",
+        "c_cumulative_count",
+        "c_data",
+        "c_digitized_voice_samples",
+        "c_encoding",
+        "c_encryption_algorithm",
+        "c_example_conferencing_tool",
+        "c_extension_bit",
+        "c_i_frame",
+        "c_interarrival_spacing",
+        "c_internet",
+        "c_interoperability",
+        "c_ip_address",
+        "c_lower_layer_protocol",
+        "c_media_stream",
+        "c_mpeg_encoded_video_stream",
+        "c_mpeg_encoding",
+        "c_netflix",
+        "c_network_address",
+        "c_p_frame",
+        "c_packet",
+        "c_packetization",
+        "c_padding_bit",
+        "c_report_packet",
+        "c_reporting_period",
+        "c_rtp_format",
+        "c_sample",
+        "c_server",
+        "c_silence_detection",
+        "c_source_identifier",
+        "c_spotify",
+        "c_subversion_field",
+        "c_temporal_relationship",
+        "c_tick",
+        "c_timely_delivery",
+        "c_timing_information",
+        "c_transport_address",
+        "c_udp_header",
+        "c_udp_port_number",
+        "c_vat",
+        "c_vic",
+        "c_video",
+        "c_youtube"
+       ],
+       "split_concepts": [
+        "C0181",
+        "C0191",
+        "C0200",
+        "C0205",
+        "C0206",
+        "C0216",
+        "C0218",
+        "C0229"
+       ]
+      }
+     },
+     "6.3": {
+      "canonical_node_typed": {
+       "tp": 26,
+       "fp": 59,
+       "fn": 30,
+       "precision": 0.3058823529411765,
+       "recall": 0.4642857142857143,
+       "f1": 0.3687943262411348
+      },
+      "concept_mentions_typed": {
+       "tp": 44,
+       "fp": 71,
+       "fn": 439,
+       "precision": 0.3826086956521739,
+       "recall": 0.09109730848861283,
+       "f1": 0.1471571906354515
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 17,
+        "fp": 0,
+        "fn": 8315,
+        "precision": 1.0,
+        "recall": 0.0020403264522323573,
+        "f1": 0.00407234399329261
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.12544477569806572,
+        "f1": 0.22292479987791075
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 1
+      },
+      "relation_confusion": {
+       "uses->performs": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 0,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [
+        "c_additive_increase_additive_decrease_strategy",
+        "c_bandwidth",
+        "c_big_windows_extension",
+        "c_buffer_space",
+        "c_clock",
+        "c_coarse_grained_clock",
+        "c_concave_function",
+        "c_congestion_control_mechanism",
+        "c_congestion_event",
+        "c_connection",
+        "c_destination",
+        "c_end_to_end_path",
+        "c_flow",
+        "c_heuristic",
+        "c_host",
+        "c_internet",
+        "c_ip_option",
+        "c_linear_increase",
+        "c_link",
+        "c_maximum_congestion_window_size",
+        "c_missing_packet",
+        "c_network",
+        "c_packet_in_transit",
+        "c_pipe",
+        "c_plateau",
+        "c_queuing_strategy",
+        "c_receiving_side",
+        "c_research_networks",
+        "c_sender",
+        "c_sending_rate",
+        "c_sequence_number",
+        "c_session",
+        "c_short_rtt_flow",
+        "c_slow_start_phase",
+        "c_source",
+        "c_standard_slow_start",
+        "c_target_congestion_window",
+        "c_tcp_ip_protocol_stack",
+        "c_tcp_maxwin",
+        "c_tcp_timeouts",
+        "c_timer",
+        "c_van_jacobson"
+       ],
+       "split_concepts": [
+        "C0239",
+        "C0240",
+        "C0250",
+        "C0256",
+        "C0293"
+       ]
+      }
+     },
+     "7.1": {
+      "canonical_node_typed": {
+       "tp": 47,
+       "fp": 101,
+       "fn": 42,
+       "precision": 0.31756756756756754,
+       "recall": 0.5280898876404494,
+       "f1": 0.39662447257383965
+      },
+      "concept_mentions_typed": {
+       "tp": 79,
+       "fp": 116,
+       "fn": 455,
+       "precision": 0.40512820512820513,
+       "recall": 0.14794007490636704,
+       "f1": 0.2167352537722908
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 38,
+        "fp": 2,
+        "fn": 3885,
+        "precision": 0.95,
+        "recall": 0.009686464440479225,
+        "f1": 0.01917739086550593
+       },
+       "bcubed": {
+        "precision": 0.9975031210986268,
+        "recall": 0.19222824740739938,
+        "f1": 0.3223387763457607
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 5,
+       "relation_correct": 3,
+       "direction_correct": 2
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 1,
+       "has_purpose->is_a": 1,
+       "is_a->is_a": 1,
+       "uses->part_of": 1,
+       "uses->uses": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 0,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [
+        "c_structure"
+       ],
+       "unmatched_nodes": [
+        "c_application_program",
+        "c_architecture",
+        "c_argument_marshalling_mechanism",
+        "c_argument_marshalling_system",
+        "c_arm",
+        "c_bit",
+        "c_browser",
+        "c_byte",
+        "c_character",
+        "c_character_string",
+        "c_charrep",
+        "c_client_side",
+        "c_compilation_based_approach",
+        "c_context_variable",
+        "c_contiguous_message",
+        "c_cray",
+        "c_data_encoder",
+        "c_data_rate",
+        "c_decimal",
+        "c_decoding",
+        "c_emp",
+        "c_emp_title",
+        "c_encoding_process",
+        "c_font_size",
+        "c_function_pointer",
+        "c_globally_unique_identifier",
+        "c_grpc",
+        "c_host",
+        "c_http_url",
+        "c_ibm",
+        "c_image",
+        "c_intel_x86_family",
+        "c_intermediate_agent",
+        "c_international_standards_organization",
+        "c_interpretation_based_approach",
+        "c_iso_standard",
+        "c_least_significant_group",
+        "c_length_field",
+        "c_lower_seven_bits",
+        "c_memory_bandwidth",
+        "c_modularity",
+        "c_multibyte_tag",
+        "c_parser",
+        "c_powerpc_processor",
+        "c_primitive_type",
+        "c_procedure_interface",
+        "c_programming_language",
+        "c_proto_file",
+        "c_protocol_header",
+        "c_rpc_protocol",
+        "c_server_side",
+        "c_signed_integer",
+        "c_string",
+        "c_subfield",
+        "c_sunrpc",
+        "c_taxonomy",
+        "c_test_case",
+        "c_twos_complement_notation",
+        "c_typedef_struct",
+        "c_unmarshalling",
+        "c_unsigned_integer",
+        "c_upper_layer",
+        "c_value",
+        "c_variable",
+        "c_vax",
+        "c_word",
+        "c_word_boundary",
+        "c_world_wide_web_consortium",
+        "c_xdr_array",
+        "c_xdr_int",
+        "c_xdr_integer",
+        "c_xdr_string"
+       ],
+       "split_concepts": [
+        "C0304",
+        "C0323"
+       ]
+      }
+     },
+     "8.2": {
+      "canonical_node_typed": {
+       "tp": 44,
+       "fp": 44,
+       "fn": 25,
+       "precision": 0.5,
+       "recall": 0.6376811594202898,
+       "f1": 0.5605095541401274
+      },
+      "concept_mentions_typed": {
+       "tp": 60,
+       "fp": 53,
+       "fn": 430,
+       "precision": 0.5309734513274337,
+       "recall": 0.12244897959183673,
+       "f1": 0.19900497512437812
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 22,
+        "fp": 0,
+        "fn": 5193,
+        "precision": 1.0,
+        "recall": 0.004218600191754554,
+        "f1": 0.008401756730952836
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.15704268889938836,
+        "f1": 0.2714553065432215
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 8,
+       "relation_correct": 6,
+       "direction_correct": 6
+      },
+      "relation_confusion": {
+       "contrasts_with->contrasts_with": 1,
+       "is_a->is_a": 2,
+       "uses->requires": 2,
+       "uses->uses": 3
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 1,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [
+        "c_adversary",
+        "c_attacker",
+        "c_authenticity",
+        "c_bit_error",
+        "c_brute_force_search",
+        "c_collision_resistance",
+        "c_communication_channel",
+        "c_counter",
+        "c_cryptanalysis",
+        "c_cryptanalyst",
+        "c_cryptographer",
+        "c_eavesdropper",
+        "c_electronic_codebook_mode_encryption",
+        "c_factoring",
+        "c_input_pad",
+        "c_legacy_system",
+        "c_output_pad",
+        "c_parity_bit",
+        "c_protocol",
+        "c_redundant_information",
+        "c_secret_decryption_function",
+        "c_secure_communication",
+        "c_tampering",
+        "c_xor"
+       ],
+       "split_concepts": [
+        "C0394",
+        "C0413",
+        "C0414",
+        "C0454"
+       ]
+      }
+     },
+     "9.3": {
+      "canonical_node_typed": {
+       "tp": 50,
+       "fp": 81,
+       "fn": 38,
+       "precision": 0.3816793893129771,
+       "recall": 0.5681818181818182,
+       "f1": 0.4566210045662101
+      },
+      "concept_mentions_typed": {
+       "tp": 72,
+       "fp": 101,
+       "fn": 412,
+       "precision": 0.4161849710982659,
+       "recall": 0.1487603305785124,
+       "f1": 0.21917808219178087
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 31,
+        "fp": 0,
+        "fn": 2768,
+        "precision": 1.0,
+        "recall": 0.011075384065737763,
+        "f1": 0.021908127208480562
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.20508800156281165,
+        "f1": 0.3403701659909391
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 4,
+       "relation_correct": 3,
+       "direction_correct": 3
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 2,
+       "contrasts_with->is_a": 1,
+       "is_a->is_a": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 2,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [
+        "c_5_tuple",
+        "c_address",
+        "c_address_resolution_protocol",
+        "c_alias",
+        "c_application",
+        "c_application_protocol",
+        "c_bootstrapping",
+        "c_client_server_interaction",
+        "c_cname_record",
+        "c_compound_variable",
+        "c_configuration_information",
+        "c_connection",
+        "c_faulty_hardware",
+        "c_flat_address",
+        "c_garbage_collection",
+        "c_globally_unique_identifier",
+        "c_icmp",
+        "c_in",
+        "c_integer",
+        "c_internet",
+        "c_internet_host",
+        "c_internet_object",
+        "c_ip_group",
+        "c_layered_model",
+        "c_local_variable",
+        "c_machine_learning",
+        "c_mail_exchange_record",
+        "c_memory_location",
+        "c_misbehaving_software",
+        "c_mx_record",
+        "c_name_field",
+        "c_name_to_address_mapping",
+        "c_network_device",
+        "c_node",
+        "c_object_identification_scheme",
+        "c_packet",
+        "c_physical_address",
+        "c_recursive_process",
+        "c_redundancy",
+        "c_router",
+        "c_rpc_mechanism",
+        "c_schema",
+        "c_search_engine",
+        "c_semantics",
+        "c_site_administrator",
+        "c_structure",
+        "c_subtable",
+        "c_tcp",
+        "c_timeout",
+        "c_top_level_domain_name_server",
+        "c_transport_protocol",
+        "c_tree",
+        "c_unix_file_name",
+        "c_url",
+        "c_value",
+        "c_value_field"
+       ],
+       "split_concepts": [
+        "C0457",
+        "C0469",
+        "C0498"
+       ]
+      }
+     }
+    },
+    "per_section": {
+     "4.4": {
+      "concept": {
+       "tp": 80,
+       "fp": 36,
+       "fn": 17,
+       "precision": 0.6896551724137931,
+       "recall": 0.8247422680412371,
+       "f1": 0.7511737089201878
+      },
+      "hierarchy": {
+       "tp": 1,
+       "fp": 7,
+       "fn": 6,
+       "precision": 0.125,
+       "recall": 0.14285714285714285,
+       "f1": 0.13333333333333333
+      },
+      "pair_recall": [
+       9,
+       49
+      ],
+      "relation_population": 9,
+      "strict": {
+       "tp": 3,
+       "fp": 20,
+       "fn": 60,
+       "precision": 0.13043478260869565,
+       "recall": 0.047619047619047616,
+       "f1": 0.06976744186046512
+      }
+     },
+     "4.5": {
+      "concept": {
+       "tp": 52,
+       "fp": 48,
+       "fn": 12,
+       "precision": 0.52,
+       "recall": 0.8125,
+       "f1": 0.6341463414634146
+      },
+      "hierarchy": {
+       "tp": 1,
+       "fp": 3,
+       "fn": 6,
+       "precision": 0.25,
+       "recall": 0.14285714285714285,
+       "f1": 0.18181818181818182
+      },
+      "pair_recall": [
+       5,
+       41
+      ],
+      "relation_population": 5,
+      "strict": {
+       "tp": 2,
+       "fp": 13,
+       "fn": 47,
+       "precision": 0.13333333333333333,
+       "recall": 0.04081632653061224,
+       "f1": 0.0625
+      }
+     },
+     "5.4": {
+      "concept": {
+       "tp": 56,
+       "fp": 66,
+       "fn": 20,
+       "precision": 0.45901639344262296,
+       "recall": 0.7368421052631579,
+       "f1": 0.5656565656565656
+      },
+      "hierarchy": {
+       "tp": 1,
+       "fp": 5,
+       "fn": 5,
+       "precision": 0.16666666666666666,
+       "recall": 0.16666666666666666,
+       "f1": 0.16666666666666666
+      },
+      "pair_recall": [
+       8,
+       37
+      ],
+      "relation_population": 8,
+      "strict": {
+       "tp": 4,
+       "fp": 23,
+       "fn": 52,
+       "precision": 0.14814814814814814,
+       "recall": 0.07142857142857142,
+       "f1": 0.0963855421686747
+      }
+     },
+     "6.3": {
+      "concept": {
+       "tp": 37,
+       "fp": 48,
+       "fn": 19,
+       "precision": 0.43529411764705883,
+       "recall": 0.6607142857142857,
+       "f1": 0.5248226950354609
+      },
+      "hierarchy": {
+       "tp": 0,
+       "fp": 7,
+       "fn": 1,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      },
+      "pair_recall": [
+       4,
+       34
+      ],
+      "relation_population": 4,
+      "strict": {
+       "tp": 0,
+       "fp": 26,
+       "fn": 47,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      }
+     },
+     "7.1": {
+      "concept": {
+       "tp": 72,
+       "fp": 76,
+       "fn": 17,
+       "precision": 0.4864864864864865,
+       "recall": 0.8089887640449438,
+       "f1": 0.6075949367088608
+      },
+      "hierarchy": {
+       "tp": 1,
+       "fp": 7,
+       "fn": 18,
+       "precision": 0.125,
+       "recall": 0.05263157894736842,
+       "f1": 0.07407407407407407
+      },
+      "pair_recall": [
+       10,
+       55
+      ],
+      "relation_population": 10,
+      "strict": {
+       "tp": 1,
+       "fp": 27,
+       "fn": 68,
+       "precision": 0.03571428571428571,
+       "recall": 0.014492753623188406,
+       "f1": 0.020618556701030924
+      }
+     },
+     "8.2": {
+      "concept": {
+       "tp": 59,
+       "fp": 29,
+       "fn": 10,
+       "precision": 0.6704545454545454,
+       "recall": 0.855072463768116,
+       "f1": 0.7515923566878981
+      },
+      "hierarchy": {
+       "tp": 2,
+       "fp": 4,
+       "fn": 15,
+       "precision": 0.3333333333333333,
+       "recall": 0.11764705882352941,
+       "f1": 0.1739130434782609
+      },
+      "pair_recall": [
+       9,
+       51
+      ],
+      "relation_population": 9,
+      "strict": {
+       "tp": 4,
+       "fp": 26,
+       "fn": 60,
+       "precision": 0.13333333333333333,
+       "recall": 0.0625,
+       "f1": 0.0851063829787234
+      }
+     },
+     "9.3": {
+      "concept": {
+       "tp": 71,
+       "fp": 60,
+       "fn": 17,
+       "precision": 0.5419847328244275,
+       "recall": 0.8068181818181818,
+       "f1": 0.6484018264840183
+      },
+      "hierarchy": {
+       "tp": 1,
+       "fp": 8,
+       "fn": 17,
+       "precision": 0.1111111111111111,
+       "recall": 0.05555555555555555,
+       "f1": 0.07407407407407407
+      },
+      "pair_recall": [
+       8,
+       59
+      ],
+      "relation_population": 8,
+      "strict": {
+       "tp": 2,
+       "fp": 23,
+       "fn": 76,
+       "precision": 0.08,
+       "recall": 0.02564102564102564,
+       "f1": 0.038834951456310676
+      }
+     }
+    }
+   },
+   "E1": {
+    "relation": {
+     "micro": {
+      "precision": 0.6346153846153846,
+      "recall": 0.358695652173913,
+      "f1": 0.45833333333333326
+     },
+     "direction_accuracy_given_correct_label": 1.0,
+     "no_prediction_by_outcome": {
+      "other": 13,
+      "rejected": 11,
+      "no_relation": 16
+     },
+     "low_support_classes": [
+      "causes",
+      "has_property",
+      "increases",
+      "performs"
+     ]
+    },
+    "hierarchy": {
+     "direct_parent_f1_pooled": {
+      "tp": 9,
+      "fp": 10,
+      "fn": 55,
+      "precision": 0.47368421052631576,
+      "recall": 0.140625,
+      "f1": 0.21686746987951808
+     },
+     "predicted_cycles": {},
+     "gold_cycles": {}
+    },
+    "legacy": {
+     "4.4": {
+      "canonical_node_typed": {
+       "tp": 97,
+       "fp": 17,
+       "fn": 0,
+       "precision": 0.8508771929824561,
+       "recall": 1.0,
+       "f1": 0.919431279620853
+      },
+      "concept_mentions_typed": {
+       "tp": 494,
+       "fp": 1,
+       "fn": 6,
+       "precision": 0.997979797979798,
+       "recall": 0.988,
+       "f1": 0.9929648241206029
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 4132,
+        "fp": 0,
+        "fn": 790,
+        "precision": 1.0,
+        "recall": 0.839496139780577,
+        "f1": 0.9127457477358074
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.8809370761021922,
+        "f1": 0.9367002089487554
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 5,
+       "relation_correct": 4,
+       "direction_correct": 4
+      },
+      "relation_confusion": {
+       "has_purpose->uses": 1,
+       "is_a->is_a": 1,
+       "part_of->part_of": 1,
+       "performs->performs": 1,
+       "uses->uses": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 1,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": [
+        "C0003",
+        "C0004",
+        "C0011",
+        "C0012",
+        "C0014",
+        "C0015",
+        "C0028",
+        "C0030",
+        "C0033",
+        "C0035",
+        "C0038",
+        "C0050",
+        "C0061",
+        "C0066",
+        "C0075",
+        "C0085"
+       ]
+      }
+     },
+     "4.5": {
+      "canonical_node_typed": {
+       "tp": 64,
+       "fp": 20,
+       "fn": 0,
+       "precision": 0.7619047619047619,
+       "recall": 1.0,
+       "f1": 0.8648648648648648
+      },
+      "concept_mentions_typed": {
+       "tp": 331,
+       "fp": 2,
+       "fn": 2,
+       "precision": 0.993993993993994,
+       "recall": 0.993993993993994,
+       "f1": 0.993993993993994
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 2361,
+        "fp": 0,
+        "fn": 788,
+        "precision": 1.0,
+        "recall": 0.7497618291521118,
+        "f1": 0.8569872958257713
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.8206620906620918,
+        "f1": 0.9014985206438328
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 3,
+       "relation_correct": 2,
+       "direction_correct": 2
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 1,
+       "acts_on->uses": 1,
+       "decreases->decreases": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 2,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": [
+        "C0098",
+        "C0101",
+        "C0103",
+        "C0110",
+        "C0111",
+        "C0112",
+        "C0114",
+        "C0118",
+        "C0122",
+        "C0123",
+        "C0130",
+        "C0136",
+        "C0137",
+        "C0141",
+        "C0145"
+       ]
+      }
+     },
+     "5.4": {
+      "canonical_node_typed": {
+       "tp": 74,
+       "fp": 35,
+       "fn": 2,
+       "precision": 0.6788990825688074,
+       "recall": 0.9736842105263158,
+       "f1": 0.7999999999999999
+      },
+      "concept_mentions_typed": {
+       "tp": 327,
+       "fp": 2,
+       "fn": 5,
+       "precision": 0.993920972644377,
+       "recall": 0.9849397590361446,
+       "f1": 0.989409984871407
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 1321,
+        "fp": 10,
+        "fn": 269,
+        "precision": 0.9924868519909842,
+        "recall": 0.8308176100628931,
+        "f1": 0.9044847654912702
+       },
+       "bcubed": {
+        "precision": 0.9945235487404164,
+        "recall": 0.8010207496653281,
+        "f1": 0.8873454130641036
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 10,
+       "relation_correct": 8,
+       "direction_correct": 8
+      },
+      "relation_confusion": {
+       "decreases->decreases": 1,
+       "has_property->decreases": 1,
+       "has_purpose->has_purpose": 1,
+       "has_purpose->performs": 1,
+       "is_a->is_a": 2,
+       "part_of->part_of": 2,
+       "uses->uses": 2
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 2,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [
+        "c_timestamp"
+       ],
+       "unmatched_nodes": [
+        "c_payload"
+       ],
+       "split_concepts": [
+        "C0169",
+        "C0172",
+        "C0179",
+        "C0180",
+        "C0181",
+        "C0182",
+        "C0184",
+        "C0185",
+        "C0189",
+        "C0190",
+        "C0191",
+        "C0196",
+        "C0200",
+        "C0201",
+        "C0202",
+        "C0203",
+        "C0204",
+        "C0205",
+        "C0206",
+        "C0209",
+        "C0212",
+        "C0216",
+        "C0218",
+        "C0223",
+        "C0224",
+        "C0226",
+        "C0229"
+       ]
+      }
+     },
+     "6.3": {
+      "canonical_node_typed": {
+       "tp": 55,
+       "fp": 22,
+       "fn": 1,
+       "precision": 0.7142857142857143,
+       "recall": 0.9821428571428571,
+       "f1": 0.8270676691729324
+      },
+      "concept_mentions_typed": {
+       "tp": 462,
+       "fp": 6,
+       "fn": 21,
+       "precision": 0.9871794871794872,
+       "recall": 0.9565217391304348,
+       "f1": 0.971608832807571
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 7402,
+        "fp": 0,
+        "fn": 930,
+        "precision": 1.0,
+        "recall": 0.8883821411425828,
+        "f1": 0.9408923350705478
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.8421621445158538,
+        "f1": 0.9143192384264154
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 8,
+       "relation_correct": 4,
+       "direction_correct": 4
+      },
+      "relation_confusion": {
+       "decreases->decreases": 2,
+       "increases->increases": 1,
+       "uses->part_of": 1,
+       "uses->performs": 1,
+       "uses->requires": 2,
+       "uses->uses": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 0,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [
+        "c_beta",
+        "c_flow_control",
+        "c_w_max"
+       ],
+       "split_concepts": [
+        "C0239",
+        "C0240",
+        "C0244",
+        "C0245",
+        "C0249",
+        "C0250",
+        "C0256",
+        "C0261",
+        "C0262",
+        "C0271",
+        "C0272",
+        "C0280",
+        "C0282",
+        "C0293"
+       ]
+      }
+     },
+     "7.1": {
+      "canonical_node_typed": {
+       "tp": 88,
+       "fp": 30,
+       "fn": 1,
+       "precision": 0.7457627118644068,
+       "recall": 0.9887640449438202,
+       "f1": 0.8502415458937198
+      },
+      "concept_mentions_typed": {
+       "tp": 518,
+       "fp": 13,
+       "fn": 16,
+       "precision": 0.975517890772128,
+       "recall": 0.9700374531835206,
+       "f1": 0.9727699530516433
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 3328,
+        "fp": 0,
+        "fn": 595,
+        "precision": 1.0,
+        "recall": 0.8483303594188122,
+        "f1": 0.917942352778927
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.834621672543021,
+        "f1": 0.90985698581237
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 7,
+       "relation_correct": 5,
+       "direction_correct": 5
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 1,
+       "has_purpose->is_a": 1,
+       "is_a->is_a": 3,
+       "part_of->is_a": 1,
+       "uses->uses": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 2,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [
+        "c_proto_file"
+       ],
+       "split_concepts": [
+        "C0300",
+        "C0301",
+        "C0302",
+        "C0303",
+        "C0304",
+        "C0310",
+        "C0311",
+        "C0318",
+        "C0323",
+        "C0329",
+        "C0333",
+        "C0334",
+        "C0338",
+        "C0345",
+        "C0349",
+        "C0360",
+        "C0363",
+        "C0369",
+        "C0370",
+        "C0372",
+        "C0379",
+        "C0383"
+       ]
+      }
+     },
+     "8.2": {
+      "canonical_node_typed": {
+       "tp": 69,
+       "fp": 23,
+       "fn": 0,
+       "precision": 0.75,
+       "recall": 1.0,
+       "f1": 0.8571428571428571
+      },
+      "concept_mentions_typed": {
+       "tp": 479,
+       "fp": 4,
+       "fn": 11,
+       "precision": 0.9917184265010351,
+       "recall": 0.9775510204081632,
+       "f1": 0.9845837615621789
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 3823,
+        "fp": 0,
+        "fn": 1392,
+        "precision": 1.0,
+        "recall": 0.7330776605944391,
+        "f1": 0.8459836246957292
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.7686128443329581,
+        "f1": 0.8691702616497107
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 11,
+       "relation_correct": 7,
+       "direction_correct": 7
+      },
+      "relation_confusion": {
+       "contrasts_with->contrasts_with": 1,
+       "has_property->has_property": 1,
+       "is_a->is_a": 1,
+       "uses->requires": 4,
+       "uses->uses": 4
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 1,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": [
+        "C0391",
+        "C0393",
+        "C0394",
+        "C0395",
+        "C0396",
+        "C0397",
+        "C0402",
+        "C0413",
+        "C0421",
+        "C0424",
+        "C0425",
+        "C0434",
+        "C0439",
+        "C0443",
+        "C0446",
+        "C0450",
+        "C0451",
+        "C0454"
+       ]
+      }
+     },
+     "9.3": {
+      "canonical_node_typed": {
+       "tp": 85,
+       "fp": 26,
+       "fn": 3,
+       "precision": 0.7657657657657657,
+       "recall": 0.9659090909090909,
+       "f1": 0.8542713567839195
+      },
+      "concept_mentions_typed": {
+       "tp": 478,
+       "fp": 0,
+       "fn": 6,
+       "precision": 1.0,
+       "recall": 0.987603305785124,
+       "f1": 0.9937629937629938
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 1891,
+        "fp": 239,
+        "fn": 908,
+        "precision": 0.887793427230047,
+        "recall": 0.6755984280100036,
+        "f1": 0.7672955974842768
+       },
+       "bcubed": {
+        "precision": 0.9450160525280147,
+        "recall": 0.7935371801323109,
+        "f1": 0.8626774946146999
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 8,
+       "relation_correct": 3,
+       "direction_correct": 3
+      },
+      "relation_confusion": {
+       "acts_on->has_purpose": 1,
+       "contrasts_with->is_a": 1,
+       "has_purpose->is_a": 1,
+       "is_a->is_a": 2,
+       "part_of->part_of": 1,
+       "uses->acts_on": 1,
+       "uses->requires": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 1,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [
+        "c_a_records",
+        "c_client",
+        "c_client_program",
+        "c_server",
+        "c_variable"
+       ],
+       "unmatched_nodes": [],
+       "split_concepts": [
+        "C0468",
+        "C0469",
+        "C0473",
+        "C0474",
+        "C0481",
+        "C0482",
+        "C0487",
+        "C0488",
+        "C0492",
+        "C0506",
+        "C0510",
+        "C0520",
+        "C0521",
+        "C0522",
+        "C0532"
+       ]
+      }
+     }
+    },
+    "per_section": {
+     "4.4": {
+      "concept": {
+       "tp": 97,
+       "fp": 17,
+       "fn": 0,
+       "precision": 0.8508771929824561,
+       "recall": 1.0,
+       "f1": 0.919431279620853
+      },
+      "hierarchy": {
+       "tp": 1,
+       "fp": 0,
+       "fn": 6,
+       "precision": 1.0,
+       "recall": 0.14285714285714285,
+       "f1": 0.25
+      },
+      "pair_recall": [
+       9,
+       63
+      ],
+      "relation_population": 9,
+      "strict": {
+       "tp": 4,
+       "fp": 14,
+       "fn": 59,
+       "precision": 0.2222222222222222,
+       "recall": 0.06349206349206349,
+       "f1": 0.09876543209876543
+      }
+     },
+     "4.5": {
+      "concept": {
+       "tp": 64,
+       "fp": 20,
+       "fn": 0,
+       "precision": 0.7619047619047619,
+       "recall": 1.0,
+       "f1": 0.8648648648648648
+      },
+      "hierarchy": {
+       "tp": 0,
+       "fp": 1,
+       "fn": 7,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      },
+      "pair_recall": [
+       8,
+       49
+      ],
+      "relation_population": 8,
+      "strict": {
+       "tp": 2,
+       "fp": 17,
+       "fn": 47,
+       "precision": 0.10526315789473684,
+       "recall": 0.04081632653061224,
+       "f1": 0.0588235294117647
+      }
+     },
+     "5.4": {
+      "concept": {
+       "tp": 74,
+       "fp": 35,
+       "fn": 2,
+       "precision": 0.6788990825688074,
+       "recall": 0.9736842105263158,
+       "f1": 0.7999999999999999
+      },
+      "hierarchy": {
+       "tp": 2,
+       "fp": 0,
+       "fn": 4,
+       "precision": 1.0,
+       "recall": 0.3333333333333333,
+       "f1": 0.5
+      },
+      "pair_recall": [
+       17,
+       54
+      ],
+      "relation_population": 17,
+      "strict": {
+       "tp": 8,
+       "fp": 14,
+       "fn": 48,
+       "precision": 0.36363636363636365,
+       "recall": 0.14285714285714285,
+       "f1": 0.2051282051282051
+      }
+     },
+     "6.3": {
+      "concept": {
+       "tp": 55,
+       "fp": 22,
+       "fn": 1,
+       "precision": 0.7142857142857143,
+       "recall": 0.9821428571428571,
+       "f1": 0.8270676691729324
+      },
+      "hierarchy": {
+       "tp": 0,
+       "fp": 0,
+       "fn": 1,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      },
+      "pair_recall": [
+       12,
+       47
+      ],
+      "relation_population": 12,
+      "strict": {
+       "tp": 4,
+       "fp": 18,
+       "fn": 43,
+       "precision": 0.18181818181818182,
+       "recall": 0.0851063829787234,
+       "f1": 0.11594202898550723
+      }
+     },
+     "7.1": {
+      "concept": {
+       "tp": 88,
+       "fp": 30,
+       "fn": 1,
+       "precision": 0.7457627118644068,
+       "recall": 0.9887640449438202,
+       "f1": 0.8502415458937198
+      },
+      "hierarchy": {
+       "tp": 4,
+       "fp": 2,
+       "fn": 15,
+       "precision": 0.6666666666666666,
+       "recall": 0.21052631578947367,
+       "f1": 0.32
+      },
+      "pair_recall": [
+       14,
+       68
+      ],
+      "relation_population": 14,
+      "strict": {
+       "tp": 5,
+       "fp": 23,
+       "fn": 64,
+       "precision": 0.17857142857142858,
+       "recall": 0.07246376811594203,
+       "f1": 0.10309278350515463
+      }
+     },
+     "8.2": {
+      "concept": {
+       "tp": 69,
+       "fp": 23,
+       "fn": 0,
+       "precision": 0.75,
+       "recall": 1.0,
+       "f1": 0.8571428571428571
+      },
+      "hierarchy": {
+       "tp": 1,
+       "fp": 2,
+       "fn": 16,
+       "precision": 0.3333333333333333,
+       "recall": 0.058823529411764705,
+       "f1": 0.1
+      },
+      "pair_recall": [
+       13,
+       64
+      ],
+      "relation_population": 13,
+      "strict": {
+       "tp": 7,
+       "fp": 18,
+       "fn": 57,
+       "precision": 0.28,
+       "recall": 0.109375,
+       "f1": 0.15730337078651685
+      }
+     },
+     "9.3": {
+      "concept": {
+       "tp": 85,
+       "fp": 26,
+       "fn": 3,
+       "precision": 0.7657657657657657,
+       "recall": 0.9659090909090909,
+       "f1": 0.8542713567839195
+      },
+      "hierarchy": {
+       "tp": 2,
+       "fp": 4,
+       "fn": 16,
+       "precision": 0.3333333333333333,
+       "recall": 0.1111111111111111,
+       "f1": 0.16666666666666666
+      },
+      "pair_recall": [
+       19,
+       74
+      ],
+      "relation_population": 19,
+      "strict": {
+       "tp": 3,
+       "fp": 19,
+       "fn": 75,
+       "precision": 0.13636363636363635,
+       "recall": 0.038461538461538464,
+       "f1": 0.060000000000000005
+      }
+     }
+    }
+   },
+   "E2": {
+    "relation": {
+     "micro": {
+      "precision": 0.6451612903225806,
+      "recall": 0.3669724770642202,
+      "f1": 0.4678362573099416
+     },
+     "direction_accuracy_given_correct_label": 0.975,
+     "no_prediction_by_outcome": {
+      "other": 20,
+      "no_relation": 14,
+      "rejected": 13
+     },
+     "low_support_classes": [
+      "causes",
+      "has_property",
+      "increases",
+      "requires"
+     ]
+    },
+    "hierarchy": {
+     "direct_parent_f1_pooled": {
+      "tp": 7,
+      "fp": 17,
+      "fn": 57,
+      "precision": 0.2916666666666667,
+      "recall": 0.109375,
+      "f1": 0.15909090909090912
+     },
+     "predicted_cycles": {},
+     "gold_cycles": {}
+    },
+    "legacy": {
+     "4.4": {
+      "canonical_node_typed": {
+       "tp": 97,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 487,
+       "fp": 6,
+       "fn": 13,
+       "precision": 0.9878296146044625,
+       "recall": 0.974,
+       "f1": 0.9808660624370593
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 4567,
+        "fp": 0,
+        "fn": 355,
+        "precision": 1.0,
+        "recall": 0.9278748476229175,
+        "f1": 0.9625882600906313
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9544711966061195,
+        "f1": 0.9767053085904055
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 5,
+       "relation_correct": 4,
+       "direction_correct": 4
+      },
+      "relation_confusion": {
+       "has_purpose->uses": 1,
+       "is_a->is_a": 1,
+       "part_of->part_of": 1,
+       "uses->uses": 2
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 1,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     },
+     "4.5": {
+      "canonical_node_typed": {
+       "tp": 64,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 331,
+       "fp": 2,
+       "fn": 2,
+       "precision": 0.993993993993994,
+       "recall": 0.993993993993994,
+       "f1": 0.993993993993994
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 3098,
+        "fp": 0,
+        "fn": 51,
+        "precision": 1.0,
+        "recall": 0.9838043823436011,
+        "f1": 0.9918360813190331
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9901101101101099,
+        "f1": 0.9950304810574813
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 5,
+       "relation_correct": 5,
+       "direction_correct": 5
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 2,
+       "decreases->decreases": 1,
+       "is_a->is_a": 1,
+       "requires->requires": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 4,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     },
+     "5.4": {
+      "canonical_node_typed": {
+       "tp": 76,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 327,
+       "fp": 2,
+       "fn": 5,
+       "precision": 0.993920972644377,
+       "recall": 0.9849397590361446,
+       "f1": 0.989409984871407
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 1550,
+        "fp": 0,
+        "fn": 40,
+        "precision": 1.0,
+        "recall": 0.9748427672955975,
+        "f1": 0.9872611464968153
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9756191432396247,
+        "f1": 0.9876591311418478
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 8,
+       "relation_correct": 6,
+       "direction_correct": 6
+      },
+      "relation_confusion": {
+       "decreases->decreases": 1,
+       "has_property->requires": 1,
+       "has_purpose->has_purpose": 1,
+       "has_purpose->performs": 1,
+       "is_a->is_a": 1,
+       "part_of->part_of": 1,
+       "uses->uses": 2
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 1,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     },
+     "6.3": {
+      "canonical_node_typed": {
+       "tp": 55,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.9821428571428571,
+       "recall": 0.9821428571428571,
+       "f1": 0.9821428571428571
+      },
+      "concept_mentions_typed": {
+       "tp": 462,
+       "fp": 6,
+       "fn": 21,
+       "precision": 0.9871794871794872,
+       "recall": 0.9565217391304348,
+       "f1": 0.971608832807571
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 7846,
+        "fp": 0,
+        "fn": 486,
+        "precision": 1.0,
+        "recall": 0.9416706673067691,
+        "f1": 0.9699592038570898
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9344748903101313,
+        "f1": 0.9661277021386596
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 7,
+       "relation_correct": 3,
+       "direction_correct": 3
+      },
+      "relation_confusion": {
+       "decreases->decreases": 1,
+       "increases->increases": 1,
+       "uses->part_of": 1,
+       "uses->performs": 1,
+       "uses->requires": 2,
+       "uses->uses": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 0,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [
+        "c_c0255"
+       ],
+       "split_concepts": []
+      }
+     },
+     "7.1": {
+      "canonical_node_typed": {
+       "tp": 88,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.9887640449438202,
+       "recall": 0.9887640449438202,
+       "f1": 0.9887640449438202
+      },
+      "concept_mentions_typed": {
+       "tp": 514,
+       "fp": 16,
+       "fn": 20,
+       "precision": 0.969811320754717,
+       "recall": 0.9625468164794008,
+       "f1": 0.9661654135338347
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 3688,
+        "fp": 0,
+        "fn": 235,
+        "precision": 1.0,
+        "recall": 0.9400968646444048,
+        "f1": 0.9691236368414138
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9435736859894167,
+        "f1": 0.9709677516127421
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 9,
+       "relation_correct": 6,
+       "direction_correct": 5
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 2,
+       "has_purpose->is_a": 1,
+       "is_a->is_a": 1,
+       "part_of->is_a": 1,
+       "part_of->part_of": 1,
+       "uses->has_purpose": 1,
+       "uses->uses": 2
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 5,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [
+        "c_c0361"
+       ],
+       "split_concepts": []
+      }
+     },
+     "8.2": {
+      "canonical_node_typed": {
+       "tp": 69,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 474,
+       "fp": 8,
+       "fn": 16,
+       "precision": 0.983402489626556,
+       "recall": 0.9673469387755103,
+       "f1": 0.9753086419753086
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 4820,
+        "fp": 0,
+        "fn": 395,
+        "precision": 1.0,
+        "recall": 0.9242569511025887,
+        "f1": 0.9606377678126556
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9418949024109338,
+        "f1": 0.970078145054644
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 13,
+       "relation_correct": 7,
+       "direction_correct": 7
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 1,
+       "contrasts_with->contrasts_with": 1,
+       "is_a->is_a": 1,
+       "requires->has_property": 1,
+       "uses->requires": 5,
+       "uses->uses": 4
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 3,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     },
+     "9.3": {
+      "canonical_node_typed": {
+       "tp": 88,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 474,
+       "fp": 3,
+       "fn": 10,
+       "precision": 0.9937106918238994,
+       "recall": 0.9793388429752066,
+       "f1": 0.9864724245577523
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 2690,
+        "fp": 0,
+        "fn": 109,
+        "precision": 1.0,
+        "recall": 0.961057520543051,
+        "f1": 0.9801421023865913
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9649684716571865,
+        "f1": 0.9821719641571302
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 15,
+       "relation_correct": 9,
+       "direction_correct": 9
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 2,
+       "acts_on->has_purpose": 1,
+       "acts_on->part_of": 1,
+       "acts_on->uses": 1,
+       "contrasts_with->is_a": 1,
+       "has_purpose->is_a": 1,
+       "is_a->is_a": 2,
+       "part_of->part_of": 4,
+       "uses->requires": 1,
+       "uses->uses": 1
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 8,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     }
+    },
+    "per_section": {
+     "4.4": {
+      "concept": {
+       "tp": 97,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 1,
+       "fp": 2,
+       "fn": 6,
+       "precision": 0.3333333333333333,
+       "recall": 0.14285714285714285,
+       "f1": 0.2
+      },
+      "pair_recall": [
+       10,
+       63
+      ],
+      "relation_population": 10,
+      "strict": {
+       "tp": 4,
+       "fp": 16,
+       "fn": 59,
+       "precision": 0.2,
+       "recall": 0.06349206349206349,
+       "f1": 0.09638554216867469
+      }
+     },
+     "4.5": {
+      "concept": {
+       "tp": 64,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 1,
+       "fp": 1,
+       "fn": 6,
+       "precision": 0.5,
+       "recall": 0.14285714285714285,
+       "f1": 0.22222222222222224
+      },
+      "pair_recall": [
+       9,
+       49
+      ],
+      "relation_population": 9,
+      "strict": {
+       "tp": 5,
+       "fp": 10,
+       "fn": 44,
+       "precision": 0.3333333333333333,
+       "recall": 0.10204081632653061,
+       "f1": 0.15625
+      }
+     },
+     "5.4": {
+      "concept": {
+       "tp": 76,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 1,
+       "fp": 2,
+       "fn": 5,
+       "precision": 0.3333333333333333,
+       "recall": 0.16666666666666666,
+       "f1": 0.2222222222222222
+      },
+      "pair_recall": [
+       16,
+       56
+      ],
+      "relation_population": 16,
+      "strict": {
+       "tp": 6,
+       "fp": 24,
+       "fn": 50,
+       "precision": 0.2,
+       "recall": 0.10714285714285714,
+       "f1": 0.13953488372093023
+      }
+     },
+     "6.3": {
+      "concept": {
+       "tp": 55,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.9821428571428571,
+       "recall": 0.9821428571428571,
+       "f1": 0.9821428571428571
+      },
+      "hierarchy": {
+       "tp": 0,
+       "fp": 0,
+       "fn": 1,
+       "precision": 0.0,
+       "recall": 0.0,
+       "f1": 0.0
+      },
+      "pair_recall": [
+       14,
+       47
+      ],
+      "relation_population": 14,
+      "strict": {
+       "tp": 3,
+       "fp": 22,
+       "fn": 44,
+       "precision": 0.12,
+       "recall": 0.06382978723404255,
+       "f1": 0.08333333333333333
+      }
+     },
+     "7.1": {
+      "concept": {
+       "tp": 88,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.9887640449438202,
+       "recall": 0.9887640449438202,
+       "f1": 0.9887640449438202
+      },
+      "hierarchy": {
+       "tp": 1,
+       "fp": 4,
+       "fn": 18,
+       "precision": 0.2,
+       "recall": 0.05263157894736842,
+       "f1": 0.08333333333333333
+      },
+      "pair_recall": [
+       17,
+       68
+      ],
+      "relation_population": 17,
+      "strict": {
+       "tp": 5,
+       "fp": 26,
+       "fn": 64,
+       "precision": 0.16129032258064516,
+       "recall": 0.07246376811594203,
+       "f1": 0.09999999999999999
+      }
+     },
+     "8.2": {
+      "concept": {
+       "tp": 69,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 1,
+       "fp": 4,
+       "fn": 16,
+       "precision": 0.2,
+       "recall": 0.058823529411764705,
+       "f1": 0.0909090909090909
+      },
+      "pair_recall": [
+       20,
+       64
+      ],
+      "relation_population": 20,
+      "strict": {
+       "tp": 7,
+       "fp": 25,
+       "fn": 57,
+       "precision": 0.21875,
+       "recall": 0.109375,
+       "f1": 0.14583333333333334
+      }
+     },
+     "9.3": {
+      "concept": {
+       "tp": 88,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 2,
+       "fp": 4,
+       "fn": 16,
+       "precision": 0.3333333333333333,
+       "recall": 0.1111111111111111,
+       "f1": 0.16666666666666666
+      },
+      "pair_recall": [
+       23,
+       78
+      ],
+      "relation_population": 23,
+      "strict": {
+       "tp": 9,
+       "fp": 15,
+       "fn": 69,
+       "precision": 0.375,
+       "recall": 0.11538461538461539,
+       "f1": 0.1764705882352941
+      }
+     }
+    }
+   },
+   "E3": {
+    "relation": {
+     "micro": {
+      "precision": 0.7037037037037037,
+      "recall": 0.35764705882352943,
+      "f1": 0.4742589703588144
+     },
+     "direction_accuracy_given_correct_label": 0.9868421052631579,
+     "no_prediction_by_outcome": {
+      "rejected": 83,
+      "no_relation": 65,
+      "other": 61
+     },
+     "low_support_classes": [
+      "prevents"
+     ]
+    },
+    "hierarchy": {
+     "direct_parent_f1_pooled": {
+      "tp": 40,
+      "fp": 19,
+      "fn": 24,
+      "precision": 0.6779661016949152,
+      "recall": 0.625,
+      "f1": 0.6504065040650406
+     },
+     "predicted_cycles": {},
+     "gold_cycles": {}
+    },
+    "legacy": {
+     "4.4": {
+      "canonical_node_typed": {
+       "tp": 97,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 487,
+       "fp": 6,
+       "fn": 13,
+       "precision": 0.9878296146044625,
+       "recall": 0.974,
+       "f1": 0.9808660624370593
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 4567,
+        "fp": 0,
+        "fn": 355,
+        "precision": 1.0,
+        "recall": 0.9278748476229175,
+        "f1": 0.9625882600906313
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9544711966061195,
+        "f1": 0.9767053085904055
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 34,
+       "relation_correct": 22,
+       "direction_correct": 22
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 5,
+       "acts_on->requires": 1,
+       "acts_on->uses": 1,
+       "has_purpose->has_purpose": 1,
+       "has_purpose->uses": 2,
+       "is_a->is_a": 4,
+       "part_of->part_of": 4,
+       "part_of->requires": 1,
+       "performs->performs": 1,
+       "performs->uses": 1,
+       "uses->part_of": 2,
+       "uses->requires": 4,
+       "uses->uses": 7
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 14,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     },
+     "4.5": {
+      "canonical_node_typed": {
+       "tp": 64,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 331,
+       "fp": 2,
+       "fn": 2,
+       "precision": 0.993993993993994,
+       "recall": 0.993993993993994,
+       "f1": 0.993993993993994
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 3098,
+        "fp": 0,
+        "fn": 51,
+        "precision": 1.0,
+        "recall": 0.9838043823436011,
+        "f1": 0.9918360813190331
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9901101101101099,
+        "f1": 0.9950304810574813
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 19,
+       "relation_correct": 15,
+       "direction_correct": 14
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 5,
+       "acts_on->uses": 1,
+       "decreases->decreases": 2,
+       "has_property->has_property": 1,
+       "has_purpose->acts_on": 1,
+       "has_purpose->uses": 1,
+       "is_a->is_a": 3,
+       "part_of->part_of": 1,
+       "requires->requires": 1,
+       "uses->performs": 1,
+       "uses->uses": 2
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 11,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     },
+     "5.4": {
+      "canonical_node_typed": {
+       "tp": 76,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 327,
+       "fp": 2,
+       "fn": 5,
+       "precision": 0.993920972644377,
+       "recall": 0.9849397590361446,
+       "f1": 0.989409984871407
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 1550,
+        "fp": 0,
+        "fn": 40,
+        "precision": 1.0,
+        "recall": 0.9748427672955975,
+        "f1": 0.9872611464968153
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9756191432396247,
+        "f1": 0.9876591311418478
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 21,
+       "relation_correct": 16,
+       "direction_correct": 16
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 2,
+       "acts_on->has_property": 1,
+       "acts_on->part_of": 2,
+       "decreases->decreases": 2,
+       "has_property->requires": 1,
+       "has_purpose->has_purpose": 2,
+       "has_purpose->performs": 1,
+       "is_a->is_a": 3,
+       "part_of->part_of": 5,
+       "uses->uses": 2
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 9,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     },
+     "6.3": {
+      "canonical_node_typed": {
+       "tp": 55,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.9821428571428571,
+       "recall": 0.9821428571428571,
+       "f1": 0.9821428571428571
+      },
+      "concept_mentions_typed": {
+       "tp": 462,
+       "fp": 6,
+       "fn": 21,
+       "precision": 0.9871794871794872,
+       "recall": 0.9565217391304348,
+       "f1": 0.971608832807571
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 7846,
+        "fp": 0,
+        "fn": 486,
+        "precision": 1.0,
+        "recall": 0.9416706673067691,
+        "f1": 0.9699592038570898
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9344748903101313,
+        "f1": 0.9661277021386596
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 22,
+       "relation_correct": 9,
+       "direction_correct": 9
+      },
+      "relation_confusion": {
+       "decreases->decreases": 2,
+       "has_property->causes": 2,
+       "has_purpose->uses": 1,
+       "increases->increases": 2,
+       "is_a->is_a": 1,
+       "part_of->uses": 2,
+       "requires->requires": 1,
+       "triggers->triggers": 1,
+       "uses->part_of": 2,
+       "uses->performs": 1,
+       "uses->requires": 5,
+       "uses->uses": 2
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 0,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [
+        "c_c0255"
+       ],
+       "split_concepts": []
+      }
+     },
+     "7.1": {
+      "canonical_node_typed": {
+       "tp": 88,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.9887640449438202,
+       "recall": 0.9887640449438202,
+       "f1": 0.9887640449438202
+      },
+      "concept_mentions_typed": {
+       "tp": 514,
+       "fp": 16,
+       "fn": 20,
+       "precision": 0.969811320754717,
+       "recall": 0.9625468164794008,
+       "f1": 0.9661654135338347
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 3688,
+        "fp": 0,
+        "fn": 235,
+        "precision": 1.0,
+        "recall": 0.9400968646444048,
+        "f1": 0.9691236368414138
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9435736859894167,
+        "f1": 0.9709677516127421
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 37,
+       "relation_correct": 31,
+       "direction_correct": 30
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 4,
+       "has_purpose->is_a": 1,
+       "is_a->is_a": 12,
+       "part_of->is_a": 1,
+       "part_of->part_of": 2,
+       "performs->performs": 1,
+       "uses->acts_on": 1,
+       "uses->has_purpose": 1,
+       "uses->part_of": 2,
+       "uses->uses": 12
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 10,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [
+        "c_c0361"
+       ],
+       "split_concepts": []
+      }
+     },
+     "8.2": {
+      "canonical_node_typed": {
+       "tp": 69,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 474,
+       "fp": 8,
+       "fn": 16,
+       "precision": 0.983402489626556,
+       "recall": 0.9673469387755103,
+       "f1": 0.9753086419753086
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 4820,
+        "fp": 0,
+        "fn": 395,
+        "precision": 1.0,
+        "recall": 0.9242569511025887,
+        "f1": 0.9606377678126556
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9418949024109338,
+        "f1": 0.970078145054644
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 38,
+       "relation_correct": 26,
+       "direction_correct": 26
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 3,
+       "causes->has_purpose": 1,
+       "contrasts_with->contrasts_with": 2,
+       "has_property->has_property": 1,
+       "has_purpose->has_purpose": 4,
+       "has_purpose->is_a": 1,
+       "is_a->is_a": 8,
+       "part_of->acts_on": 1,
+       "requires->has_property": 1,
+       "requires->requires": 1,
+       "uses->part_of": 2,
+       "uses->requires": 6,
+       "uses->uses": 7
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 8,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     },
+     "9.3": {
+      "canonical_node_typed": {
+       "tp": 88,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 474,
+       "fp": 3,
+       "fn": 10,
+       "precision": 0.9937106918238994,
+       "recall": 0.9793388429752066,
+       "f1": 0.9864724245577523
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 2690,
+        "fp": 0,
+        "fn": 109,
+        "precision": 1.0,
+        "recall": 0.961057520543051,
+        "f1": 0.9801421023865913
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9649684716571865,
+        "f1": 0.9821719641571302
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 45,
+       "relation_correct": 33,
+       "direction_correct": 33
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 2,
+       "acts_on->has_purpose": 1,
+       "acts_on->part_of": 1,
+       "acts_on->uses": 1,
+       "contrasts_with->is_a": 1,
+       "has_purpose->is_a": 1,
+       "is_a->is_a": 10,
+       "part_of->part_of": 5,
+       "requires->requires": 1,
+       "uses->acts_on": 1,
+       "uses->part_of": 5,
+       "uses->requires": 1,
+       "uses->uses": 15
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 9,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     }
+    },
+    "per_section": {
+     "4.4": {
+      "concept": {
+       "tp": 97,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 4,
+       "fp": 2,
+       "fn": 3,
+       "precision": 0.6666666666666666,
+       "recall": 0.5714285714285714,
+       "f1": 0.6153846153846153
+      },
+      "pair_recall": [
+       63,
+       63
+      ],
+      "relation_population": 63,
+      "strict": {
+       "tp": 22,
+       "fp": 26,
+       "fn": 41,
+       "precision": 0.4583333333333333,
+       "recall": 0.3492063492063492,
+       "f1": 0.39639639639639634
+      }
+     },
+     "4.5": {
+      "concept": {
+       "tp": 64,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 2,
+       "fp": 3,
+       "fn": 5,
+       "precision": 0.4,
+       "recall": 0.2857142857142857,
+       "f1": 0.3333333333333333
+      },
+      "pair_recall": [
+       49,
+       49
+      ],
+      "relation_population": 49,
+      "strict": {
+       "tp": 14,
+       "fp": 14,
+       "fn": 35,
+       "precision": 0.5,
+       "recall": 0.2857142857142857,
+       "f1": 0.36363636363636365
+      }
+     },
+     "5.4": {
+      "concept": {
+       "tp": 76,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 3,
+       "fp": 2,
+       "fn": 3,
+       "precision": 0.6,
+       "recall": 0.5,
+       "f1": 0.5454545454545454
+      },
+      "pair_recall": [
+       56,
+       56
+      ],
+      "relation_population": 56,
+      "strict": {
+       "tp": 16,
+       "fp": 26,
+       "fn": 40,
+       "precision": 0.38095238095238093,
+       "recall": 0.2857142857142857,
+       "f1": 0.32653061224489793
+      }
+     },
+     "6.3": {
+      "concept": {
+       "tp": 55,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.9821428571428571,
+       "recall": 0.9821428571428571,
+       "f1": 0.9821428571428571
+      },
+      "hierarchy": {
+       "tp": 1,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "pair_recall": [
+       47,
+       47
+      ],
+      "relation_population": 47,
+      "strict": {
+       "tp": 9,
+       "fp": 30,
+       "fn": 38,
+       "precision": 0.23076923076923078,
+       "recall": 0.19148936170212766,
+       "f1": 0.20930232558139536
+      }
+     },
+     "7.1": {
+      "concept": {
+       "tp": 88,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.9887640449438202,
+       "recall": 0.9887640449438202,
+       "f1": 0.9887640449438202
+      },
+      "hierarchy": {
+       "tp": 12,
+       "fp": 4,
+       "fn": 7,
+       "precision": 0.75,
+       "recall": 0.631578947368421,
+       "f1": 0.6857142857142857
+      },
+      "pair_recall": [
+       68,
+       68
+      ],
+      "relation_population": 68,
+      "strict": {
+       "tp": 30,
+       "fp": 30,
+       "fn": 39,
+       "precision": 0.5,
+       "recall": 0.43478260869565216,
+       "f1": 0.46511627906976744
+      }
+     },
+     "8.2": {
+      "concept": {
+       "tp": 69,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 8,
+       "fp": 5,
+       "fn": 9,
+       "precision": 0.6153846153846154,
+       "recall": 0.47058823529411764,
+       "f1": 0.5333333333333333
+      },
+      "pair_recall": [
+       64,
+       64
+      ],
+      "relation_population": 64,
+      "strict": {
+       "tp": 26,
+       "fp": 31,
+       "fn": 38,
+       "precision": 0.45614035087719296,
+       "recall": 0.40625,
+       "f1": 0.4297520661157025
+      }
+     },
+     "9.3": {
+      "concept": {
+       "tp": 88,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 13,
+       "fp": 5,
+       "fn": 5,
+       "precision": 0.7222222222222222,
+       "recall": 0.7222222222222222,
+       "f1": 0.7222222222222222
+      },
+      "pair_recall": [
+       78,
+       78
+      ],
+      "relation_population": 78,
+      "strict": {
+       "tp": 33,
+       "fp": 21,
+       "fn": 45,
+       "precision": 0.6111111111111112,
+       "recall": 0.4230769230769231,
+       "f1": 0.5
+      }
+     }
+    }
+   },
+   "E4": {
+    "relation": {
+     "micro": {
+      "precision": 0.7037037037037037,
+      "recall": 0.35764705882352943,
+      "f1": 0.4742589703588144
+     },
+     "direction_accuracy_given_correct_label": 0.9868421052631579,
+     "no_prediction_by_outcome": {
+      "rejected": 83,
+      "no_relation": 65,
+      "other": 61
+     },
+     "low_support_classes": [
+      "prevents"
+     ]
+    },
+    "hierarchy": {
+     "direct_parent_f1_pooled": {
+      "tp": 40,
+      "fp": 5,
+      "fn": 24,
+      "precision": 0.8888888888888888,
+      "recall": 0.625,
+      "f1": 0.7339449541284404
+     },
+     "predicted_cycles": {},
+     "gold_cycles": {}
+    },
+    "legacy": {
+     "4.4": {
+      "canonical_node_typed": {
+       "tp": 97,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 487,
+       "fp": 6,
+       "fn": 13,
+       "precision": 0.9878296146044625,
+       "recall": 0.974,
+       "f1": 0.9808660624370593
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 4567,
+        "fp": 0,
+        "fn": 355,
+        "precision": 1.0,
+        "recall": 0.9278748476229175,
+        "f1": 0.9625882600906313
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9544711966061195,
+        "f1": 0.9767053085904055
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 34,
+       "relation_correct": 22,
+       "direction_correct": 22
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 5,
+       "acts_on->requires": 1,
+       "acts_on->uses": 1,
+       "has_purpose->has_purpose": 1,
+       "has_purpose->uses": 2,
+       "is_a->is_a": 4,
+       "part_of->part_of": 4,
+       "part_of->requires": 1,
+       "performs->performs": 1,
+       "performs->uses": 1,
+       "uses->part_of": 2,
+       "uses->requires": 4,
+       "uses->uses": 7
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 14,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     },
+     "4.5": {
+      "canonical_node_typed": {
+       "tp": 64,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 331,
+       "fp": 2,
+       "fn": 2,
+       "precision": 0.993993993993994,
+       "recall": 0.993993993993994,
+       "f1": 0.993993993993994
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 3098,
+        "fp": 0,
+        "fn": 51,
+        "precision": 1.0,
+        "recall": 0.9838043823436011,
+        "f1": 0.9918360813190331
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9901101101101099,
+        "f1": 0.9950304810574813
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 19,
+       "relation_correct": 15,
+       "direction_correct": 14
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 5,
+       "acts_on->uses": 1,
+       "decreases->decreases": 2,
+       "has_property->has_property": 1,
+       "has_purpose->acts_on": 1,
+       "has_purpose->uses": 1,
+       "is_a->is_a": 3,
+       "part_of->part_of": 1,
+       "requires->requires": 1,
+       "uses->performs": 1,
+       "uses->uses": 2
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 11,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     },
+     "5.4": {
+      "canonical_node_typed": {
+       "tp": 76,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 327,
+       "fp": 2,
+       "fn": 5,
+       "precision": 0.993920972644377,
+       "recall": 0.9849397590361446,
+       "f1": 0.989409984871407
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 1550,
+        "fp": 0,
+        "fn": 40,
+        "precision": 1.0,
+        "recall": 0.9748427672955975,
+        "f1": 0.9872611464968153
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9756191432396247,
+        "f1": 0.9876591311418478
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 21,
+       "relation_correct": 16,
+       "direction_correct": 16
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 2,
+       "acts_on->has_property": 1,
+       "acts_on->part_of": 2,
+       "decreases->decreases": 2,
+       "has_property->requires": 1,
+       "has_purpose->has_purpose": 2,
+       "has_purpose->performs": 1,
+       "is_a->is_a": 3,
+       "part_of->part_of": 5,
+       "uses->uses": 2
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 9,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     },
+     "6.3": {
+      "canonical_node_typed": {
+       "tp": 55,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.9821428571428571,
+       "recall": 0.9821428571428571,
+       "f1": 0.9821428571428571
+      },
+      "concept_mentions_typed": {
+       "tp": 462,
+       "fp": 6,
+       "fn": 21,
+       "precision": 0.9871794871794872,
+       "recall": 0.9565217391304348,
+       "f1": 0.971608832807571
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 7846,
+        "fp": 0,
+        "fn": 486,
+        "precision": 1.0,
+        "recall": 0.9416706673067691,
+        "f1": 0.9699592038570898
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9344748903101313,
+        "f1": 0.9661277021386596
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 22,
+       "relation_correct": 9,
+       "direction_correct": 9
+      },
+      "relation_confusion": {
+       "decreases->decreases": 2,
+       "has_property->causes": 2,
+       "has_purpose->uses": 1,
+       "increases->increases": 2,
+       "is_a->is_a": 1,
+       "part_of->uses": 2,
+       "requires->requires": 1,
+       "triggers->triggers": 1,
+       "uses->part_of": 2,
+       "uses->performs": 1,
+       "uses->requires": 5,
+       "uses->uses": 2
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 0,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [
+        "c_c0255"
+       ],
+       "split_concepts": []
+      }
+     },
+     "7.1": {
+      "canonical_node_typed": {
+       "tp": 88,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.9887640449438202,
+       "recall": 0.9887640449438202,
+       "f1": 0.9887640449438202
+      },
+      "concept_mentions_typed": {
+       "tp": 514,
+       "fp": 16,
+       "fn": 20,
+       "precision": 0.969811320754717,
+       "recall": 0.9625468164794008,
+       "f1": 0.9661654135338347
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 3688,
+        "fp": 0,
+        "fn": 235,
+        "precision": 1.0,
+        "recall": 0.9400968646444048,
+        "f1": 0.9691236368414138
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9435736859894167,
+        "f1": 0.9709677516127421
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 37,
+       "relation_correct": 31,
+       "direction_correct": 30
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 4,
+       "has_purpose->is_a": 1,
+       "is_a->is_a": 12,
+       "part_of->is_a": 1,
+       "part_of->part_of": 2,
+       "performs->performs": 1,
+       "uses->acts_on": 1,
+       "uses->has_purpose": 1,
+       "uses->part_of": 2,
+       "uses->uses": 12
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 10,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [
+        "c_c0361"
+       ],
+       "split_concepts": []
+      }
+     },
+     "8.2": {
+      "canonical_node_typed": {
+       "tp": 69,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 474,
+       "fp": 8,
+       "fn": 16,
+       "precision": 0.983402489626556,
+       "recall": 0.9673469387755103,
+       "f1": 0.9753086419753086
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 4820,
+        "fp": 0,
+        "fn": 395,
+        "precision": 1.0,
+        "recall": 0.9242569511025887,
+        "f1": 0.9606377678126556
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9418949024109338,
+        "f1": 0.970078145054644
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 38,
+       "relation_correct": 26,
+       "direction_correct": 26
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 3,
+       "causes->has_purpose": 1,
+       "contrasts_with->contrasts_with": 2,
+       "has_property->has_property": 1,
+       "has_purpose->has_purpose": 4,
+       "has_purpose->is_a": 1,
+       "is_a->is_a": 8,
+       "part_of->acts_on": 1,
+       "requires->has_property": 1,
+       "requires->requires": 1,
+       "uses->part_of": 2,
+       "uses->requires": 6,
+       "uses->uses": 7
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 8,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     },
+     "9.3": {
+      "canonical_node_typed": {
+       "tp": 88,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "concept_mentions_typed": {
+       "tp": 474,
+       "fp": 3,
+       "fn": 10,
+       "precision": 0.9937106918238994,
+       "recall": 0.9793388429752066,
+       "f1": 0.9864724245577523
+      },
+      "identity": {
+       "pairwise": {
+        "tp": 2690,
+        "fp": 0,
+        "fn": 109,
+        "precision": 1.0,
+        "recall": 0.961057520543051,
+        "f1": 0.9801421023865913
+       },
+       "bcubed": {
+        "precision": 1.0,
+        "recall": 0.9649684716571865,
+        "f1": 0.9821719641571302
+       }
+      },
+      "relation_conditional": {
+       "gold_with_proposed_edge": 45,
+       "relation_correct": 33,
+       "direction_correct": 33
+      },
+      "relation_confusion": {
+       "acts_on->acts_on": 2,
+       "acts_on->has_purpose": 1,
+       "acts_on->part_of": 1,
+       "acts_on->uses": 1,
+       "contrasts_with->is_a": 1,
+       "has_purpose->is_a": 1,
+       "is_a->is_a": 10,
+       "part_of->part_of": 5,
+       "requires->requires": 1,
+       "uses->acts_on": 1,
+       "uses->part_of": 5,
+       "uses->requires": 1,
+       "uses->uses": 15
+      },
+      "qualifier_accuracy": {
+       "matched_edges_needing_a_qualifier": 9,
+       "qualifier_correct": 0
+      },
+      "alignment": {
+       "false_merge_nodes": [],
+       "unmatched_nodes": [],
+       "split_concepts": []
+      }
+     }
+    },
+    "per_section": {
+     "4.4": {
+      "concept": {
+       "tp": 97,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 4,
+       "fp": 0,
+       "fn": 3,
+       "precision": 1.0,
+       "recall": 0.5714285714285714,
+       "f1": 0.7272727272727273
+      },
+      "pair_recall": [
+       63,
+       63
+      ],
+      "relation_population": 63,
+      "strict": {
+       "tp": 22,
+       "fp": 11,
+       "fn": 41,
+       "precision": 0.6666666666666666,
+       "recall": 0.3492063492063492,
+       "f1": 0.4583333333333333
+      }
+     },
+     "4.5": {
+      "concept": {
+       "tp": 64,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 2,
+       "fp": 1,
+       "fn": 5,
+       "precision": 0.6666666666666666,
+       "recall": 0.2857142857142857,
+       "f1": 0.4
+      },
+      "pair_recall": [
+       49,
+       49
+      ],
+      "relation_population": 49,
+      "strict": {
+       "tp": 14,
+       "fp": 4,
+       "fn": 35,
+       "precision": 0.7777777777777778,
+       "recall": 0.2857142857142857,
+       "f1": 0.417910447761194
+      }
+     },
+     "5.4": {
+      "concept": {
+       "tp": 76,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 3,
+       "fp": 0,
+       "fn": 3,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666
+      },
+      "pair_recall": [
+       56,
+       56
+      ],
+      "relation_population": 56,
+      "strict": {
+       "tp": 16,
+       "fp": 4,
+       "fn": 40,
+       "precision": 0.8,
+       "recall": 0.2857142857142857,
+       "f1": 0.4210526315789473
+      }
+     },
+     "6.3": {
+      "concept": {
+       "tp": 55,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.9821428571428571,
+       "recall": 0.9821428571428571,
+       "f1": 0.9821428571428571
+      },
+      "hierarchy": {
+       "tp": 1,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "pair_recall": [
+       47,
+       47
+      ],
+      "relation_population": 47,
+      "strict": {
+       "tp": 9,
+       "fp": 12,
+       "fn": 38,
+       "precision": 0.42857142857142855,
+       "recall": 0.19148936170212766,
+       "f1": 0.2647058823529412
+      }
+     },
+     "7.1": {
+      "concept": {
+       "tp": 88,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.9887640449438202,
+       "recall": 0.9887640449438202,
+       "f1": 0.9887640449438202
+      },
+      "hierarchy": {
+       "tp": 12,
+       "fp": 1,
+       "fn": 7,
+       "precision": 0.9230769230769231,
+       "recall": 0.631578947368421,
+       "f1": 0.7499999999999999
+      },
+      "pair_recall": [
+       68,
+       68
+      ],
+      "relation_population": 68,
+      "strict": {
+       "tp": 30,
+       "fp": 7,
+       "fn": 39,
+       "precision": 0.8108108108108109,
+       "recall": 0.43478260869565216,
+       "f1": 0.5660377358490566
+      }
+     },
+     "8.2": {
+      "concept": {
+       "tp": 69,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 8,
+       "fp": 1,
+       "fn": 9,
+       "precision": 0.8888888888888888,
+       "recall": 0.47058823529411764,
+       "f1": 0.6153846153846153
+      },
+      "pair_recall": [
+       64,
+       64
+      ],
+      "relation_population": 64,
+      "strict": {
+       "tp": 26,
+       "fp": 12,
+       "fn": 38,
+       "precision": 0.6842105263157895,
+       "recall": 0.40625,
+       "f1": 0.5098039215686275
+      }
+     },
+     "9.3": {
+      "concept": {
+       "tp": 88,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0
+      },
+      "hierarchy": {
+       "tp": 13,
+       "fp": 2,
+       "fn": 5,
+       "precision": 0.8666666666666667,
+       "recall": 0.7222222222222222,
+       "f1": 0.7878787878787877
+      },
+      "pair_recall": [
+       78,
+       78
+      ],
+      "relation_population": 78,
+      "strict": {
+       "tp": 33,
+       "fp": 12,
+       "fn": 45,
+       "precision": 0.7333333333333333,
+       "recall": 0.4230769230769231,
+       "f1": 0.5365853658536585
+      }
+     }
+    }
+   }
+  }
+ },
+ "scinlp": {}
+}

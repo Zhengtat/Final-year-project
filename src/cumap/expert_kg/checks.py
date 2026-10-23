@@ -45,3 +45,13 @@ def check_structure(
         cycles.extend(registry.find_cycles(edge_refs, relation))
 
     return StructuralCheckResult(domain_range_errors=domain_range_errors, cycles=cycles)
+
+
+RETIRED_RELATIONS = {
+    "equivalent_to": "equivalence is a node property (aliases), never an edge (CR-008, registry v1.3)"
+}
+
+
+def retired_relation_errors(relations: list[str]) -> list[str]:
+    """CR-008 §3.5: an edge with a retired relation is invalid in every layer."""
+    return [f"{r!r} is retired: {RETIRED_RELATIONS[r]}" for r in relations if r in RETIRED_RELATIONS]

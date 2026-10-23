@@ -1,0 +1,463 @@
+{
+ "scinlp": {
+  "TOKEN": {
+   "relation": {
+    "IDXR1-P1": {
+     "tp": 15,
+     "fp": 117,
+     "fn": 164,
+     "precision": 0.11363636363636363,
+     "recall": 0.08379888268156424,
+     "f1": 0.09646302250803859
+    },
+    "IDX-P1": {
+     "tp": 15,
+     "fp": 117,
+     "fn": 164,
+     "precision": 0.11363636363636363,
+     "recall": 0.08379888268156424,
+     "f1": 0.09646302250803859
+    },
+    "IDXR1-P3": {
+     "tp": 20,
+     "fp": 156,
+     "fn": 159,
+     "precision": 0.11363636363636363,
+     "recall": 0.11173184357541899,
+     "f1": 0.11267605633802816
+    }
+   },
+   "concept_f1_entity_strict": {
+    "tp": 433,
+    "fp": 897,
+    "fn": 238,
+    "precision": 0.3255639097744361,
+    "recall": 0.6453055141579732,
+    "f1": 0.43278360819590206
+   },
+   "pair_recall_analogue": {
+    "reached": 47,
+    "denominator": 70,
+    "recall": 0.6714285714285714
+   },
+   "predicted_edges": 131,
+   "attribution": {
+    "misses": 158,
+    "recovered": 21,
+    "by_code": {
+     "N0": 69,
+     "N1": 40,
+     "C0": 0,
+     "C1": 0,
+     "P0": 23,
+     "R0": 13,
+     "R1": 13,
+     "R2": 0,
+     "R3": 0,
+     "E0": 0
+    },
+    "not_applicable": [
+     "S0",
+     "S1"
+    ]
+   },
+   "relation_outcomes": {
+    "edge": 132,
+    "no_relation": 162,
+    "other": 97,
+    "rejected:endpoint_not_grounded": 3,
+    "rejected:domain_range": 62
+   }
+  },
+  "R1KEY": {
+   "relation": {
+    "IDXR1-P1": {
+     "tp": 19,
+     "fp": 119,
+     "fn": 160,
+     "precision": 0.13768115942028986,
+     "recall": 0.10614525139664804,
+     "f1": 0.11987381703470032
+    },
+    "IDX-P1": {
+     "tp": 15,
+     "fp": 123,
+     "fn": 164,
+     "precision": 0.10869565217391304,
+     "recall": 0.08379888268156424,
+     "f1": 0.09463722397476339
+    },
+    "IDXR1-P3": {
+     "tp": 24,
+     "fp": 159,
+     "fn": 155,
+     "precision": 0.13114754098360656,
+     "recall": 0.1340782122905028,
+     "f1": 0.13259668508287295
+    }
+   },
+   "concept_f1_entity_strict": {
+    "tp": 433,
+    "fp": 897,
+    "fn": 238,
+    "precision": 0.3255639097744361,
+    "recall": 0.6453055141579732,
+    "f1": 0.43278360819590206
+   },
+   "pair_recall_analogue": {
+    "reached": 50,
+    "denominator": 70,
+    "recall": 0.7142857142857143
+   },
+   "predicted_edges": 137,
+   "attribution": {
+    "misses": 154,
+    "recovered": 25,
+    "by_code": {
+     "N0": 69,
+     "N1": 40,
+     "C0": 0,
+     "C1": 0,
+     "P0": 20,
+     "R0": 13,
+     "R1": 12,
+     "R2": 0,
+     "R3": 0,
+     "E0": 0
+    },
+    "not_applicable": [
+     "S0",
+     "S1"
+    ]
+   },
+   "relation_outcomes": {
+    "edge": 138,
+    "no_relation": 162,
+    "other": 96,
+    "rejected:domain_range": 57,
+    "rejected:endpoint_not_grounded": 3
+   }
+  }
+ },
+ "pd": {
+  "TOKEN": {
+   "headline": {
+    "concept_f1": {
+     "precision": 0.60625,
+     "recall": 0.6554054054054054,
+     "f1": 0.6298701298701298,
+     "tp": 97,
+     "fp": 63,
+     "fn": 51,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N",
+     "variant": "canonical_node_untyped"
+    },
+    "ancestor_hierarchy_f1": {
+     "precision": 0.6666666666666666,
+     "recall": 0.07407407407407407,
+     "f1": 0.13333333333333333,
+     "tp": 2,
+     "fp": 1,
+     "fn": 25,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N",
+     "status": "OK",
+     "gold_ancestor_pairs": 27
+    },
+    "pair_recall": {
+     "recall": 0.21212121212121213,
+     "reached": 14,
+     "denominator": 66,
+     "missing_endpoint_excluded": 52,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    },
+    "relation_macro_f1": {
+     "f1": 0.5999999999999999,
+     "classes": {
+      "acts_on": {
+       "support": 2,
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "connected_to": {
+       "support": 2,
+       "tp": 0,
+       "fp": 0,
+       "fn": 2,
+       "precision": null,
+       "recall": 0.0,
+       "f1": 0.0,
+       "low_support": true
+      },
+      "contrasts_with": {
+       "support": 0,
+       "tp": 0,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.0,
+       "recall": null,
+       "f1": null,
+       "low_support": false
+      },
+      "has_property": {
+       "support": 2,
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "increases": {
+       "support": 1,
+       "tp": 1,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.5,
+       "recall": 1.0,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "is_a": {
+       "support": 3,
+       "tp": 2,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.6666666666666666,
+       "f1": 0.8,
+       "low_support": true
+      },
+      "part_of": {
+       "support": 3,
+       "tp": 1,
+       "fp": 1,
+       "fn": 2,
+       "precision": 0.5,
+       "recall": 0.3333333333333333,
+       "f1": 0.4,
+       "low_support": true
+      },
+      "requires": {
+       "support": 0,
+       "tp": 0,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.0,
+       "recall": null,
+       "f1": null,
+       "low_support": false
+      },
+      "uses": {
+       "support": 1,
+       "tp": 1,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0,
+       "low_support": true
+      }
+     },
+     "population": 14,
+     "classes_in_macro": 7,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    },
+    "strict_e2e_edge_f1": {
+     "precision": 0.1590909090909091,
+     "recall": 0.059322033898305086,
+     "f1": 0.08641975308641975,
+     "tp": 7,
+     "fp": 37,
+     "fn": 111,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    }
+   },
+   "relation_outcomes": {
+    "no_relation": 22,
+    "other": 22,
+    "rejected:endpoint_not_grounded": 2,
+    "edge": 44,
+    "rejected:domain_range": 4
+   }
+  },
+  "R1KEY": {
+   "headline": {
+    "concept_f1": {
+     "precision": 0.60625,
+     "recall": 0.6554054054054054,
+     "f1": 0.6298701298701298,
+     "tp": 97,
+     "fp": 63,
+     "fn": 51,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N",
+     "variant": "canonical_node_untyped"
+    },
+    "ancestor_hierarchy_f1": {
+     "precision": 0.6666666666666666,
+     "recall": 0.07407407407407407,
+     "f1": 0.13333333333333333,
+     "tp": 2,
+     "fp": 1,
+     "fn": 25,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N",
+     "status": "OK",
+     "gold_ancestor_pairs": 27
+    },
+    "pair_recall": {
+     "recall": 0.21212121212121213,
+     "reached": 14,
+     "denominator": 66,
+     "missing_endpoint_excluded": 52,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    },
+    "relation_macro_f1": {
+     "f1": 0.5999999999999999,
+     "classes": {
+      "acts_on": {
+       "support": 2,
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "connected_to": {
+       "support": 2,
+       "tp": 0,
+       "fp": 0,
+       "fn": 2,
+       "precision": null,
+       "recall": 0.0,
+       "f1": 0.0,
+       "low_support": true
+      },
+      "contrasts_with": {
+       "support": 0,
+       "tp": 0,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.0,
+       "recall": null,
+       "f1": null,
+       "low_support": false
+      },
+      "has_property": {
+       "support": 2,
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "increases": {
+       "support": 1,
+       "tp": 1,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.5,
+       "recall": 1.0,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "is_a": {
+       "support": 3,
+       "tp": 2,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.6666666666666666,
+       "f1": 0.8,
+       "low_support": true
+      },
+      "part_of": {
+       "support": 3,
+       "tp": 1,
+       "fp": 1,
+       "fn": 2,
+       "precision": 0.5,
+       "recall": 0.3333333333333333,
+       "f1": 0.4,
+       "low_support": true
+      },
+      "requires": {
+       "support": 0,
+       "tp": 0,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.0,
+       "recall": null,
+       "f1": null,
+       "low_support": false
+      },
+      "uses": {
+       "support": 1,
+       "tp": 1,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0,
+       "low_support": true
+      }
+     },
+     "population": 14,
+     "classes_in_macro": 7,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    },
+    "strict_e2e_edge_f1": {
+     "precision": 0.1590909090909091,
+     "recall": 0.059322033898305086,
+     "f1": 0.08641975308641975,
+     "tp": 7,
+     "fp": 37,
+     "fn": 111,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    }
+   },
+   "relation_outcomes": {
+    "no_relation": 21,
+    "other": 22,
+    "rejected:endpoint_not_grounded": 2,
+    "edge": 44,
+    "rejected:domain_range": 5
+   }
+  }
+ },
+ "spend": {
+  "per_run": {
+   "cr020_r1key_cr012_scinlp_cr019dev_2021_acl_long_295_E0": 0.0333,
+   "cr020_r1key_cr012_scinlp_cr019dev_2024_acl_long_144_1_9_grobid_E0": 0.0651,
+   "cr020_r1key_cr012_scinlp_cr019dev_P16_1007_grobid_E0": 0.0082,
+   "cr020_r1key_cr012_scinlp_cr019dev_P02_1004_grobid_E0": 0.0012,
+   "cr020_r1key_cr012_pilot_1_5_E0": 0.0051
+  },
+  "total_usd": 0.1129,
+  "cap_usd": 10.0
+ },
+ "decision": {
+  "status": "ADOPT_R1KEY",
+  "scinlp_dev_idxr1_p1_f1_delta": 0.023410794526661727,
+  "pd_dev_strict_f1_delta": 0.0,
+  "rule": "non-inferiority: adopt if SciNLP dev IDXR1-P1 F1 falls by <= 0.005 and P&D dev Strict E2E F1 falls by <= 0.01"
+ }
+}

@@ -1,0 +1,41 @@
+{
+ "rho": 1.5,
+ "cards_median": 67.5,
+ "cards_max": 120,
+ "card_tokens_median": 2055.5,
+ "backfill_calls": 35,
+ "pd_items": 1269,
+ "partial_rate_pd": 0.012145748987854251,
+ "partial_rate_iir": 0.006134969325153374,
+ "pd_sections": 24,
+ "pd_words": 74271,
+ "pruner": {
+  "growing": 368,
+  "pruned": 2259,
+  "candidate_terms": 2446,
+  "conflicts_resolved_as_growing": 19,
+  "per_chapter": {
+   "1": {
+    "growing": 117,
+    "pruned_candidates": 649
+   },
+   "2": {
+    "growing": 188,
+    "pruned_candidates": 1171
+   },
+   "3": {
+    "growing": 134,
+    "pruned_candidates": 727
+   }
+  }
+ },
+ "partial_vs_gold": {
+  "items": 404,
+  "partials": 54,
+  "m2_quote": 0,
+  "m2_para": 0,
+  "m5_flags": 24,
+  "m5_valid": 10,
+  "m5_partials_recovered": 10
+ }
+}

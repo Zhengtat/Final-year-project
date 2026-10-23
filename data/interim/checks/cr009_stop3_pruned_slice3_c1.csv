@@ -1,0 +1,16 @@
+id,term,section,evidence quote,mark (correctly pruned / should be a node)
+1,packet per second rate,3.5,This is sometimes called the packet per second (pps) rate.,should be a node
+2,service provider,2.8,licensed to service providers,correctly pruned
+3,generality,1-problem-building-a-network,the most important characteristic of a computer network is its generality,correctly pruned
+4,quality of service,3.1,the term quality of service is usually taken to mean that the network gives the user some kind of performance-related guarantee,should be a node
+5,1-persistent protocol,2.6,The Ethernet is said to be a 1-persistent protocol,should be a node
+6,Immersive User Interface,2-perspective-race-to-the-edge,Immersive User Interfaces—that benefit from low latency connectivity,correctly pruned
+7,electromagnetic spectrum,2.1,depicts the electromagnetic spectrum,should be a node
+8,end-to-end latency,3.1,"There is another good argument in favor of small ATM cells, having to do with end-to-end latency.",should be a node
+9,C,1.4,We use Linux and C for all code examples in this book,correctly pruned
+10,host,1.2,at least hundreds of millions of hosts,should be a node
+11,highly loaded link,3.4,A highly loaded link never shows a cost of more than three times its cost when idle.,correctly pruned
+12,engineering team,1-perspective-feature-velocity,how the fastest moving cloud companies organize their engineering teams,correctly pruned
+13,remote host,1.4,translate this name into the remote host’s IP address,correctly pruned
+14,cable,2.1,some sort of copper wire or cable to connect,correctly pruned
+15,Dynamic Host Configuration Protocol,3.3,The primary method uses a protocol known as the Dynamic Host Configuration Protocol (DHCP).,should be a node

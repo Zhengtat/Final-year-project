@@ -1,0 +1,209 @@
+version: 1
+name: sleep_consolidation_v1
+status: stop1_approved_2026-10-08  # STOP 1 rulings recorded; DEV_SELECT values still unset
+
+mode: conservative  # conservative | balanced | aggressive_experimental
+
+triggers:
+  light_sleep:
+    chapter_end: true
+  deep_sleep:
+    uncertain_candidates: true
+    same_concept_queue: true
+    alias_contradiction: true
+    type_or_sense_drift: true
+    inconsistent_identity_cluster: true
+    final_book: true
+  recurrence_threshold: DEV_SELECT
+  new_node_threshold: DEV_SELECT
+
+candidate_generation:
+  lexicon: true
+  alias_rules: true
+  name_embedding:
+    enabled: true
+    top_k: 20
+  definition_embedding:
+    enabled: true
+    top_k: 20
+  evidence_embedding:
+    enabled: true
+    top_k: 10
+  structural_neighbours:
+    enabled: true
+    top_k: 10
+  relation_signature: true
+  section_history: true
+  cross_chapter: true
+  same_surface_candidates: true
+  erst_context_metadata:
+    enabled: true
+    may_decide_identity: false
+
+type_compatibility:
+  # Research ruling 2026-10-08 (STOP 1, Decision 2). 'Concept' is a generic/underspecified type, NOT a wildcard.
+  # COMPATIBLE means only "the type does not veto"; it never adds positive identity evidence.
+  # Compatibility is NOT transitive: the cluster guard checks every material cross-pair of a proposed cluster.
+  same_type: compatible
+  cross_type_compatible:
+    - [Protocol, Mechanism]
+    - [Component, Concept]
+    - [DataUnit, Concept]
+    - [Parameter, Property]
+    - [Identifier, Parameter]
+  all_other_cross_type: incompatible
+  generic_type: Concept
+  generic_type_positive_evidence: 0
+
+alias_provenance:
+  # Research ruling 2026-10-08 (STOP 1, Decision 1).
+  classes:
+    legacy_reconstructed: alias existed before CR-011 and its origin is deterministically linked to an existing merge/log/evidence record
+    legacy_unrecorded: alias in the immutable pre-sleep snapshot whose origin cannot be recovered; stated as unknown, never invented
+    cr011_native: alias created by CR-011; complete evidence/rule/transaction provenance
+  completeness_metric: aliases with a valid structured provenance envelope / all (canonical node, alias) entries in the post-sleep canonical view
+  completeness_min: 1.0
+  cr011_new_alias_source_traceability_min: 1.0
+  legacy_origin_traceability: descriptive_only
+  legacy_unrecorded_min_fields: [alias, pre_sleep_canonical_node_id, baseline_run_snapshot_hash, provenance_class, historical_origin_status, migration_backfill_record]
+  legacy_unrecorded_may: [preserved, mention_matching, candidate_retrieval]
+  legacy_unrecorded_may_not: [independently_establish_SAME, independently_trigger_auto_merge]
+  sidecar_registry_not_snapshot_mutation: true
+
+hard_guards:
+  approved_same: authoritative
+  approved_different: veto
+  type_incompatible: veto
+  explicit_textbook_distinction: veto
+  misconception_layer: exclude
+  human_gold_runtime_use: forbidden
+  one_token:
+    embedding_only_auto_merge: false
+    exact_surface_cross_chapter:
+      require_context_check: true
+    type_mismatch: veto
+    approved_acronym_pair: defer_to_R2
+    lexicon_different: veto
+    distinct_definition_or_relation_signature: review_or_split
+
+decision:
+  pair_model: logistic_regression
+  ablation_model: gradient_boosted
+  calibration: DEV_SELECT
+  thresholds:
+    auto_merge: DEV_SELECT
+    review: DEV_SELECT
+  auto_merge_gate:
+    merge_precision_min: 0.98
+    wilson_lower_min: 0.95
+    wilson_when_sample_size_permits: true
+  concept_score:
+    use_as_feature: true
+    may_decide_identity_alone: false
+  model_stated_confidence:
+    may_set_threshold: false
+
+llm_adjudicator:
+  enabled: true
+  only_review_band: true
+  sees_pair_score: false
+  sees_score_band: false
+  sees_current_merge_prediction: false
+  sees_gold: false
+  structured_output: true
+  temperature: project_deterministic_default
+
+cluster_guard:
+  enabled: true
+  naive_transitive_closure: false
+  known_negative_veto: true
+  incompatible_type_veto: true
+  contradiction_veto: true
+  small_cluster_all_cross_pairs: true
+  large_cluster_checks:
+    all_members_to_canonical_medoid: true
+    all_known_negative_pairs: true
+    lowest_scoring_cross_pairs: true
+    bridge_edges: true
+
+suspected_split:
+  enabled: true
+  automatic_production_split: false
+  output: suspected_splits.jsonl
+
+migration:
+  immutable_source_run: true
+  event_sourced_transactions: true
+  retain_absorbed_nodes: true
+  retain_alias_provenance: true
+  retain_description_history: true
+  union_edge_evidence: true
+  log_merge_created_self_loops: true
+  inverse_patch_required: true
+  roundtrip_hash_required: true
+  exclude_volatile_metadata_from_hash:
+    - timestamps
+
+evaluation:
+  sleep240:
+    total: 240
+    development: 80
+    heldout_test: 160
+    split_grouping: candidate_cluster_or_normalized_form_family
+    strata:
+      deterministic_r1_r3: 40
+      high_similarity_r4: 40
+      confusables_difficult_negatives: 40
+      one_token_polysemy: 40
+      cross_chapter_long_distance: 40
+      cluster_bridge_transitive_risk: 40
+    double_annotation_heldout_target: 80
+  exact_micro_f1: true
+  lenient_metric: true
+  merge_precision: true
+  merge_recall: true
+  distinct_pair_violation: true
+  pairwise_cluster_f1: true
+  bcubed_if_cluster_gold_available: true
+  one_token_slice: true
+  cross_chapter_slice: true
+  reverse_recoverability: true
+  evidence_retention: true
+  alias_provenance_completeness: true
+
+selection:
+  reject_on_known_different_violation: true
+  reject_on_rollback_failure: true
+  reject_on_evidence_or_provenance_failure: true
+  merge_precision_min: 0.98
+  exact_micro_f1_max_regression: 0.01
+  recall_tie_margin: 0.02
+  tie_breaker:
+    - fewer_llm_calls
+    - less_human_review
+
+adoption_gates:
+  known_different_violations: 0
+  merge_precision_min: 0.98
+  wilson_lower_min: 0.95
+  distinct_pair_violation_max: 0.02
+  exact_micro_f1_delta_min: -0.01
+  evidence_retention_min: 1.0
+  alias_provenance_completeness_min: 1.0
+  rollback_roundtrip_min: 1.0
+  one_token_critical_false_merges: 0
+  benefit:
+    merge_recall_delta_min: 0.05
+    or_review_load_reduction_min: 0.25
+
+cost:
+  soft_warning_usd: 15
+  hard_budget_usd: 25
+  paid_preflight_required: true
+  llm_dev_call_target_max: 250
+  heldout_call_target_max: 150
+
+safety:
+  never_write_gold: true
+  heldout_never_tunes: true
+  aggressive_mode_cannot_overwrite_production: true

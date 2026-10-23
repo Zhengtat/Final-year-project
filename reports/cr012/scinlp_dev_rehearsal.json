@@ -1,0 +1,87 @@
+{
+ "note": "development rehearsal only, dev split, E0, no tuning; SciNLP test unopened",
+ "docs": {
+  "P02-1004.grobid": {
+   "stats": {
+    "nodes": 62,
+    "edges": 20,
+    "negated_dropped": 1,
+    "ungrounded_dropped": 0,
+    "mentions_off_token_boundary": 0
+   },
+   "entity_strict": {
+    "tp": 16,
+    "fp": 82,
+    "fn": 19,
+    "precision": 0.16326530612244897,
+    "recall": 0.45714285714285713,
+    "f1": 0.24060150375939846
+   },
+   "entity_typed": {
+    "tp": 16,
+    "fp": 82,
+    "fn": 19,
+    "precision": 0.16326530612244897,
+    "recall": 0.45714285714285713,
+    "f1": 0.24060150375939846
+   },
+   "rel": {
+    "tp": 1,
+    "fp": 4,
+    "fn": 5,
+    "precision": 0.2,
+    "recall": 0.16666666666666666,
+    "f1": 0.1818181818181818
+   },
+   "rel_plus": {
+    "tp": 1,
+    "fp": 4,
+    "fn": 5,
+    "precision": 0.2,
+    "recall": 0.16666666666666666,
+    "f1": 0.1818181818181818
+   }
+  },
+  "P05-1008.grobid": {
+   "stats": {
+    "nodes": 45,
+    "edges": 5,
+    "negated_dropped": 0,
+    "ungrounded_dropped": 0,
+    "mentions_off_token_boundary": 0
+   },
+   "entity_strict": {
+    "tp": 4,
+    "fp": 53,
+    "fn": 8,
+    "precision": 0.07017543859649122,
+    "recall": 0.3333333333333333,
+    "f1": 0.11594202898550725
+   },
+   "entity_typed": {
+    "tp": 4,
+    "fp": 53,
+    "fn": 8,
+    "precision": 0.07017543859649122,
+    "recall": 0.3333333333333333,
+    "f1": 0.11594202898550725
+   },
+   "rel": {
+    "tp": 0,
+    "fp": 1,
+    "fn": 0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   },
+   "rel_plus": {
+    "tp": 0,
+    "fp": 1,
+    "fn": 0,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1": 0.0
+   }
+  }
+ }
+}

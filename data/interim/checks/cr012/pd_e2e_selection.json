@@ -1,0 +1,109 @@
+{
+ "seed": 20261011,
+ "rule": "eligible = 1200-5500 words; pilot from chapters (1, 2, 3); held-out from chapters (4, 5, 6, 7, 8, 9)",
+ "frozen_before_any_final_cum_prediction_was_viewed": true,
+ "pilot": [
+  {
+   "section_id": "1.5",
+   "chapter": 1,
+   "heading": "Foundation > Performance",
+   "words": 3643,
+   "sentences": 135,
+   "text_sha256": "75f5d129909e90ef114b5d9369ae1db372fbc99e5e85ca2d88b7a176e5050590"
+  },
+  {
+   "section_id": "2.6",
+   "chapter": 2,
+   "heading": "Direct Links > Multi-Access Networks",
+   "words": 2921,
+   "sentences": 124,
+   "text_sha256": "ea61355c9c1d605ee1e897343d92c576575a67500b00112f3ee10b3649e261b5"
+  }
+ ],
+ "heldout": [
+  {
+   "section_id": "4.4",
+   "chapter": 4,
+   "heading": "Advanced Internetworking > Multiprotocol Label Switching",
+   "words": 4091,
+   "sentences": 175,
+   "text_sha256": "e1cbaaeeac413e555e4d7299e6f9b082bfccbdc3a35859b55cb6f5e47e8b6c9c"
+  },
+  {
+   "section_id": "5.4",
+   "chapter": 5,
+   "heading": "End-to-End Protocols > Transport for Real-Time (RTP)",
+   "words": 4597,
+   "sentences": 181,
+   "text_sha256": "da26b407e2041715531f43c6c164582ca16b08272fd1bc017e68e66bd967177a"
+  },
+  {
+   "section_id": "6.3",
+   "chapter": 6,
+   "heading": "Congestion Control > TCP Congestion Control",
+   "words": 4108,
+   "sentences": 173,
+   "text_sha256": "8e284f047329889759890d7596f9bf68af35230bf8477a1470b502ded147fc48"
+  },
+  {
+   "section_id": "7.1",
+   "chapter": 7,
+   "heading": "End-to-End Data > Presentation Formatting",
+   "words": 4799,
+   "sentences": 223,
+   "text_sha256": "c6116e93c8e0ea060b43ba0ac659dbe173ba57bc9065e4e0660e482e54bb34cd"
+  },
+  {
+   "section_id": "8.2",
+   "chapter": 8,
+   "heading": "Network Security > Cryptographic Building Blocks",
+   "words": 4110,
+   "sentences": 174,
+   "text_sha256": "28c211a7ffc7497282ebe21f2d1ef87723f7892e3045e39f67d44a182014ebdd"
+  },
+  {
+   "section_id": "9.3",
+   "chapter": 9,
+   "heading": "Applications > Infrastructure Applications",
+   "words": 5093,
+   "sentences": 217,
+   "text_sha256": "be99d114d53799216a06c4f4cb4319a67481a5d36c9a070d61b399a989ef99d0"
+  },
+  {
+   "section_id": "4.5",
+   "chapter": 4,
+   "heading": "Advanced Internetworking > Routing Among Mobile Devices",
+   "words": 3255,
+   "sentences": 131,
+   "text_sha256": "ff35a281853a2945c20606380d716c4e738c5cc0d3043571f056ffa5714476be"
+  }
+ ],
+ "double_annotated_heldout_sections": [
+  "4.4",
+  "9.3"
+ ],
+ "stability_subset_pd_sections": [
+  "4.5",
+  "4.4"
+ ],
+ "eligible_pool": {
+  "pilot": 14,
+  "heldout": 16
+ },
+ "totals": {
+  "pilot_words": 6564,
+  "heldout_words": 30053
+ },
+ "sheets": {
+  "pilot": {
+   "path": "data/interim/checks/cr012/pd_e2e_pilot_blind.csv",
+   "sentences": 259,
+   "sha256": "9928071b155603f9205fc4aa91046e9dab9b33d50c9307ace451bbd4ee71a467"
+  },
+  "heldout": {
+   "path": "data/interim/checks/cr012/pd_e2e_test_blind.csv",
+   "sentences": 1274,
+   "sha256": "7aafea45acb17817b068f76872eb72406c401804beae87718a6ef6e112f84371"
+  }
+ }
+}

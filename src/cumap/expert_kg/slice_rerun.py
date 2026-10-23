@@ -1,0 +1,442 @@
+"""CR-007 §6: the P&D ch1-3 slice re-run, stage by stage, each with a preflight cost check.
+
+concepts (prompt v2, cached where the text is unchanged) -> canonicalize v2 (type-aware,
+0.70 review band) + first-occurrence/role rules ($0) -> select (coverage-aware global pair budget, $0) -> relations
+(registry v1.1, prompts v3, strong tier) -> snapshots ($0). Every LLM call goes through LLMClient, whose stage
+budgets are checked before each call; checkpoints are written after each section / batch of pairs so a run can
+be resumed. New run_id; old runs are kept.
+"""
+
+from __future__ import annotations
+
+import json
+from dataclasses import asdict
+from pathlib import Path
+
+from cumap.expert_kg.canonicalize import CanonicalOverrides
+from cumap.expert_kg.llm_schemas import QualifiersLLM
+from cumap.expert_kg.mentions import MentionMatcher
+from cumap.expert_kg.pair_selection import select_pairs
+from cumap.expert_kg.pipeline import (
+    Checkpoint,
+    PromptSet,
+    SectionInput,
+    _concept_to_dict,
+    _restore_concept_registry,
+    build_snapshots_stage,
+    load_checkpoint,
+    run_canonicalize_stage,
+    run_concepts_stage,
+    save_checkpoint,
+)
+from cumap.expert_kg.relations import (
+    CandidatePair,
+    PairRegistry,
+    PairResolution,
+    RelationEdgeCandidate,
+    concept_vocab,
+    enumerate_candidates,
+)
+from cumap.expert_kg.relations_v3 import V3Result, classify_pair_v3
+from cumap.expert_kg.roles import SectionText, apply_first_occurrence, apply_role_rules
+from cumap.llm.client import BudgetExceededError, LLMClient
+from cumap.llm.prompts import load_prompt
+from cumap.schemas.relations import RelationRegistry
+
+USD_PER_PAIR = 0.0069  # measured in the STOP 3 pilot (hard pairs; the average pair is cheaper)
+USD_PER_CANONICALIZE_CALL = 0.0031  # measured in CR-005
+
+
+def load_sections(
+    source_jsonl: Path, chapters: list[int], domain: str = "computer networking"
+) -> list[SectionInput]:
+    rows = [
+        json.loads(x) for x in source_jsonl.read_text(encoding="utf-8").splitlines() if x.strip()
+    ]
+    rows = sorted(
+        (r for r in rows if r.get("chapter_num") in chapters), key=lambda r: r["order_index"]
+    )
+    return [
+        SectionInput(
+            section_id=r["section_id"],
+            chapter_num=r["chapter_num"],
+            text=r["text"],
+            heading_path=r["heading_path"],
+            domain=domain,
+        )
+        for r in rows
+    ]
+
+
+def _section_texts(sections: list[SectionInput]) -> list[SectionText]:
+    return [SectionText(s.section_id, s.chapter_num, i, s.text) for i, s in enumerate(sections)]
+
+
+# ---------------------------------------------------------------- stage: canonicalize + roles
+def finish_concepts(cp: Checkpoint, sections: list[SectionInput], embed_fn) -> dict[str, int]:
+    """First occurrence by longest match, `defined` only on the first definition (later ones `refined`)."""
+    registry = _restore_concept_registry(cp, embed_fn)
+    concepts = registry.all()
+    chapters = apply_first_occurrence(concepts, _section_texts(sections))
+    order = {s.section_id: i for i, s in enumerate(sections)}
+    for c in concepts:
+        apply_role_rules(c, order)
+    cp.concepts = [_concept_to_dict(c) for c in concepts]
+    cp.concept_first_chapter = {**cp.concept_first_chapter, **chapters}
+    return chapters
+
+
+class _StubClient:
+    """Counts the canonicalize calls a real run would make (answers 'different' to everything)."""
+
+    def __init__(self):
+        self.calls = 0
+        self.run_id = "preflight"
+
+    def parse(self, **kw):
+        self.calls += 1
+
+        class _O:
+            decision, matched_candidate_index, reason = "different", None, "preflight"
+
+        class _R:
+            output = _O()
+
+        return _R()
+
+
+def preflight_canonicalize(
+    cp: Checkpoint, sections, prompts, embed_fn, overrides, tmp_dir: Path
+) -> dict:
+    stub = _StubClient()
+    probe = Checkpoint(**json.loads(json.dumps(asdict(cp))))
+    probe.completed_section_ids = []
+    run_canonicalize_stage(stub, prompts, sections, embed_fn, tmp_dir, probe, overrides=overrides)  # type: ignore[arg-type]
+    return {
+        "llm_calls": stub.calls,
+        "est_usd": stub.calls * USD_PER_CANONICALIZE_CALL,
+        "mentions": sum(len(v) for v in cp.mentions_by_section.values()),
+    }
+
+
+# ---------------------------------------------------------------- stage: pair selection ($0)
+def select_stage(
+    cp: Checkpoint,
+    sections: list[SectionInput],
+    registry: RelationRegistry,
+    embed_fn,
+    *,
+    budget: int = 700,
+    min_per_section: int = 8,
+    sample: int = 50,
+    seed: int = 42,
+    use_anchors: bool = False,
+) -> dict:
+    concepts = _restore_concept_registry(cp, embed_fn).all()
+    per: dict[str, list[CandidatePair]] = {
+        s.section_id: enumerate_candidates(s.section_id, s.text, concepts, registry)
+        for s in sections
+    }
+    rank = {"defined": 3, "refined": 3, "used": 2, "mentioned": 1}
+    role = {
+        c.concept_id: max((m.role for m in c.mentions), key=lambda r: rank.get(r, 0))
+        for c in concepts
+        if c.mentions
+    }
+    sel = select_pairs(
+        per,
+        role,
+        budget=budget,
+        min_per_section=min_per_section,
+        sample_unselected=sample,
+        seed=seed,
+        anchors=cp.anchors if use_anchors else None,
+    )
+    cp.selected_pairs = [asdict(p) for p in sel.selected]
+    cp.sample_pairs = [asdict(p) for p in sel.unselected_sample]
+    cp.selection_stats = {
+        **sel.stats,
+        "budget": budget,
+        "min_per_section": min_per_section,
+        "candidate_pairs_before_dedup": sum(len(v) for v in per.values()),
+    }
+    from cumap.expert_kg.mentions import matching_mode
+
+    if (
+        matching_mode() != "token"
+    ):  # CR-020: recorded only when not the historical default, so older runs replay byte-identically
+        cp.selection_stats["matching_mode"] = matching_mode()
+    return cp.selection_stats
+
+
+def preflight_relations(cp: Checkpoint) -> dict:
+    n = len(cp.selected_pairs) + len(cp.sample_pairs)
+    done = len(cp.relation_results_v3)
+    return {"pairs": n, "already_classified": done, "est_usd_upper": (n - done) * USD_PER_PAIR}
+
+
+# ---------------------------------------------------------------- stage: relations v3
+def relations_stage(
+    client: LLMClient,
+    cp: Checkpoint,
+    run_dir: Path,
+    registry: RelationRegistry,
+    prompts_dir: Path,
+    embed_fn,
+    *,
+    save_every: int = 20,
+    progress=None,
+    prompt_versions: tuple[str, str, str] = ("v3", "v4", "v4"),
+    evidence_fn=None,
+    limit: int | None = None,
+    qualifier_checks: str | None = None,
+    assembly: str | None = None,
+    qualifier_amendments: str | None = None,
+    misconception_source: str | None = None,
+) -> Checkpoint:
+    """`assembly` (CR-036): None reads `configs/relation_policy.yaml` (default "legacy"); "v2" records the registry version and file hash in the run and
+    sets the type-valid orientation instead of rejecting a domain/range error. `qualifier_checks` (CR-034): None reads `configs/relation_policy.yaml` (default "off"). `prompt_versions` (family, choice, qualifiers), `evidence_fn` (pair dict -> pair dict with the evidence text in `sentence`)
+    and `limit` (classify at most this many new pairs, then stop) exist for CR-019 Stage B; the defaults are the production stage."""
+    concepts = {c.concept_id: c for c in _restore_concept_registry(cp, embed_fn).all()}
+    matcher = MentionMatcher(concept_vocab(list(concepts.values())))
+    from cumap.expert_kg import edge_store as ES
+    from cumap.expert_kg import relations_v6 as R6
+
+    amend = R6.resolve_amendments(qualifier_amendments)  # CR-038 DRAFT: "v6" uses prompts relation_choice / relation_qualifiers v6 (never run)
+    if amend == "v6":
+        R6.check_registry_for_v6(registry)
+        cp.selection_stats["qualifier_amendments"] = "v6"
+    if amend == "v6" and prompt_versions == ("v3", "v4", "v4"):  # the production defaults become the drafted v6 prompts
+        prompt_versions = ("v3", "v6", "v6")
+    from cumap.expert_kg import relations_v7 as R7
+
+    mis_source = R7.resolve_source(misconception_source)  # CR-039 DRAFT: "classification" needs registry v1.6 and amendments v6 (never run)
+    if mis_source == "classification":
+        R7.check_registry_for_misconceptions(registry)
+        if amend != "v6":
+            raise ValueError("misconception_source classification needs qualifier_amendments v6")
+        cp.selection_stats["misconception_source"] = "classification"
+        if prompt_versions == ("v3", "v6", "v6"):
+            prompt_versions = ("v5", "v7", "v6")
+    from cumap.expert_kg import qualifier_checks as QC
+
+    assembly_mode = ES.resolve_assembly(assembly)
+    if assembly_mode == "v2":  # recorded only when on, so older runs and the default stay unchanged
+        cp.selection_stats["assembly"] = "v2"
+        cp.selection_stats["registry"] = ES.registry_record(registry)
+    qc_mode = QC.resolve_mode(qualifier_checks)
+    if qc_mode != "off":
+        cp.selection_stats["qualifier_checks"] = (
+            qc_mode  # recorded only when on, so older runs and the default stay unchanged
+        )
+    # CR-008: choice v4 (adds `same_concept`, no edge), qualifiers v4 (no corrects_intuition / intuition)
+    fam, rel, qual = (
+        load_prompt(prompts_dir, t, v)
+        for t, v in zip(
+            ("relation_family", "relation_choice", "relation_qualifiers"),
+            prompt_versions,
+            strict=True,
+        )
+    )
+    done = {
+        frozenset((r["pair"]["concept_x_id"], r["pair"]["concept_y_id"]))
+        for r in cp.relation_results_v3
+    }
+    anchor_pairs = {
+        frozenset((a["concept_id"], a["anchor_id"])) for a in getattr(cp, "anchors", [])
+    }
+    todo = [("selected", p) for p in cp.selected_pairs] + [("sample", p) for p in cp.sample_pairs]
+    new = 0
+    for i, (group, p) in enumerate(todo):
+        key = frozenset((p["concept_x_id"], p["concept_y_id"]))
+        if key in done:
+            continue
+        if limit is not None and new >= limit:
+            save_checkpoint(cp, run_dir)
+            return cp
+        new += 1
+        pair = CandidatePair(**(evidence_fn(p) if evidence_fn else p))
+        try:
+            res = classify_pair_v3(
+                client,
+                fam,
+                rel,
+                qual,
+                registry,
+                pair,
+                concepts[pair.concept_x_id],
+                concepts[pair.concept_y_id],
+                matcher,
+                same_concept=True,
+                containment_grounding=key
+                in anchor_pairs,  # CR-009: anchor pairs only (a code check, never shown to a model)
+                qualifier_checks=qc_mode,
+                direction_by_types=assembly_mode == "v2",
+                amendments=amend,
+                misconception_source=mis_source,
+            )
+        except BudgetExceededError:
+            save_checkpoint(cp, run_dir)
+            raise
+        cp.relation_results_v3.append({**res.to_dict(), "group": group})
+        done.add(key)
+        if len(cp.relation_results_v3) % save_every == 0:
+            save_checkpoint(cp, run_dir)
+            if progress:
+                progress(
+                    f"{len(cp.relation_results_v3)}/{len(todo)} pairs, spend ${client.spent_usd:.3f}"
+                )
+    cp.stage = "snapshots"
+    save_checkpoint(cp, run_dir)
+    return cp
+
+
+def mark_gated_dropped(cp: Checkpoint, registry: RelationRegistry) -> int:
+    """Edges of a relation the registry no longer has (it failed its gate) stay in the run data,
+    flagged `gated_dropped`, and are kept out of the graph. Never deleted. Returns how many."""
+    n = 0
+    for r in cp.relation_results_v3:
+        if r["outcome"] == "edge" and r["relation"] not in registry:
+            r["gated_dropped"] = True
+            n += 1
+    return n
+
+
+def build_pair_registry(cp: Checkpoint) -> PairRegistry:
+    """Adapter: v3 results of the SELECTED group -> the PairRegistry the snapshot writer expects. (The
+    unselected sample is measurement only and is kept out of the graph.)"""
+    reg = PairRegistry()
+    edge_pairs: set[frozenset[str]] = set()  # CR-008: an edge on a node pair is never overwritten
+    for r in cp.relation_results_v3:
+        if r["group"] != "selected" or r.get("self_pair"):
+            continue
+        if r.get("consolidated_into") or r.get("snapshot_secondary"):
+            continue
+        pk = frozenset((r["pair"]["concept_x_id"], r["pair"]["concept_y_id"]))
+        if r["outcome"] != "edge" and pk in edge_pairs:
+            continue
+        if r["outcome"] == "edge" and not r.get("gated_dropped"):
+            edge_pairs.add(pk)
+        pair = CandidatePair(**r["pair"])
+        edge = None
+        if r["outcome"] == "edge" and not r.get("gated_dropped"):
+            q = r["qualifiers"]
+            edge = RelationEdgeCandidate(
+                pair=pair,
+                family=r["family"],
+                relation=r["relation"],
+                direction=r["direction"],
+                statement=r["statement"],
+                evidence_quote=r["evidence_quote"],
+                qualifiers=QualifiersLLM(
+                    polarity=q["polarity"],
+                    modality=q["modality"],
+                    conditions=q["conditions"],
+                    part_type=q.get("part_type"),
+                    dimension=q.get(
+                        "dimension"
+                    ),  # CR-034: later qualifier schemas have no dimension field
+                    surface_phrase=q["surface_phrase"],
+                ),
+            )
+        reg.restore(
+            [
+                PairResolution(
+                    pair.concept_x_id,
+                    pair.concept_y_id,
+                    True,
+                    edge,
+                    None
+                    if edge
+                    else (
+                        "gated_dropped" if r.get("gated_dropped") else (r["reason"] or r["outcome"])
+                    ),
+                    [pair.sentence],
+                )
+            ]
+        )
+    return reg
+
+
+def snapshots_stage(
+    cp: Checkpoint,
+    run_dir: Path,
+    sections: list[SectionInput],
+    registry: RelationRegistry,
+    embed_fn,
+):
+    concept_registry = _restore_concept_registry(cp, embed_fn)
+    pair_registry = build_pair_registry(cp)
+    cp.pair_registry = [_pair_dict(p) for p in pair_registry.all()]
+    return build_snapshots_stage(
+        registry,
+        sections,
+        concept_registry,
+        pair_registry,
+        run_dir / "snapshots",
+        cp.run_id,
+        merges=cp.merges,
+    )
+
+
+def save_graph_stage(
+    cp: Checkpoint,
+    run_dir: Path,
+    sections: list[SectionInput],
+    registry: RelationRegistry,
+    embed_fn,
+):
+    """CR-036 `assembly: v2`, the "save graph" export: chapter snapshots from the edge store (built from the classification results) and the
+    concepts. No cycle or domain/range check (they moved to classification); the registry recorded in the run must be the one loaded. Bookkeeping
+    (first occurrence, roles) is still `finish_concepts`, run at the end of the concept stage, until the online index exists."""
+    from cumap.expert_kg import edge_store as ES
+
+    ES.check_registry_record(cp.selection_stats, registry)
+    concept_registry = _restore_concept_registry(cp, embed_fn)
+    types = {c.concept_id: c.node_type for c in concept_registry.all()}
+    store = ES.build_edge_store(cp.relation_results_v3, types, registry)
+    cp.pair_registry = [_pair_dict(p) for p in build_pair_registry(cp).all()]  # readers that key by pair id keep working
+    rows = [
+        {"edge_id": e.edge_id, "source_id": e.source_id, "target_id": e.target_id, "relation": e.relation, "family": e.family, "section_id": e.section_id}
+        for e in store.edges
+    ]  # fmt: skip
+    details = {e.edge_id: {"pair_ids": e.pair_ids, "quotes": e.quotes, "flags": e.flags, "direction_model": e.direction_model} for e in store.edges}
+    results = build_snapshots_stage(
+        registry,
+        sections,
+        concept_registry,
+        None,
+        run_dir / "snapshots",
+        cp.run_id,
+        merges=cp.merges,
+        edge_rows=rows,
+        run_checks=False,
+        extra_manifest={"assembly": "v2", "registry": cp.selection_stats["registry"]},
+        edge_details=details,
+    )
+    (run_dir / "edge_store.json").write_text(json.dumps(store.to_dict(), indent=1), encoding="utf-8")
+    return results
+
+
+def _pair_dict(p: PairResolution) -> dict:
+    from cumap.expert_kg.pipeline import _pair_resolution_to_dict
+
+    return _pair_resolution_to_dict(p)
+
+
+__all__ = [
+    "CanonicalOverrides",
+    "PromptSet",
+    "V3Result",
+    "finish_concepts",
+    "load_checkpoint",
+    "load_sections",
+    "preflight_canonicalize",
+    "preflight_relations",
+    "relations_stage",
+    "run_canonicalize_stage",
+    "run_concepts_stage",
+    "save_checkpoint",
+    "select_stage",
+    "snapshots_stage",
+]

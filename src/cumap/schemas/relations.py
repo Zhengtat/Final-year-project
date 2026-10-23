@@ -60,6 +60,11 @@ class RelationType(BaseModel):
     status: str | None = None
     template: str | None = None
     near_misses: list[NearMiss] = []
+    # CR-007 (registry v1.1): 'core' relations are added unconditionally; 'gated' ones are kept only
+    # if the slice re-run yields >= 5 instances and the owner marks >= 80% of up to 8 correct.
+    gate: str | None = None
+    # CR-024 (registry v1.4): labels of other benchmarks' relation lists that this relation absorbs, {source: [labels]}.
+    external_labels: dict[str, list[str]] = {}
 
 
 class FamilyDef(BaseModel):
@@ -69,6 +74,7 @@ class FamilyDef(BaseModel):
     label: str
     diagnostic_prior: float
     grounding: str
+    gloss: str | None = None  # CR-007: one-line gloss shown in the family step of relation prompt v3
 
 
 class QualifierDef(BaseModel):
@@ -100,6 +106,9 @@ class Choice(NamedTuple):
     text: str
 
 
+GENERIC_NODE_TYPE = "Concept"
+
+
 class RelationRegistry:
     def __init__(
         self,
@@ -111,7 +120,13 @@ class RelationRegistry:
         families: list[FamilyDef] | None = None,
         qualifiers: dict[str, QualifierDef] | None = None,
         chain_link_types: list[ChainLinkTypeDef] | None = None,
+        minor: int = 0,
+        output_fields: dict | None = None,
+        patch: int = 0,
     ):
+        self.patch = patch  # v1.1.1 = (1, 1, 1): v1.1 minus the relations that failed their gate
+        self.minor = minor  # registry version is `version.minor` (v1.1 = 1, 1)
+        self.output_fields: dict = output_fields or {}  # extra relation-choice output fields (v1.1)
         self._by_name: dict[str, RelationType] = {r.name: r for r in relations}
         self.node_types = node_types
         self.version = version
@@ -127,7 +142,7 @@ class RelationRegistry:
     def from_yaml(cls, path: Path) -> RelationRegistry:
         raw = yaml.safe_load(path.read_text())
         relations = [RelationType(**r) for r in raw["relations"]]
-        return cls(
+        reg = cls(
             relations,
             raw["node_types"],
             version=raw.get("version", 0),
@@ -135,7 +150,16 @@ class RelationRegistry:
             families=[FamilyDef(**f) for f in raw.get("families", [])],
             qualifiers={k: QualifierDef(**v) for k, v in raw.get("qualifiers", {}).items()},
             chain_link_types=[ChainLinkTypeDef(**c) for c in raw.get("chain_link_types", [])],
+            minor=raw.get("minor", 0),
+            output_fields=raw.get("output_fields") or {},
+            patch=raw.get("patch", 0),
         )
+        reg.source_path = Path(path)  # CR-036: so a run can record the registry file's hash
+        return reg
+
+    @property
+    def version_label(self) -> str:
+        return f"{self.version}.{self.minor}" + (f".{self.patch}" if self.patch else "")
 
     def __contains__(self, name: str) -> bool:
         return name in self._by_name
@@ -206,11 +230,17 @@ class RelationRegistry:
     def check_types(self, edge: EdgeRef, concept_types: dict[str, str]) -> list[str]:
         """Domain/range violations, given a concept_id -> node_type lookup. "Any" matches
         every type. Concepts missing from `concept_types` are not flagged (unknown, not wrong).
+        CR-007 (2026-10-01, owner decision at STOP 4): the generic fallback type "Concept" is a
+        wildcard too, since extraction types are coarse; specific wrong types are still flagged.
         """
         rel = self.get(edge.relation)
         errors = []
         source_type = concept_types.get(edge.source_id)
         target_type = concept_types.get(edge.target_id)
+        if source_type == GENERIC_NODE_TYPE:
+            source_type = None
+        if target_type == GENERIC_NODE_TYPE:
+            target_type = None
         if source_type is not None and "Any" not in rel.domain_types and source_type not in rel.domain_types:
             errors.append(
                 f"{edge.source_id} has type {source_type!r}, not in domain_types {rel.domain_types} of {rel.name!r}"

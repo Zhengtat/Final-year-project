@@ -1,0 +1,86 @@
+{
+ "benchmark": "REL-MAP-180",
+ "built_from_run": "slice3_c2",
+ "registry": "configs/relations_v1.3.yaml",
+ "seed": 20261005,
+ "split_seed_used": 20261005,
+ "dev_sections": [
+  "1.1",
+  "1.4",
+  "1.5",
+  "2.2",
+  "2.5",
+  "2.7",
+  "3-problem-not-all-networks-are-directly-connected",
+  "3.3"
+ ],
+ "test_sections": [
+  "1-perspective-feature-velocity",
+  "1-problem-building-a-network",
+  "1.2",
+  "1.3",
+  "2-perspective-race-to-the-edge",
+  "2-problem-connecting-to-a-network",
+  "2.1",
+  "2.3",
+  "2.4",
+  "2.6",
+  "2.8",
+  "3-perspective-virtual-networks-all-the-way-down",
+  "3.1",
+  "3.2",
+  "3.4",
+  "3.5"
+ ],
+ "composition": {
+  "total": 180,
+  "by_split": {
+   "dev": 60,
+   "test": 120
+  },
+  "by_stratum": {
+   "OTHER_NEAR_MISS": 30,
+   "ACCEPTED_EDGE": 120,
+   "NO_RELATION": 30
+  },
+  "by_split_stratum": {
+   "dev/ACCEPTED_EDGE": 40,
+   "dev/NO_RELATION": 10,
+   "dev/OTHER_NEAR_MISS": 10,
+   "test/ACCEPTED_EDGE": 80,
+   "test/NO_RELATION": 20,
+   "test/OTHER_NEAR_MISS": 20
+  },
+  "accepted_edge_relations": {
+   "uses": 14,
+   "has_purpose": 13,
+   "acts_on": 13,
+   "requires": 13,
+   "part_of": 12,
+   "is_a": 11,
+   "has_property": 11,
+   "connected_to": 9,
+   "performs": 8,
+   "causes": 4,
+   "increases": 4,
+   "decreases": 3,
+   "precedes": 2,
+   "contrasts_with": 2,
+   "prevents": 1
+  },
+  "evidence_sections": 24
+ },
+ "leakage_check": {
+  "shared_evidence_sections": [],
+  "shared_concept_pairs": 0,
+  "duplicate_item_ids": 0,
+  "duplicate_pair_ids": 0,
+  "ok": true
+ },
+ "blind_sheet_sha256": "cc93c48edb8d339db78ded6d16d5bc8ee1cefd9d2f44016fbbd93a649d1303d2",
+ "manifest_sha256": "71290f188fc72250ba1f26b35632eee269bb679ad27fe7e4acff25776abe4b6d",
+ "double_annotation": "not available (no second annotator): kappa is not measured",
+ "not_read": [
+  "cr010_current_to_erst_mapping_NOT_GOLD.csv"
+ ]
+}

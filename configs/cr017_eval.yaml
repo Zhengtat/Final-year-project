@@ -1,0 +1,49 @@
+version: 1
+# CR-017 evaluation configuration. Values come from the STOP-1 reconciliation and the Research rulings of 2026-10-14 (STOP 1 PASS; hierarchy gold supported for P&D, NOT_EVALUABLE for SciNLP;
+# no extra hierarchy annotation; STOP-3 relation scorer semantics frozen as proposed in reports/cr017/STOP1_RECONCILIATION.md). Scorer/reporting only: no model is run, nothing historical is overwritten.
+headline:
+  concept_f1: true
+  ancestor_hierarchy_f1: true
+  pair_recall: true
+  relation_macro_f1: true
+  strict_e2e_edge_f1: true
+  composite_score: false          # the five metrics are never averaged or weighted into one number
+
+concept_f1:
+  variant: canonical_node_untyped   # Research ruling 2026-10-14 (STOP 2 PASS): untyped canonical-node F1 (frozen E0 held-out 0.643); the typed variant (0.473) is a diagnostic
+
+hierarchy:
+  relations: [is_a]               # registry v1.3: the only subsumption relation; part_of / has_property / connected_to / uses / requires / causes excluded
+  include_instantiates: false     # not in the active registry (CR-004 patch never applied)
+  cycle_policy: report_and_close_with_visited_set   # detect and report every cycle; closure uses a visited set so it terminates; pairs inside a cycle stay in the prediction and are judged against gold; self pairs (A, A) are dropped and counted
+  canonical_alignment: true       # wrong canonical concept = wrong pair; no lexical partial credit; unmapped / false-merge predicted nodes keep synthetic ids so their pairs can only be false positives
+  closure_scope: per_section      # gold concept ids are section-local
+  pair_set_semantics: set         # duplicate predicted pairs (for example from split nodes) are counted once
+  scinlp: NOT_SUPPORTED_NO_IDENTITY_GOLD
+  population: heldout_7_headline_pilot_2_development   # CR-012 convention; the 9-section figure is reported as labelled development data
+
+relation_macro:
+  class_population: represented_in_gold   # macro over relation classes that have gold support among gold edges whose endpoints exist and whose pair reached relation classification
+  evaluation_unit: gold_edge_reaching_classifier
+  direction_handling: separate_diagnostic          # the label F1 ignores direction; direction accuracy is reported beside it
+  no_relation_handling: false_negative_for_gold_class_no_ontology_false_positive
+  other_handling: false_negative_for_gold_class_no_ontology_false_positive
+  rejected_handling: false_negative_for_gold_class_no_ontology_false_positive   # validation rejection (domain/range, ungrounded endpoint): no edge was produced
+  report_support_per_class: true
+  low_support_flag_at_or_below: 3
+  secondary: [micro_f1, direction_accuracy]
+
+strict_e2e:
+  scorer: cumap.cr012.scoring.score_graph_unit      # frozen; qualifiers are NOT part of the strict key (reported as qualifier_accuracy)
+
+bootstrap:
+  enabled: true
+  unit: section
+  resamples: 10000                # cr012/bootstrap.py RESAMPLES
+  seed: 20261011                  # cr012/bootstrap.py SEED
+  min_units_for_ci: 10            # fewer sections: CI_status NOT_EVALUABLE_SMALL_N, descriptive only
+
+compatibility:
+  retain_legacy_outputs: true
+  rerun_models: false
+  overwrite_historical_artifacts: false

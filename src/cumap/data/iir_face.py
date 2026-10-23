@@ -29,7 +29,7 @@ CHAPTER_TITLES = {
     3: "Dictionaries and tolerant retrieval",
 }
 
-_SECTION_ID_RE = re.compile(r"^iir_(\d+)(?:_(\d+))?$")
+_SECTION_ID_RE = re.compile(r"^iir_(\d+)((?:_\d+)*)$")
 
 
 @dataclass
@@ -112,12 +112,12 @@ def parse_iir_sections(tsv_path: Path) -> list[Section]:
 
 
 def _annotation_filename(section_id: str) -> str:
-    """ "iir_1" -> "iir-1.csv"; "iir_1_1" -> "iir-1.1.csv"."""
+    """ "iir_1" -> "iir-1.csv"; "iir_1_1" -> "iir-1.1.csv"; "iir_12_1_1" -> "iir-12.1.1.csv"."""
     match = _SECTION_ID_RE.match(section_id)
     if not match:
         raise ValueError(f"Unrecognised IIR section_id format: {section_id!r}")
-    chapter, sub = match.group(1), match.group(2)
-    return f"iir-{chapter}.{sub}.csv" if sub else f"iir-{chapter}.csv"
+    chapter, rest = match.group(1), match.group(2)
+    return f"iir-{chapter}{rest.replace('_', '.')}.csv"
 
 
 def _parse_concept_list(raw: str) -> list[str]:

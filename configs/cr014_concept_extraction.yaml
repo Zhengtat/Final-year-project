@@ -1,0 +1,23 @@
+version: cr014-stageB-1
+stage_b:
+  proposal_union: U2                  # U1 deterministic + RAW iteration-0 current-LLM proposals (Research, STOP 2)
+  llm_source: iteration0              # never the post-verifier / post-pruner output
+  model_tier: bulk                    # verifier and boundary calls; strong-tier comparison is a separate, budgeted arm
+  verifier_prompt: {task: cr014_concept_verifier, version: v1}
+  boundary_prompt: {task: cr014_boundary_repair, version: v1}
+  batch_candidates: 25                # candidates per verifier call
+  batch_families: 15                  # families per boundary call
+  context: {max_sentences_per_candidate: 2, max_chars_per_sentence: 360}
+  max_boundary_words: 6
+  max_output_tokens: {cr014_concept_verifier: 6000, cr014_boundary_repair: 6000}  # applied at runtime; configs/default.yaml is hash-pinned by the CR-011 handoff, so it is not edited
+  deterministic: {cache: true, allow_escalation: false}
+v0:
+  pruner_tau: 0.1                     # the production recipe (frozen-1)
+one_token:
+  # ranker = prioritisation score; fixed a priori (before any dev outcome is read). All features in [0,1], equal weights.
+  features: [definitional, heading, emphasis, acronym, recurrence, llm_agreement, head_of_multiword, technical_pos]
+  weights: {definitional: 1, heading: 1, emphasis: 1, acronym: 1, recurrence: 1, llm_agreement: 1, head_of_multiword: 1, technical_pos: 1}
+  gate_grid: [none, 0.125, 0.25, 0.375, 0.5]   # 0.125 (any one signal) added after the first table showed the other cut-offs lose recall; dev only, flagged in the report   # minimum rank score for a one-token candidate to be sent to boundary repair / verification
+  v3: {gate: none, note: 'V3 = V2 + one-word term-evidence column + priority ordering (verifier prompt v2); a hard gate is reported but not selected unless the pre-registered recall rule allows it'}
+  selection: smallest verification load whose one-token PROPOSAL recall loss vs no gate is <= 0.02 (dev)
+budgets_usd: {pilot: 5, dev: 15, heldout: 10, hard_cap: 30, stop3_planned: 6}

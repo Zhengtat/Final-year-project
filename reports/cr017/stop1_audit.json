@@ -1,0 +1,377 @@
+{
+ "hierarchy_gold": {
+  "1.5": {
+   "set": "pilot",
+   "gold_concepts": 56,
+   "gold_relation_rows": 40,
+   "is_a_edges": 0,
+   "ancestor_pairs_after_closure": 0,
+   "pairs_added_by_closure": 0,
+   "concepts_in_is_a_edges": 0,
+   "max_chain_depth": 0,
+   "cycle_in_gold": false,
+   "children_with_two_or_more_parents": 0,
+   "example_chain": null
+  },
+  "2.6": {
+   "set": "pilot",
+   "gold_concepts": 92,
+   "gold_relation_rows": 82,
+   "is_a_edges": 15,
+   "ancestor_pairs_after_closure": 27,
+   "pairs_added_by_closure": 12,
+   "concepts_in_is_a_edges": 22,
+   "max_chain_depth": 2,
+   "cycle_in_gold": false,
+   "children_with_two_or_more_parents": 1,
+   "example_chain": "Ethernet standard -> Ethernet -> bit-oriented framing protocol"
+  },
+  "4.4": {
+   "set": "heldout",
+   "gold_concepts": 97,
+   "gold_relation_rows": 64,
+   "is_a_edges": 7,
+   "ancestor_pairs_after_closure": 7,
+   "pairs_added_by_closure": 0,
+   "concepts_in_is_a_edges": 13,
+   "max_chain_depth": 1,
+   "cycle_in_gold": false,
+   "children_with_two_or_more_parents": 0,
+   "example_chain": null
+  },
+  "4.5": {
+   "set": "heldout",
+   "gold_concepts": 64,
+   "gold_relation_rows": 49,
+   "is_a_edges": 7,
+   "ancestor_pairs_after_closure": 7,
+   "pairs_added_by_closure": 0,
+   "concepts_in_is_a_edges": 14,
+   "max_chain_depth": 1,
+   "cycle_in_gold": false,
+   "children_with_two_or_more_parents": 0,
+   "example_chain": null
+  },
+  "5.4": {
+   "set": "heldout",
+   "gold_concepts": 76,
+   "gold_relation_rows": 58,
+   "is_a_edges": 6,
+   "ancestor_pairs_after_closure": 6,
+   "pairs_added_by_closure": 0,
+   "concepts_in_is_a_edges": 9,
+   "max_chain_depth": 1,
+   "cycle_in_gold": false,
+   "children_with_two_or_more_parents": 0,
+   "example_chain": null
+  },
+  "6.3": {
+   "set": "heldout",
+   "gold_concepts": 56,
+   "gold_relation_rows": 49,
+   "is_a_edges": 1,
+   "ancestor_pairs_after_closure": 1,
+   "pairs_added_by_closure": 0,
+   "concepts_in_is_a_edges": 2,
+   "max_chain_depth": 1,
+   "cycle_in_gold": false,
+   "children_with_two_or_more_parents": 0,
+   "example_chain": null
+  },
+  "7.1": {
+   "set": "heldout",
+   "gold_concepts": 89,
+   "gold_relation_rows": 69,
+   "is_a_edges": 16,
+   "ancestor_pairs_after_closure": 19,
+   "pairs_added_by_closure": 3,
+   "concepts_in_is_a_edges": 22,
+   "max_chain_depth": 2,
+   "cycle_in_gold": false,
+   "children_with_two_or_more_parents": 0,
+   "example_chain": "structure -> flat type -> data type"
+  },
+  "8.2": {
+   "set": "heldout",
+   "gold_concepts": 69,
+   "gold_relation_rows": 64,
+   "is_a_edges": 14,
+   "ancestor_pairs_after_closure": 17,
+   "pairs_added_by_closure": 3,
+   "concepts_in_is_a_edges": 19,
+   "max_chain_depth": 2,
+   "cycle_in_gold": false,
+   "children_with_two_or_more_parents": 0,
+   "example_chain": "SHA-3 -> Secure Hash Algorithm -> cryptographic hash"
+  },
+  "9.3": {
+   "set": "heldout",
+   "gold_concepts": 88,
+   "gold_relation_rows": 79,
+   "is_a_edges": 13,
+   "ancestor_pairs_after_closure": 18,
+   "pairs_added_by_closure": 5,
+   "concepts_in_is_a_edges": 21,
+   "max_chain_depth": 2,
+   "cycle_in_gold": false,
+   "children_with_two_or_more_parents": 0,
+   "example_chain": "Domain Name System -> name service -> middleware"
+  }
+ },
+ "predicted_is_a": {
+  "1.5": {
+   "predicted_edges_total": 27,
+   "predicted_is_a_edges": 0,
+   "predicted_is_a_edges_with_both_endpoints_mapped_to_gold_concepts": 0,
+   "gold_is_a_edges": 0,
+   "gold_is_a_edges_with_both_endpoint_nodes_present": 0,
+   "gold_is_a_edges_whose_pair_reached_the_classifier": 0
+  },
+  "2.6": {
+   "predicted_edges_total": 17,
+   "predicted_is_a_edges": 3,
+   "predicted_is_a_edges_with_both_endpoints_mapped_to_gold_concepts": 2,
+   "gold_is_a_edges": 15,
+   "gold_is_a_edges_with_both_endpoint_nodes_present": 13,
+   "gold_is_a_edges_whose_pair_reached_the_classifier": 3
+  },
+  "4.4": {
+   "predicted_edges_total": 23,
+   "predicted_is_a_edges": 8,
+   "predicted_is_a_edges_with_both_endpoints_mapped_to_gold_concepts": 6,
+   "gold_is_a_edges": 7,
+   "gold_is_a_edges_with_both_endpoint_nodes_present": 5,
+   "gold_is_a_edges_whose_pair_reached_the_classifier": 1
+  },
+  "4.5": {
+   "predicted_edges_total": 15,
+   "predicted_is_a_edges": 4,
+   "predicted_is_a_edges_with_both_endpoints_mapped_to_gold_concepts": 2,
+   "gold_is_a_edges": 7,
+   "gold_is_a_edges_with_both_endpoint_nodes_present": 7,
+   "gold_is_a_edges_whose_pair_reached_the_classifier": 1
+  },
+  "5.4": {
+   "predicted_edges_total": 27,
+   "predicted_is_a_edges": 5,
+   "predicted_is_a_edges_with_both_endpoints_mapped_to_gold_concepts": 2,
+   "gold_is_a_edges": 6,
+   "gold_is_a_edges_with_both_endpoint_nodes_present": 5,
+   "gold_is_a_edges_whose_pair_reached_the_classifier": 1
+  },
+  "6.3": {
+   "predicted_edges_total": 26,
+   "predicted_is_a_edges": 8,
+   "predicted_is_a_edges_with_both_endpoints_mapped_to_gold_concepts": 5,
+   "gold_is_a_edges": 1,
+   "gold_is_a_edges_with_both_endpoint_nodes_present": 1,
+   "gold_is_a_edges_whose_pair_reached_the_classifier": 0
+  },
+  "7.1": {
+   "predicted_edges_total": 28,
+   "predicted_is_a_edges": 7,
+   "predicted_is_a_edges_with_both_endpoints_mapped_to_gold_concepts": 2,
+   "gold_is_a_edges": 16,
+   "gold_is_a_edges_with_both_endpoint_nodes_present": 13,
+   "gold_is_a_edges_whose_pair_reached_the_classifier": 1
+  },
+  "8.2": {
+   "predicted_edges_total": 30,
+   "predicted_is_a_edges": 6,
+   "predicted_is_a_edges_with_both_endpoints_mapped_to_gold_concepts": 6,
+   "gold_is_a_edges": 14,
+   "gold_is_a_edges_with_both_endpoint_nodes_present": 14,
+   "gold_is_a_edges_whose_pair_reached_the_classifier": 2
+  },
+  "9.3": {
+   "predicted_edges_total": 25,
+   "predicted_is_a_edges": 9,
+   "predicted_is_a_edges_with_both_endpoints_mapped_to_gold_concepts": 5,
+   "gold_is_a_edges": 13,
+   "gold_is_a_edges_with_both_endpoint_nodes_present": 9,
+   "gold_is_a_edges_whose_pair_reached_the_classifier": 2
+  }
+ },
+ "relation_population": {
+  "per_section": {
+   "1.5": {
+    "gold_edges": 39,
+    "reached_classifier": 4,
+    "classifier_outcome_of_reached": {
+     "edge": 3,
+     "other": 1
+    }
+   },
+   "2.6": {
+    "gold_edges": 79,
+    "reached_classifier": 10,
+    "classifier_outcome_of_reached": {
+     "edge": 8,
+     "rejected": 1,
+     "other": 1
+    }
+   },
+   "4.4": {
+    "gold_edges": 63,
+    "reached_classifier": 9,
+    "classifier_outcome_of_reached": {
+     "edge": 4,
+     "other": 2,
+     "no_relation": 1,
+     "rejected": 2
+    }
+   },
+   "4.5": {
+    "gold_edges": 49,
+    "reached_classifier": 5,
+    "classifier_outcome_of_reached": {
+     "edge": 3,
+     "no_relation": 1,
+     "rejected": 1
+    }
+   },
+   "5.4": {
+    "gold_edges": 56,
+    "reached_classifier": 8,
+    "classifier_outcome_of_reached": {
+     "edge": 7,
+     "rejected": 1
+    }
+   },
+   "6.3": {
+    "gold_edges": 47,
+    "reached_classifier": 4,
+    "classifier_outcome_of_reached": {
+     "edge": 1,
+     "other": 1,
+     "rejected": 1,
+     "no_relation": 1
+    }
+   },
+   "7.1": {
+    "gold_edges": 69,
+    "reached_classifier": 10,
+    "classifier_outcome_of_reached": {
+     "no_relation": 2,
+     "edge": 5,
+     "rejected": 1,
+     "other": 2
+    }
+   },
+   "8.2": {
+    "gold_edges": 64,
+    "reached_classifier": 9,
+    "classifier_outcome_of_reached": {
+     "edge": 8,
+     "no_relation": 1
+    }
+   },
+   "9.3": {
+    "gold_edges": 78,
+    "reached_classifier": 8,
+    "classifier_outcome_of_reached": {
+     "rejected": 1,
+     "other": 3,
+     "edge": 4
+    }
+   }
+  },
+  "reached_gold_edges_total": 67,
+  "gold_relation_support_among_reached": {
+   "acts_on": 14,
+   "uses": 13,
+   "is_a": 11,
+   "contrasts_with": 7,
+   "part_of": 6,
+   "has_purpose": 6,
+   "connected_to": 3,
+   "has_property": 3,
+   "increases": 2,
+   "performs": 1,
+   "decreases": 1
+  },
+  "classifier_output_by_gold_relation": {
+   "acts_on": {
+    "acts_on": 5,
+    "requires": 1,
+    "<other>": 4,
+    "<no_relation>": 1,
+    "part_of": 1,
+    "<rejected>": 2
+   },
+   "connected_to": {
+    "part_of": 1,
+    "<other>": 1,
+    "<rejected>": 1
+   },
+   "contrasts_with": {
+    "<other>": 2,
+    "<no_relation>": 3,
+    "contrasts_with": 1,
+    "is_a": 1
+   },
+   "decreases": {
+    "decreases": 1
+   },
+   "has_property": {
+    "has_property": 2,
+    "increases": 1
+   },
+   "has_purpose": {
+    "<rejected>": 2,
+    "uses": 1,
+    "performs": 1,
+    "has_purpose": 1,
+    "is_a": 1
+   },
+   "increases": {
+    "increases": 1,
+    "<rejected>": 1
+   },
+   "is_a": {
+    "is_a": 9,
+    "contrasts_with": 1,
+    "<other>": 1
+   },
+   "part_of": {
+    "<other>": 2,
+    "part_of": 2,
+    "<rejected>": 1,
+    "<no_relation>": 1
+   },
+   "performs": {
+    "performs": 1
+   },
+   "uses": {
+    "uses": 7,
+    "<no_relation>": 1,
+    "performs": 1,
+    "<rejected>": 1,
+    "part_of": 1,
+    "requires": 2
+   }
+  }
+ },
+ "taxonomy_relation_inventory": {
+  "classification_structure_family": [
+   "is_a",
+   "part_of",
+   "has_property",
+   "connected_to"
+  ],
+  "is_a": "Source is a kind/subtype of target (the only subsumption relation in registry v1.3)",
+  "instantiates": "NOT in the active registry (CR-004 patch reserved, never applied)"
+ },
+ "hierarchy_gold_totals": {
+  "gold_concepts": 687,
+  "gold_relation_rows": 554,
+  "is_a_edges": 79,
+  "ancestor_pairs_after_closure": 102,
+  "pairs_added_by_closure": 23,
+  "concepts_in_is_a_edges": 122,
+  "sections_with_is_a": 8,
+  "sections": 9,
+  "sections_with_chain_depth_2_or_more": 4,
+  "cycles_in_gold": 0
+ }
+}

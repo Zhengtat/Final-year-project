@@ -1,0 +1,349 @@
+{
+ "tag": "cr043base",
+ "papers": [
+  "2021.acl-long.295",
+  "2024.acl-long.144-1-9.grobid",
+  "P05-1008.grobid",
+  "P16-1007.grobid",
+  "P02-1004.grobid",
+  "P03-1014.grobid",
+  "P07-1007.grobid",
+  "2020.acl-main.9.grobid",
+  "P04-1004.grobid",
+  "P08-1019.grobid",
+  "P17-1032.grobid",
+  "P17-1005.grobid",
+  "P06-1010.grobid",
+  "P15-1098.grobid",
+  "P13-1074.grobid",
+  "P16-1002.grobid",
+  "P12-1032.grobid",
+  "P15-1101.grobid",
+  "P11-2005.grobid",
+  "P14-1022.grobid"
+ ],
+ "missing": [],
+ "graph": {
+  "concepts": 1259,
+  "candidate_pairs": 1846,
+  "selected_pairs": 1355,
+  "edges": 400,
+  "gold_relations": 498,
+  "budget_saturated_papers": 10
+ },
+ "variants": {
+  "FROZEN": {
+   "concept_entity_strict": {
+    "tp": 536,
+    "fp": 1316,
+    "fn": 1496,
+    "precision": 0.2894168466522678,
+    "recall": 0.2637795275590551,
+    "f1": 0.2760041194644696
+   },
+   "relation_strict": {
+    "tp": 22,
+    "fp": 95,
+    "fn": 476,
+    "precision": 0.18803418803418803,
+    "recall": 0.04417670682730924,
+    "f1": 0.07154471544715447
+   },
+   "relation_strict_dev": {
+    "tp": 6,
+    "fp": 36,
+    "fn": 173,
+    "precision": 0.14285714285714285,
+    "recall": 0.0335195530726257,
+    "f1": 0.05429864253393666
+   },
+   "relation_strict_train": {
+    "tp": 16,
+    "fp": 59,
+    "fn": 303,
+    "precision": 0.21333333333333335,
+    "recall": 0.050156739811912224,
+    "f1": 0.08121827411167512
+   }
+  },
+  "IDXR1-P1": {
+   "concept_entity_strict": {
+    "tp": 1410,
+    "fp": 3284,
+    "fn": 622,
+    "precision": 0.3003834682573498,
+    "recall": 0.6938976377952756,
+    "f1": 0.4192685102586976
+   },
+   "relation_strict": {
+    "tp": 49,
+    "fp": 366,
+    "fn": 449,
+    "precision": 0.1180722891566265,
+    "recall": 0.09839357429718876,
+    "f1": 0.10733844468784229
+   },
+   "relation_strict_dev": {
+    "tp": 17,
+    "fp": 102,
+    "fn": 162,
+    "precision": 0.14285714285714285,
+    "recall": 0.09497206703910614,
+    "f1": 0.11409395973154361
+   },
+   "relation_strict_train": {
+    "tp": 32,
+    "fp": 264,
+    "fn": 287,
+    "precision": 0.10810810810810811,
+    "recall": 0.10031347962382445,
+    "f1": 0.1040650406504065
+   }
+  },
+  "IDXR1-P3": {
+   "concept_entity_strict": {
+    "tp": 1410,
+    "fp": 3284,
+    "fn": 622,
+    "precision": 0.3003834682573498,
+    "recall": 0.6938976377952756,
+    "f1": 0.4192685102586976
+   },
+   "relation_strict": {
+    "tp": 73,
+    "fp": 544,
+    "fn": 425,
+    "precision": 0.11831442463533225,
+    "recall": 0.1465863453815261,
+    "f1": 0.13094170403587443
+   },
+   "relation_strict_dev": {
+    "tp": 22,
+    "fp": 144,
+    "fn": 157,
+    "precision": 0.13253012048192772,
+    "recall": 0.12290502793296089,
+    "f1": 0.12753623188405797
+   },
+   "relation_strict_train": {
+    "tp": 51,
+    "fp": 400,
+    "fn": 268,
+    "precision": 0.1130820399113082,
+    "recall": 0.15987460815047022,
+    "f1": 0.13246753246753248
+   }
+  }
+ },
+ "pair_recall_analogue": {
+  "reached": 151,
+  "endpoints_present": 222,
+  "rate": 0.6801801801801802
+ },
+ "relation_macro_f1": {
+  "macro_f1": 0.30174946287068183,
+  "classes": 11,
+  "population": 222
+ },
+ "hierarchy_direct_H2": {
+  "tp": 7,
+  "fp": 50,
+  "fn": 57,
+  "precision": 0.12280701754385964,
+  "recall": 0.109375,
+  "f1": 0.11570247933884298
+ },
+ "hierarchy_surface_ancestor_H2": {
+  "tp": 7,
+  "fp": 52,
+  "fn": 57,
+  "precision": 0.11864406779661017,
+  "recall": 0.109375,
+  "f1": 0.11382113821138211
+ },
+ "fact_f1_surf_r1": {
+  "prf": {
+   "tp": 57,
+   "fp": 344,
+   "fn": 396,
+   "precision": 0.14214463840399003,
+   "recall": 0.12582781456953643,
+   "f1": 0.13348946135831383
+  },
+  "gold_facts": 453,
+  "gold_mention_relations": 498,
+  "pred_facts": 393,
+  "pred_facts_with_synthetic_concept": 264,
+  "tp_facts": 57,
+  "tp_facts_with_strict_evidence_match": 49,
+  "unplaced_counted_as_fp": 8,
+  "evidence_match_share": 0.8596491228070176
+ },
+ "earliest_failure": {
+  "N0": 142,
+  "N1": 134,
+  "P0": 71,
+  "R0": 54,
+  "R1": 20,
+  "R2": 1,
+  "recovered": 76
+ },
+ "p0_split": {
+  "P0_same_sentence": 71
+ },
+ "per_paper": {
+  "2021.acl-long.295": {
+   "split": "dev",
+   "f1": 0.024691358024691357,
+   "tp": 1,
+   "gold": 58,
+   "edges_predicted": 22
+  },
+  "2024.acl-long.144-1-9.grobid": {
+   "split": "dev",
+   "f1": 0.28888888888888886,
+   "tp": 13,
+   "gold": 58,
+   "edges_predicted": 32
+  },
+  "P05-1008.grobid": {
+   "split": "dev",
+   "f1": 0.0,
+   "tp": 0,
+   "gold": 0,
+   "edges_predicted": 7
+  },
+  "P16-1007.grobid": {
+   "split": "dev",
+   "f1": 0.0,
+   "tp": 0,
+   "gold": 18,
+   "edges_predicted": 26
+  },
+  "P02-1004.grobid": {
+   "split": "dev",
+   "f1": 0.1739130434782609,
+   "tp": 2,
+   "gold": 6,
+   "edges_predicted": 17
+  },
+  "P03-1014.grobid": {
+   "split": "dev",
+   "f1": 0.038461538461538464,
+   "tp": 1,
+   "gold": 39,
+   "edges_predicted": 13
+  },
+  "P07-1007.grobid": {
+   "split": "train",
+   "f1": 0.046511627906976744,
+   "tp": 1,
+   "gold": 20,
+   "edges_predicted": 20
+  },
+  "2020.acl-main.9.grobid": {
+   "split": "train",
+   "f1": 0.26086956521739124,
+   "tp": 6,
+   "gold": 32,
+   "edges_predicted": 14
+  },
+  "P04-1004.grobid": {
+   "split": "train",
+   "f1": 0.0,
+   "tp": 0,
+   "gold": 0,
+   "edges_predicted": 12
+  },
+  "P08-1019.grobid": {
+   "split": "train",
+   "f1": 0.0,
+   "tp": 0,
+   "gold": 18,
+   "edges_predicted": 24
+  },
+  "P17-1032.grobid": {
+   "split": "train",
+   "f1": 0.22950819672131148,
+   "tp": 7,
+   "gold": 31,
+   "edges_predicted": 30
+  },
+  "P17-1005.grobid": {
+   "split": "train",
+   "f1": 0.1935483870967742,
+   "tp": 3,
+   "gold": 13,
+   "edges_predicted": 15
+  },
+  "P06-1010.grobid": {
+   "split": "train",
+   "f1": 0.14285714285714285,
+   "tp": 2,
+   "gold": 11,
+   "edges_predicted": 17
+  },
+  "P15-1098.grobid": {
+   "split": "train",
+   "f1": 0.19230769230769232,
+   "tp": 5,
+   "gold": 23,
+   "edges_predicted": 27
+  },
+  "P13-1074.grobid": {
+   "split": "train",
+   "f1": 0.0,
+   "tp": 0,
+   "gold": 36,
+   "edges_predicted": 15
+  },
+  "P16-1002.grobid": {
+   "split": "train",
+   "f1": 0.030769230769230767,
+   "tp": 1,
+   "gold": 42,
+   "edges_predicted": 22
+  },
+  "P12-1032.grobid": {
+   "split": "train",
+   "f1": 0.0,
+   "tp": 0,
+   "gold": 33,
+   "edges_predicted": 21
+  },
+  "P15-1101.grobid": {
+   "split": "train",
+   "f1": 0.043478260869565216,
+   "tp": 1,
+   "gold": 27,
+   "edges_predicted": 18
+  },
+  "P11-2005.grobid": {
+   "split": "train",
+   "f1": 0.28571428571428575,
+   "tp": 5,
+   "gold": 25,
+   "edges_predicted": 10
+  },
+  "P14-1022.grobid": {
+   "split": "train",
+   "f1": 0.04651162790697674,
+   "tp": 1,
+   "gold": 8,
+   "edges_predicted": 35
+  }
+ },
+ "usage": {
+  "usd": 0.5347064,
+  "calls": 2145,
+  "input_tokens": 1841394,
+  "output_tokens": 701134,
+  "call_minutes": 208.80571637755588,
+  "by_model": {
+   "gpt-6-luna": [
+    1841394,
+    701134
+   ]
+  }
+ }
+}

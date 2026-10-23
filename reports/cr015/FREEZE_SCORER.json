@@ -1,0 +1,13 @@
+{
+ "status": "FROZEN",
+ "group": "scorer",
+ "frozen_at": "2026-10-13 01:45:09",
+ "git_commit": "617e0a319f175571d700622b8b71ab835996e995",
+ "hashes": {
+  "src/cumap/cr015/scoring.py": "4d960801c7c2f8688b6cd4cd49759254455a224458aee7c9b168f2b3c1cd75e3",
+  "src/cumap/cr014/pilot_score.py": "021c5418f71e76a41be7ce9bf9bbad6bdf0e89f8b4e90c9cca7bbe5df174b93e",
+  "tests/test_cr015_scoring.py": "574376e42c608527dda7df9990710c4e04db796252a82d2a2bee4b19237e51fa",
+  "src/cumap/cr015/manifest.py": "a27eae0e7c634938c5aa90f9bd879ba560439e694f7edc8673d6c368b6a19b6f",
+  "configs/cr015_manifest.yaml": "6a92f314c4e401e7b98d0b845fa80565f20545d0c73782a0a0e1dfd203d71e24"
+ }
+}

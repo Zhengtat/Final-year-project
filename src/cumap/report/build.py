@@ -15,6 +15,7 @@ from pathlib import Path
 from cumap.config import REPO_ROOT, DemoSliceConfig, Settings
 from cumap.expert_kg.face_eval import FACE_CAVEAT, FACE_PUBLISHED, evaluate_run
 from cumap.report import data as D
+from cumap.report.data import with_mentions_by_section
 from cumap.report.graph import (
     FAMILY_ORDER,
     GNode,
@@ -110,7 +111,7 @@ def _iir_section_html(sec_eval: dict, text: str) -> str:
 
 def _pd_section_html(mentions: list[dict], text: str) -> str:
     spans: list[Span] = []
-    rank = {"defined": 0, "used": 1, "mentioned": 2}
+    rank = {"defined": 0, "refined": 0, "used": 1, "mentioned": 2}
     for m in sorted(mentions, key=lambda m: rank[m["role"]]):
         loc = find_span(text, m["evidence_quote"], ignore_case=False) or find_span(
             text, m["evidence_quote"]
@@ -161,6 +162,24 @@ def _worked_example_html(ex: dict, registry: RelationRegistry, graph_svg: str) -
         f"{' ← chosen' if o['chosen'] else ''}</li>"
         for o in ex["relation_options"]
     )
+    if ex.get("logged_prompts"):
+        # CR-007 rule 16: the exact text the model saw, from data/logs/llm_prompts.jsonl
+        labels = {
+            "family": "Step 1: which family?",
+            "choice": "Step 2: which relation, and which direction?",
+            "qualifiers": "Step 3 prompt: qualifiers",
+        }
+        steps_html = "".join(
+            f"<li><b>{labels.get(step, step)}</b> <span class=\"small\">(exact prompt text, read from the prompt log)</span>"
+            f"<details><summary>show the prompt</summary><pre class=\"prompt\">{escape(text)}</pre></details></li>"
+            for step, text in ex["logged_prompts"].items()
+        )
+    else:
+        steps_html = (
+            f'<li><b>Step 1: which family?</b> The model picks one option:<ul class="opts">{fam}</ul></li>'
+            f"<li><b>Step 2: which relation, and which direction?</b> Options for the chosen family, "
+            f'filled with these two concepts:<ul class="opts">{rel}</ul></li>'
+        )
     q = ex["qualifiers"]
     quals = ", ".join(f"{k}: {v}" for k, v in q.items() if v not in (None, [], ""))
     arrow = f"{escape(ex['source'])} —[{escape(ex['relation'])}]→ {escape(ex['target'])}"
@@ -169,9 +188,7 @@ def _worked_example_html(ex: dict, registry: RelationRegistry, graph_svg: str) -
         f'<ol class="steps"><li><b>Sentence</b><blockquote>{escape(ex["sentence"])}</blockquote></li>'
         f"<li><b>Candidate pair</b> (found by co-occurrence, no LLM): <i>{escape(ex['x'])}</i> and "
         f"<i>{escape(ex['y'])}</i> — {ex['cooccurrence']} co-occurring sentence(s), cue score {ex['cue_score']}</li>"
-        f'<li><b>Step 1: which family?</b> The model picks one option:<ul class="opts">{fam}</ul></li>'
-        f"<li><b>Step 2: which relation, and which direction?</b> Options for the chosen family, "
-        f'filled with these two concepts:<ul class="opts">{rel}</ul></li>'
+        f"{steps_html}"
         f"<li><b>Step 3: qualifiers and evidence</b><br>Qualifiers: {escape(quals)}<br>"
         f"Evidence quote (verified as an exact substring of the sentence): “{escape(ex['quote'])}”<br>"
         f"Model’s statement: {escape(ex['statement'])}</li>"
@@ -181,10 +198,35 @@ def _worked_example_html(ex: dict, registry: RelationRegistry, graph_svg: str) -
     )
 
 
+def _cr7_panel_html(panel: dict) -> str:
+    def table(rows: list[tuple[str, str, str]]) -> str:
+        body = "".join(
+            f"<tr><td>{escape(a)}</td><td>{escape(b)}</td><td>{escape(c)}</td></tr>" for a, b, c in rows
+        )
+        return (
+            "<table><thead><tr><th>measure</th><th>CR-005 (ch2–3)</th><th>CR-007 (ch1–3)</th></tr></thead>"
+            f"<tbody>{body}</tbody></table>"
+        )
+
+    return (
+        f"<p>Same extraction pipeline, two generations. CR-005 numbers are the measured baselines on chapters 2–3; "
+        f"CR-007 is run <code>{escape(panel['run_id'])}</code> on chapters 1–3 (the slice grew, so read the groups below "
+        f"separately). All numbers come from saved run files; no model was called to build this page.</p>"
+        "<h3>Selection effect: which concepts were attempted at all</h3>"
+        f"{table(panel['selection'])}"
+        "<h3>Classifier effect: what happened to the pairs that were attempted</h3>"
+        f"{table(panel['classifier'])}"
+        f"<h3>Pairs the budget left out</h3><p>{escape(panel['missed'])}. This is an estimate of edges missing "
+        "from the graph because only the best-ranked pairs were classified.</p>"
+        "<p class=\"small\">Human-checked precision, gate decisions for the new relations and merge errors are in "
+        "<code>reports/cr007_stop5.md</code> (owner marks).</p>"
+    )
+
+
 def _key_concept_grid(growth: D.GrowthData) -> str:
     secs = growth.section_labels
     head = "".join(f'<th title="{escape(s["id"])}">{escape(s["label"][:12])}</th>' for s in secs)
-    glyph = {"defined": "●", "used": "◐", "mentioned": "○"}
+    glyph = {"defined": "●", "refined": "●", "used": "◐", "mentioned": "○"}
     rows = []
     for c in growth.key_concepts:
         cells = "".join(
@@ -223,7 +265,7 @@ font:inherit;cursor:pointer}nav button[aria-selected=true]{color:var(--ink);bord
 main{padding:8px 24px 48px;max-width:1100px}.tab[hidden]{display:none}
 table{border-collapse:collapse;margin:8px 0;font-size:13px}th,td{border:1px solid var(--grid);padding:4px 8px;
 text-align:left;vertical-align:top}th{background:color-mix(in srgb,var(--grid) 50%,transparent)}
-.small{font-size:12px;color:var(--ink2)}.card{border:1px solid var(--grid);border-radius:8px;padding:12px 16px;
+.small{font-size:12px;color:var(--ink2)}pre.prompt{white-space:pre-wrap;font-size:12px;border:1px solid var(--grid);border-radius:6px;padding:8px 10px;max-height:360px;overflow:auto}.card{border:1px solid var(--grid);border-radius:8px;padding:12px 16px;
 margin:14px 0;background:var(--card)}
 .svgbox,.scroll{overflow-x:auto;max-width:100%}.svgbox svg{max-width:100%;height:auto}
 .doc{white-space:pre-wrap;max-height:420px;overflow:auto;border:1px solid var(--grid);padding:10px;
@@ -310,6 +352,7 @@ def build_report(
     embed_fn=None,
     refresh_eval: bool = False,
     root: Path | None = None,
+    org_id: str | None = None,
 ) -> Path:
     """`root` is the data root (default: the repo); registry and prompts always come from the repo."""
     cfg = demo.report
@@ -317,7 +360,7 @@ def build_report(
     out = out_dir or (root / "reports" / "demo")
     figs = Figures(out / "figures")
     run_dir = root / "data" / "processed" / "kg" / run_id
-    checkpoint = json.loads((run_dir / "checkpoint.json").read_text())
+    checkpoint = with_mentions_by_section(json.loads((run_dir / "checkpoint.json").read_text()))
     registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
     from cumap.expert_kg.pipeline import PromptSet
 
@@ -463,7 +506,9 @@ def build_report(
     snaps = D.load_snapshots(run_dir)
     growth = D.build_growth(checkpoint, snaps, pd_sections, key_n=cfg.key_concepts)
     fam_counts, rel_counts = D.edge_counts(growth)
-    examples = D.worked_examples(checkpoint, registry, growth)
+    examples = D.worked_examples(
+        checkpoint, registry, growth, prompt_log=root / "data" / "logs" / "llm_prompts.jsonl"
+    )
     by_id_node = {n.id: n for n in growth.nodes}
     ex_html = []
     for ex in examples:
@@ -678,6 +723,21 @@ def build_report(
         ),
     )
 
+    from cumap.expert_kg.stop4 import panel_rows
+
+    cr7_tab = cr7_tab_button = ""
+    if checkpoint.get("relation_results_v3"):
+        cr7_tab = (
+            '<section class="tab" id="t4" hidden><h2>CR-005 vs CR-007</h2>'
+            + _cr7_panel_html(panel_rows(run_dir, root / demo.pd.source_jsonl))
+            + "</section>"
+        )
+        cr7_tab_button = '<button data-tab="t4" aria-selected="false">4 · CR-005 vs CR-007</button>'
+    sphere_html, sphere_pack = "", None
+    if org_id:
+        sphere_html, sphere_pack = _sphere_section(
+            org_id, run_id, run_dir, root, registry, demo, figs, growth
+        )
     edge_json = json.dumps(growth.edge_details).replace("</", "<\\/")
     steps_json = json.dumps(growth.steps).replace("</", "<\\/")
     n_merges = sum(len(s.merges) for s in snaps)
@@ -695,7 +755,7 @@ def build_report(
 <div class="small">{escape(footer)}</div><div class="banner">{escape(BANNER)}</div></header>
 <nav role="tablist"><button data-tab="t1" aria-selected="true">1 · Concepts &amp; FACE validation</button>
 <button data-tab="t2" aria-selected="false">2 · Relations</button>
-<button data-tab="t3" aria-selected="false">3 · Growth through chapters</button></nav><main>
+<button data-tab="t3" aria-selected="false">3 · Growth through chapters</button>{cr7_tab_button}</nav><main>
 
 <section class="tab" id="t1"><h2>Concept extraction, validated against FACE gold</h2>
 <p>Concepts are extracted per section with an evidence quote checked verbatim against the text. To
@@ -728,7 +788,7 @@ FP {escape(json.dumps(evals["dev"]["cause_counts"]["false_positive"]))} · FN {e
 <h3>Three worked examples</h3>{"".join(ex_html)}
 <h3>What was extracted</h3><div class="svgbox">{chart_fam}</div><div class="svgbox">{chart_rel}</div>
 <div class="svgbox">{chart_rej}</div>
-<h3>Checks against humans</h3>
+<h3>Checks against humans (CR-005 run: its own 30-edge spot-check and merge check)</h3>
 <p>Owner spot-check of 30 accepted edges (blind: only the sentence and triple shown): strict precision
 {_ci_text(spot["strict"])}; counting wrong-direction as right {_ci_text(spot["lenient"])}. Marks:
 {escape(json.dumps(spot["counts"]))}. Small sample — read the interval, not the point.</p>
@@ -738,6 +798,7 @@ ones ({", ".join(escape(w["alias"] + " → " + w["into"]) for w in merge["wrong"
 <code>configs/canonical_overrides.yaml</code>.</p><div class="svgbox">{chart_merge}</div>
 </section>
 
+{cr7_tab}
 <section class="tab" id="t3" hidden><h2>Growth through chapters</h2>
 <p class="small">The graph is built in book order, one section per step (press Play or drag the bar). New concepts pop in, concepts mentioned again flash, new edges flash. This is the order of the book, not a learner's path; book order is not prerequisite truth.</p>
 <p>{legend_growth}</p>
@@ -755,6 +816,7 @@ book order is <b>not</b> prerequisite truth). {n_merges} alias merges across cha
 <div class="svgbox">{chart_g1}</div><div class="svgbox">{chart_g2}</div><div class="svgbox">{chart_g3}</div>
 <div class="svgbox">{chart_g4}</div>
 <h3>When key concepts appear</h3>{_key_concept_grid(growth)}
+{sphere_html}
 </section>
 
 <div class="foot"><b>Label sources used on this page</b><ul>{label_legend}</ul>
@@ -762,12 +824,96 @@ Contains IIR (© Cambridge University Press) text for local research use only �
 </main><script type="application/json" id="edge-data">{edge_json}</script>
 <script type="application/json" id="steps-data">{steps_json}</script><script>{JS}</script></body></html>"""
     (out / "index.html").write_text(html, encoding="utf-8")
-    _write_growth3d(out, growth, checkpoint, cfg, prov, footer)
+    _write_growth3d(out, growth, checkpoint, cfg, prov, footer, sphere_pack, registry)
     return out / "index.html"
 
 
+def _sphere_section(org_id, run_id, run_dir, root, registry, demo, figs, growth):
+    """CR-006 §10: sphere figures + charts for tab 3 and the payload for the interactive Sphere
+    mode. Returns (html, payload). Reads the organisation run only."""
+    from cumap.organisation.config import load_config as load_org_config
+    from cumap.organisation.inputs import load_inputs
+    from cumap.report import sphere as S
+
+    ocfg = load_org_config()
+    org = S.load_org(run_dir / "organisation" / org_id)
+    inp = load_inputs(run_dir, root / demo.pd.source_jsonl, registry, ocfg)
+    prov = Provenance(
+        run_id=run_id,
+        prompt_versions={"organisation": org_id},
+        model_tier="none",
+        model="graph algorithms, no LLM",
+        date=datetime.now(UTC).date().isoformat(),
+    )
+    parts: dict[str, str] = {}
+    for ch in (0, *org.chapters):
+        parts[f"sphere_ch{ch}"] = figs.emit(
+            f"sphere_ch{ch}", S.sphere_svg(org, inp, ch, ocfg, prov)
+        )
+    for ch in org.chapters:
+        parts[f"top_ch{ch}"] = figs.emit(f"org-top15-ch{ch}", S.topk_svg(org, ch, prov))
+        parts[f"rings_ch{ch}"] = figs.emit(
+            f"org-ring-composition-ch{ch}", S.ring_composition_svg(org, ch, prov)
+        )
+    stab = S.stability_svg(org, prov)
+    if stab:
+        parts["stab"] = figs.emit("org-stability", stab)
+    parts["cp"] = figs.emit("org-core-periphery-fit", S.cp_fit_svg(org, prov))
+    parts["events"] = figs.emit("org-community-events", S.events_svg(org, prov))
+    key_names = [c["name"] for c in growth.key_concepts]
+    parts["traj"] = figs.emit("org-importance-trajectories", S.trajectory_svg(org, key_names, prov))
+    last = org.chapters[-1]
+    banners = "".join(
+        f'<p class="banner">Chapter {ch}: {escape(b)}</p>'
+        for ch in org.chapters
+        if (b := S.banner_for(org, ch))
+    )
+    counts = "".join(
+        f"<li>Chapter {ch}: {escape(S.unlinked_text(org, ch))} Review flags: "
+        f"{sum(1 for r in org.nodes[ch] if r['persistent_unlinked'])} persistent unlinked (no typed edge in two snapshots; a relation-recall signal), "
+        f"{sum(1 for r in org.nodes[ch] if r['persistent_periphery'])} persistent periphery (linked but outer for two snapshots; the review list).</li>"
+        for ch in org.chapters
+    )
+
+    def boxes(keys):
+        return "".join(f'<div class="svgbox">{parts[k]}</div>' for k in keys if k in parts)
+
+    html = (
+        '<h3 id="sphere">Sphere view: the graph reorganised after each chapter</h3>'
+        "<p>Same content, reorganised: concepts that many others depend on, belong to or serve, that recur across sections and "
+        "that bridge topics move towards the centre. It is a structural view (label: <b>Structural metric (no human labels)</b>); "
+        "rings are not tiers and nothing is removed or demoted because of its ring. Radius basis: "
+        f"<b>{escape(org.manifest['radius_basis'])}</b> importance (adjusted for how many sections a concept has been around; "
+        "toggle raw in the interactive view; to be revisited after the full-book run). Open <code>growth3d.html</code> and choose "
+        "<b>Sphere</b> for the interactive version (chapter slider, hover for the four components, click for why it moved).</p>"
+        f"{banners}<ul>{counts}</ul>"
+        f'<p class="small">{escape(S.LATE_NOTE)}</p>'
+        + boxes(["sphere_ch0", *[f"sphere_ch{c}" for c in org.chapters]])
+        + "<h3>Is there really a core?</h3>"
+        + boxes(["cp"])
+        + "<h3>Who is central</h3>"
+        + boxes([f"top_ch{c}" for c in org.chapters])
+        + "<h3>Do new chapters reach the centre?</h3>"
+        + boxes([f"rings_ch{c}" for c in org.chapters])
+        + "<h3>Stability and communities</h3>"
+        + boxes(["stab", "events"])
+        + "<h3>Key concepts across chapters</h3>"
+        + boxes(["traj"])
+        + f'<p class="small">Organisation run {escape(org_id)}; chapters shown: {", ".join(str(c) for c in org.chapters)} '
+        f"(chapter 1 is not in this slice, so the sphere has a start view, chapter {org.chapters[0]} and chapter {last}).</p>"
+    )
+    return html, S.sphere_payload(org, inp, ocfg)
+
+
 def _write_growth3d(
-    out: Path, growth, checkpoint: dict, cfg, prov: Provenance, footer: str
+    out: Path,
+    growth,
+    checkpoint: dict,
+    cfg,
+    prov: Provenance,
+    footer: str,
+    sphere: dict | None = None,
+    registry: RelationRegistry | None = None,
 ) -> None:
     """growth3d.html: the growth graph as an interactive 3D scene (spin, zoom, click a concept)."""
     pos = layout3d([n.id for n in growth.nodes], [(e.source, e.target) for e in growth.edges])
@@ -780,6 +926,11 @@ def _write_growth3d(
         radius,
     )
     concepts = {c["concept_id"]: c for c in checkpoint["concepts"]}
+    from cumap.report.derived import conflicting_edge_ids, inferred_edges
+
+    conflicts = conflicting_edge_ids(growth.edges, registry) if registry else set()
+    inferred = inferred_edges(growth.edges, registry) if registry else []
+    by_edge = {e.id: e for e in growth.edges}
     captions = {}
     for st, sec in zip(growth.steps, growth.section_labels, strict=True):
         captions[sec["id"]] = st["caption"]
@@ -822,8 +973,30 @@ def _write_growth3d(
                 "polarity": growth.edge_details[e.id]["polarity"],
                 "modality": growth.edge_details[e.id]["modality"],
                 "section": growth.edge_details[e.id]["section"],
+                "conf": e.id in conflicts,
             }
             for e in growth.edges
+        ]
+        + [
+            {
+                "id": f"INF-{k}",
+                "s": d["source"],
+                "t": d["target"],
+                "rel": d["relation"],
+                "fam": registry.family_of(d["relation"]),
+                "slot": family_slot(registry.family_of(d["relation"])),
+                "sec": max(by_edge[v].section for v in d["via"]),
+                "cross": any(by_edge[v].cross for v in d["via"]),
+                "neg": False,
+                "inf": True,
+                "conf": False,
+                "statement": "Inferred by transitivity from two extracted edges; no evidence sentence of its own.",
+                "quote": "",
+                "polarity": "",
+                "modality": "",
+                "section": growth.edge_details[max(d["via"], key=lambda v: by_edge[v].section)]["section"],
+            }
+            for k, d in enumerate(inferred)
         ],
         "concepts": {
             cid: {
@@ -844,6 +1017,7 @@ def _write_growth3d(
             if any(e.family == f for e in growth.edges)
         ],
         "chapters": [{"ch": c, "slot": chapter_slot(c)} for c in growth.chapters],
+        **({"sphere": _with_inferred_chapters(sphere, inferred, by_edge)} if sphere else {}),
     }
     (out / "growth3d.html").write_text(
         growth3d_page(
@@ -851,3 +1025,13 @@ def _write_growth3d(
         ),
         encoding="utf-8",
     )
+
+
+def _with_inferred_chapters(sphere: dict, inferred: list[dict], by_edge: dict) -> dict:
+    """Inferred edges appear in the sphere view from the chapter in which both parents exist."""
+    ec = dict(sphere["edge_chapter"])
+    for k, d in enumerate(inferred):
+        chs = [sphere["edge_chapter"].get(v) for v in d["via"]]
+        if all(x is not None for x in chs):
+            ec[f"INF-{k}"] = max(chs)
+    return {**sphere, "edge_chapter": ec}

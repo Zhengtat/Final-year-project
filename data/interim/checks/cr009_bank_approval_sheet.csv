@@ -1,0 +1,83 @@
+id,domain,what it teaches,passage,known nodes shown (cards),given items (corrective only),expected output (plain words),judgement (approve / edit / reject),note
+ex1_scheduler,operating systems,cold start; complete spans with an acronym; compound terms kept whole; component vs process; independent concepts,"The scheduler is the part of the kernel that decides which ready process runs next. A context switch saves the state of the running process, including its program counter, and loads the state of another process. Round-robin scheduling (RR) gives every process a fixed time slice, and the scheduler preempts a process when its slice expires.",(none: cold start),,"NEW Component “scheduler”, role defined, independent (No existing nodes were given, so nothing can be related to it.)
+NEW Component “kernel”, role used, independent (No existing nodes were given.)
+NEW Mechanism “context switch”, role defined, independent (No existing nodes were given.)
+NEW Component “program counter”, role used, independent (No existing nodes were given.)
+NEW Mechanism “round-robin scheduling” [aka RR], role defined, independent (No existing nodes were given.)
+NEW Parameter “time slice”, role defined, independent (No existing nodes were given.)
+NOT extracted: “counter” — partial span: the term is program counter
+NOT extracted: “which ready process runs next” — a descriptive phrase, not a term
+NOT extracted: “preempts” — a verb use; the scheduler (component) and round-robin scheduling (process) are different things
+NOT extracted: “fixed” — an ordinary modifier, not part of the name: the term is time slice",approve,Previously approved in chat; transcribed into the sheet.
+ex2_index,databases,existing mention; not-mention inside_longer_term; not-mention different_sense; anchor kind_of; anchor part_of; anchor acts_on,"A B-tree index keeps its keys in sorted order, so a query can find a row without a full table scan. Each index page holds many keys. When a transaction updates an indexed column, the database takes a lock on the affected index page and releases it at commit. In the query editor, a cursor shows where the next statement will be typed.","n_001 index (Component; in text)
+n_002 transaction (Concept; in text)
+n_003 lock (Mechanism; in text)
+n_004 cursor (Component; in text)
+n_005 table (Component; in text)",,"MENTION of known node n_002 (transaction), role used: ""When a transaction updates an indexed column""
+MENTION of known node n_003 (lock), role used: ""takes a lock on the affected index page""
+NOT a mention: n_004 (different_sense)
+NOT a mention: n_005 (inside_longer_term)
+NOT a mention: n_001 (inside_longer_term)
+NEW Component “B-tree index”, role defined, kind_of -> n_001
+NEW Mechanism “table scan”, role used, acts_on -> n_005
+NEW Component “index page”, role defined, part_of -> n_001
+NEW Event “commit”, role used, independent (The text relates commit to the lock only through the verb releases, and the lock card is already recorded as a mention.)
+NOT extracted: “index” — inside the longer terms B-tree index and index page, so the card is a not-mention here
+NOT extracted: “page” — partial span: the term is index page
+NOT extracted: “cursor” — different sense: a screen cursor, not the database cursor
+NOT extracted: “table” — inside the longer term table scan, so the card is a not-mention
+NOT extracted: “many keys” — a quantity plus a noun, not a term here",approve,Previously approved in chat; transcribed into the sheet.
+ex3_write_policy,computer architecture,look-alike kept separate; kind_of and compared_with on one concept; property_of; anchor to a card from the text; independent concept,"A write-back policy is a write policy that tracks each modified cache line with a dirty bit and writes the line to memory only when it is evicted. Unlike a write-through policy, a write-back policy reduces memory traffic but makes coherence harder.","n_101 write policy (Concept; in text)
+n_102 write-through policy (Mechanism; in text)
+n_103 cache line (DataUnit; in text)",,"MENTION of known node n_101 (write policy), role used: ""is a write policy that tracks each modified cache line""
+MENTION of known node n_102 (write-through policy), role mentioned: ""Unlike a write-through policy""
+MENTION of known node n_103 (cache line), role used: ""each modified cache line""
+NEW Mechanism “write-back policy”, role defined, kind_of -> n_101; compared_with -> n_102
+NEW Property “dirty bit”, role defined, property_of -> n_103
+NEW Parameter “memory traffic”, role used, independent (No card is related to memory traffic by this text.)
+NEW Property “coherence”, role used, independent (No card is related to coherence by this text.)
+NOT extracted: “write-back policy merged into write-through policy” — a look-alike: kept as a separate new concept, never linked as the same
+NOT extracted: “evicted” — a verb use, not a term
+NOT extracted: “harder” — an ordinary word",approve,Previously approved in chat; transcribed into the sheet.
+ex4_thread,operating systems,refined (not defined) on a card that already has a definition; found_via_anchor; anchor part_of; a compound kept whole,A thread is a unit of execution inside a process; every thread has its own stack and register set but shares the process address space.,"n_201 thread (Concept; in text)
+n_202 stack (Component; in text)
+n_203 process (Concept; in text)",,"MENTION of known node n_201 (thread), role refined: ""A thread is a unit of execution inside a process""
+MENTION of known node n_202 (stack), role used: ""its own stack and register set""
+MENTION of known node n_203 (process), role used: ""inside a process""
+NEW Component “register set”, role used, part_of -> n_201, found via anchor
+NEW Concept “process address space”, role used, part_of -> n_203
+NOT extracted: “unit of execution” — a descriptive phrase, not a term
+NOT extracted: “address space” — partial span: the text names the whole term process address space",approve,Previously approved in chat; transcribed into the sheet.
+ex5_wal,databases,anchor uses; anchor used_for; complete span with acronym; a value is not a concept; a verb use is not a concept; independent concepts,Write-ahead logging (WAL) records every change in the log file before the change reaches the data file. WAL makes recovery after a crash possible. A checkpoint every 5 minutes limits how long recovery takes.,"n_301 log file (Component; in text)
+n_302 recovery (Mechanism; in text)
+n_303 index (Component; not in text)",,"MENTION of known node n_301 (log file), role used: ""in the log file""
+MENTION of known node n_302 (recovery), role used: ""how long recovery takes""
+NEW Mechanism “write-ahead logging” [aka WAL], role defined, uses -> n_301; used_for -> n_302
+NEW Component “data file”, role used, independent (The text relates data file only to the change, not to any card.)
+NEW Event “crash”, role used, independent (The text relates crash to recovery only through the word after, and the recovery card is already recorded as a mention.)
+NEW Mechanism “checkpoint”, role defined, independent (The sentence relates checkpoint to recovery only through the verb limits, so it is recorded for the relation step instead.)
+NOT extracted: “every 5 minutes” — a value, not a concept
+NOT extracted: “records” — a verb use
+NOT extracted: “index” — a card that is not in this text: no mention is invented for it",approve,Previously approved in chat; transcribed into the sheet.
+ex6_hazard,computer architecture,anchor performed_by; anchor other; existing mention under an alias; a defined concept that relates only to another new concept,"A pipeline hazard occurs when the next instruction cannot execute in the following clock cycle. A data hazard arises when an instruction needs a result that an earlier instruction has not produced yet. The processor can insert a pipeline stall until the result is ready, or use operand forwarding, in which the execution unit passes the result straight to the next instruction.","n_401 instruction pipeline (Mechanism; in text)
+n_402 clock cycle (Parameter; in text)
+n_403 execution unit (Component; in text)",,"MENTION of known node n_402 (clock cycle), role used: ""in the following clock cycle""
+MENTION of known node n_403 (execution unit), role used: ""the execution unit passes the result""
+NOT a mention: n_401 (inside_longer_term)
+NEW Event “pipeline hazard”, role defined, other -> n_402
+NEW Event “data hazard”, role defined, independent (The text relates data hazard only to the earlier instruction and to pipeline hazard, which is another new concept, not a card.)
+NEW Mechanism “pipeline stall”, role defined, independent (The sentence relates pipeline stall to the result, and no card is named with it.)
+NEW Mechanism “operand forwarding”, role defined, performed_by -> n_403
+NOT extracted: “the next instruction” — a description, not a term
+NOT extracted: “hazard” — partial span: the terms are pipeline hazard and data hazard",approve,Previously approved in chat; transcribed into the sheet.
+ex7_corrective,operating systems,corrective iteration; GIVEN ITEMS accepted; a hint rejected with a reason; a longer span replacing a partial one,The kernel installs a signal handler that runs on the stack of the interrupted process when the signal arrives.,"n_501 stack (Component; in text)
+n_502 register (Component; not in text)","h1: longer_span — signal handler
+h2: missed_existing_mention — stack
+h3: missed_existing_mention — register","MENTION of known node n_501 (stack), role used: ""runs on the stack of the interrupted process""
+NOT a mention: n_502 (different_sense)
+NEW Mechanism “signal handler”, role used, uses -> n_501
+NEW Event “signal”, role used, independent (The text relates signal only to the handler, which is another new concept.)
+HINT h1: added (The text uses the whole term signal handler.)
+HINT h2: added (stack of the interrupted process refers to the stack in the same sense.)
+HINT h3: rejected (different_sense)
+NOT extracted: “handler” — partial span: replaced by signal handler (hint h1)",approve,Previously approved in chat; transcribed into the sheet.

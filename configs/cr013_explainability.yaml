@@ -1,0 +1,23 @@
+# CR-013 explainability configuration (derived artifacts only; nothing here changes any prediction)
+trace_schema_version: "1.0"
+renderer_version: "r1"
+base_commit: 2e50b6538ab5a8c97c9df3a218ab70646af90695   # exact audited viz-kg-explorer commit the explorer extends (Research D3)
+production:
+  run_id: slice3_c2
+  dataset_mode: pd
+  organisation_id: org_b6ebb5bc
+  sections_source: data/interim/textbook_sections.jsonl
+  chapters: [1, 2, 3]
+  replay:                                   # Research D1: REPLAYED layer, exact reproduction or invalid
+    enabled: true
+    budget: 1100
+    use_anchors: true
+    must_reproduce: [selected_pairs_ids_in_order, sample_pairs_ids_in_order, selection_stats]
+evaluation_example:
+  run_id: cr012_scinlp_heldout_P17_1058_grobid_E0
+  dataset_mode: scinlp
+joins:                                      # Research D2: exact, run-scoped, deterministic only; ambiguous stays ambiguous
+  v4_node_to_concept: exact_name_or_alias_unique
+  unit_to_section: strip_hash_suffix
+  edge_to_relation_row: equal_pair_id_unique
+output_root: data/processed/explainability

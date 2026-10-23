@@ -1,0 +1,37 @@
+# CR-035: identity ruleset `u1` (deterministic part, U0-U4 plus the registry search). Used only when `identity_resolver: u1` in configs/concept_policy.yaml
+# (default `legacy`; not adopted). Rule changes go through a new version of this file plus a DECISIONS.md entry (rule 11 spirit, rule 20).
+version: u1-0.1
+order: [U0, U1, U2, U3, U4-strong, U4-weak]      # the first rule that decides wins; U5 (the LLM judge) is today's adjudicator / canonicalize path
+rules:
+  U0: {what: lexicon `different` pair (approved, scoped), decides: keep_apart, replaces: [lexicon guard at R1-R3/R4, verifier C1]}
+  U1: {what: lexicon `same` set, decides: merge, replaces: [R0, G-link rule 1]}
+  U2: {what: same name form (exact, R1 name key with the acronym guard), decides: merge, replaces: [exact, R1, G-link rule 4]}
+  U3: {what: acronym <-> long form written in the text, chapter-scoped when ambiguous, decides: merge, replaces: [R2, G-link rules 2-3]}
+  U4-strong: {what: textbook alias statement with a strong cue, decides: merge, replaces: [R3-strong]}
+  U4-weak: {what: weak cue ("sometimes called"), decides: review, never merges (rule 19)}
+legacy_rule_ids: {R0: U1, exact: U2, R1: U2, R2: U3, R3-strong: U4-strong}   # the reverse mapping for reading old merge logs
+type_check: {applies_to: [U2, U3, U4-strong, U4-weak], compatible: same_or_generic}   # U0 and U1 do not need it
+search:                                          # candidate source B (registry search)
+  recipe: name_gloss                             # "form. gloss" on both sides; gloss = the first 25 words of the node's own quote
+  gloss_words: 25
+  embed_forms: [canonical_name, aliases]         # a concept's score is its best-matching form; the matched form is logged
+  top_k: 5
+  offer_threshold: 0.6                           # no tuning record; reported as is, never tuned on measurement data
+  review_band_below: 0.70                        # an LLM `same` found only below this similarity goes to review (today's R4 band)
+not_a_concept:                                   # owner defaults D-5 (handoff §0.4)
+  A: drop                                        # measured in CR-021
+  B: review_flag                                 # the node is kept
+  C: review_flag
+judge:                                           # U5, the LLM judge (DRAFT, CR-037; off by default: `identity_judge: "off"` in configs/concept_policy.yaml)
+  prompt: identity_judge
+  version: v1                                    # a draft awaiting owner review; never edit once it has produced saved results (rule 8)
+  tier: strong
+  options: [same, narrower, broader, new, not_a_concept]   # the closed choice set (rule 12): the schema is built from this list
+  outcomes:
+    same: merge                                  # B: below the review band the merge goes to review instead (today's R4 band)
+    narrower: new_node_plus_taxonomy_candidate   # replaces the unadopted `more_specific` promotion rule
+    broader: new_node_plus_taxonomy_candidate
+    new: new_node
+    not_a_concept: per_input                     # see not_a_concept: A drops the item, B and C only flag it
+  order_of_candidates: similarity_descending     # input B: candidates at or above the offer threshold, best first; the first same / narrower / broader ends the search
+  quote_check: exact_substring_of_the_sentence   # a failed quote turns the answer into no_decision (the item is treated as new / dropped as today)

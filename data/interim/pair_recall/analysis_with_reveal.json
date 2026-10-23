@@ -1,0 +1,431 @@
+{
+ "estimates": {
+  "primary (yes and evidence supported)": {
+   "prevalence": {
+    "P0": {
+     "true": 112,
+     "n": 150,
+     "clusters": 23,
+     "point": 0.7466666666666667,
+     "ci95_cluster": [
+      0.6666666666666666,
+      0.8055555555555556
+     ],
+     "wilson95_naive": [
+      0.6715059067359274,
+      0.8095087727091549
+     ]
+    },
+    "P1_extra": {
+     "true": 67,
+     "n": 150,
+     "clusters": 24,
+     "point": 0.44666666666666666,
+     "ci95_cluster": [
+      0.3575757575757576,
+      0.5294205182072828
+     ],
+     "wilson95_naive": [
+      0.36942801041509465,
+      0.5265688156508335
+     ]
+    },
+    "P2_extra_strict": {
+     "true": 38,
+     "n": 150,
+     "clusters": 22,
+     "point": 0.25333333333333335,
+     "ci95_cluster": [
+      0.17142857142857143,
+      0.34782608695652173
+     ],
+     "wilson95_naive": [
+      0.1904912272908452,
+      0.3284940932640726
+     ]
+    }
+   },
+   "estimated_true_edges": {
+    "P0": {
+     "point": 821.3333333333334,
+     "ci95_cluster": [
+      733.3333333333333,
+      886.1111111111111
+     ],
+     "pool_size": 1100
+    },
+    "P1_extra": {
+     "point": 3452.733333333333,
+     "ci95_cluster": [
+      2764.0606060606065,
+      4092.420605742296
+     ],
+     "pool_size": 7730
+    },
+    "P2_extra_strict": {
+     "point": 1245.64,
+     "ci95_cluster": [
+      842.9142857142857,
+      1710.2608695652173
+     ],
+     "pool_size": 4917
+    }
+   },
+   "estimated_true_edges_in_universe_P2": {
+    "point": 5519.706666666667,
+    "ci95_cluster": [
+     4729.00212068439,
+     6296.266748010071
+    ]
+   },
+   "pair_recall_within_universe": {
+    "P0": {
+     "point": 0.1488001777872254,
+     "ci95_cluster": [
+      0.12576187849725154,
+      0.17611707201615642
+     ]
+    },
+    "P1": {
+     "point": 0.7743285875094811,
+     "ci95_cluster": [
+      0.7041015526057697,
+      0.8388691635974445
+     ]
+    },
+    "P2": {
+     "point": 1.0,
+     "ci95_cluster": [
+      1.0,
+      1.0
+     ]
+    }
+   },
+   "gain_over_P0": {
+    "P1_extra_true_edges_per_P0": 4.203814935064934,
+    "P2_extra_true_edges_per_P0": 1.5166071428571428
+   },
+   "bootstrap": {
+    "B": 10000,
+    "seed": 20261009,
+    "resampled_unit": "evidence_section, within pool"
+   }
+  },
+  "sensitivity: ignore evidence_supported": {
+   "prevalence": {
+    "P0": {
+     "true": 112,
+     "n": 150,
+     "clusters": 23,
+     "point": 0.7466666666666667,
+     "ci95_cluster": [
+      0.6666666666666666,
+      0.8055555555555556
+     ],
+     "wilson95_naive": [
+      0.6715059067359274,
+      0.8095087727091549
+     ]
+    },
+    "P1_extra": {
+     "true": 67,
+     "n": 150,
+     "clusters": 24,
+     "point": 0.44666666666666666,
+     "ci95_cluster": [
+      0.3575757575757576,
+      0.5294205182072828
+     ],
+     "wilson95_naive": [
+      0.36942801041509465,
+      0.5265688156508335
+     ]
+    },
+    "P2_extra_strict": {
+     "true": 38,
+     "n": 150,
+     "clusters": 22,
+     "point": 0.25333333333333335,
+     "ci95_cluster": [
+      0.17142857142857143,
+      0.34782608695652173
+     ],
+     "wilson95_naive": [
+      0.1904912272908452,
+      0.3284940932640726
+     ]
+    }
+   },
+   "estimated_true_edges": {
+    "P0": {
+     "point": 821.3333333333334,
+     "ci95_cluster": [
+      733.3333333333333,
+      886.1111111111111
+     ],
+     "pool_size": 1100
+    },
+    "P1_extra": {
+     "point": 3452.733333333333,
+     "ci95_cluster": [
+      2764.0606060606065,
+      4092.420605742296
+     ],
+     "pool_size": 7730
+    },
+    "P2_extra_strict": {
+     "point": 1245.64,
+     "ci95_cluster": [
+      842.9142857142857,
+      1710.2608695652173
+     ],
+     "pool_size": 4917
+    }
+   },
+   "estimated_true_edges_in_universe_P2": {
+    "point": 5519.706666666667,
+    "ci95_cluster": [
+     4729.00212068439,
+     6296.266748010071
+    ]
+   },
+   "pair_recall_within_universe": {
+    "P0": {
+     "point": 0.1488001777872254,
+     "ci95_cluster": [
+      0.12576187849725154,
+      0.17611707201615642
+     ]
+    },
+    "P1": {
+     "point": 0.7743285875094811,
+     "ci95_cluster": [
+      0.7041015526057697,
+      0.8388691635974445
+     ]
+    },
+    "P2": {
+     "point": 1.0,
+     "ci95_cluster": [
+      1.0,
+      1.0
+     ]
+    }
+   },
+   "gain_over_P0": {
+    "P1_extra_true_edges_per_P0": 4.203814935064934,
+    "P2_extra_true_edges_per_P0": 1.5166071428571428
+   },
+   "bootstrap": {
+    "B": 10000,
+    "seed": 20261009,
+    "resampled_unit": "evidence_section, within pool"
+   }
+  },
+  "sensitivity: unclear counted as yes": {
+   "prevalence": {
+    "P0": {
+     "true": 112,
+     "n": 150,
+     "clusters": 23,
+     "point": 0.7466666666666667,
+     "ci95_cluster": [
+      0.6666666666666666,
+      0.8055555555555556
+     ],
+     "wilson95_naive": [
+      0.6715059067359274,
+      0.8095087727091549
+     ]
+    },
+    "P1_extra": {
+     "true": 67,
+     "n": 150,
+     "clusters": 24,
+     "point": 0.44666666666666666,
+     "ci95_cluster": [
+      0.3575757575757576,
+      0.5294205182072828
+     ],
+     "wilson95_naive": [
+      0.36942801041509465,
+      0.5265688156508335
+     ]
+    },
+    "P2_extra_strict": {
+     "true": 38,
+     "n": 150,
+     "clusters": 22,
+     "point": 0.25333333333333335,
+     "ci95_cluster": [
+      0.17142857142857143,
+      0.34782608695652173
+     ],
+     "wilson95_naive": [
+      0.1904912272908452,
+      0.3284940932640726
+     ]
+    }
+   },
+   "estimated_true_edges": {
+    "P0": {
+     "point": 821.3333333333334,
+     "ci95_cluster": [
+      733.3333333333333,
+      886.1111111111111
+     ],
+     "pool_size": 1100
+    },
+    "P1_extra": {
+     "point": 3452.733333333333,
+     "ci95_cluster": [
+      2764.0606060606065,
+      4092.420605742296
+     ],
+     "pool_size": 7730
+    },
+    "P2_extra_strict": {
+     "point": 1245.64,
+     "ci95_cluster": [
+      842.9142857142857,
+      1710.2608695652173
+     ],
+     "pool_size": 4917
+    }
+   },
+   "estimated_true_edges_in_universe_P2": {
+    "point": 5519.706666666667,
+    "ci95_cluster": [
+     4729.00212068439,
+     6296.266748010071
+    ]
+   },
+   "pair_recall_within_universe": {
+    "P0": {
+     "point": 0.1488001777872254,
+     "ci95_cluster": [
+      0.12576187849725154,
+      0.17611707201615642
+     ]
+    },
+    "P1": {
+     "point": 0.7743285875094811,
+     "ci95_cluster": [
+      0.7041015526057697,
+      0.8388691635974445
+     ]
+    },
+    "P2": {
+     "point": 1.0,
+     "ci95_cluster": [
+      1.0,
+      1.0
+     ]
+    }
+   },
+   "gain_over_P0": {
+    "P1_extra_true_edges_per_P0": 4.203814935064934,
+    "P2_extra_true_edges_per_P0": 1.5166071428571428
+   },
+   "bootstrap": {
+    "B": 10000,
+    "seed": 20261009,
+    "resampled_unit": "evidence_section, within pool"
+   }
+  },
+  "label_counts": {
+   "P0": {
+    "no": 38,
+    "yes": 112
+   },
+   "P1_extra": {
+    "no": 83,
+    "yes": 67
+   },
+   "P2_extra_strict": {
+    "no": 112,
+    "yes": 38
+   }
+  }
+ },
+ "classifier_conditional": {
+  "P0": {
+   "tp": 71,
+   "fn": 41,
+   "fp": 4,
+   "tn": 34,
+   "classifier_recall_on_human_true": [
+    71,
+    112,
+    [
+     0.5416508182333701,
+     0.717323820945127
+    ]
+   ],
+   "classifier_precision_vs_human": [
+    71,
+    75,
+    [
+     0.8707401284620144,
+     0.9790665722533456
+    ]
+   ],
+   "relation_agreement_among_tp": [
+    66,
+    71
+   ]
+  },
+  "P1_extra": {
+   "tp": 35,
+   "fn": 32,
+   "fp": 14,
+   "tn": 69,
+   "classifier_recall_on_human_true": [
+    35,
+    67,
+    [
+     0.40485194926043344,
+     0.6374961340504037
+    ]
+   ],
+   "classifier_precision_vs_human": [
+    35,
+    49,
+    [
+     0.575911164922199,
+     0.8215040554118738
+    ]
+   ],
+   "relation_agreement_among_tp": [
+    27,
+    35
+   ]
+  },
+  "P2_extra_strict": {
+   "tp": 18,
+   "fn": 20,
+   "fp": 11,
+   "tn": 101,
+   "classifier_recall_on_human_true": [
+    18,
+    38,
+    [
+     0.32479023322526057,
+     0.6274102861550331
+    ]
+   ],
+   "classifier_precision_vs_human": [
+    18,
+    29,
+    [
+     0.44002544205988514,
+     0.7731197789919017
+    ]
+   ],
+   "relation_agreement_among_tp": [
+    16,
+    18
+   ]
+  }
+ }
+}

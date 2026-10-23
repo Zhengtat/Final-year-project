@@ -1,0 +1,1 @@
+{"direction": "forward", "comparison_dimension": null, "other_description": "The link is carried inside the frame.", "other_suggested_label": "is carried in", "relation": "other", "evidence_quote": "x", "statement": "s", "_usage": {"input_tokens": 100, "output_tokens": 30}}

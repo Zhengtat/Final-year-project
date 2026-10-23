@@ -1,0 +1,335 @@
+=== SECTION 4.3: Advanced Internetworking > Multicast ===
+[4.3_s0000] Multi-access networks like Ethernet implement multicast in hardware.
+[4.3_s0001] There are, however, applications that need a broader multicasting capability that is effective at the scale of the Internet.
+[4.3_s0002] For example, when a radio station is broadcast over the Internet, the same data must be sent to all the hosts where a user has tuned in to that station.
+[4.3_s0003] In that example, the communication is one-to-many.
+[4.3_s0004] Other examples of one-to-many applications include transmitting the same news, current stock prices, software updates, or TV channels to multiple hosts.
+[4.3_s0005] The latter example is commonly called IPTV.
+[4.3_s0006] There are also applications whose communication is many-to-many, such as multimedia teleconferencing, online multiplayer gaming, or distributed simulations.
+[4.3_s0007] In such cases, members of a group receive data from multiple senders, typically each other.
+[4.3_s0008] From any particular sender, they all receive the same data.
+[4.3_s0009] Normal IP communication, in which each packet must be addressed and sent to a single host, is not well suited to such applications.
+[4.3_s0010] If an application has data to send to a group, it would have to send a separate packet with the identical data to each member of the group.
+[4.3_s0011] This redundancy consumes more bandwidth than necessary.
+[4.3_s0012] Furthermore, the redundant traffic is not distributed evenly but rather is focused around the sending host, and may easily exceed the capacity of the sending host and the nearby networks and routers.
+[4.3_s0013] To better support many-to-many and one-to-many communication, IP provides an IP-level multicast analogous to the link-level multicast provided by multi-access networks like Ethernet.
+[4.3_s0014] Now that we are introducing the concept of multicast for IP, we also need a term for the traditional one-to-one service of IP that has been described so far: That service is referred to as unicast.
+[4.3_s0015] The basic IP multicast model is a many-to-many model based on multicast groups, where each group has its own IP multicast address.
+[4.3_s0016] The hosts that are members of a group receive copies of any packets sent to that group’s multicast address.
+[4.3_s0017] A host can be in multiple groups, and it can join and leave groups freely by telling its local router using a protocol that we will discuss shortly.
+[4.3_s0018] Thus, while we think of unicast addresses as being associated with a node or an interface, multicast addresses are associated with an abstract group, the membership of which changes dynamically over time.
+[4.3_s0019] Further, the original IP multicast service model allows any host to send multicast traffic to a group; it doesn’t have to be a member of the group, and there may be any number of such senders to a given group.
+[4.3_s0020] Using IP multicast to send the identical packet to each member of the group, a host sends a single copy of the packet addressed to the group’s multicast address.
+[4.3_s0021] The sending host doesn’t need to know the individual unicast IP address of each member of the group because, as we will see, that knowledge is distributed among the routers in the internetwork.
+[4.3_s0022] Similarly, the sending host doesn’t need to send multiple copies of the packet because the routers will make copies whenever they have to forward the packet over more than one link.
+[4.3_s0023] Compared to using unicast IP to deliver the same packets to many receivers, IP multicast is more scalable because it eliminates the redundant traffic (packets) that would have been sent many times over the same links, especially those near to the sending host.
+[4.3_s0024] IP’s original many-to-many multicast has been supplemented with support for a form of one-to-many multicast.
+[4.3_s0025] In this model of one-to-many multicast, called Source-Specific Multicast (SSM), a receiving host specifies both a multicast group and a specific sending host.
+[4.3_s0026] The receiving host would then receive multicasts addressed to the specified group, but only if they are from the specified sender.
+[4.3_s0027] Many Internet multicast applications (e.g., radio broadcasts) fit the SSM model.
+[4.3_s0028] To contrast it with SSM, IP’s original many-to-many model is sometimes referred to as Any Source Multicast (ASM).
+[4.3_s0029] A host signals its desire to join or leave a multicast group by communicating with its local router using a special protocol for just that purpose.
+[4.3_s0030] In IPv4, that protocol is the Internet Group Management Protocol (IGMP); in IPv6, it is Multicast Listener Discovery (MLD).
+[4.3_s0031] The router then has the responsibility for making multicast behave correctly with regard to that host.
+[4.3_s0032] Because a host may fail to leave a multicast group when it should (after a crash or other failure, for example), the router periodically polls the network to determine which groups are still of interest to the attached hosts.
+[4.3_s0033] 4.3.1 Multicast Addresses  IP has a subrange of its address space reserved for multicast addresses.
+[4.3_s0034] In IPv4, these addresses are assigned in the class D address space, and IPv6 also has a portion of its address space reserved for multicast group addresses.
+[4.3_s0035] Some subranges of the multicast ranges are reserved for intradomain multicast, so they can be reused independently by different domains.
+[4.3_s0036] There are thus 28 bits of possible multicast address in IPv4 when we ignore the prefix shared by all multicast addresses.
+[4.3_s0037] This presents a problem when attempting to take advantage of hardware multicasting on a local area network (LAN).
+[4.3_s0038] Let’s take the case of Ethernet.
+[4.3_s0039] Ethernet multicast addresses have only 23 bits when we ignore their shared prefix.
+[4.3_s0040] In other words, to take advantage of Ethernet multicasting, IP has to map 28-bit IP multicast addresses into 23-bit Ethernet multicast addresses.
+[4.3_s0041] This is implemented by taking the low-order 23 bits of any IP multicast address to use as its Ethernet multicast address and ignoring the high-order 5 bits.
+[4.3_s0042] Thus, 32 (2\ 5) IP addresses map into each one of the Ethernet addresses.
+[4.3_s0043] In this section we use Ethernet as a canonical example of a networking technology that supports multicast in hardware, but the same is also true of PON (Passive Optical Networks), which is the access network technology often used to deliver fiber-to-the-home.
+[4.3_s0044] In fact, IP Multicast over PON is now a common way to deliver IPTV to homes.
+[4.3_s0045] When a host on an Ethernet joins an IP multicast group, it configures its Ethernet interface to receive any packets with the corresponding Ethernet multicast address.
+[4.3_s0046] Unfortunately, this causes the receiving host to receive not only the multicast traffic it desired but also traffic sent to any of the other 31 IP multicast groups that map to the same Ethernet address, if they are routed to that Ethernet.
+[4.3_s0047] Therefore, IP at the receiving host must examine the IP header of any multicast packet to determine whether the packet really belongs to the desired group.
+[4.3_s0048] In summary, the mismatch of multicast address sizes means that multicast traffic may place a burden on hosts that are not even interested in the group to which the traffic was sent.
+[4.3_s0049] Fortunately, in some switched networks (such as switched Ethernet) this problem can be mitigated by schemes wherein the switches recognize unwanted packets and discard them.
+[4.3_s0050] One perplexing question is how senders and receivers learn which multicast addresses to use in the first place.
+[4.3_s0051] This is normally handled by out-of-band means, and there are some quite sophisticated tools to enable group addresses to be advertised on the Internet.
+[4.3_s0052] 4.3.2 Multicast Routing (DVMRP, PIM, MSDP)
+[4.3_s0053] A router’s unicast forwarding tables indicate, for any IP address, which link to use to forward the unicast packet.
+[4.3_s0054] To support multicast, a router must additionally have multicast forwarding tables that indicate, based on multicast address, which links—possibly more than one—to use to forward the multicast packet (the router duplicates the packet if it is to be forwarded over multiple links).
+[4.3_s0055] Thus, where unicast forwarding tables collectively specify a set of paths, multicast forwarding tables collectively specify a set of trees: multicast distribution trees.
+[4.3_s0056] Furthermore, to support Source-Specific Multicast (and, it turns out, for some types of Any Source Multicast), the multicast forwarding tables must indicate which links to use based on the combination of multicast address and the (unicast) IP address of the source, again specifying a set of trees.
+[4.3_s0057] Multicast routing is the process by which the multicast distribution trees are determined or, more concretely, the process by which the multicast forwarding tables are built.
+[4.3_s0058] As with unicast routing, it is not enough that a multicast routing protocol “work”; it must also scale reasonably well as the network grows, and it must accommodate the autonomy of different routing domains.
+[4.3_s0059] DVMRP  Distance-vector routing used in unicast can be extended to support multicast.
+[4.3_s0060] The resulting protocol is called Distance Vector Multicast Routing Protocol, or DVMRP.
+[4.3_s0061] DVMRP was the first multicast routing protocol to see widespread use.
+[4.3_s0062] Recall that, in the distance-vector algorithm, each router maintains a table of Destination, Cost, NextHop tuples, and exchanges a list of (Destination, Cost) pairs with its directly connected neighbors.
+[4.3_s0063] Extending this algorithm to support multicast is a two-stage process.
+[4.3_s0064] First, we create a broadcast mechanism that allows a packet to be forwarded to all the networks on the internet.
+[4.3_s0065] Second, we need to refine this mechanism so that it prunes back networks that do not have hosts that belong to the multicast group.
+[4.3_s0066] Consequently, DVMRP is one of several multicast routing protocols described as flood-and-prune protocols.
+[4.3_s0067] Given a unicast routing table, each router knows that the current shortest path to a given destination goes through NextHop.
+[4.3_s0068] Thus, whenever it receives a multicast packet from source S, the router forwards the packet on all outgoing links (except the one on which the packet arrived)
+[4.3_s0069] if and only if the packet arrived over the link that is on the shortest path to S (i.e., the packet came from the NextHop associated with S in the routing table).
+[4.3_s0070] This strategy effectively floods packets outward from S but does not loop packets back toward S.  There are two major shortcomings to this approach.
+[4.3_s0071] The first is that it truly floods the network; it has no provision for avoiding LANs that have no members in the multicast group.
+[4.3_s0072] We address this problem below.
+[4.3_s0073] The second limitation is that a given packet will be forwarded over a LAN by each of the routers connected to that LAN.
+[4.3_s0074] This is due to the forwarding strategy of flooding packets on all links other than the one on which the packet arrived, without regard to whether or not those links are part of the shortest-path tree rooted at the source.
+[4.3_s0075] The solution to this second limitation is to eliminate the duplicate broadcast packets that are generated when more than one router is connected to a given LAN.
+[4.3_s0076] One way to do this is to designate one router as the parent router for each link, relative to the source, where only the parent router is allowed to forward multicast packets from that source over the LAN.
+[4.3_s0077] The router that has the shortest path to source S is selected as the parent; a tie between two routers would be broken according to which router has the smallest address.
+[4.3_s0078] A given router can learn if it is the parent for the LAN (again relative to each possible source) based upon the distance-vector messages it exchanges with its neighbors.
+[4.3_s0079] Notice that this refinement requires that each router keep, for each source, a bit for each of its incident links indicating whether or not it is the parent for that source/link pair.
+[4.3_s0080] Keep in mind that in an internet setting, a source is a network, not a host, since an internet router is only interested in forwarding packets between networks.
+[4.3_s0081] The resulting mechanism is sometimes called Reverse Path Broadcast (RPB) or Reverse Path Forwarding (RPF).
+[4.3_s0082] The path is reverse because we are considering the shortest path toward the source when making our forwarding decisions, as compared to unicast routing, which looks for the shortest path to a given destination.
+[4.3_s0083] The RPB mechanism just described implements shortest-path broadcast.
+[4.3_s0084] We now want to prune the set of networks that receives each packet addressed to group G to exclude those that have no hosts that are members of G.
+[4.3_s0085] This can be accomplished in two stages.
+[4.3_s0086] First, we need to recognize when a leaf network has no group members.
+[4.3_s0087] Determining that a network is a leaf is easy—if the parent router as described above is the only router on the network, then the network is a leaf.
+[4.3_s0088] Determining if any group members reside on the network is accomplished by having each host that is a member of group G periodically announce this fact over the network, as described in our earlier description of link-state multicast.
+[4.3_s0089] The router then uses this information to decide whether or not to forward a multicast packet addressed to G over this LAN.
+[4.3_s0090] The second stage is to propagate this “no members of G here” information up the shortest-path tree.
+[4.3_s0091] This is done by having the router augment the (Destination, Cost) pairs it sends to its neighbors with the set of groups for which the leaf network is interested in receiving multicast packets.
+[4.3_s0092] This information can then be propagated from router to router, so that for each of its links a given router knows for what groups it should forward multicast packets.
+[4.3_s0093] Note that including all of this information in the routing update is a fairly expensive thing to do.
+[4.3_s0094] In practice, therefore, this information is exchanged only when some source starts sending packets to that group.
+[4.3_s0095] In other words, the strategy is to use RPB, which adds a small amount of overhead to the basic distance-vector algorithm, until a particular multicast address becomes active.
+[4.3_s0096] At that time, routers that are not interested in receiving packets addressed to that group speak up, and that information is propagated to the other routers.
+[4.3_s0097] PIM-SM  Protocol Independent Multicast, or PIM, was developed in response to the scaling problems of earlier multicast routing protocols.
+[4.3_s0098] In particular, it was recognized that the existing protocols did not scale well in environments where a relatively small proportion of routers want to receive traffic for a certain group.
+[4.3_s0099] For example, broadcasting traffic to all routers until they explicitly ask to be removed from the distribution is not a good design choice if most routers don’t want to receive the traffic in the first place.
+[4.3_s0100] This situation is sufficiently common that PIM divides the problem space into sparse mode and dense mode, where sparse and dense refer to the proportion of routers that will want the multicast.
+[4.3_s0101] PIM dense mode (PIM-DM) uses a flood-and-prune algorithm like DVMRP and suffers from the same scalability problem.
+[4.3_s0102] PIM sparse mode (PIM-SM) has become the dominant multicast routing protocol and is the focus of our discussion here.
+[4.3_s0103] The “protocol independent” aspect of PIM, by the way, refers to the fact that, unlike earlier protocols such as DVMRP, PIM does not depend on any particular sort of unicast routing—it can be used with any unicast routing protocol, as we will see below.
+[4.3_s0104] In PIM-SM, routers explicitly join the multicast distribution tree using PIM protocol messages known as Join messages.
+[4.3_s0105] Note the contrast to DVMRP’s approach of creating a broadcast tree first and then pruning the uninterested routers.
+[4.3_s0106] The question that arises is where to send those Join messages because, after all, any host (and any number of hosts) could send to the multicast group.
+[4.3_s0107] To address this, PIM-SM assigns to each group a special router known as the rendezvous point (RP).
+[4.3_s0108] In general, a number of routers in a domain are configured to be candidate RPs, and PIM-SM defines a set of procedures by which all the routers in a domain can agree on the router to use as the RP for a given group.
+[4.3_s0109] These procedures are rather complex, as they must deal with a wide variety of scenarios, such as the failure of a candidate RP and the partitioning of a domain into two separate networks due to a number of link or node failures.
+[4.3_s0110] For the rest of this discussion, we assume that all routers in a domain know the unicast IP address of the RP for a given group.
+[4.3_s0111] A multicast forwarding tree is built as a result of routers sending Join messages to the RP.
+[4.3_s0112] PIM-SM allows two types of trees to be constructed: a shared tree, which may be used by all senders, and a source-specific tree, which may be used only by a specific sending host.
+[4.3_s0113] The normal mode of operation creates the shared tree first, followed by one or more source-specific trees if there is enough traffic to warrant it.
+[4.3_s0114] Because building trees installs state in the routers along the tree, it is important that the default is to have only one tree for a group, not one for every sender to a group.
+[4.3_s0115] When a router sends a Join message toward the RP for a group G, it is sent using normal IP unicast transmission.
+[4.3_s0116] This is illustrated in Figure (a), in which router R4 is sending a Join to the rendezvous point for some group.
+[4.3_s0117] The initial Join message is “wildcarded”; that is, it applies to all senders.
+[4.3_s0118] A Join message clearly must pass through some sequence of routers before reaching the RP (e.g., R2).
+[4.3_s0119] Each router along the path looks at the Join and creates a forwarding table entry for the shared tree, called a (\, G) entry (where \ means “all senders”).
+[4.3_s0120] To create the forwarding table entry, it looks at the interface on which the Join arrived and marks that interface as one on which it should forward data packets for this group.
+[4.3_s0121] It then determines which interface it will use to forward the Join toward the RP.
+[4.3_s0122] This will be the only acceptable interface for incoming packets sent to this group.
+[4.3_s0123] It then forwards the Join toward the RP.
+[4.3_s0124] Eventually, the message arrives at the RP, completing the construction of the tree branch.
+[4.3_s0125] The shared tree thus constructed is shown as a solid line from the RP to R4 in Figure (a).
+[4.3_s0126] As more routers send Join\ s toward the RP, they cause new branches to be added to the tree, as illustrated in Figure (b).
+[4.3_s0127] Note that, in this case, the Join only needs to travel to R2, which can add the new branch to the tree simply by adding a new outgoing interface to the forwarding table entry created for this group.
+[4.3_s0128] R2 need not forward the Join on to the RP.
+[4.3_s0129] Note also that the end result of this process is to build a tree whose root is the RP.
+[4.3_s0130] At this point, suppose a host wishes to send a message to the group.
+[4.3_s0131] To do so, it constructs a packet with the appropriate multicast group address as its destination and sends it to a router on its local network known as the designated router (DR).
+[4.3_s0132] Suppose the DR is R1 in Figure.
+[4.3_s0133] There is no state for this multicast group between R1 and the RP at this point, so instead of simply forwarding the multicast packet, R1 tunnels it to the RP.
+[4.3_s0134] That is, R1 encapsulates the multicast packet inside a PIM Register message that it sends to the unicast IP address of the RP.
+[4.3_s0135] Just like an IP tunnel endpoint, the RP receives the packet addressed to it, looks at the payload of the Register message, and finds inside an IP packet addressed to the multicast address of this group.
+[4.3_s0136] The RP, of course, does know what to do with such a packet—it sends it out onto the shared tree of which the RP is the root.
+[4.3_s0137] In the example of Figure, this means that the RP sends the packet on to R2, which is able to forward it on to R4 and R5.
+[4.3_s0138] The complete delivery of a packet from R1 to R4 and R5 is shown in Figure.
+[4.3_s0139] We see the tunneled packet travel from R1 to the RP with an extra IP header containing the unicast address of RP, and then the multicast packet addressed to G making its way along the shared tree to R4 and R5.
+[4.3_s0140] At this point, we might be tempted to declare success, since all hosts can send to all receivers this way.
+[4.3_s0141] However, there is some bandwidth inefficiency and processing cost in the encapsulation and decapsulation of packets on the way to the RP, so the RP forces knowledge about this group into the intervening routers so tunneling can be avoided.
+[4.3_s0142] It sends a Join message toward the sending host (Figure (c)).
+[4.3_s0143] As this Join travels toward the host, it causes the routers along the path (R3) to learn about the group, so that it will be possible for the DR to send the packet to the group as native (i.e., not tunneled) multicast packets.
+[4.3_s0144] An important detail to note at this stage is that the Join message sent by the RP to the sending host is specific to that sender, whereas the previous ones sent by R4 and R5 applied to all senders.
+[4.3_s0145] Thus, the effect of the new Join is to create sender-specific state in the routers between the identified source and the RP.
+[4.3_s0146] This is referred to as (S, G) state, since it applies to one sender to one group, and contrasts with the (\*, G) state that was installed between the receivers and the RP that applies to all senders.
+[4.3_s0147] Thus, in Figure (c), we see a source-specific route from R1 to the RP (indicated by the dashed line) and a tree that is valid for all senders from the RP to the receivers (indicated by the solid line).
+[4.3_s0148] The next possible optimization is to replace the entire shared tree with a source-specific tree.
+[4.3_s0149] This is desirable because the path from sender to receiver via the RP might be significantly longer than the shortest possible path.
+[4.3_s0150] This again is likely to be triggered by a high data rate being observed from some sender.
+[4.3_s0151] In this case, the router at the downstream end of the tree—say, R4 in our example—sends a source-specific Join toward the source.
+[4.3_s0152] As it follows the shortest path toward the source, the routers along the way create (S, G) state for this tree, and the result is a tree that has its root at the source, rather than the RP.
+[4.3_s0153] Assuming both R4 and R5 made the switch to the source-specific tree, we would end up with the tree shown in Figure (d).
+[4.3_s0154] Note that this tree no longer involves the RP at all.
+[4.3_s0155] We have removed the shared tree from this picture to simplify the diagram, but in reality all routers with receivers for a group must stay on the shared tree in case new senders show up.
+[4.3_s0156] We can now see why PIM is protocol independent.
+[4.3_s0157] All of its mechanisms for building and maintaining trees take advantage of unicast routing without depending on any particular unicast routing protocol.
+[4.3_s0158] The formation of trees is entirely determined by the paths that Join messages follow, which is determined by the choice of shortest paths made by unicast routing.
+[4.3_s0159] Thus, to be precise, PIM is “unicast routing protocol independent,” as compared to DVMRP.
+[4.3_s0160] Note that PIM is very much bound up with the Internet Protocol—it is not protocol independent in terms of network-layer protocols.
+[4.3_s0161] The design of PIM-SM again illustrates the challenges in building scalable networks and how scalability is sometimes pitted against some sort of optimality.
+[4.3_s0162] The shared tree is certainly more scalable than a source-specific tree, in the sense that it reduces the total state in routers to be on the order of the number of groups rather than the number of senders times the number of groups.
+[4.3_s0163] However, the source-specific tree is likely to be necessary to achieve efficient routing and effective use of link bandwidth.
+[4.3_s0164] Interdomain Multicast (MSDP)  PIM-SM has some significant shortcomings when it comes to interdomain multicast.
+[4.3_s0165] In particular, the existence of a single RP for a group goes against the principle that domains are autonomous.
+[4.3_s0166] For a given multicast group, all the participating domains would be dependent on the domain where the RP is located.
+[4.3_s0167] Furthermore, if there is a particular multicast group for which a sender and some receivers shared a single domain, the multicast traffic would still have to be routed initially from the sender to those receivers via whatever domain has the RP for that multicast group.
+[4.3_s0168] Consequently, the PIM-SM protocol is typically not used across domains, only within a domain.
+[4.3_s0169] To extend multicast across domains using PIM-SM, the Multicast Source Discovery Protocol (MSDP) was devised.
+[4.3_s0170] MSDP is used to connect different domains—each running PIM-SM internally, with its own RPs—by connecting the RPs of the different domains.
+[4.3_s0171] Each RP has one or more MSDP peer RPs in other domains.
+[4.3_s0172] Each pair of MSDP peers is connected by a TCP connection over which the MSDP protocol runs.
+[4.3_s0173] Together, all the MSDP peers for a given multicast group form a loose mesh that is used as a broadcast network.
+[4.3_s0174] MSDP messages are broadcast through the mesh of peer RPs using the Reverse Path Broadcast algorithm that we discussed in the context of DVMRP.
+[4.3_s0175] What information does MSDP broadcast through the mesh of RPs?
+[4.3_s0176] Not group membership information; when a host joins a group, the furthest that information will flow is its own domain’s RP.
+[4.3_s0177] Instead, it is source—multicast sender—information.
+[4.3_s0178] Each RP knows the sources in its own domain because it receives a Register message whenever a new source arises.
+[4.3_s0179] Each RP periodically uses MSDP to broadcast Source Active messages to its peers, giving the IP address of the source, the multicast group address, and the IP address of the originating RP.
+[4.3_s0180] If an MSDP peer RP that receives one of these broadcasts has active receivers for that multicast group, it sends a source-specific Join, on that RP’s own behalf, to the source host, as shown in Figure (a).
+[4.3_s0181] The Join message builds a branch of the source-specific tree to this RP, as shown in Figure (b).
+[4.3_s0182] The result is that every RP that is part of the MSDP network and has active receivers for a particular multicast group is added to the source-specific tree of the new source.
+[4.3_s0183] When an RP receives a multicast from the source, the RP uses its shared tree to forward the multicast to the receivers in its domain.
+[4.3_s0184] Source-Specific Multicast (PIM-SSM)
+[4.3_s0185] The original service model of PIM was, like earlier multicast protocols, a many-to-many model.
+[4.3_s0186] Receivers joined a group, and any host could send to the group.
+[4.3_s0187] However, it was recognized in the late 1990s that it might be useful to add a one-to-many model.
+[4.3_s0188] Lots of multicast applications, after all, have only one legitimate sender, such as the speaker at a conference being sent over the Internet.
+[4.3_s0189] We already saw that PIM-SM can create source-specific shortest path trees as an optimization after using the shared tree initially.
+[4.3_s0190] In the original PIM design, this optimization was invisible to hosts—only routers joined source-specific trees.
+[4.3_s0191] However, once the need for a one-to-many service model was recognized, it was decided to make the source-specific routing capability of PIM-SM explicitly available to hosts.
+[4.3_s0192] It turns out that this mainly required changes to IGMP and its IPv6 analog, MLD, rather than PIM itself.
+[4.3_s0193] The newly exposed capability is now known as PIM-SSM (PIM Source-Specific Multicast).
+[4.3_s0194] PIM-SSM introduces a new concept, the channel, which is the combination of a source address S and a group address G.
+[4.3_s0195] The group address G looks just like a normal IP multicast address, and both IPv4 and IPv6 have allocated subranges of the multicast address space for SSM.
+[4.3_s0196] To use PIM-SSM, a host specifies both the group and the source in an IGMP Membership Report message to its local router.
+[4.3_s0197] That router then sends a PIM-SM source-specific Join message toward the source, thereby adding a branch to itself in the source-specific tree, just as was described above for “normal” PIM-SM, but bypassing the whole shared-tree stage.
+[4.3_s0198] Since the tree that results is source specific, only the designated source can send packets on that tree.
+[4.3_s0199] The introduction of PIM-SSM has provided some significant benefits, particularly since there is relatively high demand for one-to-many multicasting:  -  Multicasts travel more directly to receivers.  -  The address of a channel is effectively a multicast group address plus a source address.
+[4.3_s0200] Therefore, given that a certain range of multicast group addresses will be used for SSM exclusively, multiple domains can use the same multicast group address independently and without conflict, as long as they use it only with sources in their own domains.  -  Because only the specified source can send to an SSM group, there is less risk of attacks based on malicious hosts overwhelming the routers or receivers with bogus multicast traffic.  -  PIM-SSM can be used across domains exactly as it is used within a domain, without reliance on anything like MSDP.
+[4.3_s0201] SSM, therefore, is quite a useful addition to the multicast service model.
+[4.3_s0202] Bidirectional Trees (BIDIR-PIM)  We round off our discussion of multicast with another enhancement to PIM known as Bidirectional PIM.
+[4.3_s0203] BIDIR-PIM is a recent variant of PIM-SM that is well suited to many-to-many multicasting within a domain, especially when senders and receivers to a group may be the same, as in a multiparty videoconference, for example.
+[4.3_s0204] As in PIM-SM, would-be receivers join groups by sending IGMP Membership Report messages (which must not be source specific), and a shared tree rooted at an RP is used to forward multicast packets to receivers.
+[4.3_s0205] Unlike PIM-SM, however, the shared tree also has branches to the sources.
+[4.3_s0206] That wouldn’t make any sense with PIM-SM’s unidirectional tree, but BIDIR-PIM’s trees are bidirectional—a router that receives a multicast packet from a downstream branch can forward it both up the tree and down other branches.
+[4.3_s0207] The route followed to deliver a packet to any particular receiver goes only as far up the tree as necessary before going down the branch to that receiver.
+[4.3_s0208] See the multicast route from R1 to R2 in Figure (b) for an example.
+[4.3_s0209] R4 forwards a multicast packet downstream to R2 at the same time that it forwards a copy of the same packet upstream to R5.
+[4.3_s0210] A surprising aspect of BIDIR-PIM is that there need not actually be an RP.
+[4.3_s0211] All that is needed is a routable address, which is known as an RP address even though it need not be the address of an RP or anything at all.
+[4.3_s0212] How can this be?
+[4.3_s0213] A Join from a receiver is forwarded toward the RP address until it reaches a router with an interface on the link where the RP address would reside, where the Join terminates.
+[4.3_s0214] Figure (a) shows a Join from R2 terminating at R5, and a Join from R3 terminating at R6.
+[4.3_s0215] The upstream forwarding of a multicast packet similarly flows toward the RP address until it reaches a router with an interface on the link where the RP address would reside, but then the router forwards the multicast packet onto that link as the final step of upstream forwarding, ensuring that all other routers on that link receive the packet.
+[4.3_s0216] Figure (b) illustrates the flow of multicast traffic originating at R1.
+[4.3_s0217] BIDIR-PIM cannot thus far be used across domains.
+[4.3_s0218] On the other hand, it has several advantages over PIM-SM for many-to-many multicast within a domain:  -  There is no source registration process because the routers already know how to route a multicast packet toward the RP address.  -
+[4.3_s0219] The routes are more direct than those that use PIM-SM’s shared tree because they go only as far up the tree as necessary, not all the way to the RP.  -  Bidirectional trees use much less state than the source-specific trees of PIM-SM because there is never any source-specific state.
+[4.3_s0220] (On the other hand, the routes will be longer than those of source-specific trees.)  -  The RP cannot be a bottleneck, and indeed no actual RP is needed.
+[4.3_s0221] One conclusion to draw from the fact that there are so many different approaches to multicast just within PIM is that multicast is a difficult problem space in which to find optimal solutions.
+[4.3_s0222] You need to decide which criteria you want to optimize (bandwidth usage, router state, path length, etc.) and what sort of application you are trying to support (one-to-many, many-to-many, etc.)
+[4.3_s0223] before you can make a choice of the “best” multicast mode for the task.
+=== SECTION 6.2: Congestion Control > Queuing Disciplines ===
+[6.2_s0000] Regardless of how simple or how sophisticated the rest of the resource allocation mechanism is, each router must implement some queuing discipline that governs how packets are buffered while waiting to be transmitted.
+[6.2_s0001] The queuing algorithm can be thought of as allocating both bandwidth (which packets get transmitted) and buffer space (which packets get discarded).
+[6.2_s0002] It also directly affects the latency experienced by a packet by determining how long a packet waits to be transmitted.
+[6.2_s0003] This section introduces two common queuing algorithms—first-in, first-out (FIFO) and fair queuing (FQ)—and identifies several variations that have been proposed.
+[6.2_s0004] 6.2.1 FIFO  The idea of FIFO queuing, also called first-come, first-served (FCFS) queuing, is simple: The first packet that arrives at a router is the first packet to be transmitted.
+[6.2_s0005] This is illustrated in Figure (a), which shows a FIFO with “slots” to hold up to eight packets.
+[6.2_s0006] Given that the amount of buffer space at each router is finite, if a packet arrives and the queue (buffer space) is full, then the router discards that packet, as shown in Figure (b).
+[6.2_s0007] This is done without regard to which flow the packet belongs to or how important the packet is.
+[6.2_s0008] This is sometimes called tail drop, since packets that arrive at the tail end of the FIFO are dropped.
+[6.2_s0009] Note that tail drop and FIFO are two separable ideas.
+[6.2_s0010] FIFO is a scheduling discipline—it determines the order in which packets are transmitted.
+[6.2_s0011] Tail drop is a drop policy—it determines which packets get dropped.
+[6.2_s0012] Because FIFO and tail drop are the simplest instances of scheduling discipline and drop policy, respectively, they are sometimes viewed as a bundle—the vanilla queuing implementation.
+[6.2_s0013] Unfortunately, the bundle is often referred to simply as FIFO queuing, when it should more precisely be called FIFO with tail drop.
+[6.2_s0014] A later section provides an example of another drop policy, which uses a more complex algorithm than “Is there a free buffer?” to decide when to drop packets.
+[6.2_s0015] Such a drop policy may be used with FIFO, or with more complex scheduling disciplines.
+[6.2_s0016] FIFO with tail drop, as the simplest of all queuing algorithms, is the most widely used in Internet routers at the time of writing.
+[6.2_s0017] This simple approach to queuing pushes all responsibility for congestion control and resource allocation out to the edges of the network.
+[6.2_s0018] Thus, the prevalent form of congestion control in the Internet currently assumes no help from the routers: TCP takes responsibility for detecting and responding to congestion.
+[6.2_s0019] We will see how this works in the next section.
+[6.2_s0020] A simple variation on basic FIFO queuing is priority queuing.
+[6.2_s0021] The idea is to mark each packet with a priority; the mark could be carried, for example, in the IP header, as we’ll discuss in a later section.
+[6.2_s0022] The routers then implement multiple FIFO queues, one for each priority class.
+[6.2_s0023] The router always transmits packets out of the highest-priority queue if that queue is nonempty before moving on to the next priority queue.
+[6.2_s0024] Within each priority, packets are still managed in a FIFO manner.
+[6.2_s0025] This idea is a small departure from the best-effort delivery model, but it does not go so far as to make guarantees to any particular priority class.
+[6.2_s0026] It just allows high-priority packets to cut to the front of the line.
+[6.2_s0027] The problem with priority queuing, of course, is that the high-priority queue can starve out all the other queues; that is, as long as there is at least one high-priority packet in the high-priority queue, lower-priority queues do not get served.
+[6.2_s0028] For this to be viable, there needs to be hard limits on how much high-priority traffic is inserted in the queue.
+[6.2_s0029] It should be immediately clear that we can’t allow users to set their own packets to high priority in an uncontrolled way; we must either prevent them from doing this altogether or provide some form of “pushback” on users.
+[6.2_s0030] One obvious way to do this is to use economics—the network could charge more to deliver high-priority packets than low-priority packets.
+[6.2_s0031] However, there are significant challenges to implementing such a scheme in a decentralized environment such as the Internet.
+[6.2_s0032] One situation in which priority queuing is used in the Internet is to protect the most important packets—typically, the routing updates that are necessary to stabilize the routing tables after a topology change.
+[6.2_s0033] Often there is a special queue for such packets, which can be identified by the Differentiated Services Code Point (formerly the TOS field) in the IP header.
+[6.2_s0034] This is in fact a simple case of the idea of “Differentiated Services.”  6.2.2 Fair Queuing  The main problem with FIFO queuing is that it does not discriminate between different traffic sources, or, in the language introduced in the previous section, it does not separate packets according to the flow to which they belong.
+[6.2_s0035] This is a problem at two different levels.
+[6.2_s0036] At one level, it is not clear that any congestion-control algorithm implemented entirely at the source will be able to adequately control congestion with so little help from the routers.
+[6.2_s0037] We will suspend judgment on this point until the next section when we discuss TCP congestion control.
+[6.2_s0038] At another level, because the entire congestion-control mechanism is implemented at the sources and FIFO queuing does not provide a means to police how well the sources adhere to this mechanism, it is possible for an ill-behaved source (flow) to capture an arbitrarily large fraction of the network capacity.
+[6.2_s0039] Considering the Internet again, it is certainly possible for a given application not to use TCP and, as a consequence, to bypass its end-to-end congestion-control mechanism.
+[6.2_s0040] (Applications such as Internet telephony do this today.)
+[6.2_s0041] Such an application is able to flood the Internet’s routers with its own packets, thereby causing other applications’ packets to be discarded.
+[6.2_s0042] Fair queuing (FQ) is an algorithm that has been designed to address this problem.
+[6.2_s0043] The idea of FQ is to maintain a separate queue for each flow currently being handled by the router.
+[6.2_s0044] The router then services these queues in a sort of round-robin, as illustrated in Figure.
+[6.2_s0045] When a flow sends packets too quickly, then its queue fills up.
+[6.2_s0046] When a queue reaches a particular length, additional packets belonging to that flow’s queue are discarded.
+[6.2_s0047] In this way, a given source cannot arbitrarily increase its share of the network’s capacity at the expense of other flows.
+[6.2_s0048] Note that FQ does not involve the router telling the traffic sources anything about the state of the router or in any way limiting how quickly a given source sends packets.
+[6.2_s0049] In other words, FQ is still designed to be used in conjunction with an end-to-end congestion-control mechanism.
+[6.2_s0050] It simply segregates traffic so that ill-behaved traffic sources do not interfere with those that are faithfully implementing the end-to-end algorithm.
+[6.2_s0051] FQ also enforces fairness among a collection of flows managed by a well-behaved congestion-control algorithm.
+[6.2_s0052] As simple as the basic idea is, there are still a modest number of details that you have to get right.
+[6.2_s0053] The main complication is that the packets being processed at a router are not necessarily the same length.
+[6.2_s0054] To truly allocate the bandwidth of the outgoing link in a fair manner, it is necessary to take packet length into consideration.
+[6.2_s0055] For example, if a router is managing two flows, one with 1000-byte packets and the other with 500-byte packets (perhaps because of fragmentation upstream from this router), then a simple round-robin servicing of packets from each flow’s queue will give the first flow two-thirds of the link’s bandwidth and the second flow only one-third of its bandwidth.
+[6.2_s0056] What we really want is bit-by-bit round-robin, where the router transmits a bit from flow 1, then a bit from flow 2, and so on.
+[6.2_s0057] Clearly, it is not feasible to interleave the bits from different packets.
+[6.2_s0058] The FQ mechanism therefore simulates this behavior by first determining when a given packet would finish being transmitted if it were being sent using bit-by-bit round-robin and then using this finishing time to sequence the packets for transmission.
+[6.2_s0059] To understand the algorithm for approximating bit-by-bit round-robin, consider the behavior of a single flow and imagine a clock that ticks once each time one bit is transmitted from all of the active flows.
+[6.2_s0060] (A flow is active when it has data in the queue.)
+[6.2_s0061] For this flow, let P_i denote the length of packet i, let S_i denote the time when the router starts to transmit packet i, and let F_i denote the time when the router finishes transmitting packet i.
+[6.2_s0062] If P_i is expressed in terms of how many clock ticks it takes to transmit packet i (keeping in mind that time advances 1 tick each time this flow gets 1 bit’s worth of service), then it is easy to see that F_i = S_i + P_i.
+[6.2_s0063] When do we start transmitting packet i?
+[6.2_s0064] The answer to this question depends on whether packet i arrived before or after the router finished transmitting packet i-1 from this flow.
+[6.2_s0065] If it was before, then logically the first bit of packet i is transmitted immediately after the last bit of packet i-1.
+[6.2_s0066] On the other hand, it is possible that the router finished transmitting packet i-1 long before i arrived, meaning that there was a period of time during which the queue for this flow was empty, so the round-robin mechanism could not transmit any packets from this flow.
+[6.2_s0067] If we let A_i denote the time that packet i arrives at the router, then S_i = \max(F_{i-1}, A_i).
+[6.2_s0068] Thus, we can compute  Now we move on to the situation in which there is more than one flow, and we find that there is a catch to determining A_i.
+[6.2_s0069] We can’t just read the wall clock when the packet arrives.
+[6.2_s0070] As noted above, we want time to advance by one tick each time all the active flows get one bit of service under bit-by-bit round-robin, so we need a clock that advances more slowly when there are more flows.
+[6.2_s0071] Specifically, the clock must advance by one tick when n bits are transmitted if there are n active flows.
+[6.2_s0072] This clock will be used to calculate A_i.
+[6.2_s0073] Now, for every flow, we calculate F_i for each packet that arrives using the above formula.
+[6.2_s0074] We then treat all the F_i as timestamps, and the next packet to transmit is always the packet that has the lowest timestamp—the packet that, based on the above reasoning, should finish transmission before all others.
+[6.2_s0075] Note that this means that a packet can arrive on a flow, and, because it is shorter than a packet from some other flow that is already in the queue waiting to be transmitted, it can be inserted into the queue in front of that longer packet.
+[6.2_s0076] However, this does not mean that a newly arriving packet can preempt a packet that is currently being transmitted.
+[6.2_s0077] It is this lack of preemption that keeps the implementation of FQ just described from exactly simulating the bit-by-bit round-robin scheme that we are attempting to approximate.
+[6.2_s0078] To better see how this implementation of fair queuing works, consider the example given in Figure.
+[6.2_s0079] Part (a) shows the queues for two flows; the algorithm selects both packets from flow 1 to be transmitted before the packet in the flow 2 queue, because of their earlier finishing times.
+[6.2_s0080] In (b), the router has already begun to send a packet from flow 2 when the packet from flow 1 arrives.
+[6.2_s0081] Though the packet arriving on flow 1 would have finished before flow 2 if we had been using perfect bit-by-bit fair queuing, the implementation does not preempt the flow 2 packet.
+[6.2_s0082] There are two things to notice about fair queuing.
+[6.2_s0083] First, the link is never left idle as long as there is at least one packet in the queue.
+[6.2_s0084] Any queuing scheme with this characteristic is said to be work conserving.
+[6.2_s0085] One effect of being work conserving is that if I am sharing a link with a lot of flows that are not sending any data then; I can use the full link capacity for my flow.
+[6.2_s0086] As soon as the other flows start sending, however, they will start to use their share and the capacity available to my flow will drop.
+[6.2_s0087] The second thing to notice is that if the link is fully loaded and there are n flows sending data, I cannot use more than 1/n\ th of the link bandwidth.
+[6.2_s0088] If I try to send more than that, my packets will be assigned increasingly large timestamps, causing them to sit in the queue longer awaiting transmission.
+[6.2_s0089] Eventually, the queue will overflow—although whether it is my packets or someone else’s that are dropped is a decision that is not determined by the fact that we are using fair queuing.
+[6.2_s0090] This is determined by the drop policy; FQ is a scheduling algorithm, which, like FIFO, may be combined with various drop policies.
+[6.2_s0091] Because FQ is work conserving, any bandwidth that is not used by one flow is automatically available to other flows.
+[6.2_s0092] For example, if we have four flows passing through a router, and all of them are sending packets, then each one will receive one-quarter of the bandwidth.
+[6.2_s0093] But, if one of them is idle long enough that all its packets drain out of the router’s queue, then the available bandwidth will be shared among the remaining three flows, which will each now receive one-third of the bandwidth.
+[6.2_s0094] Thus, we can think of FQ as providing a guaranteed minimum share of bandwidth to each flow, with the possibility that it can get more than its guarantee if other flows are not using their shares.
+[6.2_s0095] It is possible to implement a variation of FQ, called weighted fair queuing (WFQ), that allows a weight to be assigned to each flow (queue).
+[6.2_s0096] This weight logically specifies how many bits to transmit each time the router services that queue, which effectively controls the percentage of the link’s bandwidth that flow will get.
+[6.2_s0097] Simple FQ gives each queue a weight of 1, which means that logically only 1 bit is transmitted from each queue each time around.
+[6.2_s0098] This results in each flow getting 1/n^{th} of the bandwidth when there are n flows.
+[6.2_s0099] With WFQ, however, one queue might have a weight of 2, a second queue might have a weight of 1, and a third queue might have a weight of 3.
+[6.2_s0100] Assuming that each queue always contains a packet waiting to be transmitted, the first flow will get one-third of the available bandwidth, the second will get one-sixth of the available bandwidth, and the third will get one-half of the available bandwidth.
+[6.2_s0101] While we have described WFQ in terms of flows, note that it could be implemented on classes of traffic, where classes are defined in some other way than the simple flows introduced at the start of this chapter.
+[6.2_s0102] For example, we could use some bits in the IP header to identify classes and allocate a queue and a weight to each class.
+[6.2_s0103] This is exactly what is proposed as part of the Differentiated Services architecture described in a later section.
+[6.2_s0104] Note that a router performing WFQ must learn what weights to assign to each queue from somewhere, either by manual configuration or by some sort of signalling from the sources.
+[6.2_s0105] In the latter case, we are moving toward a reservation-based model.
+[6.2_s0106] Just assigning a weight to a queue provides a rather weak form of reservation because these weights are only indirectly related to the bandwidth the flow receives.
+[6.2_s0107] (The bandwidth available to a flow also depends, for example, on how many other flows are sharing the link.)
+[6.2_s0108] We will see in a later section how WFQ can be used as a component of a reservation-based resource allocation mechanism.

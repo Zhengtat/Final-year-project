@@ -1,0 +1,142 @@
+{
+ "checks": {
+  "future_retrieval_fails_closed": {
+   "P2_hipporag": "FAILED_CLOSED: query_section=1.2 order=5 retrieved {'chunk_id': '2.2#p1', 'section_id': '2.2', 'paragraph",
+   "P1_dense": "FAILED_CLOSED: query_section=1.2 order=5 retrieved {'chunk_id': '2.2#p1', 'section_id': '2.2', 'paragraph"
+  },
+  "index_with_only_earlier_sections_passes_causal_filter": {
+   "P2_hipporag": true,
+   "P1_dense": true
+  },
+  "persistent_reload_same_retrieval": {
+   "P2_hipporag": true,
+   "P1_dense": true
+  },
+  "chunk_metadata_file_persisted": {
+   "P2_hipporag": true,
+   "P1_dense (adapter sidecar)": true
+  },
+  "retrieval_rows_have_section_and_source_order": true,
+  "arm_indexes_are_separate_directories": true
+ },
+ "snapshots": {
+  "P2_hipporag": {
+   "1.1": "60bbc00ce121c88c",
+   "1.2": "3be6c824063ed9cc",
+   "2.1": "e9f8de68d422abcd",
+   "2.2": "26690e6525a315b7",
+   "2.3": "d7614143f3d338d8"
+  },
+  "P1_dense": {
+   "1.1": "0e5b01e5fae9bc15",
+   "1.2": "11afdb03312fabac",
+   "2.1": "6d9f76ed34f8009e",
+   "2.2": "9b819711262230d1",
+   "2.3": "319faa79636763f8"
+  }
+ },
+ "retrievals": {
+  "P2_hipporag": [
+   {
+    "id": "1.2#p2",
+    "section": "1.2",
+    "source_order": 5,
+    "score": 1.0,
+    "text_hash": "fd88941cbe2d"
+   },
+   {
+    "id": "1.1#p3",
+    "section": "1.1",
+    "source_order": 4,
+    "score": 0.961425244808197,
+    "text_hash": "9619a5db4094"
+   },
+   {
+    "id": "1.2#p0",
+    "section": "1.2",
+    "source_order": 5,
+    "score": 0.7919197082519531,
+    "text_hash": "9f00c3919b8d"
+   },
+   {
+    "id": "1.1#p2",
+    "section": "1.1",
+    "source_order": 4,
+    "score": 0.7117302417755127,
+    "text_hash": "41e2ebe5c729"
+   }
+  ],
+  "P1_dense": [
+   {
+    "id": "1.2#p2",
+    "section": "1.2",
+    "source_order": 5,
+    "score": 1.0,
+    "text_hash": "fd88941cbe2d"
+   },
+   {
+    "id": "1.1#p3",
+    "section": "1.1",
+    "source_order": 4,
+    "score": 0.961425244808197,
+    "text_hash": "9619a5db4094"
+   },
+   {
+    "id": "1.2#p0",
+    "section": "1.2",
+    "source_order": 5,
+    "score": 0.7919197082519531,
+    "text_hash": "9f00c3919b8d"
+   },
+   {
+    "id": "1.1#p2",
+    "section": "1.1",
+    "source_order": 4,
+    "score": 0.7117302417755127,
+    "text_hash": "41e2ebe5c729"
+   }
+  ]
+ },
+ "index_seconds": 3.2,
+ "stub_calls": {
+  "ner": 30,
+  "triples": 30,
+  "filter": 0,
+  "other": 0
+ },
+ "arm_files": {
+  "P2_hipporag": [
+   "llm_cache/stub-llm_cache.sqlite",
+   "llm_cache/stub-llm_cache.sqlite.07.lock",
+   "llm_cache/stub-llm_cache.sqlite.08.lock",
+   "llm_cache/stub-llm_cache.sqlite.0b.lock",
+   "llm_cache/stub-llm_cache.sqlite.0c.lock",
+   "llm_cache/stub-llm_cache.sqlite.0d.lock",
+   "llm_cache/stub-llm_cache.sqlite.0e.lock",
+   "llm_cache/stub-llm_cache.sqlite.0f.lock",
+   "llm_cache/stub-llm_cache.sqlite.11.lock",
+   "llm_cache/stub-llm_cache.sqlite.14.lock",
+   "llm_cache/stub-llm_cache.sqlite.19.lock",
+   "llm_cache/stub-llm_cache.sqlite.1c.lock"
+  ],
+  "P1_dense": [
+   "adapter_chunk_metadata.json",
+   "stub-llm_Transformers_sentence-transformers_all-MiniLM-L6-v2/chunk_embeddings/vdb_chunk.parquet",
+   "stub-llm_Transformers_sentence-transformers_all-MiniLM-L6-v2/chunk_embeddings/vdb_chunk.parquet.lock",
+   "stub-llm_Transformers_sentence-transformers_all-MiniLM-L6-v2/index_manifest.json",
+   "stub-llm_Transformers_sentence-transformers_all-MiniLM-L6-v2/index_manifest.json.lock"
+  ]
+ },
+ "environment": {
+  "python": "3.11.16",
+  "torch": "2.5.1",
+  "transformers": "4.45.2",
+  "sentence-transformers": "5.7.0",
+  "hipporag": "2.0.0a5",
+  "networkx": "3.4.2",
+  "python-igraph": "0.11.8",
+  "litellm": "1.73.1",
+  "openai": "3.29.0",
+  "numpy": "2.4.6"
+ }
+}

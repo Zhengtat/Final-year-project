@@ -1,0 +1,37 @@
+{
+ "candidate": "A2 = frozen CR-014 U2 -> family boundary selector (prompt cr015_boundary_family v1, bulk tier gpt-6-luna, 15 families/call, output cap 9000) -> frozen CR-014 V3 verifier (prompt v2) -> family-grounded nested-aware placement",
+ "model_tier": "bulk (gpt-6-luna, reasoning effort low), no sampling parameters, no escalation",
+ "development_outputs_sha256": {
+  "data/processed/cr015/stageA/A2_4.1.json": "4e09176311642a7eb09ad8773d54cbc43fc0bd815c8e64258bf17d74f686d1ee",
+  "data/processed/cr015/stageA/A2_4.2.json": "388202129c1a8c0002fca9b53b45878562e939080be618d12512435fd515721f",
+  "data/processed/cr015/stageA/A2_5.3.json": "bdc35bb5d6c29dee5d5652bd7c52ac5bfa79565b7f08e9fa8c867c162cd25246",
+  "data/processed/cr015/stageA/A2_6.1.json": "d91b22f7c7458bc9402548647a788fd39d9b88f9f7eeafb2754956a47a1053a3",
+  "data/processed/cr015/stageA/A2_6.4.json": "17872f162ed05ee029c84fa5587244a3c1ae97cc67dadc69a7596fbf9f18b3ea",
+  "data/processed/cr015/stageA/A2_7.2.json": "2b248dc25042a00ad84769c6a892125b8a37764d7f817b45d627ec13fe698e8f",
+  "data/processed/cr015/stageA/A2_8.3.json": "38fff1adac8123ae4a56ad597a5682b3e8cb3209cb6db69477fa2e25d0a5197f",
+  "data/processed/cr015/stageA/A2_8.4.json": "cf8f0ae029196d27a545fccfc1624499e417c765cc639a4e8fbbe46a154056ee",
+  "data/processed/cr015/stageA/A2_8.5.json": "d513c7245f4aea1affb8dff6d0b89355d33a5ac700e83b49b5fb58c35b37d692",
+  "data/processed/cr015/stageA/A2_9.2.json": "1f4b431a3a6a20ab31f33e417b689bd08e47d9fba81e0b6446d30e26037c223c"
+ },
+ "no_change_rule": "no prompt, model, selector label set, placement rule, batch size or candidate rule may change after this freeze (Research, STOP 2 decision)",
+ "status": "FROZEN",
+ "group": "a2",
+ "frozen_at": "2026-10-13 17:08:27",
+ "git_commit": "f5173c95b0cf4f2c4bd7dfd674ef1ee9ea72921b",
+ "hashes": {
+  "prompts/cr015_boundary_family/v1.md": "f39dbb64aa53ff6ea3950576f040e326534212a210270c2c0c9a4e85ec19f112",
+  "prompts/cr014_concept_verifier/v2.md": "c6f02918857826a9e91706380cf537b4ca0f2323d0614e0a0c5b919712631def",
+  "configs/cr014_concept_extraction.yaml": "b7983910fd38643d3acb8d9b2e9a88cc8b8ae014ab5bfed85233ce6a7b6926ff",
+  "configs/default.yaml": "e8e3de66be54f14fe07d6a6017bee50aaf5f25f39e01e84fa7a25cbd46f1c813",
+  "src/cumap/cr015/selector.py": "464c198eeb0aed2836bfd5ad83edf9575946217f49d875c7dfbf40ee940e951c",
+  "src/cumap/cr015/placement.py": "89c38828ffd8dfdc73f0d2cae0672e2316357ffc6616985f10ea5d18dd2d9f6e",
+  "src/cumap/cr015/stage_a.py": "48d94bcc206ef07419c23eab23c50e2c1f6d2928b07301ff201619b2b14f6273",
+  "src/cumap/cr015/dev_data.py": "14cc0459036f7b08d4e5a9a13a8fe94681f8cac5632b8f681bd3bc8e3362fda5",
+  "src/cumap/cr015/scoring.py": "4d960801c7c2f8688b6cd4cd49759254455a224458aee7c9b168f2b3c1cd75e3",
+  "src/cumap/cr014/union.py": "7d111b7f2eb616a570091e903def33c9a22589560d899dfa88f0a609430974d4",
+  "src/cumap/cr014/proposal.py": "5a068e306e181c1a4e3b3292d9248dc50468b6e5ff8e9f3edbe0cafff1c46699",
+  "src/cumap/cr014/llm_stage.py": "3579a3b81a9d1000a4f0ecaadbb42f8c850bac992521c975b542e08e121b567f",
+  "src/cumap/cr014/v3_core.py": "45c7eca15a2a9cb56072cc170268b2acdbb21e5830024bae4d71673ba4f3b3c4",
+  "src/cumap/cr014/pilot_score.py": "021c5418f71e76a41be7ce9bf9bbad6bdf0e89f8b4e90c9cca7bbe5df174b93e"
+ }
+}

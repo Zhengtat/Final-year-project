@@ -24,6 +24,7 @@ import json
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 
+from cumap.expert_kg.canonical_rules import AliasContext
 from cumap.expert_kg.canonicalize import (
     CanonicalOverrides,
     ConceptRegistry,
@@ -128,8 +129,23 @@ class Checkpoint:
     # matched candidate is logged here rather than discarded, for the taxonomy layer
     # (is_a / broader candidates) to consume later.
     taxonomy_candidates: list[dict] = field(default_factory=list)
+    # CR-007 §4.3: LLM "same" verdicts under the similarity band (not merged; for the review sheet) and
+    # different-type near-duplicates (never `same`; `related` candidates for the taxonomy layer).
+    merge_review: list[dict] = field(default_factory=list)
+    related_candidates: list[dict] = field(default_factory=list)
+    # CR-007 §6 (slice re-run): pair selection and v3 relation results
+    selected_pairs: list[dict] = field(default_factory=list)
+    sample_pairs: list[dict] = field(default_factory=list)  # unselected sample, for the missed-relation rate
+    selection_stats: dict = field(default_factory=dict)
+    relation_results_v3: list[dict] = field(default_factory=list)
     pair_registry: list[dict] = field(default_factory=list)  # stage d's PairRegistry state
     rejected_relations: list[dict] = field(default_factory=list)
+    # CR-008: re-keying log (merge records, equivalence migration, conflicts, self-loops, ...)
+    rekey: dict = field(default_factory=dict)
+    misconceptions: dict = field(default_factory=dict)  # CR-008 §5 layer + stage log
+    # CR-009 §3.6/§6.3: anchors of the v4 concept stage; they set relation-pair PRIORITY only and are never shown
+    # to the relation generator or verifier.
+    anchors: list[dict] = field(default_factory=list)
 
 
 def checkpoint_path(run_dir: Path) -> Path:
@@ -294,11 +310,16 @@ def run_canonicalize_stage(
     checkpoint: Checkpoint,
     *,
     overrides: CanonicalOverrides | None = None,
+    type_aware: bool = True,
+    review_below: float | None = 0.70,
+    alias_ctx: AliasContext | None = None,  # CR-008: R0-R3 before any embedding or LLM merge call
 ) -> tuple[Checkpoint, ConceptRegistry]:
     concept_registry = _restore_concept_registry(checkpoint, embed_fn)
     concept_first_chapter: dict[str, int] = dict(checkpoint.concept_first_chapter)
     merges = list(checkpoint.merges)
     taxonomy_candidates = list(checkpoint.taxonomy_candidates)
+    merge_review = list(checkpoint.merge_review)
+    related_candidates = list(checkpoint.related_candidates)
 
     for section in sections:
         if section.section_id in checkpoint.completed_section_ids:
@@ -310,7 +331,8 @@ def run_canonicalize_stage(
         try:
             for mention in mentions:
                 outcome = canonicalize_mention(
-                    client, prompts.canonicalize, concept_registry, mention, overrides=overrides
+                    client, prompts.canonicalize, concept_registry, mention, overrides=overrides,
+                    type_aware=type_aware, review_below=review_below, alias_ctx=alias_ctx,
                 )
                 if outcome.decision == "same":
                     merges.append(
@@ -322,6 +344,26 @@ def run_canonicalize_stage(
                             "auto_merged": outcome.auto_merged,
                             "overridden": outcome.overridden,
                             "reason": outcome.reason,
+                            "similarity": outcome.similarity,
+                            "rule_id": outcome.rule_id,
+                            "evidence_quote": outcome.evidence_quote,
+                        }
+                    )
+                elif outcome.decision == "review":
+                    cand = concept_registry.get(outcome.matched_concept_id)
+                    merge_review.append(
+                        {
+                            "concept_id": outcome.concept_id,
+                            "candidate_id": cand.concept_id,
+                            "candidate_name": cand.canonical_name,
+                            "candidate_type": cand.node_type,
+                            "candidate_definition": cand.definition,
+                            "alias": mention.canonical_name,
+                            "mention_type": mention.node_type,
+                            "quote": mention.evidence_quote,
+                            "section_id": section.section_id,
+                            "similarity": outcome.similarity,
+                            "llm_reason": outcome.reason,
                         }
                     )
                 elif outcome.decision in ("narrower", "broader") and outcome.matched_concept_id:
@@ -334,12 +376,19 @@ def run_canonicalize_stage(
                             "section_id": section.section_id,
                         }
                     )
+                for rid in outcome.related_ids:
+                    related_candidates.append(
+                        {"concept_id": outcome.concept_id, "related_concept_id": rid,
+                         "section_id": section.section_id}
+                    )
                 concept_first_chapter.setdefault(outcome.concept_id, section.chapter_num)
         except BudgetExceededError:
             checkpoint.concepts = [_concept_to_dict(c) for c in concept_registry.all()]
             checkpoint.concept_first_chapter = concept_first_chapter
             checkpoint.merges = merges
             checkpoint.taxonomy_candidates = taxonomy_candidates
+            checkpoint.merge_review = merge_review
+            checkpoint.related_candidates = related_candidates
             save_checkpoint(checkpoint, run_dir)
             raise
 
@@ -348,6 +397,8 @@ def run_canonicalize_stage(
         checkpoint.concept_first_chapter = concept_first_chapter
         checkpoint.merges = merges
         checkpoint.taxonomy_candidates = taxonomy_candidates
+        checkpoint.merge_review = merge_review
+        checkpoint.related_candidates = related_candidates
         save_checkpoint(checkpoint, run_dir)
 
     checkpoint.stage = "pairs_enumerated"
@@ -497,7 +548,14 @@ def build_snapshots_stage(
     snapshots_dir: Path,
     run_id: str,
     merges: list[dict] | None = None,
+    *,
+    edge_rows: list[dict] | None = None,
+    run_checks: bool = True,
+    extra_manifest: dict | None = None,
+    edge_details: dict[str, dict] | None = None,
 ) -> list[ChapterResult]:
+    """CR-036 (`assembly: v2`, the "save graph" export): `edge_rows` (edge_id, source_id, target_id, relation, family, section_id) replace the edges
+    derived from `pair_registry`, `run_checks=False` skips the structural check (cycles, domain/range). Defaults are the legacy behaviour."""
     merges = merges or []
     section_order = [s.section_id for s in sections]
     prereqs = find_prerequisite_candidates(concept_registry.all(), section_order)
@@ -512,7 +570,20 @@ def build_snapshots_stage(
                 concept_first_chapter[concept.concept_id] = section.chapter_num
 
     edges: list[SnapshotEdge] = []
-    if pair_registry is not None:
+    for row in edge_rows or []:
+        edges.append(
+            SnapshotEdge(
+                edge_id=row["edge_id"],
+                source_concept_id=row["source_id"],
+                relation=row["relation"],
+                target_concept_id=row["target_id"],
+                family=row["family"],
+                source_chapter=concept_first_chapter.get(row["source_id"], 0),
+                target_chapter=concept_first_chapter.get(row["target_id"], 0),
+                section_id=row["section_id"],
+            )
+        )
+    if pair_registry is not None and edge_rows is None:
         for resolution in pair_registry.all():
             if resolution.edge is None:
                 continue
@@ -581,7 +652,7 @@ def build_snapshots_stage(
             ],
             chapter_types,
             registry,
-        )
+        ) if run_checks else StructuralCheckResult()
 
         chapter_merges = [
             SnapshotMerge(concept_id=m["concept_id"], alias=m["alias"], section_id=m["section_id"])
@@ -601,7 +672,7 @@ def build_snapshots_stage(
             prerequisite_candidate_count=prereq_count,
             forward_reference_count=fwd_ref_count,
         )
-        write_snapshot(snapshot, snapshots_dir)
+        write_snapshot(snapshot, snapshots_dir, extra_manifest, edge_details)
         results.append(
             ChapterResult(
                 chapter_num=chapter_num, snapshot=snapshot, structural_check=structural_check

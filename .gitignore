@@ -38,3 +38,20 @@ reports/demo/
 
 # full (unredacted) local copies of generated reports
 reports/*.local.md
+
+# local-only dataset archives (licence-restricted data is never pushed; see the Dataset snapshot rule in CLAUDE.md)
+dataset_snapshots/
+
+# CR-012: SciNLP-derived document text is CC BY-NC and never redistributed
+data/interim/cr012/scinlp_units/
+
+# generated KG explorer embeds SciNLP-derived sentences (CC BY-NC): never committed
+reports/kg_explorer/
+
+# CR-013: the SciNLP-mode screenshot contains CC BY-NC text
+reports/cr013/screenshots/_*
+.venv-hipporag/
+
+# CR-021 owner review sheet (contains CC BY-NC SciNLP text; local only)
+data/interim/suggestions/cr021_*
+reports/cr021/adjudicator_results.jsonl

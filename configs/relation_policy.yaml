@@ -1,0 +1,21 @@
+# CR-034: relation-stage switches for NEW runs (older runs are unchanged; a run made with a switch on records it in `selection_stats`).
+# qualifier_checks:
+#   off -> today's behaviour
+#   v1  -> qualifier code checks (src/cumap/expert_kg/qualifier_checks.py): a negated edge whose evidence quote has no negation cue is rejected with
+#          reason `negation_without_cue` (owner default D-4, logged); qualifier misfit and a surface phrase as long as the quote are recorded as flags.
+qualifier_checks: "off"
+# assembly (CR-036): "legacy" | "v2". `v2` folds "verify and assemble" into classification and keeps only the "save graph" export of the chapter
+# snapshots (src/cumap/expert_kg/edge_store.py): the registry version and file hash are recorded in the run and checked when it is loaded; a
+# type-invalid orientation is replaced by the valid one (flagged) instead of rejected; symmetric relations are normalised; identical edges merge with
+# all their quotes; several relations per pair are kept; registry conflicts are flagged; measurement-sample results never reach the snapshots; the
+# misconception stage reuses an existing result instead of classifying the same proposed edge again. Not adopted: legacy stays the default. Quote the value.
+assembly: "legacy"
+# qualifier_amendments (CR-038, DRAFT): "off" | "v6". `v6` uses the per-relation qualifier schema, a verbatim dimension quote in the relation choice and
+# prompts relation_choice v6 / relation_qualifiers v6 (src/cumap/expert_kg/relations_v6.py); it needs a registry without modality `never` and without the
+# `dimension` qualifier (configs/relations_v1.5.yaml, built from v1.3). Never run; waits for the owner's review of the drafts. Quote the value.
+qualifier_amendments: "off"
+# misconception_source (CR-039, DRAFT): "legacy" | "classification". `classification` adds the `misconception` family to relation classification
+# (registry configs/relations_v1.6.yaml, prompts relation_family v5 / relation_choice v7, closed-choice schema in relations_v7.py) and builds the
+# misconception layer from those results with the legacy code checks (misconception.layer_from_classification). Needs qualifier_amendments "v6". Items
+# live only in the misconception layer (rule 22). The $0 cue scan stays as a selection-priority signal. Never run; waits for the owner's review. Quote it.
+misconception_source: "legacy"

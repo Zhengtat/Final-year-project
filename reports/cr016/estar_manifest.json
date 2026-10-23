@@ -1,0 +1,60 @@
+{
+ "E_star": "CR-009 production concept stage (U0): G1 generator (concept_generator v4, bulk tier), rule verifier, pruner tau 0 and strict G-links on P&D (slice3_c2 recipe), canonicalize v2 type-aware; CR-014 V3 and CR-015 A2/B1/B2 were NOT adopted",
+ "git_commit": "c3f6b25cea2f6d77775966898f17514ee381cdee",
+ "cr015_state": "tag cr-015-complete, NO_ELIGIBLE_DEVELOPMENT_ARM",
+ "tiers": {
+  "strong": {
+   "model": "gpt-6-sol",
+   "reasoning_effort": "medium"
+  },
+  "bulk": {
+   "model": "gpt-6-luna",
+   "reasoning_effort": "low"
+  },
+  "ceiling": {
+   "model": "gpt-6-astra",
+   "reasoning_effort": "low"
+  }
+ },
+ "file_hashes": {
+  "configs/concept_gvp.yaml": "40d4c383cda1291d5f0fc6e2b473e64ff2621521a55f087ba7cba3f3e80c15ed",
+  "configs/default.yaml": "e8e3de66be54f14fe07d6a6017bee50aaf5f25f39e01e84fa7a25cbd46f1c813",
+  "prompts/concept_generator/v4.md": "ba407e4d1293e57f0ae0b3473cbcc0e1df1e9696c0b041b523071c5b181b8a92",
+  "prompts/canonicalize/v2.md": "b4a83be786daf97c8def74d5f7342432be3ef8059cdc1b8b0e9889a9081f4e9f",
+  "configs/term_lexicon.yaml": "edd563bbfe0d7ca0cb18b5e7716df038587df1a0f834feb7620cd59d39186a66",
+  "configs/alias_rules.yaml": "a703886ecd60fb1cb2a67d6bf1ebf603bb43db3b2a324a4c18e9c409b69f56ff",
+  "configs/canonical_overrides.yaml": "3fa2f9bc2977a21c1a3d958512fbfcf981aad40f94641a51cc342a679500d239",
+  "configs/cr012_e2e_eval.yaml": "706b29dd7d366f5a1acfd1779fede73fd3d8f117858af6cea78fe03562297270",
+  "src/cumap/cr012/unit_run.py": "de001e735963e1467873f5d6c47ffce075cbccfa7339c4e129ed56d79cfb3533",
+  "src/cumap/cr012/scoring.py": "f64e1b65c5fa38c0d329351b8b73348c3559571cd4055591a6f81cfa312363bd",
+  "src/cumap/cr012/stop4_score.py": "bbc6d4a6fd47c9feabb11618406a5f39802610a965b79b0a1ff296b1d5917fd9",
+  "src/cumap/expert_kg/canonicalize.py": "29dc4cf03c7f6c2596ab445f50aa95c08635751e3b37f5974585f8f3b06c37a9"
+ },
+ "concepts_v4_hashes": {
+  "src/cumap/concepts_v4/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/cumap/concepts_v4/arms.py": "f863286c8d1aa128319475eac7dd11ad7f18c8ac6a21ffe69b542bfdad2ddd8e",
+  "src/cumap/concepts_v4/arms_dev.py": "f58b093f928636d603a16241c6bb347fb9956768a65c9e4c990721f7d5fe7cfc",
+  "src/cumap/concepts_v4/bank.py": "a019b6bd4eca83e00326d826b540edbd32a7e1706d25c5f50cac34bc2c0088ae",
+  "src/cumap/concepts_v4/cards.py": "a032e2d88b264289862b511eee967421050f3b17e5e4dde5a25b3c1778f0ce6c",
+  "src/cumap/concepts_v4/cr009_run.py": "0bc64da0ae682c5bf56dca59be2c8f152aa916bece63dfbda03b907d725ced5d",
+  "src/cumap/concepts_v4/dev_report.py": "91d949d598c15eff57525c33a6241dabd6e58e8843e409cc61159e94861b063b",
+  "src/cumap/concepts_v4/experiments.py": "84d6f7464d3f3173702ddc7cd0d5816e404f09162e8385e1f5e49d60f92314e2",
+  "src/cumap/concepts_v4/loop.py": "524443c80d94f7e2c8796573ff34cd528eb5c77ed34b2f4a8784c466e4dcc932",
+  "src/cumap/concepts_v4/pd_run.py": "94f432c87bf879197f48f3fccbae5caf560f71a805f16bb48b5e624327c551f6",
+  "src/cumap/concepts_v4/pruner.py": "84747cb7d0cb1b4b0fb58ab346f20b5b103226750586f887e2d53a1738d798f1",
+  "src/cumap/concepts_v4/runner.py": "3cef15e616de4ada56e82b00be79452e435205f43582dbc1f85ed605fcae2eca",
+  "src/cumap/concepts_v4/schema.py": "e50dfd83f9653287378109ffef8d4f36b700a3afa27e54bdbb881224a68077b8",
+  "src/cumap/concepts_v4/stop3_marks.py": "d802e3830ef1d9ea09cc136b1c71d5226b7ed6736e6ef4ae2637770b12fa0625",
+  "src/cumap/concepts_v4/stop3_report.py": "4c4b77ca5ec250e119acc675e5fea8314e806ea98b62a88a86431d6c3096a2fd",
+  "src/cumap/concepts_v4/stop3_sheets.py": "af102356a012341d60867bb969e857e9e9f1ed9333f8232b5d460232acdfc126",
+  "src/cumap/concepts_v4/verifier.py": "7a9ab2d4147d8d6567e9195620257ba80ad348d18a9cab5d4394d9aa8db821e1"
+ },
+ "sampling": "no temperature/top_p (reasoning models); reasoning effort per tier in configs/default.yaml; diskcache keyed (model, prompt_version, input hash)",
+ "recipe": {
+  "tau": 0.0,
+  "strict_g_links": true,
+  "anchors": true,
+  "reference_run": "slice3_c2",
+  "evaluation_slices": "one-section slices with an EMPTY node store (CR-012/014/015)"
+ }
+}

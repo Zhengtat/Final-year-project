@@ -1,0 +1,19 @@
+{
+ "kind": "pilot",
+ "path": "data/gold/cr015_pd_pilot_gold_draft.csv",
+ "sha256": "d4a4229010ad019932ae2dc97008c7ae394612f496589fa4613f8b618c54264d",
+ "rows": 2179,
+ "concepts": 338,
+ "mentions": 1841,
+ "nested_valid_mentions": 364,
+ "review_decision_counts": {
+  "keep": 1854,
+  "edited": 325
+ },
+ "file_mtime": "2026-10-13 07:20:05",
+ "recorded_at": "2026-10-13 07:21:21",
+ "provenance_label": "MODEL_GENERATED_DIAGNOSTIC",
+ "note": "Pipeline model draft (gpt-6-sol, cr015_gold_draft v1) -> reviewed/edited by a non-human process (325 edited rows) -> saved as pilot gold on 2026-10-13. Label is final: MODEL_GENERATED_DIAGNOSTIC. Results against it are 'agreement with frozen benchmark', not human-validated accuracy. Original unreviewed draft preserved in data/interim/suggestions/ (committed).",
+ "raw_file_committed": false,
+ "review_mode": "not human (owner statement, 2026-10-13): the draft's review/edits were model-assisted, not performed by a human"
+}

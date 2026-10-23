@@ -1,0 +1,44 @@
+{
+ "frozen_at_utc": "2026-10-08T00:33:22+00:00",
+ "git_head": "1dcbeabba8029b8e95b465928c99068f5225036f",
+ "run": "slice3_c2",
+ "seed": 20261008,
+ "n_per_pool": 150,
+ "population_sizes": {
+  "P0": 1100,
+  "P1_extra": 7730,
+  "P2_extra_strict": 4917
+ },
+ "nesting": {
+  "p0_subset_p1": true,
+  "p1_subset_p2": true,
+  "p1_extra_disjoint_from_p0": true,
+  "p2_extra_disjoint_from_p0_and_p1": true,
+  "sizes": {
+   "P0": 1100,
+   "P1": 8830,
+   "P2": 13747
+  }
+ },
+ "pool_key_hashes": {
+  "P0": "a7266585483407702dbd6de617bf4d3d6b31bfc8938612214692ebb8104d571d",
+  "P1_extra": "671cba1c86da493a94134fc0436b7bd7380aacc9d081df2e71681ec32f28cdbb",
+  "P2_extra_strict": "535c40e1e85e5f2edcf2f3b2d9448cddc2940915c5319f66fcc2759a30170afd"
+ },
+ "strict_cue_config": {
+  "file_sha256": "48480f30b5f34d0278287832db60978bd7ca0b4747a90f9c5c22015c0d0925bb",
+  "content_sha256": "10a8e85d176f4bf7eeccb2cdc42d29da48245cc9fca05546b1f20dae0b7b3825"
+ },
+ "old_p2_extra_size_prep_v0": 2474,
+ "p0_sample_origin": {
+  "anchor_derived": 36,
+  "same_sentence": 114
+ },
+ "p1_sample_includes_cr007_random_sample_pairs": 0,
+ "existing_random_human_labelled_p0_sample": "none suitable (owner marks cover accepted edges only; REL-MAP-180 is relation-balanced): 150 random P0 pairs drawn",
+ "sample_sha256": "e06f0d41bbe97201dfffca9927e9369ff9b2a20dae1bdcc4b9013e11a8c4127d",
+ "blind_sheet_sha256": "6719cc3fd7f7cfe355343c5327b15a1926d2bc529923c84543f97d72ff6fd918",
+ "truth_definition_primary": "true_relation_exists == yes AND evidence_supported == yes",
+ "estimator": "per-pool proportion x pool size; 95% percentile cluster bootstrap over evidence sections (B=10000, seed 20261009), resampling sections within each pool",
+ "classifier_output": "sealed until the annotation is frozen"
+}

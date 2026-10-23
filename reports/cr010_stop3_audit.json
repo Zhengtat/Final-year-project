@@ -1,0 +1,377 @@
+{
+ "stop": "CR-010 STOP 3",
+ "failed_checks": 0,
+ "checks": [
+  {
+   "id": "A1_counts",
+   "status": "pass",
+   "detail": {
+    "labels": 32,
+    "true_discourse_relations": 31,
+    "technical": [
+     "SAME-UNIT"
+    ]
+   },
+   "kind": "check"
+  },
+  {
+   "id": "A2_label_set_equals_fixture",
+   "status": "pass",
+   "detail": {
+    "missing": [],
+    "extra": []
+   },
+   "kind": "check"
+  },
+  {
+   "id": "B1_labels_equal_paper_table_A1",
+   "status": "pass",
+   "detail": {
+    "paper_rows": 32,
+    "missing_in_package": [],
+    "extra_in_package": []
+   },
+   "kind": "source"
+  },
+  {
+   "id": "B2_nuclearity_symbols_equal_paper",
+   "status": "pass",
+   "detail": {
+    "mismatches": {}
+   },
+   "kind": "source"
+  },
+  {
+   "id": "D1_hierarchy_naming_rule",
+   "status": "pass",
+   "detail": {
+    "discourse_coarse_classes": 14,
+    "per_class": {
+     "adversative": 3,
+     "attribution": 2,
+     "causal": 2,
+     "context": 2,
+     "contingency": 1,
+     "elaboration": 2,
+     "evaluation": 1,
+     "explanation": 3,
+     "joint": 4,
+     "mode": 2,
+     "organization": 3,
+     "purpose": 2,
+     "restatement": 2,
+     "technical": 1,
+     "topic": 2
+    },
+    "note": "SAME-UNIT sits in the package's 'technical' bucket, not a discourse coarse class (the paper: not a proper discourse relation, a device for discontinuous units); every other label obeys <coarse-class>-<fine-grained>, enforced at load"
+   },
+   "kind": "check"
+  },
+  {
+   "id": "E1_nuclearity_distribution",
+   "status": "pass",
+   "detail": {
+    "counts": {
+     "→←": 19,
+     "Λ": 7,
+     "←": 3,
+     "→": 3
+    },
+    "fixed_orientation_labels": {
+     "ELABORATION-ADDITIONAL": "←",
+     "ELABORATION-ATTRIBUTE": "←",
+     "ORGANIZATION-HEADING": "→",
+     "ORGANIZATION-PREPARATION": "→",
+     "RESTATEMENT-PARTIAL": "←",
+     "TOPIC-QUESTION": "→"
+    }
+   },
+   "kind": "check"
+  },
+  {
+   "id": "E2_orientation_reading_flagged_for_research",
+   "status": "pass",
+   "detail": {
+    "reading": "the arrow points at the nucleus: '←' nucleus first, satellite after; '→' satellite first; '→←' either; 'Λ' multinuclear",
+    "basis": "the paper's legend says '←' is for satellite relations that only go left-to-right; the reading is consistent with the definitions of all six fixed-orientation rows (elaboration, partial restatement follow their nucleus; heading, preparation, question precede it) but is an inference to be confirmed by Research",
+    "enforced_in": "ErstEdge (primary edges only; secondary edges record a direction and never nuclearity)"
+   },
+   "kind": "flag"
+  },
+  {
+   "id": "F1_definitions_vs_paper",
+   "status": "pass",
+   "detail": {
+    "paper_rows_parsed": 32,
+    "method": "token-set Jaccard between the package definition and the paper definition (the package paraphrases the paper)",
+    "lowest_overlap_for_human_review": [
+     {
+      "label": "ELABORATION-ADDITIONAL",
+      "jaccard": 0.21
+     },
+     {
+      "label": "CONTEXT-BACKGROUND",
+      "jaccard": 0.3
+     },
+     {
+      "label": "EVALUATION-COMMENT",
+      "jaccard": 0.31
+     },
+     {
+      "label": "SAME-UNIT",
+      "jaccard": 0.31
+     },
+     {
+      "label": "ORGANIZATION-PREPARATION",
+      "jaccard": 0.36
+     },
+     {
+      "label": "ADVERSATIVE-CONTRAST",
+      "jaccard": 0.4
+     }
+    ],
+    "median_jaccard": 0.62
+   },
+   "kind": "source"
+  },
+  {
+   "id": "G1_legend_vs_paper",
+   "status": "pass",
+   "detail": "the package legend has the four symbols the paper's Appendix A defines",
+   "kind": "source"
+  },
+  {
+   "id": "H1_signal_types_vs_paper",
+   "status": "pass",
+   "detail": {
+    "paper": [
+     "graphical",
+     "lexical",
+     "morphological",
+     "numerical",
+     "reference",
+     "semantic",
+     "syntactic"
+    ],
+    "package": [
+     "graphical",
+     "lexical",
+     "morphological",
+     "numerical",
+     "reference",
+     "semantic",
+     "syntactic"
+    ]
+   },
+   "kind": "source"
+  },
+  {
+   "id": "H2_signal_subtypes_in_paper_table1",
+   "status": "pass",
+   "detail": {
+    "not_found": []
+   },
+   "kind": "source"
+  },
+  {
+   "id": "I1_secondary_edge_rule_vs_paper",
+   "status": "pass",
+   "detail": "the paper: secondary edges express only relations, not prominence; the package rule forbids a fabricated nuclearity on them",
+   "kind": "source"
+  },
+  {
+   "id": "J1_semantic_guards",
+   "status": "pass",
+   "detail": {
+    "same_unit_not_semantic": true,
+    "restatement_no_auto_merge": true,
+    "list_not_contrast": true,
+    "attribution_not_domain_edge": true,
+    "organization_not_domain_edge": true,
+    "condition_not_prerequisite": true,
+    "contrast_dimension_guard": true
+   },
+   "kind": "check"
+  },
+  {
+   "id": "J2_no_cr008_equivalence_violation",
+   "status": "pass",
+   "detail": {
+    "pairs": [
+     {
+      "pair": [
+       "HDLC",
+       "SDLC"
+      ],
+      "recognised_as_different_by_fixture_surface_forms": false,
+      "lexicon_entry_forms": [
+       "High-Level Data Link Control (HDLC)",
+       "Synchronous Data Link Control (SDLC)"
+      ],
+      "recognised_via_lexicon_entry_forms": true,
+      "merge_gate_allowed": false
+     },
+     {
+      "pair": [
+       "Internet",
+       "internetworking"
+      ],
+      "recognised_as_different_by_fixture_surface_forms": true,
+      "lexicon_entry_forms": [
+       "Internet",
+       "internetworking"
+      ],
+      "recognised_via_lexicon_entry_forms": true,
+      "merge_gate_allowed": false
+     },
+     {
+      "pair": [
+       "CRC",
+       "error-detecting code"
+      ],
+      "recognised_as_different_by_fixture_surface_forms": true,
+      "lexicon_entry_forms": null,
+      "recognised_via_lexicon_entry_forms": false,
+      "merge_gate_allowed": false
+     }
+    ],
+    "rule": "an eRST restatement/synonymy signal may only queue a same-concept candidate; an approved `different` pair is never merged"
+   },
+   "kind": "check"
+  },
+  {
+   "id": "J3_lexicon_surface_form_gap",
+   "status": "FLAG",
+   "detail": {
+    "finding": "Lexicon.is_different matches only the exact surface forms of an entry: the fixture's bare forms are not recognised for these pairs, only the lexicon's own long forms are. This is the existing CR-008 guard, not an eRST behaviour; nothing was changed in CR-010.",
+    "pairs": [
+     {
+      "pair": [
+       "HDLC",
+       "SDLC"
+      ],
+      "recognised_as_different_by_fixture_surface_forms": false,
+      "lexicon_entry_forms": [
+       "High-Level Data Link Control (HDLC)",
+       "Synchronous Data Link Control (SDLC)"
+      ],
+      "recognised_via_lexicon_entry_forms": true,
+      "merge_gate_allowed": false
+     }
+    ],
+    "options": [
+     "owner adds the bare forms to the approved `different` entry (data change in configs/term_lexicon.yaml)",
+     "CR-008 matching also compares the short form of an 'X (ABC)' entry (code change, stricter, needs a DECISIONS entry)",
+     "leave as is: node names carry the long form + acronym alias, so the merge guard sees the long form"
+    ]
+   },
+   "kind": "flag"
+  },
+  {
+   "id": "K1_mapping_targets_are_inventory_labels",
+   "status": "pass",
+   "detail": {
+    "targets": 15,
+    "not_in_inventory": []
+   },
+   "kind": "check"
+  },
+  {
+   "id": "K2_no_label_equals_a_domain_relation_name",
+   "status": "pass",
+   "detail": {
+    "clashes": [],
+    "active_registry": "configs/relations_v1.3.yaml"
+   },
+   "kind": "check"
+  },
+  {
+   "id": "K3_equivalent_to_stays_retired",
+   "status": "pass",
+   "detail": {
+    "in_active_registry": false,
+    "validator_rejects": true
+   },
+   "kind": "check"
+  },
+  {
+   "id": "K4_mapping_rows_for_retired_or_misconception_relations",
+   "status": "pass",
+   "detail": {
+    "rows": [
+     {
+      "current": "identifies",
+      "layer": "classification_structure",
+      "erst_hypotheses": ""
+     },
+     {
+      "current": "encapsulates",
+      "layer": "classification_structure",
+      "erst_hypotheses": ""
+     },
+     {
+      "current": "trades_off_with",
+      "layer": "comparison",
+      "erst_hypotheses": "ADVERSATIVE-CONTRAST"
+     },
+     {
+      "current": "instantiates",
+      "layer": "classification_structure",
+      "erst_hypotheses": "ELABORATION-ATTRIBUTE;ELABORATION-ADDITIONAL"
+     },
+     {
+      "current": "equivalent_to",
+      "layer": "REMOVED_NODE_PROPERTY",
+      "erst_hypotheses": "RESTATEMENT-PARTIAL;RESTATEMENT-REPETITION"
+     },
+     {
+      "current": "conflated_with",
+      "layer": "MISCONCEPTION_LAYER",
+      "erst_hypotheses": ""
+     }
+    ],
+    "note": "hypotheses only (NOT GOLD); equivalent_to maps to RESTATEMENT-* strictly as canonicalisation evidence"
+   },
+   "kind": "flag"
+  },
+  {
+   "id": "L1_unknown_labels_fail_closed",
+   "status": "pass",
+   "detail": {
+    "registry_lookup": {
+     "CAUSAL-REASON": true,
+     "causal-cause": true,
+     "synonym_of": true,
+     "same_as": true,
+     "EQUIVALENT-TO": true,
+     "": true,
+     "SAME_UNIT": true
+    },
+    "edge_construction_rejected": {
+     "CAUSAL-REASON": true,
+     "SAME-UNIT": true
+    }
+   },
+   "kind": "check"
+  },
+  {
+   "id": "L2_unknown_or_unanchored_signals_rejected",
+   "status": "pass",
+   "detail": [
+    true,
+    true,
+    true
+   ],
+   "kind": "check"
+  }
+ ],
+ "provenance": {
+  "erst_relations.yaml": "3e1214f51ef089aa",
+  "erst_signals.yaml": "5f742fb911b20fd3",
+  "fixtures": "e1a90a3a8d2027c2",
+  "paper_table_fixture": "1b13af27720b3e1d",
+  "paper_text_present": true,
+  "paper": "arXiv:2403.13560v2 (28 Aug 2024); journal version not compared",
+  "registry_id": "erst-gum-1.0"
+ }
+}

@@ -1,0 +1,28 @@
+# CR-021: concept-stage policy switches for NEW production runs (older runs are unchanged; a run's merges log records what was applied).
+# rejected_link_policy: what happens when the strict G-link check (CR-009) rejects a link.
+#   off        -> dropped (CR-009 behaviour)
+#   adjudicate -> the strong-tier rejected-link adjudicator (prompts/rejected_link_adjudicator/v2) decides: new_concept -> its own node;
+#                 same_as_target -> mention + alias on the node; not_a_concept / failed quote -> dropped. ADOPTED 2026-10-15 after the
+#                 measured held-out test (DECISIONS.md; reports/cr021/adjudicator.md).
+rejected_link_policy: adjudicate
+# promote_rejected_links: the name-only "more specific" rule. NOT adopted (owner review: 7 of 33 promotions would split a concept).
+promote_rejected_links: false
+# backfill (CR-027): the chapter-end pass that adds mentions of earlier nodes found by string matching. false = off for NEW
+# production runs (P&D, CR-012 unit runner, SciNLP: all go through cr009_run.stage_concepts); the code and prompts/concept_backfill/v1
+# stay, older runs keep their stored backfill records, experiments.py (frozen CR-009 / CR-010 arms) is untouched. The run records
+# `backfill` in v4_concepts.json extra.
+backfill: false
+# identity_resolver (CR-035): legacy | u1. `u1` = the deterministic identity resolver (src/cumap/expert_kg/identity.py, configs/identity_rules.yaml):
+# U0-U4 for generator links (input A, adds the lexicon `different` veto and textbook alias statements), the name + gloss all-forms registry search
+# for new concepts (input B), U-ids with `legacy_rule_id` in the merge log, generator-stage entries keeping their own rule id, weak alias cues as
+# review rows. A pair the rules cannot decide falls back to today's LLM path. NOT adopted: `legacy` stays the default. A run made with `u1`
+# records it in v4_concepts.json extra.
+identity_resolver: legacy
+# identity_judge (CR-037): "off" | "v1". DRAFT, never run. With identity_resolver: u1 and identity_judge: "v1" the U5 judge (prompts/identity_judge/v1,
+# schema built from configs/identity_rules.yaml judge.options) decides a pair that U0-U4 could not decide, instead of the rejected-link adjudicator
+# (generator links) and canonicalize v2 (new concepts). Quote the value (an unquoted off is a YAML boolean). Waits for the owner's review of the prompt.
+identity_judge: "off"
+# CR-041 (2026-10-23): the lexicon file NEW production runs load. configs/term_lexicon.yaml (v0.3) stays frozen (hash-pinned by
+# the CR-011 handoff) and is what older runs, frozen evaluation and replays use. v0.4 = v0.3 + the owner marks on
+# data/gold/lexicon_intake_slice3_c2.csv (cumap lexicon apply-marks).
+term_lexicon: configs/term_lexicon_v0.4.yaml

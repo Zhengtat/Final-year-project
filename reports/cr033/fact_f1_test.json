@@ -1,0 +1,426 @@
+{
+ "split": "test",
+ "gate": {
+  "checks": {
+   "A1_all_labels_equals_cr019_per_document_for_all_three_variants": true,
+   "frozen_strict_relation_micro_equals_cr012_json": true,
+   "idx_p1_micro_equals_cr019_stage_a_json": true,
+   "frozen_concept_f1_0.352": true,
+   "frozen_pair_recall_0.545": true,
+   "frozen_strict_edge_f1_0.050": true,
+   "idx_p1_f1_0.195": true
+  },
+  "passed": true,
+  "figures": {
+   "FROZEN": {
+    "tp": 8,
+    "fp": 14,
+    "fn": 287,
+    "precision": 0.36363636363636365,
+    "recall": 0.02711864406779661,
+    "f1": 0.050473186119873815
+   },
+   "FROZEN-UNPLACED-FP": {
+    "tp": 8,
+    "fp": 105,
+    "fn": 287,
+    "precision": 0.07079646017699115,
+    "recall": 0.02711864406779661,
+    "f1": 0.0392156862745098
+   },
+   "IDX-P1": {
+    "tp": 40,
+    "fp": 75,
+    "fn": 255,
+    "precision": 0.34782608695652173,
+    "recall": 0.13559322033898305,
+    "f1": 0.1951219512195122
+   }
+  }
+ },
+ "sets": {
+  "frozen CR-012 STOP 4 E0 (token matching)": {
+   "documents": [
+    "2021.acl-long.353",
+    "2024.acl-long.108-1-9.grobid",
+    "P17-1058.grobid"
+   ],
+   "variants": {
+    "FROZEN": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 9,
+       "fp": 12,
+       "fn": 202,
+       "precision": 0.42857142857142855,
+       "recall": 0.04265402843601896,
+       "f1": 0.07758620689655173
+      },
+      "gold_facts": 211,
+      "gold_mention_relations": 295,
+      "pred_facts": 21,
+      "pred_facts_with_synthetic_concept": 5,
+      "tp_facts": 9,
+      "tp_facts_with_strict_evidence_match": 8,
+      "unplaced_counted_as_fp": 0,
+      "evidence_match_share": 0.8888888888888888
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 8,
+      "fp": 14,
+      "fn": 287,
+      "precision": 0.36363636363636365,
+      "recall": 0.02711864406779661,
+      "f1": 0.050473186119873815
+     }
+    },
+    "IDX-P1": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 53,
+       "fp": 59,
+       "fn": 158,
+       "precision": 0.4732142857142857,
+       "recall": 0.25118483412322273,
+       "f1": 0.3281733746130031
+      },
+      "gold_facts": 211,
+      "gold_mention_relations": 295,
+      "pred_facts": 108,
+      "pred_facts_with_synthetic_concept": 29,
+      "tp_facts": 53,
+      "tp_facts_with_strict_evidence_match": 40,
+      "unplaced_counted_as_fp": 4,
+      "evidence_match_share": 0.7547169811320755
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 40,
+      "fp": 75,
+      "fn": 255,
+      "precision": 0.34782608695652173,
+      "recall": 0.13559322033898305,
+      "f1": 0.1951219512195122
+     }
+    },
+    "IDX-P3": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 55,
+       "fp": 60,
+       "fn": 156,
+       "precision": 0.4782608695652174,
+       "recall": 0.26066350710900477,
+       "f1": 0.33742331288343563
+      },
+      "gold_facts": 211,
+      "gold_mention_relations": 295,
+      "pred_facts": 110,
+      "pred_facts_with_synthetic_concept": 29,
+      "tp_facts": 55,
+      "tp_facts_with_strict_evidence_match": 53,
+      "unplaced_counted_as_fp": 5,
+      "evidence_match_share": 0.9636363636363636
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 91,
+      "fp": 162,
+      "fn": 204,
+      "precision": 0.35968379446640314,
+      "recall": 0.30847457627118646,
+      "f1": 0.3321167883211679
+     }
+    }
+   }
+  },
+  "CR-021 rebuild `cr021test` E0 (r1key matching)": {
+   "documents": [
+    "2021.acl-long.353",
+    "2024.acl-long.108-1-9.grobid",
+    "P17-1058.grobid"
+   ],
+   "variants": {
+    "FROZEN": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 7,
+       "fp": 16,
+       "fn": 204,
+       "precision": 0.30434782608695654,
+       "recall": 0.03317535545023697,
+       "f1": 0.05982905982905983
+      },
+      "gold_facts": 211,
+      "gold_mention_relations": 295,
+      "pred_facts": 23,
+      "pred_facts_with_synthetic_concept": 8,
+      "tp_facts": 7,
+      "tp_facts_with_strict_evidence_match": 7,
+      "unplaced_counted_as_fp": 0,
+      "evidence_match_share": 1.0
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 7,
+      "fp": 17,
+      "fn": 288,
+      "precision": 0.2916666666666667,
+      "recall": 0.023728813559322035,
+      "f1": 0.0438871473354232
+     }
+    },
+    "IDX-P1": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 41,
+       "fp": 68,
+       "fn": 170,
+       "precision": 0.3761467889908257,
+       "recall": 0.1943127962085308,
+       "f1": 0.25625
+      },
+      "gold_facts": 211,
+      "gold_mention_relations": 295,
+      "pred_facts": 101,
+      "pred_facts_with_synthetic_concept": 33,
+      "tp_facts": 41,
+      "tp_facts_with_strict_evidence_match": 29,
+      "unplaced_counted_as_fp": 8,
+      "evidence_match_share": 0.7073170731707317
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 29,
+      "fp": 83,
+      "fn": 266,
+      "precision": 0.25892857142857145,
+      "recall": 0.09830508474576272,
+      "f1": 0.14250614250614252
+     }
+    },
+    "IDXR1-P1": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 42,
+       "fp": 67,
+       "fn": 169,
+       "precision": 0.3853211009174312,
+       "recall": 0.1990521327014218,
+       "f1": 0.2625
+      },
+      "gold_facts": 211,
+      "gold_mention_relations": 295,
+      "pred_facts": 106,
+      "pred_facts_with_synthetic_concept": 33,
+      "tp_facts": 42,
+      "tp_facts_with_strict_evidence_match": 30,
+      "unplaced_counted_as_fp": 3,
+      "evidence_match_share": 0.7142857142857143
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 30,
+      "fp": 83,
+      "fn": 265,
+      "precision": 0.26548672566371684,
+      "recall": 0.1016949152542373,
+      "f1": 0.14705882352941177
+     }
+    }
+   }
+  },
+  "frozen CR-012 oracle E1 (token matching)": {
+   "documents": [
+    "2021.acl-long.353",
+    "2024.acl-long.108-1-9.grobid",
+    "P17-1058.grobid"
+   ],
+   "variants": {
+    "FROZEN": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 56,
+       "fp": 15,
+       "fn": 155,
+       "precision": 0.7887323943661971,
+       "recall": 0.26540284360189575,
+       "f1": 0.39716312056737596
+      },
+      "gold_facts": 211,
+      "gold_mention_relations": 295,
+      "pred_facts": 71,
+      "pred_facts_with_synthetic_concept": 0,
+      "tp_facts": 56,
+      "tp_facts_with_strict_evidence_match": 47,
+      "unplaced_counted_as_fp": 0,
+      "evidence_match_share": 0.8392857142857143
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 47,
+      "fp": 27,
+      "fn": 248,
+      "precision": 0.6351351351351351,
+      "recall": 0.15932203389830507,
+      "f1": 0.25474254742547425
+     }
+    },
+    "IDX-P1": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 63,
+       "fp": 37,
+       "fn": 148,
+       "precision": 0.63,
+       "recall": 0.2985781990521327,
+       "f1": 0.405144694533762
+      },
+      "gold_facts": 211,
+      "gold_mention_relations": 295,
+      "pred_facts": 99,
+      "pred_facts_with_synthetic_concept": 0,
+      "tp_facts": 63,
+      "tp_facts_with_strict_evidence_match": 47,
+      "unplaced_counted_as_fp": 1,
+      "evidence_match_share": 0.746031746031746
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 47,
+      "fp": 56,
+      "fn": 248,
+      "precision": 0.4563106796116505,
+      "recall": 0.15932203389830507,
+      "f1": 0.23618090452261306
+     }
+    }
+   }
+  },
+  "frozen CR-012 oracle E3-M (token matching)": {
+   "documents": [
+    "2021.acl-long.353",
+    "2024.acl-long.108-1-9.grobid",
+    "P17-1058.grobid"
+   ],
+   "variants": {
+    "FROZEN": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 109,
+       "fp": 16,
+       "fn": 102,
+       "precision": 0.872,
+       "recall": 0.5165876777251185,
+       "f1": 0.6488095238095238
+      },
+      "gold_facts": 211,
+      "gold_mention_relations": 295,
+      "pred_facts": 125,
+      "pred_facts_with_synthetic_concept": 0,
+      "tp_facts": 109,
+      "tp_facts_with_strict_evidence_match": 96,
+      "unplaced_counted_as_fp": 0,
+      "evidence_match_share": 0.8807339449541285
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 100,
+      "fp": 37,
+      "fn": 195,
+      "precision": 0.7299270072992701,
+      "recall": 0.3389830508474576,
+      "f1": 0.4629629629629629
+     }
+    },
+    "IDX-P1": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 112,
+       "fp": 39,
+       "fn": 99,
+       "precision": 0.7417218543046358,
+       "recall": 0.5308056872037915,
+       "f1": 0.6187845303867404
+      },
+      "gold_facts": 211,
+      "gold_mention_relations": 295,
+      "pred_facts": 144,
+      "pred_facts_with_synthetic_concept": 0,
+      "tp_facts": 112,
+      "tp_facts_with_strict_evidence_match": 96,
+      "unplaced_counted_as_fp": 7,
+      "evidence_match_share": 0.8571428571428571
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 100,
+      "fp": 67,
+      "fn": 195,
+      "precision": 0.5988023952095808,
+      "recall": 0.3389830508474576,
+      "f1": 0.43290043290043284
+     }
+    }
+   }
+  },
+  "frozen CR-012 oracle E4-M (token matching)": {
+   "documents": [
+    "2021.acl-long.353",
+    "2024.acl-long.108-1-9.grobid",
+    "P17-1058.grobid"
+   ],
+   "variants": {
+    "FROZEN": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 108,
+       "fp": 13,
+       "fn": 103,
+       "precision": 0.8925619834710744,
+       "recall": 0.5118483412322274,
+       "f1": 0.6506024096385541
+      },
+      "gold_facts": 211,
+      "gold_mention_relations": 295,
+      "pred_facts": 121,
+      "pred_facts_with_synthetic_concept": 0,
+      "tp_facts": 108,
+      "tp_facts_with_strict_evidence_match": 96,
+      "unplaced_counted_as_fp": 0,
+      "evidence_match_share": 0.8888888888888888
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 100,
+      "fp": 28,
+      "fn": 195,
+      "precision": 0.78125,
+      "recall": 0.3389830508474576,
+      "f1": 0.47281323877068554
+     }
+    },
+    "IDX-P1": {
+     "FACT_C1_SURF_R1": {
+      "prf": {
+       "tp": 112,
+       "fp": 17,
+       "fn": 99,
+       "precision": 0.8682170542635659,
+       "recall": 0.5308056872037915,
+       "f1": 0.6588235294117648
+      },
+      "gold_facts": 211,
+      "gold_mention_relations": 295,
+      "pred_facts": 127,
+      "pred_facts_with_synthetic_concept": 0,
+      "tp_facts": 112,
+      "tp_facts_with_strict_evidence_match": 96,
+      "unplaced_counted_as_fp": 2,
+      "evidence_match_share": 0.8571428571428571
+     },
+     "strict_relation_mention_level_beside": {
+      "tp": 100,
+      "fp": 38,
+      "fn": 195,
+      "precision": 0.7246376811594203,
+      "recall": 0.3389830508474576,
+      "f1": 0.46189376443418007
+     }
+    }
+   }
+  }
+ },
+ "hashes_unchanged": true,
+ "n_hashed": 15
+}

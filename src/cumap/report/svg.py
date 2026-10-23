@@ -170,3 +170,65 @@ def hbar_svg(
     if note:
         body.append(f'<text class="t2 sm" x="12" y="{height - 38}">{escape(note)}</text>')
     return wrap_svg(width, height, "".join(body), title, footer)
+
+
+def stacked_bar_svg(
+    title: str,
+    categories: list[str],
+    series: dict[str, list[float]],
+    *,
+    provenance: Provenance,
+    label_source: str,
+    value_fmt: str = "{:.0f}",
+    width: int = 660,
+    height: int = 320,
+    series_colors: dict[str, int] | None = None,
+) -> str:
+    """Vertical stacked bars, a 2px surface gap between segments, legend for >= 2 series."""
+    footer = provenance.footer(label_source)
+    names = list(series)
+    left, right, top, bottom = 44, 12, 52, 58
+    pw, ph = width - left - right, height - top - bottom
+    totals = [sum(series[n][i] for n in names) for i in range(len(categories))]
+    top_v = (max(totals) if totals else 1) * 1.1 or 1
+    body = []
+    for g in range(5):
+        v = top_v * g / 4
+        y = top + ph - ph * g / 4
+        body.append(
+            f'<line class="grid" x1="{left}" x2="{width - right}" y1="{y:.1f}" y2="{y:.1f}"/>'
+        )
+        body.append(
+            f'<text class="t2 sm" x="{left - 6}" y="{y + 4:.1f}" text-anchor="end">{v:.3g}</text>'
+        )
+    gw = pw / max(len(categories), 1)
+    bw = min(56, gw * 0.6)
+    colors = [slot((series_colors or {}).get(n, i)) for i, n in enumerate(names)]
+    for ci, cat in enumerate(categories):
+        x = left + gw * ci + (gw - bw) / 2
+        y = top + ph
+        for si, name in enumerate(names):
+            val = series[name][ci]
+            h = ph * val / top_v
+            if val <= 0:
+                continue
+            tip = escape(f"{name} · {cat}: {value_fmt.format(val)}")
+            body.append(
+                f'<g><title>{tip}</title><rect x="{x:.1f}" y="{y - h + 1:.1f}" width="{bw:.1f}" '
+                f'height="{max(h - 2, 0):.1f}" rx="3" fill="{colors[si]}"/></g>'
+            )
+            y -= h
+        body.append(
+            f'<text class="t2 sm" x="{left + gw * ci + gw / 2:.1f}" y="{top + ph + 16}" '
+            f'text-anchor="middle">{escape(cat)}</text>'
+        )
+        body.append(
+            f'<text class="sm" x="{left + gw * ci + gw / 2:.1f}" y="{y - 4:.1f}" '
+            f'text-anchor="middle">{value_fmt.format(totals[ci])}</text>'
+        )
+    body.append(
+        f'<line class="ax" x1="{left}" x2="{width - right}" y1="{top + ph}" y2="{top + ph}"/>'
+    )
+    if len(names) >= 2:
+        body.append(_legend(names, left, 38, colors))
+    return wrap_svg(width, height, "".join(body), title, footer)

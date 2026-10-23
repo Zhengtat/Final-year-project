@@ -1,0 +1,21 @@
+id,concept,type,what the node means (definition),section,where it was tagged (quote),mark (same sense / different sense),note
+1,cloud providers,Concept,,3.5,cloud providers,same sense,
+2,video,DataUnit,,1.5,Video,same sense,
+3,optical fiber,Concept,,1.2,optical fiber,same sense,
+4,addressing,Concept,,2.7,addressing,different sense,"Here ""addressing"" means dealing with the hidden-node problem, not the networking addressing concept."
+5,network,Concept,A directly connected or switched network that uses one technology.,1.2,network,same sense,
+6,software,Concept,,1.3,software,same sense,
+7,physical link,Concept,,1.3,physical link,same sense,
+8,application,Concept,,3.3,applications,same sense,
+9,node,Concept,"A computer, or sometimes a more specialized piece of hardware, connected in a network.",1.5,nodes,same sense,
+10,bit,Concept,,1.1,bit,different sense,In §1.1 the matched word is used idiomatically rather than as a binary bit.
+11,physical link,Concept,,1.2,physical links,same sense,
+12,voice,DataUnit,,3.1,voice,same sense,
+13,network operator,Concept,A person who operates or manages networks.,2.1,network operators,same sense,
+14,collision detection,Concept,,2.6,collision detection,same sense,
+15,path,Concept,A route through a network from one point to another.,3.5,path,different sense,"The §3.5 occurrence describes a packet path through a switch implementation, not a route through the network."
+16,spectrum,Concept,,2.7,spectrum,same sense,
+17,frame header,Component,The beginning portion of a frame that can contain the number of bytes in the frame.,3.2,frame header,same sense,
+18,application process,Component,A process running on a host that communicates with other distributed application processes over a network.,1.4,application process,same sense,
+19,storage,Concept,,3.4,storage,same sense,
+20,bit,Concept,,2.5,bit,same sense,

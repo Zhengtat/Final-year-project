@@ -1,0 +1,1 @@
+A router forwards packets. The router uses a routing table. TCP is a protocol and the Transmission Control Protocol (TCP) provides reliability.

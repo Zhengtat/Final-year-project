@@ -1,0 +1,31 @@
+id,concept,type,section,evidence quote,judgement (valid complete / partial / not a concept / generic),if partial: the full term,anchored to (known concept),cue sentence,anchor judgement (correct / wrong / should be independent)
+1,port,Identifier,1.4,Ports are used to indirectly identify processes.,valid complete,,demultiplexing key,Ports are used to indirectly identify processes.,correct
+2,department,Concept,1.2,University system administrators and corporate IT departments,generic,,,,(none)
+3,ARP,Protocol,3.3,"R2 will use ARP, described below",partial,Address Resolution Protocol,,,(none)
+4,STS-3c frame,DataUnit,2.3,into a single STS-3c frame,valid complete,,frame,into a single STS-3c frame,correct
+5,message stream service,Concept,1.3,one supports a message stream service,valid complete,,service,one supports a message stream service,correct
+6,physical machine,Component,3-perspective-virtual-networks-all-the-way-down,all the features of a physical machine,generic,,,,(none)
+7,TCP/IP architecture,Concept,1.3,called the TCP/IP architecture,valid complete,,Internet,"The Internet architecture, which is also sometimes called the TCP/IP architecture after its two main protocols",correct
+8,Link-State algorithm,Mechanism,3.4,The link-state routing algorithm has many nice properties:,valid complete,,,,(none)
+9,Optical Network Unit,Component,2.8,in a device called an Optical Network Unit (ONU),valid complete,,PON,"at the end-points in individual homes, in a device called an Optical Network Unit (ONU)",correct
+10,cache replacement algorithm,Mechanism,3.2,invoke some sort of cache replacement algorithm,generic,,,,(none)
+11,application type,Concept,1.1,a more complete taxonomy of application types,generic,,application,a more complete taxonomy of application types,correct
+12,video quality,Property,1.5,the video quality will suffer,generic,,,,(none)
+13,TCP port number,Identifier,1.4,both the IP address of the server and a TCP port number,valid complete,,Transmission Control Protocol,a TCP port number,correct
+14,STS-Nc,Parameter,2.3,such a link is denoted STS-Nc (for concatenated),valid complete,,link,such a link is denoted STS-Nc (for concatenated),correct
+15,listen operation,Mechanism,1.4,The listen operation then defines how many connections can be pending on the specified socket.,valid complete,,operation,The listen operation then defines how many connections can be pending on the specified socket.,correct
+16,coax cable,Component,2.6,in the Ethernet the medium was originally a coax cable,valid complete,,cable,rather than tapping into a coax cable,correct
+17,route,Concept,3-problem-not-all-networks-are-directly-connected,Finding a suitable path or route through a network,valid complete,,network,Finding a suitable path or route through a network is one of the fundamental problems of networking.,correct
+18,network resource,Component,1.2,network resources are efficiently utilized and fairly allocated,valid complete,,network,network resources are efficiently utilized and fairly allocated,correct
+19,frame overhead,DataUnit,2.3,One of the fields in the frame overhead points to the beginning of the payload.,valid complete,,frame,One of the fields in the frame overhead points to the beginning of the payload.,correct
+20,channel capacity,Parameter,1.5,higher than the available channel capacity,valid complete,,channel,higher than the available channel capacity,correct
+21,traffic,Parameter,1.2,upgrading equipment as the network grows to carry more traffic,valid complete,,,,(none)
+22,ping,Mechanism,3.3,ping uses ICMP echo messages to determine if a node is reachable and alive.,valid complete,,node,ping uses ICMP echo messages to determine if a node is reachable and alive.,correct
+23,routing update,DataUnit,3.4,First we note that there are two different circumstances under which a given node decides to send a routing update to its neighbors.,valid complete,,routing,when a node sends a routing update to its neighbors,correct
+24,dynamic metric,Parameter,3.4,dynamically changing metrics are too unstable,generic,,,,(none)
+25,divisor polynomial,DataUnit,2.4,"agree on a divisor polynomial, C(x)",valid complete,,,,(none)
+26,address assignment inefficiency,Property,3.3,The problem we observe here is address assignment inefficiency: A network with two nodes uses an entire class C network address,valid complete,,,,(none)
+27,coaxial,Component,1.2,such as a coaxial cable or an optical fiber,partial,coaxial cable,,,(none)
+28,speed-of-light propagation delay,Parameter,1.5,"First, there is the speed-of-light propagation delay.",valid complete,,,,(none)
+29,Internet radio,Concept,1.1,video on demand and Internet radio use this technology,valid complete,,Internet,video on demand and Internet radio use this technology,correct
+30,interactive application,Concept,1.1,interactive applications usually entail audio and/or video flows,valid complete,,application,interactive applications usually entail audio and/or video flows,correct

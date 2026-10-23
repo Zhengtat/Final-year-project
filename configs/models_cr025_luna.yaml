@@ -1,0 +1,7 @@
+# CR-025 one-model arm: BOTH tiers run gpt-6-luna (tier efforts as in production: strong medium, bulk low), escalation off (it would only retry the same model).
+# Used with OPENAI_MODEL_STRONG=OPENAI_MODEL_BULK=gpt-6-luna and CUMAP_MODELS_CONFIG=configs/models_cr025_luna.yaml (the runner sets both).
+llm:
+  tiers:
+    strong: {model: gpt-6-luna, reasoning_effort: medium, usd_per_1m_input_tokens: 0.1, usd_per_1m_output_tokens: 0.5}
+    bulk:   {model: gpt-6-luna, reasoning_effort: low,    usd_per_1m_input_tokens: 0.1, usd_per_1m_output_tokens: 0.5}
+  escalation: {enabled: false}

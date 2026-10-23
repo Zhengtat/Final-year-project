@@ -1,0 +1,17 @@
+id,text form,linked to node,section,evidence,mark (same / not same)
+1,flows of data,flow of data,1.3,multiple flows of data over a single physical link,same
+2,networked applications,network applications,1.4,the writing of networked applications has become a mainstream activity,same
+3,exclusive OR (XOR),exclusive OR,2.3,calculating the exclusive OR (XOR) of the data,same
+4,Synchronous Optical Network,SONET,2.3,A third approach to framing is exemplified by the Synchronous Optical Network (SONET) standard.,same
+5,4B/5B encoding,4B/5B,2.6,while 4B/5B encoding (or the similar 8B/10B) scheme is used today,same
+6,bit-oriented framing protocol,bit-oriented protocol,2.6,the Ethernet is a bit-oriented framing protocol,same
+7,Passive Optical Network,PON,2.8,"Passive Optical Networks (PON), commonly referred to as fiber-to-the-home",same
+8,softwarization,cloudification,2-perspective-race-to-the-edge,how softwarization is transforming the network,same
+9,latency,delay,2-perspective-race-to-the-edge,low latency connectivity to end users,same
+10,multi-access networks,multiple-access network,3-problem-not-all-networks-are-directly-connected,these different types of links and multi-access networks,same
+11,Internet Protocol (IP),Internet Protocol,3-problem-not-all-networks-are-directly-connected,"the Internet Protocol (IP), is the topic of our second section",same
+12,route,path,3.1,that there really is a route to the receiver,same
+13,Address Resolution Protocol,ARP,3.3,This can be accomplished using the Address Resolution Protocol (ARP).,same
+14,User Datagram Protocol (UDP),User Datagram Protocol,3.3,a protocol called the User Datagram Protocol (UDP),same
+15,virtual circuit (VC),virtual circuit,3.3,A virtual circuit (VC) is a very reasonable replacement for a leased line,same
+16,network prefix,prefix,3.4,mapping from a network prefix,same

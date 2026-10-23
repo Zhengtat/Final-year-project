@@ -1,0 +1,16 @@
+{
+ "kind": "pilot",
+ "path": "data/gold/pd_concept_pilot_blind.csv",
+ "sha256": "9a199e638772bae5048b8f739b64709ffdad0cb2580c209de28083f083946be1",
+ "rows": 2145,
+ "concepts": 374,
+ "mentions": 1771,
+ "nested_valid_mentions": 172,
+ "file_mtime": "2026-10-12 14:14:54",
+ "recorded_at": "2026-10-12 14:58:52",
+ "annotator_provenance": "LLM-assisted/model-generated annotation by ChatGPT (GPT-5.6 Sol), using only the blind pilot source text and the CR-014/base annotation guides; no CR-014 system predictions, classifier outputs, scores or other system output were consulted (statement by the owner, 2026-10-12). NOT independently human-annotated; must not be represented as human-only gold.",
+ "raw_file_committed": false,
+ "human_annotated": false,
+ "provenance_statement_recorded_at": "2026-10-12",
+ "owner_decision": "2026-10-12: owner accepts the model-generated annotation as gold 'for now' (provisional); results are to be labelled as agreement with model-generated gold"
+}

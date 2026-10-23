@@ -18,7 +18,16 @@ Final-year project (FYP H420020) by Zheng Tat Wong. The system:
 - At the end of each milestone: run its acceptance checks, write what was verified (with numbers) and any open issues in `docs/PROGRESS.md`, then commit.
 - Log every design or schema change in `docs/DECISIONS.md` (date · decision · reason · alternatives).
 - Keep commits small, with clear messages. Don't push unless asked.
-- **Git workflow (from 2026-09-30):** one branch per change request (`cr-NNN-<slug>`), created from the mainline (the default branch, currently `master`). Doc updates for a CR (PROGRESS, DECISIONS, BUILD_PLAN, ARCHITECTURE, CLAUDE.md) live on the CR's branch with its code. When all of the CR's stop points are signed off and tests pass, open a PR to the mainline (or merge with `--no-ff` if there is no PR workflow) and tag the merge `cr-NNN-complete`. Don't start the next CR until the previous one is merged; it branches from the updated mainline. Every run writes to a new `run_id`, so runs from different branches never overwrite each other.
+- **Git workflow (from 2026-09-30):** one branch per change request (`cr-NNN-<slug>`), created from the mainline (`main`). Doc updates for a CR (PROGRESS, DECISIONS, BUILD_PLAN, ARCHITECTURE, CLAUDE.md) live on the CR's branch with its code. When all of the CR's stop points are signed off and tests pass, open a PR to the mainline (or merge with `--no-ff` if there is no PR workflow) and tag the merge `cr-NNN-complete`. Don't start the next CR until the previous one is merged; it branches from the updated mainline. Every run writes to a new `run_id`, so runs from different branches never overwrite each other.
+
+## Dataset snapshot rule
+Before replacing, upgrading, reformatting or switching any dataset used by an active CR:
+1. Preserve the repository state first: create the archive branch `archive/<cr>-<dataset>-pre-change` from the exact current `HEAD` and an annotated tag `<cr>-<dataset>-pre-change` at the same commit. Never modify the archive branch afterwards.
+2. A dataset tracked by Git is covered by that branch/tag. A gitignored, local-only or licence-restricted dataset needs a separate local archive of the exact bytes (for example `dataset_snapshots/<cr>-<dataset>-pre-change.tar.gz`) with its SHA-256; record the dataset source / version / commit, the archive location, the archive branch/tag, per-file hashes and the redistribution restriction in the active CR's dataset manifest. Do not push a dataset whose licence or project rules forbid it.
+3. A Git branch or tag is never called a dataset backup unless the dataset files are actually tracked by Git.
+4. After the snapshot is verified, continue on the original CR branch (no development on the archive branch).
+5. Reports must name the dataset snapshot / version behind every result; never silently compare or combine results from different dataset versions.
+6. Before any destructive replacement, verify that both the pre-change commit and the exact pre-change bytes (or an authoritative reproducible source) are recoverable.
 
 ## Commands
 ```bash
@@ -48,6 +57,29 @@ uv run streamlit run src/cumap/app/review_app.py
 10. **The SAF feedback is privileged.** Only the silver-label builder (M4) may read `answer_feedback`. The diagnosis pipeline and the baselines must never see it.
 11. **(CR-001) Relations change only through a new registry version** (`configs/relations_vX.Y.yaml`) plus a `DECISIONS.md` entry. Never add or rename a relation inside code or prompts.
 12. **(CR-001) Relation classification is always a choice among registry options** (including reversed, none and other), never free-text labels — use `RelationRegistry.choice_set`/the dynamic v2 LLM schemas (`build_edge_suggestion_v2` and friends), not a plain `relation: str` field, for any new extraction prompt.
+13. **(CR-006) `kg organise` never modifies content snapshots.** It reads snapshots (and the run checkpoint, read-only) and writes only under `data/processed/kg/<run_id>/organisation/<org_id>/`. It makes no API call.
+14. **(CR-006) Rings are a structural view, not tiers.** Never delete or demote a concept because of its ring; a persistently peripheral concept is a review flag (it may be a detail, or an extraction recall gap). Rings are named centre / inner / middle / outer (never "core", which CR-004 tiers use).
+15. **(CR-006) Principles are never pinned to the centre**; they earn their position like any node. Importance weights are fixed before any face-validity check and never tuned on it. Always show the "no clear core" banner when the null check fails.
+16. **(CR-007) Report examples are rendered from logged prompts.** The exact prompt text of every LLM call is in `data/logs/llm_prompts.jsonl` (by input hash); a worked example in a report is read from there, never re-rendered from a template.
+17. **(CR-007) Concept mentions use longest-match spans** (`expert_kg/mentions.py`): "bit rate" beats "bit"; spans are non-overlapping at token boundaries over all names and aliases. Candidate pairs, propagation, spread and first occurrence all use it. **(CR-020)** New production runs match with `r1key` (`configs/matching.yaml`): a span and a form also match when they share the CR-008 R1 name key ("prefixtuning" = "Prefix tuning" = "prefix-tuning"); the code default and every older run stay `token`, a run made with `r1key` records `matching_mode` in its `selection_stats`, replays use the recorded mode, and frozen scorers pin `token`.
+18. **(CR-007) `defined` marks only the first definition in book order.** Later `defined` tags become `refined` (evidence kept, appended to `description_history`); `first_chapter` is the first longest-match occurrence, not the first extraction.
+19. **(CR-008) Every merge records its rule and evidence.** Deterministic alias rules (R0 lexicon, R1 key, R2 acronym, R3-strong) run before any LLM merge call; "sometimes called" never auto-merges. (CR-035: the same rules exist as U0-U4 behind `identity_resolver: u1`, default `legacy`, not adopted.)
+20. **(CR-008) The term lexicon outranks every automatic rule** (`configs/term_lexicon.yaml`). Only `status: approved` entries take effect, and a `different` pair is never merged at any stage (rules, sweep, re-key, verifier, LLM candidates).
+21. **(CR-008) Equivalence is a node property:** one node with aliases, never an edge. `equivalent_to` is retired (registry v1.3); a `same_concept` answer draws no edge and queues a merge.
+22. **(CR-008) Misconception edges live in layer `misconception`** (`checkpoint.misconceptions`), always link to the correct edge (or approved lexicon `different` entry) they contradict, and never count as expert knowledge: they are invisible to expert precision, importance, pair selection, prerequisites, fusion and expected subgraphs.
+23. **(CR-009) In the main pass the concept generator sees only growing nodes from earlier sections of the same run, never gold.** Backfill (older runs only; off for new production runs since CR-027, switch `backfill` in `configs/concept_policy.yaml`) may show later nodes to earlier sections, as hints only.
+24. **(CR-009) Mentions are written only by the generator (main pass or, in older runs, backfill), with evidence.** String matching only produces hints (`concepts_v4/verifier.py` M-rules, the backfill detector).
+25. **(CR-009) The concept verifier is rule-based code.** Any LLM check is a separate, measured arm. **(CR-021)** The one adopted LLM arm is the rejected-link adjudicator (`prompts/rejected_link_adjudicator/v2`, policy `configs/concept_policy.yaml`): it runs only after the rule-based check rejects a link, never overrides an accepted link, and every decision is logged (`G-link-adjudicated`) with its evidence.
+26. **(CR-009) Pruned concepts are never shown to the generator and never paired.**
+27. **(CR-009) Anchors set pair priority but are never shown to the relation generator or verifier.**
+28. **(HISTORICAL since CR-030, 2026-10-23; applies to the frozen CR-010 results only) (CR-010) Dual layer: eRST never replaces the semantic relation layer.** The eRST-compatible discourse graph (`erst/graph.py`) is candidate-pair routing evidence only; an eRST label, signal or link never creates a semantic edge, merge or alias, and discourse relation, discourse signal and domain relation stay separate types (`erst/guards.py`).
+29. **(HISTORICAL since CR-030; applies to CR-010 results only) (CR-010) Pair-recall figures say what they cover:** recall within the enumerated candidate universe (P0-P3), never global textbook recall. Human labels are blind to classifier and eRST outputs until frozen; experimental outputs use new run ids.
+30. **(CR-011) No sleep / consolidation phase is part of production.** CR-011 closed with `NO_PRODUCTION_CHANGE`; no model-only SAME may merge nodes; held-out SLEEP-240 and SLEEP-POS sets stay sealed. Any future identity-consolidation work needs a new CR and keeps the CR-008 DIFFERENT veto, a configured non-transitive type map (`Concept` is not a wildcard) and complete alias provenance.
+31. **(CR-013) Explainability is derived and read-only.** Traces are backfilled only from retained artifacts into `data/processed/explainability/`; never infer an unrecorded decision (missing fields stay `NOT_RECORDED`), never re-key production ids, never write into a source run, and hash source artifacts before/after every build.
+32. **(CR-013) Replayed and joined data are labelled.** A `REPLAYED` layer (frozen deterministic code, no model call) is valid only if it reproduces the retained selected set exactly, and is never described as originally recorded; joins are exact, run-scoped and deterministic (`RECOVERABLE_BY_DETERMINISTIC_JOIN` with method and key), otherwise ambiguous/unavailable.
+33. **(CR-013) Explanation text is deterministic and gold-free in production.** Text comes from fixed templates over trace fields (no LLM, no private reasoning); production explain modules must not import gold or `cumap.cr012`; the evaluation overlay lives only in `why_not_eval.py`.
+34. **(CR-013) Evaluation overlays are separate and frozen.** Gold-derived explanation (failure codes, gold comparison) lives only in `eval_adapter.py` / `why_not_eval.py` / `eval_report.py` and the opt-in evaluation mode with its own payload; it consumes frozen CR-012 outputs, never reruns or reinterprets them, never pools datasets, and never presents failure codes as production decision rules.
+35. **(CR-019) Scores name their grounding variant.** The occurrence index (`cr019/occurrences.py`) is a separate layer that never writes mentions; every rescored number states its variant (`FROZEN`, `IDX-P1`, ...) and is reported beside, never instead of, the frozen CR-012 / CR-017 number; a predicted edge that cannot be placed is counted as a false positive, never silently dropped.
 
 ## OpenAI usage
 - Use the Responses API with Structured Outputs:
@@ -62,6 +94,7 @@ uv run streamlit run src/cumap/app/review_app.py
   - `strong` (default `gpt-6-sol`): KG construction, propositions, judging, gold-drafting (`suggest-expert`/`suggest-student`).
   - `bulk` (default `gpt-6-luna`): per-answer labelling and extraction (M4, M6).
   - `ceiling` (default `gpt-6-astra`): **opt-in only** — a model bake-off (`cumap eval model-bakeoff`) or similar. Never a default `model_tier` anywhere in the code.
+- **(CR-026) Model profile in use:** the local `.env` selects `configs/models_luna_default.yaml` (`CUMAP_MODELS_CONFIG`) with `OPENAI_MODEL_STRONG=OPENAI_MODEL_BULK=gpt-6-luna`: every tier runs `gpt-6-luna`; `gpt-6-sol` is the `escalate` tier, reached only by escalation (`strong` and `bulk` calls, same triggers, at most one retry). The listed tier defaults above are the baseline in `default.yaml` (pinned by the CR-011 handoff); unset the variable to get them back. A run states its profile; results from different profiles are never pooled.
 - **(CR-001) Escalation:** a `bulk`-tier call retries once on `strong` when the schema fails to validate, the output's own `confidence` field is below `llm.escalation.confidence_threshold`, or the caller's `escalate_check` predicate says so (e.g. a failed evidence check). Never more than one retry. Logged with `escalated`/`escalation_reason`; the run manifest reports the escalation rate and cost split by tier.
 - **(CR-001) Batch API:** for full-split bulk runs, submit via `--batch` and read results back through the *same* cache (`canonical_input_hash` has no batch-vs-live parameter by construction, so this is safe) — not yet implemented; build it when M4/M6 have a real bulk workload, not speculatively.
 - **(CR-001) Prompt layout for caching:** in any new prompt, put static content (instructions, the registry guideline block, few-shot examples) **first** and per-item content **last**, so provider-side prefix caching helps at bulk-run scale.
@@ -70,14 +103,14 @@ uv run streamlit run src/cumap/app/review_app.py
 
 ## Repo map (target)
 ```
-configs/            default.yaml, relations_v0.yaml (history), relations_v1.yaml (CR-001, current)
+configs/            default.yaml, models_luna_default.yaml (CR-026 luna-default profile, active in the local .env), models_cr023.yaml (o4-mini profile, opt-in), models_cr025_*.yaml (comparison arms), relations_v0.yaml (history), relations_v1.yaml (CR-001), relations_v1.3.yaml (CR-008, production), relations_v1.4.yaml (CR-024 merged with SciNLP, built, not adopted), term_lexicon.yaml, alias_rules.yaml, misconception_cues.yaml
 data/raw/           downloaded datasets + textbook clone        (gitignored)
 data/interim/       parsed sections, ID tables, suggestions/     (suggestions are drafts)
 data/gold/          HUMAN-OWNED annotations                      (committed)
 data/processed/     KG runs, silver labels, diagnoses by run_id  (gitignored)
 data/cache/ data/logs/                                           (gitignored)
 prompts/<task>/vN.md
-src/cumap/          config, cli, llm/, schemas/, data/, textbook/, expert_kg/, labels/,
+src/cumap/          config, cli, llm/, schemas/, data/, textbook/, expert_kg/, concepts_v4/ (CR-009), labels/,
                     student/, align/, graph/, eval/, app/
 tests/              unit tests + fixtures (incl. tests/fixtures/llm/<task>/*.json)
 reports/            generated markdown reports per milestone

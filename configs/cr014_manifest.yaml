@@ -1,0 +1,36 @@
+version: cr014-manifest-2
+supersedes:
+  version: cr014-manifest-1
+  sha256: 7462e305a43f43bf1a72be393d684ed32a25c79e0eb19558d6bb27ba05800437
+  why: v1 held-out totalled ~54k words (annotation burden); redrawn once, before any
+    prediction on any pool section; pilot carried over unchanged
+seed: cr014-manifest-v2
+rule: 'pool = ch4-9 numbered sections minus the 7 CR-012 held-out; tiny (<1000 words)
+  reserve-only; pilot fixed (4.1, 9.2; carried over from v1); held-out 8 drawn by
+  seed from non-pilot sections of <=8200 words, at most 3 per chapter; rest reserve.
+  Inputs: chapter + word count only.'
+pilot:
+- '4.1'
+- '9.2'
+heldout_sealed:
+- '4.2'
+- '5.3'
+- '6.1'
+- '6.4'
+- '7.2'
+- '8.3'
+- '8.4'
+- '8.5'
+reserve:
+- '4.3'
+- '5.1'
+- '5.2'
+- '6.2'
+- '6.5'
+- '8.1'
+- '9.1'
+- '9.4'
+reserve_replacement_rule: a reserve section may replace a held-out or pilot section
+  ONLY for a predeclared source/data-quality reason (parse defect, missing text),
+  never for model performance; log the reason here before any prediction.
+sha256: eb0b97f3d8a98dd35225d244572809f14e80c0a4c33d42c049636e1e59ce50de

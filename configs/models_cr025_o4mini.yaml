@@ -1,0 +1,10 @@
+# CR-025 one-model arm: BOTH tiers run o4-mini (tier efforts as in production: strong medium, bulk low), escalation off (it would only retry the same model).
+# Used with OPENAI_MODEL_STRONG=OPENAI_MODEL_BULK=o4-mini and CUMAP_MODELS_CONFIG=configs/models_cr025_o4mini.yaml (the runner sets both).
+llm:
+  tiers:
+    strong: {model: o4-mini, reasoning_effort: low, usd_per_1m_input_tokens: 1.1, usd_per_1m_output_tokens: 4.4}
+    bulk:   {model: o4-mini, reasoning_effort: low,    usd_per_1m_input_tokens: 1.1, usd_per_1m_output_tokens: 4.4}
+  escalation: {enabled: false}
+  # o4-mini's hidden reasoning counts against max_output_tokens: at the production caps its first paper stopped with a truncated
+  # canonicalize answer (status=incomplete, 768 of 800 tokens). Even at x3 (2,400) medium effort still truncated (2,368 tokens used on a decision that needs about 150), so this arm runs with effort LOW on both tiers and every cap x3 (two stated deviations).
+  max_output_tokens: {concept_extraction: 24000, concept_extraction_gleaning: 4500, canonicalize: 2400, relation_family: 2400, relation_choice: 3000, relation_qualifiers: 2400, misconception_structuring: 9000, concept_generator: 48000, concept_backfill: 9000, conexion_baseline: 9000, concept_rescue: 18000, erst_graph: 24000, erst_direct: 9000, default: 3000}

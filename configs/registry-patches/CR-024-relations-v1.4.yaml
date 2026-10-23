@@ -1,0 +1,157 @@
+# Registry patch from CR-024 (2026-10-22, owner instruction): ONE relation list = registry v1.3 + the 11 SciNLP labels
+# (frozen release SciNLP-repo-e78342be, configs/relations_scinlp.yaml). Overlapping relations are MERGED (the SciNLP label is
+# recorded on the existing relation as `external_labels`; no duplicate relation is created); labels with no overlap are ADDED.
+# This supersedes the 2026-10-10 Research ruling that the SciNLP registry is "never merged with relations_v1.3" (owner decision).
+patch_for_registry_version: 1
+new_version: "1.4"
+adds:
+  families:
+  - name: evaluation
+    label: Evaluation & measurement
+    diagnostic_prior: 0.6
+    grounding: SciNLP (EMNLP 2025) MeasuredBy / evaluatedBy / evaluatedOn; benchmark practice
+    gloss: how something is measured or tested, and on which data
+  # ---- merged: the SciNLP label is an existing relation under another name
+  external_labels:
+    is_a: {SciNLP: [subclassOf]}
+    part_of: {SciNLP: [partOf]}
+    has_purpose: {SciNLP: [UsedFor]}
+    contrasts_with: {SciNLP: [compareWith]}
+    uses: {SciNLP: [trainedWith]}
+  # ---- added: no overlap in v1.3
+  relations:
+  - name: subtask_of
+    family: classification_structure
+    layer: taxonomy
+    definition: Source is a narrower task or problem that belongs under the broader task named by target (a task hierarchy).
+    template: '{X} is a subtask of {Y}'
+    examples:
+    - named entity recognition subtask_of information extraction
+    - machine translation subtask_of natural language generation
+    near_misses:
+    - relation: is_a
+      example: BERT is_a masked language model
+      why: a kind of method, not a narrower task
+    - relation: part_of
+      example: slow start part_of[phase] TCP congestion control
+      why: a stage of one process, not a narrower task of a wider task
+    domain_types: [Any]
+    range_types: [Any]
+    directional: true
+    symmetric: false
+    transitive: true
+    inverse_of: has_subtask
+    conflicts_with: []
+    compatible_with: {}
+    external_labels: {SciNLP: [subtaskOf]}
+  - name: enhanced_by
+    family: function_means
+    layer: semantic
+    definition: Source (a method) is improved or extended by target, a technique added to it.
+    template: '{X} is enhanced by {Y}'
+    examples:
+    - an encoder-decoder model enhanced_by an attention mechanism
+    - a classifier enhanced_by data augmentation
+    near_misses:
+    - relation: uses
+      example: TCP uses sliding window
+      why: the target is a basic means, not an add-on that improves it
+    - relation: increases
+      example: a larger window increases throughput
+      why: a quantity change, not an added technique
+    domain_types: [Any]
+    range_types: [Any]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: enhances
+    conflicts_with: []
+    compatible_with:
+      uses: partial
+    external_labels: {SciNLP: [enhancedBy]}
+  - name: measured_by
+    family: evaluation
+    layer: semantic
+    definition: Source (a method or system) is measured by the metric named by target.
+    template: '{X} is measured by {Y}'
+    examples:
+    - a translation system measured_by BLEU
+    - a congestion control scheme measured_by goodput
+    near_misses:
+    - relation: has_property
+      example: slow start has_property exponential cwnd growth
+      why: a characteristic, not a metric used to measure it
+    domain_types: [Any]
+    range_types: [Any]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: measures
+    conflicts_with: []
+    compatible_with: {}
+    external_labels: {SciNLP: [MeasuredBy]}
+  - name: evaluated_by
+    family: evaluation
+    layer: semantic
+    definition: Source (a task) is evaluated with the metric named by target.
+    template: '{X} is evaluated by {Y}'
+    examples:
+    - question answering evaluated_by exact match
+    - routing evaluated_by convergence time
+    near_misses:
+    - relation: measured_by
+      example: a translation system measured_by BLEU
+      why: here the source is a method or system, not a task
+    domain_types: [Any]
+    range_types: [Any]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: evaluates
+    conflicts_with: []
+    compatible_with:
+      measured_by: partial
+    external_labels: {SciNLP: [evaluatedBy]}
+  - name: evaluated_on
+    family: evaluation
+    layer: semantic
+    definition: Source (a task or method) is tested on the dataset or benchmark named by target.
+    template: '{X} is evaluated on {Y}'
+    examples:
+    - sentiment analysis evaluated_on SST-2
+    - a routing protocol evaluated_on a 100-node testbed
+    near_misses:
+    - relation: uses
+      example: TCP uses sliding window
+      why: a means employed, not data it is tested on
+    domain_types: [Any]
+    range_types: [Any]
+    directional: true
+    symmetric: false
+    transitive: false
+    inverse_of: tests
+    conflicts_with: []
+    compatible_with: {}
+    external_labels: {SciNLP: [evaluatedOn]}
+  - name: similar_to
+    family: comparison
+    layer: semantic
+    definition: Source and target are alike in a stated respect but are DIFFERENT concepts (never a merge or an alias; same-concept equivalence stays a node property, CR-008).
+    template: '{X} is similar to {Y}'
+    examples:
+    - Adam similar_to RMSprop
+    - UDP similar_to raw IP datagrams
+    near_misses:
+    - relation: contrasts_with
+      example: slow start contrasts_with congestion avoidance
+      why: stresses what differs, not what is alike
+    domain_types: [Any]
+    range_types: [Any]
+    directional: false
+    symmetric: true
+    transitive: false
+    inverse_of: null
+    conflicts_with: []
+    compatible_with:
+      contrasts_with: partial
+    external_labels: {SciNLP: [similarWith]}

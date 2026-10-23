@@ -143,8 +143,8 @@ def build_growth(
             if e.edge_id in seen:
                 continue
             seen.add(e.edge_id)
-            raw = pair_edges[e.edge_id]
-            negated = raw["qualifiers"]["polarity"] == "negated"
+            raw = pair_edges.get(e.edge_id) or pair_edges[e.edge_id.split("~")[0]]  # CR-036: v2 ids are `pair~relation` for a second relation
+            negated = raw["qualifiers"].get("polarity") == "negated"
             edges.append(
                 GEdge(
                     id=e.edge_id,
@@ -167,8 +167,8 @@ def build_growth(
                 "sentence": raw["pair"]["sentence"],
                 "statement": raw["statement"],
                 "quote": raw["evidence_quote"],
-                "polarity": raw["qualifiers"]["polarity"],
-                "modality": raw["qualifiers"]["modality"],
+                "polarity": raw["qualifiers"].get("polarity", "affirmed"),
+                "modality": raw["qualifiers"].get("modality", ""),  # CR-034: any subset of the modality values (older runs keep `never`)
                 "chapter": snap.chapter_num,
                 "source_chapter": e.source_chapter,
                 "target_chapter": e.target_chapter,
@@ -218,7 +218,7 @@ def build_growth(
     key_concepts = []
     for cid in key_ids:
         by_section: dict[str, str] = {}
-        rank_role = {"defined": 3, "used": 2, "mentioned": 1}
+        rank_role = {"defined": 3, "refined": 3, "used": 2, "mentioned": 1}  # CR-007: refined shows as defined
         for m in concepts[cid]["mentions"]:
             if rank_role[m["role"]] > rank_role.get(by_section.get(m["section_id"], ""), 0):
                 by_section[m["section_id"]] = m["role"]
@@ -262,8 +262,57 @@ def build_growth(
     )
 
 
+def with_mentions_by_section(checkpoint: dict) -> dict:
+    """CR-009 runs keep mentions on the concepts and leave `mentions_by_section` empty; the report reads the section
+    view, so derive it (one entry per mention that carries an evidence quote). Older checkpoints are returned as is."""
+    if checkpoint.get("mentions_by_section"):
+        return checkpoint
+    by: dict[str, list[dict]] = {}
+    for c in checkpoint["concepts"]:
+        for m in c["mentions"]:
+            quote = m.get("quote") or m.get("evidence_quote") or ""
+            if not quote.strip():
+                continue
+            by.setdefault(m["section_id"], []).append(
+                {
+                    "canonical_name": c["canonical_name"],
+                    "node_type": c["node_type"],
+                    "role": m["role"],
+                    "definition": m.get("definition"),
+                    "evidence_quote": quote,
+                    "section_id": m["section_id"],
+                    "source": m.get("source", "llm"),
+                }
+            )
+    return {**checkpoint, "mentions_by_section": by}
+
+
+def load_logged_prompts(log_path: Path | None, hashes: set[str]) -> dict[str, str]:
+    """CR-007 rule 16: exact prompt text of an LLM call, read from the prompt log by input hash
+    (never re-rendered from a template). Returns {input_hash: user message text}."""
+    import ast
+
+    out: dict[str, str] = {}
+    if log_path is None or not log_path.exists():
+        return out
+    with log_path.open(encoding="utf-8") as f:
+        for line in f:
+            r = json.loads(line)
+            if r["input_hash"] in hashes and r["input_hash"] not in out:
+                msgs = r["messages"]
+                if isinstance(msgs, str):
+                    msgs = ast.literal_eval(msgs)
+                out[r["input_hash"]] = "\n\n".join(m["content"] for m in msgs)
+    return out
+
+
 def worked_examples(
-    checkpoint: dict, registry: RelationRegistry, growth: GrowthData, *, n: int = 3
+    checkpoint: dict,
+    registry: RelationRegistry,
+    growth: GrowthData,
+    *,
+    n: int = 3,
+    prompt_log: Path | None = None,
 ) -> list[dict]:
     """Three sections with the most families among their accepted edges (ties: more edges,
     then section id); one representative edge each, families kept distinct where possible.
@@ -278,13 +327,22 @@ def worked_examples(
     pair_edges = {
         d["edge"]["pair"]["pair_id"]: d for d in checkpoint["pair_registry"] if d.get("edge")
     }
+    v3_by_pair = {
+        r["pair"]["pair_id"]: r
+        for r in checkpoint.get("relation_results_v3", [])
+        if r.get("outcome") == "edge"
+    }
+    logged = load_logged_prompts(
+        prompt_log,
+        {h for r in v3_by_pair.values() for h in (r.get("prompt_hashes") or {}).values()},
+    )
     used_families: set[str] = set()
     out = []
     for sid in ranked:
         cands = sorted(by_section[sid], key=lambda e: e.id)
         edge = next((e for e in cands if e.family not in used_families), cands[0])
         used_families.add(edge.family)
-        res = pair_edges[edge.id]
+        res = pair_edges.get(edge.id) or pair_edges[edge.id.split("~")[0]]
         raw = res["edge"]
         x, y = concepts[res["concept_x_id"]], concepts[res["concept_y_id"]]
         family_options = [
@@ -343,6 +401,11 @@ def worked_examples(
                 ],
                 "source": concepts[edge.source],
                 "target": concepts[edge.target],
+                "logged_prompts": {
+                    step: logged[h]
+                    for step, h in ((v3_by_pair.get(edge.id) or {}).get("prompt_hashes") or {}).items()
+                    if h in logged
+                },
             }
         )
     return out

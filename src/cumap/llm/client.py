@@ -43,6 +43,8 @@ TASK_TO_STAGE = {
     "relation_family": "relations",
     "relation_choice": "relations",
     "relation_qualifiers": "relations",
+    "erst_graph": "erst",  # CR-010 P3
+    "erst_direct": "erst",  # CR-010 STOP 5
 }
 
 # Rough chars-per-token ratio for English prose, used only for the pre-call worst-case
@@ -102,6 +104,10 @@ class LLMClient:
         self._cache = LLMCache(settings.resolve(settings.paths.data_cache) / "llm")
         self._log_path = settings.resolve(settings.paths.data_logs) / "llm_calls.jsonl"
         self._log_path.parent.mkdir(parents=True, exist_ok=True)
+        # CR-007 §5.2: the exact prompt text of every call, once per input hash, so report examples
+        # are rendered from what was really sent ("Report examples are rendered from logged prompts").
+        self._prompt_log_path = self._log_path.parent / "llm_prompts.jsonl"
+        self._logged_prompt_hashes: set[str] | None = None
         self.run_id = run_id or uuid.uuid4().hex
         self._fixtures_dir = fixtures_dir or (settings.repo_root / "tests" / "fixtures" / "llm")
         self._client = None  # lazy OpenAI client; never constructed by mock-backend tests
@@ -205,6 +211,7 @@ class LLMClient:
         model_tier: str,
         fixture_name: str = "default",
         escalate_check: Callable[[SchemaT], bool] | None = None,
+        allow_escalation: bool = True,
     ) -> ParsedResult[SchemaT]:
         """`escalate_check`: optional predicate for the "evidence_check_failed" escalation
         trigger — the caller's own post-hoc check (e.g. evidence-quote verification)
@@ -212,7 +219,16 @@ class LLMClient:
         this class trying to know about every task's validation rules.
         """
         escalation = self._settings.llm.escalation
-        can_escalate = escalation.enabled and model_tier == escalation.from_tier
+        can_escalate = (
+            allow_escalation
+            and escalation.enabled
+            and model_tier
+            in (
+                [escalation.from_tier]
+                if isinstance(escalation.from_tier, str)
+                else escalation.from_tier
+            )
+        )  # CR-009: the concept loop keeps one tier
 
         try:
             result = self._parse_single_tier(
@@ -316,6 +332,7 @@ class LLMClient:
                 escalation_reason=escalated_reason,
             )
             self._log(result)
+            self._log_prompt(input_hash, task, prompt_version, model, model_tier, messages)
             return result
 
         max_output_tokens = self._max_output_tokens_for(task)
@@ -351,7 +368,29 @@ class LLMClient:
             escalation_reason=escalated_reason,
         )
         self._log(result)
+        self._log_prompt(input_hash, task, prompt_version, model, model_tier, messages)
         return result
+
+    def _log_prompt(self, input_hash, task, prompt_version, model, model_tier, messages) -> None:
+        if self._logged_prompt_hashes is None:
+            self._logged_prompt_hashes = set()
+            if self._prompt_log_path.exists():
+                with self._prompt_log_path.open() as f:
+                    for line in f:
+                        self._logged_prompt_hashes.add(json.loads(line)["input_hash"])
+        if input_hash in self._logged_prompt_hashes:
+            return
+        self._logged_prompt_hashes.add(input_hash)
+        record = {
+            "input_hash": input_hash,
+            "task": task,
+            "prompt_version": prompt_version,
+            "model": model,
+            "model_tier": model_tier,
+            "messages": messages,
+        }
+        with self._prompt_log_path.open("a") as f:
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
 
     @retry(
         retry=retry_if_exception(_is_retryable),
@@ -395,6 +434,12 @@ class LLMClient:
             "output_tokens": response.usage.output_tokens,
             "reasoning_tokens": reasoning_tokens,
         }
+        if response.output_parsed is None:
+            raise ValueError(
+                f"{task}: no parsed output (status={getattr(response, 'status', '?')}, "
+                f"output_tokens={usage['output_tokens']} of max {max_output_tokens}); raise "
+                "llm.max_output_tokens for this task if it was truncated"
+            )
         return response.output_parsed, usage
 
     def _log(self, result: ParsedResult) -> None:

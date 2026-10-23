@@ -1,0 +1,15 @@
+pd:
+  source_jsonl: data/interim/cr012/units/7.1/sections.jsonl
+  chapters:
+  - 7
+  domain: computer networking
+  relations_enabled: true
+iir_face:
+  source_jsonl: data/interim/external/iir_sections.jsonl
+  chapters:
+  - 1
+  - 2
+  - 3
+  domain: information retrieval
+  relations_enabled: false
+max_usd_per_command: 15

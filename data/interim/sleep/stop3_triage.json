@@ -1,0 +1,184 @@
+{
+ "dev_sets": {
+  "SLEEP-240": {
+   "NOT_SAME": 75,
+   "SAME": 3,
+   "UNSURE": 2
+  },
+  "SLEEP-POS": {
+   "NOT_SAME": 71,
+   "SAME": 8,
+   "UNSURE": 1
+  }
+ },
+ "eligible_pairs": 13394,
+ "findings": {
+  "must_review_total": 14,
+  "must_review_vetoed_by_guard": [
+   [
+    "SLEEP-240",
+    "SL080",
+    {
+     "lexicon_different": false,
+     "type_incompatible": true
+    }
+   ]
+  ],
+  "must_review_not_in_candidate_pool": [],
+  "eligible_dev_items": 136,
+  "eligible_must_review": 13
+ },
+ "configs": [
+  {
+   "config": "single:name_cos",
+   "kind": "single",
+   "n_features": 1,
+   "rank": 0,
+   "threshold_oof_min_positive": 0.14987475775733328,
+   "review_recall": 0.9285714285714286,
+   "reviewed_pairs": 12209,
+   "eligible_pairs": 13394,
+   "review_reduction_primary": 0.08847245035090334,
+   "dev_items_reviewed": 133,
+   "dev_review_reduction_secondary": 0.022058823529411797,
+   "oof_auc": 0.5409631019387117,
+   "runtime_s": 0.012,
+   "different_violations": 0
+  },
+  {
+   "config": "single:char_ratio",
+   "kind": "single",
+   "n_features": 1,
+   "rank": 1,
+   "threshold_oof_min_positive": 0.26666666666666666,
+   "review_recall": 0.9285714285714286,
+   "reviewed_pairs": 8025,
+   "eligible_pairs": 13394,
+   "review_reduction_primary": 0.40085112737046436,
+   "dev_items_reviewed": 128,
+   "dev_review_reduction_secondary": 0.05882352941176472,
+   "oof_auc": 0.5318949343339587,
+   "runtime_s": 0.002,
+   "different_violations": 0
+  },
+  {
+   "config": "single:token_jaccard",
+   "kind": "single",
+   "n_features": 1,
+   "rank": 2,
+   "threshold_oof_min_positive": 0.0,
+   "review_recall": 0.9285714285714286,
+   "reviewed_pairs": 13394,
+   "eligible_pairs": 13394,
+   "review_reduction_primary": 0.0,
+   "dev_items_reviewed": 136,
+   "dev_review_reduction_secondary": 0.0,
+   "oof_auc": 0.4318323952470294,
+   "runtime_s": 0.002,
+   "different_violations": 0
+  },
+  {
+   "config": "single:def_cos",
+   "kind": "single",
+   "n_features": 1,
+   "rank": 3,
+   "threshold_oof_min_positive": 0.0,
+   "review_recall": 0.9285714285714286,
+   "reviewed_pairs": 13393,
+   "eligible_pairs": 13394,
+   "review_reduction_primary": 7.46602956547271e-05,
+   "dev_items_reviewed": 136,
+   "dev_review_reduction_secondary": 0.0,
+   "oof_auc": 0.4065040650406504,
+   "runtime_s": 0.001,
+   "different_violations": 0
+  },
+  {
+   "config": "single:ev_cos",
+   "kind": "single",
+   "n_features": 1,
+   "rank": 4,
+   "threshold_oof_min_positive": 0.3310635864614794,
+   "review_recall": 0.9285714285714286,
+   "reviewed_pairs": 7125,
+   "eligible_pairs": 13394,
+   "review_reduction_primary": 0.46804539345975815,
+   "dev_items_reviewed": 128,
+   "dev_review_reduction_secondary": 0.05882352941176472,
+   "oof_auc": 0.39712320200125073,
+   "runtime_s": 0.001,
+   "different_violations": 0
+  },
+  {
+   "config": "single:max_sim",
+   "kind": "single",
+   "n_features": 1,
+   "rank": 5,
+   "threshold_oof_min_positive": 0.3310635864614794,
+   "review_recall": 0.9285714285714286,
+   "reviewed_pairs": 11301,
+   "eligible_pairs": 13394,
+   "review_reduction_primary": 0.1562639988054353,
+   "dev_items_reviewed": 136,
+   "dev_review_reduction_secondary": 0.0,
+   "oof_auc": 0.5453408380237649,
+   "runtime_s": 0.002,
+   "different_violations": 0
+  },
+  {
+   "config": "lr_similarity",
+   "kind": "lr",
+   "n_features": 7,
+   "rank": 10,
+   "threshold_oof_min_positive": 0.12932419711834622,
+   "review_recall": 0.9285714285714286,
+   "reviewed_pairs": 12775,
+   "eligible_pairs": 13394,
+   "review_reduction_primary": 0.04621472301030316,
+   "dev_items_reviewed": 116,
+   "dev_review_reduction_secondary": 0.1470588235294118,
+   "oof_auc": 0.5540963101938712,
+   "runtime_s": 0.022,
+   "different_violations": 0
+  },
+  {
+   "config": "lr_all",
+   "kind": "lr",
+   "n_features": 29,
+   "rank": 11,
+   "threshold_oof_min_positive": 0.0001919958265061867,
+   "review_recall": 0.9285714285714286,
+   "reviewed_pairs": 13260,
+   "eligible_pairs": 13394,
+   "review_reduction_primary": 0.010004479617739315,
+   "dev_items_reviewed": 134,
+   "dev_review_reduction_secondary": 0.014705882352941124,
+   "oof_auc": 0.4090056285178237,
+   "runtime_s": 0.02,
+   "different_violations": 0
+  },
+  {
+   "config": "gb_all",
+   "kind": "gb",
+   "n_features": 29,
+   "rank": 12,
+   "threshold_oof_min_positive": 0.00045960435894008963,
+   "review_recall": 0.9285714285714286,
+   "reviewed_pairs": 13394,
+   "eligible_pairs": 13394,
+   "review_reduction_primary": 0.0,
+   "dev_items_reviewed": 136,
+   "dev_review_reduction_secondary": 0.0,
+   "oof_auc": 0.4290181363352095,
+   "runtime_s": 0.233,
+   "different_violations": 0
+  }
+ ],
+ "selected": null,
+ "continuation_gate": {
+  "review_reduction_min": 0.25,
+  "review_recall_required": 1.0,
+  "passed": false,
+  "outcome": "STOP CR-011 AFTER STOP 3: NO PRODUCTION CHANGE (no paid call)"
+ }
+}

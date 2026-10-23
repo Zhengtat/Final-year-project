@@ -1,0 +1,39 @@
+# Registry patch from CR-039 (2026-10-23, DRAFT, not adopted): registry v1.6 = v1.5 + a `misconception` family (layer `misconception`).
+# BUILT FROM relations_v1.5.yaml (itself a CR-038 draft built from the production v1.3), NOT from relations_v1.4.yaml (not adopted).
+# The family exists so that a misconception is found by the same relation-classification calls as relations. It is NEVER semantic (rule 22):
+# its one relation, `conflated_with`, and every item built from it live in the `misconception` layer (checkpoint.misconceptions), invisible to expert
+# precision, importance, pair selection, prerequisites, fusion and expected subgraphs. Wrong statements about X and Y that use an ordinary relation
+# (polarity flip, reversed, wrong category, ...) are described by the misconception choice step, which names the registry relation of the WRONG statement;
+# that step is a closed choice (rule 12, relations_v7.build_misconception_choice).
+patch_for_registry_version: 1
+patch_for_registry_minor: 5
+new_version: "1.6"
+header_note: "DRAFT (CR-039): built from relations_v1.5.yaml (a CR-038 draft of v1.3), NOT from relations_v1.4.yaml (not adopted). Awaits owner review; not the default registry."
+adds:
+  families:
+  - name: misconception
+    label: Misconception (a wrong belief the text warns against)
+    diagnostic_prior: 1.0
+    grounding: textbook refutation passages; CR-008 misconception layer; common-mistake and contrast cues
+    gloss: the sentence presents a belief about X and Y as WRONG or as a common mistake ("a common mistake is...", "it is tempting to think...", "contrary to...", "is not the same as..."); not a plain negation
+  relations:
+  - name: conflated_with
+    family: misconception
+    layer: misconception
+    definition: Source and target are two different concepts that learners confuse for one another (a conflation the text warns against). Only ever a misconception-layer item, never an expert edge.
+    template: '{X} is confused with {Y}'
+    examples:
+    - 'a routing table is confused with a forwarding table'
+    - 'bandwidth is confused with throughput'
+    near_misses:
+    - relation: contrasts_with
+      example: 'slow start differs from congestion avoidance'
+      why: a plain contrast with no confusion or wrong belief stated
+    domain_types: [Any]
+    range_types: [Any]
+    directional: false
+    symmetric: true
+    transitive: false
+    inverse_of: null
+    conflicts_with: []
+    compatible_with: {}

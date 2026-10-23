@@ -1,0 +1,55 @@
+{
+ "events": 36614,
+ "boundary_family_events": 16998,
+ "concept_validity_events": 7320,
+ "placed_mentions": 10682,
+ "suppressed_occurrences": 1614,
+ "placed_with_selector_and_verifier_links": 10682,
+ "placed_with_resolvable_links": 10682,
+ "placed_link_coverage": 1.0,
+ "suppressed_with_verifier_link": 1614,
+ "all_events_have_model_prompt_config": true,
+ "per_section": {
+  "4.1": {
+   "placed": 954,
+   "blocked": 102
+  },
+  "9.2": {
+   "placed": 1007,
+   "blocked": 105
+  },
+  "4.2": {
+   "placed": 810,
+   "blocked": 115
+  },
+  "5.3": {
+   "placed": 1490,
+   "blocked": 409
+  },
+  "6.1": {
+   "placed": 796,
+   "blocked": 91
+  },
+  "6.4": {
+   "placed": 1117,
+   "blocked": 149
+  },
+  "7.2": {
+   "placed": 1736,
+   "blocked": 309
+  },
+  "8.3": {
+   "placed": 634,
+   "blocked": 107
+  },
+  "8.4": {
+   "placed": 411,
+   "blocked": 26
+  },
+  "8.5": {
+   "placed": 1727,
+   "blocked": 201
+  }
+ },
+ "path": "data/processed/cr015/stageA/trace_A2.jsonl"
+}

@@ -1,0 +1,1059 @@
+{
+ "cr": "CR-013",
+ "cr013_code_and_config_hashes": {
+  "configs/cr013_explainability.yaml": "ffcdd396624fb8196bd8dacf221c5e0672253bf4b51dea8378b49b1ac3e5b589",
+  "src/cumap/explain/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "src/cumap/explain/adapters_pd.py": "032f4e3ca5cec4475bb2587e51b530e056a076a8fab03881b822e155f2b2a3ce",
+  "src/cumap/explain/audit.py": "2d69ab7d6737c5c9ba32fdbe01a8d7cd5659e1dff5415a525681d844a27eaec5",
+  "src/cumap/explain/build.py": "536759c60547b5e75ae5d3f3810ab5bd2de39d5b8a2ff9435feee1f278f5a944",
+  "src/cumap/explain/coverage.py": "802e109009d30cc1649f6dab6ca2ef1e80cb5c01b253141fc91cdbc48d681b34",
+  "src/cumap/explain/eval_adapter.py": "94ac5137ecc04415c6cbb8b800aa0e81041fbc4815c2ceca14afcf468e0635ea",
+  "src/cumap/explain/eval_report.py": "0c85216fcc3882cfa7d5c4c53d5300135f75e9240682adb6d6859db9fa0f01c9",
+  "src/cumap/explain/final_manifest.py": "bba74e56d73e51f8d312022c6409448e5b22eab96d7536df12e69e0c166b7767",
+  "src/cumap/explain/final_report.py": "e67041253b0ad6ef82bec28a2d6ca54e1a461818634abf28c2213dbbd2210abc",
+  "src/cumap/explain/lineage.py": "94782742b53ac9afb44bc9bdd6710f69d30fa35e52382bec633ffb25a2d3664e",
+  "src/cumap/explain/render.py": "6cda056da0810466a0aaa165df0dd7d50bf6100ee88390b6a83c077ef4ddcc3a",
+  "src/cumap/explain/replay.py": "4a3a7afdb8f24566c905dd90869e2ad6815e6fbd6a34b835cc3f95ba1eed400f",
+  "src/cumap/explain/stop2_report.py": "50452e1425f078c9253f89b75fcd25e0d186dadddd573cef7613395d6aac047f",
+  "src/cumap/explain/stop3_report.py": "fdc129e75c1050a101e4c4d644f9e702ef5ed399b65e9dbc0c169ae45b34f964",
+  "src/cumap/explain/trace.py": "42797e9c3eb5e1fdae580c63d04610175a151672f8b74e8a46b8fe4f943e733d",
+  "src/cumap/explain/viewer_adapter.py": "3fb6f0edd4956c7850f36de1531ab1ceb97e1e657e0d0fc212586dcbe67fed7d",
+  "src/cumap/explain/why_not.py": "1bfbd36fb4ea312717618e706090e7f1d1cb3531b3dda772f944339ce093daad",
+  "src/cumap/explain/why_not_eval.py": "661b0182fcf915ae3504a56e4734a74b408f34be961ac6a7e9406d89652ef574",
+  "src/cumap/report/kg_explorer.html": "536171e73dd6b17b45af248078eb1890f6f824e05d7c1017be7aa328be46b2f1",
+  "src/cumap/report/kg_explorer.py": "f8b1a3ad1b5c5bf1091d4be2451bb4a29f345fbfdb5fd418dc1917f3acd9fb9c",
+  "src/cumap/report/kg_explorer_eval.js": "f5ccf6735ea40052459d35c2b0581388148ad0e6ae4ca4f119d6740a891f73e0",
+  "src/cumap/report/kg_explorer_trace.js": "d968479ec7a88f6ff3a0fd755d02b6764753b1fa33f737df05935f05f89f334e",
+  "tests/js/a11y_perf_checks.py": "61304d02f1bf1cc65bf9362d2615a034045ded2d7db7167437725f5c822f6563",
+  "tests/js/browser_checks.py": "6c0ba9d1041e76366e23808b33bdea8784c5e602bda84004e3b73d89993961fe",
+  "tests/js/cross_browser_smoke.py": "68ce2e8b041b0e7d5b9bc820dfd57d826ed27a6bb1d4a0415020250d6b9b0a60",
+  "tests/js/demo_and_tasks.py": "ac831021154fe8aeacd3b2dd822aae0547b38d0e1463cfbf7620cb86035e339c",
+  "tests/js/explorer_harness.js": "63393a355a70cd8150d698e7fc079c445d375e72d2753916145ca5137a0a95dc",
+  "tests/js/take_eval_screenshots.py": "2c744ae3278e8aaaf17b1b612f2bbac87265982110922a18a5225fc2f4a80ac8",
+  "tests/js/take_screenshots.py": "23f313490e4a66a91751f83d2c466f1c84790fb98dbe6d04aacb90f415a1886f",
+  "tests/test_cr013_eval.py": "7b887b2aebd06e050b6d295a353571ea5b2d49c0e2c423c0ed304bed04ab318c",
+  "tests/test_cr013_explorer.py": "0c175d62a0139456de0ce260ca14d18c4349e03cbc4d91dc8b755b8189240d3f",
+  "tests/test_cr013_final.py": "65e28215146b223f5727bf8e745d2eb698f754896935c572affc2732b8858ff6",
+  "tests/test_cr013_trace.py": "ea3027ae3eaae1ffadf488d2d890de37609b9c6be50c793e5e63fc41332c4974"
+ },
+ "cr013_code_combined_sha256": "ba89107c4c3c8e04c40616cfccb2fc92a55b112abf388e0b537429a2916b6812",
+ "derived_traces": {
+  "cr012_scinlp_heldout_P17_1058_grobid_E0": {
+   "counts": {
+    "events": 656,
+    "finals": 83,
+    "gaps": 8,
+    "links": 703
+   },
+   "coverage_summary": {
+    "evidence": {
+     "pct_locators_resolve": 100.0,
+     "pct_quote_in_source_text": 0.0,
+     "quote_in_source_text_checked": 0,
+     "quote_in_source_text_found": 0,
+     "quote_not_found_but_verbatim_in_other_sections": 0,
+     "quote_not_found_examples": [],
+     "quote_not_found_in_verifier_rejected_candidates": 0,
+     "quote_not_found_other_by_locator_kind": {},
+     "refs_resolving": 498,
+     "refs_total": 498,
+     "section_attribution_mismatches": [],
+     "unresolved_examples": []
+    },
+    "explanations": {
+     "dynamic_segments": 2531,
+     "events_rendered": 656,
+     "pct_supported": 100.0,
+     "pct_unknown_honesty": 100.0,
+     "sentences": 1098,
+     "support_violations": 0,
+     "unrecorded_fields_rendered_as_NOT_RECORDED": "292/292"
+    },
+    "final_objects": {
+     "concept": {
+      "count": 68,
+      "covered_incl_documented_gaps": 68,
+      "lineage_reaches_resolvable_evidence": 68,
+      "pct_covered_incl_documented_gaps": 100.0,
+      "pct_lineage_to_evidence": 100.0,
+      "stage_presence_pct": {
+       "canonicalisation": 100.0,
+       "correction": 0.0,
+       "generator": 100.0,
+       "graph_commit": 0.0,
+       "organisation": 0.0,
+       "pair_generation": 0.0,
+       "pair_selection": 0.0,
+       "pruner": 100.0,
+       "relation_classification": 0.0,
+       "source": 100.0,
+       "validation": 0.0,
+       "verifier": 0.0
+      },
+      "unit_scoped_stage_presence_events_in_a_unit_the_object_comes_from": {
+       "verifier": 68
+      },
+      "without_evidence_examples": []
+     },
+     "edge": {
+      "count": 15,
+      "covered_incl_documented_gaps": 15,
+      "lineage_reaches_resolvable_evidence": 15,
+      "pct_covered_incl_documented_gaps": 100.0,
+      "pct_lineage_to_evidence": 100.0,
+      "stage_presence_pct": {
+       "canonicalisation": 100.0,
+       "correction": 0.0,
+       "generator": 100.0,
+       "graph_commit": 0.0,
+       "organisation": 0.0,
+       "pair_generation": 0.0,
+       "pair_selection": 100.0,
+       "pruner": 100.0,
+       "relation_classification": 100.0,
+       "source": 100.0,
+       "validation": 100.0,
+       "verifier": 0.0
+      },
+      "unit_scoped_stage_presence_events_in_a_unit_the_object_comes_from": {
+       "verifier": 15
+      },
+      "without_evidence_examples": []
+     }
+    }
+   },
+   "dataset_mode": "scinlp",
+   "derived_dir": "data/processed/explainability/cr012_scinlp_heldout_P17_1058_grobid_E0/e2a0d92f8a6a",
+   "derived_trace_hashes": {
+    "explanation_index.jsonl": "2c3e41ffaea12d289d4e4d1a2f6a2d2c1eaa27395a8870eac3f10b96f7a2bd3d",
+    "manifest.json": "9dbca7c116e3b4c83244c8919e52b3415a0203071f002dde76c22707d1622381",
+    "object_lineage.jsonl": "bca5331b251a1d33dc1882d53befb8adcad4657a50c2e23a1cde2d52e5a8499a",
+    "trace_events.jsonl": "486e06c60235b626b23de067d79881df406bcda4e0da6e4dea67492fc0fca285",
+    "trace_gaps.jsonl": "010eacad4e18e827803b89a288587981a951b36a72a3c8a02d7f0193ea3ae58d"
+   },
+   "explain_code_hash": "fa4257e5b8b2d3ab",
+   "explain_id": "e2a0d92f8a6a",
+   "gaps_by_status": {
+    "NOT_RECORDED": 8
+   },
+   "renderer_version": "r1",
+   "replay": {
+    "deterministic": null,
+    "eligible_count": null,
+    "mismatches": [],
+    "valid": false
+   },
+   "source_artifact_hashes": {
+    "data/logs/llm_calls.jsonl": "02f97b6b64386d6d6bf0e674b3cc0a999f974edfd8af0a7a587620271681a87e",
+    "data/processed/kg/cr012_scinlp_heldout_P17_1058_grobid_E0/checkpoint.json": "65835f9078dd00cf1727ad62e11e7215e6d47749932043a05bedf407ed05ec2c",
+    "data/processed/kg/cr012_scinlp_heldout_P17_1058_grobid_E0/v4_concepts.json": "2a292d0a3c100ca1397a776b3222ebb0475a1b276cd7b08aec1315e91aa5f505"
+   },
+   "source_hashes_after_build": {
+    "data/logs/llm_calls.jsonl": "02f97b6b64386d6d6bf0e674b3cc0a999f974edfd8af0a7a587620271681a87e",
+    "data/processed/kg/cr012_scinlp_heldout_P17_1058_grobid_E0/checkpoint.json": "65835f9078dd00cf1727ad62e11e7215e6d47749932043a05bedf407ed05ec2c",
+    "data/processed/kg/cr012_scinlp_heldout_P17_1058_grobid_E0/v4_concepts.json": "2a292d0a3c100ca1397a776b3222ebb0475a1b276cd7b08aec1315e91aa5f505"
+   },
+   "stop1_audit_artifacts_compared": 3,
+   "trace_schema_version": "1.0",
+   "two_builds_identical_trace_hash": true,
+   "unchanged_during_build": true,
+   "unchanged_now_vs_build_time": true,
+   "unchanged_now_vs_stop1_audit": {
+    "data/logs/llm_calls.jsonl": true,
+    "data/processed/kg/cr012_scinlp_heldout_P17_1058_grobid_E0/checkpoint.json": true,
+    "data/processed/kg/cr012_scinlp_heldout_P17_1058_grobid_E0/v4_concepts.json": true
+   }
+  },
+  "slice3_c2": {
+   "counts": {
+    "events": 36730,
+    "finals": 1771,
+    "gaps": 6,
+    "links": 30982
+   },
+   "coverage_summary": {
+    "evidence": {
+     "pct_locators_resolve": 100.0,
+     "pct_quote_in_source_text": 97.95894008116495,
+     "quote_in_source_text_checked": 8378,
+     "quote_in_source_text_found": 8207,
+     "quote_not_found_but_verbatim_in_other_sections": 117,
+     "quote_not_found_examples": [
+      "data/processed/kg/slice3_c2/v4_concepts.json::sections['1.2#1'].rejected[3].item.evidence",
+      "data/processed/kg/slice3_c2/v4_concepts.json::sections['1.2#2'].rejected[1].item.evidence",
+      "data/processed/kg/slice3_c2/v4_concepts.json::sections['1.2#3'].rejected[6].item.evidence",
+      "data/processed/kg/slice3_c2/v4_concepts.json::sections['1.3#1'].rejected[0].item.evidence",
+      "data/processed/kg/slice3_c2/v4_concepts.json::sections['1.5#1'].rejected[0].item.evidence",
+      "data/processed/kg/slice3_c2/v4_concepts.json::sections['2.5#1'].rejected[2].item.evidence",
+      "data/processed/kg/slice3_c2/v4_concepts.json::sections['2.5#2'].rejected[0].item.evidence",
+      "data/processed/kg/slice3_c2/v4_concepts.json::sections['2.5#2'].rejected[4].item.evidence",
+      "data/processed/kg/slice3_c2/v4_concepts.json::sections['2.6#1'].rejected[5].item.evidence",
+      "data/processed/kg/slice3_c2/v4_concepts.json::sections['2.6#1'].rejected[10].item.evidence"
+     ],
+     "quote_not_found_in_verifier_rejected_candidates": 54,
+     "quote_not_found_other_by_locator_kind": {},
+     "refs_resolving": 10569,
+     "refs_total": 10569,
+     "section_attribution_mismatches": [
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[32].sentence",
+       "found_in": [
+        "1.2"
+       ],
+       "object_id": "pair:RP-3.3-12",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[74].sentence",
+       "found_in": [
+        "3-problem-not-all-networks-are-directly-connected"
+       ],
+       "object_id": "pair:RP-3.1-16",
+       "section_id": "3.1"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[77].sentence",
+       "found_in": [
+        "1.3"
+       ],
+       "object_id": "pair:RP-3.3-29",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[78].sentence",
+       "found_in": [
+        "1.2"
+       ],
+       "object_id": "pair:RP-3.3-31",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[169].sentence",
+       "found_in": [
+        "2-problem-connecting-to-a-network"
+       ],
+       "object_id": "pair:RP-2.2-11",
+       "section_id": "2.2"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[178].sentence",
+       "found_in": [
+        "2.6"
+       ],
+       "object_id": "pair:RP-2.7-20",
+       "section_id": "2.7"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[192].sentence",
+       "found_in": [
+        "1.3"
+       ],
+       "object_id": "pair:RP-3.3-134",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[194].sentence",
+       "found_in": [
+        "2.6"
+       ],
+       "object_id": "pair:RP-3.3-204",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[215].sentence",
+       "found_in": [
+        "1.5"
+       ],
+       "object_id": "pair:RP-1.2-72",
+       "section_id": "1.2"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[254].sentence",
+       "found_in": [
+        "2.1"
+       ],
+       "object_id": "pair:RP-2.6-30",
+       "section_id": "2.6"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[267].sentence",
+       "found_in": [
+        "3.1",
+        "3.4",
+        "4.4"
+       ],
+       "object_id": "pair:RP-2.7-99",
+       "section_id": "2.7"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[285].sentence",
+       "found_in": [
+        "1.2"
+       ],
+       "object_id": "pair:RP-3.1-142",
+       "section_id": "3.1"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[289].sentence",
+       "found_in": [
+        "3-problem-not-all-networks-are-directly-connected"
+       ],
+       "object_id": "pair:RP-3.3-225",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[290].sentence",
+       "found_in": [
+        "1.3"
+       ],
+       "object_id": "pair:RP-3.3-233",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[291].sentence",
+       "found_in": [
+        "1.3"
+       ],
+       "object_id": "pair:RP-3.3-237",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[295].sentence",
+       "found_in": [
+        "1.4"
+       ],
+       "object_id": "pair:RP-3.3-320",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[300].sentence",
+       "found_in": [
+        "3.4"
+       ],
+       "object_id": "pair:RP-3.3-394",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[359].sentence",
+       "found_in": [
+        "1.3"
+       ],
+       "object_id": "pair:RP-1.2-260",
+       "section_id": "1.2"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[371].sentence",
+       "found_in": [
+        "1.5"
+       ],
+       "object_id": "pair:RP-1.2-398",
+       "section_id": "1.2"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[373].sentence",
+       "found_in": [
+        "1.3"
+       ],
+       "object_id": "pair:RP-1.2-431",
+       "section_id": "1.2"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[445].sentence",
+       "found_in": [
+        "2.8"
+       ],
+       "object_id": "pair:RP-2-perspective-race-to-the-edge-54",
+       "section_id": "2-perspective-race-to-the-edge"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[478].sentence",
+       "found_in": [
+        "2.6"
+       ],
+       "object_id": "pair:RP-2.3-153",
+       "section_id": "2.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[484].sentence",
+       "found_in": [
+        "2.2"
+       ],
+       "object_id": "pair:RP-2.3-296",
+       "section_id": "2.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[510].sentence",
+       "found_in": [
+        "2-problem-connecting-to-a-network"
+       ],
+       "object_id": "pair:RP-2.5-142",
+       "section_id": "2.5"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[565].sentence",
+       "found_in": [
+        "1.2"
+       ],
+       "object_id": "pair:RP-2.7-420",
+       "section_id": "2.7"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[570].sentence",
+       "found_in": [
+        "2.1"
+       ],
+       "object_id": "pair:RP-2.7-553",
+       "section_id": "2.7"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[580].sentence",
+       "found_in": [
+        "1-perspective-feature-velocity"
+       ],
+       "object_id": "pair:RP-2.8-148",
+       "section_id": "2.8"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[587].sentence",
+       "found_in": [
+        "1.2"
+       ],
+       "object_id": "pair:RP-2.8-267",
+       "section_id": "2.8"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[590].sentence",
+       "found_in": [
+        "2.2"
+       ],
+       "object_id": "pair:RP-2.8-295",
+       "section_id": "2.8"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[608].sentence",
+       "found_in": [
+        "3.2"
+       ],
+       "object_id": "pair:RP-3-perspective-virtual-networks-all-the-way-down-55",
+       "section_id": "3-perspective-virtual-networks-all-the-way-down"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[624].sentence",
+       "found_in": [
+        "2.4"
+       ],
+       "object_id": "pair:RP-3.1-200",
+       "section_id": "3.1"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[698].sentence",
+       "found_in": [
+        "2.6"
+       ],
+       "object_id": "pair:RP-3.3-560",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[717].sentence",
+       "found_in": [
+        "3-perspective-virtual-networks-all-the-way-down"
+       ],
+       "object_id": "pair:RP-3.3-948",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[720].sentence",
+       "found_in": [
+        "1.1"
+       ],
+       "object_id": "pair:RP-3.4-266",
+       "section_id": "3.4"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[739].sentence",
+       "found_in": [
+        "3.1"
+       ],
+       "object_id": "pair:RP-3.4-496",
+       "section_id": "3.4"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[744].sentence",
+       "found_in": [
+        "2.3"
+       ],
+       "object_id": "pair:RP-3.4-603",
+       "section_id": "3.4"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[766].sentence",
+       "found_in": [
+        "1-perspective-feature-velocity"
+       ],
+       "object_id": "pair:RP-3.5-440",
+       "section_id": "3.5"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[768].sentence",
+       "found_in": [
+        "3.1"
+       ],
+       "object_id": "pair:RP-3.5-477",
+       "section_id": "3.5"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::selected_pairs[1055].sentence",
+       "found_in": [
+        "2.4"
+       ],
+       "object_id": "pair:RP-2.5-464",
+       "section_id": "2.5"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[32].pair.sentence",
+       "found_in": [
+        "1.2"
+       ],
+       "object_id": "relrow:RP-3.3-12:0",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[74].pair.sentence",
+       "found_in": [
+        "3-problem-not-all-networks-are-directly-connected"
+       ],
+       "object_id": "relrow:RP-3.1-16:0",
+       "section_id": "3.1"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[77].pair.sentence",
+       "found_in": [
+        "1.3"
+       ],
+       "object_id": "relrow:RP-3.3-29:0",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[78].pair.sentence",
+       "found_in": [
+        "1.2"
+       ],
+       "object_id": "relrow:RP-3.3-31:0",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[169].pair.sentence",
+       "found_in": [
+        "2-problem-connecting-to-a-network"
+       ],
+       "object_id": "relrow:RP-2.2-11:0",
+       "section_id": "2.2"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[178].pair.sentence",
+       "found_in": [
+        "2.6"
+       ],
+       "object_id": "relrow:RP-2.7-20:0",
+       "section_id": "2.7"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[192].pair.sentence",
+       "found_in": [
+        "1.3"
+       ],
+       "object_id": "relrow:RP-3.3-134:0",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[194].pair.sentence",
+       "found_in": [
+        "2.6"
+       ],
+       "object_id": "relrow:RP-3.3-204:0",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[215].pair.sentence",
+       "found_in": [
+        "1.5"
+       ],
+       "object_id": "relrow:RP-1.2-72:0",
+       "section_id": "1.2"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[254].pair.sentence",
+       "found_in": [
+        "2.1"
+       ],
+       "object_id": "relrow:RP-2.6-30:0",
+       "section_id": "2.6"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[267].pair.sentence",
+       "found_in": [
+        "3.1",
+        "3.4",
+        "4.4"
+       ],
+       "object_id": "relrow:RP-2.7-99:0",
+       "section_id": "2.7"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[285].pair.sentence",
+       "found_in": [
+        "1.2"
+       ],
+       "object_id": "relrow:RP-3.1-142:0",
+       "section_id": "3.1"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[289].pair.sentence",
+       "found_in": [
+        "3-problem-not-all-networks-are-directly-connected"
+       ],
+       "object_id": "relrow:RP-3.3-225:0",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[290].pair.sentence",
+       "found_in": [
+        "1.3"
+       ],
+       "object_id": "relrow:RP-3.3-233:0",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[291].pair.sentence",
+       "found_in": [
+        "1.3"
+       ],
+       "object_id": "relrow:RP-3.3-237:0",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[295].pair.sentence",
+       "found_in": [
+        "1.4"
+       ],
+       "object_id": "relrow:RP-3.3-320:0",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[300].pair.sentence",
+       "found_in": [
+        "3.4"
+       ],
+       "object_id": "relrow:RP-3.3-394:0",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[359].pair.sentence",
+       "found_in": [
+        "1.3"
+       ],
+       "object_id": "relrow:RP-1.2-260:0",
+       "section_id": "1.2"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[371].pair.sentence",
+       "found_in": [
+        "1.5"
+       ],
+       "object_id": "relrow:RP-1.2-398:0",
+       "section_id": "1.2"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[373].pair.sentence",
+       "found_in": [
+        "1.3"
+       ],
+       "object_id": "relrow:RP-1.2-431:0",
+       "section_id": "1.2"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[445].pair.sentence",
+       "found_in": [
+        "2.8"
+       ],
+       "object_id": "relrow:RP-2-perspective-race-to-the-edge-54:0",
+       "section_id": "2-perspective-race-to-the-edge"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[478].pair.sentence",
+       "found_in": [
+        "2.6"
+       ],
+       "object_id": "relrow:RP-2.3-153:0",
+       "section_id": "2.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[484].pair.sentence",
+       "found_in": [
+        "2.2"
+       ],
+       "object_id": "relrow:RP-2.3-296:0",
+       "section_id": "2.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[510].pair.sentence",
+       "found_in": [
+        "2-problem-connecting-to-a-network"
+       ],
+       "object_id": "relrow:RP-2.5-142:0",
+       "section_id": "2.5"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[565].pair.sentence",
+       "found_in": [
+        "1.2"
+       ],
+       "object_id": "relrow:RP-2.7-420:0",
+       "section_id": "2.7"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[570].pair.sentence",
+       "found_in": [
+        "2.1"
+       ],
+       "object_id": "relrow:RP-2.7-553:0",
+       "section_id": "2.7"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[580].pair.sentence",
+       "found_in": [
+        "1-perspective-feature-velocity"
+       ],
+       "object_id": "relrow:RP-2.8-148:0",
+       "section_id": "2.8"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[587].pair.sentence",
+       "found_in": [
+        "1.2"
+       ],
+       "object_id": "relrow:RP-2.8-267:0",
+       "section_id": "2.8"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[590].pair.sentence",
+       "found_in": [
+        "2.2"
+       ],
+       "object_id": "relrow:RP-2.8-295:0",
+       "section_id": "2.8"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[608].pair.sentence",
+       "found_in": [
+        "3.2"
+       ],
+       "object_id": "relrow:RP-3-perspective-virtual-networks-all-the-way-down-55:0",
+       "section_id": "3-perspective-virtual-networks-all-the-way-down"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[624].pair.sentence",
+       "found_in": [
+        "2.4"
+       ],
+       "object_id": "relrow:RP-3.1-200:0",
+       "section_id": "3.1"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[698].pair.sentence",
+       "found_in": [
+        "2.6"
+       ],
+       "object_id": "relrow:RP-3.3-560:0",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[717].pair.sentence",
+       "found_in": [
+        "3-perspective-virtual-networks-all-the-way-down"
+       ],
+       "object_id": "relrow:RP-3.3-948:0",
+       "section_id": "3.3"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[720].pair.sentence",
+       "found_in": [
+        "1.1"
+       ],
+       "object_id": "relrow:RP-3.4-266:0",
+       "section_id": "3.4"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[739].pair.sentence",
+       "found_in": [
+        "3.1"
+       ],
+       "object_id": "relrow:RP-3.4-496:0",
+       "section_id": "3.4"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[744].pair.sentence",
+       "found_in": [
+        "2.3"
+       ],
+       "object_id": "relrow:RP-3.4-603:0",
+       "section_id": "3.4"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[766].pair.sentence",
+       "found_in": [
+        "1-perspective-feature-velocity"
+       ],
+       "object_id": "relrow:RP-3.5-440:0",
+       "section_id": "3.5"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[768].pair.sentence",
+       "found_in": [
+        "3.1"
+       ],
+       "object_id": "relrow:RP-3.5-477:0",
+       "section_id": "3.5"
+      },
+      {
+       "evidence_ref": "data/processed/kg/slice3_c2/checkpoint.json::relation_results_v3[1055].pair.sentence",
+       "found_in": [
+        "2.4"
+       ],
+       "object_id": "relrow:RP-2.5-464:0",
+       "section_id": "2.5"
+      }
+     ],
+     "unresolved_examples": []
+    },
+    "explanations": {
+     "dynamic_segments": 111936,
+     "events_rendered": 36730,
+     "pct_supported": 100.0,
+     "pct_unknown_honesty": 100.0,
+     "sentences": 42511,
+     "support_violations": 0,
+     "unrecorded_fields_rendered_as_NOT_RECORDED": "6201/6201"
+    },
+    "final_objects": {
+     "concept": {
+      "count": 1243,
+      "covered_incl_documented_gaps": 1243,
+      "lineage_reaches_resolvable_evidence": 1243,
+      "pct_covered_incl_documented_gaps": 100.0,
+      "pct_lineage_to_evidence": 100.0,
+      "stage_presence_pct": {
+       "canonicalisation": 100.0,
+       "correction": 0.0,
+       "generator": 100.0,
+       "graph_commit": 100.0,
+       "organisation": 100.0,
+       "pair_generation": 0.0,
+       "pair_selection": 0.0,
+       "pruner": 100.0,
+       "relation_classification": 0.0,
+       "source": 100.0,
+       "validation": 0.0,
+       "verifier": 0.0
+      },
+      "unit_scoped_stage_presence_events_in_a_unit_the_object_comes_from": {
+       "verifier": 1243
+      },
+      "without_evidence_examples": []
+     },
+     "edge": {
+      "count": 528,
+      "covered_incl_documented_gaps": 528,
+      "lineage_reaches_resolvable_evidence": 528,
+      "pct_covered_incl_documented_gaps": 100.0,
+      "pct_lineage_to_evidence": 100.0,
+      "stage_presence_pct": {
+       "canonicalisation": 100.0,
+       "correction": 0.0,
+       "generator": 100.0,
+       "graph_commit": 100.0,
+       "organisation": 100.0,
+       "pair_generation": 100.0,
+       "pair_selection": 99.6,
+       "pruner": 100.0,
+       "relation_classification": 100.0,
+       "source": 100.0,
+       "validation": 100.0,
+       "verifier": 0.0
+      },
+      "unit_scoped_stage_presence_events_in_a_unit_the_object_comes_from": {
+       "verifier": 528
+      },
+      "without_evidence_examples": []
+     }
+    }
+   },
+   "dataset_mode": "pd",
+   "derived_dir": "data/processed/explainability/slice3_c2/a6f2e2006142",
+   "derived_trace_hashes": {
+    "explanation_index.jsonl": "62e415e7f11753ff0dfe620e72ab336111118aeda080a519792b20cc7dcc7a71",
+    "manifest.json": "e94e3ed80dd97fe43c41fc1654208ce66cec5078b1c1fce306b3497e17af2a92",
+    "object_lineage.jsonl": "740552ad9009cf2f6b6510e0bcb97ed39d4ea3a35224dc73a0b7bacf8faf047f",
+    "replay_pool.jsonl": "8f013f2e1141aa010d525f8809cb536d00a990ec54c8b612cb6b175a0cfde664",
+    "trace_events.jsonl": "3af9d569c8cc387081d128fd9985b0b4119c9c43b13c9419e30cb0c9fbd3f9fa",
+    "trace_gaps.jsonl": "9c81860477221d7d14276c85b1fc605fe1ef84cf432cb9e04c26a2c0b50c0ea3"
+   },
+   "explain_code_hash": "fa4257e5b8b2d3ab",
+   "explain_id": "a6f2e2006142",
+   "gaps_by_status": {
+    "INCONSISTENT": 1,
+    "NOT_RECORDED": 5,
+    "SECTION_ATTRIBUTION_AMBIGUOUS": 2,
+    "SECTION_ATTRIBUTION_MISMATCH": 76
+   },
+   "renderer_version": "r1",
+   "replay": {
+    "deterministic": true,
+    "eligible_count": 8604,
+    "mismatches": [],
+    "valid": true
+   },
+   "source_artifact_hashes": {
+    "data/interim/textbook_sections.jsonl": "665029b32e45ffc4fd0e150b1d13de719562a3657f7004efb22a94356a7d14f3",
+    "data/logs/llm_calls.jsonl": "02f97b6b64386d6d6bf0e674b3cc0a999f974edfd8af0a7a587620271681a87e",
+    "data/processed/kg/slice3_c2/checkpoint.json": "54eb0f194ca0271da08d38500b781c17eefa6af79638e85e865bdcfedaafde99",
+    "data/processed/kg/slice3_c2/misconceptions.jsonl": "b472c55b143d05b49d66f6ad2c62327dc985138770217a6da34d8c4958aed18f",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch1/communities.jsonl": "33f3aeba5452c3f70f82ec28c328a18bfc7d03fb48c71279cb2b3165454da355",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch1/events.jsonl": "6717d1d4556d9cefe3730ddb84142d155e2cb9bbb5e148a3b71a914fde6db7ac",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch1/org_nodes.jsonl": "bd10773eb7472f410734405515c2ba29ce5aed464b78ddd1a06f6c7297901c37",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch2/communities.jsonl": "fd8f9539dfebbcf1a4522ba9c6a30674095973269fc8b5945697cc9df265b37a",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch2/events.jsonl": "e59a5c361031656e29a0ba0c0b799b219a710a2b3f31def8060cfbeddaf10dc7",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch2/org_nodes.jsonl": "63fdcdc6388c29b0e41b8b00fb4faec2ee7e6037c877d61393f676b762ad8661",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch3/communities.jsonl": "35379fa73e424afae12e6a056280d1e4aa852f4136ae0235dc64a0e77cc1627f",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch3/events.jsonl": "ff52e22d07ca264e79977965b1e2e0471006e7d67919348d386f5bbbf6c4401f",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch3/org_nodes.jsonl": "38a5c945d85bf84376da7bbfbd970be9e6e808c79b260a18b48782238496861d",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/manifest.json": "0a649fd2e5cb19997681f93d1bce137cc1a5eca326d7b9479fef788bbb01db02",
+    "data/processed/kg/slice3_c2/snapshots/ch1/edges.jsonl": "cf3258abc1828272ab08e50047d72254ac2da05c282263c3318a01b5fb57aaeb",
+    "data/processed/kg/slice3_c2/snapshots/ch1/manifest.json": "9cd592288a8eba7af157df38acd6a0eebd33fb72c57d41531f0ee561a665b59f",
+    "data/processed/kg/slice3_c2/snapshots/ch1/merges.jsonl": "49dcc50ba869116001efb03a956fb57d6dc7907b3565d3afb1af4734059ff6f0",
+    "data/processed/kg/slice3_c2/snapshots/ch1/nodes.jsonl": "3ece4ff08706e95ac0efa613443faa46ed779452930f06029d421979e74df1e4",
+    "data/processed/kg/slice3_c2/snapshots/ch1/rejected.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "data/processed/kg/slice3_c2/snapshots/ch2/edges.jsonl": "9a6006d7076a0d0f2cacc9171271c3175d5e95b53e7a5b14a701f03de3cd050e",
+    "data/processed/kg/slice3_c2/snapshots/ch2/manifest.json": "03c37567b5cf7f6a5dae10e40cd69d6a3d27d120a378ed1b716f11b7fa4ba2f4",
+    "data/processed/kg/slice3_c2/snapshots/ch2/merges.jsonl": "1bb24bd1b690334f83c299df1a529a15b20324d82ba87aa5cd56ccb0cedcd0fc",
+    "data/processed/kg/slice3_c2/snapshots/ch2/nodes.jsonl": "f462655bfaf5fef0d9b0855030150343565b8a873ca1b7b19dd832464c71b5c8",
+    "data/processed/kg/slice3_c2/snapshots/ch2/rejected.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "data/processed/kg/slice3_c2/snapshots/ch3/edges.jsonl": "09936c9da878f7cb0a757e5bd8ebee73d4247ad20827f144a872832e8423a086",
+    "data/processed/kg/slice3_c2/snapshots/ch3/manifest.json": "d243bf5e2a748390430b590be150f989fe264aa2efe6b5bec7319c36dbe2c693",
+    "data/processed/kg/slice3_c2/snapshots/ch3/merges.jsonl": "27f6f1d1a0091062696c387be8a811e8b5d992d21e96695da7dc112ae9c574f8",
+    "data/processed/kg/slice3_c2/snapshots/ch3/nodes.jsonl": "0ee9fdd423a8ab1cddaecdabc7ba1f5c122f8b82764f85e337dc0159841fc929",
+    "data/processed/kg/slice3_c2/snapshots/ch3/rejected.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "data/processed/kg/slice3_c2/v4_concepts.json": "dd8f74b0d6974c661e209eddc48489ecc01e787e06a56a8fdd1d8805c6264c86"
+   },
+   "source_hashes_after_build": {
+    "data/interim/textbook_sections.jsonl": "665029b32e45ffc4fd0e150b1d13de719562a3657f7004efb22a94356a7d14f3",
+    "data/logs/llm_calls.jsonl": "02f97b6b64386d6d6bf0e674b3cc0a999f974edfd8af0a7a587620271681a87e",
+    "data/processed/kg/slice3_c2/checkpoint.json": "54eb0f194ca0271da08d38500b781c17eefa6af79638e85e865bdcfedaafde99",
+    "data/processed/kg/slice3_c2/misconceptions.jsonl": "b472c55b143d05b49d66f6ad2c62327dc985138770217a6da34d8c4958aed18f",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch1/communities.jsonl": "33f3aeba5452c3f70f82ec28c328a18bfc7d03fb48c71279cb2b3165454da355",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch1/events.jsonl": "6717d1d4556d9cefe3730ddb84142d155e2cb9bbb5e148a3b71a914fde6db7ac",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch1/org_nodes.jsonl": "bd10773eb7472f410734405515c2ba29ce5aed464b78ddd1a06f6c7297901c37",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch2/communities.jsonl": "fd8f9539dfebbcf1a4522ba9c6a30674095973269fc8b5945697cc9df265b37a",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch2/events.jsonl": "e59a5c361031656e29a0ba0c0b799b219a710a2b3f31def8060cfbeddaf10dc7",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch2/org_nodes.jsonl": "63fdcdc6388c29b0e41b8b00fb4faec2ee7e6037c877d61393f676b762ad8661",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch3/communities.jsonl": "35379fa73e424afae12e6a056280d1e4aa852f4136ae0235dc64a0e77cc1627f",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch3/events.jsonl": "ff52e22d07ca264e79977965b1e2e0471006e7d67919348d386f5bbbf6c4401f",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch3/org_nodes.jsonl": "38a5c945d85bf84376da7bbfbd970be9e6e808c79b260a18b48782238496861d",
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/manifest.json": "0a649fd2e5cb19997681f93d1bce137cc1a5eca326d7b9479fef788bbb01db02",
+    "data/processed/kg/slice3_c2/snapshots/ch1/edges.jsonl": "cf3258abc1828272ab08e50047d72254ac2da05c282263c3318a01b5fb57aaeb",
+    "data/processed/kg/slice3_c2/snapshots/ch1/manifest.json": "9cd592288a8eba7af157df38acd6a0eebd33fb72c57d41531f0ee561a665b59f",
+    "data/processed/kg/slice3_c2/snapshots/ch1/merges.jsonl": "49dcc50ba869116001efb03a956fb57d6dc7907b3565d3afb1af4734059ff6f0",
+    "data/processed/kg/slice3_c2/snapshots/ch1/nodes.jsonl": "3ece4ff08706e95ac0efa613443faa46ed779452930f06029d421979e74df1e4",
+    "data/processed/kg/slice3_c2/snapshots/ch1/rejected.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "data/processed/kg/slice3_c2/snapshots/ch2/edges.jsonl": "9a6006d7076a0d0f2cacc9171271c3175d5e95b53e7a5b14a701f03de3cd050e",
+    "data/processed/kg/slice3_c2/snapshots/ch2/manifest.json": "03c37567b5cf7f6a5dae10e40cd69d6a3d27d120a378ed1b716f11b7fa4ba2f4",
+    "data/processed/kg/slice3_c2/snapshots/ch2/merges.jsonl": "1bb24bd1b690334f83c299df1a529a15b20324d82ba87aa5cd56ccb0cedcd0fc",
+    "data/processed/kg/slice3_c2/snapshots/ch2/nodes.jsonl": "f462655bfaf5fef0d9b0855030150343565b8a873ca1b7b19dd832464c71b5c8",
+    "data/processed/kg/slice3_c2/snapshots/ch2/rejected.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "data/processed/kg/slice3_c2/snapshots/ch3/edges.jsonl": "09936c9da878f7cb0a757e5bd8ebee73d4247ad20827f144a872832e8423a086",
+    "data/processed/kg/slice3_c2/snapshots/ch3/manifest.json": "d243bf5e2a748390430b590be150f989fe264aa2efe6b5bec7319c36dbe2c693",
+    "data/processed/kg/slice3_c2/snapshots/ch3/merges.jsonl": "27f6f1d1a0091062696c387be8a811e8b5d992d21e96695da7dc112ae9c574f8",
+    "data/processed/kg/slice3_c2/snapshots/ch3/nodes.jsonl": "0ee9fdd423a8ab1cddaecdabc7ba1f5c122f8b82764f85e337dc0159841fc929",
+    "data/processed/kg/slice3_c2/snapshots/ch3/rejected.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "data/processed/kg/slice3_c2/v4_concepts.json": "dd8f74b0d6974c661e209eddc48489ecc01e787e06a56a8fdd1d8805c6264c86"
+   },
+   "stop1_audit_artifacts_compared": 9,
+   "trace_schema_version": "1.0",
+   "two_builds_identical_trace_hash": true,
+   "unchanged_during_build": true,
+   "unchanged_now_vs_build_time": true,
+   "unchanged_now_vs_stop1_audit": {
+    "data/interim/textbook_sections.jsonl": true,
+    "data/logs/llm_calls.jsonl": true,
+    "data/processed/kg/slice3_c2/checkpoint.json": true,
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch3/events.jsonl": true,
+    "data/processed/kg/slice3_c2/organisation/org_b6ebb5bc/ch3/org_nodes.jsonl": true,
+    "data/processed/kg/slice3_c2/snapshots/ch1/edges.jsonl": true,
+    "data/processed/kg/slice3_c2/snapshots/ch2/edges.jsonl": true,
+    "data/processed/kg/slice3_c2/snapshots/ch3/edges.jsonl": true,
+    "data/processed/kg/slice3_c2/v4_concepts.json": true
+   }
+  }
+ },
+ "explorer": {
+  "bytes": 5964295,
+  "eval_payload_json_sha256": "e48c1d045a321325e60b2101f5ded0c3af6deefe639899ba46be08f5bc6e9a2e",
+  "path": "reports/kg_explorer/index.html (generated, gitignored: embeds CC BY-NC SciNLP text)",
+  "second_build_identical": true,
+  "sha256": "d1e609fe824b1d1edd90429722a2259d9e5edea459ccb933d6c34b272ca01467",
+  "trace_payload_json_sha256": "cf2b5dcb5821d90b9d7d260d20b1a1bce30c3964d57eb3777bbacaab54b0403c"
+ },
+ "git": {
+  "base_commit": "2e50b6538ab5a8c97c9df3a218ab70646af90695",
+  "branch": "cr-013-process-explainability",
+  "cr012_frozen_tag": "cr012-stop4-complete (4697acb)",
+  "head_at_manifest_time": "33d2117b7dda95a364a898137b4757f79875dbf4"
+ },
+ "overlay_frozen_inputs": {
+  "hashes_after": {
+   "data/gold/pd_e2e_test_blind.csv": "44ff0383b3144a7a441e6746cfcc4d5793b661166fb6f45a268e3d1e1cf976fa",
+   "data/processed/kg/cr012_heldout_4_4_E0/checkpoint.json": "1b12216ce43dfb60088359fc843f3d459307415111bd58e1d3a7e65636889d1f",
+   "data/processed/kg/cr012_heldout_4_5_E0/checkpoint.json": "e0633ebe020eab79e145f82b517fddd3a2ae52789fc3a12f363ebf34fd6bda1b",
+   "data/processed/kg/cr012_heldout_5_4_E0/checkpoint.json": "728e0e74e151959bb5b2b3a0cea3dc38de9df743da91f68c8075ee8677993caa",
+   "data/processed/kg/cr012_heldout_6_3_E0/checkpoint.json": "e91b07c13b111a5ce17b5780b5b9838600b1b3e4d23d150767a2a23bd46cc4c1",
+   "data/processed/kg/cr012_heldout_7_1_E0/checkpoint.json": "c3d58e8929a9e69179add15d8990c31f7ae7e714cb638078db33ddf72e682710",
+   "data/processed/kg/cr012_heldout_8_2_E0/checkpoint.json": "ab245e2f87a78147cd6707e53b5a1c91e54c86d6bd4886216ef5b32065ccb70a",
+   "data/processed/kg/cr012_heldout_9_3_E0/checkpoint.json": "b4c730588002c84aeb795140892ef9f79922ffa4fb2239e034fc7db429720a41",
+   "data/processed/kg/cr012_scinlp_heldout_2021_acl_long_353_E0/checkpoint.json": "2a07efffd31a2bde9b9a0f18b7057b62b4fea53aac3d3ca7051199ae8cfd95ca",
+   "data/processed/kg/cr012_scinlp_heldout_2024_acl_long_108_1_9_grobid_E0/checkpoint.json": "0d3e6aeab006d7e65fd8e5cdbe54d1dd7b97c56b0c5880f790b9e936ed1dff8c",
+   "data/processed/kg/cr012_scinlp_heldout_P17_1058_grobid_E0/checkpoint.json": "65835f9078dd00cf1727ad62e11e7215e6d47749932043a05bedf407ed05ec2c",
+   "reports/cr012/heldout_gold_provenance.json": "2a6d81bfce2c30481d0963a47b8c8b0a0dedfca834137a48252b1b953badc38e",
+   "reports/cr012/stop4_heldout_results.json": "b7f309f7ec94068dba8bfb572b06236b1d7a3d740f938fec6616c4c72b179f4c"
+  },
+  "hashes_before": {
+   "data/gold/pd_e2e_test_blind.csv": "44ff0383b3144a7a441e6746cfcc4d5793b661166fb6f45a268e3d1e1cf976fa",
+   "data/processed/kg/cr012_heldout_4_4_E0/checkpoint.json": "1b12216ce43dfb60088359fc843f3d459307415111bd58e1d3a7e65636889d1f",
+   "data/processed/kg/cr012_heldout_4_5_E0/checkpoint.json": "e0633ebe020eab79e145f82b517fddd3a2ae52789fc3a12f363ebf34fd6bda1b",
+   "data/processed/kg/cr012_heldout_5_4_E0/checkpoint.json": "728e0e74e151959bb5b2b3a0cea3dc38de9df743da91f68c8075ee8677993caa",
+   "data/processed/kg/cr012_heldout_6_3_E0/checkpoint.json": "e91b07c13b111a5ce17b5780b5b9838600b1b3e4d23d150767a2a23bd46cc4c1",
+   "data/processed/kg/cr012_heldout_7_1_E0/checkpoint.json": "c3d58e8929a9e69179add15d8990c31f7ae7e714cb638078db33ddf72e682710",
+   "data/processed/kg/cr012_heldout_8_2_E0/checkpoint.json": "ab245e2f87a78147cd6707e53b5a1c91e54c86d6bd4886216ef5b32065ccb70a",
+   "data/processed/kg/cr012_heldout_9_3_E0/checkpoint.json": "b4c730588002c84aeb795140892ef9f79922ffa4fb2239e034fc7db429720a41",
+   "data/processed/kg/cr012_scinlp_heldout_2021_acl_long_353_E0/checkpoint.json": "2a07efffd31a2bde9b9a0f18b7057b62b4fea53aac3d3ca7051199ae8cfd95ca",
+   "data/processed/kg/cr012_scinlp_heldout_2024_acl_long_108_1_9_grobid_E0/checkpoint.json": "0d3e6aeab006d7e65fd8e5cdbe54d1dd7b97c56b0c5880f790b9e936ed1dff8c",
+   "data/processed/kg/cr012_scinlp_heldout_P17_1058_grobid_E0/checkpoint.json": "65835f9078dd00cf1727ad62e11e7215e6d47749932043a05bedf407ed05ec2c",
+   "reports/cr012/heldout_gold_provenance.json": "2a6d81bfce2c30481d0963a47b8c8b0a0dedfca834137a48252b1b953badc38e",
+   "reports/cr012/stop4_heldout_results.json": "b7f309f7ec94068dba8bfb572b06236b1d7a3d740f938fec6616c4c72b179f4c"
+  },
+  "note": "read-only inputs of the evaluation overlay (frozen CR-012 outputs, retained E0 checkpoints, owner gold)",
+  "unchanged": true
+ },
+ "read_only_integrity": {
+  "all_audited_source_artifacts_byte_identical": true,
+  "checked_against": [
+   "hashes before and after each trace build",
+   "hashes now",
+   "hashes recorded by the STOP-1 audit"
+  ]
+ },
+ "scope": "explainability / observability only; no accuracy-improvement claim",
+ "source_run_ids": [
+  "slice3_c2",
+  "cr012_scinlp_heldout_P17_1058_grobid_E0"
+ ]
+}

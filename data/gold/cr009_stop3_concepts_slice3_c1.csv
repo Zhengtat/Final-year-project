@@ -1,0 +1,41 @@
+﻿id,concept,type,section,evidence quote,judgement (valid complete / partial / not a concept / generic),if partial: the full term,anchored to (known concept),cue sentence,anchor judgement (correct / wrong / should be independent)
+1,cell tax,Concept,3.1,some detractors called the cell tax,valid complete,,,,
+2,checksum scheme,Mechanism,2.4,the simpler checksum scheme used by several Internet protocols,partial,Internet checksum,Internet,the simpler checksum scheme used by several Internet protocols,correct
+3,Carrier Sense Multiple Access,Mechanism,2-problem-connecting-to-a-network,Carrier Sense Multiple Access (CSMA) networks,valid complete,,network,Carrier Sense Multiple Access (CSMA) networks,correct
+4,effective communication service,Concept,1-problem-building-a-network,into an effective communication service,not a concept,,,,
+5,network internal,Component,1.4,C because it remains the language of choice for network internals.,generic,,network,the internals of the network,wrong
+6,Layer 2 switch,Component,3-problem-not-all-networks-are-directly-connected,"Devices that interconnect links of the same type are often called switches, or sometimes Layer 2 (L2) switches.",valid complete,,,,
+7,concurrent logical channels,Mechanism,2.5,"The idea underlying the ARPANET protocol, which we refer to as concurrent logical channels",valid complete,,logical channel,"concurrent logical channels, is to multiplex several logical channels onto a single point-to-point link",correct
+8,byte-oriented protocol,Protocol,2.3,Early examples of such byte-oriented protocols are the Binary Synchronous Communication (BISYNC) protocol,valid complete,,protocol,Early examples of such byte-oriented protocols are the Binary Synchronous Communication (BISYNC) protocol,correct
+9,sin,Identifier,1.4,the address data structure (sin) expected by the socket interface,not a concept,,address,the address data structure (sin) expected by the socket interface,wrong
+10,root switch,Component,3.2,The root switch always forwards frames out over all of its ports.,valid complete,,switch,The root switch always forwards frames out over all of its ports.,correct
+11,collision course,Event,2-perspective-race-to-the-edge,puts cloud providers and network operators on a collision course,not a concept,,cloud provider,puts cloud providers and network operators on a collision course,wrong
+12,Aloha network,Concept,2.6,"an early packet radio network, called Aloha",valid complete,,packet,"an early packet radio network, called Aloha",correct
+13,IEEE 802.15.4,Protocol,2.7,standardized as IEEE 802.15.4,valid complete,,,,
+14,aggregate throughput,Parameter,3.1,Providing high aggregate throughput is one of the design goals for a switch,valid complete,,switch,Providing high aggregate throughput is one of the design goals for a switch,correct
+15,STS-3,Parameter,2.3,"while at STS-3 rates, each SONET frame is 2430 bytes long.",valid complete,,link,STS-3 should really be viewed as three 51.84-Mbps links,correct
+16,least-cost path,Concept,3.4,"In this example, the cost of each link is set to 1, so that a least-cost path is simply the one with the fewest hops.",valid complete,,path,ends up with the least-cost paths to all nodes,correct
+17,electromagnetic radiation,Concept,2-problem-connecting-to-a-network,"through which electromagnetic radiation (e.g., radio waves) can be transmitted",generic,,,,
+18,Association Request frame,DataUnit,2.7,sends that AP an Association Request frame,valid complete,,frame,sends that AP an Association Request frame,correct
+19,network adaptor,Component,1.3,"Network adaptors, along with device drivers",valid complete,,,,
+20,Hypertext Transfer Protocol,Protocol,1.1,the Hypertext Transfer Protocol (HTTP) should be used to download the page,valid complete,,,,
+21,SourceAddr,DataUnit,3.3,the SourceAddr and the DestinationAddr for the packet,valid complete,,field,the SourceAddr and the DestinationAddr for the packet,correct
+22,edge site,Component,2.8,"edge sites, each of which serves a city or neighborhood",valid complete,,,,
+23,packet switching,Mechanism,1.2,The major reason for using packet switching rather than circuit switching in a computer network is efficiency,valid complete,,packet,that gives packet switching its efficiency,correct
+24,SYN character,DataUnit,2.3,sending a special SYN (synchronization) character,valid complete,,,,
+25,warehouse,Component,2-perspective-race-to-the-edge,"factory, and warehouse space increasingly want to deploy private 5G networks",not a concept,,,,
+26,socket,Component,1.4,"The main abstraction of the socket interface, not surprisingly, is the socket.",valid complete,,interface,"The main abstraction of the socket interface, not surprisingly, is the socket.",correct
+27,counting semaphore,Mechanism,2.5,The sending state also includes a counting semaphore called sendWindowNotFull.,generic,,,,
+28,network part,Identifier,3.3,network and host parts,valid complete,,,,
+29,copper-based cable,Component,1.2,on a typical copper-based cable,generic,,link,on a typical copper-based cable,wrong
+30,switched virtual circuit,Mechanism,3.1,The salient characteristic of a switched virtual circuit (SVC) is that a host may set up and delete such a VC dynamically,valid complete,,switching,a switched virtual circuit (SVC),correct
+31,I/O,Component,3-perspective-virtual-networks-all-the-way-down,"CPU, storage, I/O, and so on",generic,,,,
+32,smart city,Concept,2-perspective-race-to-the-edge,anyone (from smart cities to underserved rural areas,generic,,,,
+33,crash,Event,1.2,Machines crash and later are rebooted,not a concept,,,,
+34,bit stream,DataUnit,2.2,insert extra bits into the bit stream,valid complete,,,,
+35,designated switch,Component,3.2,the switch elects a single designated switch that will be responsible for forwarding frames toward the root,valid complete,,switch,the switch elects a single designated switch that will be responsible for forwarding frames toward the root,correct
+36,characters,DataUnit,1.4,it receives and prints out the characters that arrive on the connection,generic,,,,
+37,data frame,DataUnit,2.5,although a protocol can piggyback an ACK on a data frame it just happens to be sending in the opposite direction.,valid complete,,frame,data frames arriving at this node,correct
+38,slopes,Parameter,3.4,"The slopes, offsets, and breakpoints for the curves",generic,,,,
+39,classical Ethernet,Protocol,2-problem-connecting-to-a-network,of which classical Ethernet and Wi-Fi are the most famous examples,valid complete,,Ethernet,classical Ethernet and Wi-Fi are the most famous examples,correct
+40,timer,Component,2.5,the ACK is received before the timer expires,generic,,,,

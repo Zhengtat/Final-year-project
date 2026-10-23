@@ -1,0 +1,1 @@
+{"direction": "forward", "comparison_dimension": "latency budget", "other_description": null, "other_suggested_label": null, "relation": "contrasts_with", "evidence_quote": "A shielded wire has a lower cost than fiber", "statement": "wire vs fiber on cost", "_usage": {"input_tokens": 100, "output_tokens": 30}}

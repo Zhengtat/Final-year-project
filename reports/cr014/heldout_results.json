@@ -1,0 +1,592 @@
+{
+ "n_gold_mentions": 7279,
+ "n_gold_concepts": 1065,
+ "by_section": {
+  "U0": {
+   "4.2": {
+    "mention_span_exact": {
+     "tp": 298,
+     "fp": 83,
+     "fn": 389,
+     "precision": 0.7821522309711286,
+     "recall": 0.43377001455604075,
+     "f1": 0.5580524344569288
+    },
+    "one_token": {
+     "gold": 480,
+     "recall": 0.38125,
+     "predicted": 244,
+     "precision": 0.75
+    },
+    "false_positive_boundary_categories": {
+     "over_general_inside_gold": 6,
+     "no_overlap": 62,
+     "over_specific_contains_gold": 15
+    },
+    "missed_gold": {
+     "not_overlapped": 181,
+     "overlapped_inexact": 208
+    },
+    "nested_valid_gold": 208
+   },
+   "5.3": {
+    "mention_span_exact": {
+     "tp": 672,
+     "fp": 187,
+     "fn": 695,
+     "precision": 0.7823050058207218,
+     "recall": 0.49158741770299924,
+     "f1": 0.6037735849056605
+    },
+    "one_token": {
+     "gold": 984,
+     "recall": 0.4400406504065041,
+     "predicted": 553,
+     "precision": 0.783001808318264
+    },
+    "false_positive_boundary_categories": {
+     "no_overlap": 102,
+     "over_specific_contains_gold": 47,
+     "over_general_inside_gold": 38
+    },
+    "missed_gold": {
+     "not_overlapped": 279,
+     "overlapped_inexact": 416
+    },
+    "nested_valid_gold": 373
+   },
+   "6.1": {
+    "mention_span_exact": {
+     "tp": 307,
+     "fp": 51,
+     "fn": 317,
+     "precision": 0.8575418994413407,
+     "recall": 0.49198717948717946,
+     "f1": 0.6252545824847251
+    },
+    "one_token": {
+     "gold": 444,
+     "recall": 0.4752252252252252,
+     "predicted": 248,
+     "precision": 0.8508064516129032
+    },
+    "false_positive_boundary_categories": {
+     "no_overlap": 37,
+     "over_specific_contains_gold": 7,
+     "over_general_inside_gold": 7
+    },
+    "missed_gold": {
+     "not_overlapped": 221,
+     "overlapped_inexact": 96
+    },
+    "nested_valid_gold": 114
+   },
+   "6.4": {
+    "mention_span_exact": {
+     "tp": 515,
+     "fp": 175,
+     "fn": 457,
+     "precision": 0.7463768115942029,
+     "recall": 0.529835390946502,
+     "f1": 0.6197352587244284
+    },
+    "one_token": {
+     "gold": 705,
+     "recall": 0.5546099290780142,
+     "predicted": 542,
+     "precision": 0.7214022140221402
+    },
+    "false_positive_boundary_categories": {
+     "over_general_inside_gold": 39,
+     "no_overlap": 116,
+     "over_specific_contains_gold": 20
+    },
+    "missed_gold": {
+     "not_overlapped": 171,
+     "overlapped_inexact": 286
+    },
+    "nested_valid_gold": 270
+   },
+   "7.2": {
+    "mention_span_exact": {
+     "tp": 636,
+     "fp": 289,
+     "fn": 480,
+     "precision": 0.6875675675675675,
+     "recall": 0.5698924731182796,
+     "f1": 0.6232239098481137
+    },
+    "one_token": {
+     "gold": 775,
+     "recall": 0.5806451612903226,
+     "predicted": 686,
+     "precision": 0.6559766763848397
+    },
+    "false_positive_boundary_categories": {
+     "over_general_inside_gold": 47,
+     "over_specific_contains_gold": 31,
+     "no_overlap": 211
+    },
+    "missed_gold": {
+     "not_overlapped": 213,
+     "overlapped_inexact": 267
+    },
+    "nested_valid_gold": 206
+   },
+   "8.3": {
+    "mention_span_exact": {
+     "tp": 280,
+     "fp": 119,
+     "fn": 302,
+     "precision": 0.7017543859649122,
+     "recall": 0.48109965635738833,
+     "f1": 0.5708460754332314
+    },
+    "one_token": {
+     "gold": 389,
+     "recall": 0.455012853470437,
+     "predicted": 293,
+     "precision": 0.6040955631399317
+    },
+    "false_positive_boundary_categories": {
+     "no_overlap": 113,
+     "over_general_inside_gold": 3,
+     "over_specific_contains_gold": 3
+    },
+    "missed_gold": {
+     "not_overlapped": 160,
+     "overlapped_inexact": 142
+    },
+    "nested_valid_gold": 171
+   },
+   "8.4": {
+    "mention_span_exact": {
+     "tp": 153,
+     "fp": 33,
+     "fn": 229,
+     "precision": 0.8225806451612904,
+     "recall": 0.4005235602094241,
+     "f1": 0.5387323943661972
+    },
+    "one_token": {
+     "gold": 287,
+     "recall": 0.3588850174216028,
+     "predicted": 129,
+     "precision": 0.7984496124031008
+    },
+    "false_positive_boundary_categories": {
+     "no_overlap": 22,
+     "over_specific_contains_gold": 7,
+     "over_general_inside_gold": 4
+    },
+    "missed_gold": {
+     "not_overlapped": 128,
+     "overlapped_inexact": 101
+    },
+    "nested_valid_gold": 118
+   },
+   "8.5": {
+    "mention_span_exact": {
+     "tp": 835,
+     "fp": 300,
+     "fn": 714,
+     "precision": 0.73568281938326,
+     "recall": 0.539057456423499,
+     "f1": 0.6222056631892697
+    },
+    "one_token": {
+     "gold": 1211,
+     "recall": 0.523534269199009,
+     "predicted": 855,
+     "precision": 0.7415204678362574
+    },
+    "false_positive_boundary_categories": {
+     "no_overlap": 215,
+     "over_specific_contains_gold": 59,
+     "over_general_inside_gold": 26
+    },
+    "missed_gold": {
+     "not_overlapped": 301,
+     "overlapped_inexact": 413
+    },
+    "nested_valid_gold": 352
+   }
+  },
+  "V3": {
+   "4.2": {
+    "mention_span_exact": {
+     "tp": 398,
+     "fp": 151,
+     "fn": 289,
+     "precision": 0.7249544626593807,
+     "recall": 0.5793304221251819,
+     "f1": 0.6440129449838189
+    },
+    "one_token": {
+     "gold": 480,
+     "recall": 0.5041666666666667,
+     "predicted": 341,
+     "precision": 0.7096774193548387
+    },
+    "false_positive_boundary_categories": {
+     "over_general_inside_gold": 19,
+     "over_specific_contains_gold": 34,
+     "no_overlap": 98
+    },
+    "missed_gold": {
+     "not_overlapped": 29,
+     "overlapped_inexact": 260
+    },
+    "nested_valid_gold": 208
+   },
+   "5.3": {
+    "mention_span_exact": {
+     "tp": 818,
+     "fp": 318,
+     "fn": 549,
+     "precision": 0.7200704225352113,
+     "recall": 0.598390636430139,
+     "f1": 0.6536156612065521
+    },
+    "one_token": {
+     "gold": 984,
+     "recall": 0.5264227642276422,
+     "predicted": 727,
+     "precision": 0.7125171939477304
+    },
+    "false_positive_boundary_categories": {
+     "no_overlap": 199,
+     "over_general_inside_gold": 36,
+     "over_specific_contains_gold": 83
+    },
+    "missed_gold": {
+     "not_overlapped": 48,
+     "overlapped_inexact": 501
+    },
+    "nested_valid_gold": 373
+   },
+   "6.1": {
+    "mention_span_exact": {
+     "tp": 431,
+     "fp": 168,
+     "fn": 193,
+     "precision": 0.7195325542570952,
+     "recall": 0.6907051282051282,
+     "f1": 0.7048242027800491
+    },
+    "one_token": {
+     "gold": 444,
+     "recall": 0.6936936936936937,
+     "predicted": 416,
+     "precision": 0.7403846153846154
+    },
+    "false_positive_boundary_categories": {
+     "over_specific_contains_gold": 45,
+     "no_overlap": 106,
+     "over_general_inside_gold": 17
+    },
+    "missed_gold": {
+     "not_overlapped": 18,
+     "overlapped_inexact": 175
+    },
+    "nested_valid_gold": 114
+   },
+   "6.4": {
+    "mention_span_exact": {
+     "tp": 555,
+     "fp": 253,
+     "fn": 417,
+     "precision": 0.6868811881188119,
+     "recall": 0.5709876543209876,
+     "f1": 0.6235955056179776
+    },
+    "one_token": {
+     "gold": 705,
+     "recall": 0.4879432624113475,
+     "predicted": 518,
+     "precision": 0.6640926640926641
+    },
+    "false_positive_boundary_categories": {
+     "over_specific_contains_gold": 68,
+     "no_overlap": 174,
+     "over_general_inside_gold": 11
+    },
+    "missed_gold": {
+     "not_overlapped": 56,
+     "overlapped_inexact": 361
+    },
+    "nested_valid_gold": 270
+   },
+   "7.2": {
+    "mention_span_exact": {
+     "tp": 756,
+     "fp": 623,
+     "fn": 360,
+     "precision": 0.5482233502538071,
+     "recall": 0.6774193548387096,
+     "f1": 0.6060120240480962
+    },
+    "one_token": {
+     "gold": 775,
+     "recall": 0.6154838709677419,
+     "predicted": 965,
+     "precision": 0.49430051813471504
+    },
+    "false_positive_boundary_categories": {
+     "no_overlap": 522,
+     "over_specific_contains_gold": 83,
+     "over_general_inside_gold": 16,
+     "shifted_partial_overlap": 2
+    },
+    "missed_gold": {
+     "not_overlapped": 45,
+     "overlapped_inexact": 315
+    },
+    "nested_valid_gold": 206
+   },
+   "8.3": {
+    "mention_span_exact": {
+     "tp": 366,
+     "fp": 125,
+     "fn": 216,
+     "precision": 0.745417515274949,
+     "recall": 0.6288659793814433,
+     "f1": 0.6821994408201304
+    },
+    "one_token": {
+     "gold": 389,
+     "recall": 0.5629820051413882,
+     "predicted": 325,
+     "precision": 0.6738461538461539
+    },
+    "false_positive_boundary_categories": {
+     "no_overlap": 100,
+     "over_general_inside_gold": 10,
+     "over_specific_contains_gold": 15
+    },
+    "missed_gold": {
+     "not_overlapped": 19,
+     "overlapped_inexact": 197
+    },
+    "nested_valid_gold": 171
+   },
+   "8.4": {
+    "mention_span_exact": {
+     "tp": 239,
+     "fp": 54,
+     "fn": 143,
+     "precision": 0.8156996587030717,
+     "recall": 0.6256544502617801,
+     "f1": 0.7081481481481482
+    },
+    "one_token": {
+     "gold": 287,
+     "recall": 0.5958188153310104,
+     "predicted": 213,
+     "precision": 0.8028169014084507
+    },
+    "false_positive_boundary_categories": {
+     "no_overlap": 42,
+     "over_specific_contains_gold": 10,
+     "over_general_inside_gold": 2
+    },
+    "missed_gold": {
+     "not_overlapped": 16,
+     "overlapped_inexact": 127
+    },
+    "nested_valid_gold": 118
+   },
+   "8.5": {
+    "mention_span_exact": {
+     "tp": 912,
+     "fp": 463,
+     "fn": 637,
+     "precision": 0.6632727272727272,
+     "recall": 0.5887669464170433,
+     "f1": 0.6238030095759234
+    },
+    "one_token": {
+     "gold": 1211,
+     "recall": 0.5474814203137902,
+     "predicted": 932,
+     "precision": 0.7113733905579399
+    },
+    "false_positive_boundary_categories": {
+     "no_overlap": 283,
+     "over_general_inside_gold": 21,
+     "over_specific_contains_gold": 159
+    },
+    "missed_gold": {
+     "not_overlapped": 52,
+     "overlapped_inexact": 585
+    },
+    "nested_valid_gold": 352
+   }
+  }
+ },
+ "arms": {
+  "U0": {
+   "mention_span_exact": {
+    "tp": 3696,
+    "fp": 1237,
+    "fn": 3583,
+    "precision": 0.7492398135009122,
+    "recall": 0.5077620552273664,
+    "f1": 0.6053062561415002
+   },
+   "one_token": {
+    "gold": 5275,
+    "recall": 0.489478672985782,
+    "predicted": 3550,
+    "precision": 0.7273239436619718
+   },
+   "false_positive_boundary_categories": {
+    "over_general_inside_gold": 170,
+    "no_overlap": 878,
+    "over_specific_contains_gold": 189
+   },
+   "missed_gold": {
+    "not_overlapped": 1654,
+    "overlapped_inexact": 1929
+   },
+   "nested_valid_gold": 1812,
+   "distinct_surface_view": {
+    "tp": 805,
+    "fp": 321,
+    "fn": 899,
+    "precision": 0.7149200710479574,
+    "recall": 0.4724178403755869,
+    "f1": 0.568904593639576
+   }
+  },
+  "V3": {
+   "mention_span_exact": {
+    "tp": 4475,
+    "fp": 2155,
+    "fn": 2804,
+    "precision": 0.6749622926093515,
+    "recall": 0.6147822503091084,
+    "f1": 0.6434682579624704
+   },
+   "one_token": {
+    "gold": 5275,
+    "recall": 0.5577251184834123,
+    "predicted": 4437,
+    "precision": 0.6630606265494704
+   },
+   "false_positive_boundary_categories": {
+    "over_general_inside_gold": 132,
+    "over_specific_contains_gold": 497,
+    "no_overlap": 1524,
+    "shifted_partial_overlap": 2
+   },
+   "missed_gold": {
+    "not_overlapped": 283,
+    "overlapped_inexact": 2521
+   },
+   "nested_valid_gold": 1812,
+   "distinct_surface_view": {
+    "tp": 1238,
+    "fp": 934,
+    "fn": 466,
+    "precision": 0.5699815837937385,
+    "recall": 0.7265258215962441,
+    "f1": 0.6388028895768835
+   }
+  }
+ },
+ "nested_allowed": {
+  "U0": {
+   "mention_span_exact": {
+    "tp": 4475,
+    "fp": 1491,
+    "fn": 2804,
+    "precision": 0.7500838082467315,
+    "recall": 0.6147822503091084,
+    "f1": 0.6757266893167233
+   },
+   "one_token": {
+    "gold": 5275,
+    "recall": 0.6252132701421801,
+    "predicted": 4500,
+    "precision": 0.7328888888888889
+   },
+   "false_positive_boundary_categories": {
+    "over_general_inside_gold": 370,
+    "no_overlap": 913,
+    "over_specific_contains_gold": 208
+   },
+   "missed_gold": {
+    "not_overlapped": 1654,
+    "overlapped_inexact": 1150
+   },
+   "nested_valid_gold": 1812
+  },
+  "V3": {
+   "mention_span_exact": {
+    "tp": 6404,
+    "fp": 3179,
+    "fn": 875,
+    "precision": 0.6682667223207763,
+    "recall": 0.8797911801071576,
+    "f1": 0.7595777487842487
+   },
+   "one_token": {
+    "gold": 5275,
+    "recall": 0.8828436018957346,
+    "predicted": 7047,
+    "precision": 0.6608485880516531
+   },
+   "false_positive_boundary_categories": {
+    "over_general_inside_gold": 791,
+    "over_specific_contains_gold": 598,
+    "no_overlap": 1785,
+    "shifted_partial_overlap": 5
+   },
+   "missed_gold": {
+    "not_overlapped": 283,
+    "overlapped_inexact": 592
+   },
+   "nested_valid_gold": 1812
+  }
+ },
+ "span_level_proposal_recall_U2": 0.9788432476988598,
+ "v3_miss_taxonomy": {
+  "proposal_exact_hit": 0,
+  "P0_no_overlapping_candidate": 29,
+  "P1_overlap_only": 115,
+  "V_verifier_rejected": 471,
+  "B0_lost_at_boundary_stage": 260,
+  "placement_or_other": 1929
+ },
+ "bootstrap_delta_f1_sentence_clustered": {
+  "mean": 0.03806636952781566,
+  "lo95": 0.026109719579399004,
+  "hi95": 0.04956979011715257,
+  "n_sentences": 1773
+ },
+ "bootstrap_delta_f1_section_clustered": {
+  "delta": 0.03816200182097018,
+  "boot_mean": 0.04057521174457389,
+  "lo95": 0.010095047454986648,
+  "hi95": 0.07940713347658854,
+  "lo90": 0.014082023689162226,
+  "n": 10000,
+  "sections": 8
+ },
+ "gates": {
+  "f1_gain_ge_0.02_or_ci_lower_gt_0": true,
+  "precision_delta_ge_-0.02": false,
+  "recall_delta_ge_+0.05": true,
+  "one_token_recall_delta_ge_-0.02": true,
+  "deltas": {
+   "precision": -0.0742775208915607,
+   "recall": 0.10702019508174199,
+   "f1": 0.03816200182097018,
+   "one_token_recall": 0.06824644549763031
+  },
+  "gold_leakage": 0,
+  "test_time_manual_fixes": 0
+ },
+ "gold_sha256": "2050319b6bd6ec4ee7ee85705a9fc881bee61db9a72555a5ef038eaaf108b6a8"
+}

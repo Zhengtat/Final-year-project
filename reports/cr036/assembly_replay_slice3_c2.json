@@ -1,0 +1,136 @@
+{
+ "run": "slice3_c2",
+ "registry": "1.3",
+ "legacy_snapshot_edges": 528,
+ "v2_store_edges": 528,
+ "edges_in_both": 522,
+ "only_in_legacy": [
+  [
+   "c_detection",
+   "contrasts_with",
+   "c_correction"
+  ],
+  [
+   "c_distribution_system",
+   "connected_to",
+   "c_access_point"
+  ],
+  [
+   "c_peer",
+   "connected_to",
+   "c_link"
+  ],
+  [
+   "c_source",
+   "connected_to",
+   "c_link"
+  ],
+  [
+   "c_switch",
+   "connected_to",
+   "c_host"
+  ],
+  [
+   "c_tap",
+   "connected_to",
+   "c_cable"
+  ]
+ ],
+ "only_in_v2": [
+  [
+   "c_access_point",
+   "connected_to",
+   "c_distribution_system"
+  ],
+  [
+   "c_cable",
+   "connected_to",
+   "c_tap"
+  ],
+  [
+   "c_correction",
+   "contrasts_with",
+   "c_detection"
+  ],
+  [
+   "c_host",
+   "connected_to",
+   "c_switch"
+  ],
+  [
+   "c_link",
+   "connected_to",
+   "c_peer"
+  ],
+  [
+   "c_link",
+   "connected_to",
+   "c_source"
+  ]
+ ],
+ "selected_edge_results": 529,
+ "direction_set_by_types_in_stored_edges": 0,
+ "merged_identical": 1,
+ "relation_not_in_registry": 0,
+ "conflicts_flagged": 0,
+ "flags": {},
+ "measurement_sample_results": 50,
+ "second_relation_on_a_pair": 0,
+ "domain_range": {
+  "domain_range_rejections": 58,
+  "recoverable_by_direction_from_types": 14,
+  "examples": [
+   {
+    "pair_id": "RP-3.3-5",
+    "relation": "has_purpose",
+    "model_direction": "forward"
+   },
+   {
+    "pair_id": "RP-3.3-60",
+    "relation": "causes",
+    "model_direction": "reversed"
+   },
+   {
+    "pair_id": "RP-3.3-87",
+    "relation": "causes",
+    "model_direction": "reversed"
+   },
+   {
+    "pair_id": "RP-1.2-237",
+    "relation": "acts_on",
+    "model_direction": "reversed"
+   },
+   {
+    "pair_id": "RP-1.4-215",
+    "relation": "has_property",
+    "model_direction": "reversed"
+   },
+   {
+    "pair_id": "RP-2.2-123",
+    "relation": "uses",
+    "model_direction": "forward"
+   },
+   {
+    "pair_id": "RP-2.7-234",
+    "relation": "causes",
+    "model_direction": "forward"
+   },
+   {
+    "pair_id": "RP-3.3-774",
+    "relation": "decreases",
+    "model_direction": "forward"
+   },
+   {
+    "pair_id": "RP-3.4-451",
+    "relation": "has_property",
+    "model_direction": "reversed"
+   },
+   {
+    "pair_id": "RP-3.5-329",
+    "relation": "has_purpose",
+    "model_direction": "reversed"
+   }
+  ]
+ },
+ "run_records_a_registry_version": false
+}

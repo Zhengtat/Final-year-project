@@ -1,0 +1,44 @@
+{
+ "placement_loss": {
+  "suppressed_inside_longer_placed_span": 1925,
+  "not_nested_valid_among_lost": 538,
+  "nested_valid_gold_among_lost": 1391,
+  "partial_overlap_with_placed_span": 4,
+  "nested_valid_gold_suppressed_by_longer_span": 1389
+ },
+ "over_long": {
+  "placed_spans_containing_a_gold_span": 497,
+  "origin:no boundary decision (pass-through singleton family or U2 candidate)": 87,
+  "origin:SHRINK:overlong_phrase": 89,
+  "origin:KEEP:correct_boundary": 321,
+  "origin:KEEP:nested_both_valid": 65,
+  "origin:EXPAND:partial_span": 1,
+  "origin:EXPAND:new_longer_term": 6,
+  "origin:SHRINK:partial_span": 6
+ },
+ "over_long_words": {
+  "3": 105,
+  "4": 27,
+  "2": 355,
+  "1": 10
+ },
+ "verifier_rejections_of_gold_surfaces": {
+  "REJECT_GENERIC": 131,
+  "REJECT_NOT_CONCEPT": 114,
+  "REJECT_PARTIAL_OR_WRONG_BOUNDARY": 226
+ },
+ "boundary_loss_causes": {
+  "replaced_by_a_different_span_(KEEP)": 137,
+  "unaddressed_by_boundary_decisions": 51,
+  "other_not_verified": 33,
+  "REJECT:no_concept": 26,
+  "replaced_by_a_different_span_(EXPAND)": 1,
+  "replaced_by_a_different_span_(SHRINK)": 12
+ },
+ "families": {
+  "families": 6663,
+  "candidates": 8615,
+  "multi_member_families_sent_to_boundary": 2957
+ },
+ "calls": 421
+}

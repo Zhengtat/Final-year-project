@@ -1,0 +1,22 @@
+version: cr016-stage2-1
+# PRE-REGISTRATION for CR-016 STOP 2 (retrieval-only). Frozen (committed + tagged) before any index is built or any query is run.
+fresh_excluded: ["4.3", "6.2", "5.2", "6.5", "9.1", "9.4", "5.1", "8.1"]   # never indexed, never queried at STOP 2
+query:
+  template: "{surface}: {sentence}"            # byte-identical for M1 and M2; surface + current source sentence only
+retrieval: {top_k: 10, report_at: [1, 3, 5], mrr_cutoff: 10}
+embedding: {family: Transformers/sentence-transformers/all-MiniLM-L6-v2, note: "same backbone for M1 and M2 (CR-016 STOP-1 approval); NOT the HippoRAG paper configuration"}
+chunking: {unit: textbook paragraph, id: "<section_id>#p<i>"}
+gap: {short_max_units: 2, long_min_units: 8}   # source-order units between the query section and the nearest relevant paragraph
+sampling:
+  seed: cr016-stage2-v1
+  take_all_if_in: [alias, acronym, different_boundary, associative_low_lexical_overlap, same_surface_different_sense]
+  max_queries: 3000
+llm: {tier: bulk, route: "LLMClient via local OpenAI-compatible shim (rule 4)", concurrency: 6, max_output_tokens: 6000}
+gate:
+  recall_at_5_abs_gain: 0.05
+  bootstrap: {unit: query_section, n: 10000, seed: 0}
+  difficult_slice_gain: 0.10
+  overall_recall_at_5_max_regression: 0.03
+  difficult_slices: [alias, acronym, different_boundary, associative_low_lexical_overlap, same_surface_different_sense]   # fixed here, before any result
+  required: [future_violations_eq_0, provenance_completeness_eq_1.00]
+budget: {stop2_soft_usd: 3, cumulative_warning_usd: 20, cumulative_hard_usd: 25}

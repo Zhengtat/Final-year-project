@@ -1,0 +1,19 @@
+{
+ "seed": "cr015-boundary-audit-v1",
+ "families": 120,
+ "rows": 441,
+ "per_stratum": {
+  "nested_pair_in_gold": 30,
+  "only_longest_in_gold": 30,
+  "only_shorter_in_gold": 30,
+  "no_candidate_in_gold": 30
+ },
+ "available_per_stratum": {
+  "nested_pair_in_gold": 761,
+  "only_longest_in_gold": 315,
+  "only_shorter_in_gold": 573,
+  "no_candidate_in_gold": 513
+ },
+ "blind_sheet_sha256": "b8efdf1b7057402d04e000801fac98e9ad0d073d911afbf9f4972d1cb1152a1b",
+ "key_sha256": "a3a3caa68118163985b49bd144be9778c1ea3706b6a2c03ebcf36b8f532ae833"
+}

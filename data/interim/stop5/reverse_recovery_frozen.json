@@ -1,0 +1,46 @@
+{
+ "NO_ERST": "has_property",
+ "erst1": {
+  "ADVERSATIVE-CONTRAST": "contrasts_with",
+  "CAUSAL-CAUSE": "performs",
+  "CONTEXT-BACKGROUND": "uses",
+  "CONTEXT-CIRCUMSTANCE": "uses",
+  "CONTINGENCY-CONDITION": "requires",
+  "ELABORATION-ADDITIONAL": "uses",
+  "ELABORATION-ATTRIBUTE": "acts_on",
+  "PURPOSE-GOAL": "acts_on",
+  "RESTATEMENT-PARTIAL": "has_property"
+ },
+ "erst1_nuc": {
+  "ADVERSATIVE-CONTRAST|both_nuclei": "contrasts_with",
+  "CAUSAL-CAUSE|nucleus_b": "performs",
+  "CONTEXT-BACKGROUND|nucleus_b": "uses",
+  "CONTEXT-CIRCUMSTANCE|nucleus_b": "uses",
+  "CONTINGENCY-CONDITION|nucleus_b": "requires",
+  "ELABORATION-ADDITIONAL|nucleus_a": "causes",
+  "ELABORATION-ADDITIONAL|nucleus_b": "uses",
+  "ELABORATION-ATTRIBUTE|nucleus_a": "acts_on",
+  "PURPOSE-GOAL|nucleus_a": "acts_on",
+  "PURPOSE-GOAL|nucleus_b": "part_of",
+  "RESTATEMENT-PARTIAL|nucleus_a": "has_property"
+ },
+ "fitted_on": "dev valid-relation items only",
+ "full": {
+  "ADVERSATIVE-CONTRAST||symmetric|both_nuclei": "contrasts_with",
+  "CAUSAL-CAUSE||a_to_b|nucleus_b": "performs",
+  "CONTEXT-BACKGROUND||a_to_b|nucleus_b": "uses",
+  "CONTEXT-CIRCUMSTANCE||b_to_a|nucleus_b": "uses",
+  "CONTINGENCY-CONDITION||b_to_a|nucleus_b": "requires",
+  "ELABORATION-ADDITIONAL||a_to_b|nucleus_a": "uses",
+  "ELABORATION-ADDITIONAL||b_to_a|nucleus_a": "causes",
+  "ELABORATION-ADDITIONAL||b_to_a|nucleus_b": "uses",
+  "ELABORATION-ATTRIBUTE||a_to_b|nucleus_a": "acts_on",
+  "ELABORATION-ATTRIBUTE||b_to_a|nucleus_a": "part_of",
+  "PURPOSE-GOAL||b_to_a|nucleus_a": "acts_on",
+  "PURPOSE-GOAL||b_to_a|nucleus_b": "part_of",
+  "RESTATEMENT-PARTIAL||a_to_b|nucleus_a": "has_property"
+ },
+ "global": "uses",
+ "n_dev_items": 48,
+ "sha256_of_content": "a63935dee52083260f99eadfe227208a98df6ec6eade08344bee1cfe41ba106d"
+}

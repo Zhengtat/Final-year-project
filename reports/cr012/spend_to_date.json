@@ -1,0 +1,15 @@
+{
+ "runs": {
+  "cr012_pilot_1_5_E0": 0.3932,
+  "cr012_pilot_1_5_E1": 0.4575,
+  "cr012_pilot_1_5_E2": 0.3232,
+  "cr012_pilot_1_5_E3": 0.2172,
+  "cr012_pilot_1_5_E4": 0.045,
+  "cr012_pilot_2_6_E0": 0.6589,
+  "cr012_pilot_2_6_E3": 0.0,
+  "cr012_pilot_2_6_E4": 0.0,
+  "cr012_scinlp_rehearsal_P02_1004_grobid_E0": 0.4693,
+  "cr012_scinlp_rehearsal_P05_1008_grobid_E0": 0.2897
+ },
+ "total_usd": 2.8539
+}

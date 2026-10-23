@@ -82,7 +82,9 @@ def test_strong_tier_call_never_escalates_even_with_low_confidence(tmp_settings,
     assert client.escalation_count == 0
 
 
-def test_schema_without_confidence_field_never_triggers_low_confidence_escalation(tmp_settings, fixtures_dir):
+def test_schema_without_confidence_field_never_triggers_low_confidence_escalation(
+    tmp_settings, fixtures_dir
+):
     client = LLMClient(tmp_settings, fixtures_dir=fixtures_dir)
     result = client.parse(
         task="escalation_test",
@@ -137,7 +139,9 @@ def test_evidence_check_failed_escalates_via_callback(tmp_settings, fixtures_dir
         schema=AnswerWithConfidence,
         model_tier="bulk",
         fixture_name="high_confidence",  # confidence alone wouldn't escalate
-        escalate_check=lambda output: output.answer == "a confident answer",  # simulate a failed evidence check
+        escalate_check=lambda output: (
+            output.answer == "a confident answer"
+        ),  # simulate a failed evidence check
     )
     assert result.escalated is True
     assert result.escalation_reason == "evidence_check_failed"
@@ -165,12 +169,20 @@ def test_escalated_result_cache_hit_on_second_call(tmp_settings, fixtures_dir):
     client = LLMClient(tmp_settings, fixtures_dir=fixtures_dir)
     messages = [{"role": "user", "content": "x"}]
     first = client.parse(
-        task="escalation_test", prompt_version="v1", messages=messages,
-        schema=AnswerWithConfidence, model_tier="bulk", fixture_name="low_confidence",
+        task="escalation_test",
+        prompt_version="v1",
+        messages=messages,
+        schema=AnswerWithConfidence,
+        model_tier="bulk",
+        fixture_name="low_confidence",
     )
     second = client.parse(
-        task="escalation_test", prompt_version="v1", messages=messages,
-        schema=AnswerWithConfidence, model_tier="bulk", fixture_name="low_confidence",
+        task="escalation_test",
+        prompt_version="v1",
+        messages=messages,
+        schema=AnswerWithConfidence,
+        model_tier="bulk",
+        fixture_name="low_confidence",
     )
     assert first.escalated is True
     assert first.cache_hit is False  # first time: real backend calls for both bulk and strong
@@ -178,3 +190,67 @@ def test_escalated_result_cache_hit_on_second_call(tmp_settings, fixtures_dir):
     assert second.cache_hit is True  # second time: the escalated (strong) result is a cache hit
     # Only 1 real backend call per tier total, across both parse() calls.
     assert client.calls_by_tier == {"bulk": 1, "strong": 1}
+
+
+@pytest.fixture
+def luna_settings(tmp_path, monkeypatch):
+    """CR-026: the luna-default profile (every tier luna, sol only on escalation), data dirs in tmp_path."""
+    from cumap.config import load_settings
+
+    monkeypatch.setenv("CUMAP_LLM_BACKEND", "mock")
+    monkeypatch.setenv("CUMAP_MODELS_CONFIG", "configs/models_luna_default.yaml")
+    monkeypatch.setenv("OPENAI_MODEL_STRONG", "gpt-6-luna")
+    monkeypatch.setenv("OPENAI_MODEL_BULK", "gpt-6-luna")
+    s = load_settings(env_file=tmp_path / "none.env")
+    return s.model_copy(
+        update={
+            "paths": s.paths.model_copy(
+                update={"data_cache": tmp_path / "cache", "data_logs": tmp_path / "logs"}
+            )
+        }
+    )
+
+
+def test_luna_default_profile_uses_luna_everywhere_and_sol_only_as_the_escalation_tier(
+    luna_settings, fixtures_dir
+):
+    client = LLMClient(luna_settings, fixtures_dir=fixtures_dir)
+    assert client._model_for_tier("strong") == client._model_for_tier("bulk") == "gpt-6-luna"
+    assert (
+        client._model_for_tier("escalate") == "gpt-6-sol"
+        and client._model_for_tier("ceiling") == "gpt-6-astra"
+    )
+
+
+@pytest.mark.parametrize("tier", ["strong", "bulk"])
+def test_luna_default_escalates_once_to_sol_from_either_tier(luna_settings, fixtures_dir, tier):
+    client = LLMClient(luna_settings, fixtures_dir=fixtures_dir)
+    kw = {
+        "task": "escalation_test",
+        "prompt_version": "v1",
+        "messages": [{"role": "user", "content": "x"}],
+        "schema": AnswerWithConfidence,
+    }
+    ok = client.parse(**kw, model_tier=tier, fixture_name="high_confidence")
+    assert ok.model == "gpt-6-luna" and ok.escalated is False
+    low = client.parse(
+        **{**kw, "messages": [{"role": "user", "content": "y"}]},
+        model_tier=tier,
+        fixture_name="low_confidence",
+    )
+    assert low.escalated is True and low.model == "gpt-6-sol" and low.model_tier == "escalate"
+    assert client.escalation_count == 1
+
+
+def test_a_call_that_opts_out_of_escalation_stays_on_luna(luna_settings, fixtures_dir):
+    client = LLMClient(luna_settings, fixtures_dir=fixtures_dir)
+    r = client.parse(
+        task="escalation_test",
+        prompt_version="v1",
+        messages=[{"role": "user", "content": "x"}],
+        schema=AnswerWithConfidence,
+        model_tier="strong",
+        fixture_name="low_confidence",
+        allow_escalation=False,
+    )
+    assert r.model == "gpt-6-luna" and r.escalated is False

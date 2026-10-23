@@ -1,0 +1,3 @@
+{"edges": [{"label": "CAUSAL-CAUSE", "nucleus_units": ["U1"], "satellite_unit": "U0", "satellite_position": "before",
+  "evidence": "Packets are lost because buffers overflow.", "signals": [{"kind": "discourse_marker", "subtype": null, "anchor_text": "because"}], "confidence": 0.9}],
+ "_usage": {"input_tokens": 10, "output_tokens": 10}}

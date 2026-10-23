@@ -1,0 +1,231 @@
+# CR-012 benchmark-local relation registry for SciNLP (Research ruling 2026-10-10). Labels are the literal labels of the frozen release SciNLP-repo-e78342be.
+# One neutral family; symmetric = similarWith, compareWith; type constraints only where the benchmark defines them (subclassOf / partOf / compareWith / similarWith are not constrained).
+# No CUM qualifier (part_type, action_type, dimension) is defined; polarity and modality exist only so a negated relation is never a positive edge. Never merged with relations_v1.3.
+version: 1
+supersedes: 0
+node_types: &id001
+- task
+- method
+- dataset
+- metric
+qualifiers:
+  polarity:
+    values:
+    - affirmed
+    - negated
+    applies_to: all
+    required: true
+  modality:
+    values:
+    - necessary
+    - always
+    - typically
+    - possible
+    - never
+    applies_to: all
+    required: true
+  conditions:
+    type: list[concept_id | str]
+    applies_to: all
+    required: false
+  surface_phrase:
+    type: str
+    applies_to: all
+    required: when LLM-extracted
+    note: the linking words exactly as written in the source
+families:
+- name: scinlp
+  label: SciNLP benchmark relations
+  diagnostic_prior: 1.0
+  grounding: SciNLP (EMNLP 2025), repository release SciNLP-repo-e78342be
+  gloss: how two scientific entities of a paper (task, method, dataset, metric) relate
+relations:
+- name: MeasuredBy
+  family: scinlp
+  layer: semantic
+  definition: Source model is evaluated with target metric (performance evaluation).
+  template: '{X} is measured by {Y}'
+  examples: []
+  near_misses: []
+  domain_types:
+  - method
+  range_types:
+  - metric
+  directional: true
+  symmetric: false
+  transitive: false
+  inverse_of: null
+  conflicts_with: []
+  compatible_with: {}
+- name: UsedFor
+  family: scinlp
+  layer: semantic
+  definition: Source model is applied to target task (application).
+  template: '{X} is used for {Y}'
+  examples: []
+  near_misses: []
+  domain_types:
+  - method
+  range_types:
+  - task
+  directional: true
+  symmetric: false
+  transitive: false
+  inverse_of: null
+  conflicts_with: []
+  compatible_with: {}
+- name: trainedWith
+  family: scinlp
+  layer: semantic
+  definition: Source model is trained or pre-trained with target dataset.
+  template: '{X} is trained with {Y}'
+  examples: []
+  near_misses: []
+  domain_types:
+  - method
+  range_types:
+  - dataset
+  directional: true
+  symmetric: false
+  transitive: false
+  inverse_of: null
+  conflicts_with: []
+  compatible_with: {}
+- name: enhancedBy
+  family: scinlp
+  layer: semantic
+  definition: Source model is improved by target method (improvement, architecture enhancement).
+  template: '{X} is enhanced by {Y}'
+  examples: []
+  near_misses: []
+  domain_types:
+  - method
+  range_types:
+  - method
+  directional: true
+  symmetric: false
+  transitive: false
+  inverse_of: null
+  conflicts_with: []
+  compatible_with: {}
+- name: subclassOf
+  family: scinlp
+  layer: semantic
+  definition: 'Hypernym-hyponym relationship: source is a kind of target (normally a model hierarchy).'
+  template: '{X} is a subclass of {Y}'
+  examples: []
+  near_misses: []
+  domain_types: *id001
+  range_types: *id001
+  directional: true
+  symmetric: false
+  transitive: false
+  inverse_of: null
+  conflicts_with: []
+  compatible_with: {}
+- name: subtaskOf
+  family: scinlp
+  layer: semantic
+  definition: 'Task hierarchy: source task is a part of target task.'
+  template: '{X} is a subtask of {Y}'
+  examples: []
+  near_misses: []
+  domain_types:
+  - task
+  range_types:
+  - task
+  directional: true
+  symmetric: false
+  transitive: false
+  inverse_of: null
+  conflicts_with: []
+  compatible_with: {}
+- name: partOf
+  family: scinlp
+  layer: semantic
+  definition: 'Component relationship: source is a component of target.'
+  template: '{X} is part of {Y}'
+  examples: []
+  near_misses: []
+  domain_types: *id001
+  range_types: *id001
+  directional: true
+  symmetric: false
+  transitive: false
+  inverse_of: null
+  conflicts_with: []
+  compatible_with: {}
+- name: evaluatedBy
+  family: scinlp
+  layer: semantic
+  definition: Source task is evaluated with target metric (evaluation method).
+  template: '{X} is evaluated by {Y}'
+  examples: []
+  near_misses: []
+  domain_types:
+  - task
+  range_types:
+  - metric
+  directional: true
+  symmetric: false
+  transitive: false
+  inverse_of: null
+  conflicts_with: []
+  compatible_with: {}
+- name: evaluatedOn
+  family: scinlp
+  layer: semantic
+  definition: Source task is evaluated on target dataset (evaluation resource).
+  template: '{X} is evaluated on {Y}'
+  examples: []
+  near_misses: []
+  domain_types:
+  - task
+  range_types:
+  - dataset
+  directional: true
+  symmetric: false
+  transitive: false
+  inverse_of: null
+  conflicts_with: []
+  compatible_with: {}
+- name: similarWith
+  family: scinlp
+  layer: semantic
+  definition: 'Symmetric: semantic equivalence between two entities (for example an abbreviation and its full name).'
+  template: '{X} is similar to {Y}'
+  examples: []
+  near_misses: []
+  domain_types: *id001
+  range_types: *id001
+  directional: false
+  symmetric: true
+  transitive: false
+  inverse_of: null
+  conflicts_with: []
+  compatible_with: {}
+- name: compareWith
+  family: scinlp
+  layer: semantic
+  definition: 'Symmetric: two entities are compared in the paper.'
+  template: '{X} is compared with {Y}'
+  examples: []
+  near_misses: []
+  domain_types: *id001
+  range_types: *id001
+  directional: false
+  symmetric: true
+  transitive: false
+  inverse_of: null
+  conflicts_with: []
+  compatible_with: {}
+chain_link_types: []
+minor: 0
+output_fields:
+  other_description:
+    type: str | None
+    note: 'Required when the answer is OTHER: one sentence saying what the sentence expresses.'
+  other_suggested_label:
+    type: str | None
+    note: 'Required when the answer is OTHER: a 1-3 word verb phrase.'
+patch: 0

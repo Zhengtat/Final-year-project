@@ -1,0 +1,129 @@
+{
+ "run": "slice3_c2",
+ "registry": "1.3",
+ "edges": 549,
+ "edges_with_any_flag": 134,
+ "edges_rejected_under_v1": 1,
+ "negated_edges": 3,
+ "negated_with_cue": 2,
+ "by_check": {
+  "negation_without_cue": 1,
+  "qualifier_misfit:dimension": 7,
+  "qualifier_misfit:part_type": 2,
+  "surface_phrase_long": 128
+ },
+ "examples": {
+  "surface_phrase_long": [
+   {
+    "pair_id": "RP-2.5-0",
+    "section": "2.5",
+    "relation": "acts_on",
+    "quote": "sender of the original frame",
+    "surface_phrase": "sender of the original frame",
+    "polarity": "affirmed"
+   },
+   {
+    "pair_id": "RP-3.2-0",
+    "section": "3.2",
+    "relation": "part_of",
+    "quote": "switches typically have 16, 24, or 48 ports",
+    "surface_phrase": "switches typically have 16, 24, or 48 ports",
+    "polarity": "affirmed"
+   },
+   {
+    "pair_id": "RP-3.4-5",
+    "section": "3.4",
+    "relation": "part_of",
+    "quote": "path between any two nodes",
+    "surface_phrase": "path between any two nodes",
+    "polarity": "affirmed"
+   },
+   {
+    "pair_id": "RP-1.2-3",
+    "section": "1.2",
+    "relation": "causes",
+    "quote": "networks are constantly changing as technology evolves and new applications are invented",
+    "surface_phrase": "networks are constantly changing as technology evolves and new applications are invented",
+    "polarity": "affirmed"
+   },
+   {
+    "pair_id": "RP-1.3-4",
+    "section": "1.3",
+    "relation": "part_of",
+    "quote": "attaching a header to the message",
+    "surface_phrase": "attaching a header to the message",
+    "polarity": "affirmed"
+   }
+  ],
+  "qualifier_misfit:dimension": [
+   {
+    "pair_id": "RP-1.2-119",
+    "section": "1.2",
+    "relation": "decreases",
+    "quote": "receive packets faster than it can send them for an extended period of time, then the switch will eventually run out of buffer space",
+    "surface_phrase": "will eventually run out of",
+    "polarity": "affirmed"
+   },
+   {
+    "pair_id": "RP-3.3-304",
+    "section": "3.3",
+    "relation": "increases",
+    "quote": "starts with the 513th byte of the original data, so the Offset field in this header is set to 64, which is 512/8",
+    "surface_phrase": "so the Offset field in this header is set to 64",
+    "polarity": "affirmed"
+   },
+   {
+    "pair_id": "RP-1-problem-building-a-network-42",
+    "section": "1-problem-building-a-network",
+    "relation": "increases",
+    "quote": "with the proliferation of smartphones, many more people in this generation are developing networked applications than in the past",
+    "surface_phrase": "with the proliferation of smartphones, many more people in this generation are developing networked applications than in the past",
+    "polarity": "affirmed"
+   },
+   {
+    "pair_id": "RP-1.2-363",
+    "section": "1.2",
+    "relation": "uses",
+    "quote": "Unlike STDM, however, data is transmitted from each flow on demand rather than during a predetermined time slot.",
+    "surface_phrase": "Unlike STDM, however, data is transmitted from each flow on demand rather than during a predetermined time slot.",
+    "polarity": "affirmed"
+   },
+   {
+    "pair_id": "RP-1.5-210",
+    "section": "1.5",
+    "relation": "increases",
+    "quote": "an infinitely large transfer size will cause the effective throughput to approach the network bandwidth",
+    "surface_phrase": "will help improve",
+    "polarity": "affirmed"
+   }
+  ],
+  "qualifier_misfit:part_type": [
+   {
+    "pair_id": "RP-3.1-133",
+    "section": "3.1",
+    "relation": "is_a",
+    "quote": "data transfer phase",
+    "surface_phrase": "data transfer phase",
+    "polarity": "affirmed"
+   },
+   {
+    "pair_id": "RP-3-problem-not-all-networks-are-directly-connected-60",
+    "section": "3-problem-not-all-networks-are-directly-connected",
+    "relation": "requires",
+    "quote": "Wireless networks are limited by the range of their radios.",
+    "surface_phrase": "are limited by the range of their",
+    "polarity": "affirmed"
+   }
+  ],
+  "negation_without_cue": [
+   {
+    "pair_id": "MP-12",
+    "section": "3.1",
+    "relation": "requires",
+    "quote": "fast parallel hardware switches can only be built using fixed-length cells",
+    "surface_phrase": "can only be built using",
+    "polarity": "negated"
+   }
+  ]
+ }
+}

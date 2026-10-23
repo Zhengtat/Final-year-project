@@ -1,0 +1,11 @@
+{
+ "status": "FROZEN",
+ "group": "stageb_design",
+ "frozen_at": "2026-10-13 21:41:22",
+ "git_commit": "3557bf439fa201d26b87a5b3bc9db01a2b90d8c6",
+ "hashes": {
+  "docs/cr015/STAGE_B_DESIGN.md": "86537218d5166f1c1a01b27991d8cc65afd175bd2e3711c84eb6e3e9b2c40321",
+  "prompts/cr015_concept_validity/v1.md": "18b84df90efc1d1ac845e3bc32c64341d7bf96f234fd7e38352e841388b36594",
+  "prompts/cr015_concept_validity/v2.md": "3160c3d75c8c5cd67b5311dadc00b95d941cae6a41e3ae9f9a26b2bf29390932"
+ }
+}
