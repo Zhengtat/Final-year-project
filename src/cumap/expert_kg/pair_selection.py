@@ -65,6 +65,7 @@ def select_pairs(
     sample_unselected: int = 50,
     seed: int = 42,
     anchors: list[dict] | None = None,
+    priority_pairs: set[frozenset[str]] | None = None,
 ) -> Selection:
     """`concept_role`: concept id -> strongest role (defined > used > mentioned). `anchors`: CR-009 anchor records
     {concept_id, anchor_id, section_id, cue, anchored_edge_count?} in book order (pairs go first in coverage)."""
@@ -104,6 +105,13 @@ def select_pairs(
         )
     phase0b = len(chosen) - phase0
 
+    # CR-039 DRAFT, phase 0c: pairs the $0 misconception cue scan co-locates in a cue sentence come next (a selection-priority signal only; no item is made)
+    before_0c = len(chosen)
+    for p in sorted(pool, key=_rank):
+        if priority_pairs and pair_key(p) in priority_pairs:
+            take(p)
+    phase0c = len(chosen) - before_0c
+
     core = {c for c, r in concept_role.items() if r in CORE_ROLES}
     cand_of: dict[str, list[CandidatePair]] = {}
     for p in pool:
@@ -123,7 +131,7 @@ def select_pairs(
             1 for x in (p.concept_x_id, p.concept_y_id) if x in core and x not in covered
         )
         take(min(options, key=lambda p: (-gain(p), *_rank(p))))
-    phase1 = len(chosen) - phase0 - phase0b
+    phase1 = len(chosen) - phase0 - phase0b - phase0c
 
     for p in pool:  # phase 2: fill by cue score (mentioned-only concepts are covered only here)
         if len(chosen) >= budget:
@@ -139,7 +147,8 @@ def select_pairs(
         "phase0_min_per_section": phase0,
         "phase1_coverage": phase1,
         "phase0b_anchor_pairs": phase0b,
-        "phase2_fill": len(selected) - phase0 - phase0b - phase1,
+        **({"phase0c_cue_priority_pairs": phase0c} if priority_pairs else {}),
+        "phase2_fill": len(selected) - phase0 - phase0b - phase0c - phase1,
         "concepts_in_any_candidate": len(linked_candidates),
         "concepts_covered": len(covered),
         "core_concepts_with_candidates": len(cand_of),

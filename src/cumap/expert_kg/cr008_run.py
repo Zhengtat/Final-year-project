@@ -90,6 +90,15 @@ def misconception_stage(run: str, *, dry_run: bool, limit: int | None, max_usd: 
     assert cp is not None, f"no checkpoint for {run}"
     registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
     lexicon = Lexicon.load(REPO_ROOT / "configs" / "term_lexicon.yaml")
+    from cumap.expert_kg import relations_v7 as R7
+
+    if R7.resolve_source() == "classification":  # CR-039 DRAFT: the layer comes from relation classification ($0 here, no model call; never run)
+        cp_d = {"concepts": cp.concepts, "relation_results_v3": cp.relation_results_v3}
+        layer = mc.layer_from_classification(cp_d, registry, pairs, lexicon, verify=None)
+        cp.misconceptions = layer
+        save_checkpoint(cp, run_dir)
+        (run_dir / "misconceptions.jsonl").write_text("\n".join(json.dumps(i) for i in layer["items"]) + "\n", encoding="utf-8")
+        return {"source": "relation_classification", **layer["stats"]}
     cands = mc.scan_cues(pairs, lexicon)
     pre = mc.preflight(cands)
     if dry_run:

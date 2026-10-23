@@ -205,11 +205,14 @@ class V3Result:
     )  # CR-034 (only with qualifier_checks="v1")
     # CR-036 (assembly v2): {"model": ..., "set": ...} when the type-valid orientation replaced the model's
     direction_by_types: dict | None = None
+    misconception: dict | None = None  # CR-039 DRAFT: the misconception choice (misconception_source classification); a layer item source, never an edge
 
     def to_dict(self) -> dict:
         d = {k: v for k, v in self.__dict__.items() if k != "pair"}
         if d.get("direction_by_types") is None:
             d.pop("direction_by_types", None)
+        if d.get("misconception") is None:
+            d.pop("misconception", None)
         if not d.get("qualifier_flags"):
             d.pop(
                 "qualifier_flags", None
@@ -233,6 +236,7 @@ def classify_pair_v3(
     same_concept: bool = False,  # CR-008: offer the `same_concept` outcome (relation_choice v4)
     model_tier: str = "strong",
     containment_grounding: bool = False,
+    misconception_source: str = "legacy",  # CR-039 DRAFT: "classification" turns the misconception family into layer items; needs amendments v6
     amendments: str = "off",  # CR-038 DRAFT: "off" | "v6" (per-relation qualifier schema, dimension quote, prompts v6); never run
     direction_by_types: bool = False,  # CR-036: assembly v2 sets the type-valid orientation instead of rejecting a domain/range error
     qualifier_checks: str = "off",  # CR-034: "off" (today's behaviour) | "v1" (qualifier_checks.py)
@@ -270,12 +274,23 @@ def classify_pair_v3(
         return res
 
     v6 = amendments == "v6"
+    mis = False
     if v6:
         from cumap.expert_kg import relations_v6 as R6
 
         schema = R6.build_relation_choice_v6(registry, res.family, same_concept)
     else:
         schema = build_relation_choice_v3(registry, res.family, same_concept)
+    if misconception_source == "classification":  # CR-039 DRAFT
+        from cumap.expert_kg import relations_v7 as R7
+
+        if not v6:
+            raise ValueError("misconception_source classification needs qualifier amendments v6")
+        mis = res.family == R7.MISCONCEPTION_FAMILY
+        schema = R7.build_relation_choice_v7(registry, res.family, same_concept)
+    elif res.family == "misconception":  # a v1.6 registry without the switch: the family is not enabled
+        res.outcome, res.reason = "other", "family_misconception_not_enabled"
+        return res
     try:
         rel = client.parse(
             task="relation_choice",
@@ -288,7 +303,11 @@ def classify_pair_v3(
                         concept_y=y,
                         family=res.family,
                         sentence=pair.sentence,
-                        relation_options=filled_options(registry, res.family, x, y, same_concept),
+                        relation_options=(
+                            R7.misconception_options_block(registry, x, y)
+                            if mis
+                            else filled_options(registry, res.family, x, y, same_concept)
+                        ),
                     ),
                 }
             ],
@@ -301,6 +320,18 @@ def classify_pair_v3(
         return res
     res.prompt_hashes["choice"] = rel.input_hash
     o = rel.output
+    if mis:  # CR-039 DRAFT: a misconception-layer item source, never an edge (rule 22)
+        if not o.is_misconception:
+            res.outcome, res.reason = "no_relation", "not_a_misconception"
+            return res
+        if not verify_quote(o.misconception_quote, pair.sentence):
+            res.reason = "misconception_quote_not_in_sentence"
+            return res
+        if o.correction_quote and not verify_quote(o.correction_quote, pair.sentence):
+            res.reason = "correction_quote_not_in_sentence"
+            return res
+        res.outcome, res.reason, res.misconception = "misconception", None, o.model_dump()
+        return res
     res.relation, res.direction, res.statement = o.relation, o.direction, o.statement
     res.evidence_quote = o.evidence_quote
     res.comparison_dimension = o.dimension_quote if v6 else o.comparison_dimension

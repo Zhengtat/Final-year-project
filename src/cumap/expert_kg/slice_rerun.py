@@ -192,6 +192,7 @@ def relations_stage(
     qualifier_checks: str | None = None,
     assembly: str | None = None,
     qualifier_amendments: str | None = None,
+    misconception_source: str | None = None,
 ) -> Checkpoint:
     """`assembly` (CR-036): None reads `configs/relation_policy.yaml` (default "legacy"); "v2" records the registry version and file hash in the run and
     sets the type-valid orientation instead of rejecting a domain/range error. `qualifier_checks` (CR-034): None reads `configs/relation_policy.yaml` (default "off"). `prompt_versions` (family, choice, qualifiers), `evidence_fn` (pair dict -> pair dict with the evidence text in `sentence`)
@@ -207,6 +208,16 @@ def relations_stage(
         cp.selection_stats["qualifier_amendments"] = "v6"
     if amend == "v6" and prompt_versions == ("v3", "v4", "v4"):  # the production defaults become the drafted v6 prompts
         prompt_versions = ("v3", "v6", "v6")
+    from cumap.expert_kg import relations_v7 as R7
+
+    mis_source = R7.resolve_source(misconception_source)  # CR-039 DRAFT: "classification" needs registry v1.6 and amendments v6 (never run)
+    if mis_source == "classification":
+        R7.check_registry_for_misconceptions(registry)
+        if amend != "v6":
+            raise ValueError("misconception_source classification needs qualifier_amendments v6")
+        cp.selection_stats["misconception_source"] = "classification"
+        if prompt_versions == ("v3", "v6", "v6"):
+            prompt_versions = ("v5", "v7", "v6")
     from cumap.expert_kg import qualifier_checks as QC
 
     assembly_mode = ES.resolve_assembly(assembly)
@@ -262,6 +273,7 @@ def relations_stage(
                 qualifier_checks=qc_mode,
                 direction_by_types=assembly_mode == "v2",
                 amendments=amend,
+                misconception_source=mis_source,
             )
         except BudgetExceededError:
             save_checkpoint(cp, run_dir)
