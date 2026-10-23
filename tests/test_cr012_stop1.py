@@ -44,6 +44,8 @@ def test_no_pipeline_module_reads_scinlp_text_into_prompts():
             continue  # CR-025 model comparison: launches the existing SciNLP dev runner per model and scores retained runs (dev split only)
         if f.parts[2] == "cr022":
             continue  # CR-022 Part A: rescoring of retained SciNLP runs and a mapping helper (no prompt, no model call)
+        if f.parts[2] == "cr031":
+            continue  # CR-031: read-only rescoring of retained SciNLP oracle runs (no prompt, no model call)
         if f.parts[2] == "cr020":
             continue  # CR-020 dev experiment runner and scorer (SciNLP dev split only, no test-split run)
         if f.parts[2] == "cr019" and f.name in {

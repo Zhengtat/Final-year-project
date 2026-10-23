@@ -147,3 +147,6 @@ Switch `backfill: false` in `configs/concept_policy.yaml`, read by `cr009_run.st
 
 ## CR-030 retire eRST in the docs (2026-10-23)
 Docs only: ARCHITECTURE dual-layer section marked historical; CLAUDE.md rules 28 and 29 marked historical; DECISIONS entry. No code or data touched. Presentation box removal is left to the owner.
+
+## CR-031 oracle ladder under IDX-P1 (2026-10-23)
+`uv run python -m cumap.cr031.oracle_ladder` ($0) wrote `reports/cr031/oracle_ladder.{json,md}`. Determinism gate PASSED: all `FROZEN` and acceptance-table figures reproduce to three decimals; E0 `FROZEN` / `IDX-P1` / `IDX-P3` match `reports/cr019/stage_a.json` to 1e-12; the 12 source checkpoints were hash-identical before and after. Earliest-failure codes under `IDX-P1` match Appendix A (E0 N0 76 / N1 35 / P0 67 / R0 12 / R1 8 / recovered 97 / strict TP 40; E3-M and E4-M P0 1, R0 99, recovered 169, TP 100). 3 new tests (plus a guard-test allowance for the read-only module); 889 tests pass.
