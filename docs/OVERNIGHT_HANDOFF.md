@@ -129,6 +129,7 @@ Do these in order. Tasks marked "after" need the earlier one merged first.
 | T1 | housekeeping-docs-sync | (merge commit see git log) / no tag | 876 | $0 | merged; docstring/comment fixes, DECISIONS rules entry, D-6 |
 | T2 | cr-027-remove-backfill | see git log / cr-027-complete | 879 | $0 | merged |
 | T3 | cr-029-review-intake | see git log / cr-029-complete | 886 | $0 | merged; sheet data/interim/suggestions/lexicon_intake_slice3_c2.csv awaits owner marks |
+| T4 | cr-030-retire-erst | see git log / cr-030-complete | 886 (unchanged, docs only) | $0 | merged |
 
 
 ### 0.7 Where the data is (all read-only for these tasks)

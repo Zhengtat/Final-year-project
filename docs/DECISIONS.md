@@ -443,3 +443,9 @@ Format: date · decision · reason · alternatives considered.
 - **Reason:** owner decisions 2026-10-22 (handoff §8-9): a stated synonym must get a logged decision; only reviewed decisions enter the lexicon.
 - **Alternatives:** a separate sheet for the `same_concept` queue (rejected: one blind sheet is cheaper to mark); a seed list of new lexicon entries (rejected by the owner).
 - **Not done:** no lexicon version bump (no marks yet); the lexicon version/hash is not yet recorded in each run's metadata (open item); nothing merges automatically.
+
+## 2026-10-23 · CR-030: eRST discourse layer retired from the graph design (docs only)
+- **Decision:** ARCHITECTURE "Relation layers after CR-010: dual layer" is marked historical and the current layer list is the semantic layer only; CLAUDE.md rules 28 and 29 become historical notes for the frozen CR-010 results (owner-approved change to the non-negotiable rules, handoff §0.3 T4). Code (`src/cumap/erst/`) and `data/processed/cr010/` stay so CR-010 results reproduce; no new run uses them.
+- **Reason:** production never used it (pair selection is same-sentence P0; eRST only proposed the P3 pool); it never wrote an edge, merge or alias; CR-010 found it expressed 27.2% of valid relations and preserved the useful meaning of 8.6%.
+- **Alternatives:** delete the code (breaks frozen results); keep the rules as live rules.
+- **Not done here:** the "Discourse links" box of the presentation deck (not in the repo).
