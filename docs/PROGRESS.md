@@ -203,3 +203,6 @@ Owner ruling on intake row 10: "data link protocol / link-level protocol" = same
 
 ## CR-045 qualifier checks on (2026-10-24) — complete
 `qualifier_checks: v1` for new runs (owner, on the CR-034 replay: 1 rejection, the true wrong negation). Tests: full suite passes. Open: the noisy `surface_phrase_long` flag (128 on slice3_c2).
+
+## CR-046 registry v1.4.1 and the qualifier-amendment measurement (2026-10-24) — complete
+Registry `configs/relations_v1.4.1.yaml` = v1.4 + the owner-approved CR-040 wording (not the default). Qualifier amendments (CR-038 v6) measured on P&D dev 1.5 + 2.6 (same pairs, luna, $0.071): Strict E2E F1 0.113 -> 0.111, macro F1 0.781 -> 0.781: passes the pre-registered rule (drops <= 0.01); 6 comparisons recovered as `contrasts_with` with a dimension quote; no surface phrase as long as its quote. Not switched on: it needs registry v1.5 as the default for new runs (owner decision). Report `reports/cr046/qualifier_amendments.md`.

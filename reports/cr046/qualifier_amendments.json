@@ -1,0 +1,341 @@
+{
+ "sections": [
+  "1.5",
+  "2.6"
+ ],
+ "gold_sheet": "data/gold/pd_e2e_pilot_blind.csv",
+ "arms": {
+  "BASE": {
+   "headline": {
+    "concept_f1": {
+     "precision": 0.60625,
+     "recall": 0.6554054054054054,
+     "f1": 0.6298701298701298,
+     "tp": 97,
+     "fp": 63,
+     "fn": 51,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N",
+     "variant": "canonical_node_untyped"
+    },
+    "ancestor_hierarchy_f1": {
+     "precision": 0.6666666666666666,
+     "recall": 0.07407407407407407,
+     "f1": 0.13333333333333333,
+     "tp": 2,
+     "fp": 1,
+     "fn": 25,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N",
+     "status": "OK",
+     "gold_ancestor_pairs": 27
+    },
+    "pair_recall": {
+     "recall": 0.21212121212121213,
+     "reached": 14,
+     "denominator": 66,
+     "missing_endpoint_excluded": 52,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    },
+    "relation_macro_f1": {
+     "f1": 0.780952380952381,
+     "classes": {
+      "acts_on": {
+       "support": 2,
+       "tp": 2,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0,
+       "low_support": true
+      },
+      "connected_to": {
+       "support": 2,
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "has_property": {
+       "support": 2,
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "increases": {
+       "support": 1,
+       "tp": 1,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.5,
+       "recall": 1.0,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "is_a": {
+       "support": 3,
+       "tp": 2,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.6666666666666666,
+       "f1": 0.8,
+       "low_support": true
+      },
+      "part_of": {
+       "support": 3,
+       "tp": 2,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.6666666666666666,
+       "recall": 0.6666666666666666,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "uses": {
+       "support": 1,
+       "tp": 1,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0,
+       "low_support": true
+      }
+     },
+     "population": 14,
+     "classes_in_macro": 7,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    },
+    "strict_e2e_edge_f1": {
+     "precision": 0.21428571428571427,
+     "recall": 0.07627118644067797,
+     "f1": 0.11250000000000002,
+     "tp": 9,
+     "fp": 33,
+     "fn": 109,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    }
+   },
+   "qualifiers": {
+    "outcomes": {
+     "no_relation": 18,
+     "other": 23,
+     "rejected:endpoint_not_grounded": 3,
+     "edge": 42,
+     "rejected:domain_range": 6,
+     "rejected:evidence_quote_not_in_sentence": 2
+    },
+    "no_relation_reasons": {
+     "family_no_relation": 12,
+     "comparison_no_grounded_dimension": 6
+    },
+    "edges": 42,
+    "polarity": {
+     "affirmed": 42
+    },
+    "modality": {
+     "possible": 10,
+     "necessary": 7,
+     "always": 18,
+     "typically": 7
+    },
+    "part_type_set": 5,
+    "dimension_qualifier_set": 0,
+    "surface_phrase_as_long_as_quote": 2,
+    "contrasts_with_edges": 0,
+    "contrasts_with_with_dimension": 0
+   }
+  },
+  "AMEND": {
+   "headline": {
+    "concept_f1": {
+     "precision": 0.60625,
+     "recall": 0.6554054054054054,
+     "f1": 0.6298701298701298,
+     "tp": 97,
+     "fp": 63,
+     "fn": 51,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N",
+     "variant": "canonical_node_untyped"
+    },
+    "ancestor_hierarchy_f1": {
+     "precision": 1.0,
+     "recall": 0.07407407407407407,
+     "f1": 0.13793103448275862,
+     "tp": 2,
+     "fp": 0,
+     "fn": 25,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N",
+     "status": "OK",
+     "gold_ancestor_pairs": 27
+    },
+    "pair_recall": {
+     "recall": 0.21212121212121213,
+     "reached": 14,
+     "denominator": 66,
+     "missing_endpoint_excluded": 52,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    },
+    "relation_macro_f1": {
+     "f1": 0.780952380952381,
+     "classes": {
+      "acts_on": {
+       "support": 2,
+       "tp": 2,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0,
+       "low_support": true
+      },
+      "connected_to": {
+       "support": 2,
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "has_property": {
+       "support": 2,
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "increases": {
+       "support": 1,
+       "tp": 1,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.5,
+       "recall": 1.0,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "is_a": {
+       "support": 3,
+       "tp": 2,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.6666666666666666,
+       "f1": 0.8,
+       "low_support": true
+      },
+      "part_of": {
+       "support": 3,
+       "tp": 2,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.6666666666666666,
+       "recall": 0.6666666666666666,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "uses": {
+       "support": 1,
+       "tp": 1,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0,
+       "low_support": true
+      }
+     },
+     "population": 14,
+     "classes_in_macro": 7,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    },
+    "strict_e2e_edge_f1": {
+     "precision": 0.20454545454545456,
+     "recall": 0.07627118644067797,
+     "f1": 0.11111111111111112,
+     "tp": 9,
+     "fp": 35,
+     "fn": 109,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    }
+   },
+   "qualifiers": {
+    "outcomes": {
+     "no_relation": 14,
+     "other": 28,
+     "rejected:endpoint_not_grounded": 2,
+     "edge": 44,
+     "rejected:domain_range": 5,
+     "rejected:surface_phrase_not_in_quote": 1
+    },
+    "no_relation_reasons": {
+     "family_no_relation": 12,
+     "relation_no_relation": 2
+    },
+    "edges": 44,
+    "polarity": {
+     "affirmed": 44
+    },
+    "modality": {
+     "always": 27,
+     "necessary": 7,
+     "possible": 7,
+     "typically": 3
+    },
+    "part_type_set": 6,
+    "dimension_qualifier_set": 0,
+    "surface_phrase_as_long_as_quote": 0,
+    "contrasts_with_edges": 6,
+    "contrasts_with_with_dimension": 6
+   }
+  }
+ },
+ "agreement": {
+  "pairs_classified_by_both": 94,
+  "same_edge_both_arms": 35,
+  "polarity_agree": 35,
+  "modality_agree": 27,
+  "part_type_agree": 34,
+  "modality_never_to": {},
+  "relation_agree_on_edges_of_either": 35,
+  "edges_of_either": 51
+ },
+ "decision": {
+  "status": "ADOPT_V6",
+  "strict_e2e_f1_delta": -0.0013888888888888978,
+  "relation_macro_f1_delta": 0.0,
+  "rule": "adopt qualifier_amendments v6 if pooled Strict E2E F1 and Relation Macro F1 (P&D dev 1.5 + 2.6, pilot gold) each fall by at most 0.01 vs BASE"
+ },
+ "spend": {
+  "per_run": {
+   "cr046_base_cr012_pilot_1_5_E0": 0.0234,
+   "cr046_amend_cr012_pilot_1_5_E0": 0.0159,
+   "cr046_base_cr012_pilot_2_6_E0": 0.0185,
+   "cr046_amend_cr012_pilot_2_6_E0": 0.0135
+  },
+  "total_usd": 0.0713,
+  "cap_usd": 1.0
+ }
+}
