@@ -199,9 +199,13 @@ class V3Result:
     qualifier_flags: list[str] = field(
         default_factory=list
     )  # CR-034 (only with qualifier_checks="v1")
+    # CR-036 (assembly v2): {"model": ..., "set": ...} when the type-valid orientation replaced the model's
+    direction_by_types: dict | None = None
 
     def to_dict(self) -> dict:
         d = {k: v for k, v in self.__dict__.items() if k != "pair"}
+        if d.get("direction_by_types") is None:
+            d.pop("direction_by_types", None)
         if not d.get("qualifier_flags"):
             d.pop(
                 "qualifier_flags", None
@@ -225,6 +229,7 @@ def classify_pair_v3(
     same_concept: bool = False,  # CR-008: offer the `same_concept` outcome (relation_choice v4)
     model_tier: str = "strong",
     containment_grounding: bool = False,
+    direction_by_types: bool = False,  # CR-036: assembly v2 sets the type-valid orientation instead of rejecting a domain/range error
     qualifier_checks: str = "off",  # CR-034: "off" (today's behaviour) | "v1" (qualifier_checks.py)
     fixtures: tuple[str, str, str] = ("default", "default", "default"),
 ) -> V3Result:
@@ -335,6 +340,16 @@ def classify_pair_v3(
         EdgeRef(source_id=src.concept_id, relation=o.relation, target_id=tgt.concept_id),
         {c.concept_id: c.node_type for c in (cx, cy) if c.node_type != GENERIC_TYPE},
     )
+    if res.type_errors and direction_by_types and not registry.get(o.relation).symmetric:
+        types = {c.concept_id: c.node_type for c in (cx, cy) if c.node_type != GENERIC_TYPE}
+        if not registry.check_types(
+            EdgeRef(source_id=tgt.concept_id, relation=o.relation, target_id=src.concept_id), types
+        ):
+            res.direction_by_types = {
+                "model": o.direction,
+                "set": "forward" if o.direction == "reversed" else "reversed",
+            }
+            res.direction, res.type_errors = res.direction_by_types["set"], []
     if res.type_errors:
         res.reason = "domain_range"
         return res

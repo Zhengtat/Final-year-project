@@ -73,9 +73,15 @@ def _read_jsonl(path: Path) -> list[dict]:
         return [json.loads(line) for line in f if line.strip()]
 
 
-def write_snapshot(snapshot: ChapterSnapshot, snapshots_dir: Path) -> Path:
+def write_snapshot(
+    snapshot: ChapterSnapshot,
+    snapshots_dir: Path,
+    extra_manifest: dict | None = None,
+    edge_details: dict[str, dict] | None = None,
+) -> Path:
     """`snapshots_dir`: .../data/processed/kg/<run_id>/snapshots/. Writes (and
-    returns) the ch<N>/ directory under it.
+    returns) the ch<N>/ directory under it. CR-036 (`assembly: v2`): `extra_manifest` adds fields to manifest.json and `edge_details` writes
+    edges_detail.jsonl (pair ids, all quotes, flags per edge); neither is written by the legacy path.
     """
     ch_dir = snapshots_dir / f"ch{snapshot.chapter_num}"
     ch_dir.mkdir(parents=True, exist_ok=True)
@@ -95,6 +101,13 @@ def write_snapshot(snapshot: ChapterSnapshot, snapshots_dir: Path) -> Path:
         "prerequisite_candidate_count": snapshot.prerequisite_candidate_count,
         "forward_reference_count": snapshot.forward_reference_count,
     }
+    if extra_manifest:
+        manifest |= extra_manifest
+    if edge_details is not None:
+        _write_jsonl(
+            ch_dir / "edges_detail.jsonl",
+            [{"edge_id": e.edge_id, **edge_details.get(e.edge_id, {})} for e in snapshot.edges],
+        )
     (ch_dir / "manifest.json").write_text(json.dumps(manifest, indent=2))
     return ch_dir
 

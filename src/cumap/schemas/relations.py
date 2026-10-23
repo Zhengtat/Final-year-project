@@ -142,7 +142,7 @@ class RelationRegistry:
     def from_yaml(cls, path: Path) -> RelationRegistry:
         raw = yaml.safe_load(path.read_text())
         relations = [RelationType(**r) for r in raw["relations"]]
-        return cls(
+        reg = cls(
             relations,
             raw["node_types"],
             version=raw.get("version", 0),
@@ -154,6 +154,8 @@ class RelationRegistry:
             output_fields=raw.get("output_fields") or {},
             patch=raw.get("patch", 0),
         )
+        reg.source_path = Path(path)  # CR-036: so a run can record the registry file's hash
+        return reg
 
     @property
     def version_label(self) -> str:

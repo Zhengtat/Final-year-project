@@ -122,9 +122,18 @@ def misconception_stage(run: str, *, dry_run: bool, limit: int | None, max_usd: 
     }
     matcher = MentionMatcher(concept_vocab(list(regs.values())))
     counter = {"n": 0}
+    from cumap.expert_kg.edge_store import resolve_assembly
+
+    reuse_existing = resolve_assembly() == "v2"
 
     def verify(out, cand):
         """Relation verifier: a fresh classification of the proposed edge on the OTHER tier (bulk)."""
+        if reuse_existing:  # CR-036 (assembly v2): the pair already has a result for this relation, so it is not classified again
+            from cumap.expert_kg.edge_store import find_existing_result
+
+            existing = find_existing_result(cp_d["relation_results_v3"], out.pce_source, out.pce_relation, out.pce_target)
+            if existing is not None:
+                return existing
         counter["n"] += 1
         sent = next(
             (

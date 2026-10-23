@@ -190,13 +190,20 @@ def relations_stage(
     evidence_fn=None,
     limit: int | None = None,
     qualifier_checks: str | None = None,
+    assembly: str | None = None,
 ) -> Checkpoint:
-    """`qualifier_checks` (CR-034): None reads `configs/relation_policy.yaml` (default "off"). `prompt_versions` (family, choice, qualifiers), `evidence_fn` (pair dict -> pair dict with the evidence text in `sentence`)
+    """`assembly` (CR-036): None reads `configs/relation_policy.yaml` (default "legacy"); "v2" records the registry version and file hash in the run and
+    sets the type-valid orientation instead of rejecting a domain/range error. `qualifier_checks` (CR-034): None reads `configs/relation_policy.yaml` (default "off"). `prompt_versions` (family, choice, qualifiers), `evidence_fn` (pair dict -> pair dict with the evidence text in `sentence`)
     and `limit` (classify at most this many new pairs, then stop) exist for CR-019 Stage B; the defaults are the production stage."""
     concepts = {c.concept_id: c for c in _restore_concept_registry(cp, embed_fn).all()}
     matcher = MentionMatcher(concept_vocab(list(concepts.values())))
+    from cumap.expert_kg import edge_store as ES
     from cumap.expert_kg import qualifier_checks as QC
 
+    assembly_mode = ES.resolve_assembly(assembly)
+    if assembly_mode == "v2":  # recorded only when on, so older runs and the default stay unchanged
+        cp.selection_stats["assembly"] = "v2"
+        cp.selection_stats["registry"] = ES.registry_record(registry)
     qc_mode = QC.resolve_mode(qualifier_checks)
     if qc_mode != "off":
         cp.selection_stats["qualifier_checks"] = (
@@ -244,6 +251,7 @@ def relations_stage(
                 containment_grounding=key
                 in anchor_pairs,  # CR-009: anchor pairs only (a code check, never shown to a model)
                 qualifier_checks=qc_mode,
+                direction_by_types=assembly_mode == "v2",
             )
         except BudgetExceededError:
             save_checkpoint(cp, run_dir)
@@ -347,6 +355,45 @@ def snapshots_stage(
         cp.run_id,
         merges=cp.merges,
     )
+
+
+def save_graph_stage(
+    cp: Checkpoint,
+    run_dir: Path,
+    sections: list[SectionInput],
+    registry: RelationRegistry,
+    embed_fn,
+):
+    """CR-036 `assembly: v2`, the "save graph" export: chapter snapshots from the edge store (built from the classification results) and the
+    concepts. No cycle or domain/range check (they moved to classification); the registry recorded in the run must be the one loaded. Bookkeeping
+    (first occurrence, roles) is still `finish_concepts`, run at the end of the concept stage, until the online index exists."""
+    from cumap.expert_kg import edge_store as ES
+
+    ES.check_registry_record(cp.selection_stats, registry)
+    concept_registry = _restore_concept_registry(cp, embed_fn)
+    types = {c.concept_id: c.node_type for c in concept_registry.all()}
+    store = ES.build_edge_store(cp.relation_results_v3, types, registry)
+    cp.pair_registry = [_pair_dict(p) for p in build_pair_registry(cp).all()]  # readers that key by pair id keep working
+    rows = [
+        {"edge_id": e.edge_id, "source_id": e.source_id, "target_id": e.target_id, "relation": e.relation, "family": e.family, "section_id": e.section_id}
+        for e in store.edges
+    ]  # fmt: skip
+    details = {e.edge_id: {"pair_ids": e.pair_ids, "quotes": e.quotes, "flags": e.flags, "direction_model": e.direction_model} for e in store.edges}
+    results = build_snapshots_stage(
+        registry,
+        sections,
+        concept_registry,
+        None,
+        run_dir / "snapshots",
+        cp.run_id,
+        merges=cp.merges,
+        edge_rows=rows,
+        run_checks=False,
+        extra_manifest={"assembly": "v2", "registry": cp.selection_stats["registry"]},
+        edge_details=details,
+    )
+    (run_dir / "edge_store.json").write_text(json.dumps(store.to_dict(), indent=1), encoding="utf-8")
+    return results
 
 
 def _pair_dict(p: PairResolution) -> dict:
