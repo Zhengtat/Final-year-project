@@ -593,7 +593,8 @@ def run_stage(
                     {"section_id": cand.section_id, "sentence": cand.sentence, "errors": errs3}
                 )
                 continue
-            cp["relation_results_v3"].append(accepted)
+            if all(r is not accepted for r in cp["relation_results_v3"]):  # CR-036: a reused existing result is not appended twice
+                cp["relation_results_v3"].append(accepted)
             edges[new_id] = accepted
         item = _item(out, cand, text_by[cand.section_id], ctx)
         twin = next(

@@ -228,6 +228,15 @@ def stage_snapshots(run: str) -> dict:
     run_dir = KG / run
     cp = load_checkpoint(run_dir)
     registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
+    from cumap.expert_kg import edge_store as ES
+
+    if ES.resolve_assembly() == "v2":  # CR-036: the "save graph" export (no assembly checks); legacy below is unchanged
+        out = sr.save_graph_stage(cp, run_dir, sections, registry, lambda t: np.zeros(1))
+        save_checkpoint(cp, run_dir)
+        return {
+            "assembly": "v2",
+            "chapters": [(r.chapter_num, len(r.snapshot.nodes), len(r.snapshot.edges)) for r in out],
+        }
     dropped = sr.mark_gated_dropped(cp, registry)
     out = sr.snapshots_stage(cp, run_dir, sections, registry, lambda t: np.zeros(1))
     save_checkpoint(cp, run_dir)

@@ -548,7 +548,14 @@ def build_snapshots_stage(
     snapshots_dir: Path,
     run_id: str,
     merges: list[dict] | None = None,
+    *,
+    edge_rows: list[dict] | None = None,
+    run_checks: bool = True,
+    extra_manifest: dict | None = None,
+    edge_details: dict[str, dict] | None = None,
 ) -> list[ChapterResult]:
+    """CR-036 (`assembly: v2`, the "save graph" export): `edge_rows` (edge_id, source_id, target_id, relation, family, section_id) replace the edges
+    derived from `pair_registry`, `run_checks=False` skips the structural check (cycles, domain/range). Defaults are the legacy behaviour."""
     merges = merges or []
     section_order = [s.section_id for s in sections]
     prereqs = find_prerequisite_candidates(concept_registry.all(), section_order)
@@ -563,7 +570,20 @@ def build_snapshots_stage(
                 concept_first_chapter[concept.concept_id] = section.chapter_num
 
     edges: list[SnapshotEdge] = []
-    if pair_registry is not None:
+    for row in edge_rows or []:
+        edges.append(
+            SnapshotEdge(
+                edge_id=row["edge_id"],
+                source_concept_id=row["source_id"],
+                relation=row["relation"],
+                target_concept_id=row["target_id"],
+                family=row["family"],
+                source_chapter=concept_first_chapter.get(row["source_id"], 0),
+                target_chapter=concept_first_chapter.get(row["target_id"], 0),
+                section_id=row["section_id"],
+            )
+        )
+    if pair_registry is not None and edge_rows is None:
         for resolution in pair_registry.all():
             if resolution.edge is None:
                 continue
@@ -632,7 +652,7 @@ def build_snapshots_stage(
             ],
             chapter_types,
             registry,
-        )
+        ) if run_checks else StructuralCheckResult()
 
         chapter_merges = [
             SnapshotMerge(concept_id=m["concept_id"], alias=m["alias"], section_id=m["section_id"])
@@ -652,7 +672,7 @@ def build_snapshots_stage(
             prerequisite_candidate_count=prereq_count,
             forward_reference_count=fwd_ref_count,
         )
-        write_snapshot(snapshot, snapshots_dir)
+        write_snapshot(snapshot, snapshots_dir, extra_manifest, edge_details)
         results.append(
             ChapterResult(
                 chapter_num=chapter_num, snapshot=snapshot, structural_check=structural_check

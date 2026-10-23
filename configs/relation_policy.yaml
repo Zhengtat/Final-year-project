@@ -4,3 +4,9 @@
 #   v1  -> qualifier code checks (src/cumap/expert_kg/qualifier_checks.py): a negated edge whose evidence quote has no negation cue is rejected with
 #          reason `negation_without_cue` (owner default D-4, logged); qualifier misfit and a surface phrase as long as the quote are recorded as flags.
 qualifier_checks: "off"
+# assembly (CR-036): "legacy" | "v2". `v2` folds "verify and assemble" into classification and keeps only the "save graph" export of the chapter
+# snapshots (src/cumap/expert_kg/edge_store.py): the registry version and file hash are recorded in the run and checked when it is loaded; a
+# type-invalid orientation is replaced by the valid one (flagged) instead of rejected; symmetric relations are normalised; identical edges merge with
+# all their quotes; several relations per pair are kept; registry conflicts are flagged; measurement-sample results never reach the snapshots; the
+# misconception stage reuses an existing result instead of classifying the same proposed edge again. Not adopted: legacy stays the default. Quote the value.
+assembly: "legacy"

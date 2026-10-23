@@ -143,7 +143,7 @@ def build_growth(
             if e.edge_id in seen:
                 continue
             seen.add(e.edge_id)
-            raw = pair_edges[e.edge_id]
+            raw = pair_edges.get(e.edge_id) or pair_edges[e.edge_id.split("~")[0]]  # CR-036: v2 ids are `pair~relation` for a second relation
             negated = raw["qualifiers"].get("polarity") == "negated"
             edges.append(
                 GEdge(
@@ -342,7 +342,7 @@ def worked_examples(
         cands = sorted(by_section[sid], key=lambda e: e.id)
         edge = next((e for e in cands if e.family not in used_families), cands[0])
         used_families.add(edge.family)
-        res = pair_edges[edge.id]
+        res = pair_edges.get(edge.id) or pair_edges[edge.id.split("~")[0]]
         raw = res["edge"]
         x, y = concepts[res["concept_x_id"]], concepts[res["concept_y_id"]]
         family_options = [

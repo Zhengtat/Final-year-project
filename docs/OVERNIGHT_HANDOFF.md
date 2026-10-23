@@ -135,6 +135,7 @@ Do these in order. Tasks marked "after" need the earlier one merged first.
 | T7 | cr-033-fact-f1 | see git log / cr-033-complete | 906 | $0 | merged; pre-registration commit 6c1d7a1 precedes the test run |
 | T8 | cr-034-qualifier-checks | see git log / cr-034-complete | 924 | $0 | merged; switch default off |
 | T9 | cr-035-identity-resolver-a | see git log / cr-035-complete | 937 | $0 | merged; switch default legacy |
+| T10 | cr-036-save-graph | see git log / cr-036-complete | 952 | $0 | merged; switch default legacy; replay byte-identical |
 
 
 ### 0.7 Where the data is (all read-only for these tasks)
