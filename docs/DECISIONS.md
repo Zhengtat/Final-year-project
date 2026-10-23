@@ -537,3 +537,9 @@ Format: date · decision · reason · alternatives considered.
 - **Baseline result (`reports/cr043/cr043base.md`):** strict relation `IDXR1-P1` P / R / F1 0.118 / 0.098 / **0.107** (dev 0.114, train 0.104); `FROZEN` 0.072; `IDXR1-P3` 0.131; concept F1 0.419; pair-recall analogue 0.680; relation macro F1 0.302; hierarchy direct 0.116; fact F1 0.133. Earliest failure of the 498 gold relations: concept not found 28.5%, wrong span 26.9%, pair never classified 14.3% (all 71 same-sentence, so in the candidate pool), classifier "no relation" 10.8%, wrong relation 4.0%, pipeline right 15.3%. The dev figures equal CR-025's luna arm (same cached calls).
 - **Reason:** owner, 2026-10-23: build and evaluate the SciNLP expert KG; start with 20 papers and evaluate before scaling.
 - **Alternatives:** all 57 train + dev papers at once (owner: start with 20); sol (about 20 times the cost); editing the hash-pinned CR-012 runner (refused: CR-043 has its own driver).
+
+## 2026-10-24 · CR-043 pre-registration: the "all pairs" arm (written before the arm is run)
+- **Arm:** `cumap.cr043.arm_allpairs` (tag `cr043allp`): the baseline's finished concept stage is copied, and every candidate pair of a paper is classified (pair budget = the whole same-sentence pool) instead of the D3 budget. Concepts are identical to `cr043base`; pairs the baseline classified are cache hits.
+- **Papers:** the same 20 (6 dev + 14 train). **Metric:** pooled strict relation F1 under `IDXR1-P1`.
+- **Rule:** adopt the arm for SciNLP runs if pooled `IDXR1-P1` F1 rises by **at least 0.02** over `cr043base` (0.107) **and** precision falls by **at most 0.03** (from 0.118). Otherwise keep the D3 budget. Report every other objective beside it; no other metric decides.
+- **Cost:** dry run first, then 2 papers, then the rest; cap $2 for the arm.
