@@ -37,14 +37,14 @@ def test_only_the_wording_of_the_six_relations_changes():
     old = {r["name"]: r for r in _body(V14)["relations"]}
     new = {r["name"]: r for r in _body(V141)["relations"]}
     assert old.keys() == new.keys()
-    for name in new:
+    for name, rel in new.items():
         if name in prop:
-            assert {k: new[name][k] for k in WORDING} == {k: prop[name][k] for k in WORDING}
-            assert {k: v for k, v in new[name].items() if k not in WORDING} == {
+            assert {k: rel[k] for k in WORDING} == {k: prop[name][k] for k in WORDING}
+            assert {k: v for k, v in rel.items() if k not in WORDING} == {
                 k: v for k, v in old[name].items() if k not in WORDING
             }
         else:
-            assert new[name] == old[name]
+            assert rel == old[name]
     a, b = _body(V14), _body(V141)
     for k in ("families", "node_types", "qualifiers"):
         assert a[k] == b[k]

@@ -7,8 +7,11 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
+from pathlib import Path
 
 import spacy
+import yaml
 
 from cumap.concepts_v4 import experiments as X
 from cumap.concepts_v4 import pd_run as P
@@ -208,6 +211,15 @@ def stage_concepts(
     }
 
 
+def production_registry_path(settings) -> Path:
+    """CR-047: `relation_registry` in configs/relation_policy.yaml for new production runs, unless a benchmark run set
+    CUMAP_RELATION_REGISTRY (then the settings value, as before)."""
+    if os.environ.get("CUMAP_RELATION_REGISTRY"):
+        return REPO_ROOT / settings.relation_registry
+    pol = yaml.safe_load((REPO_ROOT / "configs/relation_policy.yaml").read_text()) or {}
+    return REPO_ROOT / pol.get("relation_registry", settings.relation_registry)
+
+
 def stage_select(run: str, budget: int) -> dict:
     use_production_matching()
     settings = get_settings()
@@ -215,7 +227,7 @@ def stage_select(run: str, budget: int) -> dict:
     sections = sr.load_sections(REPO_ROOT / slice_cfg.pd.source_jsonl, list(slice_cfg.pd.chapters))
     run_dir = KG / run
     cp = load_checkpoint(run_dir)
-    registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
+    registry = RelationRegistry.from_yaml(production_registry_path(settings))
     embed = X.Embedder(settings.embeddings.model)
     stats = sr.select_stage(cp, sections, registry, embed, budget=budget, use_anchors=True)
     cp.stage = "relations"
@@ -237,8 +249,11 @@ def stage_relations(run: str, *, dry_run: bool, max_usd: float) -> dict:
         )
     settings.llm.stage_budgets_usd["relations"] = max_usd
     client = LLMClient(settings, run_id=run)
-    registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
+    registry = RelationRegistry.from_yaml(production_registry_path(settings))
     embed = X.Embedder(settings.embeddings.model)
+    cp.selection_stats["relation_registry"] = str(
+        production_registry_path(settings).relative_to(REPO_ROOT)
+    )
     cp = sr.relations_stage(
         client, cp, run_dir, registry, REPO_ROOT / "prompts", embed, progress=print
     )
@@ -254,7 +269,7 @@ def stage_snapshots(run: str) -> dict:
     sections = sr.load_sections(REPO_ROOT / slice_cfg.pd.source_jsonl, list(slice_cfg.pd.chapters))
     run_dir = KG / run
     cp = load_checkpoint(run_dir)
-    registry = RelationRegistry.from_yaml(REPO_ROOT / settings.relation_registry)
+    registry = RelationRegistry.from_yaml(production_registry_path(settings))
     from cumap.expert_kg import edge_store as ES
 
     if (

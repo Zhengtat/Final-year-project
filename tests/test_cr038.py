@@ -256,9 +256,9 @@ def test_an_extra_qualifier_field_fails_schema_validation(tmp_settings, fixtures
 
 
 # ---------------------------------------------------------------- switch
-def test_amendment_switch_defaults_to_off_and_the_policy_says_so():
+def test_amendment_switch_reads_the_policy_v6_since_cr047():
     assert (
-        R6.resolve_amendments() == "off"
+        R6.resolve_amendments() == "v6"
         and R6.resolve_amendments("v6") == "v6"
         and R6.resolve_amendments(False) == "off"
     )
@@ -266,5 +266,5 @@ def test_amendment_switch_defaults_to_off_and_the_policy_says_so():
         R6.resolve_amendments("v7")
     assert (
         yaml.safe_load((REPO / "configs/relation_policy.yaml").read_text())["qualifier_amendments"]
-        == "off"
+        == "v6"
     )

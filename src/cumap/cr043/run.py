@@ -1,5 +1,5 @@
 """CR-043 runner: E0 (the real pipeline) on SciNLP train / dev papers with the CURRENT production settings (the local model
-profile, R1-key matching, rejected-link adjudicator, backfill off). One subprocess of `cumap.cr012.scinlp_run run` per paper.
+profile, R1-key matching, rejected-link adjudicator, backfill off). One subprocess per paper of `cumap.cr047.scinlp_run run` (the frozen runner with SciNLP profile v2, CR-047).
 
     uv run python -m cumap.cr043.run --dry-run            # estimates only
     uv run python -m cumap.cr043.run --limit 2            # the first 2 papers
@@ -60,7 +60,7 @@ def main() -> None:
                 flush=True,
             )
             continue
-        cmd = [sys.executable, "-m", "cumap.cr012.scinlp_run", "run", "--split", split, "--doc", d, "--tag", a.tag,
+        cmd = [sys.executable, "-m", "cumap.cr047.scinlp_run", "run", "--split", split, "--doc", d, "--tag", a.tag,
                "--max-usd", str(MAX_USD_PER_DOC)] + (["--dry-run"] if a.dry_run else [])  # fmt: skip
         t0 = time.time()
         r = subprocess.run(cmd, capture_output=True, text=True, check=False)
