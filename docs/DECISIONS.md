@@ -560,3 +560,9 @@ Format: date · decision · reason · alternatives considered.
   - CR-037 identity judge: the owner asked for elements of GraphJudge (Huang et al., EMNLP 2025) to be brought in; a v2 prompt follows in its own CR. Measurement cap about $3.
   - Switches (`qualifier_checks`, `identity_resolver`, `assembly`): the owner asked for a recommendation; recommended `qualifier_checks` v1 on, `identity_resolver` u1 after the judge measurement, `assembly` legacy for now. Awaiting the owner's on/off.
 - **Alternatives:** editing v0.4 in place (refused: lexicon versions are never edited); a separate entry kept apart from the link-layer set (not possible: same-sets are transitive in the loader).
+
+## 2026-10-24 · CR-045: qualifier code checks on for new runs (owner)
+- **Decision:** `configs/relation_policy.yaml` `qualifier_checks: "v1"` (was "off"). New relation-stage runs reject a negated edge whose quote has no negation cue (`negation_without_cue`, logged) and record qualifier-misfit and long-surface-phrase flags; runs record the mode in `selection_stats`. Older runs and replays are unchanged.
+- **Reason:** owner, on the CR-034 replay (`reports/cr034/qualifier_replay_slice3_c2.md`): on `slice3_c2` the checks reject 1 edge, the actual wrong negation; the 137 flags change nothing.
+- **Open:** the `surface_phrase_long` flag fires 128 times on `slice3_c2`, so it is noisy; review its threshold before using it for anything but review.
+- **Alternatives:** keep off (owner chose on); flags as rejections (refused: unmeasured).

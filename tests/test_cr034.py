@@ -113,8 +113,9 @@ def test_negation_cue(quote, cue):
     assert QC.has_negation_cue(quote) is cue
 
 
-def test_mode_resolution_default_off_and_invalid_raises():
-    assert QC.resolve_mode(None) == "off" and QC.resolve_mode("v1") == "v1"
+def test_mode_resolution_reads_policy_and_invalid_raises():
+    # CR-045: the owner switched the checks on for new runs
+    assert QC.resolve_mode(None) == "v1" and QC.resolve_mode("off") == "off"
     with pytest.raises(ValueError):
         QC.resolve_mode("v2")
 
