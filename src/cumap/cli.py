@@ -21,6 +21,7 @@ diagnose_app = typer.Typer(help="Alignment and diagnosis of student graphs again
 eval_app = typer.Typer(help="Evaluation, baselines and ablations (M7).")
 app_app = typer.Typer(help="Streamlit review/demo apps.")
 demo_app = typer.Typer(help="CR-005 demo report (expert KG only).")
+lexicon_app = typer.Typer(help="CR-029: standing lexicon intake (blind owner sheets; nothing enters the lexicon without a mark).")
 external_app = typer.Typer(help="External benchmark datasets (CR-003 §3) — iir_face only for now.")
 
 app.add_typer(data_app, name="data")
@@ -34,6 +35,7 @@ app.add_typer(diagnose_app, name="diagnose")
 app.add_typer(eval_app, name="eval")
 app.add_typer(app_app, name="app")
 app.add_typer(external_app, name="external")
+app.add_typer(lexicon_app, name="lexicon")
 
 
 def _not_implemented(command: str, milestone: str) -> None:
@@ -1024,3 +1026,37 @@ def demo_build(
         org_id=org,
     )
     typer.echo(f"wrote {path}")
+
+
+@lexicon_app.command("intake")
+def lexicon_intake_cmd(
+    run: str = typer.Option(..., "--run", help="run_id under data/processed/kg/ (read-only)"),
+    cap: int = typer.Option(40, "--cap", help="rows per sheet"),
+    seed: int = typer.Option(29, "--seed", help="seed for the sample groups (recorded in the key file)"),
+    with_text: bool = typer.Option(True, "--with-text/--no-text", help="recompute weak R3 cues from the P&D section texts"),
+) -> None:
+    """Write one blind lexicon-intake sheet to data/interim/suggestions/. $0, no API call, no write to data/gold/."""
+    from cumap.config import REPO_ROOT, load_demo_slice
+    from cumap.expert_kg import lexicon_intake as li
+    from cumap.expert_kg import slice_rerun as sr
+    from cumap.expert_kg.lexicon import Lexicon
+
+    run_dir = REPO_ROOT / "data" / "processed" / "kg" / run
+    cp = json.loads((run_dir / "checkpoint.json").read_text(encoding="utf-8"))
+    v4p = run_dir / "v4_concepts.json"
+    v4 = json.loads(v4p.read_text(encoding="utf-8")) if v4p.exists() else None
+    lex = Lexicon.load()
+    texts = None
+    if with_text:
+        try:
+            sc = load_demo_slice()
+            secs = sr.load_sections(REPO_ROOT / sc.pd.source_jsonl, list(sc.pd.chapters))
+            texts = {s.section_id: s.text for s in secs}
+        except Exception as e:  # noqa: BLE001  # no section texts: the weak-cue rows are skipped
+            typer.echo(f"weak cues skipped (no section texts: {e})")
+    cands = li.collect(cp, v4, lex, section_texts=texts)
+    marked = li.marked_pairs(REPO_ROOT / "data" / "gold", lex.cfg)
+    sheet, info = li.build_sheet(cands, lex, already_marked=marked, cap=cap, seed=seed)
+    info["lexicon_version"] = lex.version
+    csv_path, key_path = li.write_sheet(run, sheet, info, REPO_ROOT / "data" / "interim" / "suggestions")
+    typer.echo(f"{len(sheet)} rows -> {csv_path}\nkey -> {key_path}\n{json.dumps(info['candidates_by_group'])} skipped {info['skipped']}")

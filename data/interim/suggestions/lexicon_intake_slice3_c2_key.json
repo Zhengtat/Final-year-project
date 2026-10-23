@@ -1,0 +1,544 @@
+{
+ "run_id": "slice3_c2",
+ "rows": [
+  {
+   "id": 1,
+   "group": "u4_weak_cue",
+   "a": "multiple antennas",
+   "b": "multiple-input, multiple-output",
+   "section": "2.7",
+   "source": {
+    "kind": "r3_weak",
+    "cue": "often_referred",
+    "x_id": "c_multiple_antennas",
+    "y_id": "c_multiple_input_multiple_output"
+   }
+  },
+  {
+   "id": 2,
+   "group": "u5_same_merged",
+   "a": "mainframe",
+   "b": "mainframe computers",
+   "section": "1-problem-building-a-network",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_mainframe_computers",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "“Mainframe” is a standard shortened form of “mainframe computer”; the plural in the candidate does not change the concept.",
+    "similarity": 0.78049989042047
+   }
+  },
+  {
+   "id": 3,
+   "group": "u5_same_merged",
+   "a": "application type",
+   "b": "application class",
+   "section": "1.1",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_application_class",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "In a taxonomy, an application type is an application class: both name a category of applications.",
+    "similarity": 0.7630984515729505
+   }
+  },
+  {
+   "id": 4,
+   "group": "u5_same_merged",
+   "a": "application protocol",
+   "b": "application layer protocol",
+   "section": "1.3",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_application_layer_protocol",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "In networking, “application protocol” and “application layer protocol” are synonymous terms for protocols operating at the application layer.",
+    "similarity": 0.8865546751482283
+   }
+  },
+  {
+   "id": 5,
+   "group": "u5_same_merged",
+   "a": "802.11",
+   "b": "802.11 Wi-Fi standard",
+   "section": "1.3",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_802_11_wi_fi_standard",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "“802.11” is shorthand for the 802.11 Wi-Fi standard; candidate 0 names the same standard.",
+    "similarity": 0.7927699913579668
+   }
+  },
+  {
+   "id": 6,
+   "group": "u5_same_merged",
+   "a": "Socket API",
+   "b": "socket interface",
+   "section": "1.4",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_socket_interface",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "“Socket API” and “socket interface” are synonymous names for the programming interface used to work with sockets. A socket itself is an endpoint, while a socket library is an implementation.",
+    "similarity": 0.7451044690323844
+   }
+  },
+  {
+   "id": 7,
+   "group": "u5_same_merged",
+   "a": "link technology",
+   "b": "link-level technology",
+   "section": "2-problem-connecting-to-a-network",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_link_level_technology",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "In this networking context, “link technology” and “link-level technology” refer to the same technology used on a network link.",
+    "similarity": 0.9146833552628896
+   }
+  },
+  {
+   "id": 8,
+   "group": "u5_same_merged",
+   "a": "bit stream",
+   "b": "stream of bits",
+   "section": "2.2",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_stream_of_bits",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "“Bit stream” and “stream of bits” are synonymous expressions for the same data unit.",
+    "similarity": 0.8776094961089024
+   }
+  },
+  {
+   "id": 9,
+   "group": "u5_same_merged",
+   "a": "IP-based network",
+   "b": "IP network",
+   "section": "3-perspective-virtual-networks-all-the-way-down",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_ip_network",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "“IP-based network” and “IP network” both refer to a network using the Internet Protocol and are interchangeable in the given context.",
+    "similarity": 0.7956501958170931
+   }
+  },
+  {
+   "id": 10,
+   "group": "u5_same_merged",
+   "a": "data link protocol",
+   "b": "link-level protocol",
+   "section": "3.1",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_link_level_protocol",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "“Data link protocol” and “link-level protocol” are synonymous terms for a protocol operating at the data-link layer.",
+    "similarity": 0.8322652284176895
+   }
+  },
+  {
+   "id": 11,
+   "group": "u5_same_merged",
+   "a": "connectionless manner",
+   "b": "connectionless approach",
+   "section": "3.3",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_connectionless_approach",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "Both refer to the connectionless way of sending packets; “manner” and “approach” are alternative phrasings here.",
+    "similarity": 0.7883545842306767
+   }
+  },
+  {
+   "id": 12,
+   "group": "u5_same_merged",
+   "a": "forwarding function",
+   "b": "forwarding",
+   "section": "3.4",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_forwarding",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "“Forwarding function” refers to the forwarding operation; “function” does not identify a distinct kind or component of forwarding.",
+    "similarity": 0.8026550634903578
+   }
+  },
+  {
+   "id": 13,
+   "group": "u5_same_merged",
+   "a": "interior gateway protocols",
+   "b": "intradomain routing protocols",
+   "section": "3.4",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_intradomain_routing_protocols",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "The text explicitly presents “interior gateway protocols (IGPs)” as an alternative name for “intradomain routing protocols.”",
+    "similarity": 0.9180745609667744
+   }
+  },
+  {
+   "id": 14,
+   "group": "u5_same_merged",
+   "a": "link-state packet",
+   "b": "update packet",
+   "section": "3.4",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_update_packet",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "The textbook explicitly calls an update packet a link-state packet (LSP), making them alternative names for the same data unit.",
+    "similarity": 0.9526484232562304
+   }
+  },
+  {
+   "id": 15,
+   "group": "u5_same_merged",
+   "a": "link-layer protocol",
+   "b": "link-level protocol",
+   "section": "3.4",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_link_level_protocol",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "“Link-layer” and “link-level” are synonymous names for the same protocol layer; neither denotes a more specific protocol than the other.",
+    "similarity": 0.8939121281095713
+   }
+  },
+  {
+   "id": 16,
+   "group": "u5_same_merged",
+   "a": "Dijkstra’s algorithm",
+   "b": "Dijkstra’s shortest-path algorithm",
+   "section": "3.4",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_dijkstra_s_shortest_path_algorithm",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "“Dijkstra’s algorithm” is the usual shortened name for Dijkstra’s shortest-path algorithm. The forward search algorithm is a realization of it, not a synonym.",
+    "similarity": 0.7939051905448377
+   }
+  },
+  {
+   "id": 17,
+   "group": "u5_same_merged",
+   "a": "TransmissionTime",
+   "b": "transmit time",
+   "section": "3.4",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_transmit_time",
+    "rule_id": null,
+    "llm_called": true,
+    "reason": "“TransmissionTime” and “transmit time” are synonymous names for the link’s transmission-time parameter. A Transmission Time Interval is a distinct, specific interval.",
+    "similarity": 0.8046696757309199
+   }
+  },
+  {
+   "id": 18,
+   "group": "u5_same_held",
+   "a": "flow",
+   "b": "flow of data",
+   "section": "1.2",
+   "source": {
+    "kind": "merge_review",
+    "concept_id": "c_flow",
+    "candidate_id": "c_flow_of_data",
+    "alias": "flow",
+    "reason": "In this networking context, “flow” is shorthand for “flow of data,” as shown by the quoted passage.",
+    "similarity": 0.6591835884152056
+   }
+  },
+  {
+   "id": 19,
+   "group": "u5_same_held",
+   "a": "physical link",
+   "b": "link",
+   "section": "1.2",
+   "source": {
+    "kind": "merge_review",
+    "concept_id": "c_physical_link",
+    "candidate_id": "c_link",
+    "alias": "physical link",
+    "reason": "The book defines a link as a physical medium, so “physical” makes the meaning explicit rather than identifying a distinct kind of link.",
+    "similarity": 0.6200190867521532
+   }
+  },
+  {
+   "id": 20,
+   "group": "u5_same_held",
+   "a": "IP layer",
+   "b": "network layer",
+   "section": "1.3",
+   "source": {
+    "kind": "merge_review",
+    "concept_id": "c_ip_layer",
+    "candidate_id": "c_network_layer",
+    "alias": "IP layer",
+    "reason": "The evidence explicitly calls the IP layer the “network” layer, identifying them as alternate names for layer 3 in this textbook.",
+    "similarity": 0.5990954067520264
+   }
+  },
+  {
+   "id": 21,
+   "group": "u5_same_held",
+   "a": "internetworking layer",
+   "b": "IP layer",
+   "section": "1.3",
+   "source": {
+    "kind": "merge_review",
+    "concept_id": "c_internetworking_layer",
+    "candidate_id": "c_ip_layer",
+    "alias": "internetworking layer",
+    "reason": "The evidence explicitly uses “internetworking” as an alternative name for the IP layer.",
+    "similarity": 0.6200040381317251
+   }
+  },
+  {
+   "id": 22,
+   "group": "u5_same_held",
+   "a": "datagram",
+   "b": "message",
+   "section": "1.3",
+   "source": {
+    "kind": "same_concept_queue",
+    "pair_id": "RP-1.3-310",
+    "statement": "Datagram and message can be used as names for the same thing."
+   }
+  },
+  {
+   "id": 23,
+   "group": "u5_same_held",
+   "a": "physical media",
+   "b": "link",
+   "section": "2-problem-connecting-to-a-network",
+   "source": {
+    "kind": "merge_review",
+    "concept_id": "c_physical_media",
+    "candidate_id": "c_link",
+    "alias": "physical media",
+    "reason": "The book explicitly calls a physical medium a “link”; “physical media” is the plural form.",
+    "similarity": 0.609481497956477
+   }
+  },
+  {
+   "id": 24,
+   "group": "u5_same_held",
+   "a": "synchronization character",
+   "b": "SYN character",
+   "section": "2.3",
+   "source": {
+    "kind": "merge_review",
+    "concept_id": "c_synchronization_character",
+    "candidate_id": "c_syn_character",
+    "alias": "synchronization character",
+    "reason": "The evidence explicitly expands SYN as “synchronization,” so “SYN character” and “synchronization character” name the same character.",
+    "similarity": 0.47560868332837286
+   }
+  },
+  {
+   "id": 25,
+   "group": "u5_same_held",
+   "a": "next frame expected",
+   "b": "NFE",
+   "section": "2.5",
+   "source": {
+    "kind": "merge_review",
+    "concept_id": "c_next_frame_expected",
+    "candidate_id": "c_nfe",
+    "alias": "next frame expected",
+    "reason": "NFE is the abbreviation for “next frame expected”; both identify the same variable.",
+    "similarity": 0.6843309660456406
+   }
+  },
+  {
+   "id": 26,
+   "group": "u5_same_held",
+   "a": "ad hoc network",
+   "b": "mesh network",
+   "section": "2.7",
+   "source": {
+    "kind": "merge_review",
+    "concept_id": "c_ad_hoc_network",
+    "candidate_id": "c_mesh_network",
+    "alias": "ad hoc network",
+    "reason": "The textbook explicitly uses “mesh or ad hoc network” as alternative names for the topology described by candidate 1.",
+    "similarity": 0.5992389939230934
+   }
+  },
+  {
+   "id": 27,
+   "group": "u5_same_held",
+   "a": "virtual circuit number",
+   "b": "virtual circuit identifier",
+   "section": "3.1",
+   "source": {
+    "kind": "merge_review",
+    "concept_id": "c_virtual_circuit_number",
+    "candidate_id": "c_virtual_circuit_identifier",
+    "alias": "virtual circuit number",
+    "reason": "A virtual circuit number is the numeric identifier for a virtual circuit; the terms refer to the same label.",
+    "similarity": 0.6587947197052154
+   }
+  },
+  {
+   "id": 28,
+   "group": "u5_same_held",
+   "a": "physical address",
+   "b": "link-level address",
+   "section": "3.3",
+   "source": {
+    "kind": "merge_review",
+    "concept_id": "c_physical_address",
+    "candidate_id": "c_link_level_address",
+    "alias": "physical address",
+    "reason": "In this networking context, a host’s physical address refers to its link-level (hardware) address, which can be encoded in the host part of an IP address.",
+    "similarity": 0.584304043368428
+   }
+  },
+  {
+   "id": 29,
+   "group": "u5_sample_narrower_broader_new",
+   "a": "internetwork",
+   "b": "Internet",
+   "section": "1.2",
+   "source": {
+    "kind": "taxonomy_candidates",
+    "decision": "broader",
+    "reason": "The evidence uses “internetwork” (or lowercase “internet”) for interconnected networks in general. The Internet is a specific instance, so the terms are not interchangeable."
+   }
+  },
+  {
+   "id": 30,
+   "group": "u5_sample_narrower_broader_new",
+   "a": "Ethernet standard",
+   "b": "Ethernet",
+   "section": "2.6",
+   "source": {
+    "kind": "taxonomy_candidates",
+    "decision": "narrower",
+    "reason": "The 1978 10-Mbps Ethernet standard is a specific historical version of Ethernet, not interchangeable with Ethernet generally."
+   }
+  },
+  {
+   "id": 31,
+   "group": "u5_sample_narrower_broader_new",
+   "a": "class C address",
+   "b": "IP address",
+   "section": "3.3",
+   "source": {
+    "kind": "taxonomy_candidates",
+    "decision": "narrower",
+    "reason": "A class C address is a specific kind of IP address; it is not interchangeable with the broader term. Class A and class B addresses are different classes."
+   }
+  },
+  {
+   "id": 32,
+   "group": "u5_sample_narrower_broader_new",
+   "a": "interdomain routing protocols",
+   "b": "routing protocol",
+   "section": "3.4",
+   "source": {
+    "kind": "taxonomy_candidates",
+    "decision": "narrower",
+    "reason": "Interdomain routing protocols are a kind of routing protocol, not interchangeable with routing protocols in general. Intradomain routing protocols are a distinct kind."
+   }
+  },
+  {
+   "id": 33,
+   "group": "u5_sample_narrower_broader_new",
+   "a": "control packet",
+   "b": "setup packet",
+   "section": "3.4",
+   "source": {
+    "kind": "taxonomy_candidates",
+    "decision": "broader",
+    "reason": "A setup packet is a specific type of control packet used during setup; the terms are not interchangeable."
+   }
+  },
+  {
+   "id": 34,
+   "group": "audit_deterministic_merge",
+   "a": "OSI reference model",
+   "b": "Open Systems Interconnection architecture",
+   "section": "1.3",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_open_systems_interconnection_architecture",
+    "rule_id": "R0",
+    "llm_called": false,
+    "reason": null,
+    "similarity": null
+   }
+  },
+  {
+   "id": 35,
+   "group": "audit_deterministic_merge",
+   "a": "sendQ",
+   "b": "send queue",
+   "section": "2.5",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_send_queue",
+    "rule_id": "exact",
+    "llm_called": false,
+    "reason": null,
+    "similarity": null
+   }
+  },
+  {
+   "id": 36,
+   "group": "audit_deterministic_merge",
+   "a": "recvQ",
+   "b": "receive queue",
+   "section": "2.5",
+   "source": {
+    "kind": "checkpoint.merges",
+    "concept_id": "c_receive_queue",
+    "rule_id": "exact",
+    "llm_called": false,
+    "reason": null,
+    "similarity": null
+   }
+  }
+ ],
+ "seed": 29,
+ "cap": 40,
+ "skipped": {
+  "lexicon_covered": 9,
+  "already_marked": 0,
+  "duplicate_pair": 0,
+  "same_name": 5
+ },
+ "candidates_by_group": {
+  "u4_weak_cue": 1,
+  "u5_same_merged": 16,
+  "u5_same_held": 11,
+  "u5_not_a_concept": 0,
+  "u5_sample_narrower_broader_new": 336,
+  "audit_deterministic_merge": 3
+ },
+ "overflow_for_next_sheet": [],
+ "unsampled_not_listed": 331,
+ "lexicon_version": "0.3"
+}
