@@ -136,3 +136,6 @@ Local `.env` now selects `configs/models_luna_default.yaml`: every tier gpt-6-lu
 
 ## Housekeeping docs sync (2026-10-23)
 Docstring and config-comment corrections for handoff §4 findings 1, 2, 4 (no behaviour change). CR-023 closed without the paid comparison run (D-6; CR-025 superseded it). Baseline on `main`: 876 tests pass.
+
+## CR-027 remove backfill from new production runs (2026-10-23)
+Switch `backfill: false` in `configs/concept_policy.yaml`, read by `cr009_run.stage_concepts` (P&D, CR-012 unit runner, SciNLP); recorded in `v4_concepts.json` extra. 3 new tests (`tests/test_cr027.py`): off makes no `concept_backfill` call, on makes one, policy default and prompt kept. 879 tests pass, ruff clean. `slice3_c2` not rebuilt; no model call.

@@ -7,3 +7,8 @@
 rejected_link_policy: adjudicate
 # promote_rejected_links: the name-only "more specific" rule. NOT adopted (owner review: 7 of 33 promotions would split a concept).
 promote_rejected_links: false
+# backfill (CR-027): the chapter-end pass that adds mentions of earlier nodes found by string matching. false = off for NEW
+# production runs (P&D, CR-012 unit runner, SciNLP: all go through cr009_run.stage_concepts); the code and prompts/concept_backfill/v1
+# stay, older runs keep their stored backfill records, experiments.py (frozen CR-009 / CR-010 arms) is untouched. The run records
+# `backfill` in v4_concepts.json extra.
+backfill: false

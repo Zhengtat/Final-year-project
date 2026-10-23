@@ -38,6 +38,12 @@ def _promote_rejected() -> bool:
     return bool(_policy()["promote_rejected_links"])
 
 
+def _backfill_enabled(policy: dict | None = None) -> bool:
+    """CR-027: backfill (the chapter-end mention pass) for NEW production runs. A policy file without the key keeps the
+    pre-CR-027 behaviour (on)."""
+    return bool((policy if policy is not None else _policy()).get("backfill", True))
+
+
 def stage_concepts(
     run: str,
     *,
@@ -47,6 +53,7 @@ def stage_concepts(
     tau: float = 0.1,
     strict_g_links: bool = False,
     promote_rejected: bool | None = None,
+    backfill: bool | None = None,
 ) -> dict:
     use_production_matching()
     settings = get_settings()
@@ -118,12 +125,13 @@ def stage_concepts(
         progress=print,
         schemas=make_schemas(profile.entity_types if profile else None),
     )
-    out = run_obj.run(units)
+    do_backfill = _backfill_enabled() if backfill is None else backfill
+    out = run_obj.run(units, backfill=do_backfill)
     run_dir = KG / run
     X.save_run(
         out,
         run_dir / "v4_concepts.json",
-        {"units": len(units), "spend_usd": round(client.spent_usd, 4)},
+        {"units": len(units), "spend_usd": round(client.spent_usd, 4), "backfill": do_backfill},
     )
     overrides = (
         CanonicalOverrides()
