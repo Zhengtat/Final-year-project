@@ -139,6 +139,7 @@ Do these in order. Tasks marked "after" need the earlier one merged first.
 | T11 | cr-037-identity-judge-draft | see git log / cr-037-complete | 974 | $0 | merged as DRAFT, off by default; prompts/identity_judge/v1.md awaits owner review; measurement not run |
 | T12 | cr-038-qualifiers-draft | see git log / cr-038-complete | 988 | $0 | merged as DRAFT, off by default; registry v1.5 and prompts v6 await owner review |
 | T13 | cr-039-misconception-family-draft | see git log / cr-039-complete | 1002 | $0 | merged as DRAFT, off by default; registry v1.6 and prompts family v5 / choice v7 await owner review |
+| T14 | cr-040-v14-review-draft | see git log / cr-040-complete | 1005 | $0 | merged; docs/cr040/v14_relation_review.md awaits owner review; v1.4 file untouched |
 
 
 ### 0.7 Where the data is (all read-only for these tasks)
