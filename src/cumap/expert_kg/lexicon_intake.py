@@ -308,3 +308,118 @@ def marked_rows(sheet_csv: Path, sheet_name: str) -> tuple[list[dict], list[dict
             else:
                 rows.append({**base, "same": mark == "same"})
     return rows, neither
+
+
+# ---------------------------------------------------------------- CR-041: owner marks -> a new lexicon version
+PRIOR_MARK_SHEETS = (
+    "cr007_merge_sheet.csv",
+    "cr008_merge_sheet.csv",
+)  # earlier owner merge sheets (name_A / name_B / mark)
+_KIND_CUES = (
+    ("instance", "instance_of"),
+    ("kind of", "kind_of"),
+    ("part of", "part_of"),
+    ("predecessor", "predecessor"),
+    (" vs ", "different_type"),
+)
+
+
+def prior_owner_marks(
+    gold_dir: Path, cfg: AliasConfig, exclude: str | None = None
+) -> dict[frozenset[str], set[bool]]:
+    """{R1-key pair: {verdicts}} from the earlier owner merge sheets and every other marked intake sheet. Read-only."""
+    out: dict[frozenset[str], set[bool]] = {}
+
+    def add(a: str, b: str, mark: str) -> None:
+        m = mark.strip().lower()
+        if m in ("same", "different"):
+            out.setdefault(frozenset((r1_key(a, cfg), r1_key(b, cfg))), set()).add(m == "same")
+
+    for name in PRIOR_MARK_SHEETS:
+        p = gold_dir / name
+        if p.exists():
+            with p.open(encoding="utf-8-sig", newline="") as f:
+                for r in csv.DictReader(f):
+                    add(
+                        r.get("name_A") or "",
+                        r.get("name_B") or "",
+                        r.get("mark (same/different)") or "",
+                    )
+    for p in sorted(gold_dir.glob("lexicon_intake_*.csv")):
+        if exclude and p.name == exclude:
+            continue
+        with p.open(encoding="utf-8-sig", newline="") as f:
+            for r in csv.DictReader(f):
+                add(r.get("name_a") or "", r.get("name_b") or "", r.get("mark") or "")
+    return out
+
+
+def kind_from_note(note: str) -> str:
+    n = f" {note.lower()} "
+    return next((k for cue, k in _KIND_CUES if cue in n), "confusable")
+
+
+def entries_from_marks(
+    sheet_csv: Path, sheet_name: str, lexicon: Lexicon, prior: dict[frozenset[str], set[bool]]
+) -> tuple[list[dict], dict[str, list[dict]]]:
+    """Owner marks -> approved lexicon entries (the CR-008 learning loop). A pair is LEFT OUT and reported when the lexicon
+    already covers it, or when an earlier owner sheet marked it the other way (cross-sheet conflict)."""
+    from cumap.expert_kg.lexicon_proposals import propose_from_marks
+
+    cfg = lexicon.cfg
+    rows, neither = marked_rows(sheet_csv, sheet_name)
+    covered, conflicts, keep = [], [], []
+    for r in rows:
+        key = frozenset((r1_key(r["a"], cfg), r1_key(r["b"], cfg)))
+        same_now = lexicon.same_set(r["a"]) is not None and lexicon.same_set(
+            r["a"]
+        ) == lexicon.same_set(r["b"])
+        if same_now or lexicon.is_different(r["a"], r["b"]):
+            covered.append(r)
+        elif prior.get(key, set()) - {r["same"]}:
+            conflicts.append(r)
+        else:
+            keep.append(r)
+    entries, skipped = propose_from_marks(keep, cfg)
+    by_id = {r["id"]: r for r in keep}
+    for e in entries:
+        e["id"] = e["id"].replace(
+            " ", "_"
+        )  # ids stay space-free; `source` keeps the readable sheet name
+        if e["id"].startswith("D-"):
+            note = (by_id[e["id"].split("-")[-1]].get("note") or "").strip()
+            e["kind"] = kind_from_note(note)
+            e["why"] = f"owner mark: {note}" if note else e["why"]
+    return entries, {
+        "covered": covered,
+        "cross_sheet_conflict": conflicts,
+        "neither": neither,
+        "conflicting_marks": skipped,
+    }
+
+
+def write_lexicon_version(
+    base: Path, out: Path, version: str, entries: list[dict], changelog: str
+) -> Lexicon:
+    """A NEW lexicon file = base + entries, with its version and changelog line. Never overwrites `base` or an existing file;
+    the result is validated by the normal loader before it is kept."""
+    import yaml
+
+    if out.exists() or out.resolve() == base.resolve():
+        raise FileExistsError(
+            f"{out} exists or is the base file; lexicon versions are never edited in place"
+        )
+    raw = yaml.safe_load(base.read_text(encoding="utf-8")) or {}
+    raw["version"] = version
+    raw.setdefault("changelog", []).append(changelog)
+    for e in entries:
+        lst = "same" if e["id"].startswith("S-") else "different"
+        raw.setdefault(lst, []).append({k: v for k, v in e.items() if v is not None})
+    out.write_text(
+        yaml.safe_dump(raw, sort_keys=False, allow_unicode=True, width=120), encoding="utf-8"
+    )
+    try:
+        return Lexicon.load(out)
+    except Exception:
+        out.unlink()
+        raise
