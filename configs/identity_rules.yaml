@@ -22,3 +22,16 @@ not_a_concept:                                   # owner defaults D-5 (handoff Â
   A: drop                                        # measured in CR-021
   B: review_flag                                 # the node is kept
   C: review_flag
+judge:                                           # U5, the LLM judge (DRAFT, CR-037; off by default: `identity_judge: "off"` in configs/concept_policy.yaml)
+  prompt: identity_judge
+  version: v1                                    # a draft awaiting owner review; never edit once it has produced saved results (rule 8)
+  tier: strong
+  options: [same, narrower, broader, new, not_a_concept]   # the closed choice set (rule 12): the schema is built from this list
+  outcomes:
+    same: merge                                  # B: below the review band the merge goes to review instead (today's R4 band)
+    narrower: new_node_plus_taxonomy_candidate   # replaces the unadopted `more_specific` promotion rule
+    broader: new_node_plus_taxonomy_candidate
+    new: new_node
+    not_a_concept: per_input                     # see not_a_concept: A drops the item, B and C only flag it
+  order_of_candidates: similarity_descending     # input B: candidates at or above the offer threshold, best first; the first same / narrower / broader ends the search
+  quote_check: exact_substring_of_the_sentence   # a failed quote turns the answer into no_decision (the item is treated as new / dropped as today)
