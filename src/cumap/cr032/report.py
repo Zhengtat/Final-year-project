@@ -75,12 +75,14 @@ def markdown(r: dict) -> str:
             "",
         ]
         L += [
-            "| variant | `HIER-T1-SURF-R1` P / R / F1 | direct edges | same set, surface identity (CR-022 A2 rule) | gold pairs (direct) | unplaced as FP |",
-            "|---|---|---|---|---|---|",
+            "| variant | `HIER-T1` real identity P / R / F1 | `HIER-T1-SURF-R1` P / R / F1 | direct edges | same set, surface identity (CR-022 A2 rule) | gold pairs (direct) | unplaced as FP |",
+            "|---|---|---|---|---|---|---|",
         ]
         for v, e in s["variants"].items():
+            real = e.get("HIER_T1_real_identity")
+            real_s = triple(real) if isinstance(real, dict) else str(real)
             L.append(
-                f"| `{v}` | {triple(e['HIER_T1_SURF_R1'])} | {triple(e['HIER_T1_SURF_R1_direct_edges'])} | {triple(e['same_set_surface_identity'])} | {e['gold_pairs']} ({e['gold_direct_edges']}) | {e['unplaced_counted_as_fp']} |"
+                f"| `{v}` | {real_s} | {triple(e['HIER_T1_SURF_R1'])} | {triple(e['HIER_T1_SURF_R1_direct_edges'])} | {triple(e['same_set_surface_identity'])} | {e['gold_pairs']} ({e['gold_direct_edges']}) | {e['unplaced_counted_as_fp']} |"
             )
         first = next(iter(s["variants"].values()))
         L += ["", "Per-label F1 (first variant):", "", "| label | P / R / F1 |", "|---|---|"]
@@ -107,7 +109,11 @@ def markdown(r: dict) -> str:
     L += [
         "## Limits",
         "",
-        "- SciNLP identity is inferred from strings in this report; the real-identity figure waits for the owner's scoped identity sheet (hierarchy-relation endpoints only).",
+        (
+            "- SciNLP real identity comes from the owner's scoped sheet (`data/gold/scinlp_hier_identity_sheet_marked.csv`; hierarchy-relation endpoints only; a blank group means a concept on its own). Its gold pair count differs from the string-based variant because grouped mentions collapse into one concept."
+            if r["real_identity_marks"] == "present"
+            else "- SciNLP identity is inferred from strings in this report; the real-identity figure waits for the owner's scoped identity sheet (hierarchy-relation endpoints only)."
+        ),
         "- The explorer scorecard does not yet show these variants (not wired in this change).",
         "- P&D pilot has runs for fewer levels than held-out; only existing runs are reported. Small n: no confidence interval is attempted.",
     ]

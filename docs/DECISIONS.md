@@ -524,3 +524,9 @@ Format: date · decision · reason · alternatives considered.
 - **Reason:** handoff §9 / CR-029: only reviewed decisions enter the lexicon; new entries affect new runs only.
 - **Why a new file:** `configs/term_lexicon.yaml` (v0.3) is hash-pinned by the CR-011 handoff (`reports/cr011_sleep/CR012_EVAL_HANDOFF.json`) and used by frozen evaluation and replay code (CR-012 oracle runs, CR-014, CR-016, sleep, eRST audit), so it stays unchanged; a test checks its hash.
 - **Alternatives:** edit v0.3 in place (breaks the frozen handoff); enter row 10 on the latest mark (overrides the documented conflict rule without an owner ruling).
+
+## 2026-10-23 · CR-042: SciNLP Hierarchy F1 with real concept identity (owner's scoped sheet)
+- **Decision:** `uv run python -m cumap.cr032.run` ($0) re-run with the owner's marked sheet `data/gold/scinlp_hier_identity_sheet_marked.csv` (90 hierarchy-endpoint mentions; 57 grouped into 19 concepts, the rest on their own). `reports/cr032/hier_t1.{json,md}` now carry `HIER-T1` with real identity beside the string-based `HIER-T1-SURF-R1`. SciNLP test, frozen run: real identity FROZEN 0.043 / **IDX-P1 0.110** (tp 4, fp 33, fn 32); string-based 0.036 / 0.143. CR-021 rebuild: real identity IDX-P1 0.027, IDXR1-P1 0.053. The report generator now shows the real-identity column; the gate passed and all source files were hash-identical before and after; P&D figures unchanged.
+- **Reading:** with real identity there are 36 gold ancestor pairs instead of 46 (grouped mentions collapse into one concept). The string-based variant was optimistic (6 vs 4 true positives under IDX-P1). All figures rest on 1 to 6 true positives: direction only.
+- **Reason:** handoff §15; the owner's scoped identity sheet replaces string-inferred identity for SciNLP hierarchy.
+- **Alternatives:** keep only the string-based variant (identity inferred from strings); full 765-mention annotation (declined by the owner).

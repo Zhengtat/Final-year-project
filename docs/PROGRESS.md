@@ -190,3 +190,7 @@ T1-T14 of `docs/OVERNIGHT_HANDOFF.md` section 0.3 executed: 14 branches merged i
 ## CR-041 term lexicon v0.4 from the owner's marks (2026-10-23)
 `uv run cumap lexicon apply-marks --sheet data/gold/lexicon_intake_slice3_c2.csv --version 0.4` ($0) wrote `configs/term_lexicon_v0.4.yaml`: 23 same + 11 different entries added (132 in all), validated by the normal loader (no `different` pair inside a `same` set). `configs/concept_policy.yaml` `term_lexicon` selects it for new production runs; v0.3 is unchanged (hash still equals the CR-011 handoff). Left out: row 10 (cross-sheet conflict with CR-007 row 8) and row 11 (`neither`). 6 new tests (`tests/test_cr041.py`); 1,011 tests pass, ruff clean. No model call; `slice3_c2` not rebuilt.
 - **Awaiting owner:** a ruling on row 10 "data link protocol / link-level protocol" (enter as `same`, or keep it out).
+
+## CR-042 SciNLP Hierarchy F1 with real identity (2026-10-23)
+Owner's scoped sheet in `data/gold/scinlp_hier_identity_sheet_marked.csv` (90 rows, 19 groups) used by `cumap.cr032.run` ($0): SciNLP test, frozen run, `HIER-T1` real identity FROZEN 0.043 / IDX-P1 0.110 (string-based 0.036 / 0.143); rebuild IDXR1-P1 0.053. Gate passed, sources hash-identical, P&D unchanged. Report generator shows the real-identity column (`reports/cr032/hier_t1.md`). 2 new tests (`tests/test_cr042.py`). No model call.
+- **Open:** explorer scorecard and presentation metric definition still not updated (CR-032 open item).
