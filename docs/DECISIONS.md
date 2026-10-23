@@ -431,3 +431,9 @@ Format: date · decision · reason · alternatives considered.
 - **Decision:** close CR-023 without the planned ~$4.3 comparison run.
 - **Reason:** CR-025 already compared o4-mini (lowest scores, truncated at production caps).
 - **Alternatives:** run the comparison anyway.
+
+## 2026-10-23 · CR-027: backfill off for new production runs (switch, not deletion)
+- **Decision:** `configs/concept_policy.yaml` gets `backfill: false`; `cr009_run.stage_concepts` reads it (`_backfill_enabled`) and passes it to `ConceptRun.run(backfill=...)`; the run records `backfill` in `v4_concepts.json` `extra`. A policy file without the key keeps backfill on. Code, `prompts/concept_backfill/v1.md` and `experiments.py` (frozen CR-009 / CR-010 arms) are unchanged.
+- **Reason:** owner decision 2026-10-22 (handoff §6): backfill costs $0.089 of $10.29 and adds 234 mentions on 145 nodes, barely reaches pair selection, and relabels creation mentions as `llm` in the checkpoint conversion; D-1 approves the switch.
+- **Alternatives:** delete the code (breaks replay of stored backfill records, explorer funnel, CR-013 traces); fix the checkpoint conversion and keep backfill; a $0 pair-selection replay first.
+- **Not done:** `slice3_c2` is not rebuilt; the effect of removal is not measured.
