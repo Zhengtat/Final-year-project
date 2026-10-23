@@ -137,6 +137,7 @@ Do these in order. Tasks marked "after" need the earlier one merged first.
 | T9 | cr-035-identity-resolver-a | see git log / cr-035-complete | 937 | $0 | merged; switch default legacy |
 | T10 | cr-036-save-graph | see git log / cr-036-complete | 952 | $0 | merged; switch default legacy; replay byte-identical |
 | T11 | cr-037-identity-judge-draft | see git log / cr-037-complete | 974 | $0 | merged as DRAFT, off by default; prompts/identity_judge/v1.md awaits owner review; measurement not run |
+| T12 | cr-038-qualifiers-draft | see git log / cr-038-complete | 988 | $0 | merged as DRAFT, off by default; registry v1.5 and prompts v6 await owner review |
 
 
 ### 0.7 Where the data is (all read-only for these tasks)

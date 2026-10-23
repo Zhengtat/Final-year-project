@@ -171,3 +171,7 @@ Docs only: ARCHITECTURE dual-layer section marked historical; CLAUDE.md rules 28
 ## CR-037 U5 identity judge (DRAFT) (2026-10-23)
 `prompts/identity_judge/v1.md`, `expert_kg/identity_judge.py`, wiring behind `identity_resolver: u1` + `identity_judge: "v1"` (both off). 22 new tests (`tests/test_cr037.py`) use mock fixtures only (`tests/fixtures/llm/identity_judge/`); the prompt has never been run against a model. 974 tests pass (see the execution log).
 **Awaiting owner review (drafts, not run):** `prompts/identity_judge/v1.md` (and its schema in `identity_judge.py`). The §7 step 8 measurement (about $3) must not start before this review and the choice of held-out data (see CR-035 in DECISIONS).
+
+## CR-038 qualifier amendments, part B (DRAFT) (2026-10-23)
+Registry `configs/relations_v1.5.yaml` (generated from v1.3 by `CR-038-relations-v1.5.yaml`), prompts `relation_choice/v6.md` and `relation_qualifiers/v6.md`, `relations_v6.py`, switch `qualifier_amendments: "off"`. 14 new tests (`tests/test_cr038.py`, mock fixtures only). Nothing was run against a model.
+**Awaiting owner review (drafts, not run):** `configs/relations_v1.5.yaml` and its patch, `prompts/relation_choice/v6.md`, `prompts/relation_qualifiers/v6.md`. The §10 measurement must not start before this review.
