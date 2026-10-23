@@ -125,7 +125,7 @@ def test_production_lexicon_path_reads_the_policy():
     )
 
 
-def test_repo_state_v03_frozen_and_v04_is_production():
+def test_repo_state_v03_frozen_and_v04_kept():
     v03 = REPO_ROOT / "configs/term_lexicon.yaml"
     handoff = json.loads((REPO_ROOT / "reports/cr011_sleep/CR012_EVAL_HANDOFF.json").read_text())
     pinned = handoff["configs"]["term_lexicon"]["sha256"]
@@ -133,9 +133,8 @@ def test_repo_state_v03_frozen_and_v04_is_production():
         hashlib.sha256(v03.read_bytes()).hexdigest() == pinned
     )  # v0.3 is never edited (CR-011 handoff)
     assert Lexicon.load(v03).version == "0.3"
-    prod = production_lexicon_path()
-    assert prod.name == "term_lexicon_v0.4.yaml"
-    lex = Lexicon.load(prod)
+    assert production_lexicon_path().name == "term_lexicon_v0.5.yaml"  # CR-044 moved production on
+    lex = Lexicon.load(REPO_ROOT / "configs/term_lexicon_v0.4.yaml")
     assert lex.version == "0.4"
     assert lex.same_set("recvQ") == lex.same_set("receive queue") is not None
     assert lex.is_different("datagram", "message")
