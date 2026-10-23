@@ -94,7 +94,11 @@ def filled_options(
 
 # ------------------------------------------------------------------ schemas
 def build_relation_choice_v3(
-    registry: RelationRegistry, family: str, same_concept: bool = False
+    registry: RelationRegistry,
+    family: str,
+    same_concept: bool = False,
+    *,
+    dimension_field: str = "comparison_dimension",  # CR-038: the v6 schema calls it `dimension_quote`
 ) -> type[BaseModel]:
     extra = (SAME_CONCEPT,) if same_concept and family == "comparison" else ()
     names = (
@@ -118,7 +122,7 @@ def build_relation_choice_v3(
         direction=(Literal["forward", "reversed"], ...),
         evidence_quote=(str, ...),
         statement=(str, ...),
-        comparison_dimension=(str | None, ...),
+        **{dimension_field: (str | None, ...)},
         other_description=(str | None, ...),
         other_suggested_label=(str | None, ...),
     )
@@ -229,6 +233,7 @@ def classify_pair_v3(
     same_concept: bool = False,  # CR-008: offer the `same_concept` outcome (relation_choice v4)
     model_tier: str = "strong",
     containment_grounding: bool = False,
+    amendments: str = "off",  # CR-038 DRAFT: "off" | "v6" (per-relation qualifier schema, dimension quote, prompts v6); never run
     direction_by_types: bool = False,  # CR-036: assembly v2 sets the type-valid orientation instead of rejecting a domain/range error
     qualifier_checks: str = "off",  # CR-034: "off" (today's behaviour) | "v1" (qualifier_checks.py)
     fixtures: tuple[str, str, str] = ("default", "default", "default"),
@@ -264,7 +269,13 @@ def classify_pair_v3(
         res.other_description = fam.output.reason
         return res
 
-    schema = build_relation_choice_v3(registry, res.family, same_concept)
+    v6 = amendments == "v6"
+    if v6:
+        from cumap.expert_kg import relations_v6 as R6
+
+        schema = R6.build_relation_choice_v6(registry, res.family, same_concept)
+    else:
+        schema = build_relation_choice_v3(registry, res.family, same_concept)
     try:
         rel = client.parse(
             task="relation_choice",
@@ -291,7 +302,8 @@ def classify_pair_v3(
     res.prompt_hashes["choice"] = rel.input_hash
     o = rel.output
     res.relation, res.direction, res.statement = o.relation, o.direction, o.statement
-    res.evidence_quote, res.comparison_dimension = o.evidence_quote, o.comparison_dimension
+    res.evidence_quote = o.evidence_quote
+    res.comparison_dimension = o.dimension_quote if v6 else o.comparison_dimension
     if o.relation == NO_RELATION:
         res.outcome, res.reason = "no_relation", "relation_no_relation"
         return res
@@ -309,7 +321,13 @@ def classify_pair_v3(
         )
         return res
 
-    if o.relation in DIMENSION_RELATIONS and not dimension_grounded(
+    if v6:  # CR-038: a verbatim quote from the sentence (rule 3), not the paraphrase lemma match
+        if o.relation in R6.DIMENSION_RELATIONS_V6 and not (
+            o.dimension_quote and verify_quote(o.dimension_quote, pair.sentence)
+        ):
+            res.outcome, res.reason = "no_relation", "dimension_quote_not_in_sentence"
+            return res
+    elif o.relation in DIMENSION_RELATIONS and not dimension_grounded(
         o.comparison_dimension, pair.sentence
     ):
         res.outcome, res.reason = "no_relation", "comparison_no_grounded_dimension"
@@ -366,19 +384,36 @@ def classify_pair_v3(
                     relation=o.relation,
                     statement=o.statement,
                     sentence=pair.sentence,
+                    **(
+                        {
+                            "evidence_quote": o.evidence_quote,
+                            "qualifier_fields": R6.qualifier_fields_block(registry, o.relation),
+                        }
+                        if v6
+                        else {}
+                    ),
                 ),
             }
         ],
-        schema=build_qualifiers_v3(registry, intuition=qualifier_prompt.version == "v3"),
+        schema=(
+            R6.build_qualifiers_v6(registry, o.relation)
+            if v6
+            else build_qualifiers_v3(registry, intuition=qualifier_prompt.version == "v3")
+        ),
         model_tier=model_tier,
         fixture_name=fixtures[2],
     )
     res.prompt_hashes["qualifiers"] = q.input_hash
     res.qualifiers = q.output.model_dump()
-    if not verify_quote(q.output.surface_phrase, pair.sentence):
+    if v6:  # CR-038: the linking words only, an exact substring of the evidence quote and shorter than it
+        errs = R6.surface_phrase_errors(q.output.surface_phrase, o.evidence_quote)
+        if errs:
+            res.reason = errs[0]
+            return res
+    elif not verify_quote(q.output.surface_phrase, pair.sentence):
         res.reason = "surface_phrase_not_in_sentence"
         return res
-    if o.relation == "acts_on" and not q.output.action_type:
+    if o.relation == "acts_on" and not getattr(q.output, "action_type", None):
         res.reason = "acts_on_without_action_type"
         return res
     if qualifier_checks == "v1":

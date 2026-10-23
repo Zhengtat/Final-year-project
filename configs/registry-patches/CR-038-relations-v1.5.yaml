@@ -1,0 +1,24 @@
+# Registry patch from CR-038 (2026-10-23, DRAFT, not adopted): the qualifier definitions amended for the per-relation qualifier schema (handoff section 10).
+# BUILT FROM relations_v1.3.yaml (the production registry), NOT from relations_v1.4.yaml (CR-024, not adopted); v1.5 therefore has none of the six
+# SciNLP-driven relations. Changes: modality loses `never` (a denial is recorded by polarity only); the `dimension` qualifier is removed (the comparison
+# dimension comes only from the relation choice step, as a verbatim dimension quote); notes state the rules the new code checks enforce; the wording
+# of `contrasts_with` no longer points at a dimension qualifier. No relation is added or removed.
+patch_for_registry_version: 1
+patch_for_registry_minor: 3
+new_version: "1.5"
+header_note: "DRAFT (CR-038): built from relations_v1.3.yaml (production), NOT from relations_v1.4.yaml (not adopted). Awaits owner review; not the default registry."
+qualifier_applies_to_updates:
+  polarity:
+    note: negated only when the evidence quote itself holds a negation cue (not, no, never, without, cannot, neither, nor, independent of); a denial is recorded here and nowhere else
+  modality:
+    values: [necessary, always, typically, possible]
+    note: how strongly the sentence asserts the relation; a denial is polarity, never modality
+  surface_phrase:
+    note: only the linking words, an exact substring of the evidence quote and shorter than it (not the whole quote)
+drop_qualifiers: [dimension]
+relation_updates:
+  contrasts_with:
+    definition: Source and target are commonly compared and differ; the relation choice names the dimension they differ along as a verbatim dimension quote taken from the sentence (for example "faster"). Use for confusable pairs.
+    examples:
+    - 'slow start contrasts_with congestion avoidance [dimension quote: "increases exponentially"]'
+    - 'synchronous transmission contrasts_with asynchronous transmission [dimension quote: "shares a clock"]'

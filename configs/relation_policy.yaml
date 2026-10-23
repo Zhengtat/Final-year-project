@@ -10,3 +10,7 @@ qualifier_checks: "off"
 # all their quotes; several relations per pair are kept; registry conflicts are flagged; measurement-sample results never reach the snapshots; the
 # misconception stage reuses an existing result instead of classifying the same proposed edge again. Not adopted: legacy stays the default. Quote the value.
 assembly: "legacy"
+# qualifier_amendments (CR-038, DRAFT): "off" | "v6". `v6` uses the per-relation qualifier schema, a verbatim dimension quote in the relation choice and
+# prompts relation_choice v6 / relation_qualifiers v6 (src/cumap/expert_kg/relations_v6.py); it needs a registry without modality `never` and without the
+# `dimension` qualifier (configs/relations_v1.5.yaml, built from v1.3). Never run; waits for the owner's review of the drafts. Quote the value.
+qualifier_amendments: "off"

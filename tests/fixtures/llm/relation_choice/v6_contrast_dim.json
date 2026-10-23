@@ -1,0 +1,1 @@
+{"direction": "forward", "dimension_quote": "lower cost", "other_description": null, "other_suggested_label": null, "relation": "contrasts_with", "evidence_quote": "A shielded wire has a lower cost than fiber", "statement": "A shielded wire differs from fiber in cost.", "_usage": {"input_tokens": 100, "output_tokens": 30}}
