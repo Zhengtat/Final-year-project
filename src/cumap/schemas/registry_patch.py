@@ -27,8 +27,11 @@ def apply_patch(base: dict, patch: dict) -> dict:
         )
     out = yaml.safe_load(yaml.safe_dump(base, sort_keys=False))  # deep copy
     adds = patch.get("adds", {})
-    new_minor = int(str(patch["new_version"]).split(".")[1])
+    parts = str(patch["new_version"]).split(".")
+    new_minor = int(parts[1])
     out["minor"] = new_minor
+    if len(parts) == 3:  # CR-046: a wording-only patch version (v1.4.1)
+        out["patch"] = int(parts[2])
     out["node_types"] = list(dict.fromkeys([*out["node_types"], *adds.get("node_types", [])]))
 
     for name, q in adds.get("qualifiers", {}).items():
@@ -49,8 +52,10 @@ def apply_patch(base: dict, patch: dict) -> dict:
         target = next((r for r in out["relations"] if r["name"] == rel_name), None)
         if target is None:
             raise ValueError(f"relation_updates names unknown relation {rel_name!r}")
-        if set(upd) - {"definition", "template", "examples"}:
-            raise ValueError(f"relation_updates may change definition, template and examples only, got {sorted(upd)}")
+        if set(upd) - {"definition", "template", "examples", "near_misses"}:  # CR-046: near-miss wording too
+            raise ValueError(
+                f"relation_updates may change definition, template, examples and near_misses only, got {sorted(upd)}"
+            )
         target.update(upd)
 
     if adds.get("output_fields"):
