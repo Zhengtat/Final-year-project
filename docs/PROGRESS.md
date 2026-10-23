@@ -139,3 +139,8 @@ Docstring and config-comment corrections for handoff §4 findings 1, 2, 4 (no be
 
 ## CR-027 remove backfill from new production runs (2026-10-23)
 Switch `backfill: false` in `configs/concept_policy.yaml`, read by `cr009_run.stage_concepts` (P&D, CR-012 unit runner, SciNLP); recorded in `v4_concepts.json` extra. 3 new tests (`tests/test_cr027.py`): off makes no `concept_backfill` call, on makes one, policy default and prompt kept. 879 tests pass, ruff clean. `slice3_c2` not rebuilt; no model call.
+
+## CR-029 review intake: `same_concept` queue + lexicon intake sheet (2026-10-23)
+`cumap lexicon intake --run slice3_c2` wrote `data/interim/suggestions/lexicon_intake_slice3_c2.csv` (36 rows, blind) and `..._key.json` (seed 29). Candidates by group: weak cue 1, U5 same merged 16, U5 same held 11 (10 review band + the datagram / message queue pair), not_a_concept 0, narrower/broader/new 336 (sampled 5), deterministic audit 3 (sampled up to 10); skipped: lexicon covered 9, same name 5. 7 new tests (`tests/test_cr029_intake.py`), 886 tests pass, ruff clean. No model call.
+- **Awaiting owner:** mark `data/interim/suggestions/lexicon_intake_slice3_c2.csv` (same / different / neither), copy to `data/gold/lexicon_intake_slice3_c2.csv`; then convert with `lexicon_intake.marked_rows` + `propose_from_marks`, and add a lexicon v0.4 (not yet built, no marks).
+- **Open:** record the lexicon version/hash in run metadata; `cumap.cli` was left unformatted (whole-file reformat would be a 375-line diff).
