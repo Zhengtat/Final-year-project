@@ -12,3 +12,9 @@ promote_rejected_links: false
 # stay, older runs keep their stored backfill records, experiments.py (frozen CR-009 / CR-010 arms) is untouched. The run records
 # `backfill` in v4_concepts.json extra.
 backfill: false
+# identity_resolver (CR-035): legacy | u1. `u1` = the deterministic identity resolver (src/cumap/expert_kg/identity.py, configs/identity_rules.yaml):
+# U0-U4 for generator links (input A, adds the lexicon `different` veto and textbook alias statements), the name + gloss all-forms registry search
+# for new concepts (input B), U-ids with `legacy_rule_id` in the merge log, generator-stage entries keeping their own rule id, weak alias cues as
+# review rows. A pair the rules cannot decide falls back to today's LLM path. NOT adopted: `legacy` stays the default. A run made with `u1`
+# records it in v4_concepts.json extra.
+identity_resolver: legacy

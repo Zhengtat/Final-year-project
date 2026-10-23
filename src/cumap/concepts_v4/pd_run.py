@@ -88,8 +88,11 @@ def canonicalise(
     overrides: CanonicalOverrides | None,
     *,
     progress=print,
+    identity_resolver: str = "legacy",
 ) -> CanonResult:
-    """R0-R4 over the v4 nodes in book order. A node whose first mention merges into an existing concept maps to it."""
+    """R0-R4 over the v4 nodes in book order. A node whose first mention merges into an existing concept maps to it.
+    CR-035 `identity_resolver="u1"`: the registry search embeds every form with the name + gloss recipe, merge-log entries carry U-ids (the old id in
+    `legacy_rule_id`), weak alias cues become review rows and generator-stage entries keep their own rule id. "legacy" is byte-identical to before."""
     orig = {u["section_id"]: u["orig_section"] for u in units}
     chapter_of = {u["orig_section"]: int(u["chapter_num"]) for u in units}
     texts: dict[str, str] = {}
@@ -125,6 +128,7 @@ def canonicalise(
             type_aware=True,
             review_below=0.70,
             alias_ctx=ctx,
+            identity_resolver=identity_resolver,
         )
         node_map[n.id] = o.concept_id
         concept = reg.get(o.concept_id)
@@ -147,6 +151,11 @@ def canonicalise(
                     "rule_id": o.rule_id,
                     "evidence_quote": o.evidence_quote,
                     "stage": "canonicalize_v4",
+                    **(
+                        {"legacy_rule_id": o.legacy_rule_id, "matched_form": o.matched_form}
+                        if identity_resolver == "u1"
+                        else {}
+                    ),
                 }
             )
         elif o.decision == "review":
@@ -180,6 +189,26 @@ def canonicalise(
             related.append(
                 {"concept_id": o.concept_id, "related_concept_id": rid, "section_id": sid}
             )
+        for rid in (
+            o.weak_cue_ids
+        ):  # CR-035 U4-weak: a weak alias cue never merges; it waits for the owner
+            cand = reg.get(rid)
+            review.append(
+                {
+                    "concept_id": o.concept_id,
+                    "candidate_id": cand.concept_id,
+                    "candidate_name": cand.canonical_name,
+                    "candidate_type": cand.node_type,
+                    "candidate_definition": cand.definition,
+                    "alias": n.name,
+                    "mention_type": n.node_type,
+                    "quote": first["evidence"],
+                    "section_id": sid,
+                    "similarity": None,
+                    "llm_reason": None,
+                    "rule_id": "U4-weak",
+                }
+            )
     # every later mention (generator links and backfill) goes onto the mapped concept
     for n in out.store.nodes.values():
         concept = reg.get(node_map[n.id])
@@ -198,21 +227,28 @@ def canonicalise(
             )
     for g in out.merges:  # generator links: logged with their evidence
         if g["node_id"] in node_map:
-            merges.append(
-                {
-                    "concept_id": node_map[g["node_id"]],
-                    "alias": g["surface"],
-                    "section_id": orig.get(g["section_id"], g["section_id"]),
-                    "llm_called": False,
-                    "auto_merged": False,
-                    "overridden": False,
-                    "reason": None,
-                    "similarity": None,
-                    "rule_id": "G-link",
-                    "evidence_quote": g["evidence"],
-                    "stage": "generator",
+            entry = {
+                "concept_id": node_map[g["node_id"]],
+                "alias": g["surface"],
+                "section_id": orig.get(g["section_id"], g["section_id"]),
+                "llm_called": False,
+                "auto_merged": False,
+                "overridden": False,
+                "reason": None,
+                "similarity": None,
+                "rule_id": "G-link",
+                "evidence_quote": g["evidence"],
+                "stage": "generator",
+            }
+            if (
+                identity_resolver == "u1"
+            ):  # CR-035: keep each entry's own rule id (legacy relabelled all as G-link)
+                entry |= {
+                    "rule_id": g["rule_id"],
+                    "legacy_rule_id": "G-link",
+                    **{k: g[k] for k in ("decision", "identity_rule") if k in g},
                 }
-            )
+            merges.append(entry)
     progress(
         f"canonicalised {len(out.store.nodes)} v4 nodes -> {len(reg)} concepts ({client.backend_call_count - calls0} LLM calls)"
     )

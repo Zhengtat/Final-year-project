@@ -134,6 +134,7 @@ Do these in order. Tasks marked "after" need the earlier one merged first.
 | T6 | cr-032-hierarchy-t1 | see git log / cr-032-complete | 901 | $0 | merged; real-identity SciNLP figure awaits owner marks on scinlp_hier_identity_sheet.csv |
 | T7 | cr-033-fact-f1 | see git log / cr-033-complete | 906 | $0 | merged; pre-registration commit 6c1d7a1 precedes the test run |
 | T8 | cr-034-qualifier-checks | see git log / cr-034-complete | 924 | $0 | merged; switch default off |
+| T9 | cr-035-identity-resolver-a | see git log / cr-035-complete | 937 | $0 | merged; switch default legacy |
 
 
 ### 0.7 Where the data is (all read-only for these tasks)

@@ -82,6 +82,11 @@ class CanonicalizationOutcome:
     # CR-008 §3: the deterministic rule that merged it (R0/R1/R2/R3-strong) and its evidence
     rule_id: str | None = None
     evidence_quote: str | None = None
+    # CR-035 (`identity_resolver: u1` only): the pre-CR-035 id of a deterministic rule, the registry form that matched in the search, and the
+    # registry concepts a weak alias cue ("sometimes called") linked the mention to (review only, never a merge)
+    legacy_rule_id: str | None = None
+    matched_form: str | None = None
+    weak_cue_ids: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -178,6 +183,42 @@ class ConceptRegistry:
         scored.sort(key=lambda x: -x[1])
         return scored[:k]
 
+    # ------------------------------------------------------------ CR-035 search (`identity_resolver: u1`)
+    @staticmethod
+    def gloss_text(form: str, quote: str | None, words: int = 25) -> str:
+        """The u1 recipe on both sides of the comparison: "form. gloss", the gloss being the first `words` words of the node's own quote."""
+        gloss = " ".join((quote or "").replace('"', "'").split()[:words])
+        return f"{form}. {gloss}" if gloss else form
+
+    def _form_vectors(self, concept: RegisteredConcept, words: int) -> list[tuple[str, np.ndarray]]:
+        quote = concept.mentions[0].quote if concept.mentions else concept.definition
+        cache = concept.__dict__.setdefault("_form_vecs", {})
+        out = []
+        for form in (concept.canonical_name, *concept.aliases):
+            text = self.gloss_text(form, quote, words)
+            if text not in cache:  # a merge adds an alias (a new text): the new form is embedded, stale texts are never reused
+                cache[text] = self._embed_fn(text)
+            out.append((form, cache[text]))
+        return out
+
+    def top_k_similar_forms(
+        self, name: str, quote: str | None, k: int = 5, words: int = 25
+    ) -> list[tuple[RegisteredConcept, float, str]]:
+        """(concept, best cosine over its forms, the form that scored best), best first. Same text recipe for the query and every form."""
+        if not self._concepts:
+            return []
+        query = self._embed_fn(self.gloss_text(name, quote, words))
+        scored = []
+        for concept in self._concepts.values():
+            best_sim, best_form = -2.0, concept.canonical_name
+            for form, vec in self._form_vectors(concept, words):
+                sim = float(np.dot(query, vec) / (np.linalg.norm(query) * np.linalg.norm(vec) + 1e-9))
+                if sim > best_sim:
+                    best_sim, best_form = sim, form
+            scored.append((concept, best_sim, best_form))
+        scored.sort(key=lambda x: -x[1])
+        return scored[:k]
+
     def add_new(self, mention: ConceptMentionCandidate) -> RegisteredConcept:
         concept_id = "c_" + slugify(mention.canonical_name)
         base_id, i = concept_id, 2
@@ -236,8 +277,11 @@ def canonicalize_mention(
     type_aware: bool = False,
     review_below: float | None = None,
     alias_ctx: AliasContext | None = None,
+    identity_resolver: str = "legacy",
 ) -> CanonicalizationOutcome:
-    """CR-007 §4.3 (off by default; the CR-007 pipeline turns both on): with `type_aware`, a
+    """CR-035: `identity_resolver="u1"` searches the registry with `top_k_similar_forms` (name + gloss, every form), logs the U-ids (the old id in
+    `legacy_rule_id`) and records weak alias cues; "legacy" is the pre-CR-035 behaviour, byte-identical.
+    CR-007 §4.3 (off by default; the CR-007 pipeline turns both on): with `type_aware`, a
     candidate with a different `node_type` is never offered as `same` (it is logged as a `related`
     candidate for the taxonomy layer); with `review_below`, an LLM "same" whose similarity is under
     the band is NOT merged but routed to the review sheet (decision "review", a new concept is
@@ -250,22 +294,49 @@ def canonicalize_mention(
         if split:
             mention = replace(mention, canonical_name=split[0])
             extra_alias = split[1]
+    triples = weak_ids = None
+    if identity_resolver == "u1":
+        triples = registry.top_k_similar_forms(mention.canonical_name, mention.evidence_quote, k=k)
+        weak_ids = (
+            _weak_cue_ids(registry, mention, alias_ctx, type_aware) if alias_ctx is not None else []
+        )
     outcome = _canonicalize(
         client, prompt_template, registry, mention, similarity_threshold, k, fixture_name,
-        overrides, type_aware, review_below, alias_ctx,
+        overrides, type_aware, review_below, alias_ctx, identity_resolver, triples,
     )
+    if triples is not None:
+        outcome.weak_cue_ids = [c for c in (weak_ids or []) if c != outcome.concept_id]
+        forms = {c.concept_id: f for c, _s, f in triples}
+        outcome.matched_form = forms.get(outcome.matched_concept_id or "")
     if extra_alias:
         if outcome.decision == "same" and outcome.rule_id in (None, "exact"):
             outcome.rule_id, outcome.evidence_quote = "R2", original_name
         concept = registry.get(outcome.concept_id)
         if extra_alias != concept.canonical_name and extra_alias not in concept.aliases:
             concept.aliases.append(extra_alias)
+    if identity_resolver == "u1" and outcome.rule_id in _LEGACY_TO_U:
+        outcome.legacy_rule_id, outcome.rule_id = outcome.rule_id, _LEGACY_TO_U[outcome.rule_id]
     return outcome
+
+
+_LEGACY_TO_U = {"R0": "U1", "exact": "U2", "R1": "U2", "R2": "U3", "R3-strong": "U4-strong"}  # = identity.LEGACY_TO_U
+
+
+def _weak_cue_ids(registry, mention, alias_ctx, type_aware) -> list[str]:
+    from cumap.expert_kg.canonical_rules import types_compatible
+
+    out = []
+    for c in registry.all():
+        if type_aware and not types_compatible(mention.node_type, c.node_type):
+            continue
+        if any(alias_ctx.weak_hints(mention.canonical_name, f) for f in (c.canonical_name, *c.aliases)):
+            out.append(c.concept_id)
+    return out
 
 
 def _canonicalize(
     client, prompt_template, registry, mention, similarity_threshold, k, fixture_name,
-    overrides, type_aware, review_below, alias_ctx,
+    overrides, type_aware, review_below, alias_ctx, identity_resolver="legacy", triples=None,
 ) -> CanonicalizationOutcome:
     # Exact-string duplicate: auto-merge, no LLM call (unless a human has specifically
     # blocked this exact pair via never_merge).
@@ -298,7 +369,10 @@ def _canonicalize(
                 rule_id=hit.rule_id, evidence_quote=hit.evidence_quote,
             )
 
-    candidates = registry.top_k_similar(mention.canonical_name, mention.definition, k=k)
+    if triples is not None:  # CR-035 u1: the search was run by the caller (so the matched form can be logged)
+        candidates = [(c, sim) for c, sim, _f in triples]
+    else:
+        candidates = registry.top_k_similar(mention.canonical_name, mention.definition, k=k)
     if alias_ctx is not None:  # lexicon `different` guard: never offer a listed look-alike to the LLM
         chapter = alias_ctx.chapter_of.get(mention.section_id)
         kept = [
