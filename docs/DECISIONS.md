@@ -416,3 +416,18 @@ Format: date · decision · reason · alternatives considered.
 - **Reason:** CR-025 showed luna at about 1/20 of sol's cost for a smaller quality loss than the price gap suggests; sol stays available where a call is flagged.
 - **Alternatives:** keep strong = sol (baseline, about 5x dearer per run); o4-mini (CR-025: dearer and lower, and it truncates at the production caps); editing `default.yaml` (breaks the CR-011 handoff hash).
 - **Caveat:** escalation never fires for calls with `allow_escalation=False`, and the pipeline's main strong-tier stages escalate only on the existing triggers, so some calls that used sol before now stay on luna even if weak.
+
+## 2026-10-23 · owner: execution rules for the overnight sessions
+- **Decision:** execution sessions may merge a CR into `main` with `--no-ff` after `uv run pytest` and `uv run ruff check .` pass; total API budget for these sessions $20; the defaults in docs/OVERNIGHT_HANDOFF.md §0.4 are owner-approved; the session may draft new prompt and registry versions as new files, and no run uses a draft before the owner reviews it.
+- **Reason:** owner is absent overnight; work is queued in the handoff.
+- **Alternatives:** stop for owner sign-off at every merge.
+
+## 2026-10-23 · docs/code mismatches 1, 2, 4 corrected (comments and docstrings only)
+- **Decision:** `pair_selection.py` docstring now says what the code does: anchor pairs go first in book order and the anchor type is never read there; `hint_rejection_reasons` is documentation only; `pruner.tau: 0.1` is the configured value but production runs use tau = 0 (pruner off). No behaviour change.
+- **Reason:** handoff §4 findings 1, 2, 4. The `concept_gvp.yaml` comments were NOT edited: the CR-011 handoff test hashes that file, so even a comment edit breaks it. The facts are recorded here instead: `hint_rejection_reasons` is documentation only (nothing reads it); `anchor_family_map` is read only by the CR-009 STOP 3 report; `pruner.tau: 0.1` is the configured value but production runs use tau = 0. Finding 3 (bank/CSO features always 0) changes behaviour and is left for a CR.
+- **Alternatives:** change the code to match the docs (behaviour change, needs a CR).
+
+## 2026-10-23 · CR-023 closed without the paid comparison run (D-6)
+- **Decision:** close CR-023 without the planned ~$4.3 comparison run.
+- **Reason:** CR-025 already compared o4-mini (lowest scores, truncated at production caps).
+- **Alternatives:** run the comparison anyway.

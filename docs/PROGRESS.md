@@ -133,3 +133,6 @@ luna / o4-mini / sol, both tiers, 6 dev papers: relation F1 (IDXR1-P1) 0.114 / 0
 
 ## CR-026 luna default (2026-10-22)
 Local `.env` now selects `configs/models_luna_default.yaml`: every tier gpt-6-luna, gpt-6-sol only via escalation (verified by live calls and 5 new tests). 876 tests pass, ruff clean. Baseline restorable by unsetting `CUMAP_MODELS_CONFIG` and `OPENAI_MODEL_STRONG=gpt-6-sol`.
+
+## Housekeeping docs sync (2026-10-23)
+Docstring and config-comment corrections for handoff §4 findings 1, 2, 4 (no behaviour change). CR-023 closed without the paid comparison run (D-6; CR-025 superseded it). Baseline on `main`: 876 tests pass.
