@@ -44,6 +44,8 @@ def test_no_pipeline_module_reads_scinlp_text_into_prompts():
             continue  # CR-025 model comparison: launches the existing SciNLP dev runner per model and scores retained runs (dev split only)
         if f.parts[2] == "cr022":
             continue  # CR-022 Part A: rescoring of retained SciNLP runs and a mapping helper (no prompt, no model call)
+        if f.parts[2] == "cr040":
+            continue  # CR-040: renders a registry wording review sheet from config files (no prompt, no model call)
         if f.parts[2] == "cr033":
             continue  # CR-033: fact-F1 scorer / report over retained runs (no prompt, no model call)
         if f.parts[2] == "cr032":

@@ -1,0 +1,162 @@
+# CR-040 (DRAFT, 2026-10-23): PROPOSED wording for the six unreviewed relations of registry v1.4. This file changes nothing: configs/relations_v1.4.yaml is not
+# edited and v1.4 is not adopted. `uv run python -m cumap.cr040.review_sheet` renders docs/cr040/v14_relation_review.md (the current v1.4 text beside this proposal).
+# Adoption is an owner decision. Examples are illustrative; none is a claim about a specific textbook sentence.
+relations:
+  subtask_of:
+    definition: >-
+      Source is a narrower task, problem or function that belongs under the broader task named by target, in a task hierarchy (source is one of the ways
+      or parts of getting the target task done). Both ends are tasks or problems, not methods, components or data.
+    definition_reason: Adds "problem or function" (networking text speaks of functions such as error detection) and rules out methods, components and data so the relation is not used for is_a or part_of.
+    template: '{X} is a subtask of {Y}'
+    template_reason: Unchanged.
+    examples:
+      - named entity recognition subtask_of information extraction
+      - machine translation subtask_of natural language generation
+      - error detection subtask_of reliable delivery
+    examples_reason: Keeps the two SciNLP examples and adds one networking example, so the relation can be judged on the textbook domain. "error detection subtask_of reliable delivery" is illustrative; the owner may prefer another.
+    near_misses:
+      - relation: is_a
+        example: 'BERT is_a masked language model'
+        why: 'a kind of method, not a narrower task'
+      - relation: part_of
+        example: 'slow start part_of[phase] TCP congestion control'
+        why: 'a stage of one process, not a narrower task of a wider task'
+      - relation: has_purpose
+        example: 'a checksum has_purpose error detection'
+        why: 'the purpose of a mechanism, not a task hierarchy between two tasks'
+    near_misses_reason: Adds has_purpose, the relation most likely to be confused with a task link in networking text (a mechanism and the task it serves).
+    other_notes: transitive true is kept (a subtask of a subtask is a subtask).
+  enhanced_by:
+    definition: >-
+      Source is a method, model or system whose performance or capability is improved by an add-on technique named by target. The sentence must present the
+      target as an addition to, or a modification of, the source, not as a basic part or an ordinary means.
+    definition_reason: Today's wording ("improved or extended by a technique added to it") is kept but made testable ("addition or modification", "not a basic part or ordinary means"), because the relation overlaps uses, part_of and requires.
+    template: '{X} is enhanced by {Y}'
+    template_reason: Unchanged.
+    examples:
+      - an encoder-decoder model enhanced_by an attention mechanism
+      - a classifier enhanced_by data augmentation
+      - TCP enhanced_by selective acknowledgments
+    examples_reason: Adds a networking example (selective acknowledgments are an extension added to TCP).
+    near_misses:
+      - relation: uses
+        example: 'TCP uses sliding window'
+        why: 'the target is a basic means, not an add-on that improves it'
+      - relation: increases
+        example: 'a larger window increases throughput'
+        why: 'a quantity change, not an added technique'
+      - relation: part_of
+        example: 'the encoder part_of[component] the encoder-decoder model'
+        why: 'a structural component of the source, not an add-on'
+      - relation: requires
+        example: 'TLS requires a certificate'
+        why: 'a dependency, not an improvement'
+    near_misses_reason: Adds part_of and requires, the two relations an "add-on" is most easily mistaken for.
+    other_notes: Direction is a risk (the SciNLP label is enhancedBy with the method first); the template and the near-misses fix it as method first.
+  similar_to:
+    definition: >-
+      Source and target are alike in a stated or clearly implied respect (a shared property, role or mechanism) but are DIFFERENT concepts. Never a merge or an
+      alias: two names for one thing are same_concept (a node property, CR-008). Use contrasts_with when the sentence stresses a difference.
+    definition_reason: Requires a respect of likeness (otherwise any two co-mentioned concepts qualify) and points to same_concept and contrasts_with, the two neighbouring answers in the comparison family.
+    template: '{X} is similar to {Y}'
+    template_reason: Unchanged.
+    examples:
+      - Adam similar_to RMSprop
+      - bit stuffing similar_to byte stuffing
+    examples_reason: Replaces "UDP similar_to raw IP datagrams" (UDP is a protocol and a raw datagram is a data unit, so the likeness is loose) with a networking pair that is alike as framing techniques.
+    near_misses:
+      - relation: contrasts_with
+        example: 'slow start contrasts_with congestion avoidance'
+        why: 'stresses what differs, not what is alike'
+      - relation: same_concept
+        example: 'a datagram, also called a message'
+        why: 'two names for one thing; no edge, a merge candidate'
+      - relation: is_a
+        example: 'Ethernet is_a link-layer technology'
+        why: 'one is a kind of the other, not two alike things'
+    near_misses_reason: Adds same_concept and is_a (a pair that is "alike" because one is a kind of the other).
+    other_notes: compatible_with contrasts_with is kept as partial (alike in one respect, different in another is legitimate). Risk if adopted - the comparison-family prompts (relation_choice v4 to v7) do not explain similar_to; they would need a new version.
+  measured_by:
+    definition: >-
+      Source (a system, method, protocol, link or other thing that has a measurable quality) is quantified by the metric named by target. The target is a metric
+      or a unit of measurement, not a characteristic.
+    definition_reason: Widens "a method or system" to anything with a measurable quality (networking text measures links and protocols) and requires the target to be a metric or unit.
+    template: '{X} is measured by {Y}'
+    template_reason: Unchanged.
+    examples:
+      - a translation system measured_by BLEU
+      - a congestion control scheme measured_by goodput
+      - a link measured_by bandwidth
+    examples_reason: Adds a link measured by bandwidth, the commonest networking reading.
+    near_misses:
+      - relation: has_property
+        example: 'slow start has_property exponential cwnd growth'
+        why: 'a characteristic, not a metric used to measure it'
+      - relation: evaluated_by
+        example: 'question answering evaluated_by exact match'
+        why: 'the source is a task assessed in benchmark practice'
+      - relation: increases
+        example: 'a larger window increases throughput'
+        why: 'a quantity change, not the measuring of something'
+    near_misses_reason: Adds evaluated_by (see the overlap note) and increases.
+    other_notes: >-
+      OVERLAP with evaluated_by: both relate a thing to a metric, and with domain and range Any only the source's kind separates them. Options for the owner
+      (not decided here): (A) keep both with the wording below; (B) merge into one relation and keep the two SciNLP labels in external_labels; (C) drop
+      evaluated_by. Counts in the SciNLP train and dev gold: MeasuredBy 195, evaluatedBy 48.
+  evaluated_by:
+    definition: >-
+      Source (a task or problem) is assessed with the metric named by target, as in benchmark practice ("the task is evaluated by metric M"). Use measured_by
+      when the source is a system, method or link whose quality the metric quantifies.
+    definition_reason: Makes the split with measured_by explicit (task assessed vs thing quantified), which is the only thing separating them.
+    template: '{X} is evaluated by {Y}'
+    template_reason: Unchanged.
+    examples:
+      - question answering evaluated_by exact match
+      - routing evaluated_by convergence time
+    examples_reason: Unchanged.
+    near_misses:
+      - relation: measured_by
+        example: 'a translation system measured_by BLEU'
+        why: 'here the source is a method or system, not a task'
+      - relation: evaluated_on
+        example: 'sentiment analysis evaluated_on SST-2'
+        why: 'the target is data, not a metric'
+    near_misses_reason: Adds evaluated_on, the other half of benchmark practice that is easily confused with a metric.
+    other_notes: compatible_with measured_by partial is kept. See the overlap note under measured_by.
+  evaluated_on:
+    definition: >-
+      Source (a task or method) is tested on the dataset, benchmark, workload or testbed named by target. The target is data or a test setting, not a metric
+      and not a means the source employs.
+    definition_reason: Adds workload and testbed (the networking forms of a benchmark) and states what the target is not.
+    template: '{X} is evaluated on {Y}'
+    template_reason: Unchanged.
+    examples:
+      - sentiment analysis evaluated_on SST-2
+      - a routing protocol evaluated_on a 100-node testbed
+    examples_reason: Unchanged.
+    near_misses:
+      - relation: uses
+        example: 'TCP uses sliding window'
+        why: 'a means employed, not data it is tested on'
+      - relation: evaluated_by
+        example: 'routing evaluated_by convergence time'
+        why: 'the target is a metric, not data'
+    near_misses_reason: Adds evaluated_by (the metric half).
+    other_notes: >-
+      Registry v1.4 has no Dataset node type, so the range stays Any; "Dataset" or "TestSetting" would be a node-type change (a registry version). Counts in the
+      SciNLP train and dev gold: evaluatedOn 71.
+cross_cutting:
+  - title: Relevance to the textbook domain
+    text: >-
+      None of the six relations exists in the production registry v1.3, and the four evaluation relations come from scientific-paper benchmarks (SciNLP). A
+      networking textbook names metrics and testbeds rarely. If registry v1.4 is adopted for the textbook, the `evaluation` family adds three choices to the
+      family step on every pair; that has a cost in precision which the CR-022 Part B transfer run would measure. Whether the evaluation family belongs in the
+      textbook registry at all is an owner decision.
+  - title: Prompts
+    text: >-
+      The relation prompts (relation_family v3 to v5, relation_choice v4 to v7, relation_qualifiers v4 to v6) were written for v1.3 families. They list families
+      from the registry, but the rules text does not explain the evaluation family or similar_to. Adopting v1.4 needs new prompt versions (rule 8).
+  - title: The comparison family
+    text: >-
+      With similar_to the comparison family offers contrasts_with, similar_to, same_concept, no_relation and other. similar_to and same_concept are easy to
+      confuse (alike vs the same thing); the near-misses above are the only guard until the prompt says more.
