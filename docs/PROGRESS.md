@@ -200,3 +200,6 @@ Baseline (`cr043base`, 6 dev + 14 train, luna, $0.535): strict relation `IDXR1-P
 
 ## CR-044 term lexicon v0.5 (2026-10-24) — complete
 Owner ruling on intake row 10: "data link protocol / link-level protocol" = same; `configs/term_lexicon_v0.5.yaml` (v0.4 + 1 same entry, joins the link-layer / link-level set) is the production lexicon for new runs. Tests: `tests/test_cr044.py`; full suite 1019 passed. Recorded in DECISIONS: the owner's approvals of the CR-038 / CR-039 / CR-040 drafts and the switch recommendations (no switch changed). Open: owner on/off for the switches; held-out set for the identity-judge measurement.
+
+## CR-045 qualifier checks on (2026-10-24) — complete
+`qualifier_checks: v1` for new runs (owner, on the CR-034 replay: 1 rejection, the true wrong negation). Tests: full suite passes. Open: the noisy `surface_phrase_long` flag (128 on slice3_c2).
