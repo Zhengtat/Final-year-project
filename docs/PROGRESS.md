@@ -144,3 +144,6 @@ Switch `backfill: false` in `configs/concept_policy.yaml`, read by `cr009_run.st
 `cumap lexicon intake --run slice3_c2` wrote `data/interim/suggestions/lexicon_intake_slice3_c2.csv` (36 rows, blind) and `..._key.json` (seed 29). Candidates by group: weak cue 1, U5 same merged 16, U5 same held 11 (10 review band + the datagram / message queue pair), not_a_concept 0, narrower/broader/new 336 (sampled 5), deterministic audit 3 (sampled up to 10); skipped: lexicon covered 9, same name 5. 7 new tests (`tests/test_cr029_intake.py`), 886 tests pass, ruff clean. No model call.
 - **Awaiting owner:** mark `data/interim/suggestions/lexicon_intake_slice3_c2.csv` (same / different / neither), copy to `data/gold/lexicon_intake_slice3_c2.csv`; then convert with `lexicon_intake.marked_rows` + `propose_from_marks`, and add a lexicon v0.4 (not yet built, no marks).
 - **Open:** record the lexicon version/hash in run metadata; `cumap.cli` was left unformatted (whole-file reformat would be a 375-line diff).
+
+## CR-030 retire eRST in the docs (2026-10-23)
+Docs only: ARCHITECTURE dual-layer section marked historical; CLAUDE.md rules 28 and 29 marked historical; DECISIONS entry. No code or data touched. Presentation box removal is left to the owner.

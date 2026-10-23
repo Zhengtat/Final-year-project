@@ -316,7 +316,9 @@ The CR-007 type check applies to R1-R3. The lexicon `different` list is a guard 
 
 
 
-## Relation layers after CR-010: dual layer (Research decision 2026-10-08)
+## Relation layers after CR-010: dual layer (Research decision 2026-10-08) — HISTORICAL since CR-030 (2026-10-23)
+
+> **Historical.** The owner removed eRST from the graph design on 2026-10-22 (CR-030). The current layer list is the domain-semantic Expert-KG layer only; no new run uses the discourse layer. `src/cumap/erst/` and `data/processed/cr010/` are kept only so the frozen CR-010 results still reproduce. If cross-sentence pairs are wanted later, use a +-2-sentence window with a cue filter, not eRST. The text below describes CR-010 as it was.
 
 Two layers, never merged. (1) The **domain-semantic Expert-KG layer** (concept to concept, registry v1.3) is the architecture of
 record and is unchanged by CR-010. (2) An **eRST-compatible discourse layer** (`erst/graph.py`; sentence units, 31 eRST discourse
