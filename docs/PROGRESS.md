@@ -215,3 +215,6 @@ Cue arm on the 89 `slice3_c2` cue sentences (664 pairs) and P&D dev pairs ($0.33
 
 ## CR-049 identity judge v2 (GraphJudge elements) (2026-10-24) — complete (not adopted)
 J2 (context packs, claim verification) on the CR-021 held-out split (second look, 65 rows, luna, $0.094): same precision 0.714 (LB 0.454), 8/20 gold same rows split: fails. J1 (v1) best: accuracy 0.908, same 0.857. Finding: the production adjudicator on luna gives same precision 0.739 (LB 0.535) vs 0.952 on sol at adoption, so its aliasing rule fails on luna (owner decision: sol for identity, promotion only, or measure J1). Report `reports/cr049/identity_judge.md`.
+
+## CR-050 identity judge v1 on a fresh owner sheet (2026-10-24) — complete (not adopted)
+103 owner-marked rows (luna, $0.033): J1 accuracy 0.854 vs adjudicator 0.806, same precision 0.739 (LB 0.535) vs 0.667 (LB 0.467): J1 better but below the pre-registered LB 0.70, so the adjudicator stays. Open for the owner: sol for identity, promotion-only on luna, or adopt J1 by a rule change. Report `reports/cr050/judge_v1.md`.
