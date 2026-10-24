@@ -1,0 +1,311 @@
+{
+ "dev": {
+  "ADJ": {
+   "n": 69,
+   "confusion": {
+    "new_concept->new_concept": 37,
+    "new_concept->same_as_target": 5,
+    "not_a_concept->new_concept": 1,
+    "not_a_concept->not_a_concept": 1,
+    "not_a_concept->same_as_target": 1,
+    "same_as_target->new_concept": 4,
+    "same_as_target->same_as_target": 20
+   },
+   "precision_new_concept": {
+    "correct": 37,
+    "decided": 42,
+    "precision": 0.8809523809523809,
+    "wilson_lb": 0.7499931819289246
+   },
+   "precision_same_as_target": {
+    "correct": 20,
+    "decided": 26,
+    "precision": 0.7692307692307693,
+    "wilson_lb": 0.5794807424804321
+   },
+   "precision_not_a_concept": {
+    "correct": 1,
+    "decided": 1,
+    "precision": 1.0,
+    "wilson_lb": 0.20654329147389294
+   },
+   "same_rows_decided_new": {
+    "count": 4,
+    "of": 24,
+    "rate": 0.16666666666666666
+   },
+   "accuracy": 0.8405797101449275,
+   "adopt_promotion": true,
+   "adopt_aliasing": false
+  },
+  "J1": {
+   "n": 69,
+   "confusion": {
+    "new_concept->new_concept": 38,
+    "new_concept->same_as_target": 4,
+    "not_a_concept->new_concept": 2,
+    "not_a_concept->not_a_concept": 1,
+    "same_as_target->new_concept": 4,
+    "same_as_target->same_as_target": 20
+   },
+   "precision_new_concept": {
+    "correct": 38,
+    "decided": 44,
+    "precision": 0.8636363636363636,
+    "wilson_lb": 0.7329026247825904
+   },
+   "precision_same_as_target": {
+    "correct": 20,
+    "decided": 24,
+    "precision": 0.8333333333333334,
+    "wilson_lb": 0.6414652961213058
+   },
+   "precision_not_a_concept": {
+    "correct": 1,
+    "decided": 1,
+    "precision": 1.0,
+    "wilson_lb": 0.20654329147389294
+   },
+   "same_rows_decided_new": {
+    "count": 4,
+    "of": 24,
+    "rate": 0.16666666666666666
+   },
+   "accuracy": 0.855072463768116,
+   "adopt_promotion": true,
+   "adopt_aliasing": false,
+   "judge_answers": {
+    "narrower": 15,
+    "same": 24,
+    "new": 17,
+    "broader": 12,
+    "not_a_concept": 1
+   }
+  },
+  "J2": {
+   "n": 69,
+   "confusion": {
+    "new_concept->new_concept": 41,
+    "new_concept->same_as_target": 1,
+    "not_a_concept->new_concept": 2,
+    "not_a_concept->not_a_concept": 1,
+    "same_as_target->new_concept": 12,
+    "same_as_target->same_as_target": 12
+   },
+   "precision_new_concept": {
+    "correct": 41,
+    "decided": 55,
+    "precision": 0.7454545454545455,
+    "wilson_lb": 0.6169787660766216
+   },
+   "precision_same_as_target": {
+    "correct": 12,
+    "decided": 13,
+    "precision": 0.9230769230769231,
+    "wilson_lb": 0.6668546607175265
+   },
+   "precision_not_a_concept": {
+    "correct": 1,
+    "decided": 1,
+    "precision": 1.0,
+    "wilson_lb": 0.20654329147389294
+   },
+   "same_rows_decided_new": {
+    "count": 12,
+    "of": 24,
+    "rate": 0.5
+   },
+   "accuracy": 0.782608695652174,
+   "adopt_promotion": false,
+   "adopt_aliasing": false,
+   "judge_answers": {
+    "narrower": 18,
+    "new": 21,
+    "same": 13,
+    "broader": 16,
+    "not_a_concept": 1
+   }
+  }
+ },
+ "heldout": {
+  "ADJ": {
+   "n": 65,
+   "confusion": {
+    "new_concept->new_concept": 37,
+    "new_concept->not_a_concept": 1,
+    "new_concept->same_as_target": 5,
+    "not_a_concept->not_a_concept": 1,
+    "not_a_concept->same_as_target": 1,
+    "same_as_target->new_concept": 3,
+    "same_as_target->same_as_target": 17
+   },
+   "precision_new_concept": {
+    "correct": 37,
+    "decided": 40,
+    "precision": 0.925,
+    "wilson_lb": 0.8013546984090248
+   },
+   "precision_same_as_target": {
+    "correct": 17,
+    "decided": 23,
+    "precision": 0.7391304347826086,
+    "wilson_lb": 0.5352960945624944
+   },
+   "precision_not_a_concept": {
+    "correct": 1,
+    "decided": 2,
+    "precision": 0.5,
+    "wilson_lb": 0.09452865480086611
+   },
+   "same_rows_decided_new": {
+    "count": 3,
+    "of": 20,
+    "rate": 0.15
+   },
+   "accuracy": 0.8461538461538461,
+   "adopt_promotion": true,
+   "adopt_aliasing": false
+  },
+  "J1": {
+   "n": 65,
+   "confusion": {
+    "new_concept->new_concept": 39,
+    "new_concept->not_a_concept": 1,
+    "new_concept->same_as_target": 3,
+    "not_a_concept->not_a_concept": 2,
+    "same_as_target->new_concept": 2,
+    "same_as_target->same_as_target": 18
+   },
+   "precision_new_concept": {
+    "correct": 39,
+    "decided": 41,
+    "precision": 0.9512195121951219,
+    "wilson_lb": 0.8386073303764864
+   },
+   "precision_same_as_target": {
+    "correct": 18,
+    "decided": 21,
+    "precision": 0.8571428571428571,
+    "wilson_lb": 0.6536350585077049
+   },
+   "precision_not_a_concept": {
+    "correct": 2,
+    "decided": 3,
+    "precision": 0.6666666666666666,
+    "wilson_lb": 0.20765495512648788
+   },
+   "same_rows_decided_new": {
+    "count": 2,
+    "of": 20,
+    "rate": 0.1
+   },
+   "accuracy": 0.9076923076923077,
+   "adopt_promotion": true,
+   "adopt_aliasing": false,
+   "judge_answers": {
+    "narrower": 13,
+    "not_a_concept": 3,
+    "same": 21,
+    "broader": 12,
+    "new": 16
+   }
+  },
+  "J2": {
+   "n": 65,
+   "confusion": {
+    "new_concept->new_concept": 38,
+    "new_concept->not_a_concept": 1,
+    "new_concept->same_as_target": 4,
+    "not_a_concept->not_a_concept": 2,
+    "same_as_target->new_concept": 8,
+    "same_as_target->no_decision": 1,
+    "same_as_target->not_a_concept": 1,
+    "same_as_target->same_as_target": 10
+   },
+   "precision_new_concept": {
+    "correct": 38,
+    "decided": 46,
+    "precision": 0.8260869565217391,
+    "wilson_lb": 0.6927636765607748
+   },
+   "precision_same_as_target": {
+    "correct": 10,
+    "decided": 14,
+    "precision": 0.7142857142857143,
+    "wilson_lb": 0.4535045882751561
+   },
+   "precision_not_a_concept": {
+    "correct": 2,
+    "decided": 4,
+    "precision": 0.5,
+    "wilson_lb": 0.15003570882017145
+   },
+   "same_rows_decided_new": {
+    "count": 8,
+    "of": 20,
+    "rate": 0.4
+   },
+   "accuracy": 0.7692307692307693,
+   "adopt_promotion": false,
+   "adopt_aliasing": false,
+   "judge_answers": {
+    "narrower": 17,
+    "not_a_concept": 4,
+    "broader": 12,
+    "same": 14,
+    "new": 17,
+    "no_decision": 1
+   }
+  }
+ },
+ "stress": {
+  "ADJ": {
+   "items": 25,
+   "decided_same": 7,
+   "same_pairs": [
+    "destination address / DestinationAddr",
+    "frame / packet",
+    "link-state packet / update packet",
+    "physical link / link",
+    "IP layer / network layer",
+    "datagram / message",
+    "internetwork / Internet"
+   ]
+  },
+  "J1": {
+   "items": 25,
+   "decided_same": 7,
+   "same_pairs": [
+    "destination address / DestinationAddr",
+    "frame / packet",
+    "link-state packet / update packet",
+    "physical link / link",
+    "IP layer / network layer",
+    "datagram / message",
+    "internetwork / Internet"
+   ]
+  },
+  "J2": {
+   "items": 25,
+   "decided_same": 6,
+   "same_pairs": [
+    "destination address / DestinationAddr",
+    "multiple antennas / multiple-input, multiple-output",
+    "link-state packet / update packet",
+    "physical link / link",
+    "IP layer / network layer",
+    "datagram / message"
+   ]
+  }
+ },
+ "decision": {
+  "status": "KEEP_ADJ",
+  "j2_same_precision": 0.7142857142857143,
+  "adj_same_precision": 0.7391304347826086,
+  "j2_new_concept_wilson_lb": 0.6927636765607748,
+  "j2_same_wilson_lb": 0.4535045882751561,
+  "j2_same_rows_decided_new_share": 0.4,
+  "rule": "held-out (second look): J2 same precision >= ADJ same precision - 0.03, J2 new_concept and same Wilson LB >= 0.70, at most 20% of gold same rows decided new_concept"
+ },
+ "spend_usd": 0.0944
+}
