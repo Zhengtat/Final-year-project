@@ -54,6 +54,8 @@ def test_no_pipeline_module_reads_scinlp_text_into_prompts():
             continue  # CR-031: read-only rescoring of retained SciNLP oracle runs (no prompt, no model call)
         if f.parts[2] == "cr020":
             continue  # CR-020 dev experiment runner and scorer (SciNLP dev split only, no test-split run)
+        if f.parts[2] == "cr053":
+            continue  # CR-053: the frozen SciNLP runner with profile v3 (generator prompt v5_scinlp, train / dev only; the prompt holds no SciNLP test material)
         if f.parts[2] == "cr052":
             continue  # CR-052: read-only span analysis and rescoring of retained train / dev runs (no prompt, no model call)
         if f.parts[2] == "cr051":
