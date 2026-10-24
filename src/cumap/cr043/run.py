@@ -1,5 +1,5 @@
 """CR-043 runner: E0 (the real pipeline) on SciNLP train / dev papers with the CURRENT production settings (the local model
-profile, R1-key matching, rejected-link adjudicator, backfill off). One subprocess per paper of `cumap.cr047.scinlp_run run` (the frozen runner with SciNLP profile v2, CR-047).
+profile, R1-key matching, rejected-link adjudicator, backfill off). One subprocess per paper of `cumap.cr053.scinlp_run run` (the frozen runner with SciNLP profile v3, CR-053; `--runner cumap.cr047.scinlp_run` = profile v2).
 
     uv run python -m cumap.cr043.run --dry-run            # estimates only
     uv run python -m cumap.cr043.run --limit 2            # the first 2 papers
@@ -40,7 +40,7 @@ def main() -> None:
     ap.add_argument("--tag", default=TAG)
     ap.add_argument(
         "--runner",
-        default="cumap.cr047.scinlp_run",
+        default="cumap.cr053.scinlp_run",
         choices=["cumap.cr047.scinlp_run", "cumap.cr053.scinlp_run"],
     )  # CR-053: profile v3 (prompt v5_scinlp)
     a = ap.parse_args()

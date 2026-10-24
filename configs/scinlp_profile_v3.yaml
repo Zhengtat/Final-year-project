@@ -1,7 +1,7 @@
 # CR-053 profile v3 (generator prompt v5_scinlp), built on the CR-047 copy of the CR-012 SciNLP benchmark-local schema profile (Research ruling 2026-10-10). Only the benchmark schema changes; the CR-009 architecture is the same.
 name: scinlp
 release_label: SciNLP-repo-e78342be
-status: "CR-053 profile v3 = profile v2 (CR-047) with generator prompt v5_scinlp; candidate for new SciNLP runs"
+status: "CR-053 profile v3 = profile v2 (CR-047) with generator prompt v5_scinlp; ADOPTED for new SciNLP runs (2026-10-25)"
 entity_types:
   task: An objective requiring operational resolution through systematic processes (for example text classification, named
     entity recognition).
