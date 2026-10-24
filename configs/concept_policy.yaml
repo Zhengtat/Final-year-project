@@ -5,6 +5,10 @@
 #                 same_as_target -> mention + alias on the node; not_a_concept / failed quote -> dropped. ADOPTED 2026-10-15 after the
 #                 measured held-out test (DECISIONS.md; reports/cr021/adjudicator.md).
 rejected_link_policy: adjudicate
+# rejected_link_tier (CR-051, owner 2026-10-24): the tier the adjudicator runs on. `escalate` = gpt-6-sol under the luna profile (the model it
+# was adopted with in CR-021; on luna its `same` precision fell below its adoption bar, CR-049 / CR-050). A profile without that tier uses
+# `strong`. The tier is recorded on each G-link-adjudicated merge entry. About $0.002 per call, about $0.10 per P&D chapter.
+rejected_link_tier: escalate
 # promote_rejected_links: the name-only "more specific" rule. NOT adopted (owner review: 7 of 33 promotions would split a concept).
 promote_rejected_links: false
 # backfill (CR-027): the chapter-end pass that adds mentions of earlier nodes found by string matching. false = off for NEW

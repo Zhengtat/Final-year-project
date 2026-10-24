@@ -218,3 +218,6 @@ J2 (context packs, claim verification) on the CR-021 held-out split (second look
 
 ## CR-050 identity judge v1 on a fresh owner sheet (2026-10-24) — complete (not adopted)
 103 owner-marked rows (luna, $0.033): J1 accuracy 0.854 vs adjudicator 0.806, same precision 0.739 (LB 0.535) vs 0.667 (LB 0.467): J1 better but below the pre-registered LB 0.70, so the adjudicator stays. Open for the owner: sol for identity, promotion-only on luna, or adopt J1 by a rule change. Report `reports/cr050/judge_v1.md`.
+
+## CR-051 adjudicator on sol (2026-10-24) — complete
+`rejected_link_tier: escalate` (gpt-6-sol under the luna profile) for new runs; tier recorded per merge. Fresh-sheet check ($0.10): accuracy 0.854, same precision 0.783 (LB 0.581) vs luna 0.667; new_concept 0.889. Sol is better but still about 1 wrong same in 5 on fresh links (CR-021 held-out was 0.952).
