@@ -209,3 +209,6 @@ Registry `configs/relations_v1.4.1.yaml` = v1.4 + the owner-approved CR-040 word
 
 ## CR-047 registry v1.5 and qualifier amendments on (2026-10-24) — complete
 New P&D runs load registry v1.5 (`relation_policy.yaml` `relation_registry`; `default.yaml` keeps v1.3). SciNLP: registry `relations_scinlp_v1.0.1.yaml` (frozen registry minus modality `never`) through profile v2 and `cumap.cr047.scinlp_run`. SciNLP check (20 papers, same pairs, $0.293): IDXR1-P1 F1 0.107 -> 0.114, macro F1 0.302 -> 0.324; P&D check (CR-046) passed. `qualifier_amendments: v6` on for new runs. Tests 1028 passed.
+
+## CR-048 misconception-family measurement (2026-10-24) — complete (not adopted)
+Cue arm on the 89 `slice3_c2` cue sentences (664 pairs) and P&D dev pairs ($0.338): legacy items flagged 0 / 4, not-a-warning 0 / 75, P&D macro F1 0.781 -> 0.505, strict E2E 0.111 -> 0.063: fails; `misconception_source` stays `legacy`. Report `reports/cr048/misconception_family.md`. Refinement ideas in DECISIONS.
