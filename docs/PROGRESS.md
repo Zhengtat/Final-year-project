@@ -221,3 +221,6 @@ J2 (context packs, claim verification) on the CR-021 held-out split (second look
 
 ## CR-051 adjudicator on sol (2026-10-24) — complete
 `rejected_link_tier: escalate` (gpt-6-sol under the luna profile) for new runs; tier recorded per merge. Fresh-sheet check ($0.10): accuracy 0.854, same precision 0.783 (LB 0.581) vs luna 0.667; new_concept 0.889. Sol is better but still about 1 wrong same in 5 on fresh links (CR-021 held-out was 0.952).
+
+## CR-052 concept-span analysis (2026-10-24) — complete ($0)
+263 lost endpoints in the 20 CR-043 papers: N1 136 (prediction shorter 77, split 32, longer 27; mostly a missing generic head noun or the gold "( ACRONYM )" convention), N0 127 (all concepts never extracted: methods 71, metrics 27, tasks 26; many generic metrics and acronyms). Two gold-free span-extension rules raise strict relation F1 0.114 -> 0.129 on the current settings (optimistic: designed on the same papers). Report `reports/cr052/span_analysis.md`.
