@@ -1,5 +1,5 @@
 """CR-043 runner: E0 (the real pipeline) on SciNLP train / dev papers with the CURRENT production settings (the local model
-profile, R1-key matching, rejected-link adjudicator, backfill off). One subprocess per paper of `cumap.cr047.scinlp_run run` (the frozen runner with SciNLP profile v2, CR-047).
+profile, R1-key matching, rejected-link adjudicator, backfill off). One subprocess per paper of `cumap.cr053.scinlp_run run` (the frozen runner with SciNLP profile v3, CR-053; `--runner cumap.cr047.scinlp_run` = profile v2).
 
     uv run python -m cumap.cr043.run --dry-run            # estimates only
     uv run python -m cumap.cr043.run --limit 2            # the first 2 papers
@@ -38,6 +38,11 @@ def main() -> None:
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--cap-usd", type=float, default=3.0)
     ap.add_argument("--tag", default=TAG)
+    ap.add_argument(
+        "--runner",
+        default="cumap.cr053.scinlp_run",
+        choices=["cumap.cr047.scinlp_run", "cumap.cr053.scinlp_run"],
+    )  # CR-053: profile v3 (prompt v5_scinlp)
     a = ap.parse_args()
     papers = first_set()[: a.limit] if a.limit else first_set()
     spent = 0.0
@@ -60,7 +65,7 @@ def main() -> None:
                 flush=True,
             )
             continue
-        cmd = [sys.executable, "-m", "cumap.cr047.scinlp_run", "run", "--split", split, "--doc", d, "--tag", a.tag,
+        cmd = [sys.executable, "-m", a.runner, "run", "--split", split, "--doc", d, "--tag", a.tag,
                "--max-usd", str(MAX_USD_PER_DOC)] + (["--dry-run"] if a.dry_run else [])  # fmt: skip
         t0 = time.time()
         r = subprocess.run(cmd, capture_output=True, text=True, check=False)
