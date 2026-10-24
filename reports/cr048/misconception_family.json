@@ -1,0 +1,365 @@
+{
+ "cue": {
+  "groups": {
+   "items": {
+    "sentences": 4,
+    "classifiable": 2,
+    "flagged": 0
+   },
+   "needs_correct_edge": {
+    "sentences": 10,
+    "classifiable": 9,
+    "flagged": 3
+   },
+   "not_warning": {
+    "sentences": 75,
+    "classifiable": 63,
+    "flagged": 0
+   }
+  },
+  "item_endpoints": [
+   {
+    "item": "modulation scheme prevents bit",
+    "endpoint_pair_flagged": false
+   },
+   {
+    "item": "modulation scheme acts_on bit",
+    "endpoint_pair_flagged": false
+   },
+   {
+    "item": "hardware switch requires cell",
+    "endpoint_pair_flagged": false
+   },
+   {
+    "item": "routing table conflated_with forwarding table",
+    "endpoint_pair_flagged": false
+   }
+  ],
+  "outcomes": {
+   "edge": 209,
+   "no_relation": 129,
+   "other": 176,
+   "misconception": 8,
+   "rejected:domain_range": 34,
+   "rejected:surface_phrase_not_in_quote": 1,
+   "rejected:evidence_quote_not_in_sentence": 4,
+   "rejected:endpoint_not_grounded": 19
+  },
+  "misconception_results": 8,
+  "perturbations": {
+   "conflation": 2,
+   "polarity_flip": 1,
+   "condition_error": 1,
+   "wrong_relation": 4
+  },
+  "flagged_not_warning_examples": []
+ },
+ "layer": {
+  "source": "relation_classification",
+  "candidates": 8,
+  "warnings": 0,
+  "not_warning": 1,
+  "needs_review": 6,
+  "needs_correct_edge": 2,
+  "items": []
+ },
+ "pd": {
+  "AMEND": {
+   "headline": {
+    "concept_f1": {
+     "precision": 0.60625,
+     "recall": 0.6554054054054054,
+     "f1": 0.6298701298701298,
+     "tp": 97,
+     "fp": 63,
+     "fn": 51,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N",
+     "variant": "canonical_node_untyped"
+    },
+    "ancestor_hierarchy_f1": {
+     "precision": 1.0,
+     "recall": 0.07407407407407407,
+     "f1": 0.13793103448275862,
+     "tp": 2,
+     "fp": 0,
+     "fn": 25,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N",
+     "status": "OK",
+     "gold_ancestor_pairs": 27
+    },
+    "pair_recall": {
+     "recall": 0.21212121212121213,
+     "reached": 14,
+     "denominator": 66,
+     "missing_endpoint_excluded": 52,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    },
+    "relation_macro_f1": {
+     "f1": 0.780952380952381,
+     "classes": {
+      "acts_on": {
+       "support": 2,
+       "tp": 2,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0,
+       "low_support": true
+      },
+      "connected_to": {
+       "support": 2,
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "has_property": {
+       "support": 2,
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "increases": {
+       "support": 1,
+       "tp": 1,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.5,
+       "recall": 1.0,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "is_a": {
+       "support": 3,
+       "tp": 2,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.6666666666666666,
+       "f1": 0.8,
+       "low_support": true
+      },
+      "part_of": {
+       "support": 3,
+       "tp": 2,
+       "fp": 1,
+       "fn": 1,
+       "precision": 0.6666666666666666,
+       "recall": 0.6666666666666666,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "uses": {
+       "support": 1,
+       "tp": 1,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0,
+       "low_support": true
+      }
+     },
+     "population": 14,
+     "classes_in_macro": 7,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    },
+    "strict_e2e_edge_f1": {
+     "precision": 0.20454545454545456,
+     "recall": 0.07627118644067797,
+     "f1": 0.11111111111111112,
+     "tp": 9,
+     "fp": 35,
+     "fn": 109,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    }
+   },
+   "outcomes": {
+    "no_relation": 14,
+    "other": 28,
+    "rejected": 8,
+    "edge": 44
+   }
+  },
+  "PDMISC": {
+   "headline": {
+    "concept_f1": {
+     "precision": 0.60625,
+     "recall": 0.6554054054054054,
+     "f1": 0.6298701298701298,
+     "tp": 97,
+     "fp": 63,
+     "fn": 51,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N",
+     "variant": "canonical_node_untyped"
+    },
+    "ancestor_hierarchy_f1": {
+     "precision": 1.0,
+     "recall": 0.07407407407407407,
+     "f1": 0.13793103448275862,
+     "tp": 2,
+     "fp": 0,
+     "fn": 25,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N",
+     "status": "OK",
+     "gold_ancestor_pairs": 27
+    },
+    "pair_recall": {
+     "recall": 0.21212121212121213,
+     "reached": 14,
+     "denominator": 66,
+     "missing_endpoint_excluded": 52,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    },
+    "relation_macro_f1": {
+     "f1": 0.5047619047619046,
+     "classes": {
+      "acts_on": {
+       "support": 2,
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "connected_to": {
+       "support": 2,
+       "tp": 1,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.5,
+       "f1": 0.6666666666666666,
+       "low_support": true
+      },
+      "contrasts_with": {
+       "support": 0,
+       "tp": 0,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.0,
+       "recall": null,
+       "f1": null,
+       "low_support": false
+      },
+      "has_property": {
+       "support": 2,
+       "tp": 0,
+       "fp": 0,
+       "fn": 2,
+       "precision": null,
+       "recall": 0.0,
+       "f1": 0.0,
+       "low_support": true
+      },
+      "increases": {
+       "support": 1,
+       "tp": 1,
+       "fp": 0,
+       "fn": 0,
+       "precision": 1.0,
+       "recall": 1.0,
+       "f1": 1.0,
+       "low_support": true
+      },
+      "is_a": {
+       "support": 3,
+       "tp": 2,
+       "fp": 0,
+       "fn": 1,
+       "precision": 1.0,
+       "recall": 0.6666666666666666,
+       "f1": 0.8,
+       "low_support": true
+      },
+      "part_of": {
+       "support": 3,
+       "tp": 1,
+       "fp": 1,
+       "fn": 2,
+       "precision": 0.5,
+       "recall": 0.3333333333333333,
+       "f1": 0.4,
+       "low_support": true
+      },
+      "requires": {
+       "support": 0,
+       "tp": 0,
+       "fp": 1,
+       "fn": 0,
+       "precision": 0.0,
+       "recall": null,
+       "f1": null,
+       "low_support": false
+      },
+      "uses": {
+       "support": 1,
+       "tp": 0,
+       "fp": 0,
+       "fn": 1,
+       "precision": null,
+       "recall": 0.0,
+       "f1": 0.0,
+       "low_support": true
+      }
+     },
+     "population": 14,
+     "classes_in_macro": 7,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    },
+    "strict_e2e_edge_f1": {
+     "precision": 0.125,
+     "recall": 0.0423728813559322,
+     "f1": 0.06329113924050633,
+     "tp": 5,
+     "fp": 35,
+     "fn": 113,
+     "ci95": null,
+     "ci_status": "NOT_EVALUABLE_SMALL_N"
+    }
+   },
+   "outcomes": {
+    "no_relation": 13,
+    "other": 27,
+    "rejected": 14,
+    "edge": 40
+   }
+  }
+ },
+ "decision": {
+  "status": "KEEP_LEGACY",
+  "legacy_item_sentences_flagged": "0 / 4",
+  "not_warning_flag_rate": 0.0,
+  "pd_strict_e2e_f1_delta": -0.047819971870604785,
+  "pd_relation_macro_f1_delta": -0.2761904761904763,
+  "rule": "adopt misconception_source classification if >= 3 of the 4 legacy item sentences are flagged, <= 10% of the 75 legacy not-a-warning sentences are flagged, and P&D dev Strict E2E F1 and Relation Macro F1 each fall by <= 0.01 vs cr046 AMEND"
+ },
+ "spend": {
+  "per_run": {
+   "cr048_cue_slice3_c2": 0.2955,
+   "cr048_pdmisc_cr012_pilot_1_5_E0": 0.0239,
+   "cr048_pdmisc_cr012_pilot_2_6_E0": 0.0186
+  },
+  "total_usd": 0.338,
+  "cap_usd": 1.0
+ }
+}
