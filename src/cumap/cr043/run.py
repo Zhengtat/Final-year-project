@@ -41,7 +41,7 @@ def main() -> None:
     ap.add_argument(
         "--runner",
         default="cumap.cr053.scinlp_run",
-        choices=["cumap.cr047.scinlp_run", "cumap.cr053.scinlp_run"],
+        choices=["cumap.cr047.scinlp_run", "cumap.cr053.scinlp_run", "cumap.cr055.scinlp_run"],
     )  # CR-053: profile v3 (prompt v5_scinlp)
     a = ap.parse_args()
     papers = first_set()[: a.limit] if a.limit else first_set()

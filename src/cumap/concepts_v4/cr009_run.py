@@ -124,6 +124,14 @@ def stage_concepts(
         dev_secs, nlp, embed
     )  # IIR dev rows only; P&D is out of domain, so tau is recall-safe
     client = LLMClient(settings, run_id=run)
+    recall = (
+        profile.raw.get("concept_recall") if profile else None
+    ) or {}  # CR-055: benchmark profile v4 only
+    loop_cfg = X.loop_config(
+        recall.get("form", "G1"), 1, carry_forward_rule=recall.get("carry_forward_rule", "any_word")
+    )
+    if recall.get("m6_instruction"):
+        loop_cfg.instructions = {**loop_cfg.instructions, "M6": recall["m6_instruction"]}
     run_obj = R.ConceptRun(
         client,
         load_prompt(
@@ -132,7 +140,7 @@ def stage_concepts(
             profile.prompt_version if profile else "v4",
         ),
         {"examples": []} if profile else load_bank(),
-        X.loop_config("G1", 1),
+        loop_cfg,
         nlp=nlp,
         embed_fn=embed,
         lexicon=lexicon,
@@ -148,6 +156,7 @@ def stage_concepts(
         identity_judge=judge,
         progress=print,
         schemas=make_schemas(profile.entity_types if profile else None),
+        concept_recall=recall or None,
     )
     do_backfill = _backfill_enabled() if backfill is None else backfill
     out = run_obj.run(units, backfill=do_backfill)
@@ -174,6 +183,7 @@ def stage_concepts(
             ),
             **({"identity_resolver": resolver} if resolver != "legacy" else {}),
             **({"identity_judge": judge} if judge != "off" else {}),
+            **({"concept_recall": recall} if recall else {}),
         },
     )
     overrides = (

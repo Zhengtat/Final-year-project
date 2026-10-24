@@ -72,6 +72,9 @@ class VerifyCtx:
     m4: bool = False
     m5: bool = False
     chapter: int | None = None
+    quote_repair: bool = False  # CR-055: F2 also accepts a quote that differs from the text only in spaces around punctuation
+    m6: bool = False  # CR-055: hint acronym-like tokens and listed terms no item covers
+    m6_terms: tuple[str, ...] = ()
 
     @property
     def words(self) -> int:
@@ -97,14 +100,22 @@ class VerifyResult:
 
 
 # ---------------------------------------------------------------- helpers
-def _find_exact(quote: str, text: str) -> str | None:
-    """The exact substring of `text` equal to `quote` up to whitespace, else None."""
+def _find_exact(quote: str, text: str, repair: bool = False) -> str | None:
+    """The exact substring of `text` equal to `quote` up to whitespace, else None. With `repair` (CR-055) also up to the
+    spaces around punctuation ("answering, natural" against the tokenised "answering , natural"); the returned string is
+    always the text's own substring, so the stored quote stays verbatim (rule 3)."""
     if quote and quote in text:
         return quote
     toks = quote.split()
     if not toks:
         return None
     m = re.search(r"\s+".join(re.escape(t) for t in toks), text)
+    if m or not repair:
+        return m.group(0) if m else None
+    pieces = re.findall(r"\w+|[^\w\s]", quote)
+    if len(pieces) < 2:
+        return None
+    m = re.search(r"\s*".join(re.escape(t) for t in pieces), text)
     return m.group(0) if m else None
 
 
@@ -169,7 +180,7 @@ def verify(out_in: dict, ctx: VerifyCtx) -> VerifyResult:
 
     # F2 quote verbatim (auto-fix whitespace), F3 span in quote
     for i, m in enumerate(mentions):
-        if (exact := _find_exact(m["evidence"], text)) is None:
+        if (exact := _find_exact(m["evidence"], text, ctx.quote_repair)) is None:
             res.flags.append(
                 Flag("F2", "mention", i, f"evidence not verbatim: {m['evidence'][:60]!r}")
             )
@@ -187,7 +198,7 @@ def verify(out_in: dict, ctx: VerifyCtx) -> VerifyResult:
                 Flag("F3", "mention", i, f"surface {m['surface']!r} not inside its evidence")
             )
     for i, c in enumerate(news):
-        if (exact := _find_exact(c["evidence"], text)) is None:
+        if (exact := _find_exact(c["evidence"], text, ctx.quote_repair)) is None:
             res.flags.append(Flag("F2", "new", i, f"evidence not verbatim: {c['evidence'][:60]!r}"))
         elif exact != c["evidence"]:
             res.autofixes.append({"rule": "F2", "what": "whitespace", "where": f"new {i}"})
@@ -416,7 +427,45 @@ def verify(out_in: dict, ctx: VerifyCtx) -> VerifyResult:
         res.hints += _m4(out, ctx)
     if ctx.m5:
         res.hints += _m5(out, ctx)
+    if ctx.m6:
+        res.hints += _m6(out, ctx)
     return res
+
+
+_ACRONYM = re.compile(r"(?<![\w-])([A-Za-z][A-Za-z0-9-]{1,9})(?![\w-])")
+M6_MAX = 12
+
+
+def _m6(out: dict, ctx: VerifyCtx) -> list[Hint]:
+    """CR-055 (optional): an acronym-like token (two or more capitals, e.g. LSTM, MLM, PCFG) or a listed term (`ctx.m6_terms`, whole word,
+    case-insensitive) that the section uses and no item covers. At most M6_MAX hints per section; the generator adds or rejects each."""
+    cfg = _cfg()
+    cand: dict[str, str] = {}
+    for m in _ACRONYM.finditer(ctx.section_text):
+        t = m.group(1)
+        if sum(ch.isupper() for ch in t) >= 2:
+            cand.setdefault(t, "an acronym or model name")
+    low = " " + _nl(re.sub(r"[^\w\s-]", " ", ctx.section_text)) + " "
+    for term in ctx.m6_terms:
+        if f" {term.lower()} " in low:
+            cand.setdefault(term, "a term this benchmark marks as a concept")
+    hints = []
+    for term, why in cand.items():
+        key = ("M6", _nl(term))
+        if key in ctx.rejected_keys or _covered(term, out, cfg):
+            continue
+        hints.append(
+            Hint(
+                "M6",
+                "missed_candidate",
+                term,
+                f"{term!r} looks like a concept ({why}) that no item covers",
+                key,
+            )
+        )
+        if len(hints) >= M6_MAX:
+            break
+    return hints
 
 
 def _covered(term: str, out: dict, cfg: AliasConfig) -> bool:

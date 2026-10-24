@@ -125,6 +125,8 @@ class ConceptRun:
         fixture: str = "default",
         progress: Callable[[str], None] | None = None,
         schemas: GeneratorSchemas | None = None,
+        concept_recall: dict
+        | None = None,  # CR-055: benchmark-profile switches (quote_repair, m6, m6_terms); None = unchanged
     ):
         self.__dict__.update(locals())
         self.schemas = schemas or DEFAULT_SCHEMAS
@@ -183,6 +185,9 @@ class ConceptRun:
                 m4=self.m4,
                 m5=self.m5,
                 chapter=sec.get("chapter_num") if isinstance(sec.get("chapter_num"), int) else None,
+                quote_repair=bool((self.concept_recall or {}).get("quote_repair")),
+                m6=bool((self.concept_recall or {}).get("m6")),
+                m6_terms=tuple((self.concept_recall or {}).get("m6_terms") or ()),
             )
             sec = {
                 **sec,
@@ -303,7 +308,9 @@ class ConceptRun:
                     }
                 )
                 if self.identity_resolver == "u1" and self.identity_judge == "v1":
-                    self._judge_link(out, meta, sid, order, m, node, paras)  # CR-037 DRAFT (U5), never run
+                    self._judge_link(
+                        out, meta, sid, order, m, node, paras
+                    )  # CR-037 DRAFT (U5), never run
                 elif self.rejected_link_policy == "adjudicate":
                     self._adjudicate(out, meta, sid, order, m, node, paras)
                 elif self.promote_rejected and more_specific(m["surface"], node):
@@ -473,7 +480,9 @@ class ConceptRun:
         )
         log = {"rule_id": "G-link-judged", "node_id": node.id, "surface": m["surface"], "section_id": sid, "evidence": m["evidence"], "trivial": False}  # fmt: skip
         if not types_compatible(m.get("node_type") or node.node_type, node.node_type):
-            out.merges.append({**log, "decision": "new", "reason": "node types incompatible, no call"})
+            out.merges.append(
+                {**log, "decision": "new", "reason": "node types incompatible, no call"}
+            )
             self._promote(out, meta, sid, order, m, node)
             return
         r = judge_pair(
@@ -481,7 +490,15 @@ class ConceptRun:
             target_aliases=node.aliases, target_type=node.node_type, target_gloss=node.definition or node.gloss, sentence=sentence,
             fixture_name=self.fixture,
         )  # fmt: skip
-        out.merges.append({**log, "decision": r.decision, "raw_decision": r.raw_decision, "reason": r.reason, "input_hash": r.input_hash})
+        out.merges.append(
+            {
+                **log,
+                "decision": r.decision,
+                "raw_decision": r.raw_decision,
+                "reason": r.reason,
+                "input_hash": r.input_hash,
+            }
+        )
         if r.decision == "same":
             node.mentions.append({"section_id": sid, "order": order, "role": m["role"], "para": m["para"], "evidence": m["evidence"], "surface": m["surface"], "linked_by": "generator"})  # fmt: skip
             meta["mentions"].append(node.id)
@@ -522,7 +539,9 @@ class ConceptRun:
             m["evidence"],
         )
         prompt = load_prompt(REPO_ROOT / "prompts", "rejected_link_adjudicator", ADOPTED_VERSION)
-        tier = adjudicator_tier(self.client._settings.llm.tiers)  # CR-051: sol under the luna profile
+        tier = adjudicator_tier(
+            self.client._settings.llm.tiers
+        )  # CR-051: sol under the luna profile
         res = self.client.parse(
             task="rejected_link_adjudicator", prompt_version=prompt.version, model_tier=tier, schema=AdjudicationLLM,
             messages=[{"role": "user", "content": prompt.render(
