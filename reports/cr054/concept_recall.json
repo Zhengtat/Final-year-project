@@ -1,0 +1,264 @@
+{
+ "tag": "cr053v5",
+ "missed": 608,
+ "stage": {
+  "span": 296,
+  "never_proposed": 269,
+  "lost_after_generator": 40,
+  "node_not_placed": 3
+ },
+ "stage_by_type": {
+  "method": {
+   "never_proposed": 177,
+   "span": 156,
+   "lost_after_generator": 31,
+   "node_not_placed": 3
+  },
+  "task": {
+   "never_proposed": 50,
+   "span": 37,
+   "lost_after_generator": 6
+  },
+  "dataset": {
+   "span": 58,
+   "never_proposed": 14,
+   "lost_after_generator": 1
+  },
+  "metric": {
+   "never_proposed": 28,
+   "span": 45,
+   "lost_after_generator": 2
+  }
+ },
+ "lost_after_generator_why": {
+  "dropped_in_later_iteration": 31,
+  "F2": 8,
+  "F3": 1
+ },
+ "hint_rejected_reasons": [],
+ "node_not_placed_examples": [
+  "CRFs",
+  "CRF",
+  "CRF"
+ ],
+ "lost_examples": [
+  "prompt-based learning (dropped_in_later_iteration)",
+  "Automatic prompt search (dropped_in_later_iteration)",
+  "gradientguided search (dropped_in_later_iteration)",
+  "Fine-tuning of language models (dropped_in_later_iteration)",
+  "masked language model (dropped_in_later_iteration)",
+  "MLM (dropped_in_later_iteration)",
+  "MLM (dropped_in_later_iteration)",
+  "automatic prompt search (dropped_in_later_iteration)",
+  "MLM (dropped_in_later_iteration)",
+  "grid search (dropped_in_later_iteration)",
+  "BERT-large (F2)",
+  "attention mechanism (dropped_in_later_iteration)",
+  "bottom-up layer-wise search (dropped_in_later_iteration)",
+  "B2T (dropped_in_later_iteration)",
+  "simultaneous search (dropped_in_later_iteration)",
+  "w/o sq (dropped_in_later_iteration)",
+  "attention mechanisms (dropped_in_later_iteration)",
+  "question answering (F2)",
+  "natural language inference (F2)",
+  "Precision (dropped_in_later_iteration)"
+ ],
+ "span_examples": [
+  "GPT-3 model -> GPT-3",
+  "classification and regression -> classification",
+  "few-shot learning -> task-agnostic method for few-shot learning",
+  "GPT-3 model -> GPT-3",
+  "GPT -> GPT series",
+  "generative T5 model -> T5",
+  "finetuning -> standard finetuning",
+  "RoBERTa-large model -> RoBERTa-large",
+  "few-shot learning -> taskagnostic method for few-shot learning",
+  "sentence classification -> classification",
+  "binary classification -> classification",
+  "RoBERTalarge model-making -> RoBERTalarge",
+  "T5 model -> T5",
+  "T5 model -> T5",
+  "T5 model -> T5"
+ ],
+ "never": {
+  "classes": {
+   "short_phrase": 122,
+   "single_common_word": 95,
+   "acronym_or_model_name": 35,
+   "long_phrase": 13,
+   "contains_number_or_version": 4
+  },
+  "examples": {
+   "short_phrase": [
+    "Pre-trained Language Models (method)",
+    "smaller language models (method)",
+    "automating prompt generation (task)",
+    "language models (method)",
+    "language understanding (task)",
+    "language model (method)",
+    "fine-tuning language models (task)",
+    "language model (method)",
+    "pre-trained language model (method)",
+    "single-sentence tasks (task)",
+    "sentence-pair tasks (task)",
+    "prompt generation (task)"
+   ],
+   "single_common_word": [
+    "fine-tuning (method)",
+    "fine-tuning (method)",
+    "single-sentence (task)",
+    "sentence-pair (task)",
+    "fine-tuning (method)",
+    "single-sentence (task)",
+    "sentence-pair (task)",
+    "fine-tuning (method)",
+    "fine-tuning (method)",
+    "fine-tuning (method)",
+    "Fine-tuning (method)",
+    "fine-tuning (method)"
+   ],
+   "acronym_or_model_name": [
+    "MASK (method)",
+    "KL-divergence (metric)",
+    "LMs (method)",
+    "MRPC-but (dataset)",
+    "IMG-BART (method)",
+    "CY (method)",
+    "LM (method)",
+    "WMT 20165 shared task (dataset)",
+    "XSLT engines6 (method)",
+    "XSLT transformations (method)",
+    "XSLT transformations (method)",
+    "SEMCOR (dataset)"
+   ],
+   "long_phrase": [
+    "Auto T + L (method)",
+    "Auto T + L (method)",
+    "phrase-based ( PB ) (method)",
+    "phrase-based model ( PBM ) (method)",
+    "learning the contexts for the linguistic operations (task)",
+    "identifies question topics and question foci (task)",
+    "fixing the lexical chasm between questions (task)",
+    "tackle the lexical chasm problem between questions (task)",
+    "identify question topic and question focus (task)",
+    "texts containing punctuations ( TCP ) (dataset)",
+    "texts without punctuations ( TOP ) (dataset)",
+    "re-rank n-best translation output (task)"
+   ],
+   "contains_number_or_version": [
+    "5 - gram language models ( LMs ) (method)",
+    "Autodesk post editing corpus4 (dataset)",
+    "newstest2015 test set (dataset)",
+    "newstest2015 data set (dataset)"
+   ]
+  },
+  "by_type": {
+   "method": 177,
+   "task": 50,
+   "metric": 28,
+   "dataset": 14
+  },
+  "top_surfaces": [
+   [
+    "n-gram",
+    18
+   ],
+   [
+    "confidence",
+    13
+   ],
+   [
+    "n-grams",
+    12
+   ],
+   [
+    "nystro \u00a8 m",
+    9
+   ],
+   [
+    "fine-tuning",
+    8
+   ],
+   [
+    "phrase-based system",
+    8
+   ],
+   [
+    "ngram",
+    6
+   ],
+   [
+    "graph-based consensus",
+    6
+   ],
+   [
+    "auto l",
+    5
+   ],
+   [
+    "phrase-based",
+    5
+   ],
+   [
+    "topological parser",
+    4
+   ],
+   [
+    "kneser-ney",
+    4
+   ],
+   [
+    "auto t",
+    3
+   ],
+   [
+    "transformer",
+    3
+   ],
+   [
+    "coverage",
+    3
+   ],
+   [
+    "topological parse",
+    3
+   ],
+   [
+    "discriminative ranker",
+    3
+   ],
+   [
+    "attention-based copying",
+    3
+   ],
+   [
+    "trigrams",
+    3
+   ],
+   [
+    "trigram",
+    3
+   ],
+   [
+    "bigram",
+    3
+   ],
+   [
+    "language understanding",
+    2
+   ],
+   [
+    "language model",
+    2
+   ],
+   [
+    "single-sentence",
+    2
+   ],
+   [
+    "sentence-pair",
+    2
+   ]
+  ]
+ }
+}

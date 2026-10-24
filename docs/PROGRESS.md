@@ -227,3 +227,6 @@ J2 (context packs, claim verification) on the CR-021 held-out split (second look
 
 ## CR-053 SciNLP generator prompt v5_scinlp (2026-10-25) — complete (adopted)
 20 papers, IDXR1-P1: concept F1 0.420 -> 0.485 (precision 0.301 -> 0.371), strict relation F1 0.113 -> 0.136, metric recall 0.610 -> 0.756, fact F1 0.135 -> 0.166; macro F1 0.322 -> 0.277 (small classes). Adopted: profile v3 is the default for new SciNLP runs. With the CR-052 span rules (variant IDXR1X-P1): concept 0.513, relation 0.163. Downstream: about 71% of gold relations with both endpoints placed get no prediction (R0 70, P0 57). Spend $0.585. Next: step 4 on the other 37 train papers (the unseen check).
+
+## CR-054 missed-concept analysis (2026-10-25) — complete ($0)
+608 missed gold mentions (cr053v5): span 49%, never proposed 44%, lost after the generator 7% (mostly corrective iterations dropping earlier items), verifier / pruner almost none. Report `reports/cr054/concept_recall.md`.
