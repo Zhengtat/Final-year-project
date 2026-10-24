@@ -1,0 +1,75 @@
+{
+ "tag": "cr043base",
+ "variant": "IDXR1-P1",
+ "codes": {
+  "N0": 142,
+  "P0": 71,
+  "N1": 134,
+  "recovered": 76,
+  "R1": 20,
+  "R0": 54,
+  "R2": 1
+ },
+ "endpoints": 263,
+ "partial": {
+  "endpoints": 136,
+  "shape": {
+   "pred_shorter": 77,
+   "split": 32,
+   "pred_longer": 27
+  },
+  "kind": {
+   "modifier_missing": 63,
+   "split": 32,
+   "modifier_extra": 24,
+   "parenthetical_or_acronym": 6,
+   "prepositional_tail": 5,
+   "coordination": 3,
+   "punctuation": 3
+  },
+  "kind_weighted_by_relations": {
+   "modifier_missing": 95,
+   "split": 35,
+   "modifier_extra": 30,
+   "prepositional_tail": 10,
+   "parenthetical_or_acronym": 6,
+   "coordination": 4,
+   "punctuation": 3
+  },
+  "type_agrees": {
+   "true": 125,
+   "false": 11
+  },
+  "by_split": {
+   "train": 101,
+   "dev": 35
+  }
+ },
+ "absent": {
+  "endpoints": 127,
+  "absent_kind": {
+   "no_node": 127
+  },
+  "gold_type": {
+   "method": 71,
+   "metric": 27,
+   "task": 26,
+   "dataset": 3
+  },
+  "kind_weighted_by_relations": {
+   "no_node": 160
+  },
+  "tokens": {
+   "1": 58,
+   "2": 47,
+   "3": 17,
+   "4": 3,
+   "5": 1,
+   "7": 1
+  },
+  "by_split": {
+   "train": 68,
+   "dev": 59
+  }
+ }
+}
