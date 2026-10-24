@@ -61,3 +61,4 @@ data/interim/suggestions/cr050_identity_sheet_blind.csv
 # CR-049 / CR-050 per-row judge results (model reasons may quote CC BY-NC SciNLP text; local only)
 reports/cr049/results.jsonl
 reports/cr050/results.jsonl
+reports/cr051/results.jsonl

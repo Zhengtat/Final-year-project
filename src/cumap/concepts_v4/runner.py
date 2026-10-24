@@ -503,7 +503,11 @@ class ConceptRun:
         """CR-021 (adopted 2026-10-15 after the measured held-out test): the strong-tier rejected-link adjudicator (prompt v2) decides a
         rejected link. new_concept -> its own node (or the node that already has that name); same_as_target -> the generator's mention is
         recorded on the node and the form becomes an alias; not_a_concept or a failed evidence quote -> dropped, as before. Logged."""
-        from cumap.concepts_v4.rejected_links import ADOPTED_VERSION, AdjudicationLLM
+        from cumap.concepts_v4.rejected_links import (
+            ADOPTED_VERSION,
+            AdjudicationLLM,
+            adjudicator_tier,
+        )
         from cumap.expert_kg.relations import split_sentences
         from cumap.gold.validate import verify_quote
         from cumap.llm.prompts import load_prompt
@@ -518,8 +522,9 @@ class ConceptRun:
             m["evidence"],
         )
         prompt = load_prompt(REPO_ROOT / "prompts", "rejected_link_adjudicator", ADOPTED_VERSION)
+        tier = adjudicator_tier(self.client._settings.llm.tiers)  # CR-051: sol under the luna profile
         res = self.client.parse(
-            task="rejected_link_adjudicator", prompt_version=prompt.version, model_tier="strong", schema=AdjudicationLLM,
+            task="rejected_link_adjudicator", prompt_version=prompt.version, model_tier=tier, schema=AdjudicationLLM,
             messages=[{"role": "user", "content": prompt.render(
                 domain=self.domain, surface=m["surface"], target_name=rejected.name, target_aliases=", ".join(rejected.aliases) or "none",
                 target_type=rejected.node_type, target_gloss=rejected.definition or rejected.gloss or "none", evidence=sentence)}],
@@ -527,7 +532,7 @@ class ConceptRun:
         o = res.output
         decision = o.decision if verify_quote(o.evidence_quote, sentence) else "no_decision"
         out.merges.append({"rule_id": "G-link-adjudicated", "decision": decision, "node_id": rejected.id, "surface": m["surface"], "section_id": sid,
-                           "evidence": m["evidence"], "reason": o.reason, "input_hash": res.input_hash, "trivial": False})  # fmt: skip
+                           "evidence": m["evidence"], "reason": o.reason, "input_hash": res.input_hash, "trivial": False, "model_tier": tier})  # fmt: skip
         if decision == "new_concept":
             self._promote(out, meta, sid, order, m, rejected)
         elif decision == "same_as_target":
