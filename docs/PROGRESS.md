@@ -212,3 +212,6 @@ New P&D runs load registry v1.5 (`relation_policy.yaml` `relation_registry`; `de
 
 ## CR-048 misconception-family measurement (2026-10-24) — complete (not adopted)
 Cue arm on the 89 `slice3_c2` cue sentences (664 pairs) and P&D dev pairs ($0.338): legacy items flagged 0 / 4, not-a-warning 0 / 75, P&D macro F1 0.781 -> 0.505, strict E2E 0.111 -> 0.063: fails; `misconception_source` stays `legacy`. Report `reports/cr048/misconception_family.md`. Refinement ideas in DECISIONS.
+
+## CR-049 identity judge v2 (GraphJudge elements) (2026-10-24) — complete (not adopted)
+J2 (context packs, claim verification) on the CR-021 held-out split (second look, 65 rows, luna, $0.094): same precision 0.714 (LB 0.454), 8/20 gold same rows split: fails. J1 (v1) best: accuracy 0.908, same 0.857. Finding: the production adjudicator on luna gives same precision 0.739 (LB 0.535) vs 0.952 on sol at adoption, so its aliasing rule fails on luna (owner decision: sol for identity, promotion only, or measure J1). Report `reports/cr049/identity_judge.md`.

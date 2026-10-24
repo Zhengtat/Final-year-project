@@ -17,7 +17,7 @@ from cumap.expert_kg.identity import load_rules
 from cumap.gold.validate import verify_quote
 from cumap.llm.prompts import PromptTemplate, load_prompt
 
-JUDGE_MODES = ("off", "v1")
+JUDGE_MODES = ("off", "v1")  # CR-049: v2 (context packs) is measured by cumap.cr049 only; the production call sites pass no packs yet
 
 
 def judge_options() -> tuple[str, ...]:
@@ -51,9 +51,47 @@ def resolve_judge_mode(mode: str | None = None) -> str:
     return mode
 
 
-def load_judge_prompt() -> PromptTemplate:
+def load_judge_prompt(version: str | None = None) -> PromptTemplate:
+    """`version` None = the version in configs/identity_rules.yaml (v1); CR-049 passes "v2" explicitly."""
     j = load_rules()["judge"]
-    return load_prompt(REPO_ROOT / "prompts", j["prompt"], j["version"])
+    return load_prompt(REPO_ROOT / "prompts", j["prompt"], version or j["version"])
+
+
+def _norm(s: str) -> str:
+    return " ".join(s.split())
+
+
+def _mentions(sentence: str, names: list[str]) -> bool:
+    import re
+
+    low = _norm(sentence).lower()
+    return any(re.search(rf"(?<![\w-]){re.escape(n.lower())}(?![\w-])", low) for n in names if n)
+
+
+def context_pack(
+    sentences: list[str],
+    names: list[str],
+    *,
+    first: str | None = None,
+    exclude: str | None = None,
+    k: int = 3,
+) -> list[str]:
+    """CR-049 (GraphJudge, entity-centric context): up to `k` sentences, in text order, that mention one of `names` (whole-word,
+    case-insensitive), `first` (the term's own sentence) leading the pack and `exclude` left out. Only context for the judge: it never writes
+    a mention (rule 24)."""
+    out = [_norm(first)] if first else []
+    skip = {_norm(x) for x in (first, exclude) if x}
+    for s in sentences:
+        n = _norm(s)
+        if len(out) >= k:
+            break
+        if n not in skip and n not in out and _mentions(n, names):
+            out.append(n)
+    return out
+
+
+def render_pack(pack: list[str]) -> str:
+    return "\n".join(f"- {s}" for s in pack) if pack else "- (no other sentence uses it)"
 
 
 @dataclass(frozen=True)
@@ -80,6 +118,8 @@ def judge_pair(
     target_gloss: str | None,
     sentence: str,
     fixture_name: str = "default",
+    term_context: list[str] | None = None,
+    concept_context: list[str] | None = None,
 ) -> JudgeResult:
     """One strong-tier call. A decision whose evidence quote is not an exact substring of `sentence` becomes `no_decision` (logged by the caller)."""
     schema = build_identity_judge_schema()
@@ -97,6 +137,14 @@ def judge_pair(
                     target_type=target_type,
                     target_gloss=target_gloss or "none",
                     evidence=sentence,
+                    **(
+                        {}
+                        if prompt.version == "v1"
+                        else {
+                            "term_context": render_pack(term_context or [sentence]),
+                            "concept_context": render_pack(concept_context or []),
+                        }
+                    ),
                 ),
             }
         ],
