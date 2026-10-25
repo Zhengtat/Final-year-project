@@ -1,0 +1,223 @@
+{
+ "tag": "cr055b",
+ "control": "cr053v5",
+ "recall_by_unit_position_quintile": {
+  "cr055b": [
+   0.751,
+   0.759,
+   0.728,
+   0.807,
+   0.703
+  ],
+  "cr053v5": [
+   0.701,
+   0.678,
+   0.7,
+   0.763,
+   0.646
+  ]
+ },
+ "mentions_by_quintile": [
+  381,
+  382,
+  463,
+  456,
+  350
+ ],
+ "skipped_paragraphs": {
+  "paragraphs": 28,
+  "gold_mentions": 98,
+  "missed": 16
+ },
+ "paragraphs_with_gold": 338,
+ "span_misses": {
+  "fixed_by_X_rules": 102,
+  "not_fixed_by_X_rules": 211
+ },
+ "stage": {
+  "span": 313,
+  "never_proposed": 164,
+  "lost_after_generator": 20,
+  "hint_rejected": 1,
+  "node_not_placed": 7
+ },
+ "never": {
+  "classes": {
+   "short_phrase": 99,
+   "single_common_word": 27,
+   "acronym_or_model_name": 21,
+   "long_phrase": 15,
+   "contains_number_or_version": 2
+  },
+  "examples": {
+   "short_phrase": [
+    "smaller language models (method)",
+    "language models (method)",
+    "language model (method)",
+    "fine-tuning language models (task)",
+    "single-sentence tasks (task)",
+    "sentence-pair tasks (task)",
+    "few-shot setting (method)",
+    "sentence-pair tasks (task)",
+    "few-shot fine-tuning (method)",
+    "automatically template generation (task)",
+    "robust OOD classification (task)",
+    "w/o sq (method)"
+   ],
+   "single_common_word": [
+    "single-sentence (task)",
+    "single-sentence (task)",
+    "sentence-pair (task)",
+    "confidence (metric)",
+    "classification (task)",
+    "transformer (method)",
+    "last (method)",
+    "phrase-based (method)",
+    "phrase-based (method)",
+    "frequency (metric)",
+    "phrase-based (method)",
+    "phrase-based (method)"
+   ],
+   "long_phrase": [
+    "Fine-tuning of language models (task)",
+    "phrase-based machine translation system (method)",
+    "phrase-based ( PB ) (method)",
+    "learning the contexts for the linguistic operations (task)",
+    "identifying question topic and question focus (task)",
+    "identifying question topic and question focus (task)",
+    "identifying question topic and question focus (task)",
+    "identifying question topic and question focus (task)",
+    "identifies question topics and question foci (task)",
+    "identify question topic and question focus (task)",
+    "deep feed-forward neural network (method)",
+    "Nystro \u00a8 m methodology (method)"
+   ],
+   "acronym_or_model_name": [
+    "MRPC-but (dataset)",
+    "OOD generalization (task)",
+    "IMG-BART (method)",
+    "CY (method)",
+    "WMT 20165 shared task (dataset)",
+    "XSLT engines6 (method)",
+    "XSLT transformations (method)",
+    "XSLT transformations (method)",
+    "EMbased method (method)",
+    "F1 (metric)",
+    "MDL (method)",
+    "cQA (task)"
+   ],
+   "contains_number_or_version": [
+    "Autodesk post editing corpus4 (dataset)",
+    "Yelp 2014 (dataset)"
+   ]
+  },
+  "by_type": {
+   "method": 88,
+   "task": 47,
+   "metric": 17,
+   "dataset": 12
+  },
+  "top_surfaces": [
+   [
+    "nystro \u00a8 m",
+    10
+   ],
+   [
+    "confidence",
+    9
+   ],
+   [
+    "graph-based consensus",
+    6
+   ],
+   [
+    "phrase-based",
+    5
+   ],
+   [
+    "copying mechanism",
+    5
+   ],
+   [
+    "identifying question topic and question focus",
+    4
+   ],
+   [
+    "topological parse",
+    3
+   ],
+   [
+    "nystro \u00a8 m methodology",
+    3
+   ],
+   [
+    "discriminative ranker",
+    3
+   ],
+   [
+    "convolutional filter",
+    3
+   ],
+   [
+    "tdt4",
+    3
+   ],
+   [
+    "attention-based copying",
+    3
+   ],
+   [
+    "single-sentence",
+    2
+   ],
+   [
+    "sentence-pair tasks",
+    2
+   ],
+   [
+    "feature extraction",
+    2
+   ],
+   [
+    "deep syntactic analysis",
+    2
+   ],
+   [
+    "topological tree",
+    2
+   ],
+   [
+    "xslt transformations",
+    2
+   ],
+   [
+    "attention mechanisms",
+    2
+   ],
+   [
+    "multiple convolutional filters",
+    2
+   ],
+   [
+    "convolutional filters",
+    2
+   ],
+   [
+    "iwslt",
+    2
+   ],
+   [
+    "tdt4 data",
+    2
+   ],
+   [
+    "smaller language models",
+    1
+   ],
+   [
+    "language models",
+    1
+   ]
+  ]
+ }
+}

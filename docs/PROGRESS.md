@@ -233,3 +233,6 @@ J2 (context packs, claim verification) on the CR-021 held-out split (second look
 
 ## CR-055 SciNLP concept-recall bundle (2026-10-25) — complete (not adopted)
 Concept recall 0.701 -> 0.731 (A) / 0.751 (B, G2) but concept F1 0.485 -> 0.491 / 0.483 (rule +0.02 not met) and relation F1 0.136 -> 0.125 / 0.122 (more concepts crowd the pair budget: P0 57 -> 75 / 97). Profile v3 stays; switches kept, off. Spend $1.21.
+
+## CR-056 all pairs on the recall arms; miss analysis (2026-10-26) — complete (adopted)
+Arm B + all pairs: relation F1 0.136 -> 0.153 (recall 0.112 -> 0.149), concept recall 0.751 (0.792 with the span rules, 0.828 with nested placement). Profile v5 is the default for new SciNLP runs (about $0.04 per paper). Misses: spans now too long more often than too short (gold inconsistent), never-proposed component phrases, PDF artefacts. Next: step 4 on the other 37 train papers.

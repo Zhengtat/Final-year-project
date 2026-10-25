@@ -14,11 +14,13 @@ def test_v5_differs_from_v4_only_in_definitions_and_v4_is_untouched():
         assert v4[v4.index(part) :] == v5[v5.index(part) :]
 
 
-def test_profile_v3_is_v2_with_the_new_prompt_and_the_default_runner():
+def test_profile_v3_is_v2_with_the_new_prompt_and_its_runner_is_selectable():
     p2 = yaml.safe_load((REPO_ROOT / "configs/scinlp_profile_v2.yaml").read_text())
     p3 = yaml.safe_load((REPO_ROOT / "configs/scinlp_profile_v3.yaml").read_text())
     assert p3["generator_prompt"]["version"] == "v5_scinlp"
     assert {k: v for k, v in p3.items() if k not in ("generator_prompt", "status")} == {
         k: v for k, v in p2.items() if k not in ("generator_prompt", "status")
     }
-    assert 'default="cumap.cr053.scinlp_run"' in (REPO_ROOT / "src/cumap/cr043/run.py").read_text()
+    assert (
+        '"cumap.cr053.scinlp_run"' in (REPO_ROOT / "src/cumap/cr043/run.py").read_text()
+    )  # still selectable; CR-056 made v5 the default
