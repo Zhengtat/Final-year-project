@@ -188,6 +188,8 @@ class ConceptRun:
                 quote_repair=bool((self.concept_recall or {}).get("quote_repair")),
                 m6=bool((self.concept_recall or {}).get("m6")),
                 m6_terms=tuple((self.concept_recall or {}).get("m6_terms") or ()),
+                m7=bool((self.concept_recall or {}).get("m7")),
+                m7_heads=tuple((self.concept_recall or {}).get("m7_heads") or ()),
             )
             sec = {
                 **sec,

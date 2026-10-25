@@ -179,6 +179,44 @@
   "unplaced_counted_as_fp": 13,
   "evidence_match_share": 0.9135802469135802
  },
+ "recall_views": {
+  "IDXR1X-P1": {
+   "concept_entity_strict": {
+    "tp": 1609,
+    "fp": 2681,
+    "fn": 423,
+    "precision": 0.37505827505827505,
+    "recall": 0.7918307086614174,
+    "f1": 0.5090161341347674
+   },
+   "relation_strict": {
+    "tp": 84,
+    "fp": 388,
+    "fn": 414,
+    "precision": 0.17796610169491525,
+    "recall": 0.1686746987951807,
+    "f1": 0.1731958762886598
+   }
+  },
+  "IDXR1N-P1": {
+   "concept_entity_strict": {
+    "tp": 1683,
+    "fp": 3729,
+    "fn": 349,
+    "precision": 0.31097560975609756,
+    "recall": 0.828248031496063,
+    "f1": 0.45217624932831807
+   },
+   "relation_strict": {
+    "tp": 86,
+    "fp": 588,
+    "fn": 412,
+    "precision": 0.12759643916913946,
+    "recall": 0.17269076305220885,
+    "f1": 0.14675767918088736
+   }
+  }
+ },
  "earliest_failure": {
   "N0": 115,
   "N1": 125,
@@ -345,5 +383,6 @@
     151824
    ]
   }
- }
+ },
+ "paper_set": "first"
 }

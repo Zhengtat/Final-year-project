@@ -75,6 +75,8 @@ class VerifyCtx:
     quote_repair: bool = False  # CR-055: F2 also accepts a quote that differs from the text only in spaces around punctuation
     m6: bool = False  # CR-055: hint acronym-like tokens and listed terms no item covers
     m6_terms: tuple[str, ...] = ()
+    m7: bool = False  # CR-057: hint component / method phrases ("copying mechanism", "discriminative ranker") that no item covers
+    m7_heads: tuple[str, ...] = ()
 
     @property
     def words(self) -> int:
@@ -429,6 +431,8 @@ def verify(out_in: dict, ctx: VerifyCtx) -> VerifyResult:
         res.hints += _m5(out, ctx)
     if ctx.m6:
         res.hints += _m6(out, ctx)
+    if ctx.m7:
+        res.hints += _m7(out, ctx)
     return res
 
 
@@ -571,3 +575,99 @@ def drop_flagged(out: dict, flags: list[Flag]) -> tuple[dict, list[dict]]:
                     }
                 )
     return out, rejected
+
+
+_STOP = {
+    "the",
+    "a",
+    "an",
+    "our",
+    "this",
+    "that",
+    "these",
+    "those",
+    "its",
+    "their",
+    "of",
+    "and",
+    "or",
+    "to",
+    "in",
+    "for",
+    "with",
+    "is",
+    "are",
+    "was",
+    "were",
+    "by",
+    "on",
+    "from",
+    "which",
+    "we",
+    "as",
+    "be",
+    "each",
+    "such",
+    "all",
+    "both",
+    "any",
+    "other",
+    "same",
+    "new",
+    "proposed",
+    "standard",
+    "simple",
+    "first",
+    "second",
+    "final",
+    "different",
+    "two",
+    "three",
+    "one",
+    "it",
+    "can",
+    "using",
+    "use",
+    "used",
+}
+M7_MAX = 10
+
+
+def _m7(out: dict, ctx: VerifyCtx) -> list[Hint]:
+    """CR-057 (optional): a phrase of one to three content words ending in a component / method head (`ctx.m7_heads`: mechanism, filter,
+    ranker, parser, decoder, ...) that the section uses and no item covers. At most M7_MAX hints per section; the generator adds or rejects
+    each."""
+    cfg = _cfg()
+    heads = {h.lower() for h in ctx.m7_heads}
+    words = re.findall(r"[A-Za-z][A-Za-z0-9-]*|[^\sA-Za-z]", ctx.section_text)
+    cand: dict[str, None] = {}
+    for i, w in enumerate(words):
+        if w.lower() not in heads:
+            continue
+        j = i
+        while (
+            j > 0
+            and i - j < 3
+            and re.fullmatch(r"[A-Za-z][A-Za-z0-9-]*", words[j - 1])
+            and words[j - 1].lower() not in _STOP
+        ):
+            j -= 1
+        if j < i:
+            cand.setdefault(" ".join(words[j : i + 1]), None)
+    hints = []
+    for term in cand:
+        key = ("M7", _nl(term))
+        if key in ctx.rejected_keys or _covered(term, out, cfg):
+            continue
+        hints.append(
+            Hint(
+                "M7",
+                "missed_candidate",
+                term,
+                f"{term!r} looks like a named method or component that no item covers",
+                key,
+            )
+        )
+        if len(hints) >= M7_MAX:
+            break
+    return hints
