@@ -230,3 +230,6 @@ J2 (context packs, claim verification) on the CR-021 held-out split (second look
 
 ## CR-054 missed-concept analysis (2026-10-25) — complete ($0)
 608 missed gold mentions (cr053v5): span 49%, never proposed 44%, lost after the generator 7% (mostly corrective iterations dropping earlier items), verifier / pruner almost none. Report `reports/cr054/concept_recall.md`.
+
+## CR-055 SciNLP concept-recall bundle (2026-10-25) — complete (not adopted)
+Concept recall 0.701 -> 0.731 (A) / 0.751 (B, G2) but concept F1 0.485 -> 0.491 / 0.483 (rule +0.02 not met) and relation F1 0.136 -> 0.125 / 0.122 (more concepts crowd the pair budget: P0 57 -> 75 / 97). Profile v3 stays; switches kept, off. Spend $1.21.

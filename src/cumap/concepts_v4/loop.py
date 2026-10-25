@@ -42,6 +42,7 @@ class LoopConfig:
     per_section_call_budget: int = 5
     drop_max: int = 3
     carry_forward: bool = True
+    carry_forward_rule: str = "any_word"  # CR-055: "contained" = only a containing / contained span in the new output blocks a restore
     use_verifier: bool = True
     # C-SAC arm: SAC-KG's own checks only, one regeneration, no coverage rules
     rules: str = "all"  # all | sac (Q1 + F1-F3 only)
@@ -49,7 +50,14 @@ class LoopConfig:
     hints_forced: bool = (
         False  # C-PiVe: given items are added outright (the generator may not reject them)
     )
-    hint_rules: tuple[str, ...] = ("M1", "M2", "M3", "M4", "M5")
+    hint_rules: tuple[str, ...] = (
+        "M1",
+        "M2",
+        "M3",
+        "M4",
+        "M5",
+        "M6",
+    )  # M6 fires only when VerifyCtx.m6 (CR-055)
     bank_corrective: bool = True
     instructions: dict[str, str] = field(default_factory=dict)
     prefix: str = (
@@ -358,7 +366,7 @@ class SectionRunner:
                 elif r["decision"] == "added":
                     res.hints_added += 1
             if cfg.carry_forward:
-                new_out, n = _carry_forward(new_out, clean, rejected_keys)
+                new_out, n = _carry_forward(new_out, clean, rejected_keys, cfg.carry_forward_rule)
                 res.restored += n
             sig = json.dumps(new_out, sort_keys=True)
             if sig == prev_sig or sig == json.dumps(out, sort_keys=True):
@@ -451,9 +459,13 @@ def _words(s: str) -> set[str]:
     return set(re.findall(r"[a-z0-9]+", s.lower()))
 
 
-def _carry_forward(new_out: dict, clean: dict, rejected_keys: set) -> tuple[dict, int]:
+def _carry_forward(
+    new_out: dict, clean: dict, rejected_keys: set, rule: str = "any_word"
+) -> tuple[dict, int]:
     """Restore an item that passed every rule earlier and disappeared without a rejection, unless its span
-    overlaps an item in the latest output (the model may have replaced a partial span itself)."""
+    overlaps an item in the latest output (the model may have replaced a partial span itself). `rule` "any_word": one shared
+    word blocks the restore; "contained" (CR-055): only an item whose words contain, or are contained in, the earlier item's
+    words blocks it ("grid search" is no longer blocked by "beam search")."""
     out = copy.deepcopy(new_out)
     present = {(k, nm) for k, _key, nm in _item_keys(out)}
     spans = [_words(c["name"]) for c in out["new_concepts"]] + [
@@ -465,7 +477,7 @@ def _carry_forward(new_out: dict, clean: dict, rejected_keys: set) -> tuple[dict
         if (kind, nm) in present or nm.split("|")[-1] in rejected_names:
             continue
         iw = _words(item["name"] if kind == "new_concepts" else item["surface"])
-        if any(iw & sp for sp in spans):
+        if any((iw <= sp or sp <= iw) if rule == "contained" else (iw & sp) for sp in spans if sp):
             continue
         out[kind].append(item)
         n += 1
