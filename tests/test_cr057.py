@@ -63,3 +63,11 @@ def test_nested_view_strips_a_trailing_generic_head():
         rules=(),
     )
     assert set(out[0].mentions) == {(1, 3), (1, 2)}
+
+
+def test_the_loop_keeps_m7_hints():
+    from cumap.concepts_v4.loop import LoopConfig
+
+    assert (
+        "M7" in LoopConfig().hint_rules
+    )  # CR-057: a first run filtered M7 out (the hints never reached the generator)

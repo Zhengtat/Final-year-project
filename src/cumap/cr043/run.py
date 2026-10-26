@@ -18,7 +18,7 @@ from cumap.cr012 import production_graph as PG
 from cumap.cr043.papers import paper_set
 
 TAG = "cr043base"
-MAX_USD_PER_DOC = 1.0
+MAX_USD_PER_DOC = 3.0  # CR-057: with every pair classified the sol-priced preflight bound passes $1; real luna spend is capped by --cap-usd
 
 
 def run_id(doc: str, tag: str = TAG) -> str:

@@ -57,7 +57,8 @@ class LoopConfig:
         "M4",
         "M5",
         "M6",
-    )  # M6 fires only when VerifyCtx.m6 (CR-055)
+        "M7",
+    )  # M6 / M7 fire only when VerifyCtx.m6 / m7 (CR-055 / CR-057)
     bank_corrective: bool = True
     instructions: dict[str, str] = field(default_factory=dict)
     prefix: str = (
