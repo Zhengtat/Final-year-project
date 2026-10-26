@@ -62,3 +62,6 @@ data/interim/suggestions/cr050_identity_sheet_blind.csv
 reports/cr049/results.jsonl
 reports/cr050/results.jsonl
 reports/cr051/results.jsonl
+
+# CR-058: the pipeline diagnostics page embeds SciNLP-derived text (CC BY-NC): never committed (summary.{json,md} are numbers only)
+reports/cr058/pipeline.html
