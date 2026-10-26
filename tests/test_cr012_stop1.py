@@ -58,6 +58,8 @@ def test_no_pipeline_module_reads_scinlp_text_into_prompts():
             continue  # CR-057: the frozen SciNLP runner with profile v6 (train / dev only; no new prompt)
         if f.parts[2] == "cr056":
             continue  # CR-056: the frozen SciNLP runner with profile v5 and read-only rescoring of train / dev runs (no new prompt, no test split)
+        if f.parts[2] == "cr058":
+            continue  # CR-058: read-only diagnostics page over retained runs (no prompt, no model call); test runs read for reporting only, as CR-031
         if f.parts[2] == "cr055":
             continue  # CR-055: the frozen SciNLP runner with profile v4 (train / dev only; prompt v6_scinlp holds no SciNLP test material)
         if f.parts[2] == "cr054":

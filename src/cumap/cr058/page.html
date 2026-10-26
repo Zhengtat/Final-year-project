@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SciNLP Pipeline Diagnostics</title>
+<style>
+:root{
+  --bg:#f7f7f5;--panel:#ffffff;--ink:#1d1d1b;--muted:#6b6b66;--line:#e3e2dd;--soft:#efeee9;
+  --accent:#2f5fd0;--good:#2e8b57;--warn:#c98a12;--bad:#c4413a;--none:#9a9a94;
+  --r0:#2f5fd0;--r1:#d9622b;--r2:#2e8b57;--r3:#8a4fbf;--r4:#c4413a;--r5:#1f8fa3;--r6:#b7871a;--r7:#d4579a;--r8:#5e7d2a;--r9:#7a5c3e;--r10:#4b4f9c;
+  --dir:#2f5fd0;--sym:#d9622b;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#151514;--panel:#1e1e1c;--ink:#ecebe6;--muted:#a3a29b;--line:#34332f;--soft:#26261f;
+  --accent:#7aa2ff;--good:#5cc28a;--warn:#e2ad45;--bad:#f07a72;--none:#77766f;
+  --r0:#7aa2ff;--r1:#f39a63;--r2:#5cc28a;--r3:#b98ae6;--r4:#f07a72;--r5:#4cc3d6;--r6:#e2ad45;--r7:#f08cc0;--r8:#9cc65a;--r9:#c79b74;--r10:#9aa0f0;
+  --dir:#7aa2ff;--sym:#f39a63;
+}}
+:root[data-theme="dark"]{
+  --bg:#151514;--panel:#1e1e1c;--ink:#ecebe6;--muted:#a3a29b;--line:#34332f;--soft:#26261f;
+  --accent:#7aa2ff;--good:#5cc28a;--warn:#e2ad45;--bad:#f07a72;--none:#77766f;
+  --r0:#7aa2ff;--r1:#f39a63;--r2:#5cc28a;--r3:#b98ae6;--r4:#f07a72;--r5:#4cc3d6;--r6:#e2ad45;--r7:#f08cc0;--r8:#9cc65a;--r9:#c79b74;--r10:#9aa0f0;
+  --dir:#7aa2ff;--sym:#f39a63;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:18px 24px 8px;max-width:1400px;margin:0 auto}
+h1{font-size:22px;margin:0 0 4px}
+h2{font-size:17px;margin:26px 0 10px}
+h3{font-size:14px;margin:14px 0 6px}
+.sub{color:var(--muted);font-size:12.5px}
+.bar{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar>div{max-width:1400px;margin:0 auto;padding:8px 24px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+main{max-width:1400px;margin:0 auto;padding:0 24px 60px}
+button,select{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:5px 10px;cursor:pointer}
+button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg{display:inline-flex}.seg button{border-radius:0}.seg button:first-child{border-radius:6px 0 0 6px}.seg button:last-child{border-radius:0 6px 6px 0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:10px 0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi .v{font-size:22px;font-weight:600;font-variant-numeric:tabular-nums}
+.kpi .l{color:var(--muted);font-size:12px}
+table{border-collapse:collapse;width:100%;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-weight:600;color:var(--muted);font-size:12px;cursor:pointer;white-space:nowrap}
+td.n,th.n{text-align:right}
+tr.sel{background:var(--soft)}
+tbody tr:hover{background:var(--soft)}
+.scroll{max-height:420px;overflow:auto}
+.pill{display:inline-block;padding:1px 7px;border-radius:10px;font-size:11.5px;border:1px solid var(--line);white-space:nowrap}
+.ok{color:var(--good)}.bad{color:var(--bad)}.warn{color:var(--warn)}
+.graphs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:900px){.graphs{grid-template-columns:1fr}}
+.gbox{background:var(--panel);border:1px solid var(--line);border-radius:10px;overflow:hidden;position:relative}
+.gbox .t{padding:8px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap}
+svg.g{width:100%;height:560px;display:block;cursor:grab;touch-action:none}
+svg.g text{font-size:10px;fill:var(--ink);pointer-events:none;paint-order:stroke;stroke:var(--panel);stroke-width:3px}
+.tip{position:fixed;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px;max-width:380px;box-shadow:0 4px 18px rgba(0,0,0,.15);display:none;z-index:20}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--muted);margin:6px 0}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:4px;vertical-align:-2px}
+.legend b{display:inline-block;width:18px;height:3px;margin-right:4px;vertical-align:3px}
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+@media (max-width:1000px){.flow{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.flow{grid-template-columns:1fr}}
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;position:relative}
+.stage h3{margin:0 0 8px}
+.stage .num{color:var(--muted);font-size:12px}
+.comp{border:1px solid var(--line);border-radius:8px;padding:7px 9px;margin:6px 0;background:var(--bg)}
+.comp b{display:block;font-size:13px}
+.comp span{color:var(--muted);font-size:12px}
+.fun{display:grid;grid-template-columns:240px 1fr 150px;gap:6px 10px;align-items:center;font-size:13px}
+.fun .b{height:18px;border-radius:4px;background:var(--accent)}
+.fun .b.loss{background:var(--bad)}
+.fun .lab{color:var(--muted)}
+.mono{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:900px){.two{grid-template-columns:1fr}}
+.note{color:var(--muted);font-size:12.5px;margin:4px 0}
+.hide{display:none!important}
+.tabs button{border:none;background:none;border-bottom:2px solid transparent;border-radius:0;padding:6px 4px;margin-right:14px}
+.tabs button.on{background:none;color:var(--ink);border-bottom-color:var(--ink);font-weight:600}
+</style>
+</head>
+<body>
+<header>
+  <h1>SciNLP pipeline diagnostics</h1>
+  <div class="sub" id="hdr"></div>
+</header>
+<div class="bar"><div>
+  <div class="seg" id="panelSeg"></div>
+  <select id="setSel" title="paper set"></select>
+  <select id="paperSel" title="paper"></select>
+  <select id="levelSel" title="oracle level"></select>
+  <span class="tabs" id="tabs" style="margin-left:auto"></span>
+  <button id="themeBtn" title="theme">Theme</button>
+</div></div>
+<main>
+  <section id="tab-overview"></section>
+  <section id="tab-pipeline" class="hide"></section>
+  <section id="tab-results" class="hide"></section>
+</main>
+<div class="tip" id="tip"></div>
+<script>
+const B64="/*__DATA_B64__*/";
+let D=null;
+const S={panel:"dev",set:"all",paper:"",level:"E0",tab:"overview",gpaper:"",edgeView:"type",hideIso:true,onlyMiss:false,sortKey:"f1",sortDir:-1,missStage:""};
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const f3=x=>x==null||isNaN(x)?"–":x.toFixed(3);
+const pct=x=>x==null||isNaN(x)?"–":(100*x).toFixed(1)+"%";
+const P=x=>x.tp+x.fp?x.tp/(x.tp+x.fp):0, R=x=>x.tp+x.fn?x.tp/(x.tp+x.fn):0, F=x=>x.tp?2*x.tp/(2*x.tp+x.fp+x.fn):0;
+const NOPOOL=new Set(["graph","examples"]);
+const add=(a,b)=>{for(const k in b){if(NOPOOL.has(k))continue;const v=b[k];if(typeof v==="number")a[k]=(a[k]||0)+v;else if(v&&typeof v==="object"&&!Array.isArray(v)){a[k]=a[k]||{};add(a[k],v);}}return a;};
+const STAGES=["generator_first_pass","verifier_first_pass","corrective_round","pruner","consolidation"];
+const STAGE_NAME={generator_first_pass:"Generator, first pass",verifier_first_pass:"Verifier on the first pass",corrective_round:"Coverage hints + corrective round",pruner:"Pruner (node store)",consolidation:"Consolidation (final concepts)"};
+const GSTAGES=["gold","endpoints_placed","pair_selected","family_right","choice_right","checks_passed","assembled","credited"];
+const GNAME={gold:"Gold relations",endpoints_placed:"Both endpoint concepts placed (exact span)",pair_selected:"Pair classified (candidate + selected)",family_right:"Family step: SciNLP family",choice_right:"Choice step: right relation + direction",checks_passed:"Passed the code checks",assembled:"In the assembled graph (evidence placed)",credited:"Credited (strict, IDXR1-P1)"};
+const LOSS_NAME={span:"span differs",never_proposed:"never proposed",lost_after_generator:"lost after generator",hint_rejected:"hint rejected",node_not_placed:"node exists, occurrence not placed",not_found:"not found"};
+
+async function load(){
+  const bin=Uint8Array.from(atob(B64),c=>c.charCodeAt(0));
+  const txt=await new Response(new Blob([bin]).stream().pipeThrough(new DecompressionStream("gzip"))).text();
+  D=JSON.parse(txt);
+  init();
+}
+function recs(){
+  if(S.panel==="dev"){
+    if(S.paper) return [D.papers[S.paper]];
+    const names=S.set==="all"?[...D.meta.sets.first,...D.meta.sets.rest]:D.meta.sets[S.set];
+    return names.map(n=>D.papers[n]);
+  }
+  const docs=S.paper?[S.paper]:Object.keys(D.test);
+  return docs.map(d=>D.test[d][S.level]);
+}
+function pooled(){const o={};for(const r of recs())add(o,r);return o;}
+function devNames(){return S.set==="all"?[...D.meta.sets.first,...D.meta.sets.rest]:D.meta.sets[S.set];}
+function scopeLabel(){
+  if(S.panel==="dev") return S.paper?`paper ${S.paper}`:({all:"all 57 train + dev papers",first:"first set (20: 6 dev + 14 train)",rest:"other 37 train papers (unseen in development)"}[S.set]);
+  return (S.paper?`test paper ${S.paper}`:"3 test papers")+`, oracle level ${S.level}`;
+}
+
+function init(){
+  const g=D.gates, ok=Object.values(g).every(Boolean);
+  $("#hdr").innerHTML=`${esc(D.dataset)} · development runs <span class="mono">${esc(D.sources.first)}</span> (first 20) + <span class="mono">${esc(D.sources.rest)}</span> (other 37), profile v5 · held-out: frozen CR-012 oracle runs (older pipeline, reporting only) · grounding <b>IDXR1-P1</b> · gates <span class="${ok?"ok":"bad"}">${ok?"pass":"FAIL"}</span> (pooled numbers = CR-043 scorecards and CR-031 ladder) · sources unchanged <span class="${D.sources_unchanged?"ok":"bad"}">${D.sources_unchanged}</span>`;
+  $("#panelSeg").innerHTML=`<button data-p="dev">Development (57 papers)</button><button data-p="test">Held-out oracle (3 test papers)</button>`;
+  $("#panelSeg").onclick=e=>{const p=e.target.dataset.p;if(!p)return;S.panel=p;S.paper="";S.gpaper="";S.level="E0";render();};
+  $("#tabs").innerHTML=["overview:1 · Overview","pipeline:2 · Pipeline and stage metrics","results:3 · Hierarchy F1 and end to end"].map(x=>{const[k,l]=x.split(":");return `<button data-t="${k}">${l}</button>`}).join("");
+  $("#tabs").onclick=e=>{const t=e.target.dataset.t;if(!t)return;S.tab=t;render();};
+  $("#setSel").onchange=e=>{S.set=e.target.value;S.paper="";render();};
+  $("#paperSel").onchange=e=>{S.paper=e.target.value;if(S.paper)S.gpaper=S.paper;render();};
+  $("#levelSel").onchange=e=>{S.level=e.target.value;render();};
+  $("#themeBtn").onclick=()=>{const r=document.documentElement,cur=r.dataset.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");r.dataset.theme=cur==="dark"?"light":"dark";try{localStorage.setItem("cr058theme",r.dataset.theme)}catch(e){}};
+  try{const t=localStorage.getItem("cr058theme");if(t)document.documentElement.dataset.theme=t;}catch(e){}
+  render();
+}
+function controls(){
+  document.querySelectorAll("#panelSeg button").forEach(b=>b.classList.toggle("on",b.dataset.p===S.panel));
+  document.querySelectorAll("#tabs button").forEach(b=>b.classList.toggle("on",b.dataset.t===S.tab));
+  const ss=$("#setSel"),ps=$("#paperSel"),ls=$("#levelSel");
+  if(S.panel==="dev"){
+    ss.classList.remove("hide");ls.classList.add("hide");
+    ss.innerHTML=[["all","All 57 papers"],["first","First set (20)"],["rest","Other 37 train papers"]].map(([v,l])=>`<option value="${v}" ${S.set===v?"selected":""}>${l}</option>`).join("");
+    ps.innerHTML=`<option value="">Pooled over the set</option>`+devNames().map(n=>`<option ${S.paper===n?"selected":""}>${esc(n)}</option>`).join("");
+  }else{
+    ss.classList.add("hide");ls.classList.remove("hide");
+    ls.innerHTML=D.levels.map(l=>`<option ${S.level===l?"selected":""}>${l}</option>`).join("");
+    ps.innerHTML=`<option value="">Pooled over the 3 papers</option>`+Object.keys(D.test).map(n=>`<option ${S.paper===n?"selected":""}>${esc(n)}</option>`).join("");
+  }
+}
+function render(){
+  controls();
+  for(const t of ["overview","pipeline","results"])$("#tab-"+t).classList.toggle("hide",S.tab!==t);
+  if(S.tab==="overview")overview();else if(S.tab==="pipeline")pipeline();else results();
+}
+
+/* ---------------------------------------------------------------- overview */
+function kpis(o){
+  const pr=o.relation.gold_stages, pairR=pr.endpoints_placed?pr.pair_selected/pr.endpoints_placed:NaN;
+  const items=[
+    ["Concept F1",F(o.concept_strict),`P ${f3(P(o.concept_strict))} · R ${f3(R(o.concept_strict))}`],
+    ["Relation F1 (strict E2E)",F(o.relation_strict),`P ${f3(P(o.relation_strict))} · R ${f3(R(o.relation_strict))}`],
+    ["Pair recall",pairR,`${pr.pair_selected} of ${pr.endpoints_placed} gold relations with both endpoints placed`],
+    ["Gold relations credited",pr.gold?pr.credited/pr.gold:NaN,`${pr.credited} of ${pr.gold}`],
+  ];
+  if(o.downstream){items.push(["Hierarchy F1 (direct H2)",F(o.downstream.hierarchy_H2),`P ${f3(P(o.downstream.hierarchy_H2))} · R ${f3(R(o.downstream.hierarchy_H2))}`]);
+    items.push(["Fact F1 (FACT-C1-SURF-R1)",F(o.downstream.fact),"identity inferred from strings"]);}
+  return `<div class="kpis">${items.map(([l,v,s])=>`<div class="kpi"><div class="l">${l}</div><div class="v">${f3(v)}</div><div class="l">${s}</div></div>`).join("")}</div>`;
+}
+function overview(){
+  const o=pooled();let h=`<h2>Evaluation metrics: ${esc(scopeLabel())}</h2>${kpis(o)}`;
+  h+=funnelCard(o,"Where gold relations are lost (bottleneck funnel)");
+  h+=oracleCard();
+  h+=paperTable();
+  h+=graphSection();
+  $("#tab-overview").innerHTML=h;
+  bindPaperTable();bindGraph();
+}
+function funnelCard(o,title){
+  const g=o.relation.gold_stages,max=g.gold||1;let worst=null,wl=-1;
+  for(let i=1;i<GSTAGES.length;i++){const l=g[GSTAGES[i-1]]-g[GSTAGES[i]];if(l>wl){wl=l;worst=GSTAGES[i];}}
+  let rows="";
+  GSTAGES.forEach((s,i)=>{const n=g[s],lost=i?g[GSTAGES[i-1]]-n:0;
+    rows+=`<div class="lab">${GNAME[s]}</div><div><div class="b" style="width:${100*n/max}%"></div>${lost?`<div class="b loss" style="width:${100*lost/max}%;height:5px;margin-top:2px;opacity:${s===worst?1:.45}"></div>`:""}</div><div class="n mono">${n}${i?` <span class="${s===worst?"bad":"sub"}">−${lost}</span>`:""}${i>1&&g.endpoints_placed?` <span class="sub">(${pct(n/g.endpoints_placed)})</span>`:""}</div>`;});
+  const ns=o.relation.not_selected_split||{};
+  return `<div class="card"><h3>${title}</h3><p class="note">Each gold relation is followed to the furthest stage it reaches. Blue = reaching the stage; red = lost at it (the largest loss in full red). Percentages are pair recall: share of the gold relations with both endpoints placed.</p><div class="fun">${rows}</div>
+  <p class="note">Largest single loss: <b>${GNAME[worst]}</b> (−${wl}). Pairs never classified: ${ns.same_sentence||0} same-sentence, ${ns.cross_sentence||0} cross-sentence (cross-sentence pairs are never candidates). "Credited" can trail "assembled" when the right fact sits on a different evidence sentence than the gold mention (IDXR1-P1 is strict about it).</p></div>`;
+}
+function oracleCard(){
+  const L=D.levels,docs=Object.keys(D.test);
+  const pool=lv=>{const o={};docs.forEach(d=>add(o,D.test[d][lv]));return o;};
+  const P0=Object.fromEntries(L.map(l=>[l,pool(l)]));
+  let h=`<div class="card"><h3>Oracle ladder (held-out test, frozen CR-012 runs, older pipeline; reporting only)</h3>
+  <p class="note">E0 full pipeline · E1 gold mention spans + types given · E3-M gold nodes, every gold endpoint pair forced into classification (labels hidden) · E4-M only the gold endpoint pairs classified. The step from one level to the next shows how much that stage costs.</p>
+  <table><thead><tr><th>level</th><th class="n">concept F1</th><th class="n">relation P</th><th class="n">relation R</th><th class="n">relation F1</th><th class="n">step</th>${docs.map(d=>`<th class="n">${esc(d.replace(".grobid",""))}</th>`).join("")}<th>earliest failure (N0 · N1 · P0 · R0 · R1 · R2)</th></tr></thead><tbody>`;
+  L.forEach((l,i)=>{const o=P0[l],c=o.codes||{};h+=`<tr${S.panel==="test"&&S.level===l?' class="sel"':""}><td>${l}</td><td class="n">${f3(F(o.concept_strict))}</td><td class="n">${f3(P(o.relation_strict))}</td><td class="n">${f3(R(o.relation_strict))}</td><td class="n"><b>${f3(F(o.relation_strict))}</b></td><td class="n">${i?(F(o.relation_strict)-F(P0[L[i-1]].relation_strict)>=0?"+":"")+f3(F(o.relation_strict)-F(P0[L[i-1]].relation_strict)):"–"}</td>${docs.map(d=>`<td class="n">${f3(F(D.test[d][l].relation_strict))}</td>`).join("")}<td class="mono">${["N0","N1","P0","R0","R1","R2"].map(k=>c[k]||0).join(" · ")}</td></tr>`;});
+  h+=`</tbody></table><p class="note">P17-1058 has one gold relation, so it adds only false positives. Three papers: no confidence interval (NOT_EVALUABLE_SMALL_N).</p></div>`;
+  return h;
+}
+function paperRows(){
+  if(S.panel==="dev") return devNames().map(n=>({n,r:D.papers[n]}));
+  return Object.keys(D.test).map(n=>({n,r:D.test[n][S.level]}));
+}
+function paperTable(){
+  const rows=paperRows().map(({n,r})=>({n,split:r.split||"test",set:r.set||"test",words:r.words,gm:r.gold_mentions,gr:r.gold_relations,cR:R(r.concept_strict),cF:F(r.concept_strict),p:P(r.relation_strict),rec:R(r.relation_strict),f1:F(r.relation_strict),pr:r.relation.gold_stages.endpoints_placed?r.relation.gold_stages.pair_selected/r.relation.gold_stages.endpoints_placed:NaN,c:r.codes}));
+  rows.sort((a,b)=>{const x=a[S.sortKey],y=b[S.sortKey];return (x>y?1:x<y?-1:0)*S.sortDir;});
+  const cols=[["n","paper"],["split","split"],["words","words",1],["gm","gold concepts (mentions)",1],["gr","gold relations",1],["cR","concept R",1],["cF","concept F1",1],["pr","pair recall",1],["p","relation P",1],["rec","relation R",1],["f1","relation F1",1]];
+  return `<div class="card"><h3>Per paper (${rows.length}) · click a row to show its graphs</h3><div class="scroll"><table id="ptab"><thead><tr>${cols.map(([k,l,n])=>`<th data-k="${k}" class="${n?"n":""}">${l}${S.sortKey===k?(S.sortDir>0?" ▲":" ▼"):""}</th>`).join("")}<th>N0 · N1 · P0 · R0 · R1</th></tr></thead><tbody>${rows.map(x=>`<tr data-n="${esc(x.n)}" class="${(S.gpaper||rows[0].n)===x.n?"sel":""}"><td class="mono">${esc(x.n)}</td><td>${x.split}</td><td class="n">${x.words}</td><td class="n">${x.gm}</td><td class="n">${x.gr}</td><td class="n">${f3(x.cR)}</td><td class="n">${f3(x.cF)}</td><td class="n">${f3(x.pr)}</td><td class="n">${f3(x.p)}</td><td class="n">${f3(x.rec)}</td><td class="n"><b>${f3(x.f1)}</b></td><td class="mono">${["N0","N1","P0","R0","R1"].map(k=>x.c[k]||0).join(" · ")}</td></tr>`).join("")}</tbody></table></div></div>`;
+}
+function bindPaperTable(){
+  const t=$("#ptab");if(!t)return;
+  t.querySelector("thead").onclick=e=>{const k=e.target.dataset.k;if(!k)return;S.sortDir=S.sortKey===k?-S.sortDir:-1;S.sortKey=k;overview();};
+  t.querySelector("tbody").onclick=e=>{const tr=e.target.closest("tr");if(!tr)return;S.gpaper=tr.dataset.n;overview();document.getElementById("graphs").scrollIntoView({behavior:"smooth"});};
+}
+
+/* ---------------------------------------------------------------- graphs */
+function graphRec(){
+  const rows=paperRows();const n=S.gpaper&&rows.some(x=>x.n===S.gpaper)?S.gpaper:rows[0].n;S.gpaper=n;
+  return {name:n,r:S.panel==="dev"?D.papers[n]:D.test[n][S.level]};
+}
+const relColor=rel=>`var(--r${D.relations.indexOf(rel)%11})`;
+function graphSection(){
+  const {name,r}=graphRec(),g=r.graph;
+  const gn=g.gold_nodes,bn=g.built_nodes;
+  const cnt=(a,f)=>a.filter(f).length;
+  const lostEdges=g.gold_edges.filter(e=>e.status!=="credited");
+  const byStage={};g.missed_mentions.forEach(m=>{byStage[m.stage]=(byStage[m.stage]||0)+1;});
+  const ev=S.edgeView;
+  const legendEdges=ev==="type"?D.relations.map(rel=>`<span><b style="background:${relColor(rel)}"></b>${rel}</span>`).join(""):ev==="dir"?`<span><b style="background:var(--dir)"></b>directed (arrow)</span><span><b style="background:var(--sym)"></b>bidirected / symmetric (${D.symmetric.join(", ")})</span>`:Object.entries(D.stage_labels).map(([k,l])=>`<span><b style="background:${lossColor(k)}"></b>${esc(l)}</span>`).join("")+`<span><b style="background:var(--good)"></b>credited</span>`;
+  return `<h2 id="graphs">Gold graph and constructed graph: <span class="mono">${esc(name)}</span>${S.panel==="test"?` · ${S.level}`:""}</h2>
+  <div class="card"><div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+   <span class="sub">Relations:</span><span class="seg" id="evSeg"><button data-v="type" class="${ev==="type"?"on":""}">All relation types</button><button data-v="dir" class="${ev==="dir"?"on":""}">Directed / bidirected</button><button data-v="loss" class="${ev==="loss"?"on":""}">Where a gold edge is lost</button></span>
+   <label><input type="checkbox" id="isoCk" ${S.hideIso?"checked":""}> hide concepts with no edge</label>
+   <label><input type="checkbox" id="missCk" ${S.onlyMiss?"checked":""}> only missed / wrong</label>
+   <span class="sub">scroll to zoom, drag to pan, click a node to find it in both graphs</span></div>
+   <div class="legend"><span><i style="background:var(--good)"></i>gold concept found / built concept matches gold</span><span><i style="background:var(--warn)"></i>gold concept found with a different span</span><span><i style="background:var(--bad)"></i>gold concept missed</span><span><i style="background:var(--none)"></i>built concept not in gold</span><span>solid edge = credited / correct · dashed = missed (gold) or wrong (built)</span></div>
+   <div class="legend">${legendEdges}</div>
+   <p class="note">Gold pseudo-nodes group gold mentions by the CR-032 rule (R1 name key + acronym ↔ long form in the paper): identity inferred from strings, since SciNLP has no identity gold. Both graphs share one layout: a built concept sits where the gold concept it matches sits.</p></div>
+  <div class="graphs">
+   <div class="gbox"><div class="t"><b>Gold graph</b><span class="sub">${gn.length} concepts (${cnt(gn,x=>x.status==="found")} found, ${cnt(gn,x=>x.status==="partial")} span differs, ${cnt(gn,x=>x.status==="missed")} missed) · ${g.gold_edges.length} edges (${g.gold_edges.length-lostEdges.length} credited)</span></div><svg class="g" id="gGold"></svg></div>
+   <div class="gbox"><div class="t"><b>Constructed graph</b><span class="sub">${bn.length} concepts (${cnt(bn,x=>x.status==="gold")} match gold) · ${g.built_edges.length} edges (${cnt(g.built_edges,e=>e.status==="correct")} correct, ${cnt(g.built_edges,e=>!e.placed)} unplaced)</span></div><svg class="g" id="gBuilt"></svg></div>
+  </div>
+  <div class="two">
+   <div class="card"><h3>Missed gold concept mentions (${g.missed_mentions.length})</h3>
+    <div class="legend">${Object.entries(byStage).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<button class="pill ${S.missStage===k?"on":""}" data-ms="${k}">${LOSS_NAME[k]||k}: ${v}</button>`).join("")}<button class="pill ${S.missStage?"":"on"}" data-ms="">all</button></div>
+    <div class="scroll"><table><thead><tr><th>gold mention</th><th>type</th><th>lost at</th><th>detail</th></tr></thead><tbody id="missBody"></tbody></table></div></div>
+   <div class="card"><h3>Missed gold edges (${lostEdges.length} of ${g.gold_edges.length})</h3>
+    <div class="scroll"><table><thead><tr><th>gold relation (example mention pair)</th><th class="n">mentions</th><th>lost at</th></tr></thead><tbody>${lostEdges.sort((a,b)=>b.n-a.n).map(e=>`<tr><td>${esc(e.example)}</td><td class="n">${e.n}</td><td>${esc(D.stage_labels[e.status]||e.status)}</td></tr>`).join("")}</tbody></table></div></div>
+  </div>
+  <div class="card"><h3>Constructed edges not in gold (${g.built_edges.filter(e=>e.status!=="correct").length})</h3><p class="note">SciNLP gold is sparse: some of these are true statements the annotators did not mark.</p>
+   <div class="scroll"><table><thead><tr><th>edge</th><th>relation</th><th>placed</th><th>evidence quote</th></tr></thead><tbody>${g.built_edges.filter(e=>e.status!=="correct").map(e=>`<tr><td>${esc(nodeLabel(g,e.s))} → ${esc(nodeLabel(g,e.t))}</td><td>${e.rel}</td><td>${e.placed?"yes":"no (counted FP)"}</td><td class="sub">${esc(e.quote)}</td></tr>`).join("")}</tbody></table></div></div>`;
+}
+function nodeLabel(g,id){const n=g.built_nodes.find(x=>x.id===id)||g.gold_nodes.find(x=>x.id===id);return n?n.label:id;}
+function lossColor(k){return {endpoints_placed:"var(--bad)",pair_selected:"var(--r3)",family_right:"var(--r6)",choice_right:"var(--r1)",checks_passed:"var(--r7)",assembled:"var(--r9)",credited:"var(--r5)"}[k]||"var(--none)";}
+function bindGraph(){
+  const {r}=graphRec(),g=r.graph;
+  $("#evSeg").onclick=e=>{const v=e.target.dataset.v;if(!v)return;S.edgeView=v;overview();};
+  $("#isoCk").onchange=e=>{S.hideIso=e.target.checked;overview();};
+  $("#missCk").onchange=e=>{S.onlyMiss=e.target.checked;overview();};
+  document.querySelectorAll("[data-ms]").forEach(b=>b.onclick=()=>{S.missStage=b.dataset.ms;overview();});
+  $("#missBody").innerHTML=g.missed_mentions.filter(m=>!S.missStage||m.stage===S.missStage).map(m=>`<tr><td>${esc(m.text)}</td><td>${m.type}</td><td>${LOSS_NAME[m.stage]||m.stage}</td><td class="sub">${esc(m.detail)}</td></tr>`).join("");
+  const pos=g.pos;
+  const goldDeg={},builtDeg={};g.gold_edges.forEach(e=>{goldDeg[e.s]=1;goldDeg[e.t]=1;});g.built_edges.forEach(e=>{builtDeg[e.s]=1;builtDeg[e.t]=1;});
+  const gN=g.gold_nodes.filter(n=>(!S.hideIso||goldDeg[n.id])&&(!S.onlyMiss||n.status!=="found"||goldDeg[n.id]));
+  const gE=g.gold_edges.filter(e=>!S.onlyMiss||e.status!=="credited");
+  const bpos={},seen={};
+  g.built_nodes.forEach(n=>{const p=pos[n.u]||[500,300],k=n.u,i=seen[k]=(seen[k]||0)+1;bpos[n.id]=i>1?[p[0]+9*(i-1),p[1]+9*(i-1)]:p;});
+  const bN=g.built_nodes.filter(n=>(!S.hideIso||builtDeg[n.id])&&(!S.onlyMiss||n.status!=="gold"||builtDeg[n.id]));
+  const bE=g.built_edges.filter(e=>!S.onlyMiss||e.status!=="correct");
+  const gcol=n=>n.status==="found"?"var(--good)":n.status==="partial"?"var(--warn)":"var(--bad)";
+  const bcol=n=>n.status==="gold"?"var(--good)":"var(--none)";
+  const ecol=(e,gold)=>S.edgeView==="type"?relColor(e.rel):S.edgeView==="dir"?(e.sym?"var(--sym)":"var(--dir)"):(gold?(e.status==="credited"?"var(--good)":lossColor(e.status)):(e.status==="correct"?"var(--good)":"var(--none)"));
+  drawGraph("#gGold",gN,gE,n=>pos[n.id],gcol,e=>ecol(e,true),e=>e.status!=="credited",n=>`<b>${esc(n.label)}</b> · ${n.type}<br>${n.found} of ${n.n} mentions placed exactly · ${n.status}${Object.keys(n.loss).length?"<br>misses: "+Object.entries(n.loss).map(([k,v])=>`${LOSS_NAME[k]||k} ${v}`).join(", "):""}<br><span class="sub">${n.surfaces.map(esc).join(" · ")}</span>`,
+    e=>`<b>${e.rel}</b>${e.sym?" (symmetric)":""}<br>${esc(e.example)}<br>${e.credited} of ${e.n} mention-level relations credited${e.status!=="credited"?"<br>lost at: "+esc(D.stage_labels[e.status]||e.status):""}`,n=>n.id);
+  drawGraph("#gBuilt",bN,bE,n=>bpos[n.id],bcol,e=>ecol(e,false),e=>e.status!=="correct",n=>`<b>${esc(n.label)}</b> · ${n.type}<br>${n.n} placed mentions, ${n.gold_mentions} on gold spans · ${n.status==="gold"?"matches gold":"not a gold concept"}`,
+    e=>`<b>${e.rel}</b>${e.sym?" (symmetric)":""} · ${e.status}${e.placed?"":" · evidence not placed (FP)"}<br><span class="sub">${esc(e.quote)}</span>`,n=>n.u);
+}
+function drawGraph(sel,nodes,edges,P,ncol,ecol,dashed,ntip,etip,uid){
+  const svg=document.querySelector(sel);const NS="http://www.w3.org/2000/svg";
+  const id=new Map(nodes.map(n=>[n.id,n]));
+  let maxY=600;nodes.forEach(n=>{const p=P(n);if(p&&p[1]>maxY)maxY=p[1];});
+  let vb=[0,0,1000,maxY+40];svg.setAttribute("viewBox",vb.join(" "));
+  const mk=(c)=>{const m=document.createElementNS(NS,"marker");m.setAttribute("id",c);m.setAttribute("viewBox","0 0 10 10");m.setAttribute("refX","16");m.setAttribute("refY","5");m.setAttribute("markerWidth","6");m.setAttribute("markerHeight","6");m.setAttribute("orient","auto-start-reverse");const p=document.createElementNS(NS,"path");p.setAttribute("d","M0,0L10,5L0,10z");p.setAttribute("fill","var(--muted)");m.appendChild(p);return m;};
+  const defs=document.createElementNS(NS,"defs");defs.appendChild(mk(sel.slice(1)+"A"));
+  const tip=$("#tip");
+  svg.innerHTML="";svg.appendChild(defs);
+  const gE=document.createElementNS(NS,"g"),gNd=document.createElementNS(NS,"g");svg.appendChild(gE);svg.appendChild(gNd);
+  edges.forEach(e=>{const a=id.get(e.s),b=id.get(e.t);if(!a||!b)return;const p=P(a),q=P(b);if(!p||!q)return;
+    const l=document.createElementNS(NS,"line");l.setAttribute("x1",p[0]);l.setAttribute("y1",p[1]);l.setAttribute("x2",q[0]);l.setAttribute("y2",q[1]);
+    l.setAttribute("stroke",ecol(e));l.setAttribute("stroke-width","1.8");l.setAttribute("stroke-opacity",".85");if(dashed(e))l.setAttribute("stroke-dasharray","5 3");
+    const m=`url(#${sel.slice(1)}A)`;l.setAttribute("marker-end",m);if(e.sym)l.setAttribute("marker-start",m);
+    l.onmousemove=ev=>showTip(ev,etip(e));l.onmouseleave=hideTip;gE.appendChild(l);});
+  nodes.forEach(n=>{const p=P(n);if(!p)return;const c=document.createElementNS(NS,"circle");c.setAttribute("cx",p[0]);c.setAttribute("cy",p[1]);c.setAttribute("r",Math.min(4+Math.sqrt(n.n)*1.6,14));c.setAttribute("fill",ncol(n));c.setAttribute("stroke","var(--panel)");c.setAttribute("stroke-width","1.2");c.dataset.u=uid(n);
+    c.onmousemove=ev=>showTip(ev,ntip(n));c.onmouseleave=hideTip;c.onclick=()=>highlight(uid(n));gNd.appendChild(c);
+    const t=document.createElementNS(NS,"text");t.setAttribute("x",p[0]+8);t.setAttribute("y",p[1]+3);t.textContent=n.label.length>28?n.label.slice(0,27)+"…":n.label;gNd.appendChild(t);});
+  let drag=null;
+  svg.onwheel=ev=>{ev.preventDefault();const r=svg.getBoundingClientRect(),k=ev.deltaY>0?1.15:1/1.15,mx=vb[0]+(ev.clientX-r.left)/r.width*vb[2],my=vb[1]+(ev.clientY-r.top)/r.height*vb[3];vb=[mx-(mx-vb[0])*k,my-(my-vb[1])*k,vb[2]*k,vb[3]*k];svg.setAttribute("viewBox",vb.join(" "));};
+  svg.onpointerdown=ev=>{if(ev.target.tagName==="circle")return;drag=[ev.clientX,ev.clientY,vb[0],vb[1]];svg.setPointerCapture(ev.pointerId);};
+  svg.onpointermove=ev=>{if(!drag)return;const r=svg.getBoundingClientRect();vb[0]=drag[2]-(ev.clientX-drag[0])/r.width*vb[2];vb[1]=drag[3]-(ev.clientY-drag[1])/r.height*vb[3];svg.setAttribute("viewBox",vb.join(" "));};
+  svg.onpointerup=()=>{drag=null;};
+}
+function highlight(u){document.querySelectorAll("svg.g circle").forEach(c=>{const on=c.dataset.u===u;c.setAttribute("stroke",on?"var(--ink)":"var(--panel)");c.setAttribute("stroke-width",on?"3":"1.2");});}
+function showTip(ev,h){const t=$("#tip");t.innerHTML=h;t.style.display="block";const x=Math.min(ev.clientX+14,innerWidth-400);t.style.left=x+"px";t.style.top=(ev.clientY+14)+"px";}
+function hideTip(){$("#tip").style.display="none";}
+
+/* ---------------------------------------------------------------- pipeline */
+function prfCells(x){return `<td class="n">${f3(P(x))}</td><td class="n">${f3(R(x))}</td><td class="n"><b>${f3(F(x))}</b></td>`;}
+function pipeline(){
+  const o=pooled(),c=o.concept,rel=o.relation,pr=rel.pairs||{},g=rel.gold_stages,ck=rel.checks||{correct:{},wrong:{}};
+  const pairRec=s=>g.endpoints_placed?g[s]/g.endpoints_placed:NaN;
+  let h=`<h2>The pipeline: ${esc(scopeLabel())}</h2>
+  <p class="note">Four stages with their components. Every number below is computed from the retained run records with the frozen scorers (grounding IDXR1-P1); the last row of each table is what the next stage receives.${S.panel==="test"&&!c?" The older held-out runs have no concept-stage record at this level, so stages 1 and 2 show only the final concepts.":""}</p>
+  <div class="flow">
+   <div class="stage"><div class="num">Stage 1</div><h3>Concept extraction</h3>
+    <div class="comp"><b>Retriever</b><span>cards of this run's growing nodes from earlier sections (string hits, top-30 semantic, lexicon partners; cap 120)</span></div>
+    <div class="comp"><b>Generator</b><span>LLM: new concepts (anchored / independent) and mentions of existing cards, each with a verbatim quote</span></div>
+    <div class="comp"><b>Verifier</b><span>code: format F1-F6, conflicts C1-C5, quantity Q1; coverage hints M1-M7 → one corrective round</span></div>
+    <div class="comp"><b>Pruner</b><span>P1 logistic model; off for SciNLP (τ = 0)</span></div></div>
+   <div class="stage"><div class="num">Stage 2</div><h3>Concept consolidation</h3>
+    <div class="comp"><b>Generator links</b><span>strict G-link rules; rejected links go to the adjudicator (LLM, sol)</span></div>
+    <div class="comp"><b>Deterministic identity rules</b><span>exact, R0 lexicon, R1 name key, R2 acronym, R3 alias statement</span></div>
+    <div class="comp"><b>Registry search + LLM judge</b><span>top 5 candidates with similarity ≥ 0.6 → canonicalise call (R4); below 0.70 → review</span></div></div>
+   <div class="stage"><div class="num">Stage 3</div><h3>Relation classification</h3>
+    <div class="comp"><b>Candidate pairs</b><span>concepts co-occurring in one sentence (longest-match mentions)</span></div>
+    <div class="comp"><b>Pair selection</b><span>all candidate pairs classified (profile v5)</span></div>
+    <div class="comp"><b>Family step</b><span>LLM: SciNLP family, no relation, or other</span></div>
+    <div class="comp"><b>Choice step</b><span>LLM: one registry relation + direction, with an evidence quote</span></div>
+    <div class="comp"><b>Qualifiers + code checks</b><span>polarity, modality, surface phrase; domain/range, grounding, quote checks</span></div></div>
+   <div class="stage"><div class="num">Stage 4</div><h3>Assembly</h3>
+    <div class="comp"><b>Edge filters</b><span>measurement sample out, gated / consolidated results out, negated edges not drawn</span></div>
+    <div class="comp"><b>Evidence placement</b><span>an edge is placed on its own evidence sentence; unplaced edges count as false positives</span></div>
+    <div class="comp"><b>Save graph</b><span>the snapshot the scorers and the explorer read</span></div></div>
+  </div>`;
+  // stage 1
+  h+=`<h2>Stage 1 · Concept extraction</h2><div class="two"><div class="card"><h3>Concept recall, precision and F1 after each component</h3>`;
+  if(c){
+    h+=`<table><thead><tr><th>after</th><th class="n">concepts</th><th class="n">precision</th><th class="n">recall</th><th class="n">F1</th><th class="n">ΔR</th></tr></thead><tbody>`;
+    STAGES.forEach((s,i)=>{const x=c.stages[s],d=i?R(x)-R(c.stages[STAGES[i-1]]):0;if(s==="consolidation")return;h+=`<tr><td>${STAGE_NAME[s]}</td><td class="n">${x.nodes}</td>${prfCells(x)}<td class="n ${d<0?"bad":d>0?"ok":""}">${i?(d>=0?"+":"")+f3(d):"–"}</td></tr>`;});
+    h+=`</tbody></table><p class="note">Mention level: a gold mention counts as found when a concept's placed mention has exactly its span (SciNLP has no identity gold). "Concepts" = distinct concepts after that component. Precision is a lower bound: SciNLP gold marks only some concepts.</p>`;
+  }else h+=`<p class="note">Not recorded for this run. Final concepts: P ${f3(P(o.concept_strict))} · R ${f3(R(o.concept_strict))} · F1 ${f3(F(o.concept_strict))}.</p>`;
+  h+=`</div>`;
+  if(c){const v=c.verifier,k=v.counts||{},hi=v.hints||{};
+    h+=`<div class="card"><h3>What the verifier drops</h3><table><thead><tr><th></th><th class="n">dropped</th><th class="n">recovered later</th><th class="n">lost for good</th></tr></thead><tbody>
+    <tr><td><b>Wrong concepts</b> (no gold mention has the surface)</td><td class="n">${k.concept_wrong||0}</td><td class="n">${k.concept_wrong_recovered||0}</td><td class="n ok">${(k.concept_wrong||0)-(k.concept_wrong_recovered||0)}</td></tr>
+    <tr><td><b>Correct concepts</b> (a gold surface)</td><td class="n">${k.concept_correct||0}</td><td class="n">${k.concept_correct_recovered||0}</td><td class="n bad">${(k.concept_correct||0)-(k.concept_correct_recovered||0)}</td></tr>
+    <tr><td>Wrong mentions of existing concepts</td><td class="n">${k.mention_wrong||0}</td><td class="n">${k.mention_wrong_recovered||0}</td><td class="n">${(k.mention_wrong||0)-(k.mention_wrong_recovered||0)}</td></tr>
+    <tr><td>Correct mentions of existing concepts</td><td class="n">${k.mention_correct||0}</td><td class="n">${k.mention_correct_recovered||0}</td><td class="n">${(k.mention_correct||0)-(k.mention_correct_recovered||0)}</td></tr></tbody></table>
+    <p class="note">Rules on wrong items: ${Object.entries(v.rules.wrong||{}).map(([a,b])=>`${a} ${b}`).join(", ")||"–"} · on correct items: ${Object.entries(v.rules.correct||{}).map(([a,b])=>`${a} ${b}`).join(", ")||"–"} (F2 quote not verbatim, F3 surface not in the quote).</p>
+    <h3>Coverage hints and the corrective round</h3><p class="note">Hints added ${hi.added||0} · rejected by the generator ${hi.rejected||0} · items restored by carry-forward ${hi.restored||0} · unresolved ${hi.unresolved||0}. Pruned: ${c.pruned} (pruner off).</p></div>`;}
+  h+=`</div>`;
+  // stage 2
+  h+=`<h2>Stage 2 · Concept consolidation</h2><div class="two"><div class="card"><h3>Concept recall, precision and F1 after consolidation</h3>`;
+  if(c){const a=c.stages.pruner,b=c.stages.consolidation,m=c.consolidation;
+    h+=`<table><thead><tr><th></th><th class="n">concepts</th><th class="n">precision</th><th class="n">recall</th><th class="n">F1</th></tr></thead><tbody><tr><td>before (node store)</td><td class="n">${a.nodes}</td>${prfCells(a)}</tr><tr><td><b>after consolidation</b></td><td class="n">${b.nodes}</td>${prfCells(b)}</tr></tbody></table>
+    <p class="note">Merging changes recall only when a merge adds an alias that places more mentions. Whether a merge is right cannot be scored on SciNLP (no identity gold); the fresh owner sheets (CR-050, CR-051) measure it.</p></div>
+    <div class="card"><h3>Canonicalisation merges by rule</h3><table><tbody>${Object.entries(m.merges||{}).sort((x,y)=>y[1]-x[1]).map(([k,v])=>`<tr><td class="mono">${esc(k)}</td><td class="n">${v}</td></tr>`).join("")||"<tr><td>no merges</td></tr>"}</tbody></table><p class="note">Nodes ${m.nodes_before} → ${m.nodes_after}.</p>
+    <h3>Generator-link decisions</h3><table><tbody>${Object.entries(m.links||{}).sort((x,y)=>y[1]-x[1]).map(([k,v])=>`<tr><td class="mono">${esc(k)}</td><td class="n">${v}</td></tr>`).join("")||"<tr><td>none</td></tr>"}</tbody></table>
+    <p class="note">G-link = a mention linked to an existing node by a strict rule; G-link-rejected = the link failed the strict check; G-link-adjudicated = the adjudicator (sol) ruled on a rejected link; -promoted = it became a new node; -rerouted = attached to another node.</p></div>`;}
+  else h+=`<p class="note">Not recorded for this run.</p></div>`;
+  h+=`</div>`;
+  // stage 3
+  const ss=rel.selection_stats||{};
+  h+=`<h2>Stage 3 · Relation classification</h2><div class="two"><div class="card"><h3>Pair recall at each step</h3><table><thead><tr><th>step</th><th class="n">gold relations reaching it</th><th class="n">pair recall</th></tr></thead><tbody>`;
+  ["endpoints_placed","pair_selected","family_right","choice_right","checks_passed"].forEach(s=>{h+=`<tr><td>${GNAME[s]}</td><td class="n">${g[s]}</td><td class="n"><b>${pct(pairRec(s))}</b></td></tr>`;});
+  h+=`</tbody></table><p class="note">Pair recall = share of the ${g.endpoints_placed} gold relations whose two endpoint mentions are both placed. Of ${g.gold} gold relations, ${g.gold-g.endpoints_placed} are lost before this stage (an endpoint concept missing or with a different span).</p>
+   <h3>Pair selection</h3><p class="note">Candidate pairs ${ss.unique_candidate_pairs??"–"} · selected ${ss.selected??"–"} (phase 0 per-section minimum ${ss.phase0_min_per_section??"–"}, phase 1 coverage ${ss.phase1_coverage??"–"}, anchor pairs ${ss.phase0b_anchor_pairs??"–"}, fill ${ss.phase2_fill??"–"}). Gold pairs never classified: ${(rel.not_selected_split||{}).same_sentence||0} same-sentence, ${(rel.not_selected_split||{}).cross_sentence||0} cross-sentence.</p></div>
+  <div class="card"><h3>Pairs at each step (${pr.selected||0} classified pairs)</h3><p class="note">A pair is correct when a gold relation links its two concepts (${pr.selected_positive||0} correct pairs, ${pr.selected_negative||0} with no gold relation).</p>
+   <table><thead><tr><th>step</th><th class="n">correct pairs</th><th class="n">wrong pairs</th></tr></thead><tbody>
+   <tr><td><b>Family step</b>: put in the SciNLP family</td><td class="n ok">${pr.family_tp||0}</td><td class="n">${pr.family_fp||0}</td></tr>
+   <tr><td>Family step: said no relation / other</td><td class="n bad">${pr.family_fn||0}</td><td class="n ok">${pr.family_tn||0}</td></tr>
+   <tr><td colspan="3" class="sub">Right family: ${pr.family_tp||0} of ${pr.selected_positive||0} correct pairs (${pct((pr.family_tp||0)/(pr.selected_positive||1))}); ${pr.family_tn||0} of ${pr.selected_negative||0} wrong pairs rightly stopped (${pct((pr.family_tn||0)/(pr.selected_negative||1))}).</td></tr>
+   <tr><td><b>Choice step</b>: right relation and direction</td><td class="n ok">${pr.choice_right||0}</td><td class="n">–</td></tr>
+   <tr><td>Choice step: wrong relation or direction</td><td class="n bad">${pr.choice_wrong_label||0}</td><td class="n">${pr.choice_on_negative||0}</td></tr>
+   <tr><td>Choice step: declined (no relation / other)</td><td class="n bad">${pr.choice_declined_positive||0}</td><td class="n ok">${pr.choice_declined_negative||0}</td></tr>
+   <tr><td colspan="3" class="sub">Right choice: ${pr.choice_right||0} of ${pr.family_tp||0} correct pairs in the family (${pct((pr.choice_right||0)/(pr.family_tp||1))}).</td></tr>
+   <tr><td><b>Code checks</b>: dropped</td><td class="n bad">${pr.checks_dropped_correct||0}</td><td class="n ok">${pr.checks_dropped_wrong||0}</td></tr>
+   <tr><td>Code checks: passed</td><td class="n ok">${pr.checks_passed_correct||0}</td><td class="n bad">${pr.checks_passed_wrong||0}</td></tr>
+   </tbody></table>
+   <p class="note">"Correct" in the checks rows = the pair had the right relation and direction. Dropped by reason — correct: ${Object.entries(ck.correct||{}).map(([a,b])=>`${a} ${b}`).join(", ")||"none"}; wrong: ${Object.entries(ck.wrong||{}).map(([a,b])=>`${a} ${b}`).join(", ")||"none"}.</p></div></div>`;
+  // stage 4
+  const ed=rel.edges||{};
+  h+=`<h2>Stage 4 · Assembly</h2><div class="two"><div class="card"><h3>Edges through assembly</h3><table><thead><tr><th></th><th class="n">correct</th><th class="n">wrong</th></tr></thead><tbody>
+   <tr><td>Passed the checks</td><td class="n">${pr.checks_passed_correct||0}</td><td class="n">${pr.checks_passed_wrong||0}</td></tr>
+   <tr><td>Dropped by the edge filters (negated, gated, consolidated)</td><td class="n bad">${pr.assembly_dropped_correct||0}</td><td class="n ok">${pr.assembly_dropped_wrong||0}</td></tr>
+   <tr><td>Evidence not placed (counted as FP)</td><td class="n bad">${pr.unplaced_correct||0}</td><td class="n">${pr.unplaced_wrong||0}</td></tr>
+   <tr><td><b>In the saved graph</b></td><td class="n ok">${pr.in_graph_correct||0}</td><td class="n">${pr.in_graph_wrong||0}</td></tr></tbody></table>
+   <p class="note">Edges predicted ${ed.predicted||0} · placed ${ed.placed||0} · unplaced ${ed.unplaced||0}.</p></div>
+  <div class="card"><h3>From the saved graph to the score</h3><p class="note">Gold relations in the assembled graph: ${g.assembled} · credited by the strict scorer: ${g.credited}. The gap (${g.assembled-g.credited}) is "right fact, different evidence sentence": IDXR1-P1 credits an edge only at the mentions inside its own evidence sentence. One correct edge can also credit several gold mention-level relations, so correct edges and credited relations differ.</p>
+   <p class="note">Strict relation result: P ${f3(P(o.relation_strict))} · R ${f3(R(o.relation_strict))} · F1 ${f3(F(o.relation_strict))} (tp ${o.relation_strict.tp}, fp ${o.relation_strict.fp}, fn ${o.relation_strict.fn}). Continue in tab 3.</p></div></div>`;
+  h+=funnelCard(o,"Bottleneck funnel over all four stages");
+  $("#tab-pipeline").innerHTML=h;
+}
+
+/* ---------------------------------------------------------------- results */
+function results(){
+  const o=pooled(),g=o.relation.gold_stages;
+  const chain=["endpoints_placed","pair_selected","family_right","choice_right","checks_passed","assembled","credited"];
+  let prev="gold",rows="";
+  chain.forEach(s=>{rows+=`<tr><td>${GNAME[s]}</td><td class="n">${g[s]} / ${g[prev]}</td><td class="n"><b>${pct(g[prev]?g[s]/g[prev]:NaN)}</b></td></tr>`;prev=s;});
+  let h=`<h2>Hierarchy F1 and end-to-end relation F1: ${esc(scopeLabel())}</h2>
+  <p class="note">These depend on every stage above. End-to-end recall is the product of the stage pass rates below; a stage with a low rate is a bottleneck.</p>
+  <div class="two"><div class="card"><h3>End-to-end recall as a chain</h3><table><thead><tr><th>stage</th><th class="n">passed</th><th class="n">pass rate</th></tr></thead><tbody>${rows}</tbody></table>
+   <p class="note">Product: ${g.credited} / ${g.gold} = <b>${pct(g.gold?g.credited/g.gold:NaN)}</b> = strict relation recall.</p></div>
+  <div class="card"><h3>Objectives</h3><table><thead><tr><th>objective</th><th class="n">precision</th><th class="n">recall</th><th class="n">F1</th></tr></thead><tbody>
+   <tr><td>Concept F1 (entity strict)</td>${prfCells(o.concept_strict)}</tr>
+   <tr><td><b>Strict end-to-end relation F1</b> (IDXR1-P1, headline)</td>${prfCells(o.relation_strict)}</tr>`;
+  if(o.downstream){h+=`<tr><td>Relation F1, lenient upper reading (IDXR1-P3)</td>${prfCells(o.downstream.relation_P3)}</tr>
+   <tr><td><b>Hierarchy F1</b> (direct, H2 = subclassOf + subtaskOf)</td>${prfCells(o.downstream.hierarchy_H2)}</tr>
+   <tr><td>Fact F1 (FACT-C1-SURF-R1, identity from strings)</td>${prfCells(o.downstream.fact)}</tr>`;}
+  h+=`</tbody></table>`;
+  if(S.panel==="dev"&&!S.paper)h+=`<p class="note">Relation macro F1 (A3, pooled rows): <b>${f3(D.meta.macro_f1[S.set])}</b>.</p>`;
+  h+=`<p class="note">Hierarchy F1 needs both hierarchy endpoints found (stage 1), the pair classified (stage 3) and the relation chosen as subclassOf / subtaskOf with the right direction. ${S.panel==="test"?"Hierarchy and fact F1 are shown for the development papers.":""}</p></div></div>`;
+  h+=`<div class="card"><h3>Earliest failure codes (frozen CR-012 attribution)</h3><p class="note">N0 endpoint concept not extracted · N1 wrong span · P0 pair never classified · R0 classifier chose no relation · R1 wrong relation · R2 wrong direction · recovered = the pair has the right relation (credited, or right fact on another sentence).</p>
+   <table><tbody>${Object.entries(o.codes||{}).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<tr><td class="mono">${k}</td><td class="n">${v}</td></tr>`).join("")}</tbody></table></div>`;
+  $("#tab-results").innerHTML=h;
+}
+load();
+</script>
+</body>
+</html>
