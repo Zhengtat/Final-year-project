@@ -26,9 +26,9 @@ from cumap.llm.client import LLMClient
 from cumap.llm.prompts import load_prompt
 
 OUT = REPO_ROOT / "data/interim/suggestions"
-PURPOSE_SCINLP = (
-    "An expert knowledge graph of each research paper: the specific scientific content the paper studies, proposes, uses, "
-    "evaluates or compares, and how these relate, so that a reader's understanding of the paper can later be compared with it."
+PURPOSE_SCINLP = (  # owner's wording, 2026-10-27
+    "Identify concepts within a paper to build a knowledge graph that maps the connection between concepts to build an "
+    "understanding of the paper"
 )
 CHUNK_WORDS = 700
 MAX_OUTPUT_TOKENS = (
