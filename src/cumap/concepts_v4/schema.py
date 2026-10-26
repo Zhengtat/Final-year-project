@@ -105,14 +105,65 @@ class GeneratorSchemas:
 
     generator: type[BaseModel]
     backfill: type[BaseModel]
+    fill_type: str | None = None  # CR-059: type-free schemas; the runner gives every item this internal type after parsing
 
 
 DEFAULT_SCHEMAS = GeneratorSchemas(ConceptGeneratorV4LLM, BackfillLLM)
 
+# ---------------------------------------------------------------- CR-059: type-free generator schemas (no node_type field)
+UNTYPED = "Concept"  # the generic type every downstream rule already treats as "no type" (domain/range skip, identity same_or_generic)
+
+
+class ExistingMentionUntypedLLM(_Strict):
+    node_id: str
+    surface: str
+    role: Literal["used", "mentioned", "refined", "defined"]
+    evidence: str
+    para: str
+
+
+class NewConceptUntypedLLM(_Strict):
+    name: str
+    aliases: list[str]
+    role: Literal["defined", "used", "mentioned"]
+    evidence: str
+    para: str
+    extraction_origin: Literal["anchored", "independent"]
+    anchors: list[AnchorLLM]
+    independence_check: str | None
+    found_via_anchor: bool
+
+
+class ConceptGeneratorUntypedLLM(_Strict):
+    existing_mentions: list[ExistingMentionUntypedLLM]
+    not_mentions: list[NotMentionLLM]
+    new_concepts: list[NewConceptUntypedLLM]
+    hint_responses: list[HintResponseLLM]
+
+
+class BackfillUntypedLLM(_Strict):
+    existing_mentions: list[ExistingMentionUntypedLLM]
+    hint_responses: list[HintResponseLLM]
+
+
+UNTYPED_SCHEMAS = GeneratorSchemas(ConceptGeneratorUntypedLLM, BackfillUntypedLLM, fill_type=UNTYPED)
+
+
+def fill_types(out: dict, fill_type: str | None) -> dict:
+    """Give every generator item the internal type when the schema has no node_type field (CR-059); otherwise unchanged."""
+    if fill_type:
+        for k in ("existing_mentions", "new_concepts"):
+            for it in out.get(k) or []:
+                it.setdefault("node_type", fill_type)
+    return out
+
 
 def make_schemas(node_types: tuple[str, ...] | list[str] | None) -> GeneratorSchemas:
+    """None = the networking types; an empty list = type-free (CR-059); otherwise a benchmark's own types (CR-012)."""
     if node_types is None or tuple(node_types) == NODE_TYPES:
         return DEFAULT_SCHEMAS
+    if not node_types:
+        return UNTYPED_SCHEMAS
     nt = Literal[tuple(node_types)]  # type: ignore[valid-type]
     existing = create_model("ExistingMentionLLM", __base__=ExistingMentionLLM, node_type=(nt, ...))
     new = create_model("NewConceptLLM", __base__=NewConceptLLM, node_type=(nt, ...))
