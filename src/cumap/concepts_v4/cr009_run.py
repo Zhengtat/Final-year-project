@@ -130,8 +130,15 @@ def stage_concepts(
     loop_cfg = X.loop_config(
         recall.get("form", "G1"), 1, carry_forward_rule=recall.get("carry_forward_rule", "any_word")
     )
-    if recall.get("m6_instruction"):
-        loop_cfg.instructions = {**loop_cfg.instructions, "M6": recall["m6_instruction"]}
+    for rule in (
+        "M6",
+        "M7",
+    ):  # CR-055 / CR-057: hint correction texts come from the profile (concept_gvp.yaml is hash-pinned)
+        if recall.get(f"{rule.lower()}_instruction"):
+            loop_cfg.instructions = {
+                **loop_cfg.instructions,
+                rule: recall[f"{rule.lower()}_instruction"],
+            }
     run_obj = R.ConceptRun(
         client,
         load_prompt(

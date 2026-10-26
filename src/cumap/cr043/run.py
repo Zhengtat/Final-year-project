@@ -15,10 +15,10 @@ import sys
 import time
 
 from cumap.cr012 import production_graph as PG
-from cumap.cr043.papers import first_set
+from cumap.cr043.papers import paper_set
 
 TAG = "cr043base"
-MAX_USD_PER_DOC = 1.0
+MAX_USD_PER_DOC = 3.0  # CR-057: with every pair classified the sol-priced preflight bound passes $1; real luna spend is capped by --cap-usd
 
 
 def run_id(doc: str, tag: str = TAG) -> str:
@@ -46,10 +46,14 @@ def main() -> None:
             "cumap.cr053.scinlp_run",
             "cumap.cr055.scinlp_run",
             "cumap.cr056.scinlp_run",
+            "cumap.cr057.scinlp_run",
         ],
-    )  # CR-053: profile v3 (prompt v5_scinlp)
+    )  # the SciNLP profile wrappers: v2 (CR-047), v3 (CR-053), v4 (CR-055), v5 (CR-056, default), v6 (CR-057)
+    ap.add_argument(
+        "--set", default="first", choices=["first", "rest", "all"]
+    )  # CR-057: "rest" = the 37 unseen train papers
     a = ap.parse_args()
-    papers = first_set()[: a.limit] if a.limit else first_set()
+    papers = paper_set(a.set)[: a.limit] if a.limit else paper_set(a.set)
     spent = 0.0
     for split, d in papers:
         assert split in ("train", "dev")

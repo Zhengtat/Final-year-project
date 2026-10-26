@@ -1,6 +1,6 @@
 """CR-056 $0 rescoring variant `IDXR1N-P1`: `IDXR1X-P1` (CR-052 span rules) plus NESTED placement: inside every placed mention, every
 token-aligned occurrence of another node's name or alias (R1 key) is placed too, for that node ("language model" inside "pre-trained
-language model"). Gold-free; reported beside `IDXR1-P1` (rule 35). Recall-first: it adds mentions, so precision can fall.
+language model"), and (CR-057) the mention minus a trailing generic head is placed for the same node ("GLUE" inside "GLUE benchmark"). Gold-free; reported beside `IDXR1-P1` (rule 35). Recall-first: it adds mentions, so precision can fall.
 
     uv run python -m cumap.cr056.nested --tag cr055b"""
 
@@ -21,6 +21,8 @@ from cumap.cr043.papers import first_set
 from cumap.cr043.run import run_id
 from cumap.cr052 import extend as X
 
+HEADS_STRIP = X.HEADS | {"benchmark", "benchmarks", "task", "tasks", "series", "methodology"}
+
 
 def k(s: str) -> str:
     return re.sub(r"[^a-z0-9]", "", s.lower())
@@ -38,6 +40,17 @@ def nested_nodes(
     spans = {n.node_id: {X.extend(tok, m, rules) for m in n.mentions} for n in nodes}
     if nested:
         add: dict[str, set] = {}
+        for (
+            cid,
+            ms,
+        ) in spans.items():  # CR-057: a name minus its trailing generic head ("Nystro ¨ m" inside "Nystro ¨ m method")
+            for a, b in ms:
+                if (
+                    b - a >= 2
+                    and tok[b - 1].lower() in HEADS_STRIP
+                    and any(re.search(r"[A-Z0-9]", t) for t in tok[a : b - 1])
+                ):  # a name remains
+                    add.setdefault(cid, set()).add((a, b - 1))
         for ms in spans.values():
             for a, b in ms:
                 for i in range(a, b):
