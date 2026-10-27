@@ -50,8 +50,12 @@ class _Strict(BaseModel):
 
 
 class QuotedTerm(_Strict):
+    """A profile term with its evidence. A committed profile keeps only `quote_sha256` (SciNLP text is CC BY-NC); the quote itself sits in a
+    gitignored evidence file, checked by `verify_evidence`."""
+
     term: str
-    quote: str
+    quote: str | None = None
+    quote_sha256: str | None = None
 
 
 class CategoryEntry(_Strict):
@@ -92,6 +96,51 @@ def load_domain_profile(path: Path, *, require_approved: bool = True) -> DomainP
     if missing:
         raise ValueError(f"{path} does not decide the categories {sorted(missing)}")
     return prof
+
+
+def quote_hash(quote: str) -> str:
+    import hashlib
+
+    return hashlib.sha256(" ".join(quote.split()).encode("utf-8")).hexdigest()
+
+
+def split_evidence(profile: dict) -> tuple[dict, dict]:
+    """(profile with quote hashes only, evidence {sha256: quote}) from a drafted profile dict."""
+    import copy
+
+    prof, ev = copy.deepcopy(profile), {}
+
+    def strip(items: list[dict]) -> None:
+        for t in items:
+            q = t.pop("quote", None)
+            if q:
+                h = quote_hash(q)
+                t["quote_sha256"], ev[h] = h, " ".join(q.split())
+
+    for c in prof["categories"].values():
+        strip(c["examples"])
+    strip(prof["always_concepts"])
+    strip(prof["not_alone"])
+    return prof, ev
+
+
+def verify_evidence(prof: DomainProfile, evidence: dict[str, str]) -> list[str]:
+    """Terms whose quote is missing from the evidence file, whose hash does not match, or that are not inside their quote."""
+    bad = []
+    items = [
+        *prof.always_concepts,
+        *prof.not_alone,
+        *(e for c in prof.categories.values() for e in c.examples),
+    ]
+    for t in items:
+        q = evidence.get(t.quote_sha256 or "") if t.quote is None else t.quote
+        if (
+            q is None
+            or quote_hash(q) != (t.quote_sha256 or quote_hash(q))
+            or t.term.lower() not in q.lower()
+        ):
+            bad.append(t.term)
+    return bad
 
 
 def _examples(entry: CategoryEntry, k: int = 4) -> str:

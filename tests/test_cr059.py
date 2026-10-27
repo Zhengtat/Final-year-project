@@ -212,3 +212,21 @@ def test_profile_v7_is_v5_with_only_the_cr059_changes():
         "endpoint_check",
     }
     assert p7["entity_types"] == [] and p7["generator_prompt"]["version"] == "v7"
+
+
+def test_a_committed_profile_keeps_quote_hashes_and_the_evidence_file_verifies_them():
+    d = _profile().model_dump()
+    prof, ev = DP.split_evidence(d)
+    assert "quote" not in str({k: v for k, v in prof.items() if k != "provenance"}).replace(
+        "quote_sha256", ""
+    )
+    p = DP.DomainProfile.model_validate(prof)
+    assert DP.verify_evidence(p, ev) == []
+    ev[next(iter(ev))] = "something else"
+    assert DP.verify_evidence(p, ev) != []
+
+
+def test_the_approved_scinlp_profile_loads_and_holds_no_quote_text():
+    p = DP.load_domain_profile(REPO / "configs/domain_profiles/scinlp_v1.yaml")
+    assert p.status == "approved" and p.provenance["gold_used"] is False
+    assert all(t.quote is None and t.quote_sha256 for t in [*p.always_concepts, *p.not_alone])
