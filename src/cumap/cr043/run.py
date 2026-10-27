@@ -39,6 +39,9 @@ def main() -> None:
     ap.add_argument("--cap-usd", type=float, default=3.0)
     ap.add_argument("--tag", default=TAG)
     ap.add_argument(
+        "--max-usd-per-doc", type=float, default=MAX_USD_PER_DOC
+    )  # CR-059: the sol-priced per-paper preflight bound; real spend is capped by --cap-usd
+    ap.add_argument(
         "--runner",
         default="cumap.cr056.scinlp_run",
         choices=[
@@ -76,7 +79,7 @@ def main() -> None:
             )
             continue
         cmd = [sys.executable, "-m", a.runner, "run", "--split", split, "--doc", d, "--tag", a.tag,
-               "--max-usd", str(MAX_USD_PER_DOC)] + (["--dry-run"] if a.dry_run else [])  # fmt: skip
+               "--max-usd", str(a.max_usd_per_doc)] + (["--dry-run"] if a.dry_run else [])  # fmt: skip
         t0 = time.time()
         r = subprocess.run(cmd, capture_output=True, text=True, check=False)
         spent += 0.0 if a.dry_run else recorded_spend(rid)
