@@ -740,3 +740,15 @@ Format: date · decision · reason · alternatives considered.
 
 ## 2026-10-30 · CR-059 profile v2 approved by the owner
 - The owner approved `configs/domain_profiles/scinlp_v2.yaml` as drafted ("start", 2026-10-30): `status: approved`, `reviewed_by: owner`. No content change; arm F2 runs as pre-registered on 2026-10-29.
+
+## 2026-10-30 · CR-059 arm F2 (profile v2): partial result, 2 dev papers, stopped before the 20
+- **Run:** `cr059v8` on the first 2 first-set papers (2021.acl-long.295, 2024.acl-long.144), $0.185 ($0.09 per paper, about twice the $0.05 estimate; 20 papers would pass the $1.5 stop). IDXR1-P1, same 2 papers:
+
+| arm | concepts | pairs | concept P / R / F1 | relation P / R / F1 |
+|---|---|---|---|---|
+| v5 `cr055ballp` | 182 | 274 | 0.559 / 0.792 / 0.656 | 0.312 / 0.207 / 0.249 |
+| arm R `cr059relR` (choice b) | 182 | 274 | same | 0.259 / 0.241 / 0.250 |
+| arm F `cr059v7` (profile v1) | 462 | 1,274 | 0.238 / 0.795 / 0.367 | 0.081 / 0.233 / 0.121 |
+| **arm F2 `cr059v8` (profile v2)** | 264 | 615 | 0.325 / 0.781 / 0.459 | 0.145 / 0.224 / 0.176 |
+
+- **Reading (1), adoption:** fails (concept recall -0.011, relation F1 -0.073). **Reading (2), profile effect:** the narrower profile halves arm F's over-extraction but stays well below v5 on concept precision (0.325 vs 0.559) at no recall gain, and below arm R on relation F1 (0.176 vs 0.250). On 2 papers only; not run on the other 18. Not adopted; every switch stays at its default.
