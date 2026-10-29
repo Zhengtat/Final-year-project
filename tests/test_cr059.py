@@ -230,3 +230,21 @@ def test_the_approved_scinlp_profile_loads_and_holds_no_quote_text():
     p = DP.load_domain_profile(REPO / "configs/domain_profiles/scinlp_v1.yaml")
     assert p.status == "approved" and p.provenance["gold_used"] is False
     assert all(t.quote is None and t.quote_sha256 for t in [*p.always_concepts, *p.not_alone])
+
+
+def test_profile_v2_is_v1_narrowed_and_still_a_draft():
+    v1 = DP.load_domain_profile(REPO / "configs/domain_profiles/scinlp_v1.yaml")
+    v2 = DP.load_domain_profile(
+        REPO / "configs/domain_profiles/scinlp_v2.yaml", require_approved=False
+    )
+    assert v2.specificity == "named_instances" and v1.specificity == "field_terms"
+    assert {k for k, c in v2.categories.items() if not c.include} == {
+        "property",
+        "phenomenon",
+        "field",
+        "setting",
+    }
+    assert [t.term for t in v2.always_concepts] == ["accuracy"] and v2.not_alone == v1.not_alone
+    p7 = yaml.safe_load((REPO / "configs/scinlp_profile_v7.yaml").read_text())
+    p8 = yaml.safe_load((REPO / "configs/scinlp_profile_v8.yaml").read_text())
+    assert {k for k in p7 if p7[k] != p8.get(k)} == {"status", "domain_profile"}
