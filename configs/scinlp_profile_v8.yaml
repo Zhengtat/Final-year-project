@@ -3,7 +3,7 @@
 # CR-055 profile v4 (generator prompt v6_scinlp + concept_recall switches); was: CR-053 profile v3 (generator prompt v5_scinlp), built on the CR-047 copy of the CR-012 SciNLP benchmark-local schema profile (Research ruling 2026-10-10). Only the benchmark schema changes; the CR-009 architecture is the same.
 name: scinlp
 release_label: SciNLP-repo-e78342be
-status: "CR-059 DRAFT v8 = v7 with the narrower domain profile v2; not adopted, never run"
+status: "CR-059 DRAFT v8 = v7 with the narrower domain profile v2 (owner-approved 2026-10-30); not adopted"
 entity_types: []   # CR-059: no node types (type-free generator schema; every concept gets the generic internal type)
 relation_registry: configs/relations_scinlp_v1.0.1.yaml
 symmetric:

@@ -1,8 +1,8 @@
-# CR-059 DRAFT domain profile v2 for SciNLP = owner-approved v1 with the narrowing edits listed in provenance (option 3, 2026-10-28). Status draft: loads only after the owner approves it.
+# CR-059 domain profile v2 for SciNLP (owner-approved 2026-10-30) = owner-approved v1 with the narrowing edits listed in provenance (option 3, 2026-10-28). Approved by the owner as drafted.
 # Quotes are SHA-256 only (SciNLP text is CC BY-NC); the evidence file of v1 covers every kept term.
 name: scinlp
 version: 2
-status: draft
+status: approved
 document_kind: paper
 domain: natural language processing
 domain_description: These papers describe computational methods and systems for processing
@@ -144,8 +144,8 @@ provenance:
     connection between concepts to build an understanding of the paper
   drafted_on: '2026-10-27'
   gold_used: false
-  reviewed_by: null
-  review: null
+  reviewed_by: owner
+  review: approved as drafted (2026-10-30, "start")
   draft_file: 'data/interim/suggestions/domain_profile_scinlp_draft.yaml (gitignored:
     SciNLP quotes, CC BY-NC)'
   evidence_file: data/interim/cr059/domain_profile_scinlp_v1_evidence.json (gitignored)
