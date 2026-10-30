@@ -1,0 +1,201 @@
+{
+ "tag": "cr055ballp",
+ "papers": 20,
+ "rows": {
+  "5": {
+   "hints": 156,
+   "hit_np": 9,
+   "np_keys": 107,
+   "hit_gold": 10,
+   "precision_np": 0.0577,
+   "recall_np": 0.0841,
+   "f1_np": 0.0684,
+   "precision_any_gold": 0.0641
+  },
+  "10": {
+   "hints": 323,
+   "hit_np": 12,
+   "np_keys": 107,
+   "hit_gold": 13,
+   "precision_np": 0.0372,
+   "recall_np": 0.1121,
+   "f1_np": 0.0558,
+   "precision_any_gold": 0.0402
+  },
+  "15": {
+   "hints": 482,
+   "hit_np": 13,
+   "np_keys": 107,
+   "hit_gold": 14,
+   "precision_np": 0.027,
+   "recall_np": 0.1215,
+   "f1_np": 0.0441,
+   "precision_any_gold": 0.029
+  },
+  "20": {
+   "hints": 647,
+   "hit_np": 16,
+   "np_keys": 107,
+   "hit_gold": 18,
+   "precision_np": 0.0247,
+   "recall_np": 0.1495,
+   "f1_np": 0.0424,
+   "precision_any_gold": 0.0278
+  },
+  "30": {
+   "hints": 994,
+   "hit_np": 18,
+   "np_keys": 107,
+   "hit_gold": 22,
+   "precision_np": 0.0181,
+   "recall_np": 0.1682,
+   "f1_np": 0.0327,
+   "precision_any_gold": 0.0221
+  }
+ },
+ "chosen_k": 5,
+ "examples_k15": [
+  "2021.acl-long.295: manual prompts",
+  "2021.acl-long.295: training examples",
+  "2021.acl-long.295: fine tuning language models [GOLD-NP]",
+  "2021.acl-long.295: training examples",
+  "2021.acl-long.295: sentence pair tasks [GOLD-NP]",
+  "2021.acl-long.295: based fine tuning",
+  "2021.acl-long.295: manual prompts",
+  "2021.acl-long.295: training examples",
+  "2021.acl-long.295: fine tuning language models [GOLD-NP]",
+  "2021.acl-long.295: sentence pair tasks [GOLD-NP]",
+  "2021.acl-long.295: based fine tuning",
+  "2021.acl-long.295: single sentence tasks [GOLD-NP]",
+  "2024.acl-long.144-1-9.grobid: sparse representations",
+  "2024.acl-long.144-1-9.grobid: causal features",
+  "2024.acl-long.144-1-9.grobid: classification tasks",
+  "2024.acl-long.144-1-9.grobid: sparse representations",
+  "2024.acl-long.144-1-9.grobid: causal features",
+  "2024.acl-long.144-1-9.grobid: classification tasks",
+  "2024.acl-long.144-1-9.grobid: sparse representations",
+  "2024.acl-long.144-1-9.grobid: classification tasks",
+  "2024.acl-long.144-1-9.grobid: attention weights",
+  "P05-1008.grobid: corpus",
+  "P05-1008.grobid: linguistic features",
+  "P05-1008.grobid: generated texts",
+  "P05-1008.grobid: stylistic dimension",
+  "P05-1008.grobid: corpus",
+  "P05-1008.grobid: generated texts",
+  "P16-1007.grobid: target prefix",
+  "P16-1007.grobid: phrase tables",
+  "P16-1007.grobid: phrase based alignment",
+  "P16-1007.grobid: phrase based results",
+  "P16-1007.grobid: target prefix",
+  "P16-1007.grobid: phrase tables",
+  "P16-1007.grobid: phrase based results",
+  "P16-1007.grobid: phrase based alignment",
+  "P16-1007.grobid: metrics",
+  "P02-1004.grobid: linguistic operations",
+  "P02-1004.grobid: semantic representation",
+  "P02-1004.grobid: syntactic labels",
+  "P02-1004.grobid: linguistic operations",
+  "P02-1004.grobid: semantic representation",
+  "P02-1004.grobid: syntactic labels",
+  "P03-1014.grobid: deep parser",
+  "P03-1014.grobid: deep syntactic analysis [GOLD-NP]",
+  "P03-1014.grobid: parsing process",
+  "P03-1014.grobid: parsing process",
+  "P03-1014.grobid: best parse",
+  "P03-1014.grobid: sentences",
+  "P03-1014.grobid: sentences",
+  "P03-1014.grobid: topological information",
+  "P03-1014.grobid: trees",
+  "P07-1007.grobid: adaptation examples",
+  "P07-1007.grobid: nouns",
+  "P07-1007.grobid: adaptation process",
+  "P07-1007.grobid: adaptation examples",
+  "P07-1007.grobid: nouns",
+  "P07-1007.grobid: adaptation process",
+  "2020.acl-main.9.grobid: conversation datasets",
+  "2020.acl-main.9.grobid: small conversation datasets",
+  "2020.acl-main.9.grobid: utterances"
+ ],
+ "per_paper": {
+  "2021.acl-long.295": {
+   "units": 4,
+   "never_proposed_keys": 13
+  },
+  "2024.acl-long.144-1-9.grobid": {
+   "units": 3,
+   "never_proposed_keys": 10
+  },
+  "P05-1008.grobid": {
+   "units": 2,
+   "never_proposed_keys": 0
+  },
+  "P16-1007.grobid": {
+   "units": 3,
+   "never_proposed_keys": 14
+  },
+  "P02-1004.grobid": {
+   "units": 2,
+   "never_proposed_keys": 3
+  },
+  "P03-1014.grobid": {
+   "units": 3,
+   "never_proposed_keys": 10
+  },
+  "P07-1007.grobid": {
+   "units": 2,
+   "never_proposed_keys": 3
+  },
+  "2020.acl-main.9.grobid": {
+   "units": 3,
+   "never_proposed_keys": 6
+  },
+  "P04-1004.grobid": {
+   "units": 3,
+   "never_proposed_keys": 1
+  },
+  "P08-1019.grobid": {
+   "units": 3,
+   "never_proposed_keys": 5
+  },
+  "P17-1032.grobid": {
+   "units": 3,
+   "never_proposed_keys": 5
+  },
+  "P17-1005.grobid": {
+   "units": 3,
+   "never_proposed_keys": 1
+  },
+  "P06-1010.grobid": {
+   "units": 3,
+   "never_proposed_keys": 4
+  },
+  "P15-1098.grobid": {
+   "units": 3,
+   "never_proposed_keys": 5
+  },
+  "P13-1074.grobid": {
+   "units": 3,
+   "never_proposed_keys": 7
+  },
+  "P16-1002.grobid": {
+   "units": 3,
+   "never_proposed_keys": 5
+  },
+  "P12-1032.grobid": {
+   "units": 2,
+   "never_proposed_keys": 6
+  },
+  "P15-1101.grobid": {
+   "units": 2,
+   "never_proposed_keys": 3
+  },
+  "P11-2005.grobid": {
+   "units": 2,
+   "never_proposed_keys": 2
+  },
+  "P14-1022.grobid": {
+   "units": 3,
+   "never_proposed_keys": 4
+  }
+ }
+}

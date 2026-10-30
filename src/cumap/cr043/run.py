@@ -43,7 +43,7 @@ def main() -> None:
     )  # CR-059: the sol-priced per-paper preflight bound; real spend is capped by --cap-usd
     ap.add_argument(
         "--runner",
-        default="cumap.cr056.scinlp_run",
+        default="cumap.cr060.scinlp_run",  # CR-060: profile v10 = v5 + span identity A-all (adopted 2026-10-30)
         choices=[
             "cumap.cr047.scinlp_run",
             "cumap.cr053.scinlp_run",
@@ -52,8 +52,10 @@ def main() -> None:
             "cumap.cr057.scinlp_run",
             "cumap.cr059.scinlp_run",
             "cumap.cr059.scinlp_run_v8",
+            "cumap.cr060.scinlp_run",
         ],
-    )  # the SciNLP profile wrappers: v2 (CR-047), v3 (CR-053), v4 (CR-055), v5 (CR-056, default), v6 (CR-057), v7 (CR-059 draft)
+    )  # the SciNLP profile wrappers: v2 (CR-047), v3 (CR-053), v4 (CR-055), v5 (CR-056, default), v6 (CR-057), v7 (CR-059 draft),
+    # v10 (CR-060 span identity, default)
     ap.add_argument(
         "--set", default="first", choices=["first", "rest", "all"]
     )  # CR-057: "rest" = the 37 unseen train papers

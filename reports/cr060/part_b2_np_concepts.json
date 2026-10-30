@@ -1,0 +1,197 @@
+{
+ "tag": "cr055ballp",
+ "papers": 20,
+ "objective": "IDXR1-P1",
+ "diagnostic_only": "rule 24",
+ "arms": {
+  "control": {
+   "concept": {
+    "tp": 1527,
+    "fp": 2763,
+    "fn": 505,
+    "precision": 0.3559440559440559,
+    "recall": 0.7514763779527559,
+    "f1": 0.48307497627333124
+   },
+   "relation": {
+    "tp": 74,
+    "fp": 398,
+    "fn": 424,
+    "precision": 0.15677966101694915,
+    "recall": 0.14859437751004015,
+    "f1": 0.15257731958762885
+   },
+   "counts": {
+    "concepts": 1269
+   }
+  },
+  "NPC-5": {
+   "concept": {
+    "tp": 1536,
+    "fp": 4320,
+    "fn": 496,
+    "precision": 0.26229508196721313,
+    "recall": 0.7559055118110236,
+    "f1": 0.3894523326572008
+   },
+   "relation": {
+    "tp": 73,
+    "fp": 399,
+    "fn": 425,
+    "precision": 0.15466101694915255,
+    "recall": 0.1465863453815261,
+    "f1": 0.1505154639175258
+   },
+   "counts": {
+    "added": 155,
+    "concepts": 1424,
+    "no_exact_quote": 1
+   },
+   "vs_control": {
+    "concept_recall": 0.0044,
+    "concept_f1": -0.0936,
+    "relation_f1": -0.0021
+   }
+  },
+  "NPC-10": {
+   "concept": {
+    "tp": 1544,
+    "fp": 5557,
+    "fn": 488,
+    "precision": 0.21743416420222503,
+    "recall": 0.7598425196850394,
+    "f1": 0.3381145297273623
+   },
+   "relation": {
+    "tp": 73,
+    "fp": 399,
+    "fn": 425,
+    "precision": 0.15466101694915255,
+    "recall": 0.1465863453815261,
+    "f1": 0.1505154639175258
+   },
+   "counts": {
+    "added": 322,
+    "concepts": 1591,
+    "no_exact_quote": 1
+   },
+   "vs_control": {
+    "concept_recall": 0.0084,
+    "concept_f1": -0.145,
+    "relation_f1": -0.0021
+   }
+  },
+  "NPC-20": {
+   "concept": {
+    "tp": 1552,
+    "fp": 7643,
+    "fn": 480,
+    "precision": 0.1687873844480696,
+    "recall": 0.7637795275590551,
+    "f1": 0.27647635165226686
+   },
+   "relation": {
+    "tp": 73,
+    "fp": 399,
+    "fn": 425,
+    "precision": 0.15466101694915255,
+    "recall": 0.1465863453815261,
+    "f1": 0.1505154639175258
+   },
+   "counts": {
+    "added": 641,
+    "concepts": 1910,
+    "no_exact_quote": 6
+   },
+   "vs_control": {
+    "concept_recall": 0.0123,
+    "concept_f1": -0.2066,
+    "relation_f1": -0.0021
+   }
+  },
+  "NPC-30": {
+   "concept": {
+    "tp": 1562,
+    "fp": 9144,
+    "fn": 470,
+    "precision": 0.14589949560993834,
+    "recall": 0.7687007874015748,
+    "f1": 0.24525043177892916
+   },
+   "relation": {
+    "tp": 73,
+    "fp": 397,
+    "fn": 425,
+    "precision": 0.15531914893617021,
+    "recall": 0.1465863453815261,
+    "f1": 0.15082644628099173
+   },
+   "counts": {
+    "added": 977,
+    "concepts": 2246,
+    "no_exact_quote": 17
+   },
+   "vs_control": {
+    "concept_recall": 0.0172,
+    "concept_f1": -0.2378,
+    "relation_f1": -0.0018
+   }
+  },
+  "NPC-all": {
+   "concept": {
+    "tp": 1590,
+    "fp": 19139,
+    "fn": 442,
+    "precision": 0.07670413430459742,
+    "recall": 0.78248031496063,
+    "f1": 0.13971266640305788
+   },
+   "relation": {
+    "tp": 73,
+    "fp": 397,
+    "fn": 425,
+    "precision": 0.15531914893617021,
+    "recall": 0.1465863453815261,
+    "f1": 0.15082644628099173
+   },
+   "counts": {
+    "added": 11834,
+    "no_exact_quote": 561,
+    "concepts": 13103
+   },
+   "vs_control": {
+    "concept_recall": 0.031,
+    "concept_f1": -0.3434,
+    "relation_f1": -0.0018
+   }
+  },
+  "NPC-all-nofilter": {
+   "concept": {
+    "tp": 826,
+    "fp": 20750,
+    "fn": 1206,
+    "precision": 0.03828327771598072,
+    "recall": 0.406496062992126,
+    "f1": 0.06997627922738053
+   },
+   "relation": {
+    "tp": 12,
+    "fp": 444,
+    "fn": 486,
+    "precision": 0.02631578947368421,
+    "recall": 0.024096385542168676,
+    "f1": 0.025157232704402517
+   },
+   "counts": {
+    "added": 15843,
+    "no_exact_quote": 688,
+    "concepts": 17112
+   },
+   "vs_control": {
+    "concept_recall": -0.345,
+    "concept_f1": -0.4131,
+    "relation_f1": -0.1274
+   }
+  }
+ }
+}
