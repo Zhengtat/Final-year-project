@@ -752,3 +752,7 @@ Format: date · decision · reason · alternatives considered.
 | **arm F2 `cr059v8` (profile v2)** | 264 | 615 | 0.325 / 0.781 / 0.459 | 0.145 / 0.224 / 0.176 |
 
 - **Reading (1), adoption:** fails (concept recall -0.011, relation F1 -0.073). **Reading (2), profile effect:** the narrower profile halves arm F's over-extraction but stays well below v5 on concept precision (0.325 vs 0.559) at no recall gain, and below arm R on relation F1 (0.176 vs 0.250). On 2 papers only; not run on the other 18. Not adopted; every switch stays at its default.
+
+## 2026-10-30 · CR-059 closed: NOT ADOPTED (owner)
+- **Decision (owner, 2026-10-30):** CR-059 closes as not adopted. Profile v5 (`configs/scinlp_profile_v5.yaml`, prompt `concept_generator/v6_scinlp`, endpoint check `types`) stays production; `cumap.cr043.run` keeps its default runner.
+- **Kept, off by default:** the type-free generator (`concept_generator/v7`, `make_schemas([])`), domain profiles (`configs/domain_profiles/scinlp_v1.yaml`, `scinlp_v2.yaml`, both owner-approved, gold-free), the drafter (`cumap.cr059.draft`, `domain_profile/v1`), the choice-step endpoint check (`relation_choice/v8`, `endpoint_check: choice`), run profiles v7 / v7r / v8. Results: arm R relation F1 0.153 -> 0.139 (20 papers); arm F 0.249 -> 0.121 and arm F2 0.249 -> 0.176 (2 dev papers each, stopped). Spend $1.17 of the $5 cap.
