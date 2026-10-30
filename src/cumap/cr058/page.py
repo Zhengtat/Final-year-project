@@ -40,6 +40,7 @@ from cumap.cr054.recall import run_trace
 from cumap.cr058 import funnel as FN
 from cumap.cr058 import graphs as GR
 from cumap.cr060 import span_identity as SI
+from cumap.cr063 import tolerant as T
 
 OUT = REPO_ROOT / "reports" / "cr058"
 TEMPLATE = Path(__file__).with_name("page.html")
@@ -99,6 +100,11 @@ def paper_record(doc, g, cp: dict, v4: dict | None, sym: set[str], trace: dict |
         "concept_strict": rf["concept_strict"],
         "codes": {},
     }  # fmt: skip
+    ov = T.score(doc, g, cp, set(sym), "overlap")[
+        "scores"
+    ]  # CR-063: overlap headline, strict beside
+    rec["concept_overlap"] = FN.prf_d(ov["entity_strict"])
+    rec["relation_overlap"] = FN.prf_d(ov["rel"])
     codes = sc_attribution(doc, g, rf["pred"], cp, sym)
     for c in codes:
         rec["codes"][c or "recovered"] = rec["codes"].get(c or "recovered", 0) + 1
