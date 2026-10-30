@@ -1,7 +1,8 @@
 """CR-060 Part A, measured at $0: the head-variant identity rule applied to the saved v5 checkpoints of the first 20 papers (exact, since the
 rule runs after relation classification). Objective `IDXR1-P1`; `IDXR1X-P1` / `IDXR1N-P1` beside it (rule 35). No model call.
 
-    uv run python -m cumap.cr060.measure_a [--tag cr055ballp]"""
+    uv run python -m cumap.cr060.measure_a [--tag cr055ballp]
+    uv run python -m cumap.cr060.measure_a --set rest --tag cr057rest   # CR-061: the other 37 train papers (reference for the page)"""
 
 from __future__ import annotations
 
@@ -15,7 +16,7 @@ from cumap.cr012 import scinlp_run as SR
 from cumap.cr012.adapters import SciNLPAdapter
 from cumap.cr019 import variants as V
 from cumap.cr043.eval import PRIMARY, pool, prf_d
-from cumap.cr043.papers import first_set
+from cumap.cr043.papers import paper_set
 from cumap.cr043.run import run_id
 from cumap.cr056 import nested as N
 from cumap.cr060 import span_identity as SI
@@ -25,10 +26,10 @@ ARMS = ("control", "A-name", "A-all")
 VIEWS = {"IDXR1X-P1": False, "IDXR1N-P1": True}
 
 
-def measure(tag: str) -> dict:
+def measure(tag: str, set_name: str = "first") -> dict:
     ad = SciNLPAdapter()
     sym = frozenset(ad.symmetric_relations())
-    papers = first_set()
+    papers = paper_set(set_name)
     docs, gold = {}, {}
     for s in {s for s, _ in papers}:
         docs[s] = {d.doc_key: d for d in ad.load_documents(s, paragraph_every=SR.PARAGRAPH_EVERY)}
@@ -56,7 +57,7 @@ def measure(tag: str) -> dict:
                 vr = N.score(doc, g, cp, set(sym), nested)
                 acc[a][view]["ent"].append(vr["entity_strict"])
                 acc[a][view]["rel"].append(vr["rel"])
-    res = {"tag": tag, "papers": len(papers), "objective": PRIMARY, "arms": {}}
+    res = {"tag": tag, "set": set_name, "papers": len(papers), "objective": PRIMARY, "arms": {}}
     for a in ARMS:
         res["arms"][a] = {
             "concept": prf_d(pool(acc[a]["ent"])),
@@ -76,7 +77,7 @@ def measure(tag: str) -> dict:
 
 
 def markdown(r: dict) -> str:
-    L = [f"# CR-060 Part A: head-variant identity (replay on `{r['tag']}`, {r['papers']} first-set papers, `{r['objective']}`)", "",
+    L = [f"# CR-060 Part A: head-variant identity (replay on `{r['tag']}`, {r['papers']} papers, set `{r['set']}`, `{r['objective']}`)", "",
          "| arm | concepts | concept P / R / F1 | relation P / R / F1 | aliases | merges | edges dropped | rule |", "|---|---|---|---|---|---|---|---|"]  # fmt: skip
     for a, x in r["arms"].items():
         cc, rr, n = x["concept"], x["relation"], x["counts"]
@@ -105,11 +106,13 @@ def markdown(r: dict) -> str:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--tag", default="cr055ballp")
+    ap.add_argument("--set", default="first", choices=["first", "rest"])
     a = ap.parse_args()
-    r = measure(a.tag)
+    r = measure(a.tag, a.set)
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "part_a.json").write_text(json.dumps(r, indent=1), encoding="utf-8")
-    (OUT / "part_a.md").write_text(markdown(r), encoding="utf-8")
+    suffix = "" if a.set == "first" else f"_{a.set}"
+    (OUT / f"part_a{suffix}.json").write_text(json.dumps(r, indent=1), encoding="utf-8")
+    (OUT / f"part_a{suffix}.md").write_text(markdown(r), encoding="utf-8")
     print(markdown(r))
 
 

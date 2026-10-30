@@ -255,3 +255,6 @@ Built behind switches, never run: generator prompt v7 (type-free, profile slots)
 - **2026-10-30 Part B sizing ($0):** noun-phrase hint at the pre-registered k = 5: 156 hints, 9 hit never-proposed gold keys (of 107); recall ceiling +0.0074 < the +0.01 rule, so the arm was not run. Never-proposed gold: 45 not candidates, 37 covered by a containing / contained item, 82 ranked low (median 84). Spend $0.
 - **2026-10-30 Part B2 (owner: noun phrases as concepts, $0 replay diagnostic, rule 24):** recall 0.751 -> 0.756 / 0.760 / 0.764 / 0.769 at 5 / 10 / 20 / 30 per unit (precision 0.356 -> 0.262 ... 0.146); all 11,834 uncovered candidates +0.031 at precision 0.077; without the coverage filter recall falls to 0.406 (span theft). Not adopted.
 - **2026-10-30: CLOSED (owner).** Part A adopted (profile v10); Part B not adopted. Merged with tag `cr-060-complete`.
+
+### CR-061 (diagnostics page on profile v10)
+- **2026-10-30:** page shows v10 (v5 runs + span identity A-all, in memory); gates pass. Missed gold mentions on 57 papers: v5 1,521 -> v10 1,540 (span 862 -> 906; first 20: 505 -> 472, other 37: 1,016 -> 1,068); gold nodes found 1,411 -> 1,476. Finding: R-acr spans lose their closing bracket under r1key matching (A-all recall -0.014 on the other 37); A-name / A-head pass on both sets. Adoption change pending the owner.

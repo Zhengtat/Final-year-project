@@ -1,0 +1,227 @@
+{
+ "tag": "cr057rest",
+ "set": "rest",
+ "papers": 37,
+ "objective": "IDXR1-P1",
+ "arms": {
+  "control": {
+   "concept": {
+    "tp": 2616,
+    "fp": 5195,
+    "fn": 1016,
+    "precision": 0.33491230316220716,
+    "recall": 0.7202643171806168,
+    "f1": 0.4572227562702089
+   },
+   "relation": {
+    "tp": 106,
+    "fp": 695,
+    "fn": 749,
+    "precision": 0.132334581772784,
+    "recall": 0.1239766081871345,
+    "f1": 0.12801932367149757
+   },
+   "views": {
+    "IDXR1X-P1": {
+     "concept": {
+      "tp": 2684,
+      "fp": 5127,
+      "fn": 948,
+      "precision": 0.34361797465113303,
+      "recall": 0.7389867841409692,
+      "f1": 0.469107751463777
+     },
+     "relation": {
+      "tp": 108,
+      "fp": 693,
+      "fn": 747,
+      "precision": 0.1348314606741573,
+      "recall": 0.12631578947368421,
+      "f1": 0.13043478260869568
+     }
+    },
+    "IDXR1N-P1": {
+     "concept": {
+      "tp": 2897,
+      "fp": 7141,
+      "fn": 735,
+      "precision": 0.2886033074317593,
+      "recall": 0.7976321585903083,
+      "f1": 0.4238478419897586
+     },
+     "relation": {
+      "tp": 115,
+      "fp": 1048,
+      "fn": 740,
+      "precision": 0.09888220120378331,
+      "recall": 0.13450292397660818,
+      "f1": 0.11397423191278493
+     }
+    }
+   },
+   "counts": {
+    "concepts": 2277
+   },
+   "merge_examples": []
+  },
+  "A-name": {
+   "concept": {
+    "tp": 2666,
+    "fp": 5165,
+    "fn": 966,
+    "precision": 0.3404418337377091,
+    "recall": 0.7340308370044053,
+    "f1": 0.46514873942248974
+   },
+   "relation": {
+    "tp": 112,
+    "fp": 683,
+    "fn": 743,
+    "precision": 0.14088050314465408,
+    "recall": 0.13099415204678364,
+    "f1": 0.13575757575757574
+   },
+   "views": {
+    "IDXR1X-P1": {
+     "concept": {
+      "tp": 2690,
+      "fp": 5141,
+      "fn": 942,
+      "precision": 0.3435065764270208,
+      "recall": 0.7406387665198237,
+      "f1": 0.46933612492366744
+     },
+     "relation": {
+      "tp": 108,
+      "fp": 687,
+      "fn": 747,
+      "precision": 0.13584905660377358,
+      "recall": 0.12631578947368421,
+      "f1": 0.1309090909090909
+     }
+    },
+    "IDXR1N-P1": {
+     "concept": {
+      "tp": 2903,
+      "fp": 7193,
+      "fn": 729,
+      "precision": 0.28753961965134706,
+      "recall": 0.799284140969163,
+      "f1": 0.42293123543123545
+     },
+     "relation": {
+      "tp": 115,
+      "fp": 1058,
+      "fn": 740,
+      "precision": 0.09803921568627451,
+      "recall": 0.13450292397660818,
+      "f1": 0.11341222879684419
+     }
+    }
+   },
+   "counts": {
+    "aliases": 105,
+    "merges": 7,
+    "edges_dropped": 4,
+    "alias_R-head": 105,
+    "concepts": 2270
+   },
+   "merge_examples": [
+    "MetricsMATR dataset -> MetricsMATR dataset",
+    "maximum entropy model -> maximum entropy model",
+    "ASR systems -> ASR systems",
+    "RNMT models -> RNMT+ Model",
+    "RNMT+ -> RNMT models",
+    "Wikipedia corpus -> Wikipedia corpus",
+    "AQUAINT corpus -> AQUAINT corpus"
+   ],
+   "rule": {
+    "concept_recall_delta": 0.0138,
+    "relation_f1_delta": 0.0077,
+    "passes": true
+   }
+  },
+  "A-all": {
+   "concept": {
+    "tp": 2564,
+    "fp": 5097,
+    "fn": 1068,
+    "precision": 0.33468215637645216,
+    "recall": 0.7059471365638766,
+    "f1": 0.45408660232002124
+   },
+   "relation": {
+    "tp": 108,
+    "fp": 669,
+    "fn": 747,
+    "precision": 0.138996138996139,
+    "recall": 0.12631578947368421,
+    "f1": 0.1323529411764706
+   },
+   "views": {
+    "IDXR1X-P1": {
+     "concept": {
+      "tp": 2575,
+      "fp": 5085,
+      "fn": 1057,
+      "precision": 0.33616187989556134,
+      "recall": 0.7089757709251101,
+      "f1": 0.4560750974140984
+     },
+     "relation": {
+      "tp": 107,
+      "fp": 670,
+      "fn": 748,
+      "precision": 0.1377091377091377,
+      "recall": 0.12514619883040937,
+      "f1": 0.13112745098039216
+     }
+    },
+    "IDXR1N-P1": {
+     "concept": {
+      "tp": 2845,
+      "fp": 6965,
+      "fn": 787,
+      "precision": 0.2900101936799184,
+      "recall": 0.7833149779735683,
+      "f1": 0.42330010415116803
+     },
+     "relation": {
+      "tp": 114,
+      "fp": 1012,
+      "fn": 741,
+      "precision": 0.10124333925399645,
+      "recall": 0.13333333333333333,
+      "f1": 0.11509338717819283
+     }
+    }
+   },
+   "counts": {
+    "aliases": 359,
+    "merges": 11,
+    "edges_dropped": 4,
+    "alias_R-head": 187,
+    "alias_R-acr": 172,
+    "concepts": 2266
+   },
+   "merge_examples": [
+    "MetricsMATR dataset -> MetricsMATR dataset",
+    "maximum entropy model -> maximum entropy model",
+    "ASR systems -> ASR systems",
+    "RNMT models -> RNMT+ Model",
+    "RNMT+ -> RNMT models",
+    "dynamic programming algorithm -> dynamic programming algorithm",
+    "Wikipedia corpus -> Wikipedia corpus",
+    "AQUAINT corpus -> AQUAINT corpus",
+    "learning to rank model -> learning to rank model",
+    "BoW ( MLP ) -> BoW ( MLP )",
+    "n-gram model -> n-gram model"
+   ],
+   "rule": {
+    "concept_recall_delta": -0.0143,
+    "relation_f1_delta": 0.0043,
+    "passes": false
+   }
+  }
+ }
+}
