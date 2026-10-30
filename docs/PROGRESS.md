@@ -267,3 +267,4 @@ Built behind switches, never run: generator prompt v7 (type-free, profile slots)
 
 ### CR-063 (symbol-aware grounding)
 - **2026-10-30 ($0):** `IDXR1S-P1` (spans keep trailing brackets / symbols): A-name recall +0.0015 / +0.0077 (first 20 / other 37), relation F1 unchanged. A-name-acr under it: +0.017 / -0.006 recall (gold's acronym convention differs between the sets): not proposed. Grounding choice pending the owner.
+- **2026-10-30 addendum ($0, owner):** position-tolerant evaluation: +-1 character snaps nothing, +-2 snaps 39 of 793 span misses (recall 0.747 -> 0.754, relation F1 unchanged): spans are whole tokens separated by spaces, so only lone one-character tokens are forgiven.
