@@ -851,3 +851,11 @@ Format: date · decision · reason · alternatives considered.
 - **Measurement** (`cumap.cr063.measure_tol`, `reports/cr063/tolerant.md`, 57 papers): **+-1 character snaps nothing**; **+-2 characters** snaps 39 v11 spans (8 first 20, 31 other 37): concept recall 0.747 -> **0.754**, F2 0.609 -> 0.614, precision 0.349 -> 0.352; strict relation F1 unchanged (0.147). v5 likewise +0.004 recall.
 - **Why so little:** SciNLP text is pre-tokenised with a space between tokens and gold spans are whole tokens, so the smallest boundary difference is one one-character token plus its space (2 characters): +-2 only forgives a lone ")", "+", "*", "'" at an edge. The large span misses differ by whole words ("GloVe" vs "GloVe model": 6 characters; "accuracy" vs "test accuracy": 5) and would need a word-level tolerance, which is a different, more lenient metric.
 - Reporting only; headline grounding unchanged.
+
+## 2026-10-30 · CR-063 addendum 2 pre-registration (owner): word-level relaxed evaluation — written before computing
+- **Variants** (`cumap.cr063.tolerant`, evaluation only, beside `IDXR1-P1`, rule 35), same snapping as `IDXR1T2-P1` (one-to-one, exact matches kept, then smallest token offset, ties in text order; relation endpoints use the same map):
+  - `IDXR1W1-P1` **+-1 word**: start and end each within one token of the gold span;
+  - `IDXR1HW-P1` **head-word**: the spans overlap and end in the same last token (case-insensitive);
+  - `IDXR1OV-P1` **overlap**: the spans share at least one token.
+- **Measured ($0):** v5 and v11, 57 train / dev papers, per set; concept P / R / F2 / F1 and strict relation F1; snapped counts; a sample of snapped pairs per variant for a meaning check.
+- **Also delivered:** an assessment of which variant is most defensible in a presentation (standard practice in the literature, what each one forgives, what it wrongly credits).
