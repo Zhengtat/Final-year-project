@@ -252,3 +252,4 @@ Built behind switches, never run: generator prompt v7 (type-free, profile slots)
 
 ### CR-060 (span identity, noun-phrase hint; first 20 papers only)
 - **2026-10-30 Part A ($0 replay):** head-variant identity A-all: relation F1 0.153 -> 0.167, concept recall 0.751 -> 0.768 (`reports/cr060/part_a.md`); adopted as profile v10 (default runner `cumap.cr060.scinlp_run`). A-name 0.165. Same 20 papers as the head list's origin: optimistic.
+- **2026-10-30 Part B sizing ($0):** noun-phrase hint at the pre-registered k = 5: 156 hints, 9 hit never-proposed gold keys (of 107); recall ceiling +0.0074 < the +0.01 rule, so the arm was not run. Never-proposed gold: 45 not candidates, 37 covered by a containing / contained item, 82 ranked low (median 84). Spend $0.

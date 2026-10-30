@@ -85,3 +85,29 @@ def test_the_committed_variants_load():
     for name in ("A-name", "A-all"):
         v = SI.load_variant(name)
         assert "model" in v.heads and v.name == name
+
+
+# ---------------------------------------------------------------- Part B: noun-phrase ranking (no model, no network)
+from cumap.cr060 import np_candidates as NP
+
+
+def test_percentile_ranks_share_ties_and_span_zero_to_one():
+    assert NP._pct({"a": 1.0, "b": 2.0, "c": 2.0, "d": 3.0}) == {
+        "a": 0.0,
+        "b": 0.5,
+        "c": 0.5,
+        "d": 1.0,
+    }
+
+
+def test_c_value_discounts_a_term_that_mostly_occurs_inside_a_longer_one():
+    c = {"m": NP.Cand("m", "model", 1, freq=10), "lm": NP.Cand("lm", "language model", 2, freq=8),
+         "x": NP.Cand("x", "parser", 1, freq=10)}  # fmt: skip
+    cv = NP._cvalue(c)
+    assert cv["x"] > cv["m"] and cv["m"] == 2.0  # log2(2) * (10 - 8)
+
+
+def test_centrality_links_only_chunks_of_the_same_sentence():
+    c = {k: NP.Cand(k, k, 1) for k in "abc"}
+    pr = NP._central(c, [[{"a"}, {"b"}], [{"c"}]])
+    assert pr["a"] == pr["b"] > pr["c"]

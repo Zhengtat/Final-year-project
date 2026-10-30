@@ -53,10 +53,9 @@ def main() -> None:
             "cumap.cr059.scinlp_run",
             "cumap.cr059.scinlp_run_v8",
             "cumap.cr060.scinlp_run",
-            "cumap.cr060.scinlp_run_np",
         ],
     )  # the SciNLP profile wrappers: v2 (CR-047), v3 (CR-053), v4 (CR-055), v5 (CR-056, default), v6 (CR-057), v7 (CR-059 draft),
-    # v10 (CR-060 span identity), v9 (CR-060 noun-phrase hint)
+    # v10 (CR-060 span identity, default)
     ap.add_argument(
         "--set", default="first", choices=["first", "rest", "all"]
     )  # CR-057: "rest" = the 37 unseen train papers
