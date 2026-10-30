@@ -1,5 +1,5 @@
-"""CR-060: the frozen CR-012 SciNLP runner with profile v10 (`configs/scinlp_profile_v10.yaml`: profile v5 + the Part A head-variant
-identity rule at assembly). Same mechanism as `cumap.cr056.scinlp_run`; the frozen runner is not edited. After a paper's run the checkpoint
+"""CR-060 / CR-061: the frozen CR-012 SciNLP runner with profile v11 (`configs/scinlp_profile_v11.yaml`: profile v5 + the CR-060
+head-variant identity rule, variant A-name, at assembly; v10 = A-all is superseded). Same mechanism as `cumap.cr056.scinlp_run`; the frozen runner is not edited. After a paper's run the checkpoint
 is rewritten with the span-identity step applied; the pre-step checkpoint is kept as `checkpoint_pre_span_identity.json` (a resumed run
 starts from it, so the relation stage never sees merged nodes) and the record as `span_identity.json`. Train / dev only (rule 9).
 
@@ -18,7 +18,8 @@ from cumap.cr012.adapters import SciNLPAdapter
 from cumap.cr056.scinlp_run import all_pairs
 from cumap.cr060 import span_identity as SI
 
-PROFILE_V10 = REPO_ROOT / "configs/scinlp_profile_v10.yaml"
+PROFILE_V10 = REPO_ROOT / "configs/scinlp_profile_v10.yaml"  # A-all, superseded (CR-061)
+PROFILE_V11 = REPO_ROOT / "configs/scinlp_profile_v11.yaml"  # A-name, adopted (CR-061)
 PRE = "checkpoint_pre_span_identity.json"
 
 
@@ -56,7 +57,7 @@ def with_span_identity(variant: str) -> None:
     SR.run_doc = run_doc
 
 
-def use_profile(path=PROFILE_V10) -> None:
+def use_profile(path=PROFILE_V11) -> None:
     SR.PROFILE = path
     prof = yaml.safe_load(path.read_text())
     if prof.get("pair_budget") == "all":

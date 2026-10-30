@@ -142,7 +142,7 @@ function scopeLabel(){
 
 function init(){
   const g=D.gates, ok=Object.values(g).every(Boolean);
-  $("#hdr").innerHTML=`${esc(D.dataset)} · development runs <span class="mono">${esc(D.sources.first)}</span> (first 20) + <span class="mono">${esc(D.sources.rest)}</span> (other 37), profile v5 · held-out: frozen CR-012 oracle runs (older pipeline, reporting only) · grounding <b>IDXR1-P1</b> · gates <span class="${ok?"ok":"bad"}">${ok?"pass":"FAIL"}</span> (pooled numbers = CR-043 scorecards and CR-031 ladder) · sources unchanged <span class="${D.sources_unchanged?"ok":"bad"}">${D.sources_unchanged}</span>`;
+  $("#hdr").innerHTML=`${esc(D.dataset)} · development runs <span class="mono">${esc(D.sources.first)}</span> (first 20) + <span class="mono">${esc(D.sources.rest)}</span> (other 37), profile <b>${esc(D.profile||"v5")}</b> · held-out: frozen CR-012 oracle runs (older pipeline, reporting only) · grounding <b>IDXR1-P1</b> · gates <span class="${ok?"ok":"bad"}">${ok?"pass":"FAIL"}</span> (pooled numbers = ${D.profile&&D.profile!=="v5"?"CR-060 replay":"CR-043 scorecards"} and CR-031 ladder) · sources unchanged <span class="${D.sources_unchanged?"ok":"bad"}">${D.sources_unchanged}</span>`;
   $("#panelSeg").innerHTML=`<button data-p="dev">Development (57 papers)</button><button data-p="test">Held-out oracle (3 test papers)</button>`;
   $("#panelSeg").onclick=e=>{const p=e.target.dataset.p;if(!p)return;S.panel=p;S.paper="";S.gpaper="";S.level="E0";render();};
   $("#tabs").innerHTML=["overview:1 · Overview","pipeline:2 · Pipeline and stage metrics","results:3 · Hierarchy F1 and end to end"].map(x=>{const[k,l]=x.split(":");return `<button data-t="${k}">${l}</button>`}).join("");
@@ -342,7 +342,7 @@ function pipeline(){
     <div class="comp"><b>Registry search + LLM judge</b><span>top 5 candidates with similarity ≥ 0.6 → canonicalise call (R4); below 0.70 → review</span></div></div>
    <div class="stage"><div class="num">Stage 3</div><h3>Relation classification</h3>
     <div class="comp"><b>Candidate pairs</b><span>concepts co-occurring in one sentence (longest-match mentions)</span></div>
-    <div class="comp"><b>Pair selection</b><span>all candidate pairs classified (profile v5)</span></div>
+    <div class="comp"><b>Pair selection</b><span>all candidate pairs classified (profile v5 / v11)</span></div>
     <div class="comp"><b>Family step</b><span>LLM: SciNLP family, no relation, or other</span></div>
     <div class="comp"><b>Choice step</b><span>LLM: one registry relation + direction, with an evidence quote</span></div>
     <div class="comp"><b>Qualifiers + code checks</b><span>polarity, modality, surface phrase; domain/range, grounding, quote checks</span></div></div>

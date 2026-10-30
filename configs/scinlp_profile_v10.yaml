@@ -1,7 +1,7 @@
 # CR-060 profile v10 = profile v5 + the Part A head-variant identity rule (variant A-all) at assembly. CR-055 profile v4 (generator prompt v6_scinlp + concept_recall switches); was: CR-053 profile v3 (generator prompt v5_scinlp), built on the CR-047 copy of the CR-012 SciNLP benchmark-local schema profile (Research ruling 2026-10-10). Only the benchmark schema changes; the CR-009 architecture is the same.
 name: scinlp
 release_label: SciNLP-repo-e78342be
-status: "CR-060 profile v10 = profile v5 + span identity A-all (assembly-stage alias rule, configs/span_identity.yaml)"
+status: "CR-060 profile v10 = profile v5 + span identity A-all; SUPERSEDED by v11 (2026-10-30): R-acr spans lose their closing bracket under r1key matching"
 entity_types:
   task: An objective requiring operational resolution through systematic processes (for example text classification, named
     entity recognition).

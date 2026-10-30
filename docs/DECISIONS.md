@@ -791,3 +791,19 @@ Format: date · decision · reason · alternatives considered.
 ## 2026-10-30 · CR-060 closed (owner)
 - **Part A adopted:** head-variant identity A-all (`configs/span_identity.yaml`, profile v10, default runner `cumap.cr060.scinlp_run`); replay on the first 20 papers: relation F1 0.153 -> 0.167, concept recall 0.751 -> 0.768.
 - **Part B not adopted:** the noun-phrase hint (recall ceiling +0.0074 at the pre-registered k, arm not run) and noun phrases as concepts (recall +0.004 to +0.031 at precision 0.26 to 0.08, replay diagnostic). Rule 24 unchanged. Spend $0 of the $3 cap.
+
+## 2026-10-30 · CR-061: diagnostics page shows profile v10; the adopted A-all has a defect (finding for the owner)
+- **Page:** `cumap.cr058.page` now applies the CR-060 span-identity step in memory (profile v10, variant `--span-identity`, default the adopted A-all); `--profile v5` rebuilds the CR-058 page as merged (`pipeline_v5.html`, `summary.*`, unchanged but for a `profile` field). v10 gates: pooled concept and relation counts equal the CR-060 replay (`reports/cr060/part_a.json`, new `part_a_rest.json`); all pass; source checkpoints unchanged.
+- **Finding (the reference replay on the other 37 train papers, `cr057rest`, outside CR-060's first-20 scope):** A-all concept recall 0.720 -> **0.706 (-0.014)**, relation F1 0.128 -> 0.132; A-name 0.734 (+0.014) / 0.136 (+0.008). **Cause:** the R-acr alias ("masked language modeling ( MLM )") is placed by the r1key matcher without its closing bracket ("masked language modeling ( MLM"), which matches neither gold form: 256 of the 341 span misses v10 adds over v5 on the 57 papers carry such a span. R-acr is defective under r1key matching; R-head is not.
+- **Also measured ($0, both sets, recorded here before any decision):** A-head (R-head for every form, no R-acr): first 20 recall +0.022 / relation F1 +0.015 (0.168); other 37 +0.015 / +0.005 (0.133). A-name: +0.020 / +0.012 and +0.014 / +0.008.
+- **No adoption change made:** v10 stays A-all until the owner decides (the other 37 papers were outside the CR-060 scope).
+
+## 2026-10-30 · CR-061: span identity switched to A-name (owner); profile v11 adopted
+- **Decision (owner, 2026-10-30, after the finding above):** the adopted span-identity variant changes from A-all to **A-name** (head alias only for name-like forms; no R-acr). `configs/scinlp_profile_v11.yaml` = v5 + `span_identity: A-name`; `cumap.cr060.scinlp_run` and `cumap.cr043.run` default to v11; `configs/scinlp_profile_v10.yaml` (A-all) is kept and marked superseded. No run had used v10.
+- **Numbers (replay, `IDXR1-P1`):** first 20 concept recall 0.751 -> 0.771, relation F1 0.153 -> 0.165; other 37 0.720 -> 0.734, 0.128 -> 0.136. Missed gold mentions on the 57 papers: v5 1,521 -> v11 **1,431** (span 862 -> 793); gold nodes found 1,411 -> 1,477.
+- **Caveat:** the choice used the other 37 papers, so they are no longer an unseen check for it.
+- **Also measured and not adopted (scratch, $0):** "name + word + head" extensions on top of A-name ("Transformer Big model"): right extension fires 1 / 15 times (relation F1 +0.000 / +0.002), left extension 4 / 3 times (-0.000 / -0.001).
+- **Page:** `cumap.cr058.page` defaults to v11 (`pipeline.html`, `summary_v11.*`); `--profile v10` and `--profile v5` rebuild the others; every generated page is gitignored (`reports/cr058/pipeline*.html`).
+
+## 2026-10-30 · CR-061 closed (owner)
+- Diagnostics page on the adopted profile (v11, span identity A-name, in memory; gates pass); A-all found defective (R-acr bracket loss) and superseded by A-name. Spend $0.
