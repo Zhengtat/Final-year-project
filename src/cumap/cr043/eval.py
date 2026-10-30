@@ -49,7 +49,20 @@ def prf_d(x: PRF) -> dict:
         "precision": x.precision,
         "recall": x.recall,
         "f1": x.f1,
+        "f2": f_beta(x, 2.0),  # CR-062: the concept headline (beta fixed at 2); F1 beside it
     }
+
+
+def f_beta(x: PRF, beta: float) -> float:
+    b2 = beta * beta
+    d = (1 + b2) * x.tp + b2 * x.fn + x.fp
+    return (1 + b2) * x.tp / d if d else 0.0
+
+
+def c3(x: dict) -> str:
+    """Concept cell: P / R / **F2** (F1 ...); F2 from the counts when an older scorecard has none."""
+    f2 = x.get("f2", f_beta(PRF(x["tp"], x["fp"], x["fn"]), 2.0))
+    return f"{x['precision']:.3f} / {x['recall']:.3f} / **{f2:.3f}** (F1 {x['f1']:.3f}; tp {x['tp']}, fp {x['fp']}, fn {x['fn']})"
 
 
 def sentence_of(doc, span) -> int:
@@ -194,12 +207,12 @@ def markdown(r: dict) -> str:
         "",
         "## Strict relation P / R / F1 (headline `IDXR1-P1`)",
         "",
-        "| grounding | all papers | dev papers | train papers | concept F1 (entity strict) |",
+        "| grounding | all papers | dev papers | train papers | concept P / R / F2 (entity strict; F1 beside) |",
         "|---|---|---|---|---|",
     ]
     for k, x in v.items():
         L.append(
-            f"| `{k}` | {f3(x['relation_strict'])} | {f3(x['relation_strict_dev'])} | {f3(x['relation_strict_train'])} | {f3(x['concept_entity_strict'])} |"
+            f"| `{k}` | {f3(x['relation_strict'])} | {f3(x['relation_strict_dev'])} | {f3(x['relation_strict_train'])} | {c3(x['concept_entity_strict'])} |"
         )
     if r.get("recall_views"):
         L += [
@@ -214,7 +227,7 @@ def markdown(r: dict) -> str:
             "| view | concept P / R / F1 | relation P / R / F1 |",
             "|---|---|---|",
             *[
-                f"| `{k}` | {f3(x['concept_entity_strict'])} | {f3(x['relation_strict'])} |"
+                f"| `{k}` | {c3(x['concept_entity_strict'])} | {f3(x['relation_strict'])} |"
                 for k, x in r["recall_views"].items()
             ],
         ]

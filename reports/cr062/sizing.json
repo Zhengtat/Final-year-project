@@ -1,0 +1,194 @@
+{
+ "b": {
+  "control": {
+   "concept": {
+    "tp": 4233,
+    "fp": 7889,
+    "fn": 1431,
+    "precision": 0.34919980201286915,
+    "recall": 0.7473516949152542,
+    "f1": 0.4759923535364894,
+    "f2": 0.6085743861061591
+   },
+   "counts": {}
+  },
+  "V2": {
+   "concept": {
+    "tp": 4240,
+    "fp": 7924,
+    "fn": 1424,
+    "precision": 0.3485695494902992,
+    "recall": 0.748587570621469,
+    "f1": 0.47565627103432806,
+    "f2": 0.6088454910970706
+   },
+   "counts": {
+    "still_dropped": 119,
+    "rescued_gold": 5,
+    "rescued_non_gold": 24,
+    "already_in_graph": 90
+   },
+   "recall_delta": 0.0012,
+   "f2_delta": 0.0003
+  },
+  "V1-para + V2": {
+   "concept": {
+    "tp": 4248,
+    "fp": 7944,
+    "fn": 1416,
+    "precision": 0.3484251968503937,
+    "recall": 0.75,
+    "f1": 0.4758064516129032,
+    "f2": 0.609504132231405
+   },
+   "counts": {
+    "still_dropped": 104,
+    "rescued_gold": 10,
+    "rescued_non_gold": 34,
+    "already_in_graph": 90
+   },
+   "recall_delta": 0.0026,
+   "f2_delta": 0.0009
+  },
+  "V1-paper + V2": {
+   "concept": {
+    "tp": 4267,
+    "fp": 7999,
+    "fn": 1397,
+    "precision": 0.347872166965596,
+    "recall": 0.7533545197740112,
+    "f1": 0.4759620747350809,
+    "f2": 0.6109329362579463
+   },
+   "counts": {
+    "still_dropped": 67,
+    "rescued_gold": 17,
+    "rescued_non_gold": 63,
+    "already_in_graph": 91
+   },
+   "recall_delta": 0.006,
+   "f2_delta": 0.0024
+  }
+ },
+ "c": {
+  "nodes": {
+   "gold": 1387,
+   "non_gold": 2152
+  },
+  "V6": {
+   "gold": 208,
+   "gold_mentions_at_risk": 292,
+   "non_gold": 171,
+   "non_gold_per_gold": 0.82,
+   "examples": [
+    "structured prediction [GOLD]",
+    "roberta-large-nli-stsb mean-tokens",
+    "prompt-based methods",
+    "sentiment polarity analysis [GOLD]",
+    "derivative estimator",
+    "data augmentation methods",
+    "Amazon Review Polarity [GOLD]",
+    "Yelp Review Polarity [GOLD]",
+    "IMDB [GOLD]",
+    "TweetEval Sentiment [GOLD]",
+    "Yahoo ! Answers Sentiment",
+    "BERT-EDA [GOLD]",
+    "STR [GOLD]",
+    "STE [GOLD]",
+    "question answering [GOLD]",
+    "Nicolov's generator",
+    "hierarchical adaptation method",
+    "frustratingly easy domain adaptation",
+    "Phrasal",
+    "dynamic phrase table",
+    "KenLM [GOLD]",
+    "TransType",
+    "TransType2",
+    "encoderdecoder NMT framework",
+    "decision tree learning [GOLD]",
+    "Nitrogen",
+    "FERGUS",
+    "LFG",
+    "shallow processing",
+    "morphological information"
+   ]
+  },
+  "V7": {
+   "non_gold": 226,
+   "gold_mentions_at_risk": 262,
+   "gold": 124,
+   "non_gold_per_gold": 1.82,
+   "examples": [
+    "automatic prompt search method",
+    "binary sentence classification [GOLD]",
+    "regularization",
+    "meta-learning [GOLD]",
+    "binary classification [GOLD]",
+    "CLS",
+    "binary sentiment classification [GOLD]",
+    "sentiment analysis [GOLD]",
+    "automatic verbalizer search",
+    "brute-force",
+    "T5-3B",
+    "cross-validation evaluation",
+    "1-seg",
+    "2-seg",
+    "domain adaptation",
+    "causality-inspired data augmentation",
+    "sparse regularization",
+    "transformer layer",
+    "distance regularization",
+    "Yelp Review Polarity [GOLD]",
+    "topic classification [GOLD]",
+    "social factor prediction [GOLD]",
+    "BERT-EDA [GOLD]",
+    "bottom-up layer-wise search [GOLD]",
+    "text generation [GOLD]",
+    "CHATYUAN [GOLD]",
+    "keystroke ratio [GOLD]",
+    "Poisson distribution",
+    "autocomplete",
+    "prefix-constrained tuning"
+   ]
+  },
+  "V6 or V7": {
+   "non_gold": 376,
+   "gold_mentions_at_risk": 522,
+   "gold": 307,
+   "non_gold_per_gold": 1.22,
+   "examples": [
+    "automatic prompt search method",
+    "binary sentence classification [GOLD]",
+    "regularization",
+    "meta-learning [GOLD]",
+    "binary classification [GOLD]",
+    "CLS",
+    "binary sentiment classification [GOLD]",
+    "sentiment analysis [GOLD]",
+    "automatic verbalizer search",
+    "brute-force",
+    "structured prediction [GOLD]",
+    "T5-3B",
+    "roberta-large-nli-stsb mean-tokens",
+    "cross-validation evaluation",
+    "1-seg",
+    "2-seg",
+    "prompt-based methods",
+    "domain adaptation",
+    "causality-inspired data augmentation",
+    "sentiment polarity analysis [GOLD]",
+    "derivative estimator",
+    "sparse regularization",
+    "transformer layer",
+    "data augmentation methods",
+    "distance regularization",
+    "Amazon Review Polarity [GOLD]",
+    "Yelp Review Polarity [GOLD]",
+    "IMDB [GOLD]",
+    "TweetEval Sentiment [GOLD]",
+    "Yahoo ! Answers Sentiment"
+   ]
+  }
+ },
+ "trigger": true
+}

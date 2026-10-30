@@ -58,6 +58,8 @@ def test_no_pipeline_module_reads_scinlp_text_into_prompts():
             continue  # CR-057: the frozen SciNLP runner with profile v6 (train / dev only; no new prompt)
         if f.parts[2] == "cr056":
             continue  # CR-056: the frozen SciNLP runner with profile v5 and read-only rescoring of train / dev runs (no new prompt, no test split)
+        if f.parts[2] == "cr062":
+            continue  # CR-062: $0 sizing of domain-free verifier rules over retained train / dev runs (no prompt, no model call)
         if f.parts[2] == "cr060":
             continue  # CR-060: the SciNLP runner with profile v10 (an assembly alias rule) and a $0 noun-phrase hint sizing (first-set train / dev papers only, no test split)
         if f.parts[2] == "cr059":

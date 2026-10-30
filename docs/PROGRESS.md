@@ -260,3 +260,7 @@ Built behind switches, never run: generator prompt v7 (type-free, profile slots)
 - **2026-10-30:** page shows v10 (v5 runs + span identity A-all, in memory); gates pass. Missed gold mentions on 57 papers: v5 1,521 -> v10 1,540 (span 862 -> 906; first 20: 505 -> 472, other 37: 1,016 -> 1,068); gold nodes found 1,411 -> 1,476. Finding: R-acr spans lose their closing bracket under r1key matching (A-all recall -0.014 on the other 37); A-name / A-head pass on both sets. Adoption change pending the owner.
 - **2026-10-30 (owner): switched to A-name, profile v11 adopted** (v10 superseded). Missed gold mentions 1,521 -> 1,431 (span 862 -> 793); relation F1 first 20 0.153 -> 0.165, other 37 0.128 -> 0.136. Page defaults to v11; gates pass.
 - **2026-10-30: CLOSED (owner).** Merged with tag `cr-061-complete`.
+
+### CR-062 (concept F2 headline; domain-free verifier)
+- **2026-10-30 ($0):** F2 headline added (scorecards, page). Verifier re-anchoring V1-paper + V2: recall +0.0060, F2 +0.0024 (17 gold / 63 non-gold rescued); flag rules V6 / V7 flag 0.82 / 1.82 non-gold per gold: not pursued. Paid arm held for the owner (expected gain below the +0.01 rule). Spend $0.
+- **2026-10-30: CLOSED (owner), no paid arm.** Merged with tag `cr-062-complete`.
