@@ -65,3 +65,7 @@ reports/cr051/results.jsonl
 
 # CR-058: the pipeline diagnostics page embeds SciNLP-derived text (CC BY-NC): never committed (summary.{json,md} are numbers only)
 reports/cr058/pipeline.html
+
+# CR-059: drafted domain profiles and their evidence quote SciNLP text (CC BY-NC): never committed; the approved profile keeps hashes only
+data/interim/suggestions/domain_profile_*
+data/interim/cr059/

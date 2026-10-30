@@ -193,6 +193,7 @@ def relations_stage(
     assembly: str | None = None,
     qualifier_amendments: str | None = None,
     misconception_source: str | None = None,
+    endpoint_check: str | None = None,
 ) -> Checkpoint:
     """`assembly` (CR-036): None reads `configs/relation_policy.yaml` (default "legacy"); "v2" records the registry version and file hash in the run and
     sets the type-valid orientation instead of rejecting a domain/range error. `qualifier_checks` (CR-034): None reads `configs/relation_policy.yaml` (default "off"). `prompt_versions` (family, choice, qualifiers), `evidence_fn` (pair dict -> pair dict with the evidence text in `sentence`)
@@ -218,6 +219,15 @@ def relations_stage(
         cp.selection_stats["misconception_source"] = "classification"
         if prompt_versions == ("v3", "v6", "v6"):
             prompt_versions = ("v5", "v7", "v6")
+    from cumap.expert_kg import relations_v8 as R8
+
+    ep = R8.resolve_endpoint_check(endpoint_check)  # CR-059 DRAFT: None reads the active benchmark profile (default "types")
+    if ep == "choice":
+        if amend != "v6":
+            raise ValueError("endpoint_check choice needs qualifier_amendments v6")
+        cp.selection_stats["endpoint_check"] = "choice"  # recorded only when on, so older runs stay unchanged
+        if prompt_versions == ("v3", "v6", "v6"):
+            prompt_versions = ("v3", "v8", "v6")
     from cumap.expert_kg import qualifier_checks as QC
 
     assembly_mode = ES.resolve_assembly(assembly)
@@ -273,6 +283,7 @@ def relations_stage(
                 qualifier_checks=qc_mode,
                 direction_by_types=assembly_mode == "v2",
                 amendments=amend,
+                endpoint_check=ep,
                 misconception_source=mis_source,
             )
         except BudgetExceededError:

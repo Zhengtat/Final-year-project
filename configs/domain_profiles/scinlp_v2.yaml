@@ -1,0 +1,161 @@
+# CR-059 domain profile v2 for SciNLP (owner-approved 2026-10-30) = owner-approved v1 with the narrowing edits listed in provenance (option 3, 2026-10-28). Approved by the owner as drafted.
+# Quotes are SHA-256 only (SciNLP text is CC BY-NC); the evidence file of v1 covers every kept term.
+name: scinlp
+version: 2
+status: approved
+document_kind: paper
+domain: natural language processing
+domain_description: These papers describe computational methods and systems for processing
+  or generating language, including dialogue, word senses, and mathematical language.
+  They carry knowledge about research tasks, techniques, models, data resources, evaluation,
+  and the phenomena these methods address.
+specificity: named_instances
+specificity_reason: 'Owner edit of v1 (CR-059 option 3): only specific named things
+  count, after profile v1''s broad reading added non-gold concepts on SciNLP dev.'
+categories:
+  named_artifact:
+    include: true
+    scope: named_only
+    examples:
+    - term: PLATO
+      quote_sha256: 975f607d79145e7b8b7b6ceeb220bd94ffc0184dd6763d45cf864869a424fa22
+    - term: BERT
+      quote_sha256: 8bdfcc20bb93e389154438c4e8c8968145c5bfb80a4b2ff28b8bec9fb370c17e
+    - term: XLNet
+      quote_sha256: 2d098ce97fda29ba0a3cb4a558b285d12f49bc863c7622e699fd2bc5baa95d14
+    reason: null
+  technique:
+    include: true
+    scope: named_only
+    examples:
+    - term: active learning
+      quote_sha256: dd560c2d2e68ef6e5e0e4752b5847b7d68047ba59eff071950a3c764b1b1d162
+    - term: count-merging technique
+      quote_sha256: 9757ae58f0f4eb55cdff671efcca384a935c6e9bacd353b0a2f951e8547a3ba8
+    - term: EM algorithm
+      quote_sha256: f95ebdedf8717a3bab7533ea70f5a6bdfb4fc543d624cc13bc73d31557a19ad5
+    reason: null
+  component:
+    include: true
+    scope: named_only
+    examples:
+    - term: discrete latent variables
+      quote_sha256: de85c18de1b3017bd9217110626c71d2165534fd828bd69821140d172d9c09f0
+    - term: shared network
+      quote_sha256: 32ee150c5eb8a37d5bacda45b592597860483ef76e1556dd13241d2388a650f9
+    - term: flexible attention mechanisms
+      quote_sha256: dcbf15a256872a8cc5310ad0ecbef43e89c406c086f959144b2c1b54e9997c69
+    reason: null
+  task:
+    include: true
+    scope: named_only
+    examples:
+    - term: word sense disambiguation
+      quote_sha256: 03ae45d0dfb1c5ed6b72962309252aff864d1bda4e836fd34be3573ed90fde2d
+    - term: response generation
+      quote_sha256: 5d92b0b957dc449c7bf7501fc402d31f0a9a87203ed82dc5478f9be5a48aac6f
+    - term: theorem proving
+      quote_sha256: 8547fe9961026785ea52d91072475c20820fd1178a7036dee0494972d3715c40
+    reason: null
+  resource:
+    include: true
+    scope: named_only
+    examples:
+    - term: DSO corpus
+      quote_sha256: 1a242344bff817f529b5e03cb759c9a583edbcd198975e418e1ecce513c5172d
+    - term: Daily Dialog
+      quote_sha256: 9fdc40b11131e0dc07f06fedc9868e35e555939a54ba7423272c6b46f5571d96
+    reason: null
+  measure:
+    include: true
+    scope: any
+    examples:
+    - term: accuracy
+      quote_sha256: 139f7f30d46ddb2af558696dba7315bad02ceca72383b8bb2b3ce1053efadef0
+    - term: perplexity
+      quote_sha256: 8837017e4c457b3a0f96c8caf303be99d3c25080ce291749cbe4842df82f9d71
+    reason: null
+  property:
+    include: false
+    scope: any
+    examples:
+    - term: sense priors
+      quote_sha256: ae09335fe0f43959375fac5641fbcdf8661dd8cbcd638b2620fd7f188ef8b2e1
+    - term: convergence
+      quote_sha256: 6449d0c5580c6aa31b08a81fcfbc8afa6fc735b8246c8f4a347688e3b9215b9b
+    reason: null
+  phenomenon:
+    include: false
+    scope: any
+    examples:
+    - term: domain dependence
+      quote_sha256: 80d5c8f277c35d4cd3f713bdbb70f2c1c7345c03d15c6c04d86197434d4b34fa
+    - term: accuracy drop
+      quote_sha256: afd528e011f1cbea929c5e1905a435ab6034b6e336f880ca2ada98e744792d13
+    - term: one-to-many relationship
+      quote_sha256: 86830b860df373d67dd2dcc66debea016e6334994687aab9f10e4c8094543bf8
+    reason: null
+  field:
+    include: false
+    scope: any
+    examples:
+    - term: natural language processing
+      quote_sha256: 24030477cdc0b0b468c37805497469a39f326985a48fab0703adf3f7800803df
+    - term: mathematics
+      quote_sha256: ff9973e394feb2354c0c2f1e8609c5ef8c970ce09d326c8c263b37c2a93736c5
+    - term: natural language understanding
+      quote_sha256: 59ff4912d120714e0537d3020a922e3047ba54bb4ec42ebcd7e77d257fbe4a8a
+    reason: null
+  setting:
+    include: false
+    scope: any
+    examples:
+    - term: fine-grained evaluation
+      quote_sha256: dd7e511aec4106c1581a961e1550547330dceee0b100b8fe1d4e72575e08c2fa
+    - term: new domain
+      quote_sha256: 7903048753e381c59bf0764d1fbb6d255afc30123b8a08a833b61cf3737124df
+    reason: null
+always_concepts:
+- term: accuracy
+  quote_sha256: 139f7f30d46ddb2af558696dba7315bad02ceca72383b8bb2b3ce1053efadef0
+not_alone:
+- term: system
+  quote_sha256: d670f40e4b87bd37326d15619223ef29031471f3aa5167d291fe30decd094ce0
+- term: model
+  quote_sha256: d080216f3f41a656b9c12ab10be889417b4d07e0a94372387c34f71b2df744e8
+- term: approach
+  quote_sha256: 889e5d3d9a7215c35d7abaa772df0395b4290af267eae285f7d57e52e8d0172f
+- term: corpus
+  quote_sha256: 6d1532678d1aca42ec3a715a12e8ab15c279c687c01da5e71c0dc506f7c7bfaa
+- term: dialogue
+  quote_sha256: 6725b78b82022e3903cca5691b63487475963f1ba7db8e04a79e075f53c32e4a
+acronym_convention: long_form_with_acronym_alias
+keep_variant_modifier: true
+provenance:
+  drafter_prompt: domain_profile/v1
+  model: gpt-6-luna
+  input_hash: 97ae3d413e5d65279577c9fc85c0c0bbc8a1240e00676da8b1ef91b361ecee72
+  sample_papers:
+  - P07-1007.grobid
+  - 2020.acl-main.9.grobid
+  - P04-1004.grobid
+  excerpt_words: 700
+  purpose: Identify concepts within a paper to build a knowledge graph that maps the
+    connection between concepts to build an understanding of the paper
+  drafted_on: '2026-10-27'
+  gold_used: false
+  reviewed_by: owner
+  review: approved as drafted (2026-10-30, "start")
+  draft_file: 'data/interim/suggestions/domain_profile_scinlp_draft.yaml (gitignored:
+    SciNLP quotes, CC BY-NC)'
+  evidence_file: data/interim/cr059/domain_profile_scinlp_v1_evidence.json (gitignored)
+  derived_from: configs/domain_profiles/scinlp_v1.yaml (owner-approved, drafted without
+    gold)
+  edits:
+  - specificity field_terms -> named_instances
+  - property, phenomenon, field, setting switched off
+  - technique, component, task, resource scope any -> named_only; measure stays any
+  - 'always_concepts: prior, convergence, coherence dropped (properties are off),
+    attention dropped (bare component vs named_only); accuracy kept'
+  edit_basis: owner option 3 (2026-10-28) after the CR-059 arm F partial result on
+    2 SciNLP dev papers; no gold marking rates used

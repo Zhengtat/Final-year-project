@@ -205,6 +205,7 @@ class V3Result:
     )  # CR-034 (only with qualifier_checks="v1")
     # CR-036 (assembly v2): {"model": ..., "set": ...} when the type-valid orientation replaced the model's
     direction_by_types: dict | None = None
+    endpoint_fit: dict | None = None  # CR-059 DRAFT: {"answer", "reason"} from relation_choice v8 (endpoint_check "choice" only)
     misconception: dict | None = None  # CR-039 DRAFT: the misconception choice (misconception_source classification); a layer item source, never an edge
 
     def to_dict(self) -> dict:
@@ -213,6 +214,8 @@ class V3Result:
             d.pop("direction_by_types", None)
         if d.get("misconception") is None:
             d.pop("misconception", None)
+        if d.get("endpoint_fit") is None:
+            d.pop("endpoint_fit", None)
         if not d.get("qualifier_flags"):
             d.pop(
                 "qualifier_flags", None
@@ -240,6 +243,7 @@ def classify_pair_v3(
     amendments: str = "off",  # CR-038 DRAFT: "off" | "v6" (per-relation qualifier schema, dimension quote, prompts v6); never run
     direction_by_types: bool = False,  # CR-036: assembly v2 sets the type-valid orientation instead of rejecting a domain/range error
     qualifier_checks: str = "off",  # CR-034: "off" (today's behaviour) | "v1" (qualifier_checks.py)
+    endpoint_check: str = "types",  # CR-059 DRAFT: "types" (registry domain/range) | "choice" (choice v8 endpoint_fit; type-free runs)
     fixtures: tuple[str, str, str] = ("default", "default", "default"),
 ) -> V3Result:
     x, y = cx.canonical_name, cy.canonical_name
@@ -275,7 +279,14 @@ def classify_pair_v3(
 
     v6 = amendments == "v6"
     mis = False
-    if v6:
+    if endpoint_check == "choice":  # CR-059 DRAFT: v6 schema + endpoint_fit (needs amendments v6)
+        from cumap.expert_kg import relations_v6 as R6
+        from cumap.expert_kg import relations_v8 as R8
+
+        if not v6:
+            raise ValueError("endpoint_check choice needs qualifier amendments v6")
+        schema = R8.build_relation_choice_v8(registry, res.family, same_concept)
+    elif v6:
         from cumap.expert_kg import relations_v6 as R6
 
         schema = R6.build_relation_choice_v6(registry, res.family, same_concept)
@@ -384,10 +395,17 @@ def classify_pair_v3(
     if not (gx and gy):
         res.reason = "endpoint_not_grounded"
         return res
+    if endpoint_check == "choice":  # CR-059 DRAFT: the choice step's judgement replaces the node-type domain/range check
+        res.endpoint_fit = {"answer": o.endpoint_fit, "reason": o.endpoint_fit_reason}
+        if o.endpoint_fit != "fits":
+            res.reason = "endpoint_fit"
+            return res
     src, tgt = (cy, cx) if o.direction == "reversed" else (cx, cy)
     res.type_errors = registry.check_types(
         EdgeRef(source_id=src.concept_id, relation=o.relation, target_id=tgt.concept_id),
-        {c.concept_id: c.node_type for c in (cx, cy) if c.node_type != GENERIC_TYPE},
+        {c.concept_id: c.node_type for c in (cx, cy) if c.node_type != GENERIC_TYPE}
+        if endpoint_check != "choice"
+        else {},  # CR-059: choice mode never reads node types
     )
     if res.type_errors and direction_by_types and not registry.get(o.relation).symmetric:
         types = {c.concept_id: c.node_type for c in (cx, cy) if c.node_type != GENERIC_TYPE}

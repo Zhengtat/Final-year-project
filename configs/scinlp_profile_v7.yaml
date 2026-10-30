@@ -1,0 +1,50 @@
+# CR-059 DRAFT profile v7 = profile v5 + (1) generator prompt concept_generator/v7 (no node types; slots from the domain profile), (2) the owner-approved, gold-free domain profile, (3) endpoint_check: choice (relation_choice v8). Never run before owner review.
+# CR-055 profile v4 (generator prompt v6_scinlp + concept_recall switches); was: CR-053 profile v3 (generator prompt v5_scinlp), built on the CR-047 copy of the CR-012 SciNLP benchmark-local schema profile (Research ruling 2026-10-10). Only the benchmark schema changes; the CR-009 architecture is the same.
+name: scinlp
+release_label: SciNLP-repo-e78342be
+status: "CR-059 DRAFT v7: v5 with the type-free generator v7, the gold-free domain profile and endpoint_check choice; not adopted, never run"
+entity_types: []   # CR-059: no node types (type-free generator schema; every concept gets the generic internal type)
+relation_registry: configs/relations_scinlp_v1.0.1.yaml
+symmetric:
+- similarWith
+- compareWith
+domain: natural language processing research
+generator_prompt:
+  task: concept_generator
+  version: v7        # CR-059 DRAFT: domain-general, type-free core; domain content from domain_profile below
+  base_version: v4
+few_shot_bank: none (the existing prompt framework does not require examples; no test-derived or invented examples are used)
+term_lexicon: empty (the networking lexicon is disabled; no SciNLP identity lexicon is created)
+canonical_overrides: empty
+alias_rules: configs/alias_rules.yaml (generic R1-R3 machinery retained)
+pruner:
+  tau: 0.0
+  note: same recipe as the CR-009 final production run (pruner off outside its training domain)
+strict_g_links: true
+scoring:
+  level: mention
+  scorer: CR-012 SciNLP strict scorer
+  negated_relations_are_not_positive_edges: true
+  unit: document
+  full_documents: true
+forbidden_in_prompts:
+- SciNLP test examples
+- test entity surfaces
+- test relations
+- test-derived aliases
+- test-derived few-shot examples
+# CR-055: concept-recall switches read by cumap.concepts_v4.cr009_run for this profile only (the CUM / P&D path is unchanged).
+concept_recall:
+  form: G2                       # CR-055 arm B: an independent first reading, then the main call checks its terms
+  carry_forward_rule: contained  # restore an earlier verified item unless a containing / contained span replaced it (was: any shared word)
+  quote_repair: true             # F2 accepts a quote that differs from the text only in spaces around punctuation (stored quote = the text's substring)
+  m6: true                       # hint acronym-like tokens and the terms below that no item covers
+  m6_terms: [accuracy, precision, recall, F1, perplexity, entropy, fluency, coverage, diversity, p-value, BLEU, ROUGE, n-gram, n-grams, bigram, bigrams, trigram, trigrams]
+  m6_instruction: "These terms look like concepts this paper uses that you did not list: {items}. Add each with evidence (a metric, method, dataset or task the text names), or reject it with a reason."
+# CR-056: the pair budget. "all" = every candidate pair is classified (the frozen D3 rule is replaced at call time by cumap.cr056.scinlp_run).
+pair_budget: all
+
+# CR-059: the domain profile drafted from the documents without gold (cumap.cr059.draft); only an owner-approved file loads.
+domain_profile: configs/domain_profiles/scinlp_v1.yaml
+# CR-059: the relation choice step judges the endpoints (owner choice b); node types are never read.
+endpoint_check: choice

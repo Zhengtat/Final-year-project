@@ -22,7 +22,7 @@ from cumap.concepts_v4.cards import (
 )
 from cumap.concepts_v4.loop import LoopConfig, SectionResult, SectionRunner, render_paragraphs
 from cumap.concepts_v4.pruner import is_value_like, norm
-from cumap.concepts_v4.schema import DEFAULT_SCHEMAS, GeneratorSchemas
+from cumap.concepts_v4.schema import DEFAULT_SCHEMAS, GeneratorSchemas, fill_types
 from cumap.concepts_v4.verifier import VerifyCtx, drop_flagged, verify
 from cumap.config import REPO_ROOT
 from cumap.expert_kg.alias_rules import AliasConfig, r1_key
@@ -127,12 +127,15 @@ class ConceptRun:
         schemas: GeneratorSchemas | None = None,
         concept_recall: dict
         | None = None,  # CR-055: benchmark-profile switches (quote_repair, m6, m6_terms); None = unchanged
+        prompt_fields: dict[str, str]
+        | None = None,  # CR-059: domain-profile slots of the type-free generator prompt; None = unchanged
     ):
         self.__dict__.update(locals())
         self.schemas = schemas or DEFAULT_SCHEMAS
         self.runner = SectionRunner(
-            client, prompt, bank, cfg, domain=domain, fixture=fixture, schemas=self.schemas
-        )
+            client, prompt, bank, cfg, domain=domain, fixture=fixture, schemas=self.schemas,
+            prompt_fields=prompt_fields,
+        )  # fmt: skip
         self.alias_cfg = lexicon.cfg if lexicon else AliasConfig.load()
 
     # ---------------------------------------------------------------- chapter contexts
@@ -636,7 +639,7 @@ class ConceptRun:
                     }
                 )
                 continue
-            bo = res.output.model_dump()
+            bo = fill_types(res.output.model_dump(), self.schemas.fill_type)
             vctx = VerifyCtx(
                 section_text=" ".join(paras.values()),
                 paragraphs=paras,

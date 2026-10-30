@@ -164,6 +164,7 @@ def stage_concepts(
         progress=print,
         schemas=make_schemas(profile.entity_types if profile else None),
         concept_recall=recall or None,
+        prompt_fields=_domain_profile_fields(profile),
     )
     do_backfill = _backfill_enabled() if backfill is None else backfill
     out = run_obj.run(units, backfill=do_backfill)
@@ -191,6 +192,7 @@ def stage_concepts(
             **({"identity_resolver": resolver} if resolver != "legacy" else {}),
             **({"identity_judge": judge} if judge != "off" else {}),
             **({"concept_recall": recall} if recall else {}),
+            **(_domain_profile_record(profile) or {}),
         },
     )
     overrides = (
@@ -226,6 +228,31 @@ def stage_concepts(
         "pruned": len(out.pruned),
         "spend_usd": round(client.spent_usd, 4),
     }
+
+
+def _domain_profile_path(profile) -> Path | None:
+    rel = (profile.raw.get("domain_profile") if profile else None) or None
+    return REPO_ROOT / rel if rel else None
+
+
+def _domain_profile_fields(profile) -> dict[str, str] | None:
+    """CR-059: the v7 prompt slots from the run profile's approved domain profile; None for every earlier profile."""
+    path = _domain_profile_path(profile)
+    if path is None:
+        return None
+    from cumap.cr059.domain_profile import load_domain_profile, prompt_fields
+
+    return prompt_fields(load_domain_profile(path))
+
+
+def _domain_profile_record(profile) -> dict | None:
+    path = _domain_profile_path(profile)
+    if path is None:
+        return None
+    import hashlib
+
+    return {"domain_profile": {"path": str(path.relative_to(REPO_ROOT)),
+                               "sha256": hashlib.sha256(path.read_bytes()).hexdigest()}}  # fmt: skip
 
 
 def production_registry_path(settings) -> Path:

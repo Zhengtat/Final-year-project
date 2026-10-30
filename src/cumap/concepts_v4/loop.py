@@ -16,7 +16,7 @@ from dataclasses import dataclass, field
 
 from cumap.concepts_v4.bank import card_line, render_examples
 from cumap.concepts_v4.cards import Card
-from cumap.concepts_v4.schema import DEFAULT_SCHEMAS, GeneratorSchemas
+from cumap.concepts_v4.schema import DEFAULT_SCHEMAS, GeneratorSchemas, fill_types
 from cumap.concepts_v4.verifier import (
     Hint,
     VerifyCtx,
@@ -89,8 +89,8 @@ class SectionResult:
     error: str | None = None
 
 
-def render_cards(cards: list[Card]) -> str:
-    return "\n".join(card_line(c.to_bank_card()) for c in cards) or "(none: no known nodes yet)"
+def render_cards(cards: list[Card], typed: bool = True) -> str:
+    return "\n".join(card_line(c.to_bank_card(), typed) for c in cards) or "(none: no known nodes yet)"
 
 
 def render_look_alikes(lexicon, cards: list[Card], text: str, chapter: int | None) -> str:
@@ -150,8 +150,10 @@ class SectionRunner:
         domain: str,
         fixture: str = "default",
         schemas: GeneratorSchemas | None = None,
+        prompt_fields: dict[str, str] | None = None,
     ):
         self.schemas = schemas or DEFAULT_SCHEMAS
+        self.prompt_fields = dict(prompt_fields or {})
         self.client, self.prompt, self.bank, self.cfg, self.domain, self.fixture = (
             client,
             prompt,
@@ -182,7 +184,9 @@ class SectionRunner:
             look_alikes=""
             if pass_a
             else render_look_alikes(lexicon, cards, sec["text"], sec.get("chapter_num")),
-            existing_nodes="(not shown in this pass)" if pass_a else render_cards(cards),
+            existing_nodes="(not shown in this pass)"
+            if pass_a
+            else render_cards(cards, typed=self.schemas.fill_type is None),
             independent_terms=(
                 "TERMS FOUND BY AN INDEPENDENT READER (check each; the list may be incomplete or wrong):\n"
                 + "\n".join(f"- {t}" for t in terms)
@@ -193,6 +197,7 @@ class SectionRunner:
             corrections=corrections,
             section_paragraphs=render_paragraphs(paras),
             pass_note=PASS_A_NOTE if pass_a else "",
+            **self.prompt_fields,  # CR-059: domain-profile slots (empty for every earlier prompt version)
         )
         res = self.client.parse(
             task="concept_generator",
@@ -203,7 +208,7 @@ class SectionRunner:
             fixture_name=self.fixture,
             allow_escalation=False,
         )
-        return res.output.model_dump()
+        return fill_types(res.output.model_dump(), self.schemas.fill_type)
 
     # ---------------------------------------------------------------- the loop
     def run(

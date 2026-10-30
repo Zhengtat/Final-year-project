@@ -18,11 +18,12 @@ def _n(s: str) -> str:
     return " ".join(s.split())
 
 
-def card_line(c: dict) -> str:
-    """`n_0142 | cyclic redundancy check | aka: CRC | Mechanism | def §2.4 | in_text: yes | "gloss"`."""
+def card_line(c: dict, typed: bool = True) -> str:
+    """`n_0142 | cyclic redundancy check | aka: CRC | Mechanism | def §2.4 | in_text: yes | "gloss"` (CR-059: no type column when untyped)."""
     aka = ", ".join(c.get("aliases", [])) or "-"
     d = c.get("def") or "—"
-    return f'{c["id"]} | {c["name"]} | aka: {aka} | {c["type"]} | def {d} | in_text: {"yes" if c["in_text"] else "no"} | "{c["gloss"]}"'
+    typ = f' | {c["type"]}' if typed else ""
+    return f'{c["id"]} | {c["name"]} | aka: {aka}{typ} | def {d} | in_text: {"yes" if c["in_text"] else "no"} | "{c["gloss"]}"'
 
 
 def _output_json(ex: dict, mode: str) -> dict:
