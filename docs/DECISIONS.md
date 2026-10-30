@@ -871,3 +871,13 @@ Format: date · decision · reason · alternatives considered.
 - **Adoption metric unchanged:** adoption rules stay on strict `IDXR1-P1` (overlap erases boundary improvements, e.g. the v5 -> v11 gain +0.016 recall strict vs +0.003 overlap). Pending the owner if this should change too.
 - **Where:** CR-043 scorecards (`cumap.cr043.eval`: `IDXR1OV-P1` first; `cr055ballp` and `cr057rest_rest` regenerated, strict numbers byte-identical apart from the new F2 fields) and the diagnostics page (overview KPIs, objectives table, per-paper table sorted by overlap relation F1). Gates still check strict counts.
 - **Headline numbers:** v5 first 20 (`cr055ballp`): overlap concept P / R / F2 0.426 / 0.899 / 0.736, relation F1 0.210 (strict 0.153); v11, 57 papers: overlap concept recall 0.882, relation F1 0.189 (strict 0.747 / 0.147).
+
+## 2026-10-30 · CR-063: adoption rules judged on overlap too (owner)
+- **Decision (owner, 2026-10-30):** adoption rules are judged on **`IDXR1OV-P1`** (overlap), not strict; strict `IDXR1-P1` is reported beside every decision. The recall-first rule reads: concept recall (overlap) >= +0.01 AND relation F1 (overlap) >= -0.005.
+- **Known consequence (measured, CR-063 addendum 2):** overlap forgives boundary errors, so boundary fixes barely register (CR-060 span identity: +0.016 recall strict, +0.003 overlap); under this rule such fixes would not be adopted. Earlier adoptions (v5, v11) were judged on strict and are not re-decided.
+
+## 2026-10-30 · CR-063: bottlenecks under the overlap headline (v11, 57 papers, $0)
+- **Method** (`cumap.cr063.bottleneck`, `reports/cr063/bottleneck.md`): gold mentions relabelled to their overlap-matched predicted spans, then the unchanged CR-058 funnel; check: funnel credited 247 = overlap relation tp 247.
+- **Gold relations (1,354), strict -> overlap:** endpoints placed 707 -> **972 (72%)**; pair classified 855 (88%; 117 same-sentence pairs never classified); family right 691 (81%); **choice right 384 (56%)**; checks passed 349 (91%); assembled 348; credited 247 (71%).
+- **Choice-step losses (307):** wrong relation 298 (of which 82 "other" / "no_relation"), wrong direction 9; most frequent confusions trainedWith -> evaluatedOn 38, enhancedBy -> UsedFor 27, compareWith -> other 18, trainedWith -> UsedFor 11.
+- **Concept misses under overlap (666 of 5,664 gold mentions):** never proposed 480, lost after the generator 81, hint rejected 48, node not placed 29, span 28 (strict: 793).

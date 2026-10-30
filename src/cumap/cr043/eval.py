@@ -32,8 +32,8 @@ from cumap.cr043.run import TAG, run_id
 from cumap.expert_kg.alias_rules import AliasConfig
 
 OUT = REPO_ROOT / "reports" / "cr043"
-PRIMARY = "IDXR1-P1"  # strict: the adoption metric and the secondary reported number (CR-063)
-HEADLINE = "IDXR1OV-P1"  # CR-063 (owner, 2026-10-30): overlap matching is the headline reported number; strict beside it
+PRIMARY = "IDXR1-P1"  # strict: the secondary reported number (CR-063), reported beside every adoption decision
+HEADLINE = "IDXR1OV-P1"  # CR-063 (owner, 2026-10-30): overlap matching is the headline and the adoption metric; strict beside it
 VARIANTS = ("FROZEN", PRIMARY, "IDXR1-P3")
 REPORTED = (HEADLINE, *VARIANTS)
 H2 = C.HIER_SETS["H2 {subclassOf, subtaskOf}"]
@@ -217,7 +217,7 @@ def markdown(r: dict) -> str:
         "",
         (
             "Overlap: a predicted mention that shares a token with a gold mention counts as it (one-to-one, closest first; relation endpoints the same). "
-            "Strict `IDXR1-P1` (exact spans) is the secondary number and the adoption metric."
+            "Overlap is also the adoption metric; strict `IDXR1-P1` (exact spans) is the secondary number, reported beside every decision."
         ),
         "",
         "| grounding | all papers | dev papers | train papers | concept P / R / F2 (F1 beside) |",

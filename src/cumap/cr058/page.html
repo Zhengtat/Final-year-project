@@ -426,9 +426,9 @@ function results(){
    <p class="note">Product: ${g.credited} / ${g.gold} = <b>${pct(g.gold?g.credited/g.gold:NaN)}</b> = strict relation recall.</p></div>
   <div class="card"><h3>Objectives</h3><table><thead><tr><th>objective</th><th class="n">precision</th><th class="n">recall</th><th class="n">F1</th></tr></thead><tbody>
    ${o.concept_overlap?`<tr><td><b>Concept F1, overlap match</b> (IDXR1OV-P1, headline; F2 ${f3(F2(o.concept_overlap))})</td>${prfCells(o.concept_overlap)}</tr>
-   <tr><td><b>End-to-end relation F1, overlap match</b> (IDXR1OV-P1, headline)</td>${prfCells(o.relation_overlap)}</tr>`:""}
+   <tr><td><b>End-to-end relation F1, overlap match</b> (IDXR1OV-P1, headline and adoption metric)</td>${prfCells(o.relation_overlap)}</tr>`:""}
    <tr><td>Concept F1, strict (entity strict; F2 ${f3(F2(o.concept_strict))})</td>${prfCells(o.concept_strict)}</tr>
-   <tr><td>Strict end-to-end relation F1 (IDXR1-P1, secondary; adoption metric)</td>${prfCells(o.relation_strict)}</tr>`;
+   <tr><td>Strict end-to-end relation F1 (IDXR1-P1, secondary)</td>${prfCells(o.relation_strict)}</tr>`;
   if(o.downstream){h+=`<tr><td>Relation F1, lenient upper reading (IDXR1-P3)</td>${prfCells(o.downstream.relation_P3)}</tr>
    <tr><td><b>Hierarchy F1</b> (direct, H2 = subclassOf + subtaskOf)</td>${prfCells(o.downstream.hierarchy_H2)}</tr>
    <tr><td>Fact F1 (FACT-C1-SURF-R1, identity from strings)</td>${prfCells(o.downstream.fact)}</tr>`;}
