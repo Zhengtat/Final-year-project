@@ -58,7 +58,7 @@ def main() -> None:
         f, r = res["first"][k], res["rest"][k]
         from cumap.cr012.types import PRF
 
-        add = lambda a, b: PRF(a["tp"] + b["tp"], a["fp"] + b["fp"], a["fn"] + b["fn"])  # noqa: E731
+        add = lambda a, b: PRF(a["tp"] + b["tp"], a["fp"] + b["fp"], a["fn"] + b["fn"])
         res["all"][k] = {"concept": prf_d(add(f["concept"], r["concept"])), "relation": prf_d(add(f["relation"], r["relation"])),
                          "snapped": f["snapped"] + r["snapped"]}  # fmt: skip
     L = ["# CR-063 addendum: position-tolerant evaluation (+-1 / +-2 characters), 57 SciNLP train / dev papers", "",

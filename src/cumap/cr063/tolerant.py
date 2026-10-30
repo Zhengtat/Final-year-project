@@ -13,7 +13,7 @@ from cumap.cr019 import variants as V
 def snap_map(doc, gold_spans: set, pred_spans: set, n: int) -> dict:
     """{predicted span: gold span} for predicted spans within n characters at both ends of a gold span (one-to-one)."""
     off = doc.token_offsets
-    ch = lambda sp: (off[sp[0]][0], off[sp[1] - 1][1])  # noqa: E731
+    ch = lambda sp: (off[sp[0]][0], off[sp[1] - 1][1])
     exact = pred_spans & gold_spans
     free_g = sorted(gold_spans - exact)
     cands = []
