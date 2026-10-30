@@ -824,3 +824,6 @@ Format: date · decision · reason · alternatives considered.
 - **(b) Recall rules** (`cumap.cr062.measure`, `reports/cr062/sizing.md`, 57 papers, v11, approximate replay): control concept P / R / F2 0.349 / 0.747 / 0.609. V2 (F3 tolerance) rescues 5 gold / 24 non-gold items, recall +0.0012; V1-para + V2 10 / 34, +0.0026; **V1-paper + V2 17 / 63, recall +0.0060, F2 +0.0024**, precision -0.001. Items already in the final graph by another route are not counted.
 - **(c) Flag rules:** V6 sentence role flags 171 non-gold / 208 gold nodes (0.82 per gold: citation and example contexts carry many gold datasets and models); V7 grammatical role 226 / 124 (1.82); either 376 / 307. Below the 3 : 1 trigger: not pursued.
 - **Trigger:** met by (b) (+0.0060 >= +0.005). The pre-registered paid arm would test V1-paper + V2 on the first 20 papers; its expected concept-recall gain (about +0.006 pooled) is below the +0.01 adoption rule, so the arm is held for the owner before any spend.
+
+## 2026-10-30 · CR-062 closed (owner): no paid arm
+- Concept F2 headline adopted (reporting). Verifier re-anchoring (V1-paper + V2) recorded as small and positive (+0.006 recall at $0), not adopted, no arm run; flag rules V6 / V7 not pursued. Spend $0. Next: CR-063 (matcher fix for bracketed acronyms and trailing symbols).
