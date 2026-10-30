@@ -1,0 +1,215 @@
+{
+ "tag": "cr055ballp",
+ "papers": 20,
+ "objective": "IDXR1-P1",
+ "arms": {
+  "control": {
+   "concept": {
+    "tp": 1527,
+    "fp": 2763,
+    "fn": 505,
+    "precision": 0.3559440559440559,
+    "recall": 0.7514763779527559,
+    "f1": 0.48307497627333124
+   },
+   "relation": {
+    "tp": 74,
+    "fp": 398,
+    "fn": 424,
+    "precision": 0.15677966101694915,
+    "recall": 0.14859437751004015,
+    "f1": 0.15257731958762885
+   },
+   "views": {
+    "IDXR1X-P1": {
+     "concept": {
+      "tp": 1609,
+      "fp": 2681,
+      "fn": 423,
+      "precision": 0.37505827505827505,
+      "recall": 0.7918307086614174,
+      "f1": 0.5090161341347674
+     },
+     "relation": {
+      "tp": 84,
+      "fp": 388,
+      "fn": 414,
+      "precision": 0.17796610169491525,
+      "recall": 0.1686746987951807,
+      "f1": 0.1731958762886598
+     }
+    },
+    "IDXR1N-P1": {
+     "concept": {
+      "tp": 1683,
+      "fp": 3729,
+      "fn": 349,
+      "precision": 0.31097560975609756,
+      "recall": 0.828248031496063,
+      "f1": 0.45217624932831807
+     },
+     "relation": {
+      "tp": 86,
+      "fp": 588,
+      "fn": 412,
+      "precision": 0.12759643916913946,
+      "recall": 0.17269076305220885,
+      "f1": 0.14675767918088736
+     }
+    }
+   },
+   "counts": {
+    "concepts": 1269
+   },
+   "merge_examples": []
+  },
+  "A-name": {
+   "concept": {
+    "tp": 1567,
+    "fp": 2724,
+    "fn": 465,
+    "precision": 0.36518294103938476,
+    "recall": 0.7711614173228346,
+    "f1": 0.4956507986715167
+   },
+   "relation": {
+    "tp": 80,
+    "fp": 392,
+    "fn": 418,
+    "precision": 0.1694915254237288,
+    "recall": 0.1606425702811245,
+    "f1": 0.16494845360824742
+   },
+   "views": {
+    "IDXR1X-P1": {
+     "concept": {
+      "tp": 1609,
+      "fp": 2681,
+      "fn": 423,
+      "precision": 0.37505827505827505,
+      "recall": 0.7918307086614174,
+      "f1": 0.5090161341347674
+     },
+     "relation": {
+      "tp": 84,
+      "fp": 388,
+      "fn": 414,
+      "precision": 0.17796610169491525,
+      "recall": 0.1686746987951807,
+      "f1": 0.1731958762886598
+     }
+    },
+    "IDXR1N-P1": {
+     "concept": {
+      "tp": 1683,
+      "fp": 3736,
+      "fn": 349,
+      "precision": 0.3105739066248385,
+      "recall": 0.828248031496063,
+      "f1": 0.45175144275936113
+     },
+     "relation": {
+      "tp": 86,
+      "fp": 590,
+      "fn": 412,
+      "precision": 0.12721893491124261,
+      "recall": 0.17269076305220885,
+      "f1": 0.1465076660988075
+     }
+    }
+   },
+   "counts": {
+    "aliases": 41,
+    "merges": 0,
+    "edges_dropped": 0,
+    "alias_R-head": 41,
+    "concepts": 1269
+   },
+   "merge_examples": [],
+   "rule": {
+    "concept_recall_delta": 0.0197,
+    "relation_f1_delta": 0.0124,
+    "passes": true
+   }
+  },
+  "A-all": {
+   "concept": {
+    "tp": 1560,
+    "fp": 2645,
+    "fn": 472,
+    "precision": 0.37098692033293695,
+    "recall": 0.7677165354330708,
+    "f1": 0.5002405002405002
+   },
+   "relation": {
+    "tp": 80,
+    "fp": 380,
+    "fn": 418,
+    "precision": 0.17391304347826086,
+    "recall": 0.1606425702811245,
+    "f1": 0.16701461377870563
+   },
+   "views": {
+    "IDXR1X-P1": {
+     "concept": {
+      "tp": 1561,
+      "fp": 2643,
+      "fn": 471,
+      "precision": 0.3713130352045671,
+      "recall": 0.7682086614173228,
+      "f1": 0.5006414368184734
+     },
+     "relation": {
+      "tp": 80,
+      "fp": 380,
+      "fn": 418,
+      "precision": 0.17391304347826086,
+      "recall": 0.1606425702811245,
+      "f1": 0.16701461377870563
+     }
+    },
+    "IDXR1N-P1": {
+     "concept": {
+      "tp": 1640,
+      "fp": 3633,
+      "fn": 392,
+      "precision": 0.3110183956002276,
+      "recall": 0.8070866141732284,
+      "f1": 0.4490075290896647
+     },
+     "relation": {
+      "tp": 82,
+      "fp": 568,
+      "fn": 416,
+      "precision": 0.12615384615384614,
+      "recall": 0.1646586345381526,
+      "f1": 0.14285714285714285
+     }
+    }
+   },
+   "counts": {
+    "aliases": 188,
+    "merges": 11,
+    "edges_dropped": 3,
+    "alias_R-head": 96,
+    "alias_R-acr": 92,
+    "concepts": 1258
+   },
+   "merge_examples": [
+    "automatic prompt search method -> automatic prompt search method",
+    "data augmentation methods -> data augmentation methods",
+    "inference algorithm -> inference algorithms",
+    "case assignment model -> case assignment model",
+    "extraposition model -> extraposition model",
+    "syntactic aggregation model -> syntactic aggregation model",
+    "language modeling framework -> language modeling framework",
+    "trigram model -> trigram models"
+   ],
+   "rule": {
+    "concept_recall_delta": 0.0162,
+    "relation_f1_delta": 0.0144,
+    "passes": true
+   }
+  }
+ }
+}

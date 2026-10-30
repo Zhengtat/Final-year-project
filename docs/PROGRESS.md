@@ -249,3 +249,6 @@ Built behind switches, never run: generator prompt v7 (type-free, profile slots)
 - **2026-10-28 results:** arm R (choice b alone, 20 papers): relation F1 0.153 -> 0.139, fails; endpoint_fit drops 0 correct / 95 wrong pairs vs domain_range 2 / 328. Arm F (profile v7 + profile v1): partial, 2 papers, concept precision 0.559 -> 0.238 with recall unchanged, relation F1 0.249 -> 0.121; stopped by the owner. Neither adopted. Spend $0.99. Next: profile v2 (narrower, owner edits).
 - **2026-10-30:** owner approved profile v2; arm F2 (`cr059v8`) on 2 dev papers: concept P 0.325 (v5 0.559), recall 0.781 (v5 0.792), relation F1 0.176 (v5 0.249, arm R 0.250); fails both pre-registered readings; stopped before the 20 ($0.09 per paper would pass the $1.5 stop). Not adopted. CR-059 spend $1.17 of $5.
 - **2026-10-30: CLOSED, NOT ADOPTED (owner).** v5 stays production; every CR-059 switch stays off by default. Merged with tag `cr-059-complete`.
+
+### CR-060 (span identity, noun-phrase hint; first 20 papers only)
+- **2026-10-30 Part A ($0 replay):** head-variant identity A-all: relation F1 0.153 -> 0.167, concept recall 0.751 -> 0.768 (`reports/cr060/part_a.md`); adopted as profile v10 (default runner `cumap.cr060.scinlp_run`). A-name 0.165. Same 20 papers as the head list's origin: optimistic.

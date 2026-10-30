@@ -1,0 +1,13 @@
+# CR-060 Part A: head-variant identity, an assembly-stage alias rule (cumap.cr060.span_identity). Off unless a run profile names a variant.
+# Gold-free: the head list is the CR-052 `HEADS` list, unchanged. Every alias and merge records its rule and evidence (rule 19);
+# a term-lexicon `different` pair is never merged (rule 20).
+version: 1
+heads: [approach, approaches, model, models, method, methods, system, systems, algorithm, algorithms, framework, frameworks,
+        technique, techniques, dataset, datasets, corpus, corpora]
+variants:
+  A-name:   # R-head only where the form is name-like (an uppercase letter or a digit): "GloVe" -> "GloVe model"
+    r_head: name_like
+    r_acr: false
+  A-all:    # R-head for every form, plus R-acr: "word sense disambiguation" -> "word sense disambiguation ( WSD )"
+    r_head: all
+    r_acr: true
