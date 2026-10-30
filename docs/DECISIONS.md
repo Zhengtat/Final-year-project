@@ -804,3 +804,6 @@ Format: date · decision · reason · alternatives considered.
 - **Caveat:** the choice used the other 37 papers, so they are no longer an unseen check for it.
 - **Also measured and not adopted (scratch, $0):** "name + word + head" extensions on top of A-name ("Transformer Big model"): right extension fires 1 / 15 times (relation F1 +0.000 / +0.002), left extension 4 / 3 times (-0.000 / -0.001).
 - **Page:** `cumap.cr058.page` defaults to v11 (`pipeline.html`, `summary_v11.*`); `--profile v10` and `--profile v5` rebuild the others; every generated page is gitignored (`reports/cr058/pipeline*.html`).
+
+## 2026-10-30 · CR-061 closed (owner)
+- Diagnostics page on the adopted profile (v11, span identity A-name, in memory; gates pass); A-all found defective (R-acr bracket loss) and superseded by A-name. Spend $0.
