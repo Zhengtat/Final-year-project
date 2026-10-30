@@ -109,7 +109,7 @@ const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const f3=x=>x==null||isNaN(x)?"–":x.toFixed(3);
 const pct=x=>x==null||isNaN(x)?"–":(100*x).toFixed(1)+"%";
-const P=x=>x.tp+x.fp?x.tp/(x.tp+x.fp):0, R=x=>x.tp+x.fn?x.tp/(x.tp+x.fn):0, F=x=>x.tp?2*x.tp/(2*x.tp+x.fp+x.fn):0;
+const P=x=>x.tp+x.fp?x.tp/(x.tp+x.fp):0, R=x=>x.tp+x.fn?x.tp/(x.tp+x.fn):0, F=x=>x.tp?2*x.tp/(2*x.tp+x.fp+x.fn):0, F2=x=>x.tp?5*x.tp/(5*x.tp+4*x.fn+x.fp):0;  // CR-062: concept F2 (beta 2) is the concept headline, F1 beside
 const NOPOOL=new Set(["graph","examples"]);
 const add=(a,b)=>{for(const k in b){if(NOPOOL.has(k))continue;const v=b[k];if(typeof v==="number")a[k]=(a[k]||0)+v;else if(v&&typeof v==="object"&&!Array.isArray(v)){a[k]=a[k]||{};add(a[k],v);}}return a;};
 const STAGES=["generator_first_pass","verifier_first_pass","corrective_round","pruner","consolidation"];
@@ -222,10 +222,10 @@ function paperRows(){
   return Object.keys(D.test).map(n=>({n,r:D.test[n][S.level]}));
 }
 function paperTable(){
-  const rows=paperRows().map(({n,r})=>({n,split:r.split||"test",set:r.set||"test",words:r.words,gm:r.gold_mentions,gr:r.gold_relations,cR:R(r.concept_strict),cF:F(r.concept_strict),p:P(r.relation_strict),rec:R(r.relation_strict),f1:F(r.relation_strict),pr:r.relation.gold_stages.endpoints_placed?r.relation.gold_stages.pair_selected/r.relation.gold_stages.endpoints_placed:NaN,c:r.codes}));
+  const rows=paperRows().map(({n,r})=>({n,split:r.split||"test",set:r.set||"test",words:r.words,gm:r.gold_mentions,gr:r.gold_relations,cR:R(r.concept_strict),cF2:F2(r.concept_strict),cF:F(r.concept_strict),p:P(r.relation_strict),rec:R(r.relation_strict),f1:F(r.relation_strict),pr:r.relation.gold_stages.endpoints_placed?r.relation.gold_stages.pair_selected/r.relation.gold_stages.endpoints_placed:NaN,c:r.codes}));
   rows.sort((a,b)=>{const x=a[S.sortKey],y=b[S.sortKey];return (x>y?1:x<y?-1:0)*S.sortDir;});
-  const cols=[["n","paper"],["split","split"],["words","words",1],["gm","gold concepts (mentions)",1],["gr","gold relations",1],["cR","concept R",1],["cF","concept F1",1],["pr","pair recall",1],["p","relation P",1],["rec","relation R",1],["f1","relation F1",1]];
-  return `<div class="card"><h3>Per paper (${rows.length}) · click a row to show its graphs</h3><div class="scroll"><table id="ptab"><thead><tr>${cols.map(([k,l,n])=>`<th data-k="${k}" class="${n?"n":""}">${l}${S.sortKey===k?(S.sortDir>0?" ▲":" ▼"):""}</th>`).join("")}<th>N0 · N1 · P0 · R0 · R1</th></tr></thead><tbody>${rows.map(x=>`<tr data-n="${esc(x.n)}" class="${(S.gpaper||rows[0].n)===x.n?"sel":""}"><td class="mono">${esc(x.n)}</td><td>${x.split}</td><td class="n">${x.words}</td><td class="n">${x.gm}</td><td class="n">${x.gr}</td><td class="n">${f3(x.cR)}</td><td class="n">${f3(x.cF)}</td><td class="n">${f3(x.pr)}</td><td class="n">${f3(x.p)}</td><td class="n">${f3(x.rec)}</td><td class="n"><b>${f3(x.f1)}</b></td><td class="mono">${["N0","N1","P0","R0","R1"].map(k=>x.c[k]||0).join(" · ")}</td></tr>`).join("")}</tbody></table></div></div>`;
+  const cols=[["n","paper"],["split","split"],["words","words",1],["gm","gold concepts (mentions)",1],["gr","gold relations",1],["cR","concept R",1],["cF2","concept F2",1],["cF","concept F1",1],["pr","pair recall",1],["p","relation P",1],["rec","relation R",1],["f1","relation F1",1]];
+  return `<div class="card"><h3>Per paper (${rows.length}) · click a row to show its graphs</h3><div class="scroll"><table id="ptab"><thead><tr>${cols.map(([k,l,n])=>`<th data-k="${k}" class="${n?"n":""}">${l}${S.sortKey===k?(S.sortDir>0?" ▲":" ▼"):""}</th>`).join("")}<th>N0 · N1 · P0 · R0 · R1</th></tr></thead><tbody>${rows.map(x=>`<tr data-n="${esc(x.n)}" class="${(S.gpaper||rows[0].n)===x.n?"sel":""}"><td class="mono">${esc(x.n)}</td><td>${x.split}</td><td class="n">${x.words}</td><td class="n">${x.gm}</td><td class="n">${x.gr}</td><td class="n">${f3(x.cR)}</td><td class="n"><b>${f3(x.cF2)}</b></td><td class="n">${f3(x.cF)}</td><td class="n">${f3(x.pr)}</td><td class="n">${f3(x.p)}</td><td class="n">${f3(x.rec)}</td><td class="n"><b>${f3(x.f1)}</b></td><td class="mono">${["N0","N1","P0","R0","R1"].map(k=>x.c[k]||0).join(" · ")}</td></tr>`).join("")}</tbody></table></div></div>`;
 }
 function bindPaperTable(){
   const t=$("#ptab");if(!t)return;
@@ -325,6 +325,7 @@ function hideTip(){$("#tip").style.display="none";}
 
 /* ---------------------------------------------------------------- pipeline */
 function prfCells(x){return `<td class="n">${f3(P(x))}</td><td class="n">${f3(R(x))}</td><td class="n"><b>${f3(F(x))}</b></td>`;}
+function cprfCells(x){return `<td class="n">${f3(P(x))}</td><td class="n">${f3(R(x))}</td><td class="n"><b>${f3(F2(x))}</b></td><td class="n">${f3(F(x))}</td>`;}
 function pipeline(){
   const o=pooled(),c=o.concept,rel=o.relation,pr=rel.pairs||{},g=rel.gold_stages,ck=rel.checks||{correct:{},wrong:{}};
   const pairRec=s=>g.endpoints_placed?g[s]/g.endpoints_placed:NaN;
@@ -354,8 +355,8 @@ function pipeline(){
   // stage 1
   h+=`<h2>Stage 1 · Concept extraction</h2><div class="two"><div class="card"><h3>Concept recall, precision and F1 after each component</h3>`;
   if(c){
-    h+=`<table><thead><tr><th>after</th><th class="n">concepts</th><th class="n">precision</th><th class="n">recall</th><th class="n">F1</th><th class="n">ΔR</th></tr></thead><tbody>`;
-    STAGES.forEach((s,i)=>{const x=c.stages[s],d=i?R(x)-R(c.stages[STAGES[i-1]]):0;if(s==="consolidation")return;h+=`<tr><td>${STAGE_NAME[s]}</td><td class="n">${x.nodes}</td>${prfCells(x)}<td class="n ${d<0?"bad":d>0?"ok":""}">${i?(d>=0?"+":"")+f3(d):"–"}</td></tr>`;});
+    h+=`<table><thead><tr><th>after</th><th class="n">concepts</th><th class="n">precision</th><th class="n">recall</th><th class="n">F2</th><th class="n">F1</th><th class="n">ΔR</th></tr></thead><tbody>`;
+    STAGES.forEach((s,i)=>{const x=c.stages[s],d=i?R(x)-R(c.stages[STAGES[i-1]]):0;if(s==="consolidation")return;h+=`<tr><td>${STAGE_NAME[s]}</td><td class="n">${x.nodes}</td>${cprfCells(x)}<td class="n ${d<0?"bad":d>0?"ok":""}">${i?(d>=0?"+":"")+f3(d):"–"}</td></tr>`;});
     h+=`</tbody></table><p class="note">Mention level: a gold mention counts as found when a concept's placed mention has exactly its span (SciNLP has no identity gold). "Concepts" = distinct concepts after that component. Precision is a lower bound: SciNLP gold marks only some concepts.</p>`;
   }else h+=`<p class="note">Not recorded for this run. Final concepts: P ${f3(P(o.concept_strict))} · R ${f3(R(o.concept_strict))} · F1 ${f3(F(o.concept_strict))}.</p>`;
   h+=`</div>`;
@@ -371,7 +372,7 @@ function pipeline(){
   // stage 2
   h+=`<h2>Stage 2 · Concept consolidation</h2><div class="two"><div class="card"><h3>Concept recall, precision and F1 after consolidation</h3>`;
   if(c){const a=c.stages.pruner,b=c.stages.consolidation,m=c.consolidation;
-    h+=`<table><thead><tr><th></th><th class="n">concepts</th><th class="n">precision</th><th class="n">recall</th><th class="n">F1</th></tr></thead><tbody><tr><td>before (node store)</td><td class="n">${a.nodes}</td>${prfCells(a)}</tr><tr><td><b>after consolidation</b></td><td class="n">${b.nodes}</td>${prfCells(b)}</tr></tbody></table>
+    h+=`<table><thead><tr><th></th><th class="n">concepts</th><th class="n">precision</th><th class="n">recall</th><th class="n">F2</th><th class="n">F1</th></tr></thead><tbody><tr><td>before (node store)</td><td class="n">${a.nodes}</td>${cprfCells(a)}</tr><tr><td><b>after consolidation</b></td><td class="n">${b.nodes}</td>${cprfCells(b)}</tr></tbody></table>
     <p class="note">Merging changes recall only when a merge adds an alias that places more mentions. Whether a merge is right cannot be scored on SciNLP (no identity gold); the fresh owner sheets (CR-050, CR-051) measure it.</p></div>
     <div class="card"><h3>Canonicalisation merges by rule</h3><table><tbody>${Object.entries(m.merges||{}).sort((x,y)=>y[1]-x[1]).map(([k,v])=>`<tr><td class="mono">${esc(k)}</td><td class="n">${v}</td></tr>`).join("")||"<tr><td>no merges</td></tr>"}</tbody></table><p class="note">Nodes ${m.nodes_before} → ${m.nodes_after}.</p>
     <h3>Generator-link decisions</h3><table><tbody>${Object.entries(m.links||{}).sort((x,y)=>y[1]-x[1]).map(([k,v])=>`<tr><td class="mono">${esc(k)}</td><td class="n">${v}</td></tr>`).join("")||"<tr><td>none</td></tr>"}</tbody></table>
