@@ -45,7 +45,9 @@ def extend_span(tokens: list[str], sp: tuple[int, int], forms: list[str]) -> tup
 
 def predict(doc, cp: dict) -> dict:
     pred = V.sc_predict_indexed(doc, cp, "r1key")
-    forms = {c["concept_id"]: [c["canonical_name"], *(c.get("aliases") or [])] for c in cp["concepts"]}
+    forms = {
+        c["concept_id"]: [c["canonical_name"], *(c.get("aliases") or [])] for c in cp["concepts"]
+    }
     ext: dict[str, set] = {}
     grown: list[tuple[int, int, str]] = []
     for n in pred["nodes"]:
@@ -63,7 +65,11 @@ def predict(doc, cp: dict) -> dict:
             if inside:
                 dropped += len(inside)
                 ext[nid] = sps - inside
-    nodes = [dataclasses.replace(n, mentions=tuple(sorted(ext[n.node_id]))) for n in pred["nodes"] if ext[n.node_id]]
+    nodes = [
+        dataclasses.replace(n, mentions=tuple(sorted(ext[n.node_id])))
+        for n in pred["nodes"]
+        if ext[n.node_id]
+    ]
     stats = {**pred["stats"], "spans_extended": len(grown), "nested_spans_dropped": dropped}
     return {**pred, "nodes": nodes, "stats": stats}
 
@@ -77,5 +83,7 @@ def score(doc, gold, cp: dict, sym: set[str]) -> dict:
     rels, unplaced = S.project_edges_to_mentions(pred["nodes"], edges)
     res = S.score_scinlp_unit(gold, S.project_nodes_to_mentions(pred["nodes"]), rels, sym)
     r = res["rel"]
-    res["rel"] = PRF(r.tp, r.fp + unplaced + lost + pred["stats"]["edges_without_node_or_quote"], r.fn)
+    res["rel"] = PRF(
+        r.tp, r.fp + unplaced + lost + pred["stats"]["edges_without_node_or_quote"], r.fn
+    )
     return {"scores": res, "pred": pred}

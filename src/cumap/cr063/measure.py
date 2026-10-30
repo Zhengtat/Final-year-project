@@ -29,7 +29,9 @@ def main() -> None:
     sym = set(ad.symmetric_relations())
     docs, golds = {}, {}
     for s in ("train", "dev"):
-        docs.update({x.doc_key: x for x in ad.load_documents(s, paragraph_every=SR.PARAGRAPH_EVERY)})
+        docs.update(
+            {x.doc_key: x for x in ad.load_documents(s, paragraph_every=SR.PARAGRAPH_EVERY)}
+        )
         golds.update(ad.gold(s))
     res: dict = {}
     for set_name, tag in SETS:

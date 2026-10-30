@@ -29,7 +29,9 @@ def main() -> None:
     sym = set(ad.symmetric_relations())
     docs, golds = {}, {}
     for s in ("train", "dev"):
-        docs.update({x.doc_key: x for x in ad.load_documents(s, paragraph_every=SR.PARAGRAPH_EVERY)})
+        docs.update(
+            {x.doc_key: x for x in ad.load_documents(s, paragraph_every=SR.PARAGRAPH_EVERY)}
+        )
         golds.update(ad.gold(s))
     res: dict = {}
     for set_name, tag in [*SETS, ("all", None)]:
@@ -41,7 +43,11 @@ def main() -> None:
             cp0 = json.loads((PG.run_path(run_id(d, tag)) / "checkpoint.json").read_text())
             doc, gold = docs[d], golds[d]
             for p, var in PROFILES:
-                cp = cp0 if var is None else SI.apply(cp0, doc.text, SI.load_variant(var), symmetric=frozenset(sym))[0]
+                cp = (
+                    cp0
+                    if var is None
+                    else SI.apply(cp0, doc.text, SI.load_variant(var), symmetric=frozenset(sym))[0]
+                )
                 r = V.sc_score(doc, gold, cp, sym, PRIMARY)["scores"]
                 acc[(p, PRIMARY)][0].append(r["entity_strict"])
                 acc[(p, PRIMARY)][1].append(r["rel"])
@@ -64,7 +70,12 @@ def main() -> None:
     L = ["# CR-063 addendum: position-tolerant evaluation (+-1 / +-2 characters), 57 SciNLP train / dev papers", "",
          f"Reported beside `{PRIMARY}` (rule 35); evaluation only. A span within N characters of a gold span at both ends counts as that span.", ""]  # fmt: skip
     for set_name in ("first", "rest", "all"):
-        L += [f"## Set `{set_name}`", "", "| profile @ grounding | spans snapped | concept P / R / F2 (F1) | relation P / R / F1 |", "|---|---|---|---|"]
+        L += [
+            f"## Set `{set_name}`",
+            "",
+            "| profile @ grounding | spans snapped | concept P / R / F2 (F1) | relation P / R / F1 |",
+            "|---|---|---|---|",
+        ]
         for k, x in res[set_name].items():
             c, r = x["concept"], x["relation"]
             L.append(f"| {k} | {x['snapped']} | {c['precision']:.3f} / {c['recall']:.3f} / **{c['f2']:.3f}** ({c['f1']:.3f}) | "

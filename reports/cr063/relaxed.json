@@ -1,0 +1,761 @@
+{
+ "first": {
+  "v5 @ IDXR1-P1": {
+   "concept": {
+    "tp": 1527,
+    "fp": 2763,
+    "fn": 505,
+    "precision": 0.3559440559440559,
+    "recall": 0.7514763779527559,
+    "f1": 0.48307497627333124,
+    "f2": 0.6148333064905782
+   },
+   "relation": {
+    "tp": 74,
+    "fp": 398,
+    "fn": 424,
+    "precision": 0.15677966101694915,
+    "recall": 0.14859437751004015,
+    "f1": 0.15257731958762885,
+    "f2": 0.15016233766233766
+   },
+   "snapped": 0
+  },
+  "v5 @ IDXR1T2-P1": {
+   "concept": {
+    "tp": 1535,
+    "fp": 2755,
+    "fn": 497,
+    "precision": 0.3578088578088578,
+    "recall": 0.7554133858267716,
+    "f1": 0.4856058209427397,
+    "f2": 0.6180544371074247
+   },
+   "relation": {
+    "tp": 74,
+    "fp": 398,
+    "fn": 424,
+    "precision": 0.15677966101694915,
+    "recall": 0.14859437751004015,
+    "f1": 0.15257731958762885,
+    "f2": 0.15016233766233766
+   },
+   "snapped": 8
+  },
+  "v5 @ IDXR1W1-P1": {
+   "concept": {
+    "tp": 1721,
+    "fp": 2569,
+    "fn": 311,
+    "precision": 0.40116550116550115,
+    "recall": 0.8469488188976378,
+    "f1": 0.5444479595064853,
+    "f2": 0.6929457239491061
+   },
+   "relation": {
+    "tp": 94,
+    "fp": 378,
+    "fn": 404,
+    "precision": 0.19915254237288135,
+    "recall": 0.18875502008032127,
+    "f1": 0.19381443298969073,
+    "f2": 0.19074675324675325
+   },
+   "snapped": 194
+  },
+  "v5 @ IDXR1HW-P1": {
+   "concept": {
+    "tp": 1608,
+    "fp": 2682,
+    "fn": 424,
+    "precision": 0.3748251748251748,
+    "recall": 0.7913385826771654,
+    "f1": 0.5086997785510914,
+    "f2": 0.6474472539861491
+   },
+   "relation": {
+    "tp": 83,
+    "fp": 389,
+    "fn": 415,
+    "precision": 0.17584745762711865,
+    "recall": 0.16666666666666666,
+    "f1": 0.1711340206185567,
+    "f2": 0.16842532467532467
+   },
+   "snapped": 81
+  },
+  "v5 @ IDXR1OV-P1": {
+   "concept": {
+    "tp": 1827,
+    "fp": 2463,
+    "fn": 205,
+    "precision": 0.4258741258741259,
+    "recall": 0.8991141732283464,
+    "f1": 0.5779816513761468,
+    "f2": 0.7356257046223225
+   },
+   "relation": {
+    "tp": 102,
+    "fp": 370,
+    "fn": 396,
+    "precision": 0.21610169491525424,
+    "recall": 0.20481927710843373,
+    "f1": 0.2103092783505155,
+    "f2": 0.2069805194805195
+   },
+   "snapped": 300
+  },
+  "v11 @ IDXR1-P1": {
+   "concept": {
+    "tp": 1567,
+    "fp": 2724,
+    "fn": 465,
+    "precision": 0.36518294103938476,
+    "recall": 0.7711614173228346,
+    "f1": 0.4956507986715167,
+    "f2": 0.6308881552459941
+   },
+   "relation": {
+    "tp": 80,
+    "fp": 392,
+    "fn": 418,
+    "precision": 0.1694915254237288,
+    "recall": 0.1606425702811245,
+    "f1": 0.16494845360824742,
+    "f2": 0.16233766233766234
+   },
+   "snapped": 0
+  },
+  "v11 @ IDXR1T2-P1": {
+   "concept": {
+    "tp": 1575,
+    "fp": 2716,
+    "fn": 457,
+    "precision": 0.367047308319739,
+    "recall": 0.7750984251968503,
+    "f1": 0.498181243080816,
+    "f2": 0.634109026491666
+   },
+   "relation": {
+    "tp": 80,
+    "fp": 392,
+    "fn": 418,
+    "precision": 0.1694915254237288,
+    "recall": 0.1606425702811245,
+    "f1": 0.16494845360824742,
+    "f2": 0.16233766233766234
+   },
+   "snapped": 8
+  },
+  "v11 @ IDXR1W1-P1": {
+   "concept": {
+    "tp": 1721,
+    "fp": 2570,
+    "fn": 311,
+    "precision": 0.40107201118620367,
+    "recall": 0.8469488188976378,
+    "f1": 0.5443618535505298,
+    "f2": 0.6928899267251791
+   },
+   "relation": {
+    "tp": 94,
+    "fp": 378,
+    "fn": 404,
+    "precision": 0.19915254237288135,
+    "recall": 0.18875502008032127,
+    "f1": 0.19381443298969073,
+    "f2": 0.19074675324675325
+   },
+   "snapped": 154
+  },
+  "v11 @ IDXR1HW-P1": {
+   "concept": {
+    "tp": 1651,
+    "fp": 2640,
+    "fn": 381,
+    "precision": 0.38475879748310415,
+    "recall": 0.8125,
+    "f1": 0.5222204649691602,
+    "f2": 0.6647073033255496
+   },
+   "relation": {
+    "tp": 89,
+    "fp": 383,
+    "fn": 409,
+    "precision": 0.1885593220338983,
+    "recall": 0.178714859437751,
+    "f1": 0.18350515463917524,
+    "f2": 0.18060064935064934
+   },
+   "snapped": 84
+  },
+  "v11 @ IDXR1OV-P1": {
+   "concept": {
+    "tp": 1827,
+    "fp": 2464,
+    "fn": 205,
+    "precision": 0.4257748776508972,
+    "recall": 0.8991141732283464,
+    "f1": 0.5778902419737466,
+    "f2": 0.7355664707303325
+   },
+   "relation": {
+    "tp": 102,
+    "fp": 370,
+    "fn": 396,
+    "precision": 0.21610169491525424,
+    "recall": 0.20481927710843373,
+    "f1": 0.2103092783505155,
+    "f2": 0.2069805194805195
+   },
+   "snapped": 260
+  }
+ },
+ "rest": {
+  "v5 @ IDXR1-P1": {
+   "concept": {
+    "tp": 2616,
+    "fp": 5195,
+    "fn": 1016,
+    "precision": 0.33491230316220716,
+    "recall": 0.7202643171806168,
+    "f1": 0.4572227562702089,
+    "f2": 0.5855230762343883
+   },
+   "relation": {
+    "tp": 106,
+    "fp": 695,
+    "fn": 749,
+    "precision": 0.132334581772784,
+    "recall": 0.1239766081871345,
+    "f1": 0.12801932367149757,
+    "f2": 0.12556266287609572
+   },
+   "snapped": 0
+  },
+  "v5 @ IDXR1T2-P1": {
+   "concept": {
+    "tp": 2630,
+    "fp": 5181,
+    "fn": 1002,
+    "precision": 0.3367046472922801,
+    "recall": 0.7241189427312775,
+    "f1": 0.4596696670453552,
+    "f2": 0.5886566095169882
+   },
+   "relation": {
+    "tp": 106,
+    "fp": 695,
+    "fn": 749,
+    "precision": 0.132334581772784,
+    "recall": 0.1239766081871345,
+    "f1": 0.12801932367149757,
+    "f2": 0.12556266287609572
+   },
+   "snapped": 14
+  },
+  "v5 @ IDXR1W1-P1": {
+   "concept": {
+    "tp": 2952,
+    "fp": 4859,
+    "fn": 680,
+    "precision": 0.37792856228395855,
+    "recall": 0.8127753303964758,
+    "f1": 0.5159486148737219,
+    "f2": 0.6607278750167868
+   },
+   "relation": {
+    "tp": 130,
+    "fp": 671,
+    "fn": 725,
+    "precision": 0.16229712858926343,
+    "recall": 0.15204678362573099,
+    "f1": 0.1570048309178744,
+    "f2": 0.15399194503672115
+   },
+   "snapped": 336
+  },
+  "v5 @ IDXR1HW-P1": {
+   "concept": {
+    "tp": 2762,
+    "fp": 5049,
+    "fn": 870,
+    "precision": 0.3536038919472539,
+    "recall": 0.7604625550660793,
+    "f1": 0.48274054006816397,
+    "f2": 0.6182013518957876
+   },
+   "relation": {
+    "tp": 114,
+    "fp": 687,
+    "fn": 741,
+    "precision": 0.14232209737827714,
+    "recall": 0.13333333333333333,
+    "f1": 0.13768115942028986,
+    "f2": 0.13503909026297087
+   },
+   "snapped": 146
+  },
+  "v5 @ IDXR1OV-P1": {
+   "concept": {
+    "tp": 3150,
+    "fp": 4661,
+    "fn": 482,
+    "precision": 0.40327742926641913,
+    "recall": 0.8672907488986784,
+    "f1": 0.550554924407935,
+    "f2": 0.7050449885849859
+   },
+   "relation": {
+    "tp": 145,
+    "fp": 656,
+    "fn": 710,
+    "precision": 0.18102372034956304,
+    "recall": 0.1695906432748538,
+    "f1": 0.17512077294685988,
+    "f2": 0.17176024638711207
+   },
+   "snapped": 534
+  },
+  "v11 @ IDXR1-P1": {
+   "concept": {
+    "tp": 2666,
+    "fp": 5165,
+    "fn": 966,
+    "precision": 0.3404418337377091,
+    "recall": 0.7340308370044053,
+    "f1": 0.46514873942248974,
+    "f2": 0.5961805089673062
+   },
+   "relation": {
+    "tp": 112,
+    "fp": 683,
+    "fn": 743,
+    "precision": 0.14088050314465408,
+    "recall": 0.13099415204678364,
+    "f1": 0.13575757575757574,
+    "f2": 0.132858837485172
+   },
+   "snapped": 0
+  },
+  "v11 @ IDXR1T2-P1": {
+   "concept": {
+    "tp": 2697,
+    "fp": 5134,
+    "fn": 935,
+    "precision": 0.3444004597114034,
+    "recall": 0.7425660792951542,
+    "f1": 0.47055744569484426,
+    "f2": 0.603112840466926
+   },
+   "relation": {
+    "tp": 112,
+    "fp": 683,
+    "fn": 743,
+    "precision": 0.14088050314465408,
+    "recall": 0.13099415204678364,
+    "f1": 0.13575757575757574,
+    "f2": 0.132858837485172
+   },
+   "snapped": 31
+  },
+  "v11 @ IDXR1W1-P1": {
+   "concept": {
+    "tp": 2974,
+    "fp": 4857,
+    "fn": 658,
+    "precision": 0.3797726982505427,
+    "recall": 0.8188325991189427,
+    "f1": 0.5188868533542702,
+    "f2": 0.6650565767699808
+   },
+   "relation": {
+    "tp": 130,
+    "fp": 665,
+    "fn": 725,
+    "precision": 0.16352201257861634,
+    "recall": 0.15204678362573099,
+    "f1": 0.1575757575757576,
+    "f2": 0.1542111506524318
+   },
+   "snapped": 308
+  },
+  "v11 @ IDXR1HW-P1": {
+   "concept": {
+    "tp": 2825,
+    "fp": 5006,
+    "fn": 807,
+    "precision": 0.3607457540543992,
+    "recall": 0.7778083700440529,
+    "f1": 0.492890168367792,
+    "f2": 0.6317366608524532
+   },
+   "relation": {
+    "tp": 122,
+    "fp": 673,
+    "fn": 733,
+    "precision": 0.15345911949685534,
+    "recall": 0.14269005847953217,
+    "f1": 0.14787878787878786,
+    "f2": 0.14472123368920523
+   },
+   "snapped": 159
+  },
+  "v11 @ IDXR1OV-P1": {
+   "concept": {
+    "tp": 3171,
+    "fp": 4660,
+    "fn": 461,
+    "precision": 0.40492912782530965,
+    "recall": 0.8730726872246696,
+    "f1": 0.5532583093431038,
+    "f2": 0.709110425332081
+   },
+   "relation": {
+    "tp": 145,
+    "fp": 650,
+    "fn": 710,
+    "precision": 0.18238993710691823,
+    "recall": 0.1695906432748538,
+    "f1": 0.17575757575757572,
+    "f2": 0.17200474495848161
+   },
+   "snapped": 505
+  }
+ },
+ "all": {
+  "v5 @ IDXR1-P1": {
+   "concept": {
+    "tp": 4143,
+    "fp": 7958,
+    "fn": 1521,
+    "precision": 0.3423683993058425,
+    "recall": 0.7314618644067796,
+    "f1": 0.46642274134534206,
+    "f2": 0.5959950513565613
+   },
+   "relation": {
+    "tp": 180,
+    "fp": 1093,
+    "fn": 1173,
+    "precision": 0.14139827179890024,
+    "recall": 0.13303769401330376,
+    "f1": 0.13709063214013711,
+    "f2": 0.13462976813762154
+   },
+   "snapped": 0
+  },
+  "v5 @ IDXR1T2-P1": {
+   "concept": {
+    "tp": 4165,
+    "fp": 7936,
+    "fn": 1499,
+    "precision": 0.34418643087348155,
+    "recall": 0.7353460451977402,
+    "f1": 0.46889952153110054,
+    "f2": 0.5991598814627269
+   },
+   "relation": {
+    "tp": 180,
+    "fp": 1093,
+    "fn": 1173,
+    "precision": 0.14139827179890024,
+    "recall": 0.13303769401330376,
+    "f1": 0.13709063214013711,
+    "f2": 0.13462976813762154
+   },
+   "snapped": 22
+  },
+  "v5 @ IDXR1W1-P1": {
+   "concept": {
+    "tp": 4673,
+    "fp": 7428,
+    "fn": 991,
+    "precision": 0.3861664325262375,
+    "recall": 0.8250353107344632,
+    "f1": 0.5260906276386152,
+    "f2": 0.6722386857323704
+   },
+   "relation": {
+    "tp": 224,
+    "fp": 1049,
+    "fn": 1129,
+    "precision": 0.17596229379418696,
+    "recall": 0.1655580192165558,
+    "f1": 0.1706016755521706,
+    "f2": 0.16753926701570682
+   },
+   "snapped": 530
+  },
+  "v5 @ IDXR1HW-P1": {
+   "concept": {
+    "tp": 4370,
+    "fp": 7731,
+    "fn": 1294,
+    "precision": 0.3611271795719362,
+    "recall": 0.7715395480225988,
+    "f1": 0.4919786096256684,
+    "f2": 0.6286503438156342
+   },
+   "relation": {
+    "tp": 197,
+    "fp": 1076,
+    "fn": 1156,
+    "precision": 0.15475255302435192,
+    "recall": 0.14560236511456023,
+    "f1": 0.15003808073115005,
+    "f2": 0.14734480179506357
+   },
+   "snapped": 227
+  },
+  "v5 @ IDXR1OV-P1": {
+   "concept": {
+    "tp": 4977,
+    "fp": 7124,
+    "fn": 687,
+    "precision": 0.41128832327906784,
+    "recall": 0.878707627118644,
+    "f1": 0.5603152265690965,
+    "f2": 0.7159708835630233
+   },
+   "relation": {
+    "tp": 247,
+    "fp": 1026,
+    "fn": 1106,
+    "precision": 0.19402985074626866,
+    "recall": 0.18255728011825573,
+    "f1": 0.18811881188118815,
+    "f2": 0.18474195961106957
+   },
+   "snapped": 834
+  },
+  "v11 @ IDXR1-P1": {
+   "concept": {
+    "tp": 4233,
+    "fp": 7889,
+    "fn": 1431,
+    "precision": 0.34919980201286915,
+    "recall": 0.7473516949152542,
+    "f1": 0.4759923535364894,
+    "f2": 0.6085743861061591
+   },
+   "relation": {
+    "tp": 192,
+    "fp": 1075,
+    "fn": 1161,
+    "precision": 0.1515390686661405,
+    "recall": 0.1419068736141907,
+    "f1": 0.14656488549618324,
+    "f2": 0.14373409192992964
+   },
+   "snapped": 0
+  },
+  "v11 @ IDXR1T2-P1": {
+   "concept": {
+    "tp": 4272,
+    "fp": 7850,
+    "fn": 1392,
+    "precision": 0.3524170928889622,
+    "recall": 0.7542372881355932,
+    "f1": 0.4803778252558191,
+    "f2": 0.6141813790327219
+   },
+   "relation": {
+    "tp": 192,
+    "fp": 1075,
+    "fn": 1161,
+    "precision": 0.1515390686661405,
+    "recall": 0.1419068736141907,
+    "f1": 0.14656488549618324,
+    "f2": 0.14373409192992964
+   },
+   "snapped": 39
+  },
+  "v11 @ IDXR1W1-P1": {
+   "concept": {
+    "tp": 4695,
+    "fp": 7427,
+    "fn": 969,
+    "precision": 0.3873123246988946,
+    "recall": 0.8289194915254238,
+    "f1": 0.5279433262116271,
+    "f2": 0.6749956869285181
+   },
+   "relation": {
+    "tp": 224,
+    "fp": 1043,
+    "fn": 1129,
+    "precision": 0.17679558011049723,
+    "recall": 0.1655580192165558,
+    "f1": 0.17099236641221377,
+    "f2": 0.16768977391825124
+   },
+   "snapped": 462
+  },
+  "v11 @ IDXR1HW-P1": {
+   "concept": {
+    "tp": 4476,
+    "fp": 7646,
+    "fn": 1188,
+    "precision": 0.36924599901006433,
+    "recall": 0.7902542372881356,
+    "f1": 0.5033172157876982,
+    "f2": 0.6435102651101271
+   },
+   "relation": {
+    "tp": 211,
+    "fp": 1056,
+    "fn": 1142,
+    "precision": 0.1665351223362273,
+    "recall": 0.15594974131559497,
+    "f1": 0.16106870229007633,
+    "f2": 0.15795777811049558
+   },
+   "snapped": 243
+  },
+  "v11 @ IDXR1OV-P1": {
+   "concept": {
+    "tp": 4998,
+    "fp": 7124,
+    "fn": 666,
+    "precision": 0.41230819996700213,
+    "recall": 0.8824152542372882,
+    "f1": 0.5620150680310356,
+    "f2": 0.7185577088964288
+   },
+   "relation": {
+    "tp": 247,
+    "fp": 1020,
+    "fn": 1106,
+    "precision": 0.19494869771112866,
+    "recall": 0.18255728011825573,
+    "f1": 0.1885496183206107,
+    "f2": 0.1849079203473574
+   },
+   "snapped": 765
+  }
+ },
+ "v11_shapes": {
+  "IDXR1-P1": {},
+  "IDXR1T2-P1": {
+   "prediction inside gold (gold longer)": 39
+  },
+  "IDXR1W1-P1": {
+   "prediction inside gold (gold longer)": 216,
+   "gold inside prediction (prediction longer)": 243,
+   "partial overlap": 3
+  },
+  "IDXR1HW-P1": {
+   "prediction inside gold (gold longer)": 118,
+   "gold inside prediction (prediction longer)": 125
+  },
+  "IDXR1OV-P1": {
+   "prediction inside gold (gold longer)": 441,
+   "gold inside prediction (prediction longer)": 312,
+   "partial overlap": 12
+  }
+ },
+ "v11_samples": {
+  "IDXR1-P1": [],
+  "IDXR1T2-P1": [
+   "'RNMT' -> gold 'RNMT +' x17",
+   "'NYT95' -> gold \"NYT95 '\" x4",
+   "'weighted A' -> gold 'weighted A *' x4",
+   "'SST-2' -> gold 'SST-2 (' x1",
+   "'DFG-label ( Neighbor' -> gold 'DFG-label ( Neighbor )' x1",
+   "'DFG-label ( Paragraph' -> gold 'DFG-label ( Paragraph )' x1",
+   "'DFG-label ( Document' -> gold 'DFG-label ( Document )' x1",
+   "'Span-Attribute tagging ( SA-T' -> gold 'Span-Attribute tagging ( SA-T )' x1",
+   "'Pearson correlation' -> gold 'Pearson correlation \u03c1' x1",
+   "'Pearson \u2019 s' -> gold 'Pearson \u2019 s \u03c1' x1",
+   "'Pointwise Mutual Information ( PMI' -> gold 'Pointwise Mutual Information ( PMI )' x1",
+   "'pointwise mutual information ( PMI' -> gold 'pointwise mutual information ( PMI )' x1",
+   "'Spearman \u2019 s' -> gold 'Spearman \u2019 s \u03c1' x1",
+   "'Weighted A' -> gold 'Weighted A *' x1",
+   "'dovetailing WA' -> gold 'dovetailing WA *' x1",
+   "'BoW ( Linear' -> gold 'BoW ( Linear )' x1",
+   "'BoW ( MLP' -> gold 'BoW ( MLP )' x1"
+  ],
+  "IDXR1W1-P1": [
+   "'RNMT' -> gold 'RNMT +' x17",
+   "'test accuracy' -> gold 'accuracy' x7",
+   "'parsing accuracy' -> gold 'accuracy' x7",
+   "'Boltzmann-machine distribution' -> gold 'Boltzmann-machine' x6",
+   "'component accuracy' -> gold 'accuracy' x6",
+   "'tagging accuracy' -> gold 'accuracy' x6",
+   "'MDL principle' -> gold 'MDL' x5",
+   "'Big model' -> gold 'Transformer Big model' x5",
+   "'translation consensus' -> gold 'graph-based translation consensus' x4",
+   "'NYT95' -> gold \"NYT95 '\" x4",
+   "'average TER score' -> gold 'TER' x4",
+   "'weighted A' -> gold 'weighted A *' x4",
+   "'confidence measures' -> gold 'confidence' x3",
+   "'entropy thresholds' -> gold 'entropy' x3",
+   "'confidence weights' -> gold 'confidence' x3",
+   "'active learning' -> gold 'active learning approach' x3",
+   "'count-merging' -> gold 'count-merging technique' x3",
+   "'bidirectional LSTM' -> gold 'LSTM' x3",
+   "'n-gram similarity' -> gold 'n-gram' x3",
+   "'DFG approach' -> gold 'DFG' x3",
+   "'ATIS' -> gold 'ATIS domain' x3",
+   "'ASDL grammar' -> gold 'ASDL' x3",
+   "'modified Levenshtein alignment' -> gold 'Levenshtein alignment' x3",
+   "'average TER scores' -> gold 'TER' x3",
+   "'Big models' -> gold 'Transformer Big models' x3"
+  ],
+  "IDXR1HW-P1": [
+   "'test accuracy' -> gold 'accuracy' x7",
+   "'parsing accuracy' -> gold 'accuracy' x7",
+   "'component accuracy' -> gold 'accuracy' x6",
+   "'tagging accuracy' -> gold 'accuracy' x6",
+   "'Big model' -> gold 'Transformer Big model' x5",
+   "'translation consensus' -> gold 'graph-based translation consensus' x4",
+   "'EM' -> gold 'IP + EM' x4",
+   "'bidirectional LSTM' -> gold 'LSTM' x3",
+   "'modified Levenshtein alignment' -> gold 'Levenshtein alignment' x3",
+   "'Big models' -> gold 'Transformer Big models' x3",
+   "'supertag accuracy' -> gold 'accuracy' x3",
+   "'next-word suggestion accuracy' -> gold 'accuracy' x2",
+   "'expected accuracy' -> gold 'accuracy' x2",
+   "'thresholded precision' -> gold 'precision' x2",
+   "'tree cut model' -> gold 'MDL-based ( Minimum Description Length ) tree cut model' x2",
+   "'classification accuracy' -> gold 'accuracy' x2",
+   "'word error rate' -> gold 'error rate' x2",
+   "'RNN' -> gold 'sequence-to-sequence RNN' x2",
+   "'symmetrical sentence level BLEU' -> gold 'BLEU' x2",
+   "'semantic parsing' -> gold 'semisupervised semantic parsing' x2",
+   "'semantic parsing' -> gold 'semi-supervised semantic parsing' x2",
+   "'FSAs' -> gold 'weighted FSAs' x2",
+   "'QG' -> gold 'NN-based QG' x2",
+   "'top k accuracy' -> gold 'accuracy' x2",
+   "'NASH' -> gold 'vanilla NASH' x2"
+  ],
+  "IDXR1OV-P1": [
+   "'RNMT' -> gold 'RNMT +' x17",
+   "'test accuracy' -> gold 'accuracy' x7",
+   "'parsing accuracy' -> gold 'accuracy' x7",
+   "'Boltzmann-machine distribution' -> gold 'Boltzmann-machine' x6",
+   "'component accuracy' -> gold 'accuracy' x6",
+   "'tagging accuracy' -> gold 'accuracy' x6",
+   "'IP' -> gold 'IP + EM' x6",
+   "'MDL principle' -> gold 'MDL' x5",
+   "'WORDNET 1.7.1 test set' -> gold 'WORDNET 1.7.1' x5",
+   "'Big model' -> gold 'Transformer Big model' x5",
+   "'translation consensus' -> gold 'graph-based translation consensus' x4",
+   "'NYT95' -> gold \"NYT95 '\" x4",
+   "'average TER score' -> gold 'TER' x4",
+   "'weighted A' -> gold 'weighted A *' x4",
+   "'confidence measures' -> gold 'confidence' x3",
+   "'entropy thresholds' -> gold 'entropy' x3",
+   "'confidence weights' -> gold 'confidence' x3",
+   "'active learning' -> gold 'active learning approach' x3",
+   "'count-merging' -> gold 'count-merging technique' x3",
+   "'bidirectional LSTM' -> gold 'LSTM' x3",
+   "'UPNN' -> gold 'UPNN ( no UP )' x3",
+   "'n-gram similarity' -> gold 'n-gram' x3",
+   "'DFG approach' -> gold 'DFG' x3",
+   "'WORDNET 1.6 test set' -> gold 'WORDNET 1.6' x3",
+   "'ATIS' -> gold 'ATIS domain' x3"
+  ]
+ }
+}
