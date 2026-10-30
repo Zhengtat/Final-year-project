@@ -4,7 +4,7 @@
   "first": "cr055ballp",
   "rest": "cr057rest"
  },
- "profile": "v10 (v5 runs + span identity A-all, CR-060)",
+ "profile": "v10 (v5 runs + span identity A-all)",
  "gates": {
   "first/concept": true,
   "first/relation": true,

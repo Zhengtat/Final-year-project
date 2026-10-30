@@ -1,9 +1,10 @@
 """CR-058: SciNLP pipeline diagnostics page ($0, read-only, no model call).
 
-    uv run python -m cumap.cr058.page            # reports/cr058/pipeline.html (gitignored: SciNLP text is CC BY-NC) + summary_v10.{json,md}
+    uv run python -m cumap.cr058.page            # reports/cr058/pipeline.html (gitignored: SciNLP text is CC BY-NC) + summary_v11.{json,md}
+    uv run python -m cumap.cr058.page --profile v10  # superseded A-all: pipeline_v10.html + summary_v10.{json,md}
     uv run python -m cumap.cr058.page --profile v5   # the CR-058 page as merged: pipeline_v5.html + summary.{json,md}
 
-CR-061: by default the development panel shows profile v10 = the v5 runs with the CR-060 span-identity step (variant A-all) applied in
+CR-061: by default the development panel shows profile v11 = the v5 runs with the CR-060 span-identity step (variant A-name) applied in
 memory at load (the step runs after relation classification, so this equals a v10 run; the source checkpoints are not written, and are
 hashed before and after). Gates for v10: the pooled concept and relation counts must equal the CR-060 replay (`reports/cr060/part_a*.json`);
 hierarchy, fact and macro F1 have no v10 reference and are not gated.
@@ -49,7 +50,10 @@ DEV_SOURCES = (
     ("rest", "cr057rest", "cr057rest_rest.json"),
 )
 LEVELS = (("E0", "E0"), ("E1", "E1"), ("E3", "E3-M"), ("E4", "E4-M"))
-SPAN_IDENTITY: str | None = "A-all"  # CR-061: None = profile v5 as merged in CR-058
+SPAN_IDENTITY: str | None = (
+    "A-name"  # CR-061: profile v11 (A-name); None = profile v5 as merged in CR-058
+)
+PROFILE_LABEL = {"A-name": "v11", "A-all": "v10"}
 V10_REFS = {"first": "part_a.json", "rest": "part_a_rest.json"}
 DATASET = "SciNLP repository release SciNLP-repo-e78342be (registry relations_scinlp_v1.0.1)"
 
@@ -123,7 +127,7 @@ def build_dev(ad: SciNLPAdapter, sym: set[str]) -> tuple[dict, dict, list[Path]]
             cp, v4, fs = _load(rid)
             files += fs
             doc, g = docs[split][d], gold[split][d]
-            if SPAN_IDENTITY:  # CR-061: profile v10, applied in memory
+            if SPAN_IDENTITY:  # CR-061: profile v11 (or v10), applied in memory
                 cp, _rec = SI.apply(
                     cp, doc.text, SI.load_variant(SPAN_IDENTITY), symmetric=frozenset(sym)
                 )
@@ -172,7 +176,7 @@ def gates(papers: dict, meta: dict, test: dict) -> dict:
     out = {}
     for set_name, _tag, card in DEV_SOURCES:
         recs = [papers[d] for d in meta["sets"][set_name]]
-        if SPAN_IDENTITY:  # CR-061: v10 reference = the CR-060 replay (concept and relation only)
+        if SPAN_IDENTITY:  # CR-061: reference = the CR-060 replay (concept and relation only)
             ref = json.loads((REPO_ROOT / "reports/cr060" / V10_REFS[set_name]).read_text())[
                 "arms"
             ][SPAN_IDENTITY]
@@ -232,7 +236,7 @@ def summary(papers: dict, meta: dict, test: dict, gate: dict, hashes_ok: bool) -
     return {
         "dataset": DATASET,
         "sources": {s: t for s, t, _ in DEV_SOURCES},
-        "profile": f"v10 (v5 runs + span identity {SPAN_IDENTITY}, CR-060)" if SPAN_IDENTITY else "v5",
+        "profile": f"{PROFILE_LABEL.get(SPAN_IDENTITY, 'replay')} (v5 runs + span identity {SPAN_IDENTITY})" if SPAN_IDENTITY else "v5",
         "gates": gate,
         "sources_unchanged": hashes_ok,
         "development": sets,
@@ -303,7 +307,7 @@ def main() -> dict:
     data = {
         "dataset": DATASET,
         "sources": {s: t for s, t, _ in DEV_SOURCES},
-        "profile": f"v10 (v5 runs + span identity {SPAN_IDENTITY}, CR-060)"
+        "profile": f"{PROFILE_LABEL[SPAN_IDENTITY]} (v5 runs + span identity {SPAN_IDENTITY})"
         if SPAN_IDENTITY
         else "v5",
         "papers": papers,
@@ -321,9 +325,8 @@ def main() -> dict:
         gzip.compress(json.dumps(data, ensure_ascii=False).encode("utf-8"), mtime=0)
     ).decode()
     html = TEMPLATE.read_text(encoding="utf-8").replace("/*__DATA_B64__*/", blob)
-    page, summ = (
-        ("pipeline.html", "summary_v10") if SPAN_IDENTITY else ("pipeline_v5.html", "summary")
-    )
+    page, summ = {None: ("pipeline_v5.html", "summary"), "A-all": ("pipeline_v10.html", "summary_v10"),
+                  "A-name": ("pipeline.html", "summary_v11")}[SPAN_IDENTITY]  # fmt: skip
     (OUT / page).write_text(html, encoding="utf-8")
     s = summary(papers, meta, test, gate, before == after)
     s["profile"] = data["profile"]
@@ -336,9 +339,8 @@ if __name__ == "__main__":
     import argparse
 
     ap = argparse.ArgumentParser()
-    ap.add_argument("--profile", default="v10", choices=["v10", "v5"])
-    ap.add_argument("--span-identity", default="A-all", choices=["A-all", "A-name"])
+    ap.add_argument("--profile", default="v11", choices=["v11", "v10", "v5"])
     a = ap.parse_args()
-    SPAN_IDENTITY = None if a.profile == "v5" else a.span_identity
+    SPAN_IDENTITY = {"v5": None, "v10": "A-all", "v11": "A-name"}[a.profile]
     r = main()
     print(json.dumps({"gates": r["gates"], "sources_unchanged": r["sources_unchanged"]}, indent=1))

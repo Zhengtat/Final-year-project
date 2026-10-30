@@ -1,0 +1,378 @@
+{
+ "dataset": "SciNLP repository release SciNLP-repo-e78342be (registry relations_scinlp_v1.0.1)",
+ "sources": {
+  "first": "cr055ballp",
+  "rest": "cr057rest"
+ },
+ "profile": "v11 (v5 runs + span identity A-name)",
+ "gates": {
+  "first/concept": true,
+  "first/relation": true,
+  "first/concept_strict_equals_consolidation": true,
+  "rest/concept": true,
+  "rest/relation": true,
+  "rest/concept_strict_equals_consolidation": true,
+  "test/E0/relation": true,
+  "test/E1/relation": true,
+  "test/E3-M/relation": true,
+  "test/E4-M/relation": true
+ },
+ "sources_unchanged": true,
+ "development": {
+  "first": {
+   "papers": 20,
+   "concept_stages": {
+    "generator_first_pass": {
+     "tp": 1456,
+     "fp": 2581,
+     "fn": 576
+    },
+    "verifier_first_pass": {
+     "tp": 1458,
+     "fp": 2599,
+     "fn": 574
+    },
+    "corrective_round": {
+     "tp": 1507,
+     "fp": 2752,
+     "fn": 525
+    },
+    "pruner": {
+     "tp": 1506,
+     "fp": 2758,
+     "fn": 526
+    },
+    "consolidation": {
+     "tp": 1567,
+     "fp": 2724,
+     "fn": 465
+    }
+   },
+   "gold_relation_stages": {
+    "gold": 498,
+    "endpoints_placed": 269,
+    "pair_selected": 235,
+    "family_right": 188,
+    "choice_right": 111,
+    "checks_passed": 104,
+    "assembled": 103,
+    "credited": 80
+   },
+   "relation_strict": {
+    "tp": 80,
+    "fp": 392,
+    "fn": 418
+   }
+  },
+  "rest": {
+   "papers": 37,
+   "concept_stages": {
+    "generator_first_pass": {
+     "tp": 2609,
+     "fp": 4795,
+     "fn": 1023
+    },
+    "verifier_first_pass": {
+     "tp": 2612,
+     "fp": 4796,
+     "fn": 1020
+    },
+    "corrective_round": {
+     "tp": 2605,
+     "fp": 5125,
+     "fn": 1027
+    },
+    "pruner": {
+     "tp": 2603,
+     "fp": 5149,
+     "fn": 1029
+    },
+    "consolidation": {
+     "tp": 2666,
+     "fp": 5165,
+     "fn": 966
+    }
+   },
+   "gold_relation_stages": {
+    "gold": 856,
+    "endpoints_placed": 438,
+    "pair_selected": 385,
+    "family_right": 315,
+    "choice_right": 172,
+    "checks_passed": 156,
+    "assembled": 156,
+    "credited": 112
+   },
+   "relation_strict": {
+    "tp": 112,
+    "fp": 683,
+    "fn": 743
+   }
+  },
+  "all": {
+   "papers": 57,
+   "concept_stages": {
+    "generator_first_pass": {
+     "tp": 4065,
+     "fp": 7376,
+     "fn": 1599
+    },
+    "verifier_first_pass": {
+     "tp": 4070,
+     "fp": 7395,
+     "fn": 1594
+    },
+    "corrective_round": {
+     "tp": 4112,
+     "fp": 7877,
+     "fn": 1552
+    },
+    "pruner": {
+     "tp": 4109,
+     "fp": 7907,
+     "fn": 1555
+    },
+    "consolidation": {
+     "tp": 4233,
+     "fp": 7889,
+     "fn": 1431
+    }
+   },
+   "gold_relation_stages": {
+    "gold": 1354,
+    "endpoints_placed": 707,
+    "pair_selected": 620,
+    "family_right": 503,
+    "choice_right": 283,
+    "checks_passed": 260,
+    "assembled": 259,
+    "credited": 192
+   },
+   "relation_strict": {
+    "tp": 192,
+    "fp": 1075,
+    "fn": 1161
+   }
+  }
+ },
+ "test_oracle": {
+  "2021.acl-long.353": {
+   "E0": {
+    "relation_strict": {
+     "tp": 21,
+     "fp": 29,
+     "fn": 143
+    },
+    "concept_strict": {
+     "tp": 339,
+     "fp": 113,
+     "fn": 62
+    },
+    "codes": {
+     "N1": 18,
+     "R1": 4,
+     "recovered": 68,
+     "P0": 37,
+     "N0": 29,
+     "R0": 8
+    }
+   },
+   "E1": {
+    "relation_strict": {
+     "tp": 23,
+     "fp": 28,
+     "fn": 141
+    },
+    "concept_strict": {
+     "tp": 397,
+     "fp": 93,
+     "fn": 4
+    },
+    "codes": {
+     "R0": 21,
+     "R1": 6,
+     "recovered": 70,
+     "P0": 61,
+     "N1": 4,
+     "N0": 2
+    }
+   },
+   "E3-M": {
+    "relation_strict": {
+     "tp": 59,
+     "fp": 33,
+     "fn": 105
+    },
+    "concept_strict": {
+     "tp": 397,
+     "fp": 75,
+     "fn": 4
+    },
+    "codes": {
+     "R0": 49,
+     "R1": 7,
+     "recovered": 101,
+     "N1": 4,
+     "P0": 1,
+     "N0": 2
+    }
+   },
+   "E4-M": {
+    "relation_strict": {
+     "tp": 59,
+     "fp": 19,
+     "fn": 105
+    },
+    "concept_strict": {
+     "tp": 397,
+     "fp": 75,
+     "fn": 4
+    },
+    "codes": {
+     "R0": 49,
+     "R1": 7,
+     "recovered": 101,
+     "N1": 4,
+     "P0": 1,
+     "N0": 2
+    }
+   }
+  },
+  "2024.acl-long.108-1-9.grobid": {
+   "E0": {
+    "relation_strict": {
+     "tp": 19,
+     "fp": 32,
+     "fn": 111
+    },
+    "concept_strict": {
+     "tp": 247,
+     "fp": 167,
+     "fn": 55
+    },
+    "codes": {
+     "P0": 36,
+     "recovered": 40,
+     "N1": 17,
+     "N0": 29,
+     "R0": 4,
+     "R1": 4
+    }
+   },
+   "E1": {
+    "relation_strict": {
+     "tp": 24,
+     "fp": 28,
+     "fn": 106
+    },
+    "concept_strict": {
+     "tp": 301,
+     "fp": 92,
+     "fn": 1
+    },
+    "codes": {
+     "P0": 53,
+     "recovered": 52,
+     "R0": 17,
+     "R1": 8
+    }
+   },
+   "E3-M": {
+    "relation_strict": {
+     "tp": 41,
+     "fp": 34,
+     "fn": 89
+    },
+    "concept_strict": {
+     "tp": 301,
+     "fp": 76,
+     "fn": 1
+    },
+    "codes": {
+     "R0": 50,
+     "recovered": 68,
+     "R1": 12
+    }
+   },
+   "E4-M": {
+    "relation_strict": {
+     "tp": 41,
+     "fp": 18,
+     "fn": 89
+    },
+    "concept_strict": {
+     "tp": 301,
+     "fp": 76,
+     "fn": 1
+    },
+    "codes": {
+     "R0": 50,
+     "recovered": 68,
+     "R1": 12
+    }
+   }
+  },
+  "P17-1058.grobid": {
+   "E0": {
+    "relation_strict": {
+     "tp": 0,
+     "fp": 15,
+     "fn": 1
+    },
+    "concept_strict": {
+     "tp": 46,
+     "fp": 356,
+     "fn": 16
+    },
+    "codes": {
+     "N1": 1
+    }
+   },
+   "E1": {
+    "relation_strict": {
+     "tp": 0,
+     "fp": 1,
+     "fn": 1
+    },
+    "concept_strict": {
+     "tp": 59,
+     "fp": 25,
+     "fn": 3
+    },
+    "codes": {
+     "R1": 1
+    }
+   },
+   "E3-M": {
+    "relation_strict": {
+     "tp": 0,
+     "fp": 1,
+     "fn": 1
+    },
+    "concept_strict": {
+     "tp": 59,
+     "fp": 18,
+     "fn": 3
+    },
+    "codes": {
+     "R1": 1
+    }
+   },
+   "E4-M": {
+    "relation_strict": {
+     "tp": 0,
+     "fp": 1,
+     "fn": 1
+    },
+    "concept_strict": {
+     "tp": 59,
+     "fp": 18,
+     "fn": 3
+    },
+    "codes": {
+     "R1": 1
+    }
+   }
+  }
+ }
+}

@@ -258,3 +258,4 @@ Built behind switches, never run: generator prompt v7 (type-free, profile slots)
 
 ### CR-061 (diagnostics page on profile v10)
 - **2026-10-30:** page shows v10 (v5 runs + span identity A-all, in memory); gates pass. Missed gold mentions on 57 papers: v5 1,521 -> v10 1,540 (span 862 -> 906; first 20: 505 -> 472, other 37: 1,016 -> 1,068); gold nodes found 1,411 -> 1,476. Finding: R-acr spans lose their closing bracket under r1key matching (A-all recall -0.014 on the other 37); A-name / A-head pass on both sets. Adoption change pending the owner.
+- **2026-10-30 (owner): switched to A-name, profile v11 adopted** (v10 superseded). Missed gold mentions 1,521 -> 1,431 (span 862 -> 793); relation F1 first 20 0.153 -> 0.165, other 37 0.128 -> 0.136. Page defaults to v11; gates pass.
