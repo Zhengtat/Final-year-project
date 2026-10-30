@@ -264,3 +264,6 @@ Built behind switches, never run: generator prompt v7 (type-free, profile slots)
 ### CR-062 (concept F2 headline; domain-free verifier)
 - **2026-10-30 ($0):** F2 headline added (scorecards, page). Verifier re-anchoring V1-paper + V2: recall +0.0060, F2 +0.0024 (17 gold / 63 non-gold rescued); flag rules V6 / V7 flag 0.82 / 1.82 non-gold per gold: not pursued. Paid arm held for the owner (expected gain below the +0.01 rule). Spend $0.
 - **2026-10-30: CLOSED (owner), no paid arm.** Merged with tag `cr-062-complete`.
+
+### CR-063 (symbol-aware grounding)
+- **2026-10-30 ($0):** `IDXR1S-P1` (spans keep trailing brackets / symbols): A-name recall +0.0015 / +0.0077 (first 20 / other 37), relation F1 unchanged. A-name-acr under it: +0.017 / -0.006 recall (gold's acronym convention differs between the sets): not proposed. Grounding choice pending the owner.
