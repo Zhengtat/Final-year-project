@@ -807,3 +807,14 @@ Format: date · decision · reason · alternatives considered.
 
 ## 2026-10-30 · CR-061 closed (owner)
 - Diagnostics page on the adopted profile (v11, span identity A-name, in memory; gates pass); A-all found defective (R-acr bracket loss) and superseded by A-name. Spend $0.
+
+## 2026-10-30 · CR-062 pre-registration: concept F2 headline and a domain-free, more accurate verifier — written before any computation
+- **Constraint (owner, 2026-10-30):** the pipeline must traverse domains: no component is trained or tuned on domain-specific (gold) information; gold only evaluates on train / dev. A learned verifier score (context embedding) is excluded.
+- **(a) Metric:** concept **F2** (beta = 2, fixed now) becomes the headline concept number in CR-043 scorecards and the diagnostics page; F1 stays reported beside it. Adoption rules are unchanged (recall-first: concept recall >= +0.01, strict relation F1 >= -0.005).
+- **(b) Verifier recall rules, sized by replay at $0** (approximate: the corrective-round interplay is not replayed) on the 57 train / dev papers (v11 runs): items the verifier dropped on F2 / F3 are rescued when
+  - **V1 re-anchor:** the item's name occurs verbatim (case-insensitive) in the paper; the new quote is the sentence containing the occurrence nearest the original quote (an exact substring, rule 3); variant `para` (same paragraph as the original quote only) and `paper` (anywhere);
+  - **V2 F3 tolerance:** the name's R1 key equals the R1 key of a word window inside the quote (hyphen / space / plural variants);
+  - **V3:** a hard drop remains only when neither applies (the name is not in the paper).
+  Reported: rescued items gold / non-gold, and concept P / R / F1 / F2 with the rescued items added as concepts (IDXR1-P1).
+- **(c) Domain-free flag rules, sized at $0** on the final concepts of the same runs (counts of gold and non-gold nodes flagged, and gold mentions at risk): **V6 sentence role** (every evidence quote of the node is a citation sentence, an "e.g. / such as / for example" list or a parenthetical citation context); **V7 grammatical role** (in every sentence of the paper that contains the item, its head token is only a modifier: dependency `compound` / `amod` / `nmod` / `poss` / `appos`, never a subject, object or prepositional object). spaCy `en_core_web_sm` only, no training.
+- **(d)** A paid arm (first 20 papers, 2 first) only if (b) adds concept recall >= 0.005 or (c) flags at least 3 non-gold nodes per gold node; otherwise CR-062 ends at $0. Cap $1.5.
