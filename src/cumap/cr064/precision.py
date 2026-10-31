@@ -32,7 +32,7 @@ from cumap.cr063 import bottleneck as BN
 from cumap.cr063 import tolerant as T
 
 OUT = REPO_ROOT / "reports/cr064"
-ARMS = (("v5", "cr055ballp"), ("arm R2", "cr064relR2"))
+ARMS = (("v5", "cr055ballp"), ("arm R2", "cr064relR2"), ("arm R3", "cr064relR3"))
 FP_KINDS = ("wrong direction", "wrong label", "unannotated pair", "non-gold endpoint", "unplaced")
 
 

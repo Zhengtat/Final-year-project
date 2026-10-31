@@ -23,7 +23,7 @@ from cumap.cr063 import bottleneck as BN
 from cumap.cr063 import tolerant as T
 
 OUT = REPO_ROOT / "reports/cr064"
-ARMS = (("v5", "cr055ballp"), ("arm R (CR-059)", "cr059relR"), ("arm R2", "cr064relR2"))
+ARMS = (("v5", "cr055ballp"), ("arm R (CR-059)", "cr059relR"), ("arm R2", "cr064relR2"), ("arm R3", "cr064relR3"))
 DROPS = ("domain_range", "endpoint_fit")
 RULE = -0.005
 

@@ -89,3 +89,20 @@ def test_the_arm_refuses_while_the_registry_is_a_draft(monkeypatch, tmp_path):
     assert not AR.approved()
     with pytest.raises(SystemExit):
         AR.worker("train", "any")
+
+
+def test_profile_v13_is_v12_with_choice_prompt_v10(monkeypatch):
+    p12 = yaml.safe_load((REPO / "configs/scinlp_profile_v12.yaml").read_text())
+    p13 = yaml.safe_load((REPO / "configs/scinlp_profile_v13.yaml").read_text())
+    assert {k for k in set(p12) | set(p13) if p12.get(k) != p13.get(k)} == {
+        "status",
+        "choice_prompt",
+    }
+    monkeypatch.setenv("CUMAP_BENCHMARK_PROFILE", str(REPO / "configs/scinlp_profile_v13.yaml"))
+    assert choice_prompt_version() == "v10"
+    body9, body10 = (
+        (REPO / f"prompts/relation_choice/{v}.md").read_text().split("---\n", 2)[2]
+        for v in ("v9", "v10")
+    )
+    i, j = body10.index("- Specific concepts only."), body10.index("- endpoint_fit:")
+    assert body10[:i] + body10[j:] == body9

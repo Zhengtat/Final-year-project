@@ -8,6 +8,7 @@ call while the registry patch is still a DRAFT (owner approval, 👤). Same proc
     uv run python -m cumap.cr064.arm_relations --dry-run
     uv run python -m cumap.cr064.arm_relations --limit 2
     uv run python -m cumap.cr064.arm_relations
+    uv run python -m cumap.cr064.arm_relations --arm r3   # CR-064 arm R3: choice_prompt v10
 Train / dev papers only (rule 9)."""
 
 from __future__ import annotations
@@ -25,8 +26,15 @@ from cumap.cr012 import production_graph as PG
 from cumap.cr043.papers import first_set
 from cumap.cr043.run import recorded_spend, run_id
 
-BASE_TAG, TAG = "cr055ballp", "cr064relR2"
-PROFILE_V12 = REPO_ROOT / "configs/scinlp_profile_v12.yaml"
+BASE_TAG = "cr055ballp"
+ARMS = {  # arm -> (run tag, profile)
+    "r2": ("cr064relR2", REPO_ROOT / "configs/scinlp_profile_v12.yaml"),
+    "r3": (
+        "cr064relR3",
+        REPO_ROOT / "configs/scinlp_profile_v13.yaml",
+    ),  # v12 + choice_prompt v10 (specific ends)
+}
+TAG, PROFILE_V12 = ARMS["r2"]
 PATCH = REPO_ROOT / "configs/registry-patches/CR-064-relations-scinlp-v1.0.2.yaml"
 MAX_USD_PER_DOC = 3.0
 
@@ -49,7 +57,7 @@ def approved() -> bool:
     return "DRAFT" not in yaml.safe_load(PATCH.read_text())["header_note"]
 
 
-def worker(split: str, doc_key: str) -> dict:
+def worker(split: str, doc_key: str, arm: str = "r2") -> dict:
     import yaml
 
     from cumap.concepts_v4 import cr009_run as R
@@ -58,9 +66,10 @@ def worker(split: str, doc_key: str) -> dict:
     from cumap.cr012.adapters import SciNLPAdapter
 
     assert split in ("train", "dev")
+    tag, profile = ARMS[arm]
     if not approved():
         raise SystemExit("registry relations_scinlp_v1.0.2 is a DRAFT: owner approval first")
-    src, dst = PG.run_path(run_id(doc_key, BASE_TAG)), PG.run_path(run_id(doc_key, TAG))
+    src, dst = PG.run_path(run_id(doc_key, BASE_TAG)), PG.run_path(run_id(doc_key, tag))
     if not dst.exists():
         shutil.copytree(src, dst)
         cp = cleared(json.loads((dst / "checkpoint.json").read_text()))
@@ -70,12 +79,12 @@ def worker(split: str, doc_key: str) -> dict:
         for d in SciNLPAdapter().load_documents(split, paragraph_every=SR.PARAGRAPH_EVERY)
     }[doc_key]
     info = SR.prepare(split, doc)
-    prof = yaml.safe_load(PROFILE_V12.read_text())
-    os.environ.update({"CUMAP_DEMO_SLICE": info["slice_config"], "CUMAP_BENCHMARK_PROFILE": str(PROFILE_V12),
+    prof = yaml.safe_load(profile.read_text())
+    os.environ.update({"CUMAP_DEMO_SLICE": info["slice_config"], "CUMAP_BENCHMARK_PROFILE": str(profile),
                        "CUMAP_RELATION_REGISTRY": prof["relation_registry"]})  # fmt: skip
     get_settings.cache_clear()
-    rel = R.stage_relations(run_id(doc_key, TAG), dry_run=False, max_usd=MAX_USD_PER_DOC)
-    return {"run_id": run_id(doc_key, TAG), "relations": rel}
+    rel = R.stage_relations(run_id(doc_key, tag), dry_run=False, max_usd=MAX_USD_PER_DOC)
+    return {"run_id": run_id(doc_key, tag), "relations": rel}
 
 
 def main() -> None:
@@ -84,10 +93,12 @@ def main() -> None:
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--cap-usd", type=float, default=1.0)
     ap.add_argument("--worker", nargs=2, metavar=("SPLIT", "DOC"))
+    ap.add_argument("--arm", choices=sorted(ARMS), default="r2")
     a = ap.parse_args()
     if a.worker:
-        print(json.dumps(worker(*a.worker), default=str))
+        print(json.dumps(worker(*a.worker, arm=a.arm), default=str))
         return
+    tag = ARMS[a.arm][0]
     papers = first_set()[: a.limit] if a.limit else first_set()
     spent, pairs = 0.0, 0
     for split, d in papers:
@@ -101,10 +112,10 @@ def main() -> None:
             continue
         if not approved():
             raise SystemExit("registry relations_scinlp_v1.0.2 is a DRAFT: owner approval first")
-        dck = PG.run_path(run_id(d, TAG)) / "checkpoint.json"
+        dck = PG.run_path(run_id(d, tag)) / "checkpoint.json"
         if dck.exists() and json.loads(dck.read_text()).get("relation_results_v3") and \
                 len(json.loads(dck.read_text())["relation_results_v3"]) >= len(cp["selected_pairs"]):  # fmt: skip
-            spent += recorded_spend(run_id(d, TAG))
+            spent += recorded_spend(run_id(d, tag))
             print(
                 json.dumps(
                     {"doc": d, "skipped": "already finished", "spent_so_far": round(spent, 4)}
@@ -113,9 +124,9 @@ def main() -> None:
             )
             continue
         t0 = time.time()
-        r = subprocess.run([sys.executable, "-m", "cumap.cr064.arm_relations", "--worker", split, d],
+        r = subprocess.run([sys.executable, "-m", "cumap.cr064.arm_relations", "--worker", split, d, "--arm", a.arm],
                            capture_output=True, text=True, check=False)  # fmt: skip
-        spent += recorded_spend(run_id(d, TAG))
+        spent += recorded_spend(run_id(d, tag))
         print(json.dumps({"doc": d, "rc": r.returncode, "s": round(time.time() - t0), "spent_so_far": round(spent, 4),
                           "tail": (r.stdout + r.stderr)[-200:]}), flush=True)  # fmt: skip
         if r.returncode:
