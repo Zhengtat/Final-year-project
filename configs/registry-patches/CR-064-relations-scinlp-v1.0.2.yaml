@@ -1,13 +1,15 @@
-# Registry patch from CR-064 (2026-10-31): SciNLP registry v1.0.2 = v1.0.1 + role-explicit wording. DRAFT, awaiting owner approval.
+# Registry patch from CR-064 (2026-10-31): SciNLP registry v1.0.2 = v1.0.1 + role-explicit wording. Owner-approved 2026-10-31 (option B for trainedWith).
 # Wording only (definition, near_misses): the 11 relations, names, templates, types, directions and flags are unchanged (rule 11).
 # Each definition says what the source and the target must be ("source" = the concept named first in the chosen reading), so the
 # relation choice can judge the roles without concept node types.
 # Written from the benchmark's own relation definitions (v1.0.1) and entity-type descriptions (scinlp profile `entity_types`);
 # near-miss examples are role patterns, never gold or invented sentences.
+# EXCEPTION (owner, option B): trainedWith says "trained, fine-tuned, run or tested on" to match how the SciNLP gold applies the label
+# (gold-informed wording, logged in DECISIONS); the benchmark's own definition says "trained or pre-trained".
 patch_for_registry_version: 1
 patch_for_registry_minor: 0
 new_version: 1.0.2
-header_note: 'CR-064 (2026-10-31): v1.0.1 with role-explicit definitions and near misses (wording only). DRAFT until the owner approves.'
+header_note: 'CR-064 (2026-10-31): v1.0.1 with role-explicit definitions and near misses (wording only). Owner-approved 2026-10-31; trainedWith wording is gold-informed (option B).'
 relation_updates:
   MeasuredBy:
     definition: The source is a specific method, model or system (not a task) whose performance is measured or reported with
@@ -30,8 +32,8 @@ relation_updates:
       example: '[a method] is trained with [a dataset]'
       why: the target is a dataset, not a task
   trainedWith:
-    definition: The source is a specific method, model or system (not a task) that is trained or pre-trained on the target, a
-      dataset. The target is a data resource (a corpus, benchmark or dataset), not a task or a metric.
+    definition: The source is a specific method, model or system (not a task) that is trained, fine-tuned, run or tested on
+      the target, a dataset. The target is a data resource (a corpus, benchmark or dataset), not a task or a metric.
     near_misses:
     - relation: evaluatedOn
       example: '[a task] is evaluated on [a dataset]'

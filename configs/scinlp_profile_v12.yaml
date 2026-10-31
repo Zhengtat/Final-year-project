@@ -1,8 +1,8 @@
-# CR-064 DRAFT profile v12 = profile v5 + registry relations_scinlp_v1.0.2 (role-explicit wording) + endpoint_check choice + choice_prompt v9 (roles judged before the choice; node types not read by the relation stage). Concepts unchanged: the relations-only arm on copies of the cr055ballp runs. Never run before owner approval of the registry.
+# CR-064 DRAFT profile v12 = profile v5 + registry relations_scinlp_v1.0.2 (role-explicit wording) + endpoint_check choice + choice_prompt v9 (roles judged before the choice; node types not read by the relation stage). Concepts unchanged: the relations-only arm on copies of the cr055ballp runs. Registry approved by the owner 2026-10-31 (trainedWith option B).
 # CR-055 profile v4 (generator prompt v6_scinlp + concept_recall switches); was: CR-053 profile v3 (generator prompt v5_scinlp), built on the CR-047 copy of the CR-012 SciNLP benchmark-local schema profile (Research ruling 2026-10-10). Only the benchmark schema changes; the CR-009 architecture is the same.
 name: scinlp
 release_label: SciNLP-repo-e78342be
-status: "CR-064 DRAFT v12 (relations-only arm): v5 + registry v1.0.2 + endpoint_check choice + choice_prompt v9; not adopted, never run"
+status: "CR-064 DRAFT v12 (relations-only arm): v5 + registry v1.0.2 + endpoint_check choice + choice_prompt v9; arm R2, not adopted"
 entity_types:
   task: An objective requiring operational resolution through systematic processes (for example text classification, named
     entity recognition).
