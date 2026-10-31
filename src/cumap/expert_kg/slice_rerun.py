@@ -194,6 +194,8 @@ def relations_stage(
     qualifier_amendments: str | None = None,
     misconception_source: str | None = None,
     endpoint_check: str | None = None,
+    choice_context: str | None = None,
+    sections: dict[str, str] | None = None,
 ) -> Checkpoint:
     """`assembly` (CR-036): None reads `configs/relation_policy.yaml` (default "legacy"); "v2" records the registry version and file hash in the run and
     sets the type-valid orientation instead of rejecting a domain/range error. `qualifier_checks` (CR-034): None reads `configs/relation_policy.yaml` (default "off"). `prompt_versions` (family, choice, qualifiers), `evidence_fn` (pair dict -> pair dict with the evidence text in `sentence`)
@@ -231,6 +233,21 @@ def relations_stage(
             cp.selection_stats["choice_prompt"] = cv  # recorded only when not the CR-059 default
         if prompt_versions == ("v3", "v6", "v6"):
             prompt_versions = ("v3", cv, "v6")
+    from cumap.expert_kg import choice_context as CC
+
+    cmode = CC.resolve_choice_context(choice_context)  # CR-064: "none" (every earlier run) | "origin" | "neighbours"
+    context_fn = None
+    if cmode != "none":
+        if ep != "choice" or prompt_versions[1] != CC.PROMPT_FOR[cmode]:
+            raise ValueError(f"choice_context {cmode} needs endpoint_check choice and relation_choice {CC.PROMPT_FOR[cmode]}")
+        cp.selection_stats["choice_context"] = cmode  # recorded only when on, so older runs stay unchanged
+        context_fn = CC.build_context_fn(
+            cmode,
+            concepts,
+            registry,
+            sections=sections,
+            edges=CC.load_graph(run_dir) if cmode == "neighbours" else None,
+        )
     from cumap.expert_kg import qualifier_checks as QC
 
     assembly_mode = ES.resolve_assembly(assembly)
@@ -287,6 +304,7 @@ def relations_stage(
                 direction_by_types=assembly_mode == "v2",
                 amendments=amend,
                 endpoint_check=ep,
+                context=context_fn(pair) if context_fn else None,
                 misconception_source=mis_source,
             )
         except BudgetExceededError:

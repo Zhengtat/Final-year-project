@@ -10,6 +10,8 @@ call while the registry patch is still a DRAFT (owner approval, 👤). Same proc
     uv run python -m cumap.cr064.arm_relations
     uv run python -m cumap.cr064.arm_relations --arm r3   # CR-064 arm R3: choice_prompt v10
     uv run python -m cumap.cr064.arm_relations --arm r4   # arm R4: R3 + registry v1.0.3 (partOf rewrite)
+    uv run python -m cumap.cr064.arm_relations --arm r6   # arm R6: R3 + origin-sentence background (relation_choice v11)
+    uv run python -m cumap.cr064.arm_relations --arm r7   # arm R7: R3 + one-hop neighbourhood background (v12; needs R3 finished)
 Train / dev papers only (rule 9)."""
 
 from __future__ import annotations
@@ -38,11 +40,18 @@ ARMS = {  # arm -> (run tag, profile)
         "cr064relR4",
         REPO_ROOT / "configs/scinlp_profile_v14.yaml",
     ),  # v13 + registry v1.0.3 (partOf)
+    "r6": ("cr064relR6", REPO_ROOT / "configs/scinlp_profile_v15.yaml"),  # v13 + origin sentence
+    "r7": ("cr064relR7", REPO_ROOT / "configs/scinlp_profile_v16.yaml"),  # v13 + 1-hop neighbours
 }
+GRAPH_SOURCE_TAG = (
+    "cr064relR3"  # arm R7 reads this finished arm's edges as its frozen first-pass graph
+)
 PATCHES = {  # arm -> registry patch whose approval gates it
     "r2": "CR-064-relations-scinlp-v1.0.2.yaml",
     "r3": "CR-064-relations-scinlp-v1.0.2.yaml",
     "r4": "CR-064-relations-scinlp-v1.0.3.yaml",
+    "r6": "CR-064-relations-scinlp-v1.0.2.yaml",
+    "r7": "CR-064-relations-scinlp-v1.0.2.yaml",
 }
 TAG, PROFILE_V12 = ARMS["r2"]
 PATCH = REPO_ROOT / "configs/registry-patches/CR-064-relations-scinlp-v1.0.2.yaml"
@@ -75,6 +84,7 @@ def worker(split: str, doc_key: str, arm: str = "r2") -> dict:
     from cumap.config import get_settings
     from cumap.cr012 import scinlp_run as SR
     from cumap.cr012.adapters import SciNLPAdapter
+    from cumap.expert_kg import choice_context as CC
 
     assert split in ("train", "dev")
     tag, profile = ARMS[arm]
@@ -85,6 +95,18 @@ def worker(split: str, doc_key: str, arm: str = "r2") -> dict:
         shutil.copytree(src, dst)
         cp = cleared(json.loads((dst / "checkpoint.json").read_text()))
         (dst / "checkpoint.json").write_text(json.dumps(cp), encoding="utf-8")
+    if (
+        arm == "r7" and not (dst / CC.GRAPH_FILE).exists()
+    ):  # the frozen first pass, one sidecar per document
+        scp = json.loads(
+            (PG.run_path(run_id(doc_key, GRAPH_SOURCE_TAG)) / "checkpoint.json").read_text()
+        )
+        if len(scp["relation_results_v3"]) < len(scp["selected_pairs"]):
+            raise SystemExit(f"{GRAPH_SOURCE_TAG} is not finished for {doc_key}")
+        edges = CC.graph_from_results(scp["relation_results_v3"])
+        (dst / CC.GRAPH_FILE).write_text(
+            json.dumps({"source": GRAPH_SOURCE_TAG, "edges": edges}), encoding="utf-8"
+        )
     doc = {
         d.doc_key: d
         for d in SciNLPAdapter().load_documents(split, paragraph_every=SR.PARAGRAPH_EVERY)

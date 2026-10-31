@@ -243,6 +243,7 @@ def classify_pair_v3(
     amendments: str = "off",  # CR-038 DRAFT: "off" | "v6" (per-relation qualifier schema, dimension quote, prompts v6); never run
     direction_by_types: bool = False,  # CR-036: assembly v2 sets the type-valid orientation instead of rejecting a domain/range error
     qualifier_checks: str = "off",  # CR-034: "off" (today's behaviour) | "v1" (qualifier_checks.py)
+    context: dict[str, str] | None = None,  # CR-064: background lines for the choice prompt (choice_context.py); None = none
     endpoint_check: str = "types",  # CR-059 DRAFT: "types" (registry domain/range) | "choice" (choice v8 endpoint_fit; type-free runs)
     fixtures: tuple[str, str, str] = ("default", "default", "default"),
 ) -> V3Result:
@@ -319,6 +320,7 @@ def classify_pair_v3(
                             if mis
                             else filled_options(registry, res.family, x, y, same_concept)
                         ),
+                        **(context or {}),
                     ),
                 }
             ],

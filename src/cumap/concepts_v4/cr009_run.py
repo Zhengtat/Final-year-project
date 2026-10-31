@@ -298,8 +298,19 @@ def stage_relations(run: str, *, dry_run: bool, max_usd: float) -> dict:
     cp.selection_stats["relation_registry"] = str(
         production_registry_path(settings).relative_to(REPO_ROOT)
     )
+    from cumap.expert_kg import choice_context as CC
+
+    sections = None
+    if CC.resolve_choice_context() == "origin":  # CR-064: the origin sentence is looked up in the section text
+        slice_cfg = load_demo_slice()
+        sections = {
+            s.section_id: s.text
+            for s in sr.load_sections(
+                REPO_ROOT / slice_cfg.pd.source_jsonl, list(slice_cfg.pd.chapters)
+            )
+        }
     cp = sr.relations_stage(
-        client, cp, run_dir, registry, REPO_ROOT / "prompts", embed, progress=print
+        client, cp, run_dir, registry, REPO_ROOT / "prompts", embed, progress=print, sections=sections
     )
     return {"results": len(cp.relation_results_v3), "spend_usd": round(client.spent_usd, 4)}
 

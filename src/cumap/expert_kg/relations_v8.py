@@ -14,7 +14,7 @@ from cumap.schemas.relations import RelationRegistry
 
 ENDPOINT_CHECKS = ("types", "choice")
 FIT = ("fits", "does_not_fit")
-CHOICE_PROMPTS = ("v8", "v9", "v10")  # CR-064: v9 = v8 with the role check made before the choice; v10 = v9 + specific ends (same schema)
+CHOICE_PROMPTS = ("v8", "v9", "v10", "v11", "v12")  # CR-064: v9 = v8 + role check first; v10 = v9 + specific ends; v11 / v12 = v10 + background lines (origin sentence / neighbours); same schema
 
 
 def resolve_endpoint_check(value: str | None = None) -> str:

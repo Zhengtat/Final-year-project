@@ -138,3 +138,109 @@ def test_profile_v14_is_v13_with_only_the_registry_changed():
     assert diff == {"relation_registry", "status"}
     assert p14["relation_registry"] == "configs/relations_scinlp_v1.0.3.yaml"
     assert p14["choice_prompt"] == "v10" and p14["endpoint_check"] == "choice"
+
+
+def _concept(cid, name, quote, section="s1", role="defined", source="llm"):
+    from cumap.expert_kg.canonicalize import Mention, RegisteredConcept
+
+    return RegisteredConcept(
+        concept_id=cid,
+        canonical_name=name,
+        node_type="method",
+        definition=None,
+        first_introduced=section,
+        mentions=[Mention(section_id=section, role=role, quote=quote, source=source)],
+    )
+
+
+def test_origin_sentence_is_the_whole_sentence_of_the_first_defined_mention():
+    from cumap.expert_kg import choice_context as CC
+
+    text = "First sentence here. We present   LM-BFF, a better method. Last one."
+    c = _concept("c1", "LM-BFF", "We present LM-BFF")
+    assert CC.origin_sentence(c, {"s1": text}) == "We present LM-BFF, a better method."
+    spans = _concept(
+        "c2", "X", "Alpha ends. Beta begins"
+    )  # a quote across two sentences stays as it is
+    assert (
+        CC.origin_sentence(spans, {"s1": "Alpha ends. Beta begins here."})
+        == "Alpha ends. Beta begins"
+    )
+    assert CC.origin_sentence(_concept("c3", "Y", "q", source="propagation"), {"s1": "q"}) is None
+
+
+def test_neighbour_lines_leave_out_the_pair_edge_and_use_the_registry_template():
+    from cumap.expert_kg import choice_context as CC
+
+    names = {"a": "A", "b": "B", "c": "C", "d": "D"}
+    tpl = {"UsedFor": "{X} is used for {Y}", "partOf": "{X} is part of {Y}"}
+    edges = [
+        {"src": "a", "relation": "UsedFor", "tgt": "b"},  # the pair's own edge: never shown
+        {"src": "a", "relation": "UsedFor", "tgt": "c"},
+        {"src": "d", "relation": "partOf", "tgt": "a"},
+        {"src": "c", "relation": "partOf", "tgt": "d"},  # not a neighbour of a
+    ]
+    got = CC.neighbour_lines("a", "b", edges, names, tpl)
+    assert got == ["A is used for C", "D is part of A"]
+    assert CC.neighbour_lines("a", "b", [], names, tpl) == []
+
+
+def test_graph_from_results_orients_edges_and_keeps_selected_edges_only():
+    from cumap.expert_kg import choice_context as CC
+
+    def r(out, x, y, d, group="selected"):
+        return {"outcome": out, "relation": "UsedFor", "direction": d, "group": group,
+                "pair": {"concept_x_id": x, "concept_y_id": y}}  # fmt: skip
+
+    got = CC.graph_from_results(
+        [r("edge", "a", "b", "forward"), r("edge", "a", "c", "reversed"), r("rejected", "a", "d", "forward"), r("edge", "a", "e", "forward", "sample")]
+    )  # fmt: skip
+    assert got == [
+        {"src": "a", "relation": "UsedFor", "tgt": "b"},
+        {"src": "c", "relation": "UsedFor", "tgt": "a"},
+    ]
+
+
+def test_context_modes_need_their_prompt_and_the_default_changes_nothing(monkeypatch):
+    from cumap.expert_kg import choice_context as CC
+    from cumap.expert_kg import relations_v8 as R8
+
+    assert CC.resolve_choice_context() == "none"
+    assert CC.build_context_fn("none", {}, RelationRegistry.from_yaml(V102)) is None
+    assert CC.PROMPT_FOR == {"origin": "v11", "neighbours": "v12"}
+    assert set(CC.PROMPT_FOR.values()) <= set(R8.CHOICE_PROMPTS)
+    with pytest.raises(ValueError):
+        CC.resolve_choice_context("both")
+
+
+def test_prompts_v11_and_v12_are_v10_plus_the_background_rule_and_blocks():
+    body = lambda v: (REPO / f"prompts/relation_choice/{v}.md").read_text().split("---\n\n", 1)[1]
+    v10 = body("v10")
+    for v, key in (("v11", "first introduced"), ("v12", "other relations")):
+        b = body(v)
+        assert "- Background." in b and "{context_x}" in b and "{context_y}" in b and key in b
+        stripped = b.replace("{context_x}", "").replace("{context_y}", "")
+        keep = [ln for ln in v10.splitlines() if ln.strip()]
+        assert all(ln in stripped.splitlines() for ln in keep)  # every v10 line survives unchanged
+        rendered = load_prompt(REPO / "prompts", "relation_choice", v).render(
+            concept_x="X", concept_y="Y", family="f", sentence="S.", relation_options="O",
+            context_x="CX", context_y="CY",
+        )  # fmt: skip
+        assert "CX" in rendered and "CY" in rendered and "{" not in rendered.replace("{X}", "")
+
+
+def test_profiles_v15_and_v16_are_v13_plus_one_context_each():
+    p13 = yaml.safe_load((REPO / "configs/scinlp_profile_v13.yaml").read_text())
+    for name, prompt, ctx in (("v15", "v11", "origin"), ("v16", "v12", "neighbours")):
+        p = yaml.safe_load((REPO / f"configs/scinlp_profile_{name}.yaml").read_text())
+        assert {k for k in {**p13, **p} if p13.get(k) != p.get(k)} == {
+            "status",
+            "choice_prompt",
+            "choice_context",
+        }
+        assert (p["choice_prompt"], p["choice_context"]) == (prompt, ctx)
+        assert (
+            p["relation_registry"]
+            == p13["relation_registry"]
+            == "configs/relations_scinlp_v1.0.2.yaml"
+        )
