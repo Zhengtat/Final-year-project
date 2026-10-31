@@ -86,9 +86,12 @@ def test_the_arm_refuses_while_the_registry_is_a_draft(monkeypatch, tmp_path):
     draft = tmp_path / "p.yaml"
     draft.write_text("header_note: 'x DRAFT'\n")
     monkeypatch.setattr(AR, "PATCH", draft)
+    monkeypatch.setattr(AR, "PATCHES", {"r2": "p.yaml", "r4": "p.yaml"})
     assert not AR.approved()
     with pytest.raises(SystemExit):
         AR.worker("train", "any")
+    with pytest.raises(SystemExit):
+        AR.worker("train", "any", arm="r4")
 
 
 def test_profile_v13_is_v12_with_choice_prompt_v10(monkeypatch):
@@ -106,3 +109,32 @@ def test_profile_v13_is_v12_with_choice_prompt_v10(monkeypatch):
     )
     i, j = body10.index("- Specific concepts only."), body10.index("- endpoint_fit:")
     assert body10[:i] + body10[j:] == body9
+
+
+V103 = REPO / "configs/relations_scinlp_v1.0.3.yaml"
+PATCH103 = REPO / "configs/registry-patches/CR-064-relations-scinlp-v1.0.3.yaml"
+
+
+def test_v103_is_the_generated_patch_and_changes_only_the_partof_wording(tmp_path):
+    from cumap.schemas.registry_patch import apply_patch
+
+    base = yaml.safe_load(V102.read_text())
+    new = yaml.safe_load(V103.read_text())
+    assert apply_patch(base, yaml.safe_load(PATCH103.read_text())) == new
+    assert new["patch"] == 3 and new["minor"] == 0
+    by = lambda reg: {r["name"]: r for r in reg["relations"]}
+    changed = [n for n, r in by(new).items() if r != by(base)[n]]
+    assert changed == ["partOf"]
+    for k in ("name", "template", "family", "directed", "symmetric"):
+        assert by(new)["partOf"].get(k) == by(base)["partOf"].get(k)
+    names = set(by(new))
+    assert {nm["relation"] for nm in by(new)["partOf"]["near_misses"]} <= names
+
+
+def test_profile_v14_is_v13_with_only_the_registry_changed():
+    p13 = yaml.safe_load((REPO / "configs/scinlp_profile_v13.yaml").read_text())
+    p14 = yaml.safe_load((REPO / "configs/scinlp_profile_v14.yaml").read_text())
+    diff = {k for k in p13 if p13[k] != p14.get(k)}
+    assert diff == {"relation_registry", "status"}
+    assert p14["relation_registry"] == "configs/relations_scinlp_v1.0.3.yaml"
+    assert p14["choice_prompt"] == "v10" and p14["endpoint_check"] == "choice"

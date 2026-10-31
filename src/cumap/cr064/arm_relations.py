@@ -9,6 +9,7 @@ call while the registry patch is still a DRAFT (owner approval, 👤). Same proc
     uv run python -m cumap.cr064.arm_relations --limit 2
     uv run python -m cumap.cr064.arm_relations
     uv run python -m cumap.cr064.arm_relations --arm r3   # CR-064 arm R3: choice_prompt v10
+    uv run python -m cumap.cr064.arm_relations --arm r4   # arm R4: R3 + registry v1.0.3 (partOf rewrite)
 Train / dev papers only (rule 9)."""
 
 from __future__ import annotations
@@ -33,6 +34,15 @@ ARMS = {  # arm -> (run tag, profile)
         "cr064relR3",
         REPO_ROOT / "configs/scinlp_profile_v13.yaml",
     ),  # v12 + choice_prompt v10 (specific ends)
+    "r4": (
+        "cr064relR4",
+        REPO_ROOT / "configs/scinlp_profile_v14.yaml",
+    ),  # v13 + registry v1.0.3 (partOf)
+}
+PATCHES = {  # arm -> registry patch whose approval gates it
+    "r2": "CR-064-relations-scinlp-v1.0.2.yaml",
+    "r3": "CR-064-relations-scinlp-v1.0.2.yaml",
+    "r4": "CR-064-relations-scinlp-v1.0.3.yaml",
 }
 TAG, PROFILE_V12 = ARMS["r2"]
 PATCH = REPO_ROOT / "configs/registry-patches/CR-064-relations-scinlp-v1.0.2.yaml"
@@ -50,11 +60,12 @@ def cleared(cp: dict) -> dict:
     return cp
 
 
-def approved() -> bool:
+def approved(arm: str = "r2") -> bool:
     """The registry wording is owner-approved once the patch's header note no longer says DRAFT."""
     import yaml
 
-    return "DRAFT" not in yaml.safe_load(PATCH.read_text())["header_note"]
+    patch = PATCH.parent / PATCHES[arm]
+    return "DRAFT" not in yaml.safe_load(patch.read_text())["header_note"]
 
 
 def worker(split: str, doc_key: str, arm: str = "r2") -> dict:
@@ -67,8 +78,8 @@ def worker(split: str, doc_key: str, arm: str = "r2") -> dict:
 
     assert split in ("train", "dev")
     tag, profile = ARMS[arm]
-    if not approved():
-        raise SystemExit("registry relations_scinlp_v1.0.2 is a DRAFT: owner approval first")
+    if not approved(arm):
+        raise SystemExit(f"registry patch {PATCHES[arm]} is a DRAFT: owner approval first")
     src, dst = PG.run_path(run_id(doc_key, BASE_TAG)), PG.run_path(run_id(doc_key, tag))
     if not dst.exists():
         shutil.copytree(src, dst)
@@ -110,8 +121,8 @@ def main() -> None:
                 json.dumps({"doc": d, "selected": len(cp["selected_pairs"]), "choice_calls": fam})
             )
             continue
-        if not approved():
-            raise SystemExit("registry relations_scinlp_v1.0.2 is a DRAFT: owner approval first")
+        if not approved(a.arm):
+            raise SystemExit(f"registry patch {PATCHES[a.arm]} is a DRAFT: owner approval first")
         dck = PG.run_path(run_id(d, tag)) / "checkpoint.json"
         if dck.exists() and json.loads(dck.read_text()).get("relation_results_v3") and \
                 len(json.loads(dck.read_text())["relation_results_v3"]) >= len(cp["selected_pairs"]):  # fmt: skip

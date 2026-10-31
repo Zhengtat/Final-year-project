@@ -1,0 +1,26 @@
+# Registry patch from CR-064 (2026-11-01): SciNLP registry v1.0.3 = v1.0.2 + a rewritten partOf definition. DRAFT: awaiting owner approval (relation registry changes are a HUMAN step).
+# Wording only (partOf definition and near_misses): the 11 relations, names, templates, types, directions and flags are unchanged (rule 11).
+# Why: in arm R3 partOf predicted 71 relations and 2 were correct. The false ones are not containment: a method that "uses / employs /
+# is run with" another technique, an example listed under a category ("such as", "namely"), and a generic whole ("the encoder").
+# The new definition says what a part is and names what is NOT a part, with role patterns only (no gold, no invented sentences).
+# Not gold-informed: the benchmark's own partOf definition is "Component relationship: source is a component of target."
+patch_for_registry_version: 1
+patch_for_registry_minor: 0
+new_version: 1.0.3
+header_note: 'DRAFT CR-064 (2026-11-01): v1.0.2 with a rewritten partOf definition (wording only). Awaiting owner approval.'
+relation_updates:
+  partOf:
+    definition: The source is a component of the target, that is a module, layer, step or sub-part that is built into the target
+      and is one of the pieces it is made of. The target is the whole, a specific method, model, system or process that is made
+      up of such parts. The source belongs to the design of the target; it is not something the target merely uses, applies,
+      is run with or lists as an example.
+    near_misses:
+    - relation: subclassOf
+      example: '[an example or a kind] is listed under [a category]'
+      why: a kind or an example of the target, not a piece it is made of
+    - relation: enhancedBy
+      example: '[a method] employs, uses or is combined with [a technique]'
+      why: the technique is a tool or an add-on the method uses, not a piece built into its design; that relation runs from the method
+    - relation: UsedFor
+      example: '[a method] is applied to [a task]'
+      why: the target is a task the source solves, not a whole the source is built into
