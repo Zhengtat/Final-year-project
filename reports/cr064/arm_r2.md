@@ -2,11 +2,14 @@
 
 Adoption rule (pre-registered): overlap relation F1 >= v5 -0.005. Delta +0.0113: **passes**. trainedWith wording is gold-informed (owner option B).
 
+Arm R3 rule (pre-registered): overlap relation F1 >= R2 + 0.005 and >= v5 -0.005. Delta vs R2 +0.0104, vs v5 +0.0217: **passes**.
+
 | arm | overlap concept P / R / F2 | overlap relation P / R / F1 | strict relation P / R / F1 | spend |
 |---|---|---|---|---|
 | v5 | 0.426 / 0.899 / 0.736 | 0.216 / 0.205 / **0.210** | 0.157 / 0.149 / 0.153 |  |
 | arm R (CR-059) | 0.426 / 0.899 / 0.736 | 0.176 / 0.221 / **0.196** | 0.125 / 0.157 / 0.139 | $0.4633 |
 | arm R2 | 0.426 / 0.899 / 0.736 | 0.204 / 0.243 / **0.222** | 0.145 / 0.173 / 0.158 | $0.5756 |
+| arm R3 | 0.426 / 0.899 / 0.736 | 0.227 / 0.237 / **0.232** | 0.164 / 0.171 / 0.167 | $0.5935 |
 
 ## v5
 
@@ -25,3 +28,9 @@ Adoption rule (pre-registered): overlap relation F1 >= v5 -0.005. Delta +0.0113:
 - choice-step losses (overlap): wrong relation: gold enhancedBy -> other x9; wrong relation: gold MeasuredBy -> other x8; wrong relation: gold similarWith -> partOf x6; wrong relation: gold partOf -> other x5; wrong relation: gold MeasuredBy -> evaluatedBy x4; wrong relation: gold trainedWith -> UsedFor x4; wrong relation: gold UsedFor -> other x3; wrong relation: gold partOf -> compareWith x3; wrong relation: gold MeasuredBy -> compareWith x3; wrong relation: gold subtaskOf -> other x3
 - endpoint drops: {'endpoint_fit / gold-linked': 2, 'endpoint_fit / not gold-linked': 4}
 - outcomes (selected pairs): {'no_relation': 724, 'other': 503, 'edge': 570, 'rejected': 43}
+
+## arm R3
+
+- choice-step losses (overlap): wrong relation: gold subtaskOf -> no_relation x7; wrong relation: gold enhancedBy -> no_relation x6; wrong relation: gold MeasuredBy -> no_relation x5; wrong relation: gold UsedFor -> other x4; wrong relation: gold MeasuredBy -> other x4; wrong relation: gold UsedFor -> no_relation x4; wrong relation: gold MeasuredBy -> evaluatedBy x4; wrong relation: gold trainedWith -> no_relation x4; wrong relation: gold evaluatedBy -> no_relation x3; wrong relation: gold subclassOf -> no_relation x3
+- endpoint drops: {'endpoint_fit / not gold-linked': 1}
+- outcomes (selected pairs): {'no_relation': 890, 'other': 422, 'edge': 492, 'rejected': 36}

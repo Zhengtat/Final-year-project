@@ -34,8 +34,8 @@ Most frequent wrong labels (predicted on gold): compareWith on gold partOf x3; s
 | enhancedBy | 41 | 30 | 28 | 2 | 0 | 0.00 | 0.00 |
 | partOf | 34 | 21 | 18 | 2 | 2 | 0.06 | 0.11 |
 | similarWith | 22 | 10 | 10 | 2 | 2 | 0.09 | 0.20 |
-| subclassOf | 17 | 13 | 9 | 3 | 3 | 0.18 | 0.33 |
 | evaluatedBy | 17 | 14 | 14 | 8 | 7 | 0.41 | 0.50 |
+| subclassOf | 17 | 13 | 9 | 3 | 3 | 0.18 | 0.33 |
 | evaluatedOn | 17 | 14 | 8 | 2 | 2 | 0.12 | 0.25 |
 
 ### Checks: rejected relation results
@@ -78,8 +78,8 @@ Most frequent wrong labels (predicted on gold): UsedFor on gold trainedWith x3; 
 | enhancedBy | 41 | 30 | 28 | 4 | 3 | 0.07 | 0.11 |
 | partOf | 34 | 21 | 18 | 0 | 0 | 0.00 | 0.00 |
 | similarWith | 22 | 10 | 10 | 1 | 1 | 0.05 | 0.10 |
-| subclassOf | 17 | 13 | 9 | 4 | 4 | 0.24 | 0.44 |
 | evaluatedBy | 17 | 14 | 14 | 7 | 6 | 0.35 | 0.43 |
+| subclassOf | 17 | 13 | 9 | 4 | 4 | 0.24 | 0.44 |
 | evaluatedOn | 17 | 14 | 8 | 4 | 4 | 0.24 | 0.50 |
 
 ### Checks: rejected relation results
@@ -87,4 +87,48 @@ Most frequent wrong labels (predicted on gold): UsedFor on gold trainedWith x3; 
 - right choice rejected (a gold relation wrongly dropped): 10 {'surface_phrase_not_in_quote': 6, 'endpoint_not_grounded': 2, 'endpoint_fit': 2}
 - wrong choice rejected (noise removed): 33 {'endpoint_not_grounded': 16, 'endpoint_fit': 4, 'surface_phrase_not_in_quote': 9, 'evidence_quote_not_in_sentence': 3, 'negation_without_cue': 1}
 - pair accounting: {'selected': 1840, 'selected_negative': 1575, 'family_tn': 738, 'family_fp': 837, 'choice_declined_negative': 398, 'selected_positive': 265, 'family_tp': 213, 'choice_right': 143, 'checks_passed_correct': 133, 'in_graph_correct': 132, 'choice_on_negative': 439, 'checks_passed_wrong': 437, 'in_graph_wrong': 429, 'checks_dropped_wrong': 33, 'choice_declined_positive': 39, 'assembly_dropped_wrong': 5, 'choice_wrong_label': 31, 'checks_dropped_correct': 10, 'family_fn': 52, 'unplaced_wrong': 3, 'assembly_dropped_correct': 1}
+
+## arm R3
+
+### Predicted relations (overlap): where precision is lost
+
+| relation | predicted | TP | P | wrong direction | wrong label | unannotated pair | non-gold endpoint | unplaced | strict P |
+|---|---|---|---|---|---|---|---|---|---|
+| UsedFor | 133 | 20 | 0.15 | 0 | 4 | 6 | 101 | 2 | 0.08 |
+| partOf | 71 | 2 | 0.03 | 1 | 4 | 5 | 57 | 2 | 0.03 |
+| compareWith | 77 | 30 | 0.39 | 0 | 5 | 10 | 31 | 1 | 0.32 |
+| trainedWith | 58 | 14 | 0.24 | 0 | 1 | 5 | 36 | 2 | 0.17 |
+| MeasuredBy | 68 | 32 | 0.47 | 0 | 0 | 8 | 28 | 0 | 0.35 |
+| enhancedBy | 31 | 2 | 0.06 | 0 | 0 | 3 | 26 | 0 | 0.06 |
+| evaluatedBy | 31 | 6 | 0.19 | 0 | 2 | 2 | 20 | 1 | 0.10 |
+| subclassOf | 19 | 3 | 0.16 | 0 | 1 | 0 | 15 | 0 | 0.11 |
+| evaluatedOn | 13 | 5 | 0.38 | 0 | 1 | 1 | 6 | 0 | 0.23 |
+| similarWith | 8 | 1 | 0.12 | 0 | 4 | 0 | 2 | 1 | 0.00 |
+| subtaskOf | 9 | 3 | 0.33 | 0 | 0 | 1 | 4 | 1 | 0.33 |
+| (edge without node or quote) | 1 | 0 | 0.00 | 0 | 0 | 0 | 0 | 1 | 0.00 |
+| **all** | 519 | 118 | 0.227 | 1 | 22 | 41 | 326 | 11 | |
+
+Most frequent wrong labels (predicted on gold): compareWith on gold partOf x3; UsedFor on gold enhancedBy x2; evaluatedBy on gold MeasuredBy x2; partOf on gold enhancedBy x2; compareWith on gold UsedFor x1; trainedWith on gold UsedFor x1; UsedFor on gold subtaskOf x1; compareWith on gold MeasuredBy x1; evaluatedOn on gold trainedWith x1; partOf on gold similarWith x1; similarWith on gold subclassOf x1; similarWith on gold partOf x1
+
+### Gold relations (overlap): recall and the classification-conditional rate
+
+| gold relation | gold | endpoints placed | pair classified | choice right | credited | recall | credited / classified |
+|---|---|---|---|---|---|---|---|
+| MeasuredBy | 92 | 72 | 66 | 41 | 32 | 0.35 | 0.48 |
+| UsedFor | 89 | 66 | 59 | 34 | 20 | 0.22 | 0.34 |
+| compareWith | 76 | 66 | 61 | 45 | 30 | 0.39 | 0.49 |
+| subtaskOf | 47 | 25 | 18 | 3 | 3 | 0.06 | 0.17 |
+| trainedWith | 46 | 37 | 30 | 16 | 14 | 0.30 | 0.47 |
+| enhancedBy | 41 | 30 | 28 | 3 | 2 | 0.05 | 0.07 |
+| partOf | 34 | 21 | 18 | 2 | 2 | 0.06 | 0.11 |
+| similarWith | 22 | 10 | 10 | 1 | 1 | 0.05 | 0.10 |
+| evaluatedBy | 17 | 14 | 14 | 7 | 6 | 0.35 | 0.43 |
+| subclassOf | 17 | 13 | 9 | 3 | 3 | 0.18 | 0.33 |
+| evaluatedOn | 17 | 14 | 8 | 5 | 5 | 0.29 | 0.62 |
+
+### Checks: rejected relation results
+
+- right choice rejected (a gold relation wrongly dropped): 7 {'endpoint_not_grounded': 3, 'surface_phrase_not_in_quote': 3, 'evidence_quote_not_in_sentence': 1}
+- wrong choice rejected (noise removed): 29 {'endpoint_not_grounded': 14, 'evidence_quote_not_in_sentence': 5, 'surface_phrase_not_in_quote': 8, 'endpoint_fit': 1, 'negation_without_cue': 1}
+- pair accounting: {'selected': 1840, 'selected_negative': 1575, 'family_tn': 738, 'family_fp': 837, 'choice_declined_negative': 470, 'selected_positive': 265, 'family_tp': 213, 'choice_right': 134, 'checks_passed_correct': 127, 'in_graph_correct': 127, 'choice_declined_positive': 52, 'choice_on_negative': 367, 'checks_passed_wrong': 365, 'in_graph_wrong': 358, 'checks_dropped_wrong': 29, 'assembly_dropped_wrong': 6, 'choice_wrong_label': 27, 'family_fn': 52, 'checks_dropped_correct': 7, 'unplaced_wrong': 1}
 

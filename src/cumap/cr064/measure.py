@@ -23,7 +23,12 @@ from cumap.cr063 import bottleneck as BN
 from cumap.cr063 import tolerant as T
 
 OUT = REPO_ROOT / "reports/cr064"
-ARMS = (("v5", "cr055ballp"), ("arm R (CR-059)", "cr059relR"), ("arm R2", "cr064relR2"), ("arm R3", "cr064relR3"))
+ARMS = (
+    ("v5", "cr055ballp"),
+    ("arm R (CR-059)", "cr059relR"),
+    ("arm R2", "cr064relR2"),
+    ("arm R3", "cr064relR3"),
+)
 DROPS = ("domain_range", "endpoint_fit")
 RULE = -0.005
 
@@ -102,9 +107,15 @@ def main() -> None:
     base = res["arms"]["v5"][f"{HEADLINE} relation"]["f1"]
     r2 = res["arms"]["arm R2"][f"{HEADLINE} relation"]["f1"]
     res["rule"] = {"delta_overlap_relation_f1": round(r2 - base, 4), "passes": r2 - base >= RULE}
+    r3 = res["arms"]["arm R3"][f"{HEADLINE} relation"]["f1"]
+    res["rule_r3"] = {"delta_vs_r2": round(r3 - r2, 4), "delta_vs_v5": round(r3 - base, 4),
+                      "passes": r3 - r2 >= 0.005 and r3 - base >= RULE}  # fmt: skip
     L = [f"# CR-064: arm R2 (registry v1.0.2 + relation_choice v9, no node types) on {len(papers)} first-set papers", "",
          (f"Adoption rule (pre-registered): overlap relation F1 >= v5 {RULE:+}. Delta {res['rule']['delta_overlap_relation_f1']:+.4f}: "
           f"**{'passes' if res['rule']['passes'] else 'fails'}**. trainedWith wording is gold-informed (owner option B)."), "",
+         (f"Arm R3 rule (pre-registered): overlap relation F1 >= R2 + 0.005 and >= v5 {RULE:+}. Delta vs R2 "
+          f"{res['rule_r3']['delta_vs_r2']:+.4f}, vs v5 {res['rule_r3']['delta_vs_v5']:+.4f}: "
+          f"**{'passes' if res['rule_r3']['passes'] else 'fails'}**."), "",
          "| arm | overlap concept P / R / F2 | overlap relation P / R / F1 | strict relation P / R / F1 | spend |", "|---|---|---|---|---|"]  # fmt: skip
     for arm, x in res["arms"].items():
         c, ro, rs = x[f"{HEADLINE} concept"], x[f"{HEADLINE} relation"], x[f"{PRIMARY} relation"]

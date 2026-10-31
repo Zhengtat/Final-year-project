@@ -305,10 +305,106 @@
     "rejected": 43
    },
    "spend_usd": 0.5756
+  },
+  "arm R3": {
+   "tag": "cr064relR3",
+   "IDXR1OV-P1 concept": {
+    "tp": 1827,
+    "fp": 2463,
+    "fn": 205,
+    "precision": 0.4258741258741259,
+    "recall": 0.8991141732283464,
+    "f1": 0.5779816513761468,
+    "f2": 0.7356257046223225
+   },
+   "IDXR1-P1 concept": {
+    "tp": 1527,
+    "fp": 2763,
+    "fn": 505,
+    "precision": 0.3559440559440559,
+    "recall": 0.7514763779527559,
+    "f1": 0.48307497627333124,
+    "f2": 0.6148333064905782
+   },
+   "IDXR1OV-P1 relation": {
+    "tp": 118,
+    "fp": 401,
+    "fn": 380,
+    "precision": 0.22736030828516376,
+    "recall": 0.23694779116465864,
+    "f1": 0.23205506391347097,
+    "f2": 0.23496614894464357
+   },
+   "IDXR1-P1 relation": {
+    "tp": 85,
+    "fp": 434,
+    "fn": 413,
+    "precision": 0.16377649325626203,
+    "recall": 0.1706827309236948,
+    "f1": 0.1671583087512291,
+    "f2": 0.16925527678215851
+   },
+   "choice_misses": {
+    "wrong relation: gold subtaskOf -> no_relation": 7,
+    "wrong relation: gold enhancedBy -> no_relation": 6,
+    "wrong relation: gold MeasuredBy -> no_relation": 5,
+    "wrong relation: gold UsedFor -> other": 4,
+    "wrong relation: gold MeasuredBy -> other": 4,
+    "wrong relation: gold UsedFor -> no_relation": 4,
+    "wrong relation: gold MeasuredBy -> evaluatedBy": 4,
+    "wrong relation: gold trainedWith -> no_relation": 4,
+    "wrong relation: gold evaluatedBy -> no_relation": 3,
+    "wrong relation: gold subclassOf -> no_relation": 3,
+    "wrong relation: gold partOf -> other": 3,
+    "wrong relation: gold partOf -> compareWith": 3,
+    "wrong relation: gold similarWith -> partOf": 3,
+    "wrong relation: gold similarWith -> other": 3,
+    "wrong relation: gold enhancedBy -> other": 3,
+    "wrong relation: gold trainedWith -> UsedFor": 3,
+    "wrong relation: gold enhancedBy -> UsedFor": 2,
+    "wrong relation: gold compareWith -> partOf": 2,
+    "wrong relation: gold UsedFor -> trainedWith": 2,
+    "wrong relation: gold evaluatedOn -> no_relation": 2,
+    "wrong relation: gold compareWith -> no_relation": 2,
+    "wrong relation: gold compareWith -> enhancedBy": 2,
+    "right relation, wrong direction": 2,
+    "wrong relation: gold subtaskOf -> other": 2,
+    "wrong relation: gold partOf -> no_relation": 2,
+    "wrong relation: gold enhancedBy -> partOf": 2,
+    "wrong relation: gold UsedFor -> compareWith": 1,
+    "wrong relation: gold trainedWith -> other": 1,
+    "wrong relation: gold subtaskOf -> UsedFor": 1,
+    "wrong relation: gold MeasuredBy -> compareWith": 1,
+    "wrong relation: gold trainedWith -> evaluatedOn": 1,
+    "wrong relation: gold evaluatedBy -> other": 1,
+    "wrong relation: gold subclassOf -> similarWith": 1,
+    "wrong relation: gold partOf -> similarWith": 1,
+    "wrong relation: gold trainedWith -> similarWith": 1,
+    "wrong relation: gold partOf -> enhancedBy": 1,
+    "wrong relation: gold subtaskOf -> similarWith": 1,
+    "wrong relation: gold subtaskOf -> partOf": 1,
+    "wrong relation: gold similarWith -> subclassOf": 1,
+    "wrong relation: gold partOf -> subclassOf": 1
+   },
+   "drops": {
+    "endpoint_fit / not gold-linked": 1
+   },
+   "outcomes": {
+    "no_relation": 890,
+    "other": 422,
+    "edge": 492,
+    "rejected": 36
+   },
+   "spend_usd": 0.5935
   }
  },
  "rule": {
   "delta_overlap_relation_f1": 0.0113,
+  "passes": true
+ },
+ "rule_r3": {
+  "delta_vs_r2": 0.0104,
+  "delta_vs_v5": 0.0217,
   "passes": true
  }
 }
