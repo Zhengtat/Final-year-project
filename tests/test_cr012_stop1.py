@@ -58,6 +58,8 @@ def test_no_pipeline_module_reads_scinlp_text_into_prompts():
             continue  # CR-057: the frozen SciNLP runner with profile v6 (train / dev only; no new prompt)
         if f.parts[2] == "cr056":
             continue  # CR-056: the frozen SciNLP runner with profile v5 and read-only rescoring of train / dev runs (no new prompt, no test split)
+        if f.parts[2] == "cr064":
+            continue  # CR-064: a relations-only arm on copies of first-set train / dev runs (no test split; refuses until the registry is approved)
         if f.parts[2] == "cr063":
             continue  # CR-063: a grounding variant and its $0 measurement over retained train / dev runs (no prompt, no model call)
         if f.parts[2] == "cr062":

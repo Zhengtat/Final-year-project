@@ -14,6 +14,7 @@ from cumap.schemas.relations import RelationRegistry
 
 ENDPOINT_CHECKS = ("types", "choice")
 FIT = ("fits", "does_not_fit")
+CHOICE_PROMPTS = ("v8", "v9")  # CR-064: v9 = v8 with the role check made before the choice (same schema)
 
 
 def resolve_endpoint_check(value: str | None = None) -> str:
@@ -25,6 +26,18 @@ def resolve_endpoint_check(value: str | None = None) -> str:
         value = (p.raw.get("endpoint_check") if p else None) or "types"
     if value not in ENDPOINT_CHECKS:
         raise ValueError(f"endpoint_check must be one of {ENDPOINT_CHECKS}, not {value!r}")
+    return value
+
+
+def choice_prompt_version(value: str | None = None) -> str:
+    """CR-064: the choice prompt for `endpoint_check: choice`. Explicit value, else the active profile's `choice_prompt`, else v8."""
+    if value is None:
+        from cumap.cr012.schema_profile import active_profile
+
+        p = active_profile()
+        value = (p.raw.get("choice_prompt") if p else None) or "v8"
+    if value not in CHOICE_PROMPTS:
+        raise ValueError(f"choice_prompt must be one of {CHOICE_PROMPTS}, not {value!r}")
     return value
 
 

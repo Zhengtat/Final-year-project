@@ -226,8 +226,11 @@ def relations_stage(
         if amend != "v6":
             raise ValueError("endpoint_check choice needs qualifier_amendments v6")
         cp.selection_stats["endpoint_check"] = "choice"  # recorded only when on, so older runs stay unchanged
+        cv = R8.choice_prompt_version()  # CR-064: profile `choice_prompt` (default v8)
+        if cv != "v8":
+            cp.selection_stats["choice_prompt"] = cv  # recorded only when not the CR-059 default
         if prompt_versions == ("v3", "v6", "v6"):
-            prompt_versions = ("v3", "v8", "v6")
+            prompt_versions = ("v3", cv, "v6")
     from cumap.expert_kg import qualifier_checks as QC
 
     assembly_mode = ES.resolve_assembly(assembly)

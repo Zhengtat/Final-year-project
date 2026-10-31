@@ -1,0 +1,125 @@
+# Registry patch from CR-064 (2026-10-31): SciNLP registry v1.0.2 = v1.0.1 + role-explicit wording. DRAFT, awaiting owner approval.
+# Wording only (definition, near_misses): the 11 relations, names, templates, types, directions and flags are unchanged (rule 11).
+# Each definition says what the source and the target must be ("source" = the concept named first in the chosen reading), so the
+# relation choice can judge the roles without concept node types.
+# Written from the benchmark's own relation definitions (v1.0.1) and entity-type descriptions (scinlp profile `entity_types`);
+# near-miss examples are role patterns, never gold or invented sentences.
+patch_for_registry_version: 1
+patch_for_registry_minor: 0
+new_version: 1.0.2
+header_note: 'CR-064 (2026-10-31): v1.0.1 with role-explicit definitions and near misses (wording only). DRAFT until the owner approves.'
+relation_updates:
+  MeasuredBy:
+    definition: The source is a specific method, model or system (not a task) whose performance is measured or reported with
+      the target, a metric. The target is a measure (a score, rate or other quantity), not a dataset or a task.
+    near_misses:
+    - relation: evaluatedBy
+      example: '[a task] is evaluated by [a metric]'
+      why: the source is a task as a whole, not a specific method
+    - relation: enhancedBy
+      example: '[a method] is enhanced by [another method]'
+      why: the target is a technique, not a measure
+  UsedFor:
+    definition: The source is a specific method, model or system applied to, or designed for, the target, a task. The target
+      is a task or problem to be solved, not another method, a dataset or a metric.
+    near_misses:
+    - relation: enhancedBy
+      example: '[a method] is enhanced by [an added method]'
+      why: the target is a method the source uses or adds, not a task it solves
+    - relation: trainedWith
+      example: '[a method] is trained with [a dataset]'
+      why: the target is a dataset, not a task
+  trainedWith:
+    definition: The source is a specific method, model or system (not a task) that is trained or pre-trained on the target, a
+      dataset. The target is a data resource (a corpus, benchmark or dataset), not a task or a metric.
+    near_misses:
+    - relation: evaluatedOn
+      example: '[a task] is evaluated on [a dataset]'
+      why: the source is a task as a whole, not a specific method
+    - relation: UsedFor
+      example: '[a method] is used for [a task]'
+      why: the target is a task, not a dataset
+  enhancedBy:
+    definition: The source is a specific method, model or system that is improved, extended or modified by the target, a
+      method added to it (an added component, technique or architectural change). Both are methods.
+    near_misses:
+    - relation: UsedFor
+      example: '[a method] is used for [a task]'
+      why: the target is a task the source solves, not a method added to it
+    - relation: partOf
+      example: '[a component] is part of [a method]'
+      why: a standing component of the whole's design, not an addition that improves it
+  subclassOf:
+    definition: The source is a kind, variant or instance of the target; it belongs to the category the target names. Both are
+      the same sort of thing (normally two methods, such as a specific model and its model family).
+    near_misses:
+    - relation: partOf
+      example: '[a component] is part of [a method]'
+      why: a piece of the target, not a kind of it
+    - relation: subtaskOf
+      example: '[a narrower task] is a subtask of [a broader task]'
+      why: both are tasks
+    - relation: similarWith
+      example: '[a name] is similar to [another name for the same thing]'
+      why: the same thing under another name, not a narrower kind
+  subtaskOf:
+    definition: Both are tasks; the source is a narrower task that is a step, part or special case of the target, a broader
+      task.
+    near_misses:
+    - relation: subclassOf
+      example: '[a model] is a subclass of [a model family]'
+      why: both are methods, not tasks
+    - relation: UsedFor
+      example: '[a method] is used for [a task]'
+      why: the source is a method, not a task
+  partOf:
+    definition: The source is a component, module, layer or step contained in the target; the target is the whole built from
+      the source and other parts.
+    near_misses:
+    - relation: subclassOf
+      example: '[a model] is a subclass of [a model family]'
+      why: a kind of the target, not a piece of it
+    - relation: enhancedBy
+      example: '[a method] is enhanced by [an added technique]'
+      why: the added technique improves the method; that relation runs from the improved method
+  evaluatedBy:
+    definition: The source is a task (not a specific method) whose results are measured with the target, a metric. The target
+      is a measure (a score, rate or other quantity).
+    near_misses:
+    - relation: MeasuredBy
+      example: '[a method] is measured by [a metric]'
+      why: the source is a specific method, not a task
+    - relation: evaluatedOn
+      example: '[a task] is evaluated on [a dataset]'
+      why: the target is a dataset, not a measure
+  evaluatedOn:
+    definition: The source is a task (not a specific method) whose performance is assessed on the target, a dataset (a
+      benchmark or test data).
+    near_misses:
+    - relation: trainedWith
+      example: '[a method] is trained with [a dataset]'
+      why: the source is a specific method, not a task
+    - relation: evaluatedBy
+      example: '[a task] is evaluated by [a metric]'
+      why: the target is a measure, not a dataset
+  similarWith:
+    definition: 'Symmetric: the two concepts name the same or an equivalent thing as the sentence presents them (an abbreviation
+      and its full name, two names for one thing, or near-identical variants). Both are the same sort of thing.'
+    near_misses:
+    - relation: compareWith
+      example: '[a method] is compared with [another method]'
+      why: two distinct things set against each other, not equivalent
+    - relation: subclassOf
+      example: '[a model] is a subclass of [a model family]'
+      why: a narrower kind, not the same thing
+  compareWith:
+    definition: 'Symmetric: the sentence sets the two concepts against each other; their results or properties are compared
+      (for example outperforms, better than, versus, compared with, as a baseline for). They are distinct things of the same
+      sort.'
+    near_misses:
+    - relation: similarWith
+      example: '[a name] is similar to [another name for the same thing]'
+      why: the same thing, not two things being compared
+    - relation: partOf
+      example: '[a component] is part of [a method]'
+      why: one contains the other; nothing is being compared
