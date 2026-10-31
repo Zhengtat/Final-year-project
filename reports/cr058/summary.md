@@ -6,11 +6,11 @@ Gates (pooled final numbers = CR-043 scorecards and CR-031 ladder): **True**; so
 
 ## Development (train + dev, profile v5)
 
-| set | papers | generator 1st pass F1 | after verifier | after corrective round | after pruner | after consolidation | relation F1 |
+| set | papers | concept F2 (F1): generator 1st pass | after verifier | after corrective round | after pruner | after consolidation | relation F1 |
 |---|---|---|---|---|---|---|---|
-| first | 20 | 0.480 | 0.479 | 0.479 | 0.478 | 0.483 | 0.153 |
-| rest | 37 | 0.473 | 0.473 | 0.459 | 0.457 | 0.457 | 0.128 |
-| all | 57 | 0.475 | 0.475 | 0.466 | 0.465 | 0.466 | 0.137 |
+| first | 20 | 0.598 (0.480) | 0.598 (0.479) | 0.608 (0.479) | 0.608 (0.478) | 0.615 (0.483) | 0.153 |
+| rest | 37 | 0.595 (0.473) | 0.595 (0.473) | 0.585 (0.459) | 0.584 (0.457) | 0.586 (0.457) | 0.128 |
+| all | 57 | 0.596 (0.475) | 0.596 (0.475) | 0.593 (0.466) | 0.593 (0.465) | 0.596 (0.466) | 0.137 |
 
 ## Gold relations reaching each stage (development, all papers)
 

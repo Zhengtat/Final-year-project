@@ -264,3 +264,13 @@ Built behind switches, never run: generator prompt v7 (type-free, profile slots)
 ### CR-062 (concept F2 headline; domain-free verifier)
 - **2026-10-30 ($0):** F2 headline added (scorecards, page). Verifier re-anchoring V1-paper + V2: recall +0.0060, F2 +0.0024 (17 gold / 63 non-gold rescued); flag rules V6 / V7 flag 0.82 / 1.82 non-gold per gold: not pursued. Paid arm held for the owner (expected gain below the +0.01 rule). Spend $0.
 - **2026-10-30: CLOSED (owner), no paid arm.** Merged with tag `cr-062-complete`.
+
+### CR-063 (symbol-aware grounding)
+- **2026-10-30 ($0):** `IDXR1S-P1` (spans keep trailing brackets / symbols): A-name recall +0.0015 / +0.0077 (first 20 / other 37), relation F1 unchanged. A-name-acr under it: +0.017 / -0.006 recall (gold's acronym convention differs between the sets): not proposed. Grounding choice pending the owner.
+- **2026-10-30 addendum ($0, owner):** position-tolerant evaluation: +-1 character snaps nothing, +-2 snaps 39 of 793 span misses (recall 0.747 -> 0.754, relation F1 unchanged): spans are whole tokens separated by spaces, so only lone one-character tokens are forgiven.
+- **2026-10-30 addendum 2 ($0, owner):** relaxed evaluations on v11 (concept recall / relation F1): strict 0.747 / 0.147, head-word 0.790 / 0.161, +-1 word 0.829 / 0.171, overlap 0.882 / 0.189. +-1 word and overlap erase the v5 -> v11 gain; head-word keeps it. Strict stays the headline and adoption metric.
+- **2026-10-30 (owner): overlap `IDXR1OV-P1` is the SciNLP headline, strict `IDXR1-P1` secondary** (scorecards, page, CLAUDE.md rule 35). Adoption stays on strict pending the owner.
+- **2026-10-30 (owner): adoption rules also judged on overlap** (strict beside every decision).
+- **2026-10-30 bottlenecks (overlap, v11):** gold relations 1,354 -> endpoints placed 972 -> classified 855 -> family 691 -> **choice 384 (56%)** -> checks 349 -> credited 247. Choice losses: 298 wrong relation (trainedWith -> evaluatedOn 38, enhancedBy -> UsedFor 27), 9 direction. Concept misses: never proposed 480 of 666.
+- **2026-10-31 (owner): span identity (CR-060 / CR-061) reversed**; production is profile v5 again; page default v5. Code kept, off.
+- **2026-10-31: CLOSED (owner).** Merged with tag `cr-063-complete`.

@@ -11,3 +11,6 @@ variants:
   A-all:    # R-head for every form, plus R-acr: "word sense disambiguation" -> "word sense disambiguation ( WSD )"
     r_head: all
     r_acr: true
+  A-name-acr:   # CR-063: A-name + R-acr; the acronym alias is placed whole only under the symbol-aware grounding IDXR1S-P1
+    r_head: name_like
+    r_acr: true

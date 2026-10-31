@@ -32,8 +32,10 @@ from cumap.cr043.run import TAG, run_id
 from cumap.expert_kg.alias_rules import AliasConfig
 
 OUT = REPO_ROOT / "reports" / "cr043"
-PRIMARY = "IDXR1-P1"
+PRIMARY = "IDXR1-P1"  # strict: the secondary reported number (CR-063), reported beside every adoption decision
+HEADLINE = "IDXR1OV-P1"  # CR-063 (owner, 2026-10-30): overlap matching is the headline and the adoption metric; strict beside it
 VARIANTS = ("FROZEN", PRIMARY, "IDXR1-P3")
+REPORTED = (HEADLINE, *VARIANTS)
 H2 = C.HIER_SETS["H2 {subclassOf, subtaskOf}"]
 
 
@@ -94,9 +96,9 @@ def score(papers: list[tuple[str, str]], tag: str) -> dict:
         "papers": [d for _, d in present],
         "missing": [d for s, d in papers if (s, d) not in present],
     }
-    ent = {v: [] for v in VARIANTS}
-    rel = {v: [] for v in VARIANTS}
-    by_split = {v: {"dev": [], "train": []} for v in VARIANTS}
+    ent = {v: [] for v in REPORTED}
+    rel = {v: [] for v in REPORTED}
+    by_split = {v: {"dev": [], "train": []} for v in REPORTED}
     codes_all: Counter = Counter()
     p0: Counter = Counter()
     a1, a2, rows, facts = [], [], [], {}
@@ -130,6 +132,12 @@ def score(papers: list[tuple[str, str]], tag: str) -> dict:
                 p0.update(p0_split(doc, g, codes))
                 per_paper[d] = {"split": s, "f1": r["scores"]["rel"].f1, "tp": r["scores"]["rel"].tp,
                                 "gold": len(g.relations), "edges_predicted": r["edges"]["predicted"]}  # fmt: skip
+        from cumap.cr063 import tolerant as T  # CR-063: the overlap headline
+
+        ov = T.score(doc, g, cp, sym, "overlap")["scores"]
+        ent[HEADLINE].append(ov["entity_strict"])
+        rel[HEADLINE].append(ov["rel"])
+        by_split[HEADLINE][s].append(ov["rel"])
         from cumap.cr056 import (
             nested as N,  # CR-057: recall-first views, reported beside IDXR1-P1 (rule 35)
         )
@@ -158,7 +166,7 @@ def score(papers: list[tuple[str, str]], tag: str) -> dict:
                 "relation_strict_dev": prf_d(pool(by_split[v]["dev"])),
                 "relation_strict_train": prf_d(pool(by_split[v]["train"])),
             }
-            for v in VARIANTS
+            for v in REPORTED
         },
         "pair_recall_analogue": {
             "reached": n_prop,
@@ -205,9 +213,14 @@ def markdown(r: dict) -> str:
             f"Spend ${r['usage']['usd']:.3f} ({r['usage']['calls']} non-cached calls)."
         ),
         "",
-        "## Strict relation P / R / F1 (headline `IDXR1-P1`)",
+        "## Relation P / R / F1 and concept P / R / F2: headline overlap `IDXR1OV-P1`, strict `IDXR1-P1` beside (CR-063)",
         "",
-        "| grounding | all papers | dev papers | train papers | concept P / R / F2 (entity strict; F1 beside) |",
+        (
+            "Overlap: a predicted mention that shares a token with a gold mention counts as it (one-to-one, closest first; relation endpoints the same). "
+            "Overlap is also the adoption metric; strict `IDXR1-P1` (exact spans) is the secondary number, reported beside every decision."
+        ),
+        "",
+        "| grounding | all papers | dev papers | train papers | concept P / R / F2 (F1 beside) |",
         "|---|---|---|---|---|",
     ]
     for k, x in v.items():

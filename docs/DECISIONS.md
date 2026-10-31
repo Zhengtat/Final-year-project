@@ -827,3 +827,65 @@ Format: date · decision · reason · alternatives considered.
 
 ## 2026-10-30 · CR-062 closed (owner): no paid arm
 - Concept F2 headline adopted (reporting). Verifier re-anchoring (V1-paper + V2) recorded as small and positive (+0.006 recall at $0), not adopted, no arm run; flag rules V6 / V7 not pursued. Spend $0. Next: CR-063 (matcher fix for bracketed acronyms and trailing symbols).
+
+## 2026-10-30 · CR-063 pre-registration: symbol-aware grounding (brackets, trailing symbols) — written before any computation
+- **Defect (CR-061 / CR-062 analysis):** `MentionMatcher` tokens are runs of letters and digits, so a placed span always ends at a word: a name ending in ")" / "+" / "*" / "'" ("Vector Space Model ( VSM )", "RNMT+", "weighted A*") is placed without its symbols. About 157 of v11's 793 span misses involve brackets or trailing symbols.
+- **Variant `IDXR1S-P1`** (`cumap.cr063.grounding`, a grounding variant beside `IDXR1-P1`, rule 35; the frozen matchers and scorers are not edited): `IDXR1-P1` placement, then every placed span of a node whose form ends in non-word symbols is extended over the same symbol sequence when the text continues with it (spacing ignored; only when the span's R1 key equals that form's); spans of other nodes inside an extended span are dropped (rule 17, longest match). Domain-free, no training.
+- **Arms ($0, 57 train / dev papers, v5 runs with span identity in memory):** A-name (v11) and **A-name-acr** (A-name + the CR-060 R-acr alias, `configs/span_identity.yaml` new variant), each under `IDXR1-P1` and `IDXR1S-P1`; reported per set (first 20, other 37) with concept P / R / F2 / F1 and strict relation F1.
+- **What can be decided (owner):** (1) reporting `IDXR1S-P1` beside `IDXR1-P1` from now on, or making it the headline grounding (a rule-35 decision); (2) adopting A-name-acr, which is only meaningful under `IDXR1S-P1`. Reference rule for both: concept recall >= +0.01 and relation F1 >= -0.005 on each set against v11 under `IDXR1-P1`.
+
+## 2026-10-30 · CR-063 results ($0): symbol-aware grounding helps a little; the acronym alias splits by paper set
+- **Measurement** (`cumap.cr063.measure`, `reports/cr063/grounding.md`; reference v11 = A-name under `IDXR1-P1`):
+  - **A-name @ `IDXR1S-P1`:** first 20 concept recall +0.0015, other 37 +0.0077; relation F1 unchanged (0.165 / 0.136); 5 / 41 spans extended (trailing "+", "*", brackets of names that end in them).
+  - **A-name-acr @ `IDXR1S-P1`:** first 20 recall **+0.0172**, relation F1 **+0.0057** (0.171); other 37 recall **-0.0058**, relation F1 +0.0003. Under `IDXR1-P1` it loses on both sets (-0.0054 / -0.0297 recall), as A-all did.
+- **Reading:** the matcher defect is real but small in effect; most of the 157 bracket / symbol misses depend on whether gold keeps "( ACRONYM )" inside the long form's span, and the two paper sets disagree (the first 20 mostly keep it, the other 37 mostly annotate the long form and the acronym separately). No domain-free rule can follow that convention.
+- **Decisions pending (owner):** reporting `IDXR1S-P1` beside `IDXR1-P1` or as the headline grounding; A-name-acr fails the reference rule on the other 37 and is not proposed. No production change. Spend $0.
+
+## 2026-10-30 · CR-063 addendum pre-registration (owner): position-tolerant evaluation `IDXR1T1-P1` / `IDXR1T2-P1` — written before computing
+- **Owner:** identify the same concept by its location in the text, plus or minus 1 / 2 characters, for evaluation against SciNLP gold only (no pipeline change).
+- **Not tried before on SciNLP:** CR-005 / CR-007 used a string-level "lenient" match on IIR; SciNLP has used exact spans only (plus the IDXR1X / IDXR1N span-rule views).
+- **Variant** (`cumap.cr063.tolerant`, beside `IDXR1-P1`, rule 35): take the `IDXR1-P1` prediction; a predicted mention whose character start and end are each within N of a gold mention's (N = 1 or 2) is snapped to that gold span, one-to-one, smallest total offset first (ties: text order); relation endpoints use the same map; then the frozen strict scorer runs unchanged. A predicted span already equal to a gold span keeps it.
+- **Measured ($0):** v5 and v11 on the 57 train / dev papers, per set, concept P / R / F2 / F1 and strict relation P / R / F1, against `IDXR1-P1`; plus how many of v11's 793 span misses each tolerance recovers. Reporting only; the headline grounding stays `IDXR1-P1` unless the owner decides otherwise.
+
+## 2026-10-30 · CR-063 addendum results ($0): position tolerance recovers 39 of 793 span misses
+- **Measurement** (`cumap.cr063.measure_tol`, `reports/cr063/tolerant.md`, 57 papers): **+-1 character snaps nothing**; **+-2 characters** snaps 39 v11 spans (8 first 20, 31 other 37): concept recall 0.747 -> **0.754**, F2 0.609 -> 0.614, precision 0.349 -> 0.352; strict relation F1 unchanged (0.147). v5 likewise +0.004 recall.
+- **Why so little:** SciNLP text is pre-tokenised with a space between tokens and gold spans are whole tokens, so the smallest boundary difference is one one-character token plus its space (2 characters): +-2 only forgives a lone ")", "+", "*", "'" at an edge. The large span misses differ by whole words ("GloVe" vs "GloVe model": 6 characters; "accuracy" vs "test accuracy": 5) and would need a word-level tolerance, which is a different, more lenient metric.
+- Reporting only; headline grounding unchanged.
+
+## 2026-10-30 · CR-063 addendum 2 pre-registration (owner): word-level relaxed evaluation — written before computing
+- **Variants** (`cumap.cr063.tolerant`, evaluation only, beside `IDXR1-P1`, rule 35), same snapping as `IDXR1T2-P1` (one-to-one, exact matches kept, then smallest token offset, ties in text order; relation endpoints use the same map):
+  - `IDXR1W1-P1` **+-1 word**: start and end each within one token of the gold span;
+  - `IDXR1HW-P1` **head-word**: the spans overlap and end in the same last token (case-insensitive);
+  - `IDXR1OV-P1` **overlap**: the spans share at least one token.
+- **Measured ($0):** v5 and v11, 57 train / dev papers, per set; concept P / R / F2 / F1 and strict relation F1; snapped counts; a sample of snapped pairs per variant for a meaning check.
+- **Also delivered:** an assessment of which variant is most defensible in a presentation (standard practice in the literature, what each one forgives, what it wrongly credits).
+
+## 2026-10-30 · CR-063 addendum 2 results ($0): relaxed evaluations and their defensibility
+- **Measurement** (`cumap.cr063.measure_words`, `reports/cr063/relaxed.md`, 57 papers, v11; spans credited / concept P / R / F2 / relation F1): strict `IDXR1-P1` 0 / 0.349 / 0.747 / 0.609 / 0.147; +-2 characters 39 / 0.352 / 0.754 / 0.614 / 0.147; **+-1 word** 462 / 0.387 / 0.829 / 0.675 / 0.171; **head-word** 243 / 0.369 / 0.790 / 0.644 / 0.161; **overlap** 765 / 0.412 / 0.882 / 0.719 / 0.189.
+- **v5 -> v11 difference under each** (concept recall / relation F1): strict +0.016 / +0.010; head-word +0.018 / +0.011; +-1 word +0.004 / +0.000; overlap +0.003 / +0.001. The +-1-word and overlap variants erase the CR-060 span-identity gain (they forgive exactly the boundary errors it fixed); head-word keeps it.
+- **What they credit (sampled):** +-1 word and overlap credit different concepts as gold ("RNMT" for "RNMT +", a different model; "confidence weights" / "entropy thresholds" for "confidence" / "entropy"; overlap: "IP" for "IP + EM"); head-word credits modifier variants ("test accuracy" for "accuracy", "bidirectional LSTM" for "LSTM") and some different-scope phrases ("Big model" for "Transformer Big model", "EM" for "IP + EM").
+- **Use:** strict `IDXR1-P1` stays the headline and the only adoption metric (relaxed variants hide real differences between systems). For presentation: overlap as the labelled upper bound ("partial match", the standard lenient scheme), head-word as the principled relaxed view; +-1 word and +-2 characters not presented. Reporting only; no production change; $0.
+
+## 2026-10-30 · CR-063: overlap matching becomes the SciNLP headline (owner); strict is secondary
+- **Decision (owner, 2026-10-30):** the headline reported number is **`IDXR1OV-P1`** (overlap match: a predicted mention that shares a token with a gold mention counts as it, one-to-one, closest first; relation endpoints the same; `cumap.cr063.tolerant`); strict `IDXR1-P1` is reported beside it as the secondary number (rule 35 amended in CLAUDE.md).
+- **Adoption metric unchanged:** adoption rules stay on strict `IDXR1-P1` (overlap erases boundary improvements, e.g. the v5 -> v11 gain +0.016 recall strict vs +0.003 overlap). Pending the owner if this should change too.
+- **Where:** CR-043 scorecards (`cumap.cr043.eval`: `IDXR1OV-P1` first; `cr055ballp` and `cr057rest_rest` regenerated, strict numbers byte-identical apart from the new F2 fields) and the diagnostics page (overview KPIs, objectives table, per-paper table sorted by overlap relation F1). Gates still check strict counts.
+- **Headline numbers:** v5 first 20 (`cr055ballp`): overlap concept P / R / F2 0.426 / 0.899 / 0.736, relation F1 0.210 (strict 0.153); v11, 57 papers: overlap concept recall 0.882, relation F1 0.189 (strict 0.747 / 0.147).
+
+## 2026-10-30 · CR-063: adoption rules judged on overlap too (owner)
+- **Decision (owner, 2026-10-30):** adoption rules are judged on **`IDXR1OV-P1`** (overlap), not strict; strict `IDXR1-P1` is reported beside every decision. The recall-first rule reads: concept recall (overlap) >= +0.01 AND relation F1 (overlap) >= -0.005.
+- **Known consequence (measured, CR-063 addendum 2):** overlap forgives boundary errors, so boundary fixes barely register (CR-060 span identity: +0.016 recall strict, +0.003 overlap); under this rule such fixes would not be adopted. Earlier adoptions (v5, v11) were judged on strict and are not re-decided.
+
+## 2026-10-30 · CR-063: bottlenecks under the overlap headline (v11, 57 papers, $0)
+- **Method** (`cumap.cr063.bottleneck`, `reports/cr063/bottleneck.md`): gold mentions relabelled to their overlap-matched predicted spans, then the unchanged CR-058 funnel; check: funnel credited 247 = overlap relation tp 247.
+- **Gold relations (1,354), strict -> overlap:** endpoints placed 707 -> **972 (72%)**; pair classified 855 (88%; 117 same-sentence pairs never classified); family right 691 (81%); **choice right 384 (56%)**; checks passed 349 (91%); assembled 348; credited 247 (71%).
+- **Choice-step losses (307):** wrong relation 298 (of which 82 "other" / "no_relation"), wrong direction 9; most frequent confusions trainedWith -> evaluatedOn 38, enhancedBy -> UsedFor 27, compareWith -> other 18, trainedWith -> UsedFor 11.
+- **Concept misses under overlap (666 of 5,664 gold mentions):** never proposed 480, lost after the generator 81, hint rejected 48, node not placed 29, span 28 (strict: 793).
+
+## 2026-10-31 · CR-060 / CR-061 span identity REVERSED (owner)
+- **Decision (owner, 2026-10-31):** with overlap matching as the headline and adoption metric, the span-identity rule is unnecessary; its adoption is reversed. Production is **profile v5** again (`cumap.cr043.run` default runner `cumap.cr056.scinlp_run`); profiles v10 / v11 are marked reversed, and the code (`cumap.cr060.span_identity`, `cumap.cr060.scinlp_run`, `configs/span_identity.yaml`) stays, off by default, as for every non-adopted change. Not a git revert: CR-062 / CR-063 and the diagnostics page import the module.
+- **Page:** `cumap.cr058.page` defaults to v5 again (`pipeline.html`, `summary.*`, gated against the CR-043 scorecards; all gates pass); `--profile v11` / `--profile v10` rebuild `pipeline_v11.html` / `pipeline_v10.html`.
+- **What is given up (strict):** concept recall 0.747 -> 0.731 and relation F1 0.147 -> 0.137 on the 57 papers; under overlap the difference is +0.003 recall / +0.001 relation F1.
+
+## 2026-10-31 · CR-063 closed (owner)
+- Symbol-aware grounding `IDXR1S-P1` and the +-N-character / word-level relaxed variants measured ($0); **overlap `IDXR1OV-P1` is the SciNLP headline and adoption metric**, strict `IDXR1-P1` beside; span identity reversed (production v5); bottleneck under overlap: the relation choice step (56% pass). Spend $0. Next: CR-064, the choice step.
