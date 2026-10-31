@@ -244,3 +244,47 @@ def test_profiles_v15_and_v16_are_v13_plus_one_context_each():
             == p13["relation_registry"]
             == "configs/relations_scinlp_v1.0.2.yaml"
         )
+
+
+V104 = REPO / "configs/relations_scinlp_v1.0.4.yaml"
+PATCH104 = REPO / "configs/registry-patches/CR-064-relations-scinlp-v1.0.4-drop-partOf.yaml"
+
+
+def test_v104_is_v102_minus_partof_and_nothing_else_changes():
+    import json
+
+    from cumap.schemas.registry_patch import apply_drops
+
+    base, new = yaml.safe_load(V102.read_text()), yaml.safe_load(V104.read_text())
+    assert apply_drops(base, yaml.safe_load(PATCH104.read_text())) == new
+    assert (new["version"], new["minor"], new["patch"]) == (1, 0, 4)
+    old_rel = {r["name"]: r for r in base["relations"]}
+    new_rel = {r["name"]: r for r in new["relations"]}
+    assert set(old_rel) - set(new_rel) == {"partOf"}
+    for name, r in new_rel.items():  # only references to partOf are pruned
+        assert {k for k in r if r[k] != old_rel[name].get(k)} <= {
+            "near_misses",
+            "conflicts_with",
+            "compatible_with",
+        }
+        assert r["definition"] == old_rel[name]["definition"]
+    assert "partOf" not in json.dumps(new)
+    assert len(RelationRegistry.from_yaml(V104).all_relations()) == 10
+
+
+def test_profiles_v17_v18_v19_are_their_twins_on_registry_v104():
+    for twin, name in (("v13", "v17"), ("v15", "v18"), ("v16", "v19")):
+        a = yaml.safe_load((REPO / f"configs/scinlp_profile_{twin}.yaml").read_text())
+        b = yaml.safe_load((REPO / f"configs/scinlp_profile_{name}.yaml").read_text())
+        assert {k for k in {**a, **b} if a.get(k) != b.get(k)} == {"status", "relation_registry"}
+        assert b["relation_registry"] == "configs/relations_scinlp_v1.0.4.yaml"
+
+
+def test_arms_without_partof_are_gated_by_the_drop_patch_and_neighbour_arms_have_a_source():
+    assert AR.ARMS["r5"][0] == "cr064relR5" and AR.GRAPH_SOURCES == {
+        "r7": "cr064relR3",
+        "r9": "cr064relR5",
+    }
+    for arm in ("r5", "r8", "r9"):
+        assert AR.PATCHES[arm] == PATCH104.name
+        assert AR.approved(arm)  # no DRAFT in the header: owner-directed 2026-11-01

@@ -21,7 +21,9 @@ def apply_patch(base: dict, patch: dict) -> dict:
             f"patch is for registry version {patch.get('patch_for_registry_version')!r}, "
             f"base is {base.get('version')!r}"
         )
-    if "patch_for_registry_minor" in patch and patch["patch_for_registry_minor"] != base.get("minor", 0):
+    if "patch_for_registry_minor" in patch and patch["patch_for_registry_minor"] != base.get(
+        "minor", 0
+    ):
         raise ValueError(  # CR-038: a patch built on v1.3 must not be applied to v1.4 by accident
             f"patch is for registry minor {patch['patch_for_registry_minor']!r}, base has minor {base.get('minor', 0)!r}"
         )
@@ -44,15 +46,24 @@ def apply_patch(base: dict, patch: dict) -> dict:
     }
     for name, upd in updates.items():
         out["qualifiers"][name].update(upd)
-    for name in patch.get("drop_qualifiers", []):  # CR-038: a qualifier the registry no longer defines (v1.5: dimension)
+    for name in patch.get(
+        "drop_qualifiers", []
+    ):  # CR-038: a qualifier the registry no longer defines (v1.5: dimension)
         if name not in out["qualifiers"]:
             raise ValueError(f"cannot drop unknown qualifier {name!r}")
         del out["qualifiers"][name]
-    for rel_name, upd in patch.get("relation_updates", {}).items():  # CR-038: wording of an existing relation (definition / template / examples only)
+    for rel_name, upd in patch.get(
+        "relation_updates", {}
+    ).items():  # CR-038: wording of an existing relation (definition / template / examples only)
         target = next((r for r in out["relations"] if r["name"] == rel_name), None)
         if target is None:
             raise ValueError(f"relation_updates names unknown relation {rel_name!r}")
-        if set(upd) - {"definition", "template", "examples", "near_misses"}:  # CR-046: near-miss wording too
+        if set(upd) - {
+            "definition",
+            "template",
+            "examples",
+            "near_misses",
+        }:  # CR-046: near-miss wording too
             raise ValueError(
                 f"relation_updates may change definition, template, examples and near_misses only, got {sorted(upd)}"
             )
@@ -70,11 +81,16 @@ def apply_patch(base: dict, patch: dict) -> dict:
         if fam["name"] in fams:
             raise ValueError(f"family {fam['name']!r} already exists in the base registry")
         out["families"].insert(
-            max((i for i, f in enumerate(out["families"]) if f["name"] != "pedagogical"), default=-1) + 1,
+            max(
+                (i for i, f in enumerate(out["families"]) if f["name"] != "pedagogical"), default=-1
+            )
+            + 1,
             fam,
         )
         fams.add(fam["name"])
-    for rel_name, labels in adds.get("external_labels", {}).items():  # CR-024: merge another list's labels into a relation
+    for rel_name, labels in adds.get(
+        "external_labels", {}
+    ).items():  # CR-024: merge another list's labels into a relation
         target = next((r for r in out["relations"] if r["name"] == rel_name), None)
         if target is None:
             raise ValueError(f"external_labels names unknown relation {rel_name!r}")
@@ -106,7 +122,9 @@ def drop_relations(base: dict, names: list[str], *, patch: int) -> dict:
     for r in out["relations"]:
         r["near_misses"] = [m for m in r.get("near_misses", []) if m.get("relation") not in gone]
         r["conflicts_with"] = [x for x in r.get("conflicts_with", []) if x not in gone]
-        r["compatible_with"] = {k: v for k, v in (r.get("compatible_with") or {}).items() if k not in gone}
+        r["compatible_with"] = {
+            k: v for k, v in (r.get("compatible_with") or {}).items() if k not in gone
+        }
     for q in out["qualifiers"].values():
         if isinstance(q.get("applies_to"), list):
             q["applies_to"] = [x for x in q["applies_to"] if x not in gone]
@@ -117,8 +135,15 @@ def apply_drops(base: dict, patch: dict) -> dict:
     """CR-008: a patch with `drops: [...]` -> base minus those relations, at `new_version` (x.minor)."""
     if patch.get("patch_for_registry_version") != base.get("version"):
         raise ValueError("patch is for another registry version")
-    out = drop_relations(base, patch["drops"], patch=0)
-    out["minor"] = int(str(patch["new_version"]).split(".")[1])
+    if "patch_for_registry_minor" in patch and patch["patch_for_registry_minor"] != base.get(
+        "minor", 0
+    ):
+        raise ValueError("patch is for another registry minor")
+    parts = str(patch["new_version"]).split(".")
+    out = drop_relations(
+        base, patch["drops"], patch=int(parts[2]) if len(parts) == 3 else 0
+    )  # CR-064: x.y.z keeps the wording-patch number
+    out["minor"] = int(parts[1])
     for q in patch.get("drop_qualifiers", []):
         out["qualifiers"].pop(q, None)  # CR-008 item 2: corrects_intuition / intuition
     return out
@@ -132,8 +157,8 @@ def drops_main(argv: list[str]) -> None:
     text = yaml.safe_dump(new, sort_keys=False, width=110, allow_unicode=True)
     out_path.write_text(
         f"# Relation registry v{patch['new_version']}: GENERATED by cumap.schemas.registry_patch "
-        f"(apply-drops) from {base_path.name} + {patch_path.name} (CR-008: equivalent_to and the "
-        "corrects_intuition / intuition qualifiers removed).\n"
+        f"(apply-drops) from {base_path.name} + {patch_path.name} "
+        f"({patch.get('header_note') or 'CR-008: equivalent_to and the corrects_intuition / intuition qualifiers removed'}).\n"
         f"# Do not hand-edit: change the patch file and regenerate. {base_path.name} is unchanged.\n\n"
         + text,
         encoding="utf-8",

@@ -1,0 +1,10 @@
+# Registry patch from CR-064 (2026-11-01): SciNLP registry v1.0.4 = v1.0.2 minus partOf. Owner-directed 2026-11-01 ("lets try the partof-removed arm ...").
+# Removal only, no new wording: every other relation is identical to v1.0.2; references to partOf (near misses, conflicts, compatibility,
+# qualifier scopes) are pruned by cumap.schemas.registry_patch.drop_relations. The gold still has partOf; the fold scoring variant
+# (cumap.cr064.fold) credits subclassOf / enhancedBy / UsedFor answers on gold-partOf pairs, reported beside the as-scored numbers.
+patch_for_registry_version: 1
+patch_for_registry_minor: 0
+new_version: 1.0.4
+header_note: 'CR-064 (2026-11-01): v1.0.2 minus partOf (owner-directed removal, no new wording)'
+drops:
+- partOf

@@ -12,6 +12,7 @@ call while the registry patch is still a DRAFT (owner approval, 👤). Same proc
     uv run python -m cumap.cr064.arm_relations --arm r4   # arm R4: R3 + registry v1.0.3 (partOf rewrite)
     uv run python -m cumap.cr064.arm_relations --arm r6   # arm R6: R3 + origin-sentence background (relation_choice v11)
     uv run python -m cumap.cr064.arm_relations --arm r7   # arm R7: R3 + one-hop neighbourhood background (v12; needs R3 finished)
+    uv run python -m cumap.cr064.arm_relations --arm r5   # arm R5: R3 on registry v1.0.4 (partOf removed); r8 = R6 and r9 = R7 (needs R5 finished) the same way
 Train / dev papers only (rule 9)."""
 
 from __future__ import annotations
@@ -43,15 +44,26 @@ ARMS = {  # arm -> (run tag, profile)
     "r6": ("cr064relR6", REPO_ROOT / "configs/scinlp_profile_v15.yaml"),  # v13 + origin sentence
     "r7": ("cr064relR7", REPO_ROOT / "configs/scinlp_profile_v16.yaml"),  # v13 + 1-hop neighbours
 }
-GRAPH_SOURCE_TAG = (
-    "cr064relR3"  # arm R7 reads this finished arm's edges as its frozen first-pass graph
+ARMS.update(
+    {
+        "r5": ("cr064relR5", REPO_ROOT / "configs/scinlp_profile_v17.yaml"),  # R3 without partOf
+        "r8": ("cr064relR8", REPO_ROOT / "configs/scinlp_profile_v18.yaml"),  # R6 without partOf
+        "r9": ("cr064relR9", REPO_ROOT / "configs/scinlp_profile_v19.yaml"),  # R7 without partOf
+    }
 )
+GRAPH_SOURCES = {  # neighbour arms read this finished arm's edges as their frozen first pass
+    "r7": "cr064relR3",
+    "r9": "cr064relR5",
+}
 PATCHES = {  # arm -> registry patch whose approval gates it
     "r2": "CR-064-relations-scinlp-v1.0.2.yaml",
     "r3": "CR-064-relations-scinlp-v1.0.2.yaml",
     "r4": "CR-064-relations-scinlp-v1.0.3.yaml",
     "r6": "CR-064-relations-scinlp-v1.0.2.yaml",
     "r7": "CR-064-relations-scinlp-v1.0.2.yaml",
+    "r5": "CR-064-relations-scinlp-v1.0.4-drop-partOf.yaml",
+    "r8": "CR-064-relations-scinlp-v1.0.4-drop-partOf.yaml",
+    "r9": "CR-064-relations-scinlp-v1.0.4-drop-partOf.yaml",
 }
 TAG, PROFILE_V12 = ARMS["r2"]
 PATCH = REPO_ROOT / "configs/registry-patches/CR-064-relations-scinlp-v1.0.2.yaml"
@@ -99,13 +111,13 @@ def worker(split: str, doc_key: str, arm: str = "r2") -> dict:
         arm == "r7" and not (dst / CC.GRAPH_FILE).exists()
     ):  # the frozen first pass, one sidecar per document
         scp = json.loads(
-            (PG.run_path(run_id(doc_key, GRAPH_SOURCE_TAG)) / "checkpoint.json").read_text()
+            (PG.run_path(run_id(doc_key, GRAPH_SOURCES[arm])) / "checkpoint.json").read_text()
         )
         if len(scp["relation_results_v3"]) < len(scp["selected_pairs"]):
-            raise SystemExit(f"{GRAPH_SOURCE_TAG} is not finished for {doc_key}")
+            raise SystemExit(f"{GRAPH_SOURCES[arm]} is not finished for {doc_key}")
         edges = CC.graph_from_results(scp["relation_results_v3"])
         (dst / CC.GRAPH_FILE).write_text(
-            json.dumps({"source": GRAPH_SOURCE_TAG, "edges": edges}), encoding="utf-8"
+            json.dumps({"source": GRAPH_SOURCES[arm], "edges": edges}), encoding="utf-8"
         )
     doc = {
         d.doc_key: d
