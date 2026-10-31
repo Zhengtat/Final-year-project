@@ -28,6 +28,11 @@ ARMS = (
     ("arm R (CR-059)", "cr059relR"),
     ("arm R2", "cr064relR2"),
     ("arm R3", "cr064relR3"),
+    ("arm R5 (R3, no partOf)", "cr064relR5"),
+    ("arm R6 (origin)", "cr064relR6"),
+    ("arm R7 (neighbours)", "cr064relR7"),
+    ("arm R8 (R6, no partOf)", "cr064relR8"),
+    ("arm R9 (R7, no partOf)", "cr064relR9"),
 )
 DROPS = ("domain_range", "endpoint_fit")
 RULE = -0.005
@@ -65,9 +70,10 @@ def main() -> None:
             {x.doc_key: x for x in ad.load_documents(s, paragraph_every=SR.PARAGRAPH_EVERY)}
         )
         golds.update(ad.gold(s))
-    papers = [d for _s, d in first_set() if all(finished(t, d) for _a, t in ARMS)]
+    arms = [(a, t) for a, t in ARMS if any(finished(t, d) for _s, d in first_set())]
+    papers = [d for _s, d in first_set() if all(finished(t, d) for _a, t in arms)]
     res: dict = {"papers": papers, "arms": {}}
-    for arm, tag in ARMS:
+    for arm, tag in arms:
         acc = {k: ([], []) for k in (HEADLINE, PRIMARY)}
         choice, drops, outcomes = Counter(), Counter(), Counter()
         for d in papers:
@@ -110,12 +116,21 @@ def main() -> None:
     r3 = res["arms"]["arm R3"][f"{HEADLINE} relation"]["f1"]
     res["rule_r3"] = {"delta_vs_r2": round(r3 - r2, 4), "delta_vs_v5": round(r3 - base, 4),
                       "passes": r3 - r2 >= 0.005 and r3 - base >= RULE}  # fmt: skip
-    L = [f"# CR-064: arm R2 (registry v1.0.2 + relation_choice v9, no node types) on {len(papers)} first-set papers", "",
+    res[
+        "rule_context"
+    ] = {}  # CR-064 pre-registered: a context arm must beat R3 by >= +0.005 and stay >= v5 -0.005
+    for arm in ("arm R6 (origin)", "arm R7 (neighbours)"):
+        if arm in res["arms"]:
+            f = res["arms"][arm][f"{HEADLINE} relation"]["f1"]
+            res["rule_context"][arm] = {"delta_vs_r3": round(f - r3, 4), "delta_vs_v5": round(f - base, 4),
+                                        "passes": f - r3 >= 0.005 and f - base >= RULE}  # fmt: skip
+    L = [f"# CR-064: relation arms on {len(papers)} first-set papers (registry v1.0.2 / v1.0.4, no node types)", "",
          (f"Adoption rule (pre-registered): overlap relation F1 >= v5 {RULE:+}. Delta {res['rule']['delta_overlap_relation_f1']:+.4f}: "
           f"**{'passes' if res['rule']['passes'] else 'fails'}**. trainedWith wording is gold-informed (owner option B)."), "",
          (f"Arm R3 rule (pre-registered): overlap relation F1 >= R2 + 0.005 and >= v5 {RULE:+}. Delta vs R2 "
           f"{res['rule_r3']['delta_vs_r2']:+.4f}, vs v5 {res['rule_r3']['delta_vs_v5']:+.4f}: "
           f"**{'passes' if res['rule_r3']['passes'] else 'fails'}**."), "",
+         *[f"Context arm {a[:6]} (pre-registered): delta vs R3 {x['delta_vs_r3']:+.4f}, vs v5 {x['delta_vs_v5']:+.4f}: **{'passes' if x['passes'] else 'fails'}**." + chr(10) for a, x in res["rule_context"].items()],
          "| arm | overlap concept P / R / F2 | overlap relation P / R / F1 | strict relation P / R / F1 | spend |", "|---|---|---|---|---|"]  # fmt: skip
     for arm, x in res["arms"].items():
         c, ro, rs = x[f"{HEADLINE} concept"], x[f"{HEADLINE} relation"], x[f"{PRIMARY} relation"]
@@ -127,8 +142,8 @@ def main() -> None:
         L += ["", f"## {arm}", "", f"- choice-step losses (overlap): {top}", f"- endpoint drops: {x['drops']}",
               f"- outcomes (selected pairs): {x['outcomes']}"]  # fmt: skip
     OUT.mkdir(parents=True, exist_ok=True)
-    (OUT / "arm_r2.json").write_text(json.dumps(res, indent=1), encoding="utf-8")
-    (OUT / "arm_r2.md").write_text("\n".join(L) + "\n", encoding="utf-8")
+    (OUT / "arms_all.json").write_text(json.dumps(res, indent=1), encoding="utf-8")
+    (OUT / "arms_all.md").write_text("\n".join(L) + "\n", encoding="utf-8")
     print("\n".join(L))
 
 

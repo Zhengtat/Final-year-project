@@ -32,7 +32,16 @@ from cumap.cr063 import bottleneck as BN
 from cumap.cr063 import tolerant as T
 
 OUT = REPO_ROOT / "reports/cr064"
-ARMS = (("v5", "cr055ballp"), ("arm R2", "cr064relR2"), ("arm R3", "cr064relR3"))
+ARMS = (
+    ("v5", "cr055ballp"),
+    ("arm R2", "cr064relR2"),
+    ("arm R3", "cr064relR3"),
+    ("arm R5", "cr064relR5"),
+    ("arm R6", "cr064relR6"),
+    ("arm R7", "cr064relR7"),
+    ("arm R8", "cr064relR8"),
+    ("arm R9", "cr064relR9"),
+)
 FP_KINDS = ("wrong direction", "wrong label", "unannotated pair", "non-gold endpoint", "unplaced")
 
 
@@ -127,9 +136,12 @@ def main() -> None:
             {x.doc_key: x for x in ad.load_documents(s, paragraph_every=SR.PARAGRAPH_EVERY)}
         )
         golds.update(ad.gold(s))
-    papers = [d for _s, d in first_set()]
+    from cumap.cr064.measure import finished
+
+    arms = [(a, t) for a, t in ARMS if any(finished(t, d) for _s, d in first_set())]
+    papers = [d for _s, d in first_set() if all(finished(t, d) for _a, t in arms)]
     res: dict = {}
-    for arm, tag in ARMS:
+    for arm, tag in arms:
         ov = per_relation(papers, docs, golds, sym, tag, "overlap")
         st = per_relation(papers, docs, golds, sym, tag, "strict")
         stages, chk = per_gold(papers, docs, golds, sym, tag)
