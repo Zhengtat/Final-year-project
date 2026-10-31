@@ -19,7 +19,9 @@ from cumap.cr056.scinlp_run import all_pairs
 from cumap.cr060 import span_identity as SI
 
 PROFILE_V10 = REPO_ROOT / "configs/scinlp_profile_v10.yaml"  # A-all, superseded (CR-061)
-PROFILE_V11 = REPO_ROOT / "configs/scinlp_profile_v11.yaml"  # A-name, adopted (CR-061)
+PROFILE_V11 = (
+    REPO_ROOT / "configs/scinlp_profile_v11.yaml"
+)  # A-name (CR-061), reversed 2026-10-31: run only on request
 PRE = "checkpoint_pre_span_identity.json"
 
 

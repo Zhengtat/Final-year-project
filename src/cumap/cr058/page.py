@@ -1,10 +1,10 @@
 """CR-058: SciNLP pipeline diagnostics page ($0, read-only, no model call).
 
-    uv run python -m cumap.cr058.page            # reports/cr058/pipeline.html (gitignored: SciNLP text is CC BY-NC) + summary_v11.{json,md}
-    uv run python -m cumap.cr058.page --profile v10  # superseded A-all: pipeline_v10.html + summary_v10.{json,md}
-    uv run python -m cumap.cr058.page --profile v5   # the CR-058 page as merged: pipeline_v5.html + summary.{json,md}
+    uv run python -m cumap.cr058.page                # profile v5 (production): reports/cr058/pipeline.html (gitignored: CC BY-NC) + summary.{json,md}
+    uv run python -m cumap.cr058.page --profile v11  # reversed span identity A-name: pipeline_v11.html + summary_v11.{json,md}
+    uv run python -m cumap.cr058.page --profile v10  # reversed A-all: pipeline_v10.html + summary_v10.{json,md}
 
-CR-061: by default the development panel shows profile v11 = the v5 runs with the CR-060 span-identity step (variant A-name) applied in
+CR-061 (span identity reversed by the owner 2026-10-31; the default is v5 again): `--profile v11` shows profile v11 = the v5 runs with the CR-060 span-identity step (variant A-name) applied in
 memory at load (the step runs after relation classification, so this equals a v10 run; the source checkpoints are not written, and are
 hashed before and after). Gates for v10: the pooled concept and relation counts must equal the CR-060 replay (`reports/cr060/part_a*.json`);
 hierarchy, fact and macro F1 have no v10 reference and are not gated.
@@ -52,7 +52,7 @@ DEV_SOURCES = (
 )
 LEVELS = (("E0", "E0"), ("E1", "E1"), ("E3", "E3-M"), ("E4", "E4-M"))
 SPAN_IDENTITY: str | None = (
-    "A-name"  # CR-061: profile v11 (A-name); None = profile v5 as merged in CR-058
+    None  # profile v5 (production again, 2026-10-31); "A-name" = v11, "A-all" = v10 (both reversed)
 )
 PROFILE_LABEL = {"A-name": "v11", "A-all": "v10"}
 V10_REFS = {"first": "part_a.json", "rest": "part_a_rest.json"}
@@ -335,8 +335,8 @@ def main() -> dict:
         gzip.compress(json.dumps(data, ensure_ascii=False).encode("utf-8"), mtime=0)
     ).decode()
     html = TEMPLATE.read_text(encoding="utf-8").replace("/*__DATA_B64__*/", blob)
-    page, summ = {None: ("pipeline_v5.html", "summary"), "A-all": ("pipeline_v10.html", "summary_v10"),
-                  "A-name": ("pipeline.html", "summary_v11")}[SPAN_IDENTITY]  # fmt: skip
+    page, summ = {None: ("pipeline.html", "summary"), "A-all": ("pipeline_v10.html", "summary_v10"),
+                  "A-name": ("pipeline_v11.html", "summary_v11")}[SPAN_IDENTITY]  # fmt: skip
     (OUT / page).write_text(html, encoding="utf-8")
     s = summary(papers, meta, test, gate, before == after)
     s["profile"] = data["profile"]
@@ -349,7 +349,7 @@ if __name__ == "__main__":
     import argparse
 
     ap = argparse.ArgumentParser()
-    ap.add_argument("--profile", default="v11", choices=["v11", "v10", "v5"])
+    ap.add_argument("--profile", default="v5", choices=["v5", "v11", "v10"])
     a = ap.parse_args()
     SPAN_IDENTITY = {"v5": None, "v10": "A-all", "v11": "A-name"}[a.profile]
     r = main()

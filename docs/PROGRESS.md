@@ -272,3 +272,5 @@ Built behind switches, never run: generator prompt v7 (type-free, profile slots)
 - **2026-10-30 (owner): overlap `IDXR1OV-P1` is the SciNLP headline, strict `IDXR1-P1` secondary** (scorecards, page, CLAUDE.md rule 35). Adoption stays on strict pending the owner.
 - **2026-10-30 (owner): adoption rules also judged on overlap** (strict beside every decision).
 - **2026-10-30 bottlenecks (overlap, v11):** gold relations 1,354 -> endpoints placed 972 -> classified 855 -> family 691 -> **choice 384 (56%)** -> checks 349 -> credited 247. Choice losses: 298 wrong relation (trainedWith -> evaluatedOn 38, enhancedBy -> UsedFor 27), 9 direction. Concept misses: never proposed 480 of 666.
+- **2026-10-31 (owner): span identity (CR-060 / CR-061) reversed**; production is profile v5 again; page default v5. Code kept, off.
+- **2026-10-31: CLOSED (owner).** Merged with tag `cr-063-complete`.

@@ -881,3 +881,11 @@ Format: date · decision · reason · alternatives considered.
 - **Gold relations (1,354), strict -> overlap:** endpoints placed 707 -> **972 (72%)**; pair classified 855 (88%; 117 same-sentence pairs never classified); family right 691 (81%); **choice right 384 (56%)**; checks passed 349 (91%); assembled 348; credited 247 (71%).
 - **Choice-step losses (307):** wrong relation 298 (of which 82 "other" / "no_relation"), wrong direction 9; most frequent confusions trainedWith -> evaluatedOn 38, enhancedBy -> UsedFor 27, compareWith -> other 18, trainedWith -> UsedFor 11.
 - **Concept misses under overlap (666 of 5,664 gold mentions):** never proposed 480, lost after the generator 81, hint rejected 48, node not placed 29, span 28 (strict: 793).
+
+## 2026-10-31 · CR-060 / CR-061 span identity REVERSED (owner)
+- **Decision (owner, 2026-10-31):** with overlap matching as the headline and adoption metric, the span-identity rule is unnecessary; its adoption is reversed. Production is **profile v5** again (`cumap.cr043.run` default runner `cumap.cr056.scinlp_run`); profiles v10 / v11 are marked reversed, and the code (`cumap.cr060.span_identity`, `cumap.cr060.scinlp_run`, `configs/span_identity.yaml`) stays, off by default, as for every non-adopted change. Not a git revert: CR-062 / CR-063 and the diagnostics page import the module.
+- **Page:** `cumap.cr058.page` defaults to v5 again (`pipeline.html`, `summary.*`, gated against the CR-043 scorecards; all gates pass); `--profile v11` / `--profile v10` rebuild `pipeline_v11.html` / `pipeline_v10.html`.
+- **What is given up (strict):** concept recall 0.747 -> 0.731 and relation F1 0.147 -> 0.137 on the 57 papers; under overlap the difference is +0.003 recall / +0.001 relation F1.
+
+## 2026-10-31 · CR-063 closed (owner)
+- Symbol-aware grounding `IDXR1S-P1` and the +-N-character / word-level relaxed variants measured ($0); **overlap `IDXR1OV-P1` is the SciNLP headline and adoption metric**, strict `IDXR1-P1` beside; span identity reversed (production v5); bottleneck under overlap: the relation choice step (56% pass). Spend $0. Next: CR-064, the choice step.
