@@ -1,0 +1,689 @@
+{
+ "v5": {
+  "overlap": {
+   "compareWith": {
+    "predicted": 89,
+    "tp": 29,
+    "non-gold endpoint": 40,
+    "unannotated pair": 14,
+    "unplaced": 1,
+    "wrong label": 5
+   },
+   "subclassOf": {
+    "predicted": 32,
+    "wrong label": 3,
+    "tp": 3,
+    "non-gold endpoint": 23,
+    "unplaced": 0,
+    "unannotated pair": 3
+   },
+   "UsedFor": {
+    "predicted": 125,
+    "non-gold endpoint": 98,
+    "tp": 16,
+    "unannotated pair": 7,
+    "wrong label": 2,
+    "unplaced": 2
+   },
+   "partOf": {
+    "predicted": 64,
+    "non-gold endpoint": 50,
+    "unplaced": 3,
+    "unannotated pair": 3,
+    "tp": 2,
+    "wrong label": 5,
+    "wrong direction": 1
+   },
+   "trainedWith": {
+    "predicted": 26,
+    "tp": 5,
+    "unplaced": 2,
+    "non-gold endpoint": 19
+   },
+   "evaluatedBy": {
+    "predicted": 22,
+    "tp": 7,
+    "unplaced": 1,
+    "non-gold endpoint": 11,
+    "wrong label": 2,
+    "unannotated pair": 1
+   },
+   "MeasuredBy": {
+    "predicted": 70,
+    "tp": 32,
+    "unplaced": 1,
+    "non-gold endpoint": 30,
+    "unannotated pair": 7
+   },
+   "similarWith": {
+    "predicted": 6,
+    "tp": 2,
+    "unplaced": 1,
+    "wrong label": 1,
+    "non-gold endpoint": 2
+   },
+   "(edge without node or quote)": {
+    "predicted": 2,
+    "unplaced": 2
+   },
+   "subtaskOf": {
+    "predicted": 10,
+    "tp": 4,
+    "unplaced": 0,
+    "non-gold endpoint": 5,
+    "unannotated pair": 1
+   },
+   "evaluatedOn": {
+    "predicted": 7,
+    "tp": 2,
+    "unplaced": 0,
+    "non-gold endpoint": 5
+   },
+   "enhancedBy": {
+    "predicted": 19,
+    "non-gold endpoint": 16,
+    "unplaced": 0,
+    "unannotated pair": 3
+   }
+  },
+  "strict": {
+   "compareWith": {
+    "predicted": 89,
+    "tp": 25,
+    "non-gold endpoint": 45,
+    "unannotated pair": 14,
+    "unplaced": 1,
+    "wrong label": 4
+   },
+   "subclassOf": {
+    "predicted": 32,
+    "wrong label": 1,
+    "tp": 3,
+    "non-gold endpoint": 27,
+    "unplaced": 0,
+    "unannotated pair": 1
+   },
+   "UsedFor": {
+    "predicted": 125,
+    "non-gold endpoint": 108,
+    "unannotated pair": 6,
+    "wrong label": 1,
+    "unplaced": 2,
+    "tp": 8
+   },
+   "partOf": {
+    "predicted": 64,
+    "non-gold endpoint": 55,
+    "unplaced": 3,
+    "unannotated pair": 1,
+    "tp": 1,
+    "wrong label": 3,
+    "wrong direction": 1
+   },
+   "trainedWith": {
+    "predicted": 26,
+    "tp": 4,
+    "non-gold endpoint": 20,
+    "unplaced": 2
+   },
+   "evaluatedBy": {
+    "predicted": 22,
+    "tp": 4,
+    "unplaced": 1,
+    "non-gold endpoint": 14,
+    "wrong label": 2,
+    "unannotated pair": 1
+   },
+   "MeasuredBy": {
+    "predicted": 70,
+    "non-gold endpoint": 41,
+    "unplaced": 1,
+    "tp": 24,
+    "unannotated pair": 4
+   },
+   "similarWith": {
+    "predicted": 6,
+    "non-gold endpoint": 4,
+    "unplaced": 1,
+    "wrong label": 1
+   },
+   "(edge without node or quote)": {
+    "predicted": 2,
+    "unplaced": 2
+   },
+   "subtaskOf": {
+    "predicted": 10,
+    "tp": 4,
+    "unplaced": 0,
+    "non-gold endpoint": 5,
+    "unannotated pair": 1
+   },
+   "evaluatedOn": {
+    "predicted": 7,
+    "tp": 1,
+    "unplaced": 0,
+    "non-gold endpoint": 6
+   },
+   "enhancedBy": {
+    "predicted": 19,
+    "non-gold endpoint": 19,
+    "unplaced": 0
+   }
+  },
+  "gold_stages": {
+   "subtaskOf": {
+    "gold": 47,
+    "endpoints_placed": 25,
+    "pair_selected": 18,
+    "family_right": 15,
+    "choice_right": 7,
+    "checks_passed": 4,
+    "assembled": 4,
+    "credited": 4
+   },
+   "MeasuredBy": {
+    "gold": 92,
+    "endpoints_placed": 72,
+    "pair_selected": 66,
+    "family_right": 55,
+    "choice_right": 38,
+    "checks_passed": 37,
+    "assembled": 37,
+    "credited": 32
+   },
+   "compareWith": {
+    "gold": 76,
+    "endpoints_placed": 66,
+    "pair_selected": 61,
+    "family_right": 51,
+    "choice_right": 42,
+    "checks_passed": 40,
+    "assembled": 39,
+    "credited": 29
+   },
+   "UsedFor": {
+    "gold": 89,
+    "endpoints_placed": 66,
+    "pair_selected": 59,
+    "family_right": 45,
+    "choice_right": 38,
+    "checks_passed": 31,
+    "assembled": 31,
+    "credited": 16
+   },
+   "similarWith": {
+    "gold": 22,
+    "endpoints_placed": 10,
+    "pair_selected": 10,
+    "family_right": 8,
+    "choice_right": 2,
+    "checks_passed": 2,
+    "assembled": 2,
+    "credited": 2
+   },
+   "enhancedBy": {
+    "gold": 41,
+    "endpoints_placed": 30,
+    "pair_selected": 28,
+    "family_right": 17,
+    "choice_right": 2,
+    "checks_passed": 1,
+    "assembled": 1,
+    "credited": 0
+   },
+   "subclassOf": {
+    "gold": 17,
+    "endpoints_placed": 13,
+    "pair_selected": 9,
+    "family_right": 7,
+    "choice_right": 3,
+    "checks_passed": 3,
+    "assembled": 3,
+    "credited": 3
+   },
+   "evaluatedBy": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 14,
+    "family_right": 11,
+    "choice_right": 8,
+    "checks_passed": 8,
+    "assembled": 8,
+    "credited": 7
+   },
+   "trainedWith": {
+    "gold": 46,
+    "endpoints_placed": 37,
+    "pair_selected": 30,
+    "family_right": 26,
+    "choice_right": 6,
+    "checks_passed": 6,
+    "assembled": 6,
+    "credited": 5
+   },
+   "evaluatedOn": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 8,
+    "family_right": 7,
+    "choice_right": 2,
+    "checks_passed": 2,
+    "assembled": 2,
+    "credited": 2
+   },
+   "partOf": {
+    "gold": 34,
+    "endpoints_placed": 21,
+    "pair_selected": 18,
+    "family_right": 14,
+    "choice_right": 2,
+    "checks_passed": 2,
+    "assembled": 2,
+    "credited": 2
+   }
+  },
+  "checks": {
+   "correct": {
+    "domain_range": 8,
+    "endpoint_not_grounded": 3,
+    "surface_phrase_not_in_quote": 2
+   },
+   "wrong": {
+    "domain_range": 322,
+    "endpoint_not_grounded": 27,
+    "evidence_quote_not_in_sentence": 8,
+    "surface_phrase_not_in_quote": 11
+   }
+  },
+  "pairs": {
+   "selected": 1840,
+   "selected_negative": 1575,
+   "family_tn": 738,
+   "family_fp": 837,
+   "choice_on_negative": 649,
+   "checks_dropped_wrong": 368,
+   "selected_positive": 265,
+   "family_tp": 213,
+   "choice_right": 125,
+   "checks_passed_correct": 112,
+   "in_graph_correct": 111,
+   "choice_wrong_label": 66,
+   "checks_passed_wrong": 347,
+   "in_graph_wrong": 338,
+   "choice_declined_positive": 22,
+   "assembly_dropped_wrong": 7,
+   "choice_declined_negative": 188,
+   "checks_dropped_correct": 13,
+   "family_fn": 52,
+   "assembly_dropped_correct": 1,
+   "unplaced_wrong": 2
+  },
+  "confusion_overlap": {
+   "compareWith on gold partOf": 3,
+   "subclassOf on gold subtaskOf": 2,
+   "UsedFor on gold enhancedBy": 2,
+   "evaluatedBy on gold MeasuredBy": 2,
+   "partOf on gold similarWith": 2,
+   "subclassOf on gold evaluatedOn": 1,
+   "compareWith on gold subclassOf": 1,
+   "partOf on gold evaluatedBy": 1,
+   "similarWith on gold partOf": 1,
+   "partOf on gold subtaskOf": 1,
+   "compareWith on gold MeasuredBy": 1,
+   "partOf on gold enhancedBy": 1
+  }
+ },
+ "arm R2": {
+  "overlap": {
+   "compareWith": {
+    "predicted": 87,
+    "tp": 29,
+    "non-gold endpoint": 38,
+    "unannotated pair": 15,
+    "wrong label": 4,
+    "unplaced": 1
+   },
+   "trainedWith": {
+    "predicted": 63,
+    "tp": 15,
+    "non-gold endpoint": 41,
+    "wrong label": 1,
+    "unplaced": 2,
+    "unannotated pair": 4
+   },
+   "UsedFor": {
+    "predicted": 172,
+    "non-gold endpoint": 134,
+    "tp": 20,
+    "unannotated pair": 9,
+    "wrong label": 7,
+    "unplaced": 2
+   },
+   "enhancedBy": {
+    "predicted": 37,
+    "non-gold endpoint": 29,
+    "unplaced": 0,
+    "wrong label": 1,
+    "unannotated pair": 4,
+    "tp": 3
+   },
+   "subtaskOf": {
+    "predicted": 14,
+    "wrong label": 1,
+    "tp": 5,
+    "unplaced": 1,
+    "non-gold endpoint": 6,
+    "unannotated pair": 1
+   },
+   "partOf": {
+    "predicted": 62,
+    "non-gold endpoint": 54,
+    "unplaced": 1,
+    "unannotated pair": 2,
+    "wrong label": 4,
+    "wrong direction": 1
+   },
+   "subclassOf": {
+    "predicted": 26,
+    "tp": 4,
+    "non-gold endpoint": 19,
+    "unplaced": 0,
+    "unannotated pair": 2,
+    "wrong label": 1
+   },
+   "evaluatedBy": {
+    "predicted": 30,
+    "tp": 6,
+    "unplaced": 1,
+    "non-gold endpoint": 18,
+    "wrong label": 2,
+    "unannotated pair": 3
+   },
+   "MeasuredBy": {
+    "predicted": 80,
+    "tp": 34,
+    "unplaced": 0,
+    "non-gold endpoint": 37,
+    "unannotated pair": 8,
+    "wrong label": 1
+   },
+   "similarWith": {
+    "predicted": 5,
+    "tp": 1,
+    "unplaced": 1,
+    "wrong label": 2,
+    "non-gold endpoint": 1
+   },
+   "(edge without node or quote)": {
+    "predicted": 3,
+    "unplaced": 3
+   },
+   "evaluatedOn": {
+    "predicted": 15,
+    "unannotated pair": 1,
+    "tp": 4,
+    "unplaced": 0,
+    "wrong label": 1,
+    "non-gold endpoint": 9
+   }
+  },
+  "strict": {
+   "compareWith": {
+    "predicted": 87,
+    "tp": 25,
+    "non-gold endpoint": 42,
+    "unannotated pair": 15,
+    "wrong label": 4,
+    "unplaced": 1
+   },
+   "trainedWith": {
+    "predicted": 63,
+    "tp": 9,
+    "non-gold endpoint": 47,
+    "wrong label": 1,
+    "unplaced": 2,
+    "unannotated pair": 4
+   },
+   "UsedFor": {
+    "predicted": 172,
+    "non-gold endpoint": 146,
+    "tp": 10,
+    "unannotated pair": 8,
+    "wrong label": 6,
+    "unplaced": 2
+   },
+   "enhancedBy": {
+    "predicted": 37,
+    "non-gold endpoint": 32,
+    "unplaced": 0,
+    "wrong label": 1,
+    "tp": 3,
+    "unannotated pair": 1
+   },
+   "subtaskOf": {
+    "predicted": 14,
+    "wrong label": 1,
+    "non-gold endpoint": 8,
+    "unplaced": 1,
+    "tp": 3,
+    "unannotated pair": 1
+   },
+   "partOf": {
+    "predicted": 62,
+    "non-gold endpoint": 57,
+    "unplaced": 1,
+    "unannotated pair": 1,
+    "wrong direction": 1,
+    "wrong label": 2
+   },
+   "subclassOf": {
+    "predicted": 26,
+    "tp": 3,
+    "non-gold endpoint": 23,
+    "unplaced": 0
+   },
+   "evaluatedBy": {
+    "predicted": 30,
+    "tp": 4,
+    "unplaced": 1,
+    "non-gold endpoint": 21,
+    "wrong label": 2,
+    "unannotated pair": 2
+   },
+   "MeasuredBy": {
+    "predicted": 80,
+    "non-gold endpoint": 48,
+    "unplaced": 0,
+    "tp": 26,
+    "unannotated pair": 6
+   },
+   "similarWith": {
+    "predicted": 5,
+    "non-gold endpoint": 3,
+    "unplaced": 1,
+    "wrong label": 1
+   },
+   "(edge without node or quote)": {
+    "predicted": 3,
+    "unplaced": 3
+   },
+   "evaluatedOn": {
+    "predicted": 15,
+    "unannotated pair": 1,
+    "tp": 3,
+    "unplaced": 0,
+    "non-gold endpoint": 11
+   }
+  },
+  "gold_stages": {
+   "subtaskOf": {
+    "gold": 47,
+    "endpoints_placed": 25,
+    "pair_selected": 18,
+    "family_right": 15,
+    "choice_right": 8,
+    "checks_passed": 5,
+    "assembled": 5,
+    "credited": 5
+   },
+   "MeasuredBy": {
+    "gold": 92,
+    "endpoints_placed": 72,
+    "pair_selected": 66,
+    "family_right": 55,
+    "choice_right": 38,
+    "checks_passed": 38,
+    "assembled": 38,
+    "credited": 34
+   },
+   "compareWith": {
+    "gold": 76,
+    "endpoints_placed": 66,
+    "pair_selected": 61,
+    "family_right": 51,
+    "choice_right": 46,
+    "checks_passed": 42,
+    "assembled": 41,
+    "credited": 29
+   },
+   "UsedFor": {
+    "gold": 89,
+    "endpoints_placed": 66,
+    "pair_selected": 59,
+    "family_right": 45,
+    "choice_right": 38,
+    "checks_passed": 35,
+    "assembled": 35,
+    "credited": 20
+   },
+   "similarWith": {
+    "gold": 22,
+    "endpoints_placed": 10,
+    "pair_selected": 10,
+    "family_right": 8,
+    "choice_right": 1,
+    "checks_passed": 1,
+    "assembled": 1,
+    "credited": 1
+   },
+   "enhancedBy": {
+    "gold": 41,
+    "endpoints_placed": 30,
+    "pair_selected": 28,
+    "family_right": 17,
+    "choice_right": 4,
+    "checks_passed": 4,
+    "assembled": 4,
+    "credited": 3
+   },
+   "subclassOf": {
+    "gold": 17,
+    "endpoints_placed": 13,
+    "pair_selected": 9,
+    "family_right": 7,
+    "choice_right": 4,
+    "checks_passed": 4,
+    "assembled": 4,
+    "credited": 4
+   },
+   "evaluatedBy": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 14,
+    "family_right": 11,
+    "choice_right": 7,
+    "checks_passed": 7,
+    "assembled": 7,
+    "credited": 6
+   },
+   "trainedWith": {
+    "gold": 46,
+    "endpoints_placed": 37,
+    "pair_selected": 30,
+    "family_right": 26,
+    "choice_right": 19,
+    "checks_passed": 18,
+    "assembled": 18,
+    "credited": 15
+   },
+   "evaluatedOn": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 8,
+    "family_right": 7,
+    "choice_right": 4,
+    "checks_passed": 4,
+    "assembled": 4,
+    "credited": 4
+   },
+   "partOf": {
+    "gold": 34,
+    "endpoints_placed": 21,
+    "pair_selected": 18,
+    "family_right": 14,
+    "choice_right": 0,
+    "checks_passed": 0,
+    "assembled": 0,
+    "credited": 0
+   }
+  },
+  "checks": {
+   "correct": {
+    "surface_phrase_not_in_quote": 6,
+    "endpoint_not_grounded": 2,
+    "endpoint_fit": 2
+   },
+   "wrong": {
+    "endpoint_not_grounded": 16,
+    "endpoint_fit": 4,
+    "surface_phrase_not_in_quote": 9,
+    "evidence_quote_not_in_sentence": 3,
+    "negation_without_cue": 1
+   }
+  },
+  "pairs": {
+   "selected": 1840,
+   "selected_negative": 1575,
+   "family_tn": 738,
+   "family_fp": 837,
+   "choice_declined_negative": 398,
+   "selected_positive": 265,
+   "family_tp": 213,
+   "choice_right": 143,
+   "checks_passed_correct": 133,
+   "in_graph_correct": 132,
+   "choice_on_negative": 439,
+   "checks_passed_wrong": 437,
+   "in_graph_wrong": 429,
+   "checks_dropped_wrong": 33,
+   "choice_declined_positive": 39,
+   "assembly_dropped_wrong": 5,
+   "choice_wrong_label": 31,
+   "checks_dropped_correct": 10,
+   "family_fn": 52,
+   "unplaced_wrong": 3,
+   "assembly_dropped_correct": 1
+  },
+  "confusion_overlap": {
+   "UsedFor on gold trainedWith": 3,
+   "UsedFor on gold enhancedBy": 2,
+   "UsedFor on gold subtaskOf": 2,
+   "evaluatedBy on gold MeasuredBy": 2,
+   "partOf on gold similarWith": 2,
+   "compareWith on gold UsedFor": 1,
+   "subtaskOf on gold evaluatedOn": 1,
+   "trainedWith on gold UsedFor": 1,
+   "compareWith on gold subclassOf": 1,
+   "compareWith on gold partOf": 1,
+   "compareWith on gold MeasuredBy": 1,
+   "evaluatedOn on gold trainedWith": 1,
+   "enhancedBy on gold partOf": 1,
+   "MeasuredBy on gold evaluatedBy": 1,
+   "similarWith on gold partOf": 1,
+   "partOf on gold enhancedBy": 1,
+   "similarWith on gold trainedWith": 1,
+   "partOf on gold subtaskOf": 1,
+   "subclassOf on gold similarWith": 1
+  }
+ }
+}
