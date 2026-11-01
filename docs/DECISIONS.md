@@ -955,3 +955,7 @@ Format: date · decision · reason · alternatives considered.
 - **Quote safety:** `evidence_quote_not_in_sentence` rejections stay at 1-6 per arm (R3 5, R6 3, R7 6, R8 1, R9 4), so the background text is not being quoted.
 - **Caveats:** 20 papers, one run each, no variance estimate; R7/R9 neighbours come from the model's own R3/R5 edges (two-pass, about double cost in production). R9 first attempt failed on a bug (sidecar written only for r7; fixed to every `GRAPH_SOURCES` arm, failed run dirs deleted and rerun).
 - **Open for owner:** adoption of any profile, partOf removal as a registry decision, a 37-paper confirmation, and a possible R7+R8-style combination.
+
+### 2026-11-01 · CR-064: best arm and relation-step oracle ladder
+- **Best arm:** R8 (origin-sentence background, registry v1.0.4 without partOf, `choice_prompt` v11, profile v18): overlap relation F1 0.264, folded 0.266, strict 0.197 on the 20 first-set papers. Owner asked for the highest-F1 combination; the 37-paper confirmation is NOT run yet (owner, 2026-11-01).
+- **Oracle ladder** (`cumap.cr064.oracle`, $0, train/dev only, simulated from the retained runs; `reports/cr064/oracle_cr064relR8.{json,md}`, `..R3`): the earlier CR-031 ladder was test-split and older-pipeline, so not reused. Gold relations alive per stage for R8: 498 gold, 368 endpoints placed, 321 pair selected, 267 family right, 174 choice right, 173 checks passed, 173 assembled, 130 credited.

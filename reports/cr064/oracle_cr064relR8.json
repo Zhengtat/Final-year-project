@@ -1,0 +1,132 @@
+{
+ "tag": "cr064relR8",
+ "tp": 130,
+ "pred": 486,
+ "gold": 498,
+ "stages": {
+  "gold": 498,
+  "endpoints_placed": 368,
+  "pair_selected": 321,
+  "family_right": 267,
+  "choice_right": 174,
+  "checks_passed": 173,
+  "assembled": 173,
+  "credited": 130
+ },
+ "pairs": {
+  "selected": 1840,
+  "selected_negative": 1575,
+  "family_tn": 802,
+  "selected_positive": 265,
+  "family_tp": 216,
+  "choice_right": 143,
+  "checks_passed_correct": 142,
+  "in_graph_correct": 142,
+  "family_fp": 773,
+  "choice_on_negative": 327,
+  "checks_passed_wrong": 334,
+  "in_graph_wrong": 327,
+  "checks_dropped_wrong": 15,
+  "choice_declined_negative": 446,
+  "assembly_dropped_wrong": 6,
+  "choice_wrong_label": 22,
+  "choice_declined_positive": 51,
+  "family_fn": 49,
+  "unplaced_wrong": 1,
+  "checks_dropped_correct": 1
+ },
+ "not_selected_split": {
+  "same_sentence": 47
+ },
+ "lost_at": {
+  "endpoints_placed": 130,
+  "pair_selected": 47,
+  "credited": 173,
+  "choice_right": 93,
+  "family_right": 54,
+  "checks_passed": 1
+ },
+ "fp": {
+  "wrong direction": 0,
+  "wrong label": 18,
+  "unannotated pair": 44,
+  "non-gold endpoint": 285,
+  "unplaced": 9
+ },
+ "ladder": [
+  {
+   "name": "as run",
+   "tp": 130,
+   "recall": 0.26104417670682734,
+   "p_kept": 0.2674897119341564,
+   "f1_kept": 0.26422764227642276,
+   "f1_clean": 0.4140127388535032
+  },
+  {
+   "name": "perfect mention-level credit (edge on the right gold mention pair)",
+   "tp": 173,
+   "recall": 0.3473895582329317,
+   "p_kept": 0.3270321361058601,
+   "f1_kept": 0.33690360272638753,
+   "f1_clean": 0.5156482861400894
+  },
+  {
+   "name": "perfect checks and assembly",
+   "tp": 174,
+   "recall": 0.3493975903614458,
+   "p_kept": 0.3283018867924528,
+   "f1_kept": 0.3385214007782101,
+   "f1_clean": 0.5178571428571429
+  },
+  {
+   "name": "perfect choice (label + direction)",
+   "tp": 267,
+   "recall": 0.536144578313253,
+   "p_kept": 0.42857142857142855,
+   "f1_kept": 0.47636039250669043,
+   "f1_clean": 0.6980392156862745
+  },
+  {
+   "name": "perfect pair selection and classification",
+   "tp": 368,
+   "recall": 0.7389558232931727,
+   "p_kept": 0.5082872928176796,
+   "f1_kept": 0.6022913256955811,
+   "f1_clean": 0.8498845265588915
+  },
+  {
+   "name": "perfect concepts (every gold endpoint is a node)",
+   "tp": 498,
+   "recall": 1.0,
+   "p_kept": 0.5831381733021077,
+   "f1_kept": 0.7366863905325444,
+   "f1_clean": 1.0
+  }
+ ],
+ "precision_side": [
+  {
+   "name": "remove wrong direction + wrong label (choice errors on gold pairs)",
+   "pred": 468,
+   "precision": 0.2777777777777778,
+   "f1": 0.2691511387163561
+  },
+  {
+   "name": "also remove unplaced edges",
+   "pred": 459,
+   "precision": 0.28322440087145967,
+   "f1": 0.2716823406478579
+  },
+  {
+   "name": "also remove non-gold endpoints (concept precision)",
+   "pred": 174,
+   "precision": 0.7471264367816092,
+   "f1": 0.3869047619047619
+  },
+  {
+   "name": "also remove unannotated pairs (gold incompleteness)",
+   "pred": 130,
+   "precision": 1.0,
+   "f1": 0.4140127388535032
+  }
+ ]
+}
