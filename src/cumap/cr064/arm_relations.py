@@ -108,7 +108,7 @@ def worker(split: str, doc_key: str, arm: str = "r2") -> dict:
         cp = cleared(json.loads((dst / "checkpoint.json").read_text()))
         (dst / "checkpoint.json").write_text(json.dumps(cp), encoding="utf-8")
     if (
-        arm == "r7" and not (dst / CC.GRAPH_FILE).exists()
+        arm in GRAPH_SOURCES and not (dst / CC.GRAPH_FILE).exists()
     ):  # the frozen first pass, one sidecar per document
         scp = json.loads(
             (PG.run_path(run_id(doc_key, GRAPH_SOURCES[arm])) / "checkpoint.json").read_text()

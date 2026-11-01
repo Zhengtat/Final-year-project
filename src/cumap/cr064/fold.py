@@ -38,6 +38,8 @@ ARMS = (
     ("arm R5", "cr064relR5"),
     ("arm R6", "cr064relR6"),
     ("arm R7", "cr064relR7"),
+    ("arm R8", "cr064relR8"),
+    ("arm R9", "cr064relR9"),
 )
 
 

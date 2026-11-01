@@ -171,26 +171,6 @@
    }
   },
   "gold_stages": {
-   "UsedFor": {
-    "gold": 89,
-    "endpoints_placed": 66,
-    "pair_selected": 59,
-    "family_right": 45,
-    "choice_right": 38,
-    "checks_passed": 31,
-    "assembled": 31,
-    "credited": 16
-   },
-   "trainedWith": {
-    "gold": 46,
-    "endpoints_placed": 37,
-    "pair_selected": 30,
-    "family_right": 26,
-    "choice_right": 6,
-    "checks_passed": 6,
-    "assembled": 6,
-    "credited": 5
-   },
    "enhancedBy": {
     "gold": 41,
     "endpoints_placed": 30,
@@ -200,26 +180,6 @@
     "checks_passed": 1,
     "assembled": 1,
     "credited": 0
-   },
-   "evaluatedBy": {
-    "gold": 17,
-    "endpoints_placed": 14,
-    "pair_selected": 14,
-    "family_right": 11,
-    "choice_right": 8,
-    "checks_passed": 8,
-    "assembled": 8,
-    "credited": 7
-   },
-   "subclassOf": {
-    "gold": 17,
-    "endpoints_placed": 13,
-    "pair_selected": 9,
-    "family_right": 7,
-    "choice_right": 3,
-    "checks_passed": 3,
-    "assembled": 3,
-    "credited": 3
    },
    "subtaskOf": {
     "gold": 47,
@@ -231,15 +191,35 @@
     "assembled": 4,
     "credited": 4
    },
-   "MeasuredBy": {
-    "gold": 92,
-    "endpoints_placed": 72,
-    "pair_selected": 66,
-    "family_right": 55,
+   "evaluatedBy": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 14,
+    "family_right": 11,
+    "choice_right": 8,
+    "checks_passed": 8,
+    "assembled": 8,
+    "credited": 7
+   },
+   "trainedWith": {
+    "gold": 46,
+    "endpoints_placed": 37,
+    "pair_selected": 30,
+    "family_right": 26,
+    "choice_right": 6,
+    "checks_passed": 6,
+    "assembled": 6,
+    "credited": 5
+   },
+   "UsedFor": {
+    "gold": 89,
+    "endpoints_placed": 66,
+    "pair_selected": 59,
+    "family_right": 45,
     "choice_right": 38,
-    "checks_passed": 37,
-    "assembled": 37,
-    "credited": 32
+    "checks_passed": 31,
+    "assembled": 31,
+    "credited": 16
    },
    "evaluatedOn": {
     "gold": 17,
@@ -250,6 +230,16 @@
     "checks_passed": 2,
     "assembled": 2,
     "credited": 2
+   },
+   "subclassOf": {
+    "gold": 17,
+    "endpoints_placed": 13,
+    "pair_selected": 9,
+    "family_right": 7,
+    "choice_right": 3,
+    "checks_passed": 3,
+    "assembled": 3,
+    "credited": 3
    },
    "compareWith": {
     "gold": 76,
@@ -270,6 +260,16 @@
     "checks_passed": 2,
     "assembled": 2,
     "credited": 2
+   },
+   "MeasuredBy": {
+    "gold": 92,
+    "endpoints_placed": 72,
+    "pair_selected": 66,
+    "family_right": 55,
+    "choice_right": 38,
+    "checks_passed": 37,
+    "assembled": 37,
+    "credited": 32
    },
    "partOf": {
     "gold": 34,
@@ -516,26 +516,6 @@
    }
   },
   "gold_stages": {
-   "UsedFor": {
-    "gold": 89,
-    "endpoints_placed": 66,
-    "pair_selected": 59,
-    "family_right": 45,
-    "choice_right": 38,
-    "checks_passed": 35,
-    "assembled": 35,
-    "credited": 20
-   },
-   "trainedWith": {
-    "gold": 46,
-    "endpoints_placed": 37,
-    "pair_selected": 30,
-    "family_right": 26,
-    "choice_right": 19,
-    "checks_passed": 18,
-    "assembled": 18,
-    "credited": 15
-   },
    "enhancedBy": {
     "gold": 41,
     "endpoints_placed": 30,
@@ -545,26 +525,6 @@
     "checks_passed": 4,
     "assembled": 4,
     "credited": 3
-   },
-   "evaluatedBy": {
-    "gold": 17,
-    "endpoints_placed": 14,
-    "pair_selected": 14,
-    "family_right": 11,
-    "choice_right": 7,
-    "checks_passed": 7,
-    "assembled": 7,
-    "credited": 6
-   },
-   "subclassOf": {
-    "gold": 17,
-    "endpoints_placed": 13,
-    "pair_selected": 9,
-    "family_right": 7,
-    "choice_right": 4,
-    "checks_passed": 4,
-    "assembled": 4,
-    "credited": 4
    },
    "subtaskOf": {
     "gold": 47,
@@ -576,20 +536,50 @@
     "assembled": 5,
     "credited": 5
    },
-   "MeasuredBy": {
-    "gold": 92,
-    "endpoints_placed": 72,
-    "pair_selected": 66,
-    "family_right": 55,
+   "evaluatedBy": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 14,
+    "family_right": 11,
+    "choice_right": 7,
+    "checks_passed": 7,
+    "assembled": 7,
+    "credited": 6
+   },
+   "trainedWith": {
+    "gold": 46,
+    "endpoints_placed": 37,
+    "pair_selected": 30,
+    "family_right": 26,
+    "choice_right": 19,
+    "checks_passed": 18,
+    "assembled": 18,
+    "credited": 15
+   },
+   "UsedFor": {
+    "gold": 89,
+    "endpoints_placed": 66,
+    "pair_selected": 59,
+    "family_right": 45,
     "choice_right": 38,
-    "checks_passed": 38,
-    "assembled": 38,
-    "credited": 34
+    "checks_passed": 35,
+    "assembled": 35,
+    "credited": 20
    },
    "evaluatedOn": {
     "gold": 17,
     "endpoints_placed": 14,
     "pair_selected": 8,
+    "family_right": 7,
+    "choice_right": 4,
+    "checks_passed": 4,
+    "assembled": 4,
+    "credited": 4
+   },
+   "subclassOf": {
+    "gold": 17,
+    "endpoints_placed": 13,
+    "pair_selected": 9,
     "family_right": 7,
     "choice_right": 4,
     "checks_passed": 4,
@@ -615,6 +605,16 @@
     "checks_passed": 1,
     "assembled": 1,
     "credited": 1
+   },
+   "MeasuredBy": {
+    "gold": 92,
+    "endpoints_placed": 72,
+    "pair_selected": 66,
+    "family_right": 55,
+    "choice_right": 38,
+    "checks_passed": 38,
+    "assembled": 38,
+    "credited": 34
    },
    "partOf": {
     "gold": 34,
@@ -864,26 +864,6 @@
    }
   },
   "gold_stages": {
-   "UsedFor": {
-    "gold": 89,
-    "endpoints_placed": 66,
-    "pair_selected": 59,
-    "family_right": 45,
-    "choice_right": 34,
-    "checks_passed": 33,
-    "assembled": 33,
-    "credited": 20
-   },
-   "trainedWith": {
-    "gold": 46,
-    "endpoints_placed": 37,
-    "pair_selected": 30,
-    "family_right": 26,
-    "choice_right": 16,
-    "checks_passed": 16,
-    "assembled": 16,
-    "credited": 14
-   },
    "enhancedBy": {
     "gold": 41,
     "endpoints_placed": 30,
@@ -893,26 +873,6 @@
     "checks_passed": 3,
     "assembled": 3,
     "credited": 2
-   },
-   "evaluatedBy": {
-    "gold": 17,
-    "endpoints_placed": 14,
-    "pair_selected": 14,
-    "family_right": 11,
-    "choice_right": 7,
-    "checks_passed": 7,
-    "assembled": 7,
-    "credited": 6
-   },
-   "subclassOf": {
-    "gold": 17,
-    "endpoints_placed": 13,
-    "pair_selected": 9,
-    "family_right": 7,
-    "choice_right": 3,
-    "checks_passed": 3,
-    "assembled": 3,
-    "credited": 3
    },
    "subtaskOf": {
     "gold": 47,
@@ -924,15 +884,35 @@
     "assembled": 3,
     "credited": 3
    },
-   "MeasuredBy": {
-    "gold": 92,
-    "endpoints_placed": 72,
-    "pair_selected": 66,
-    "family_right": 55,
-    "choice_right": 41,
-    "checks_passed": 38,
-    "assembled": 38,
-    "credited": 32
+   "evaluatedBy": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 14,
+    "family_right": 11,
+    "choice_right": 7,
+    "checks_passed": 7,
+    "assembled": 7,
+    "credited": 6
+   },
+   "trainedWith": {
+    "gold": 46,
+    "endpoints_placed": 37,
+    "pair_selected": 30,
+    "family_right": 26,
+    "choice_right": 16,
+    "checks_passed": 16,
+    "assembled": 16,
+    "credited": 14
+   },
+   "UsedFor": {
+    "gold": 89,
+    "endpoints_placed": 66,
+    "pair_selected": 59,
+    "family_right": 45,
+    "choice_right": 34,
+    "checks_passed": 33,
+    "assembled": 33,
+    "credited": 20
    },
    "evaluatedOn": {
     "gold": 17,
@@ -943,6 +923,16 @@
     "checks_passed": 5,
     "assembled": 5,
     "credited": 5
+   },
+   "subclassOf": {
+    "gold": 17,
+    "endpoints_placed": 13,
+    "pair_selected": 9,
+    "family_right": 7,
+    "choice_right": 3,
+    "checks_passed": 3,
+    "assembled": 3,
+    "credited": 3
    },
    "compareWith": {
     "gold": 76,
@@ -963,6 +953,16 @@
     "checks_passed": 1,
     "assembled": 1,
     "credited": 1
+   },
+   "MeasuredBy": {
+    "gold": 92,
+    "endpoints_placed": 72,
+    "pair_selected": 66,
+    "family_right": 55,
+    "choice_right": 41,
+    "checks_passed": 38,
+    "assembled": 38,
+    "credited": 32
    },
    "partOf": {
     "gold": 34,
@@ -1029,6 +1029,1648 @@
    "partOf on gold subtaskOf": 1,
    "subclassOf on gold similarWith": 1,
    "UsedFor on gold trainedWith": 1
+  }
+ },
+ "arm R5": {
+  "overlap": {
+   "compareWith": {
+    "predicted": 91,
+    "tp": 31,
+    "non-gold endpoint": 40,
+    "unannotated pair": 15,
+    "wrong label": 4,
+    "unplaced": 1
+   },
+   "trainedWith": {
+    "predicted": 54,
+    "tp": 16,
+    "non-gold endpoint": 31,
+    "unplaced": 2,
+    "unannotated pair": 5
+   },
+   "enhancedBy": {
+    "predicted": 39,
+    "non-gold endpoint": 32,
+    "unplaced": 1,
+    "wrong label": 1,
+    "unannotated pair": 3,
+    "tp": 2
+   },
+   "UsedFor": {
+    "predicted": 138,
+    "tp": 21,
+    "non-gold endpoint": 105,
+    "unannotated pair": 7,
+    "wrong label": 4,
+    "unplaced": 1
+   },
+   "subtaskOf": {
+    "predicted": 11,
+    "wrong label": 1,
+    "tp": 4,
+    "unplaced": 1,
+    "non-gold endpoint": 4,
+    "unannotated pair": 1
+   },
+   "evaluatedBy": {
+    "predicted": 33,
+    "tp": 7,
+    "unplaced": 1,
+    "non-gold endpoint": 19,
+    "wrong label": 2,
+    "unannotated pair": 4
+   },
+   "MeasuredBy": {
+    "predicted": 65,
+    "tp": 35,
+    "unplaced": 0,
+    "non-gold endpoint": 23,
+    "unannotated pair": 7
+   },
+   "similarWith": {
+    "predicted": 5,
+    "tp": 1,
+    "unplaced": 1,
+    "non-gold endpoint": 1,
+    "unannotated pair": 1,
+    "wrong label": 1
+   },
+   "subclassOf": {
+    "predicted": 18,
+    "non-gold endpoint": 13,
+    "unplaced": 0,
+    "tp": 3,
+    "wrong label": 2
+   },
+   "(edge without node or quote)": {
+    "predicted": 2,
+    "unplaced": 2
+   },
+   "evaluatedOn": {
+    "predicted": 12,
+    "tp": 5,
+    "unannotated pair": 1,
+    "unplaced": 0,
+    "non-gold endpoint": 6
+   }
+  },
+  "strict": {
+   "compareWith": {
+    "predicted": 91,
+    "tp": 27,
+    "non-gold endpoint": 46,
+    "unannotated pair": 14,
+    "wrong label": 3,
+    "unplaced": 1
+   },
+   "trainedWith": {
+    "predicted": 54,
+    "tp": 11,
+    "non-gold endpoint": 36,
+    "unplaced": 2,
+    "unannotated pair": 5
+   },
+   "enhancedBy": {
+    "predicted": 39,
+    "non-gold endpoint": 35,
+    "unplaced": 1,
+    "wrong label": 1,
+    "tp": 2
+   },
+   "UsedFor": {
+    "predicted": 138,
+    "tp": 11,
+    "non-gold endpoint": 116,
+    "unannotated pair": 7,
+    "wrong label": 3,
+    "unplaced": 1
+   },
+   "subtaskOf": {
+    "predicted": 11,
+    "wrong label": 1,
+    "non-gold endpoint": 5,
+    "unplaced": 1,
+    "unannotated pair": 1,
+    "tp": 3
+   },
+   "evaluatedBy": {
+    "predicted": 33,
+    "tp": 4,
+    "unplaced": 1,
+    "non-gold endpoint": 24,
+    "wrong label": 2,
+    "unannotated pair": 2
+   },
+   "MeasuredBy": {
+    "predicted": 65,
+    "non-gold endpoint": 35,
+    "unplaced": 0,
+    "tp": 26,
+    "unannotated pair": 4
+   },
+   "similarWith": {
+    "predicted": 5,
+    "non-gold endpoint": 4,
+    "unplaced": 1
+   },
+   "subclassOf": {
+    "predicted": 18,
+    "non-gold endpoint": 15,
+    "unplaced": 0,
+    "tp": 2,
+    "wrong label": 1
+   },
+   "(edge without node or quote)": {
+    "predicted": 2,
+    "unplaced": 2
+   },
+   "evaluatedOn": {
+    "predicted": 12,
+    "non-gold endpoint": 8,
+    "unannotated pair": 1,
+    "tp": 3,
+    "unplaced": 0
+   }
+  },
+  "gold_stages": {
+   "enhancedBy": {
+    "gold": 41,
+    "endpoints_placed": 30,
+    "pair_selected": 28,
+    "family_right": 16,
+    "choice_right": 3,
+    "checks_passed": 3,
+    "assembled": 3,
+    "credited": 2
+   },
+   "subtaskOf": {
+    "gold": 47,
+    "endpoints_placed": 25,
+    "pair_selected": 18,
+    "family_right": 14,
+    "choice_right": 4,
+    "checks_passed": 4,
+    "assembled": 4,
+    "credited": 4
+   },
+   "evaluatedBy": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 14,
+    "family_right": 10,
+    "choice_right": 8,
+    "checks_passed": 8,
+    "assembled": 8,
+    "credited": 7
+   },
+   "trainedWith": {
+    "gold": 46,
+    "endpoints_placed": 37,
+    "pair_selected": 30,
+    "family_right": 27,
+    "choice_right": 19,
+    "checks_passed": 19,
+    "assembled": 19,
+    "credited": 16
+   },
+   "UsedFor": {
+    "gold": 89,
+    "endpoints_placed": 66,
+    "pair_selected": 59,
+    "family_right": 49,
+    "choice_right": 36,
+    "checks_passed": 35,
+    "assembled": 35,
+    "credited": 21
+   },
+   "evaluatedOn": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 8,
+    "family_right": 8,
+    "choice_right": 5,
+    "checks_passed": 5,
+    "assembled": 5,
+    "credited": 5
+   },
+   "subclassOf": {
+    "gold": 17,
+    "endpoints_placed": 13,
+    "pair_selected": 9,
+    "family_right": 6,
+    "choice_right": 3,
+    "checks_passed": 3,
+    "assembled": 3,
+    "credited": 3
+   },
+   "compareWith": {
+    "gold": 76,
+    "endpoints_placed": 66,
+    "pair_selected": 61,
+    "family_right": 53,
+    "choice_right": 48,
+    "checks_passed": 45,
+    "assembled": 45,
+    "credited": 31
+   },
+   "similarWith": {
+    "gold": 22,
+    "endpoints_placed": 10,
+    "pair_selected": 10,
+    "family_right": 5,
+    "choice_right": 1,
+    "checks_passed": 1,
+    "assembled": 1,
+    "credited": 1
+   },
+   "MeasuredBy": {
+    "gold": 92,
+    "endpoints_placed": 72,
+    "pair_selected": 66,
+    "family_right": 59,
+    "choice_right": 39,
+    "checks_passed": 39,
+    "assembled": 39,
+    "credited": 35
+   },
+   "partOf": {
+    "gold": 34,
+    "endpoints_placed": 21,
+    "pair_selected": 18,
+    "family_right": 14,
+    "choice_right": 0,
+    "checks_passed": 0,
+    "assembled": 0,
+    "credited": 0
+   }
+  },
+  "checks": {
+   "correct": {
+    "endpoint_not_grounded": 2,
+    "surface_phrase_not_in_quote": 1
+   },
+   "wrong": {
+    "endpoint_not_grounded": 11,
+    "surface_phrase_not_in_quote": 6,
+    "evidence_quote_not_in_sentence": 4
+   }
+  },
+  "pairs": {
+   "selected": 1840,
+   "selected_negative": 1575,
+   "family_tn": 799,
+   "family_fp": 776,
+   "choice_declined_negative": 462,
+   "selected_positive": 265,
+   "family_tp": 214,
+   "choice_right": 140,
+   "checks_passed_correct": 137,
+   "in_graph_correct": 137,
+   "choice_on_negative": 314,
+   "checks_passed_wrong": 312,
+   "in_graph_wrong": 305,
+   "checks_dropped_wrong": 21,
+   "choice_declined_positive": 55,
+   "assembly_dropped_wrong": 5,
+   "choice_wrong_label": 19,
+   "family_fn": 51,
+   "checks_dropped_correct": 3,
+   "unplaced_wrong": 2
+  },
+  "confusion_overlap": {
+   "compareWith on gold partOf": 3,
+   "UsedFor on gold enhancedBy": 2,
+   "evaluatedBy on gold MeasuredBy": 2,
+   "UsedFor on gold trainedWith": 2,
+   "compareWith on gold UsedFor": 1,
+   "subtaskOf on gold evaluatedOn": 1,
+   "enhancedBy on gold partOf": 1,
+   "subclassOf on gold partOf": 1,
+   "similarWith on gold trainedWith": 1,
+   "subclassOf on gold similarWith": 1
+  }
+ },
+ "arm R6": {
+  "overlap": {
+   "compareWith": {
+    "predicted": 87,
+    "tp": 32,
+    "non-gold endpoint": 35,
+    "unannotated pair": 16,
+    "wrong label": 4,
+    "unplaced": 0
+   },
+   "trainedWith": {
+    "predicted": 61,
+    "tp": 14,
+    "non-gold endpoint": 39,
+    "wrong label": 1,
+    "unplaced": 2,
+    "unannotated pair": 5
+   },
+   "UsedFor": {
+    "predicted": 140,
+    "non-gold endpoint": 107,
+    "wrong label": 5,
+    "tp": 21,
+    "unannotated pair": 6,
+    "unplaced": 1
+   },
+   "enhancedBy": {
+    "predicted": 31,
+    "non-gold endpoint": 25,
+    "unplaced": 1,
+    "unannotated pair": 3,
+    "wrong direction": 1,
+    "tp": 1
+   },
+   "subtaskOf": {
+    "predicted": 10,
+    "wrong label": 1,
+    "unplaced": 1,
+    "tp": 3,
+    "non-gold endpoint": 4,
+    "unannotated pair": 1
+   },
+   "subclassOf": {
+    "predicted": 20,
+    "tp": 3,
+    "non-gold endpoint": 16,
+    "unplaced": 0,
+    "wrong label": 1
+   },
+   "partOf": {
+    "predicted": 70,
+    "non-gold endpoint": 59,
+    "unplaced": 3,
+    "unannotated pair": 2,
+    "tp": 2,
+    "wrong label": 3,
+    "wrong direction": 1
+   },
+   "evaluatedBy": {
+    "predicted": 27,
+    "tp": 8,
+    "unplaced": 1,
+    "non-gold endpoint": 14,
+    "wrong label": 2,
+    "unannotated pair": 2
+   },
+   "MeasuredBy": {
+    "predicted": 67,
+    "tp": 32,
+    "unplaced": 0,
+    "non-gold endpoint": 29,
+    "unannotated pair": 6
+   },
+   "similarWith": {
+    "predicted": 7,
+    "tp": 1,
+    "non-gold endpoint": 2,
+    "unplaced": 1,
+    "wrong label": 3
+   },
+   "(edge without node or quote)": {
+    "predicted": 4,
+    "unplaced": 4
+   },
+   "evaluatedOn": {
+    "predicted": 8,
+    "unannotated pair": 1,
+    "tp": 3,
+    "unplaced": 0,
+    "non-gold endpoint": 4
+   }
+  },
+  "strict": {
+   "compareWith": {
+    "predicted": 87,
+    "tp": 27,
+    "non-gold endpoint": 41,
+    "unannotated pair": 16,
+    "wrong label": 3,
+    "unplaced": 0
+   },
+   "trainedWith": {
+    "predicted": 61,
+    "tp": 9,
+    "non-gold endpoint": 44,
+    "wrong label": 1,
+    "unplaced": 2,
+    "unannotated pair": 5
+   },
+   "UsedFor": {
+    "predicted": 140,
+    "non-gold endpoint": 118,
+    "wrong label": 4,
+    "tp": 11,
+    "unannotated pair": 6,
+    "unplaced": 1
+   },
+   "enhancedBy": {
+    "predicted": 31,
+    "non-gold endpoint": 28,
+    "unplaced": 1,
+    "wrong direction": 1,
+    "tp": 1
+   },
+   "subtaskOf": {
+    "predicted": 10,
+    "wrong label": 1,
+    "unplaced": 1,
+    "tp": 3,
+    "non-gold endpoint": 4,
+    "unannotated pair": 1
+   },
+   "subclassOf": {
+    "predicted": 20,
+    "tp": 2,
+    "non-gold endpoint": 18,
+    "unplaced": 0
+   },
+   "partOf": {
+    "predicted": 70,
+    "non-gold endpoint": 62,
+    "unplaced": 3,
+    "unannotated pair": 1,
+    "tp": 1,
+    "wrong direction": 1,
+    "wrong label": 2
+   },
+   "evaluatedBy": {
+    "predicted": 27,
+    "tp": 4,
+    "unplaced": 1,
+    "non-gold endpoint": 18,
+    "wrong label": 2,
+    "unannotated pair": 2
+   },
+   "MeasuredBy": {
+    "predicted": 67,
+    "non-gold endpoint": 40,
+    "unplaced": 0,
+    "tp": 24,
+    "unannotated pair": 3
+   },
+   "similarWith": {
+    "predicted": 7,
+    "non-gold endpoint": 4,
+    "unplaced": 1,
+    "wrong label": 2
+   },
+   "(edge without node or quote)": {
+    "predicted": 4,
+    "unplaced": 4
+   },
+   "evaluatedOn": {
+    "predicted": 8,
+    "unannotated pair": 1,
+    "tp": 2,
+    "unplaced": 0,
+    "non-gold endpoint": 5
+   }
+  },
+  "gold_stages": {
+   "enhancedBy": {
+    "gold": 41,
+    "endpoints_placed": 30,
+    "pair_selected": 28,
+    "family_right": 17,
+    "choice_right": 2,
+    "checks_passed": 2,
+    "assembled": 2,
+    "credited": 1
+   },
+   "subtaskOf": {
+    "gold": 47,
+    "endpoints_placed": 25,
+    "pair_selected": 18,
+    "family_right": 15,
+    "choice_right": 3,
+    "checks_passed": 3,
+    "assembled": 3,
+    "credited": 3
+   },
+   "evaluatedBy": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 14,
+    "family_right": 11,
+    "choice_right": 9,
+    "checks_passed": 9,
+    "assembled": 9,
+    "credited": 8
+   },
+   "trainedWith": {
+    "gold": 46,
+    "endpoints_placed": 37,
+    "pair_selected": 30,
+    "family_right": 26,
+    "choice_right": 19,
+    "checks_passed": 17,
+    "assembled": 17,
+    "credited": 14
+   },
+   "UsedFor": {
+    "gold": 89,
+    "endpoints_placed": 66,
+    "pair_selected": 59,
+    "family_right": 45,
+    "choice_right": 36,
+    "checks_passed": 36,
+    "assembled": 36,
+    "credited": 21
+   },
+   "evaluatedOn": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 8,
+    "family_right": 7,
+    "choice_right": 3,
+    "checks_passed": 3,
+    "assembled": 3,
+    "credited": 3
+   },
+   "subclassOf": {
+    "gold": 17,
+    "endpoints_placed": 13,
+    "pair_selected": 9,
+    "family_right": 7,
+    "choice_right": 3,
+    "checks_passed": 3,
+    "assembled": 3,
+    "credited": 3
+   },
+   "compareWith": {
+    "gold": 76,
+    "endpoints_placed": 66,
+    "pair_selected": 61,
+    "family_right": 51,
+    "choice_right": 46,
+    "checks_passed": 44,
+    "assembled": 44,
+    "credited": 32
+   },
+   "similarWith": {
+    "gold": 22,
+    "endpoints_placed": 10,
+    "pair_selected": 10,
+    "family_right": 8,
+    "choice_right": 1,
+    "checks_passed": 1,
+    "assembled": 1,
+    "credited": 1
+   },
+   "MeasuredBy": {
+    "gold": 92,
+    "endpoints_placed": 72,
+    "pair_selected": 66,
+    "family_right": 55,
+    "choice_right": 37,
+    "checks_passed": 36,
+    "assembled": 36,
+    "credited": 32
+   },
+   "partOf": {
+    "gold": 34,
+    "endpoints_placed": 21,
+    "pair_selected": 18,
+    "family_right": 14,
+    "choice_right": 2,
+    "checks_passed": 2,
+    "assembled": 2,
+    "credited": 2
+   }
+  },
+  "checks": {
+   "correct": {
+    "endpoint_not_grounded": 1,
+    "surface_phrase_not_in_quote": 2,
+    "evidence_quote_not_in_sentence": 1
+   },
+   "wrong": {
+    "endpoint_not_grounded": 12,
+    "evidence_quote_not_in_sentence": 3,
+    "surface_phrase_not_in_quote": 8
+   }
+  },
+  "pairs": {
+   "selected": 1840,
+   "selected_negative": 1575,
+   "family_tn": 738,
+   "family_fp": 837,
+   "choice_declined_negative": 467,
+   "selected_positive": 265,
+   "family_tp": 213,
+   "choice_right": 134,
+   "checks_passed_correct": 130,
+   "in_graph_correct": 130,
+   "choice_on_negative": 370,
+   "checks_passed_wrong": 373,
+   "in_graph_wrong": 366,
+   "checks_dropped_wrong": 23,
+   "choice_declined_positive": 53,
+   "choice_wrong_label": 26,
+   "checks_dropped_correct": 4,
+   "family_fn": 52,
+   "unplaced_wrong": 4,
+   "assembly_dropped_wrong": 3
+  },
+  "confusion_overlap": {
+   "UsedFor on gold trainedWith": 3,
+   "compareWith on gold partOf": 3,
+   "UsedFor on gold enhancedBy": 2,
+   "evaluatedBy on gold MeasuredBy": 2,
+   "similarWith on gold subclassOf": 2,
+   "partOf on gold enhancedBy": 2,
+   "compareWith on gold UsedFor": 1,
+   "subtaskOf on gold evaluatedOn": 1,
+   "trainedWith on gold UsedFor": 1,
+   "partOf on gold similarWith": 1,
+   "similarWith on gold partOf": 1,
+   "subclassOf on gold similarWith": 1
+  }
+ },
+ "arm R7": {
+  "overlap": {
+   "compareWith": {
+    "predicted": 93,
+    "tp": 31,
+    "non-gold endpoint": 37,
+    "unannotated pair": 22,
+    "unplaced": 0,
+    "wrong label": 3
+   },
+   "trainedWith": {
+    "predicted": 49,
+    "tp": 13,
+    "non-gold endpoint": 30,
+    "wrong label": 1,
+    "unplaced": 3,
+    "unannotated pair": 2
+   },
+   "enhancedBy": {
+    "predicted": 30,
+    "non-gold endpoint": 23,
+    "unplaced": 1,
+    "unannotated pair": 4,
+    "tp": 2
+   },
+   "UsedFor": {
+    "predicted": 136,
+    "tp": 20,
+    "unannotated pair": 6,
+    "non-gold endpoint": 104,
+    "wrong label": 4,
+    "unplaced": 2
+   },
+   "subtaskOf": {
+    "predicted": 12,
+    "wrong label": 1,
+    "unplaced": 1,
+    "tp": 4,
+    "non-gold endpoint": 5,
+    "unannotated pair": 1
+   },
+   "subclassOf": {
+    "predicted": 23,
+    "tp": 5,
+    "non-gold endpoint": 16,
+    "wrong label": 2,
+    "unplaced": 0
+   },
+   "partOf": {
+    "predicted": 66,
+    "non-gold endpoint": 56,
+    "unplaced": 2,
+    "unannotated pair": 2,
+    "tp": 1,
+    "wrong label": 4,
+    "wrong direction": 1
+   },
+   "evaluatedBy": {
+    "predicted": 25,
+    "tp": 7,
+    "unplaced": 0,
+    "non-gold endpoint": 14,
+    "wrong label": 2,
+    "unannotated pair": 2
+   },
+   "MeasuredBy": {
+    "predicted": 67,
+    "tp": 34,
+    "unplaced": 0,
+    "non-gold endpoint": 26,
+    "unannotated pair": 7
+   },
+   "similarWith": {
+    "predicted": 7,
+    "tp": 1,
+    "unplaced": 1,
+    "non-gold endpoint": 3,
+    "wrong label": 2
+   },
+   "(edge without node or quote)": {
+    "predicted": 4,
+    "unplaced": 4
+   },
+   "evaluatedOn": {
+    "predicted": 11,
+    "tp": 5,
+    "unannotated pair": 1,
+    "unplaced": 0,
+    "non-gold endpoint": 5
+   }
+  },
+  "strict": {
+   "compareWith": {
+    "predicted": 93,
+    "tp": 27,
+    "non-gold endpoint": 44,
+    "unannotated pair": 20,
+    "unplaced": 0,
+    "wrong label": 2
+   },
+   "trainedWith": {
+    "predicted": 49,
+    "tp": 9,
+    "non-gold endpoint": 34,
+    "wrong label": 1,
+    "unplaced": 3,
+    "unannotated pair": 2
+   },
+   "enhancedBy": {
+    "predicted": 30,
+    "non-gold endpoint": 26,
+    "unplaced": 1,
+    "tp": 2,
+    "unannotated pair": 1
+   },
+   "UsedFor": {
+    "predicted": 136,
+    "tp": 10,
+    "non-gold endpoint": 115,
+    "unannotated pair": 5,
+    "wrong label": 4,
+    "unplaced": 2
+   },
+   "subtaskOf": {
+    "predicted": 12,
+    "wrong label": 1,
+    "unplaced": 1,
+    "tp": 4,
+    "non-gold endpoint": 5,
+    "unannotated pair": 1
+   },
+   "subclassOf": {
+    "predicted": 23,
+    "tp": 3,
+    "non-gold endpoint": 20,
+    "unplaced": 0
+   },
+   "partOf": {
+    "predicted": 66,
+    "non-gold endpoint": 59,
+    "unplaced": 2,
+    "tp": 1,
+    "wrong direction": 1,
+    "wrong label": 3
+   },
+   "evaluatedBy": {
+    "predicted": 25,
+    "tp": 4,
+    "unplaced": 0,
+    "non-gold endpoint": 18,
+    "wrong label": 2,
+    "unannotated pair": 1
+   },
+   "MeasuredBy": {
+    "predicted": 67,
+    "non-gold endpoint": 38,
+    "unplaced": 0,
+    "tp": 25,
+    "unannotated pair": 4
+   },
+   "similarWith": {
+    "predicted": 7,
+    "non-gold endpoint": 5,
+    "unplaced": 1,
+    "wrong label": 1
+   },
+   "(edge without node or quote)": {
+    "predicted": 4,
+    "unplaced": 4
+   },
+   "evaluatedOn": {
+    "predicted": 11,
+    "non-gold endpoint": 7,
+    "unannotated pair": 1,
+    "tp": 3,
+    "unplaced": 0
+   }
+  },
+  "gold_stages": {
+   "enhancedBy": {
+    "gold": 41,
+    "endpoints_placed": 30,
+    "pair_selected": 28,
+    "family_right": 17,
+    "choice_right": 3,
+    "checks_passed": 3,
+    "assembled": 3,
+    "credited": 2
+   },
+   "subtaskOf": {
+    "gold": 47,
+    "endpoints_placed": 25,
+    "pair_selected": 18,
+    "family_right": 15,
+    "choice_right": 4,
+    "checks_passed": 4,
+    "assembled": 4,
+    "credited": 4
+   },
+   "evaluatedBy": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 14,
+    "family_right": 11,
+    "choice_right": 8,
+    "checks_passed": 8,
+    "assembled": 8,
+    "credited": 7
+   },
+   "trainedWith": {
+    "gold": 46,
+    "endpoints_placed": 37,
+    "pair_selected": 30,
+    "family_right": 26,
+    "choice_right": 17,
+    "checks_passed": 17,
+    "assembled": 16,
+    "credited": 13
+   },
+   "UsedFor": {
+    "gold": 89,
+    "endpoints_placed": 66,
+    "pair_selected": 59,
+    "family_right": 45,
+    "choice_right": 36,
+    "checks_passed": 35,
+    "assembled": 35,
+    "credited": 20
+   },
+   "evaluatedOn": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 8,
+    "family_right": 7,
+    "choice_right": 5,
+    "checks_passed": 5,
+    "assembled": 5,
+    "credited": 5
+   },
+   "subclassOf": {
+    "gold": 17,
+    "endpoints_placed": 13,
+    "pair_selected": 9,
+    "family_right": 7,
+    "choice_right": 5,
+    "checks_passed": 5,
+    "assembled": 5,
+    "credited": 5
+   },
+   "compareWith": {
+    "gold": 76,
+    "endpoints_placed": 66,
+    "pair_selected": 61,
+    "family_right": 51,
+    "choice_right": 47,
+    "checks_passed": 45,
+    "assembled": 45,
+    "credited": 31
+   },
+   "similarWith": {
+    "gold": 22,
+    "endpoints_placed": 10,
+    "pair_selected": 10,
+    "family_right": 8,
+    "choice_right": 1,
+    "checks_passed": 1,
+    "assembled": 1,
+    "credited": 1
+   },
+   "MeasuredBy": {
+    "gold": 92,
+    "endpoints_placed": 72,
+    "pair_selected": 66,
+    "family_right": 55,
+    "choice_right": 40,
+    "checks_passed": 40,
+    "assembled": 40,
+    "credited": 34
+   },
+   "partOf": {
+    "gold": 34,
+    "endpoints_placed": 21,
+    "pair_selected": 18,
+    "family_right": 14,
+    "choice_right": 1,
+    "checks_passed": 1,
+    "assembled": 1,
+    "credited": 1
+   }
+  },
+  "checks": {
+   "correct": {
+    "endpoint_not_grounded": 1,
+    "surface_phrase_not_in_quote": 1
+   },
+   "wrong": {
+    "endpoint_not_grounded": 12,
+    "evidence_quote_not_in_sentence": 6,
+    "surface_phrase_not_in_quote": 8,
+    "endpoint_fit": 1
+   }
+  },
+  "pairs": {
+   "selected": 1840,
+   "selected_negative": 1575,
+   "family_tn": 738,
+   "family_fp": 837,
+   "choice_declined_negative": 470,
+   "selected_positive": 265,
+   "family_tp": 213,
+   "choice_right": 139,
+   "checks_passed_correct": 137,
+   "in_graph_correct": 136,
+   "choice_declined_positive": 50,
+   "choice_on_negative": 367,
+   "checks_passed_wrong": 364,
+   "in_graph_wrong": 353,
+   "checks_dropped_wrong": 27,
+   "assembly_dropped_wrong": 7,
+   "choice_wrong_label": 24,
+   "family_fn": 52,
+   "checks_dropped_correct": 2,
+   "unplaced_wrong": 4,
+   "assembly_dropped_correct": 1
+  },
+  "confusion_overlap": {
+   "compareWith on gold partOf": 3,
+   "evaluatedBy on gold MeasuredBy": 2,
+   "partOf on gold enhancedBy": 2,
+   "UsedFor on gold trainedWith": 2,
+   "subtaskOf on gold evaluatedOn": 1,
+   "trainedWith on gold UsedFor": 1,
+   "UsedFor on gold enhancedBy": 1,
+   "subclassOf on gold subtaskOf": 1,
+   "UsedFor on gold subtaskOf": 1,
+   "partOf on gold similarWith": 1,
+   "similarWith on gold partOf": 1,
+   "similarWith on gold trainedWith": 1,
+   "partOf on gold subtaskOf": 1,
+   "subclassOf on gold similarWith": 1
+  }
+ },
+ "arm R8": {
+  "overlap": {
+   "compareWith": {
+    "predicted": 91,
+    "tp": 33,
+    "non-gold endpoint": 36,
+    "unannotated pair": 19,
+    "wrong label": 3,
+    "unplaced": 0
+   },
+   "trainedWith": {
+    "predicted": 56,
+    "tp": 17,
+    "non-gold endpoint": 33,
+    "unplaced": 2,
+    "unannotated pair": 4
+   },
+   "subclassOf": {
+    "predicted": 20,
+    "tp": 3,
+    "non-gold endpoint": 16,
+    "unplaced": 0,
+    "wrong label": 1
+   },
+   "UsedFor": {
+    "predicted": 139,
+    "non-gold endpoint": 106,
+    "wrong label": 4,
+    "tp": 21,
+    "unannotated pair": 7,
+    "unplaced": 1
+   },
+   "subtaskOf": {
+    "predicted": 16,
+    "wrong label": 2,
+    "tp": 5,
+    "unplaced": 1,
+    "non-gold endpoint": 7,
+    "unannotated pair": 1
+   },
+   "enhancedBy": {
+    "predicted": 54,
+    "non-gold endpoint": 43,
+    "unplaced": 2,
+    "wrong label": 2,
+    "unannotated pair": 4,
+    "tp": 3
+   },
+   "evaluatedBy": {
+    "predicted": 26,
+    "tp": 7,
+    "unplaced": 1,
+    "non-gold endpoint": 14,
+    "wrong label": 2,
+    "unannotated pair": 2
+   },
+   "MeasuredBy": {
+    "predicted": 63,
+    "tp": 36,
+    "unplaced": 0,
+    "non-gold endpoint": 22,
+    "unannotated pair": 5
+   },
+   "similarWith": {
+    "predicted": 10,
+    "tp": 1,
+    "unplaced": 1,
+    "non-gold endpoint": 3,
+    "unannotated pair": 1,
+    "wrong label": 4
+   },
+   "(edge without node or quote)": {
+    "predicted": 1,
+    "unplaced": 1
+   },
+   "evaluatedOn": {
+    "predicted": 10,
+    "unannotated pair": 1,
+    "tp": 4,
+    "unplaced": 0,
+    "non-gold endpoint": 5
+   }
+  },
+  "strict": {
+   "compareWith": {
+    "predicted": 91,
+    "tp": 28,
+    "non-gold endpoint": 43,
+    "unannotated pair": 18,
+    "wrong label": 2,
+    "unplaced": 0
+   },
+   "trainedWith": {
+    "predicted": 56,
+    "tp": 12,
+    "non-gold endpoint": 38,
+    "unplaced": 2,
+    "unannotated pair": 4
+   },
+   "subclassOf": {
+    "predicted": 20,
+    "tp": 3,
+    "non-gold endpoint": 17,
+    "unplaced": 0
+   },
+   "UsedFor": {
+    "predicted": 139,
+    "non-gold endpoint": 116,
+    "wrong label": 3,
+    "tp": 12,
+    "unannotated pair": 7,
+    "unplaced": 1
+   },
+   "subtaskOf": {
+    "predicted": 16,
+    "wrong label": 2,
+    "non-gold endpoint": 8,
+    "unplaced": 1,
+    "tp": 4,
+    "unannotated pair": 1
+   },
+   "enhancedBy": {
+    "predicted": 54,
+    "non-gold endpoint": 46,
+    "unplaced": 2,
+    "wrong label": 2,
+    "tp": 3,
+    "unannotated pair": 1
+   },
+   "evaluatedBy": {
+    "predicted": 26,
+    "tp": 4,
+    "unplaced": 1,
+    "non-gold endpoint": 17,
+    "wrong label": 2,
+    "unannotated pair": 2
+   },
+   "MeasuredBy": {
+    "predicted": 63,
+    "non-gold endpoint": 33,
+    "unplaced": 0,
+    "tp": 28,
+    "unannotated pair": 2
+   },
+   "similarWith": {
+    "predicted": 10,
+    "non-gold endpoint": 7,
+    "unplaced": 1,
+    "wrong label": 2
+   },
+   "(edge without node or quote)": {
+    "predicted": 1,
+    "unplaced": 1
+   },
+   "evaluatedOn": {
+    "predicted": 10,
+    "unannotated pair": 1,
+    "tp": 3,
+    "unplaced": 0,
+    "non-gold endpoint": 6
+   }
+  },
+  "gold_stages": {
+   "enhancedBy": {
+    "gold": 41,
+    "endpoints_placed": 30,
+    "pair_selected": 28,
+    "family_right": 16,
+    "choice_right": 4,
+    "checks_passed": 4,
+    "assembled": 4,
+    "credited": 3
+   },
+   "subtaskOf": {
+    "gold": 47,
+    "endpoints_placed": 25,
+    "pair_selected": 18,
+    "family_right": 14,
+    "choice_right": 5,
+    "checks_passed": 5,
+    "assembled": 5,
+    "credited": 5
+   },
+   "evaluatedBy": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 14,
+    "family_right": 11,
+    "choice_right": 8,
+    "checks_passed": 8,
+    "assembled": 8,
+    "credited": 7
+   },
+   "trainedWith": {
+    "gold": 46,
+    "endpoints_placed": 37,
+    "pair_selected": 30,
+    "family_right": 28,
+    "choice_right": 22,
+    "checks_passed": 22,
+    "assembled": 22,
+    "credited": 17
+   },
+   "UsedFor": {
+    "gold": 89,
+    "endpoints_placed": 66,
+    "pair_selected": 59,
+    "family_right": 48,
+    "choice_right": 36,
+    "checks_passed": 36,
+    "assembled": 36,
+    "credited": 21
+   },
+   "evaluatedOn": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 8,
+    "family_right": 8,
+    "choice_right": 4,
+    "checks_passed": 4,
+    "assembled": 4,
+    "credited": 4
+   },
+   "subclassOf": {
+    "gold": 17,
+    "endpoints_placed": 13,
+    "pair_selected": 9,
+    "family_right": 6,
+    "choice_right": 3,
+    "checks_passed": 3,
+    "assembled": 3,
+    "credited": 3
+   },
+   "compareWith": {
+    "gold": 76,
+    "endpoints_placed": 66,
+    "pair_selected": 61,
+    "family_right": 57,
+    "choice_right": 48,
+    "checks_passed": 47,
+    "assembled": 47,
+    "credited": 33
+   },
+   "similarWith": {
+    "gold": 22,
+    "endpoints_placed": 10,
+    "pair_selected": 10,
+    "family_right": 6,
+    "choice_right": 1,
+    "checks_passed": 1,
+    "assembled": 1,
+    "credited": 1
+   },
+   "MeasuredBy": {
+    "gold": 92,
+    "endpoints_placed": 72,
+    "pair_selected": 66,
+    "family_right": 59,
+    "choice_right": 43,
+    "checks_passed": 43,
+    "assembled": 43,
+    "credited": 36
+   },
+   "partOf": {
+    "gold": 34,
+    "endpoints_placed": 21,
+    "pair_selected": 18,
+    "family_right": 14,
+    "choice_right": 0,
+    "checks_passed": 0,
+    "assembled": 0,
+    "credited": 0
+   }
+  },
+  "checks": {
+   "correct": {
+    "endpoint_not_grounded": 1
+   },
+   "wrong": {
+    "endpoint_not_grounded": 7,
+    "surface_phrase_not_in_quote": 5,
+    "evidence_quote_not_in_sentence": 1,
+    "endpoint_fit": 2
+   }
+  },
+  "pairs": {
+   "selected": 1840,
+   "selected_negative": 1575,
+   "family_tn": 802,
+   "selected_positive": 265,
+   "family_tp": 216,
+   "choice_right": 143,
+   "checks_passed_correct": 142,
+   "in_graph_correct": 142,
+   "family_fp": 773,
+   "choice_on_negative": 327,
+   "checks_passed_wrong": 334,
+   "in_graph_wrong": 327,
+   "checks_dropped_wrong": 15,
+   "choice_declined_negative": 446,
+   "assembly_dropped_wrong": 6,
+   "choice_wrong_label": 22,
+   "choice_declined_positive": 51,
+   "family_fn": 49,
+   "unplaced_wrong": 1,
+   "checks_dropped_correct": 1
+  },
+  "confusion_overlap": {
+   "UsedFor on gold trainedWith": 2,
+   "UsedFor on gold enhancedBy": 2,
+   "compareWith on gold partOf": 2,
+   "evaluatedBy on gold MeasuredBy": 2,
+   "enhancedBy on gold partOf": 2,
+   "similarWith on gold subclassOf": 2,
+   "compareWith on gold UsedFor": 1,
+   "subtaskOf on gold evaluatedOn": 1,
+   "similarWith on gold partOf": 1,
+   "subtaskOf on gold partOf": 1,
+   "similarWith on gold trainedWith": 1,
+   "subclassOf on gold similarWith": 1
+  }
+ },
+ "arm R9": {
+  "overlap": {
+   "compareWith": {
+    "predicted": 83,
+    "tp": 32,
+    "non-gold endpoint": 35,
+    "wrong label": 4,
+    "unannotated pair": 12,
+    "unplaced": 0
+   },
+   "trainedWith": {
+    "predicted": 51,
+    "tp": 13,
+    "non-gold endpoint": 31,
+    "wrong label": 1,
+    "unplaced": 2,
+    "unannotated pair": 4
+   },
+   "enhancedBy": {
+    "predicted": 56,
+    "non-gold endpoint": 45,
+    "unplaced": 0,
+    "wrong label": 2,
+    "unannotated pair": 5,
+    "tp": 4
+   },
+   "UsedFor": {
+    "predicted": 138,
+    "tp": 18,
+    "non-gold endpoint": 107,
+    "unannotated pair": 6,
+    "wrong label": 6,
+    "unplaced": 1
+   },
+   "subclassOf": {
+    "predicted": 17,
+    "tp": 4,
+    "non-gold endpoint": 12,
+    "unplaced": 0,
+    "wrong label": 1
+   },
+   "evaluatedBy": {
+    "predicted": 34,
+    "tp": 7,
+    "unplaced": 1,
+    "non-gold endpoint": 21,
+    "wrong label": 2,
+    "unannotated pair": 3
+   },
+   "MeasuredBy": {
+    "predicted": 62,
+    "tp": 32,
+    "unplaced": 0,
+    "non-gold endpoint": 22,
+    "unannotated pair": 8
+   },
+   "similarWith": {
+    "predicted": 4,
+    "tp": 1,
+    "unplaced": 1,
+    "unannotated pair": 1,
+    "wrong label": 1
+   },
+   "subtaskOf": {
+    "predicted": 13,
+    "tp": 4,
+    "unplaced": 0,
+    "non-gold endpoint": 8,
+    "unannotated pair": 1
+   },
+   "(edge without node or quote)": {
+    "predicted": 2,
+    "unplaced": 2
+   },
+   "evaluatedOn": {
+    "predicted": 8,
+    "tp": 4,
+    "unplaced": 0,
+    "non-gold endpoint": 4
+   }
+  },
+  "strict": {
+   "compareWith": {
+    "predicted": 83,
+    "tp": 27,
+    "non-gold endpoint": 41,
+    "wrong label": 3,
+    "unannotated pair": 12,
+    "unplaced": 0
+   },
+   "trainedWith": {
+    "predicted": 51,
+    "tp": 9,
+    "non-gold endpoint": 35,
+    "wrong label": 1,
+    "unplaced": 2,
+    "unannotated pair": 4
+   },
+   "enhancedBy": {
+    "predicted": 56,
+    "non-gold endpoint": 48,
+    "unplaced": 0,
+    "wrong label": 2,
+    "tp": 4,
+    "unannotated pair": 2
+   },
+   "UsedFor": {
+    "predicted": 138,
+    "tp": 10,
+    "non-gold endpoint": 116,
+    "unannotated pair": 6,
+    "wrong label": 5,
+    "unplaced": 1
+   },
+   "subclassOf": {
+    "predicted": 17,
+    "tp": 3,
+    "non-gold endpoint": 14,
+    "unplaced": 0
+   },
+   "evaluatedBy": {
+    "predicted": 34,
+    "tp": 4,
+    "unplaced": 1,
+    "non-gold endpoint": 25,
+    "wrong label": 2,
+    "unannotated pair": 2
+   },
+   "MeasuredBy": {
+    "predicted": 62,
+    "non-gold endpoint": 33,
+    "unplaced": 0,
+    "tp": 24,
+    "unannotated pair": 5
+   },
+   "similarWith": {
+    "predicted": 4,
+    "non-gold endpoint": 2,
+    "unplaced": 1,
+    "wrong label": 1
+   },
+   "subtaskOf": {
+    "predicted": 13,
+    "non-gold endpoint": 9,
+    "unplaced": 0,
+    "tp": 3,
+    "unannotated pair": 1
+   },
+   "(edge without node or quote)": {
+    "predicted": 2,
+    "unplaced": 2
+   },
+   "evaluatedOn": {
+    "predicted": 8,
+    "tp": 3,
+    "unplaced": 0,
+    "non-gold endpoint": 5
+   }
+  },
+  "gold_stages": {
+   "enhancedBy": {
+    "gold": 41,
+    "endpoints_placed": 30,
+    "pair_selected": 28,
+    "family_right": 15,
+    "choice_right": 5,
+    "checks_passed": 5,
+    "assembled": 5,
+    "credited": 4
+   },
+   "subtaskOf": {
+    "gold": 47,
+    "endpoints_placed": 25,
+    "pair_selected": 18,
+    "family_right": 14,
+    "choice_right": 5,
+    "checks_passed": 4,
+    "assembled": 4,
+    "credited": 4
+   },
+   "evaluatedBy": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 14,
+    "family_right": 11,
+    "choice_right": 8,
+    "checks_passed": 8,
+    "assembled": 8,
+    "credited": 7
+   },
+   "trainedWith": {
+    "gold": 46,
+    "endpoints_placed": 37,
+    "pair_selected": 30,
+    "family_right": 27,
+    "choice_right": 16,
+    "checks_passed": 16,
+    "assembled": 16,
+    "credited": 13
+   },
+   "UsedFor": {
+    "gold": 89,
+    "endpoints_placed": 66,
+    "pair_selected": 59,
+    "family_right": 48,
+    "choice_right": 31,
+    "checks_passed": 31,
+    "assembled": 31,
+    "credited": 18
+   },
+   "evaluatedOn": {
+    "gold": 17,
+    "endpoints_placed": 14,
+    "pair_selected": 8,
+    "family_right": 8,
+    "choice_right": 4,
+    "checks_passed": 4,
+    "assembled": 4,
+    "credited": 4
+   },
+   "subclassOf": {
+    "gold": 17,
+    "endpoints_placed": 13,
+    "pair_selected": 9,
+    "family_right": 6,
+    "choice_right": 4,
+    "checks_passed": 4,
+    "assembled": 4,
+    "credited": 4
+   },
+   "compareWith": {
+    "gold": 76,
+    "endpoints_placed": 66,
+    "pair_selected": 61,
+    "family_right": 54,
+    "choice_right": 47,
+    "checks_passed": 46,
+    "assembled": 45,
+    "credited": 32
+   },
+   "similarWith": {
+    "gold": 22,
+    "endpoints_placed": 10,
+    "pair_selected": 10,
+    "family_right": 5,
+    "choice_right": 1,
+    "checks_passed": 1,
+    "assembled": 1,
+    "credited": 1
+   },
+   "MeasuredBy": {
+    "gold": 92,
+    "endpoints_placed": 72,
+    "pair_selected": 66,
+    "family_right": 60,
+    "choice_right": 37,
+    "checks_passed": 36,
+    "assembled": 36,
+    "credited": 32
+   },
+   "partOf": {
+    "gold": 34,
+    "endpoints_placed": 21,
+    "pair_selected": 18,
+    "family_right": 15,
+    "choice_right": 0,
+    "checks_passed": 0,
+    "assembled": 0,
+    "credited": 0
+   }
+  },
+  "checks": {
+   "correct": {
+    "surface_phrase_not_in_quote": 2,
+    "evidence_quote_not_in_sentence": 1
+   },
+   "wrong": {
+    "endpoint_not_grounded": 8,
+    "endpoint_fit": 3,
+    "evidence_quote_not_in_sentence": 4,
+    "surface_phrase_not_in_quote": 7
+   }
+  },
+  "pairs": {
+   "selected": 1840,
+   "selected_negative": 1575,
+   "family_tn": 794,
+   "selected_positive": 265,
+   "family_tp": 215,
+   "choice_right": 133,
+   "checks_passed_correct": 130,
+   "in_graph_correct": 129,
+   "choice_declined_positive": 61,
+   "family_fp": 781,
+   "choice_on_negative": 325,
+   "checks_passed_wrong": 324,
+   "in_graph_wrong": 317,
+   "checks_dropped_wrong": 22,
+   "assembly_dropped_wrong": 5,
+   "choice_declined_negative": 456,
+   "choice_wrong_label": 21,
+   "checks_dropped_correct": 3,
+   "family_fn": 50,
+   "unplaced_wrong": 2,
+   "assembly_dropped_correct": 1
+  },
+  "confusion_overlap": {
+   "UsedFor on gold trainedWith": 4,
+   "compareWith on gold partOf": 3,
+   "UsedFor on gold enhancedBy": 2,
+   "evaluatedBy on gold MeasuredBy": 2,
+   "enhancedBy on gold partOf": 2,
+   "compareWith on gold UsedFor": 1,
+   "trainedWith on gold UsedFor": 1,
+   "similarWith on gold partOf": 1,
+   "subclassOf on gold similarWith": 1
   }
  }
 }
