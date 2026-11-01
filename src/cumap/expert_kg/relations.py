@@ -78,6 +78,22 @@ def split_sentences(text: str) -> list[str]:
     return [s.strip() for s in re.split(r"(?<=[.!?])\s+", text) if s.strip()]
 
 
+_ABBREV_END = re.compile(r"(?:\bet al|\be\.g|\bi\.e|\bvs|\bcf|\bFig|\bEq|\bSec|\betc)\s?\.$", re.IGNORECASE)
+_CONTINUES = (",", ";", ":", ")", "]")
+
+
+def split_sentences_abbrev(text: str) -> list[str]:
+    """CR-064: `split_sentences`, but a cut after an abbreviation ("et al.", "e.g.", also written "et al .") or before a piece that
+    starts with a comma, semicolon, colon or closing bracket is undone (the plain splitter breaks "Radford et al ., 2019" apart)."""
+    out: list[str] = []
+    for piece in split_sentences(text):
+        if out and (_ABBREV_END.search(out[-1]) or piece.startswith(_CONTINUES)):
+            out[-1] = f"{out[-1]} {piece}"
+        else:
+            out.append(piece)
+    return out
+
+
 def concept_vocab(concepts: list[RegisteredConcept]) -> dict[str, str]:
     """{surface(lower): concept_id} over canonical names and aliases (first concept wins)."""
     vocab: dict[str, str] = {}
@@ -136,14 +152,18 @@ def enumerate_candidates(
     registry: RelationRegistry,
     *,
     window: int = DEFAULT_SENTENCE_WINDOW,
+    splitter=None,
+    all_sentences: bool = False,
 ) -> list[CandidatePair]:
-    """Stage A: rule-based, no LLM call. Two concepts are a candidate pair if they're
+    """CR-064: `splitter` (default `split_sentences`) and `all_sentences` (one candidate for EVERY co-occurrence sentence of a pair, the
+    first one first, instead of the earliest only; window 0) are opt-in; the defaults leave every earlier run unchanged.
+    Stage A: rule-based, no LLM call. Two concepts are a candidate pair if they're
     mentioned in the same sentence (window=0) or within `window` sentences of each
     other. Ranked by (has a relational cue word, co-occurrence count, earliest
     position). `find_candidate_pairs` caps at `max_pairs` and returns (kept, overflow);
     `enumerate_candidates` returns every ranked pair (CR-007 §5.3 selects globally).
     """
-    sentences = split_sentences(section_text)
+    sentences = (splitter or split_sentences)(section_text)
     cue_words = _cue_words(registry)
     mentions = sentence_mentions(sentences, concepts)
     mentioned = [c for c in concepts if mentions.get(c.concept_id)]
@@ -175,6 +195,8 @@ def enumerate_candidates(
                         entry["cue_score"] = 1
 
     ranked = sorted(stats.values(), key=lambda e: (-e["cue_score"], -e["count"], e["first_idx"]))
+    if all_sentences:
+        return _every_sentence(section_id, sentences, mentioned, mentions, ranked, window)
     all_pairs = [
         CandidatePair(
             pair_id=f"RP-{section_id}-{i}",
@@ -188,6 +210,21 @@ def enumerate_candidates(
         for i, e in enumerate(ranked)
     ]
     return all_pairs
+
+
+def _every_sentence(
+    section_id, sentences, mentioned, mentions, ranked, window
+) -> list[CandidatePair]:
+    """One candidate per (pair, sentence): the pair's earliest sentence as ranked, then its other sentences (window 0 only)."""
+    if window:
+        raise ValueError("all_sentences needs window 0")
+    out = []
+    for i, e in enumerate(ranked):
+        xs, ys = set(mentions[e["concept_x_id"]]), set(mentions[e["concept_y_id"]])
+        for k, idx in enumerate(sorted(xs & ys, key=lambda j: (j != e["first_idx"], j))):
+            pid = f"RP-{section_id}-{i}" + (f"~s{idx}" if k else "")
+            out.append(CandidatePair(pid, section_id, e["concept_x_id"], e["concept_y_id"], sentences[idx], e["count"], e["cue_score"]))  # fmt: skip
+    return out
 
 
 @dataclass

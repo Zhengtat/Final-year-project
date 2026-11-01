@@ -51,6 +51,13 @@ ARMS.update(
         "r9": ("cr064relR9", REPO_ROOT / "configs/scinlp_profile_v19.yaml"),  # R7 without partOf
     }
 )
+ARMS.update(  # CR-064 pair-delivery arms on top of R8: a1 every co-occurrence sentence, a2 + abbreviation-aware splitter, a3 + second look at declined pairs
+    {
+        "a1": ("cr064relA1", REPO_ROOT / "configs/scinlp_profile_v20.yaml"),
+        "a2": ("cr064relA2", REPO_ROOT / "configs/scinlp_profile_v21.yaml"),
+        "a3": ("cr064relA3", REPO_ROOT / "configs/scinlp_profile_v22.yaml"),
+    }
+)
 GRAPH_SOURCES = {  # neighbour arms read this finished arm's edges as their frozen first pass
     "r7": "cr064relR3",
     "r9": "cr064relR5",
@@ -64,7 +71,15 @@ PATCHES = {  # arm -> registry patch whose approval gates it
     "r5": "CR-064-relations-scinlp-v1.0.4-drop-partOf.yaml",
     "r8": "CR-064-relations-scinlp-v1.0.4-drop-partOf.yaml",
     "r9": "CR-064-relations-scinlp-v1.0.4-drop-partOf.yaml",
+    "a1": "CR-064-relations-scinlp-v1.0.4-drop-partOf.yaml",
+    "a2": "CR-064-relations-scinlp-v1.0.4-drop-partOf.yaml",
+    "a3": "CR-064-relations-scinlp-v1.0.4-drop-partOf.yaml",
 }
+BUILD_ARMS = (
+    "a1",
+    "a2",
+    "a3",
+)  # arms whose candidate pairs are rebuilt ($0 step) before the relation calls
 TAG, PROFILE_V12 = ARMS["r2"]
 PATCH = REPO_ROOT / "configs/registry-patches/CR-064-relations-scinlp-v1.0.2.yaml"
 MAX_USD_PER_DOC = 3.0
@@ -89,7 +104,7 @@ def approved(arm: str = "r2") -> bool:
     return "DRAFT" not in yaml.safe_load(patch.read_text())["header_note"]
 
 
-def worker(split: str, doc_key: str, arm: str = "r2") -> dict:
+def worker(split: str, doc_key: str, arm: str = "r2", build_only: bool = False) -> dict:
     import yaml
 
     from cumap.concepts_v4 import cr009_run as R
@@ -128,6 +143,9 @@ def worker(split: str, doc_key: str, arm: str = "r2") -> dict:
     os.environ.update({"CUMAP_DEMO_SLICE": info["slice_config"], "CUMAP_BENCHMARK_PROFILE": str(profile),
                        "CUMAP_RELATION_REGISTRY": prof["relation_registry"]})  # fmt: skip
     get_settings.cache_clear()
+    sel = R.stage_reselect(run_id(doc_key, tag))  # CR-064: sentence_split / cooccurrence arms ($0)
+    if build_only:
+        return {"run_id": run_id(doc_key, tag), "selection": sel}
     rel = R.stage_relations(run_id(doc_key, tag), dry_run=False, max_usd=MAX_USD_PER_DOC)
     return {"run_id": run_id(doc_key, tag), "relations": rel}
 
@@ -138,10 +156,15 @@ def main() -> None:
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--cap-usd", type=float, default=1.0)
     ap.add_argument("--worker", nargs=2, metavar=("SPLIT", "DOC"))
+    ap.add_argument(
+        "--build-only",
+        action="store_true",
+        help="worker: rebuild the candidate pairs ($0) and stop",
+    )
     ap.add_argument("--arm", choices=sorted(ARMS), default="r2")
     a = ap.parse_args()
     if a.worker:
-        print(json.dumps(worker(*a.worker, arm=a.arm), default=str))
+        print(json.dumps(worker(*a.worker, arm=a.arm, build_only=a.build_only), default=str))
         return
     tag = ARMS[a.arm][0]
     papers = first_set()[: a.limit] if a.limit else first_set()
@@ -150,6 +173,15 @@ def main() -> None:
         cp = json.loads((PG.run_path(run_id(d, BASE_TAG)) / "checkpoint.json").read_text())
         fam = sum(1 for r in cp["relation_results_v3"] if r.get("family") == "scinlp")
         pairs += fam
+        if a.dry_run and a.arm in BUILD_ARMS:  # $0: build this arm's candidate pairs and count them
+            r = subprocess.run([sys.executable, "-m", "cumap.cr064.arm_relations", "--worker", split, d, "--arm", a.arm, "--build-only"],
+                               capture_output=True, text=True, check=False)  # fmt: skip
+            line = next((x for x in reversed(r.stdout.splitlines()) if x.startswith("{")), "{}")
+            sel = json.loads(line).get("selection", {})
+            pairs += sel.get("selected", 0) - fam
+            print(json.dumps({"doc": d, "rc": r.returncode, "base_pairs": len(cp["selected_pairs"]), **sel,
+                              "err": r.stderr[-200:] if r.returncode else ""}), flush=True)  # fmt: skip
+            continue
         if a.dry_run:
             print(
                 json.dumps({"doc": d, "selected": len(cp["selected_pairs"]), "choice_calls": fam})
@@ -158,8 +190,9 @@ def main() -> None:
         if not approved(a.arm):
             raise SystemExit(f"registry patch {PATCHES[a.arm]} is a DRAFT: owner approval first")
         dck = PG.run_path(run_id(d, tag)) / "checkpoint.json"
-        if dck.exists() and json.loads(dck.read_text()).get("relation_results_v3") and \
-                len(json.loads(dck.read_text())["relation_results_v3"]) >= len(cp["selected_pairs"]):  # fmt: skip
+        own = json.loads(dck.read_text()) if dck.exists() else {}
+        if own.get("relation_results_v3") and len(own["relation_results_v3"]) >= len(own["selected_pairs"]) and \
+                (a.arm not in BUILD_ARMS or own.get("selection_stats", {}).get("cooccurrence_built")):  # fmt: skip
             spent += recorded_spend(run_id(d, tag))
             print(
                 json.dumps(

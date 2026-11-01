@@ -169,6 +169,37 @@ def select_stage(
     return cp.selection_stats
 
 
+def reselect_stage(
+    cp: Checkpoint,
+    sections: list[SectionInput],
+    registry: RelationRegistry,
+    embed_fn,
+    *,
+    split: str,
+    cooccurrence: str,
+) -> dict:
+    """CR-064: rebuild `selected_pairs` with the chosen sentence splitter and co-occurrence rule ($0). Idempotent: done once per run."""
+    from cumap.expert_kg import cooccurrence as CO
+
+    if cp.selection_stats.get("cooccurrence_built"):
+        return cp.selection_stats
+    concepts = _restore_concept_registry(cp, embed_fn).all()
+    pairs = CO.build_pairs([(s.section_id, s.text) for s in sections], concepts, registry, split=split, cooccurrence=cooccurrence)  # fmt: skip
+    first = sum(1 for p in pairs if "~s" not in p.pair_id)
+    cp.selected_pairs = [asdict(p) for p in pairs]
+    cp.sample_pairs = []
+    cp.selection_stats = {
+        **cp.selection_stats,
+        "sentence_split": split,
+        "cooccurrence": cooccurrence,
+        "cooccurrence_built": True,
+        "selected": len(pairs),
+        "primary_pairs": first,
+        "extra_sentences": len(pairs) - first,
+    }
+    return cp.selection_stats
+
+
 def preflight_relations(cp: Checkpoint) -> dict:
     n = len(cp.selected_pairs) + len(cp.sample_pairs)
     done = len(cp.relation_results_v3)
@@ -196,6 +227,7 @@ def relations_stage(
     endpoint_check: str | None = None,
     choice_context: str | None = None,
     sections: dict[str, str] | None = None,
+    declined_pass: str | None = None,
 ) -> Checkpoint:
     """`assembly` (CR-036): None reads `configs/relation_policy.yaml` (default "legacy"); "v2" records the registry version and file hash in the run and
     sets the type-valid orientation instead of rejecting a domain/range error. `qualifier_checks` (CR-034): None reads `configs/relation_policy.yaml` (default "off"). `prompt_versions` (family, choice, qualifiers), `evidence_fn` (pair dict -> pair dict with the evidence text in `sentence`)
@@ -205,15 +237,23 @@ def relations_stage(
     from cumap.expert_kg import edge_store as ES
     from cumap.expert_kg import relations_v6 as R6
 
-    amend = R6.resolve_amendments(qualifier_amendments)  # CR-038 DRAFT: "v6" uses prompts relation_choice / relation_qualifiers v6 (never run)
+    amend = R6.resolve_amendments(
+        qualifier_amendments
+    )  # CR-038 DRAFT: "v6" uses prompts relation_choice / relation_qualifiers v6 (never run)
     if amend == "v6":
         R6.check_registry_for_v6(registry)
         cp.selection_stats["qualifier_amendments"] = "v6"
-    if amend == "v6" and prompt_versions == ("v3", "v4", "v4"):  # the production defaults become the drafted v6 prompts
+    if amend == "v6" and prompt_versions == (
+        "v3",
+        "v4",
+        "v4",
+    ):  # the production defaults become the drafted v6 prompts
         prompt_versions = ("v3", "v6", "v6")
     from cumap.expert_kg import relations_v7 as R7
 
-    mis_source = R7.resolve_source(misconception_source)  # CR-039 DRAFT: "classification" needs registry v1.6 and amendments v6 (never run)
+    mis_source = R7.resolve_source(
+        misconception_source
+    )  # CR-039 DRAFT: "classification" needs registry v1.6 and amendments v6 (never run)
     if mis_source == "classification":
         R7.check_registry_for_misconceptions(registry)
         if amend != "v6":
@@ -223,11 +263,15 @@ def relations_stage(
             prompt_versions = ("v5", "v7", "v6")
     from cumap.expert_kg import relations_v8 as R8
 
-    ep = R8.resolve_endpoint_check(endpoint_check)  # CR-059 DRAFT: None reads the active benchmark profile (default "types")
+    ep = R8.resolve_endpoint_check(
+        endpoint_check
+    )  # CR-059 DRAFT: None reads the active benchmark profile (default "types")
     if ep == "choice":
         if amend != "v6":
             raise ValueError("endpoint_check choice needs qualifier_amendments v6")
-        cp.selection_stats["endpoint_check"] = "choice"  # recorded only when on, so older runs stay unchanged
+        cp.selection_stats["endpoint_check"] = (
+            "choice"  # recorded only when on, so older runs stay unchanged
+        )
         cv = R8.choice_prompt_version()  # CR-064: profile `choice_prompt` (default v8)
         if cv != "v8":
             cp.selection_stats["choice_prompt"] = cv  # recorded only when not the CR-059 default
@@ -235,12 +279,18 @@ def relations_stage(
             prompt_versions = ("v3", cv, "v6")
     from cumap.expert_kg import choice_context as CC
 
-    cmode = CC.resolve_choice_context(choice_context)  # CR-064: "none" (every earlier run) | "origin" | "neighbours"
+    cmode = CC.resolve_choice_context(
+        choice_context
+    )  # CR-064: "none" (every earlier run) | "origin" | "neighbours"
     context_fn = None
     if cmode != "none":
         if ep != "choice" or prompt_versions[1] != CC.PROMPT_FOR[cmode]:
-            raise ValueError(f"choice_context {cmode} needs endpoint_check choice and relation_choice {CC.PROMPT_FOR[cmode]}")
-        cp.selection_stats["choice_context"] = cmode  # recorded only when on, so older runs stay unchanged
+            raise ValueError(
+                f"choice_context {cmode} needs endpoint_check choice and relation_choice {CC.PROMPT_FOR[cmode]}"
+            )
+        cp.selection_stats["choice_context"] = (
+            cmode  # recorded only when on, so older runs stay unchanged
+        )
         context_fn = CC.build_context_fn(
             cmode,
             concepts,
@@ -268,10 +318,14 @@ def relations_stage(
             strict=True,
         )
     )
-    done = {
-        frozenset((r["pair"]["concept_x_id"], r["pair"]["concept_y_id"]))
-        for r in cp.relation_results_v3
-    }
+    by_sentence = (
+        cp.selection_stats.get("cooccurrence") == "all"
+    )  # CR-064: one result per (pair, sentence), not per pair
+
+    def dkey(p: dict):
+        return p["pair_id"] if by_sentence else frozenset((p["concept_x_id"], p["concept_y_id"]))
+
+    done = {dkey(r["pair"]) for r in cp.relation_results_v3}
     anchor_pairs = {
         frozenset((a["concept_id"], a["anchor_id"])) for a in getattr(cp, "anchors", [])
     }
@@ -279,7 +333,7 @@ def relations_stage(
     new = 0
     for i, (group, p) in enumerate(todo):
         key = frozenset((p["concept_x_id"], p["concept_y_id"]))
-        if key in done:
+        if dkey(p) in done:
             continue
         if limit is not None and new >= limit:
             save_checkpoint(cp, run_dir)
@@ -311,13 +365,44 @@ def relations_stage(
             save_checkpoint(cp, run_dir)
             raise
         cp.relation_results_v3.append({**res.to_dict(), "group": group})
-        done.add(key)
+        done.add(dkey(p))
         if len(cp.relation_results_v3) % save_every == 0:
             save_checkpoint(cp, run_dir)
             if progress:
                 progress(
                     f"{len(cp.relation_results_v3)}/{len(todo)} pairs, spend ${client.spent_usd:.3f}"
                 )
+    from cumap.expert_kg import cooccurrence as CO
+
+    dp = declined_pass or CO.profile_value("declined_pass", "off")
+    if (
+        dp != "off"
+    ):  # CR-064: a second look at every pair the first pass declined (family or choice said no_relation)
+        if ep != "choice" or cmode != "origin" or amend != "v6":
+            raise ValueError(
+                "declined_pass needs endpoint_check choice, choice_context origin and amendments v6"
+            )
+        cp.selection_stats["declined_pass"] = dp
+        rel2 = load_prompt(prompts_dir, "relation_choice", dp)
+        fams = [f for f in registry.families if f != "pedagogical"]
+        if len(fams) != 1:
+            raise ValueError("declined_pass needs a registry with one relation family")
+        for i, r in enumerate(cp.relation_results_v3):
+            if (
+                r.get("second_pass")
+                or r.get("group", "selected") != "selected"
+                or r["outcome"] != "no_relation"
+            ):
+                continue
+            pair = CandidatePair(**r["pair"])
+            try:
+                res2 = classify_pair_v3(client, fam, rel2, qual, registry, pair, concepts[pair.concept_x_id], concepts[pair.concept_y_id], matcher, same_concept=True, containment_grounding=False, qualifier_checks=qc_mode, direction_by_types=assembly_mode == "v2", amendments=amend, endpoint_check=ep, context=context_fn(pair) if context_fn else None, skip_family=fams[0])  # fmt: skip
+            except BudgetExceededError:
+                save_checkpoint(cp, run_dir)
+                raise
+            cp.relation_results_v3[i] = {**res2.to_dict(), "group": r.get("group", "selected"), "second_pass": True, "first_reason": r.get("reason")}  # fmt: skip
+            if i % 20 == 0:
+                save_checkpoint(cp, run_dir)
     cp.stage = "snapshots"
     save_checkpoint(cp, run_dir)
     return cp
@@ -427,12 +512,22 @@ def save_graph_stage(
     concept_registry = _restore_concept_registry(cp, embed_fn)
     types = {c.concept_id: c.node_type for c in concept_registry.all()}
     store = ES.build_edge_store(cp.relation_results_v3, types, registry)
-    cp.pair_registry = [_pair_dict(p) for p in build_pair_registry(cp).all()]  # readers that key by pair id keep working
+    cp.pair_registry = [
+        _pair_dict(p) for p in build_pair_registry(cp).all()
+    ]  # readers that key by pair id keep working
     rows = [
         {"edge_id": e.edge_id, "source_id": e.source_id, "target_id": e.target_id, "relation": e.relation, "family": e.family, "section_id": e.section_id}
         for e in store.edges
     ]  # fmt: skip
-    details = {e.edge_id: {"pair_ids": e.pair_ids, "quotes": e.quotes, "flags": e.flags, "direction_model": e.direction_model} for e in store.edges}
+    details = {
+        e.edge_id: {
+            "pair_ids": e.pair_ids,
+            "quotes": e.quotes,
+            "flags": e.flags,
+            "direction_model": e.direction_model,
+        }
+        for e in store.edges
+    }
     results = build_snapshots_stage(
         registry,
         sections,
@@ -446,7 +541,9 @@ def save_graph_stage(
         extra_manifest={"assembly": "v2", "registry": cp.selection_stats["registry"]},
         edge_details=details,
     )
-    (run_dir / "edge_store.json").write_text(json.dumps(store.to_dict(), indent=1), encoding="utf-8")
+    (run_dir / "edge_store.json").write_text(
+        json.dumps(store.to_dict(), indent=1), encoding="utf-8"
+    )
     return results
 
 

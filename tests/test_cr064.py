@@ -288,3 +288,68 @@ def test_arms_without_partof_are_gated_by_the_drop_patch_and_neighbour_arms_have
     for arm in ("r5", "r8", "r9"):
         assert AR.PATCHES[arm] == PATCH104.name
         assert AR.approved(arm)  # no DRAFT in the header: owner-directed 2026-11-01
+
+
+# ---- pair-delivery arms A1-A3 (every co-occurrence sentence, abbreviation-aware splitter, second look at declined pairs)
+def test_abbrev_splitter_keeps_citations_together():
+    from cumap.expert_kg.relations import split_sentences, split_sentences_abbrev
+
+    t = "We fine-tune BERT or GPT - 2 ( Radford et al . , 2019 ) on Persona-Chat . Results are good ( e.g . , TREC ) . Done."
+    assert len(split_sentences(t)) > 3
+    assert split_sentences_abbrev(t) == [
+        "We fine-tune BERT or GPT - 2 ( Radford et al . , 2019 ) on Persona-Chat .",
+        "Results are good ( e.g . , TREC ) .",
+        "Done.",
+    ]
+
+
+def _concepts(*names):
+    from cumap.expert_kg.canonicalize import RegisteredConcept
+
+    return [RegisteredConcept(f"C{i}", n, "method", None, "S1") for i, n in enumerate(names)]
+
+
+def test_every_cooccurrence_sentence_is_a_candidate():
+    from cumap.expert_kg import cooccurrence as CO
+    from cumap.schemas.relations import RelationRegistry
+
+    reg = RelationRegistry.from_yaml(REPO / "configs/relations_scinlp_v1.0.4.yaml")
+    text = "BERT is tested on GLUE. Nothing here. We run BERT on GLUE again. GLUE only."
+    cs = _concepts("BERT", "GLUE")
+    first = CO.build_pairs([("S1", text)], cs, reg, split="plain", cooccurrence="first")
+    every = CO.build_pairs([("S1", text)], cs, reg, split="plain", cooccurrence="all")
+    assert len(first) == 1 and len(every) == 2
+    assert every[0].sentence == first[0].sentence and every[1].sentence == "We run BERT on GLUE again."
+    assert every[1].pair_id.endswith("~s2") and every[0].pair_id == first[0].pair_id
+
+
+def test_default_enumeration_unchanged():
+    from cumap.expert_kg.relations import enumerate_candidates
+    from cumap.schemas.relations import RelationRegistry
+
+    reg = RelationRegistry.from_yaml(REPO / "configs/relations_scinlp_v1.0.4.yaml")
+    text = "BERT is tested on GLUE. We run BERT on GLUE again."
+    a = enumerate_candidates("S", text, _concepts("BERT", "GLUE"), reg)
+    assert len(a) == 1 and a[0].sentence == "BERT is tested on GLUE." and a[0].cooccurrence_count == 2
+
+
+def test_pair_delivery_profiles_and_prompt():
+    import yaml
+
+    from cumap.cr064 import arm_relations as AR
+    from cumap.llm.prompts import load_prompt
+
+    v18 = yaml.safe_load((REPO / "configs/scinlp_profile_v18.yaml").read_text())
+    for n, extra in ((20, {"cooccurrence": "all"}), (21, {"cooccurrence": "all", "sentence_split": "abbrev"}),
+                     (22, {"cooccurrence": "all", "sentence_split": "abbrev", "declined_pass": "v13"})):  # fmt: skip
+        p = yaml.safe_load((REPO / f"configs/scinlp_profile_v{n}.yaml").read_text())
+        for k, v in p.items():
+            if k in extra:
+                assert v == extra[k]
+            elif k != "status":
+                assert v == v18[k], k
+        assert set(extra) <= set(p)
+    assert AR.ARMS["a1"][0] == "cr064relA1" and AR.BUILD_ARMS == ("a1", "a2", "a3") and AR.approved("a3")
+    v11 = load_prompt(REPO / "prompts", "relation_choice", "v11")
+    v13 = load_prompt(REPO / "prompts", "relation_choice", "v13")
+    assert "Second reading" in v13.body and "Second reading" not in v11.body

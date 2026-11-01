@@ -205,8 +205,12 @@ class V3Result:
     )  # CR-034 (only with qualifier_checks="v1")
     # CR-036 (assembly v2): {"model": ..., "set": ...} when the type-valid orientation replaced the model's
     direction_by_types: dict | None = None
-    endpoint_fit: dict | None = None  # CR-059 DRAFT: {"answer", "reason"} from relation_choice v8 (endpoint_check "choice" only)
-    misconception: dict | None = None  # CR-039 DRAFT: the misconception choice (misconception_source classification); a layer item source, never an edge
+    endpoint_fit: dict | None = (
+        None  # CR-059 DRAFT: {"answer", "reason"} from relation_choice v8 (endpoint_check "choice" only)
+    )
+    misconception: dict | None = (
+        None  # CR-039 DRAFT: the misconception choice (misconception_source classification); a layer item source, never an edge
+    )
 
     def to_dict(self) -> dict:
         d = {k: v for k, v in self.__dict__.items() if k != "pair"}
@@ -243,40 +247,46 @@ def classify_pair_v3(
     amendments: str = "off",  # CR-038 DRAFT: "off" | "v6" (per-relation qualifier schema, dimension quote, prompts v6); never run
     direction_by_types: bool = False,  # CR-036: assembly v2 sets the type-valid orientation instead of rejecting a domain/range error
     qualifier_checks: str = "off",  # CR-034: "off" (today's behaviour) | "v1" (qualifier_checks.py)
-    context: dict[str, str] | None = None,  # CR-064: background lines for the choice prompt (choice_context.py); None = none
+    context: dict[str, str]
+    | None = None,  # CR-064: background lines for the choice prompt (choice_context.py); None = none
     endpoint_check: str = "types",  # CR-059 DRAFT: "types" (registry domain/range) | "choice" (choice v8 endpoint_fit; type-free runs)
+    skip_family: str
+    | None = None,  # CR-064: go straight to the relation choice within this family (second look at a declined pair)
     fixtures: tuple[str, str, str] = ("default", "default", "default"),
 ) -> V3Result:
     x, y = cx.canonical_name, cy.canonical_name
     res = V3Result(pair=pair, outcome="rejected")
 
-    fam = client.parse(
-        task="relation_family",
-        prompt_version=family_prompt.version,
-        messages=[
-            {
-                "role": "user",
-                "content": family_prompt.render(
-                    concept_x=x,
-                    concept_y=y,
-                    sentence=pair.sentence,
-                    family_options=family_options_v3(registry),
-                ),
-            }
-        ],
-        schema=build_family_choice_llm(registry),
-        model_tier=model_tier,
-        fixture_name=fixtures[0],
-    )
-    res.prompt_hashes["family"] = fam.input_hash
-    res.family, res.family_reason = fam.output.family, fam.output.reason
-    if res.family == NO_RELATION:
-        res.outcome, res.reason = "no_relation", "family_no_relation"
-        return res
-    if res.family == OTHER:
-        res.outcome, res.reason = "other", "family_other"
-        res.other_description = fam.output.reason
-        return res
+    if skip_family:
+        res.family, res.family_reason = skip_family, "second_pass"
+    else:
+        fam = client.parse(
+            task="relation_family",
+            prompt_version=family_prompt.version,
+            messages=[
+                {
+                    "role": "user",
+                    "content": family_prompt.render(
+                        concept_x=x,
+                        concept_y=y,
+                        sentence=pair.sentence,
+                        family_options=family_options_v3(registry),
+                    ),
+                }
+            ],
+            schema=build_family_choice_llm(registry),
+            model_tier=model_tier,
+            fixture_name=fixtures[0],
+        )
+        res.prompt_hashes["family"] = fam.input_hash
+        res.family, res.family_reason = fam.output.family, fam.output.reason
+        if res.family == NO_RELATION:
+            res.outcome, res.reason = "no_relation", "family_no_relation"
+            return res
+        if res.family == OTHER:
+            res.outcome, res.reason = "other", "family_other"
+            res.other_description = fam.output.reason
+            return res
 
     v6 = amendments == "v6"
     mis = False
@@ -300,7 +310,9 @@ def classify_pair_v3(
             raise ValueError("misconception_source classification needs qualifier amendments v6")
         mis = res.family == R7.MISCONCEPTION_FAMILY
         schema = R7.build_relation_choice_v7(registry, res.family, same_concept)
-    elif res.family == "misconception":  # a v1.6 registry without the switch: the family is not enabled
+    elif (
+        res.family == "misconception"
+    ):  # a v1.6 registry without the switch: the family is not enabled
         res.outcome, res.reason = "other", "family_misconception_not_enabled"
         return res
     try:
@@ -397,7 +409,9 @@ def classify_pair_v3(
     if not (gx and gy):
         res.reason = "endpoint_not_grounded"
         return res
-    if endpoint_check == "choice":  # CR-059 DRAFT: the choice step's judgement replaces the node-type domain/range check
+    if (
+        endpoint_check == "choice"
+    ):  # CR-059 DRAFT: the choice step's judgement replaces the node-type domain/range check
         res.endpoint_fit = {"answer": o.endpoint_fit, "reason": o.endpoint_fit_reason}
         if o.endpoint_fit != "fits":
             res.reason = "endpoint_fit"

@@ -279,6 +279,30 @@ def stage_select(run: str, budget: int) -> dict:
     return {**stats, **sr.preflight_relations(cp)}
 
 
+def stage_reselect(run: str) -> dict:
+    """CR-064 ($0): rebuild the run's candidate pairs for the profile's `sentence_split` / `cooccurrence` (no-op for the defaults)."""
+    from cumap.expert_kg import cooccurrence as CO
+
+    split, cooc = CO.resolve()
+    if (split, cooc) == ("plain", "first"):
+        return {"reselect": False}
+    use_production_matching()
+    settings = get_settings()
+    run_dir = KG / run
+    cp = load_checkpoint(run_dir)
+    registry = RelationRegistry.from_yaml(production_registry_path(settings))
+    slice_cfg = load_demo_slice()
+    secs = sr.load_sections(REPO_ROOT / slice_cfg.pd.source_jsonl, list(slice_cfg.pd.chapters))
+    stats = sr.reselect_stage(
+        cp, secs, registry, X.Embedder(settings.embeddings.model), split=split, cooccurrence=cooc
+    )
+    save_checkpoint(cp, run_dir)
+    return {
+        k: stats[k]
+        for k in ("sentence_split", "cooccurrence", "selected", "primary_pairs", "extra_sentences")
+    }
+
+
 def stage_relations(run: str, *, dry_run: bool, max_usd: float) -> dict:
     use_production_matching()
     settings = get_settings()
@@ -301,7 +325,9 @@ def stage_relations(run: str, *, dry_run: bool, max_usd: float) -> dict:
     from cumap.expert_kg import choice_context as CC
 
     sections = None
-    if CC.resolve_choice_context() == "origin":  # CR-064: the origin sentence is looked up in the section text
+    if (
+        CC.resolve_choice_context() == "origin"
+    ):  # CR-064: the origin sentence is looked up in the section text
         slice_cfg = load_demo_slice()
         sections = {
             s.section_id: s.text
@@ -310,7 +336,14 @@ def stage_relations(run: str, *, dry_run: bool, max_usd: float) -> dict:
             )
         }
     cp = sr.relations_stage(
-        client, cp, run_dir, registry, REPO_ROOT / "prompts", embed, progress=print, sections=sections
+        client,
+        cp,
+        run_dir,
+        registry,
+        REPO_ROOT / "prompts",
+        embed,
+        progress=print,
+        sections=sections,
     )
     return {"results": len(cp.relation_results_v3), "spend_usd": round(client.spent_usd, 4)}
 
