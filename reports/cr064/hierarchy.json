@@ -1,0 +1,91 @@
+{
+ "sources": {
+  "first": "cr055ballp",
+  "rest": "cr057rest"
+ },
+ "variant": "IDXR1-P1",
+ "papers": 57,
+ "hierarchy_A1_DIR": {
+  "tp": 19,
+  "fp": 95,
+  "fn": 127,
+  "precision": 0.16666666666666666,
+  "recall": 0.13013698630136986,
+  "f1": 0.14615384615384616
+ },
+ "hierarchy_f1_ci95_paper_bootstrap": [
+  0.08239700374531835,
+  0.22145328719723184
+ ],
+ "e2e_relation_strict": {
+  "tp": 180,
+  "fp": 1093,
+  "fn": 1173,
+  "precision": 0.14139827179890024,
+  "recall": 0.13303769401330376,
+  "f1": 0.13709063214013711
+ },
+ "gold_hierarchy_relations": 146,
+ "gold_outcomes": {
+  "miss_no_edge_at_pair": 32,
+  "miss_endpoint_not_extracted": 88,
+  "hit": 19,
+  "hit_needs_label_merge": 1,
+  "miss_other_relation": 7
+ },
+ "other_relation_at_pair": {
+  "subclassOf -> compareWith": 1,
+  "subtaskOf -> partOf": 1,
+  "subclassOf -> similarWith": 2,
+  "subtaskOf -> similarWith": 2,
+  "subclassOf -> partOf": 1
+ },
+ "false_links": {
+  "no gold relation at pair": 90,
+  "gold evaluatedOn": 1,
+  "unplaced": 1,
+  "gold UsedFor": 1,
+  "gold partOf": 2
+ },
+ "choice_at_gold_node_pairs": {
+  "partOf -> UsedFor": 1,
+  "partOf -> compareWith": 2,
+  "partOf -> none/declined": 10,
+  "partOf -> other": 7,
+  "partOf -> partOf": 23,
+  "partOf -> similarWith": 1,
+  "partOf -> subclassOf": 3,
+  "subclassOf -> UsedFor": 1,
+  "subclassOf -> compareWith": 1,
+  "subclassOf -> no_relation": 1,
+  "subclassOf -> none/declined": 2,
+  "subclassOf -> other": 1,
+  "subclassOf -> partOf": 1,
+  "subclassOf -> similarWith": 2,
+  "subclassOf -> subclassOf": 11,
+  "subtaskOf -> UsedFor": 5,
+  "subtaskOf -> none/declined": 2,
+  "subtaskOf -> other": 2,
+  "subtaskOf -> partOf": 1,
+  "subtaskOf -> similarWith": 2,
+  "subtaskOf -> subclassOf": 3,
+  "subtaskOf -> subtaskOf": 11
+ },
+ "funnel_not_reached_hierarchy": {
+  "choice_right": 20,
+  "pair_selected": 10,
+  "endpoints_placed": 90,
+  "credited": 20,
+  "family_right": 4,
+  "checks_passed": 2
+ },
+ "funnel_not_reached_all": {
+  "endpoints_placed": 681,
+  "credited": 248,
+  "choice_right": 214,
+  "pair_selected": 83,
+  "family_right": 106,
+  "checks_passed": 21,
+  "assembled": 1
+ }
+}
