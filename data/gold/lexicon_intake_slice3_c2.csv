@@ -1,0 +1,37 @@
+id,section,name_a,name_b,type_a,type_b,quote,mark,note
+1,2.7,multiple antennas,"multiple-input, multiple-output",Component,Mechanism,"le antennas and allowing greater wireless channel bandwidths. The use of multiple antennas is often called MIMO for multiple-input, multiple-output. The latest emerging standard, 802.11ax, promises",different,component vs technique
+2,1-problem-building-a-network,mainframe,mainframe computers,Component,Component,mainframe computers,same,
+3,1.1,application type,application class,Concept,Concept,a more complete taxonomy of application types,same,
+4,1.3,application protocol,application layer protocol,Protocol,Protocol,a range of application protocols,same,
+5,1.3,802.11,802.11 Wi-Fi standard,Protocol,Protocol,the 802.11 Wi-Fi standards,same,
+6,1.4,Socket API,socket interface,Component,Component,1.4.1 Socket API,same,
+7,2-problem-connecting-to-a-network,link technology,link-level technology,Concept,Concept,survey the available link-level technology,same,
+8,2.2,bit stream,stream of bits,DataUnit,DataUnit,insert extra bits into the bit stream,same,
+9,3-perspective-virtual-networks-all-the-way-down,IP-based network,IP network,Concept,Concept,runs on top of an IP-based network,same,
+10,3.1,data link protocol,link-level protocol,Protocol,Protocol,the appropriate data link protocol,same,
+11,3.3,connectionless manner,connectionless approach,Mechanism,Mechanism,a datagram is a packet sent in a connectionless manner over a network,neither,"phrasing, not a concept name"
+12,3.4,forwarding function,forwarding,Mechanism,Mechanism,to accomplish the forwarding function,same,
+13,3.4,interior gateway protocols,intradomain routing protocols,Protocol,Protocol,"the protocols described in this section are collectively known as intradomain routing protocols, or interior gateway protocols (IGPs)",same,
+14,3.4,link-state packet,update packet,DataUnit,DataUnit,"each node creates an update packet, also called a link-state packet (LSP)",different,generic update vs LSP (kind of)
+15,3.4,link-layer protocol,link-level protocol,Protocol,Protocol,using acknowledgments and retransmissions just as in the reliable link-layer protocol,same,
+16,3.4,Dijkstra’s algorithm,Dijkstra’s shortest-path algorithm,Mechanism,Mechanism,a realization of Dijkstra’s algorithm called the forward search algorithm,same,
+17,3.4,TransmissionTime,transmit time,Parameter,Parameter,where TransmissionTime and Latency were statically defined for the link,same,
+18,1.2,flow,flow of data,DataUnit,DataUnit,three flows of data—corresponding to the three pairs of hosts—are multiplexed onto a single physical link,same,
+19,1.2,physical link,link,Component,Component,the physical link is shared over time,different,kind of (link may be logical)
+20,1.3,IP layer,network layer,Layer,Layer,the IP (internetworking or just network) layer is layer 3,different,instance (IP) vs generic layer 3
+21,1.3,internetworking layer,IP layer,Layer,Layer,the IP (internetworking or just network) layer is layer 3,same,
+22,1.3,datagram,message,DataUnit,DataUnit,datagram may be thought of as a synonym for message,different,kind of (message is generic)
+23,2-problem-connecting-to-a-network,physical media,link,Component,Component,different physical media and link technologies,different,medium vs link
+24,2.3,synchronization character,SYN character,DataUnit,DataUnit,SYN (synchronization) character,same,
+25,2.5,next frame expected,NFE,Identifier,Identifier,"This is the next frame expected, the frame with a sequence number one more than the last frame received (LFR)",same,
+26,2.7,ad hoc network,mesh network,Concept,Concept,the mesh or ad hoc network,same,
+27,3.1,virtual circuit number,virtual circuit identifier,Identifier,Identifier,the virtual circuit number can be treated as an index,same,
+28,3.3,physical address,link-level address,Identifier,Identifier,encode a host’s physical address in the host part of its IP address,same,
+29,1.2,internetwork,Internet,Concept,Concept,"are interconnected to form an internetwork, or internet for short",different,generic internetwork vs the Internet (instance)
+30,2.6,Ethernet standard,Ethernet,Protocol,Protocol,a 10-Mbps Ethernet standard in 1978,different,specification vs technology
+31,3.3,class C address,IP address,Identifier,Identifier,it is a class C address,different,kind of
+32,3.4,interdomain routing protocols,routing protocol,Protocol,Protocol,when we look at interdomain routing protocols,different,kind of
+33,3.4,control packet,setup packet,DataUnit,DataUnit,by sending a control packet,different,kind of (setup is a control packet)
+34,1.3,OSI reference model,Open Systems Interconnection architecture,Concept,Concept,"the schematic given in Figure is not a protocol graph, per se, but rather a reference model for a protocol graph.",same,
+35,2.5,sendQ,send queue,Component,Component,saves a copy of the frame in the transmit queue (sendQ),same,
+36,2.5,recvQ,receive queue,Component,Component,a queue that holds frames that have been received out of order (recvQ),same,

@@ -1,0 +1,104 @@
+row,dataset,run_id,section_id,surface,rejected_target,target_type,rule_kind,evidence,MARK_distinct_concept (yes/no),MARK_same_as_target (yes/no),MARK_note
+1,scinlp_dev_train,cr012_scinlp_cr043base_P08_1019_grobid_E0,P08-1019.grobid#2,framework of language modeling,language modeling framework,method,more_specific,We employ the framework of language modeling ( for information retrieval ),no,yes,
+2,pd_production,slice3_c3,2.5#2,sliding window algorithm,sliding window,Mechanism,more_specific,the state of the sliding window algorithm,no,yes,"P&D uses ""sliding window"" for the algorithm"
+3,pd_production,slice3_c3,3.1#2,header,field,DataUnit,different_words,place that number in the header of the packet,yes,no,
+4,pd_production,slice3_c3,3.3#3,routing protocol,protocol,Protocol,more_specific,running a routing protocol,yes,no,
+5,pd_production,slice3_c3,1.3#1,demultiplexes,demultiplexing,Mechanism,different_words,and demultiplexes the message to the correct application,no,yes,
+6,pd_production,slice3_c3,3.4#3,graph-based,graph theory,Concept,different_words,the simple graph-based protocol described above,no,no,"adjective, not a concept"
+7,scinlp_dev_train,cr012_scinlp_cr043base_2021_acl_long_295_E0,2021.acl-long.295#4,templates,prompts,method,different_words,We demonstrate the top 3 automatically generated templates and label words for all tasks in Table E.1,yes,no,templates are one part of a prompt (template + label words)
+8,pd_production,slice3_c3,1-perspective-feature-velocity,Socket API,network application programming interface,Component,more_specific,using the Socket API described in Section 1.4,yes,no,Socket API is one instance of a network API
+9,pd_production,slice3_c3,3-perspective-virtual-networks-all-the-way-down,virtualize,virtualization,Mechanism,different_words,ideas about how to virtualize them,no,yes,
+10,scinlp_dev_train,cr012_scinlp_cr043base_P07_1007_grobid_E0,P07-1007.grobid#2,EM algorithm,expectation-maximization,method,more_specific,the EM algorithm provides the following iterative steps,no,yes,abbreviation
+11,pd_production,slice3_c3,2.7#1,layer protocols,link-level protocol,Protocol,different_words,for higher layer protocols,no,no,"fragment of ""higher layer protocols"""
+12,pd_production,slice3_c3,2.7#1,throughput,throughput rate,Parameter,shortened,promises another substantial improvement in throughput,no,yes,
+13,pd_production,slice3_c3,2.7#1,frequency band,delay × bandwidth product,Parameter,different_words,width of a frequency band,yes,no,
+14,pd_production,slice3_c3,2.6#1,"Carrier Sense, Multiple Access with Collision Detect (CSMA/CD)",Carrier Sense Multiple Access,Protocol,more_specific,"The more general name for the technology behind the Ethernet is Carrier Sense, Multiple Access with Collision Detect (CSMA/CD).",yes,no,
+15,pd_production,slice3_c3,3.1#2,virtual circuit switching,circuit switching,Mechanism,more_specific,There are several things to note about virtual circuit switching,yes,no,
+16,pd_production,slice3_c3,2.6#1,computer communication,computer network,Concept,different_words,to support computer communication across the Hawaiian Islands,yes,no,
+17,pd_production,slice3_c3,2.6#1,packet type,GET command,Concept,different_words,The packet type field serves as the demultiplexing key,yes,no,
+18,pd_production,slice3_c3,2.7#1,in sync,sync,State,more_specific,it is able to hop frequencies in sync with the transmitter,no,yes,
+19,pd_production,slice3_c3,2.7#1,mobile,mobile wireless,Component,shortened,is often mobile and relies on its link,no,no,"adjective (""is often mobile"")"
+20,pd_production,slice3_c3,2.7#1,wireless protocol,networking protocol,Protocol,different_words,a wireless protocol would follow the same algorithm as the Ethernet,yes,no,
+21,pd_production,slice3_c3,3.5,forwarding,forward,Mechanism,different_words,per-packet forwarding decision,no,yes,
+22,scinlp_dev_train,cr012_scinlp_cr043base_2020_acl_main_9_grobid_E0,2020.acl-main.9.grobid#2,transformer blocks,transformer,method,more_specific,The number of transformer blocks in our model L is 12,yes,no,
+23,scinlp_dev_train,cr012_scinlp_cr043base_P13_1074_grobid_E0,P13-1074.grobid#3,UPP model,unified punctuation prediction model,method,more_specific,using the UPP model,no,yes,abbreviation
+24,pd_production,slice3_c3,2.8,carrier frequencies,carrier,Component,more_specific,The bands with carrier frequencies below 1GHz,yes,no,
+25,pd_production,slice3_c3,2-perspective-race-to-the-edge,Cable Head End,Head End,Component,more_specific,the Cable Head End,no,yes,P&D head end = cable head end
+26,pd_production,slice3_c3,3.1#2,transmitted,transmission,Mechanism,different_words,pad transmitted data to fill a complete cell,no,yes,
+27,pd_production,slice3_c3,2.4#2,error,burst error,Event,shortened,"Any “burst” error (i.e., sequence of consecutive errored bits)",yes,no,
+28,pd_production,slice3_c3,2.7#1,redundancy,redundant bits,DataUnit,different_words,there is usually enough redundancy to recover the original bit,yes,no,
+29,scinlp_dev_train,cr012_scinlp_cr043base_P17_1032_grobid_E0,P17-1032.grobid#2,F1 measure,similarity metrics,metric,different_words,trained by maximizing the F1 measure,yes,no,
+30,pd_production,slice3_c3,3.5,commodity switch manufacturer,network equipment vendor,Concept,different_words,buy a pre-built switch from a commodity switch manufacturer,yes,no,
+31,pd_production,slice3_c3,3.3#4,host,receiving node,Component,different_words,Each host receives the query,yes,no,
+32,pd_production,slice3_c3,2.7#1,receiver,receiving technology,Component,different_words,known to both the sender and the receiver,yes,no,
+33,scinlp_dev_train,cr012_scinlp_cr043base_P13_1074_grobid_E0,P13-1074.grobid#3,Treebank data,Treebank,dataset,more_specific,where Treebank data is available,no,yes,
+34,pd_production,slice3_c3,3.5,L3 router,Layer 3 switch,Component,different_words,"an L2 switch, an L3 router",yes,no,borderline: router vs L3 switch; P&D sometimes treats them as interchangeable
+35,scinlp_dev_train,cr012_scinlp_cr043base_P06_1010_grobid_E0,P06-1010.grobid#2,transliteration,Chinese transliteration,task,shortened,To demonstrate that score propagation can further help transliteration,yes,no,broader: generic task vs Chinese-specific
+36,pd_production,slice3_c3,2.7#1,rate,average rate,Parameter,shortened,per-device data rates of 150 Mbps to 450 Mbps,yes,no,
+37,pd_production,slice3_c3,3.4#3,network,network layer,Layer,shortened,the network depicted in Figure,yes,no,
+38,scinlp_dev_train,cr012_scinlp_cr043base_P12_1032_grobid_E0,P12-1032.grobid#2,graph-based translation consensus,translation consensus,task,more_specific,"In this section , graph-based translation consensus is tested on the Chinese to English translation tasks",yes,no,
+39,pd_production,slice3_c3,3.3#2,bytes,bit,DataUnit,different_words,has 1400 bytes of data,yes,no,
+40,pd_production,slice3_c3,2.7#1,random bits,bit pattern,DataUnit,different_words,n random bits,no,no,"phrase (""n random bits""), not a concept"
+41,pd_production,slice3_c3,2.7#1,node,station,Component,different_words,a node on an Ethernet receives every other node’s transmissions,yes,no,
+42,pd_production,slice3_c3,3-perspective-virtual-networks-all-the-way-down,machines,host,Component,different_words,the physical machines that those VMs run on,yes,no,
+43,pd_production,slice3_c3,2.7#1,endpoints,end host,Component,different_words,two different classes of endpoints,yes,no,
+44,pd_production,slice3_c3,2.2,bits flow,flow,DataUnit,more_specific,bits flow between network adaptors,no,no,"verb phrase (""bits flow between"")"
+45,pd_production,slice3_c3,2.7#1,IEEE 802.11,IEEE standard 802.3,Protocol,different_words,the IEEE 802.11 standards,yes,no,
+46,scinlp_dev_train,cr012_scinlp_cr043base_P16_1002_grobid_E0,P16-1002.grobid#3,test accuracy,accuracy,metric,more_specific,yielded test accuracy of 82.9%,yes,no,narrower: accuracy on the test split
+47,pd_production,slice3_c3,3.3#1,protocols,transport,Protocol,different_words,The higher-level protocols or applications that run above IP,yes,no,
+48,pd_production,slice3_c3,3.3#1,bit,error,Event,different_words,if any bit in the header is corrupted in transit,yes,no,
+49,scinlp_dev_train,cr012_scinlp_cr043base_P07_1007_grobid_E0,P07-1007.grobid#2,language model adaptation,language model,method,more_specific,performed language model adaptation of automatic speech recognition systems,yes,no,
+50,pd_production,slice3_c3,3.3#4,link-level network technologies,network technology,Concept,more_specific,many link-level network technologies,yes,no,
+51,pd_production,slice3_c3,3.3#1,packets,fixed-length packet,DataUnit,shortened,host will not send needlessly small packets,yes,no,
+52,pd_production,slice3_c3,2.7#1,wireless,wireless environment,Concept,shortened,In a wireless mesh,no,no,"adjective (""wireless mesh"")"
+53,scinlp_dev_train,cr012_scinlp_cr043base_P13_1074_grobid_E0,P13-1074.grobid#3,ASR systems,speech recognition,task,more_specific,without the dependences on either the ASR systems or subsequent tasks,yes,no,
+54,scinlp_dev_train,cr012_scinlp_cr043base_P08_1019_grobid_E0,P08-1019.grobid#2,MDL-based,Minimum Description Length,method,more_specific,MDL-based tree cut model,no,no,"adjective (""MDL-based tree cut model""); MDL itself is the concept"
+55,pd_production,slice3_c3,2.7#1,protocol,Link Control Protocol,Protocol,shortened,a wireless protocol would follow the same algorithm,yes,no,
+56,pd_production,slice3_c3,2.7#1,multi-access,multiple-access network,Concept,shortened,Wireless media are also inherently multi-access,yes,no,
+57,pd_production,slice3_c3,2.7#1,algorithmically,algorithm,Mechanism,different_words,computed algorithmically by a pseudorandom number generator,no,no,adverb
+58,pd_production,slice3_c3,2.5#1,transport,transport protocols,Protocol,shortened,"including both transport and sometimes, the application layer",yes,no,"evidence means transport layer, not transport protocols"
+59,pd_production,slice3_c3,2.1,consumers,subscriber,Concept,different_words,reaching millions of consumers,yes,no,
+60,pd_production,slice3_c3,3.4#3,TOS (type of service),TOS field,Identifier,different_words,the presence of TOS (type of service) information,yes,no,borderline: TOS information vs the header field that carries it
+61,scinlp_dev_train,cr012_scinlp_cr043base_P13_1074_grobid_E0,P13-1074.grobid#3,text processing tasks,text processing,task,more_specific,the subsequent text processing tasks,no,yes,
+62,pd_production,slice3_c3,3.3#1,packets,variable length packet,DataUnit,shortened,the type of packets that can be carried,yes,no,
+63,pd_production,slice3_c3,2.7#2,protocol layer,layer,Layer,more_specific,the same protocol layer as the wireless links,no,yes,"""layer"" in P&D means protocol layer"
+64,pd_production,slice3_c3,3.5,packet,packet-switched network,Concept,shortened,the average packet is 64 bytes,yes,no,
+65,pd_production,slice3_c3,3.4#1,row,field,DataUnit,different_words,one row of the table,yes,no,
+66,pd_production,slice3_c3,2.5#1,timer,clock cycle,Parameter,different_words,before the timer expires,yes,no,
+67,pd_production,slice3_c3,3.4#2,code,software,Component,different_words,The code that implements this algorithm is very straightforward,yes,no,
+68,pd_production,slice3_c3,3.3#2,receiving host,receiver,Component,different_words,at the receiving host,no,yes,borderline: receiver could be any receiving node
+69,pd_production,slice3_c3,3.4#1,research and development,development,Mechanism,more_specific,such a rich field of research and development,yes,no,
+70,pd_production,slice3_c3,2.3#1,interleaved,interleaving,Mechanism,different_words,where the bytes from these frames are interleaved,no,yes,
+71,pd_production,slice3_c3,3.3#1,routing loops,loop,Property,more_specific,packets that have been going around in routing loops,yes,no,
+72,pd_production,slice3_c3,2.7#1,wireless technologies,network technology,Concept,different_words,two prominent wireless technologies,yes,no,
+73,pd_production,slice3_c3,2.7#1,medium,physical material,Component,different_words,Because wireless links all share the same medium,yes,no,
+74,pd_production,slice3_c3,2.8,different,property,Property,different_words,each optimized for a different band,no,no,adjective
+75,pd_production,slice3_c3,3.5,instruction set,instruction,DataUnit,more_specific,an architecture and instruction set that has been optimized,yes,no,
+76,scinlp_dev_train,cr012_scinlp_cr043base_P17_1032_grobid_E0,P17-1032.grobid#2,accuracy,cosine similarity,metric,different_words,achieving 94.3% accuracy even with fewer landmarks,yes,no,
+77,pd_production,slice3_c3,3.3#2,IP,Internet,Concept,different_words,IP does not attempt to recover from missing fragments.,yes,no,
+78,pd_production,slice3_c3,3.5,architecture,technology,Concept,different_words,with an architecture and instruction set that has been optimized,yes,no,
+79,scinlp_dev_train,cr012_scinlp_cr043base_P06_1010_grobid_E0,P06-1010.grobid#2,transliteration,name transliteration,task,shortened,all the transliteration pairs,yes,no,broader: generic task vs name-specific
+80,pd_production,slice3_c3,3.3#2,network topology,topology,Concept,more_specific,this structure has nothing to do with network topology,no,yes,
+81,pd_production,slice3_c3,3.5,server operating system,operating system,Component,more_specific,Like a server operating system,yes,no,
+82,pd_production,slice3_c3,3.5,shared medium,shared media,Component,different_words,connected to the shared medium,no,yes,
+83,pd_production,slice3_c3,2.5#1,sending rate,throughput rate,Parameter,different_words,this implies a maximum sending rate,yes,no,
+84,pd_production,slice3_c3,2.7#1,radio signals,signal,DataUnit,more_specific,receiving radio signals from any transmitter,yes,no,
+85,scinlp_dev_train,cr012_scinlp_cr043base_P06_1010_grobid_E0,P06-1010.grobid#2,phonetic,phonetic scoring,method,shortened,one that is more traditional and based on phonetic correspondences,no,no,"adjective (""phonetic correspondences"")"
+86,scinlp_dev_train,cr012_scinlp_cr043base_P08_1019_grobid_E0,P08-1019.grobid#2,language modeling,language model,method,different_words,We employ the framework of language modeling ( for information retrieval ),yes,no,process vs model
+87,scinlp_dev_train,cr012_scinlp_cr043base_P08_1019_grobid_E0,P08-1019.grobid#2,translation-based approach,translation-based model,method,different_words,translation-based approach ( for information retrieval ),no,yes,approach/model used interchangeably in IR
+88,pd_production,slice3_c3,3.4#4,compress,compression,Mechanism,different_words,The compression of the dynamic range was achieved,no,yes,
+89,pd_production,slice3_c3,3.3#5,forward,forwarding,Mechanism,different_words,it forwards the packet on to that network,no,yes,
+90,pd_production,slice3_c3,2.7#1,link,connection,Component,different_words,wait until the link becomes idle,yes,no,
+91,pd_production,slice3_c3,2.7#1,Wi-Fi,Wi-Fi network,Concept,shortened,Wi-Fi (more formally known as 802.11),yes,no,technology vs a network built with it
+92,pd_production,slice3_c3,3.3#4,address translation,ARP,Protocol,different_words,3.3.6 Address Translation (ARP),yes,no,task vs the protocol that performs it
+93,pd_production,slice3_c3,3.5,network,network deployment,Concept,shortened,a distributed network data plane,yes,no,
+94,pd_production,slice3_c3,2-perspective-race-to-the-edge,vendors,network equipment vendor,Concept,shortened,the vendors that sell them,yes,no,
+95,pd_production,slice3_c3,2.5#1,rate,average rate,Parameter,shortened,a maximum sending rate,yes,no,
+96,pd_production,slice3_c3,2.7#1,bit chipping sequence,jamming sequence,DataUnit,different_words,Figure gives an example of a 4-bit chipping sequence.,yes,no,chipping sequence is not a jamming sequence
+97,pd_production,slice3_c3,3.5,packet forwarding,packet switching,Mechanism,different_words,aggregate packet forwarding capacity,yes,no,
+98,pd_production,slice3_c3,3.2#1,point-to-point,point-to-point link,Component,shortened,in a point-to-point configuration,no,no,"modifier (""point-to-point configuration"")"
+99,pd_production,slice3_c3,2.7#1,physical layer,link-level technology,Concept,different_words,at the physical layer,yes,no,
+100,pd_production,slice3_c3,2.7#1,802.11 standards,802.11 Wi-Fi standards,Protocol,shortened,the IEEE 802.11 standards,no,yes,
+101,pd_production,slice3_c3,2.7#1,bandwidth,bandwidth requirement,Parameter,shortened,a wired (or at least high-bandwidth) connection,yes,no,
+102,pd_production,slice3_c3,2.7#1,wireless media,physical media,Component,different_words,Wireless media are also inherently multi-access,yes,no,
+103,pd_production,slice3_c3,2.5#1,timer,clock,Parameter,different_words,the sender associates a timer with each frame it transmits,yes,no,

@@ -1,0 +1,2180 @@
+row_type,sentence_id,span_text,occurrence,concept_id,canonical_name,node_type,aliases,nested_valid,boundary_notes,review_decision
+CONCEPT,,,,C0001,multi-access network,Concept,Multi-access networks|multi-access networks,,,KEEP
+CONCEPT,,,,C0002,ethernet,Protocol,,,,KEEP
+CONCEPT,,,,C0003,multicast,Mechanism,multicasting|multicasts,,,EDITED: identity/boundary review
+CONCEPT,,,,C0004,hardware,Component,,,,KEEP
+CONCEPT,,,,C0005,network application,Concept,applications|application|Applications,,,EDITED: identity/boundary review
+CONCEPT,,,,C0006,internet,Concept,,,,KEEP
+CONCEPT,,,,C0007,radio station,Concept,,,,KEEP
+CONCEPT,,,,C0008,broadcast,Mechanism,broadcast mechanism|mechanism|broadcasting|broadcasts,,,EDITED: identity/boundary review
+CONCEPT,,,,C0009,data,DataUnit,,,,KEEP
+CONCEPT,,,,C0010,host,Component,hosts,,,KEEP
+CONCEPT,,,,C0011,communication,Concept,,,,KEEP
+CONCEPT,,,,C0012,one-to-many communication,Concept,one-to-many,,,KEEP
+CONCEPT,,,,C0013,one-to-many application,Concept,one-to-many applications,,,KEEP
+CONCEPT,,,,C0014,software update,DataUnit,software updates,,,KEEP
+CONCEPT,,,,C0015,tv channel,Concept,TV channels,,,KEEP
+CONCEPT,,,,C0016,iptv,Concept,,,,EDITED: identity/boundary review
+CONCEPT,,,,C0017,many-to-many communication,Concept,many-to-many,,,KEEP
+CONCEPT,,,,C0018,multimedia teleconferencing,Concept,,,,KEEP
+CONCEPT,,,,C0019,online multiplayer gaming,Concept,,,,KEEP
+CONCEPT,,,,C0020,distributed simulation,Concept,distributed simulations,,,KEEP
+CONCEPT,,,,C0021,multicast group member,Concept,members|member|group members,,,KEEP
+CONCEPT,,,,C0022,multicast group,Concept,group|multicast groups|groups|IP multicast group|IP multicast groups|G,,,EDITED: identity/boundary review
+CONCEPT,,,,C0023,sender,Component,senders|sending host|source|multicast sender|sources|source host,,,EDITED: identity/boundary review
+CONCEPT,,,,C0025,internet protocol,Protocol,IP,,,KEEP
+CONCEPT,,,,C0026,packet,DataUnit,packets,,,KEEP
+CONCEPT,,,,C0027,redundant transmission,Property,redundancy,,,KEEP
+CONCEPT,,,,C0028,bandwidth,Parameter,,,,KEEP
+CONCEPT,,,,C0029,redundant traffic,Concept,,,,KEEP
+CONCEPT,,,,C0030,network traffic,Concept,traffic,,,EDITED: identity/boundary review
+CONCEPT,,,,C0032,capacity,Parameter,network capacity,,,EDITED: identity/boundary review
+CONCEPT,,,,C0033,network,Concept,networks,,,KEEP
+CONCEPT,,,,C0034,router,Component,routers|internet router|router R4|Internet routers,,,EDITED: identity/boundary review
+CONCEPT,,,,C0035,ip multicast,Mechanism,IP-level multicast,,,KEEP
+CONCEPT,,,,C0036,link-level multicast,Mechanism,,,,KEEP
+CONCEPT,,,,C0038,unicast,Mechanism,IP communication|one-to-one service|unicast IP,,,EDITED: identity/boundary review
+CONCEPT,,,,C0039,IP multicast service model,Concept,IP multicast model,,,EDITED: identity/boundary review
+CONCEPT,,,,C0041,ip multicast address,Identifier,IP multicast addresses,,,KEEP
+CONCEPT,,,,C0042,multicast address,Identifier,multicast addresses|Multicast Addresses|addresses,,,KEEP
+CONCEPT,,,,C0043,multicast group address,Identifier,group’s multicast address|multicast group addresses|group addresses|group address|G,,,EDITED: identity/boundary review
+CONCEPT,,,,C0044,multicast group join,Event,join,,,KEEP
+CONCEPT,,,,C0045,multicast group leave,Event,leave,,,KEEP
+CONCEPT,,,,C0046,local router,Component,,,,KEEP
+CONCEPT,,,,C0047,protocol,Protocol,protocols,,,KEEP
+CONCEPT,,,,C0048,unicast address,Identifier,unicast addresses,,,KEEP
+CONCEPT,,,,C0049,node,Component,,,,KEEP
+CONCEPT,,,,C0050,network interface,Component,interface,,,KEEP
+CONCEPT,,,,C0051,multicast group membership,State,membership|group membership,,,EDITED: identity/boundary review
+CONCEPT,,,,C0053,multicast traffic,Concept,,,,KEEP
+CONCEPT,,,,C0054,unicast ip address,Identifier,,,,KEEP
+CONCEPT,,,,C0055,ip address,Identifier,IP addresses,,,KEEP
+CONCEPT,,,,C0056,internetwork,Concept,,,,KEEP
+CONCEPT,,,,C0057,link,Component,links,,,KEEP
+CONCEPT,,,,C0059,receiver,Component,receivers|receiving host|Receivers,,,EDITED: identity/boundary review
+CONCEPT,,,,C0060,scalability,Property,scalable|scaling|scale,,,KEEP
+CONCEPT,,,,C0061,many-to-many multicast,Mechanism,many-to-many model|many-to-many multicasting,,,EDITED: identity/boundary review
+CONCEPT,,,,C0062,one-to-many multicast,Mechanism,one-to-many model|one-to-many service model|one-to-many multicasting,,,EDITED: identity/boundary review
+CONCEPT,,,,C0063,source-specific multicast,Mechanism,SSM,,,KEEP
+CONCEPT,,,,C0066,radio broadcast,Concept,radio broadcasts,,,KEEP
+CONCEPT,,,,C0067,any source multicast,Mechanism,ASM,,,KEEP
+CONCEPT,,,,C0068,ipv4,Protocol,,,,KEEP
+CONCEPT,,,,C0069,internet group management protocol,Protocol,IGMP,,,KEEP
+CONCEPT,,,,C0070,ipv6,Protocol,,,,KEEP
+CONCEPT,,,,C0071,multicast listener discovery,Protocol,MLD,,,KEEP
+CONCEPT,,,,C0072,crash,Event,,,,KEEP
+CONCEPT,,,,C0073,failure,Event,,,,KEEP
+CONCEPT,,,,C0074,address space,Concept,,,,KEEP
+CONCEPT,,,,C0075,class d,Identifier,,,,KEEP
+CONCEPT,,,,C0076,class d address space,Concept,,,,KEEP
+CONCEPT,,,,C0077,multicast address range,Concept,multicast ranges,,,KEEP
+CONCEPT,,,,C0078,intradomain multicast,Mechanism,,,,KEEP
+CONCEPT,,,,C0079,routing domain,Concept,domains|routing domains|domain|domain’s,,,EDITED: identity/boundary review
+CONCEPT,,,,C0080,bit,DataUnit,bits,,,KEEP
+CONCEPT,,,,C0081,address prefix,Identifier,prefix,,,KEEP
+CONCEPT,,,,C0082,hardware multicasting,Mechanism,,,,KEEP
+CONCEPT,,,,C0083,local area network,Concept,LAN|LANs,,,KEEP
+CONCEPT,,,,C0084,ethernet multicast address,Identifier,Ethernet multicast addresses,,,KEEP
+CONCEPT,,,,C0085,shared address prefix,Identifier,shared prefix,,,KEEP
+CONCEPT,,,,C0086,ethernet multicasting,Mechanism,,,,KEEP
+CONCEPT,,,,C0092,ethernet address,Identifier,Ethernet addresses,,,KEEP
+CONCEPT,,,,C0093,networking technology,Concept,,,,KEEP
+CONCEPT,,,,C0094,passive optical network,Concept,PON|Passive Optical Networks,,,KEEP
+CONCEPT,,,,C0095,access network technology,Concept,,,,KEEP
+CONCEPT,,,,C0096,access network,Concept,,,,KEEP
+CONCEPT,,,,C0097,fiber-to-the-home,Concept,,,,KEEP
+CONCEPT,,,,C0098,ip multicast over pon,Mechanism,,,,KEEP
+CONCEPT,,,,C0101,ethernet interface,Component,,,,KEEP
+CONCEPT,,,,C0102,ip header,DataUnit,,,,KEEP
+CONCEPT,,,,C0103,header,DataUnit,,,,KEEP
+CONCEPT,,,,C0104,multicast packet,DataUnit,multicast packets|packet|multicast|Multicasts,,,KEEP
+CONCEPT,,,,C0105,multicast address size,Parameter,multicast address sizes,,,KEEP
+CONCEPT,,,,C0106,switched network,Concept,switched networks,,,KEEP
+CONCEPT,,,,C0107,switched ethernet,Concept,,,,KEEP
+CONCEPT,,,,C0108,network switch,Component,switches,,,KEEP
+CONCEPT,,,,C0110,out-of-band communication,Mechanism,out-of-band means,,,KEEP
+CONCEPT,,,,C0111,multicast routing,Mechanism,,,,KEEP
+CONCEPT,,,,C0112,distance vector multicast routing protocol,Protocol,DVMRP,,,KEEP
+CONCEPT,,,,C0113,protocol independent multicast,Protocol,PIM,,,KEEP
+CONCEPT,,,,C0114,multicast source discovery protocol,Protocol,MSDP|MSDP protocol,,,KEEP
+CONCEPT,,,,C0115,unicast forwarding table,Component,unicast forwarding tables,,,KEEP
+CONCEPT,,,,C0116,forwarding table,Component,forwarding tables,,,KEEP
+CONCEPT,,,,C0117,unicast packet,DataUnit,,,,KEEP
+CONCEPT,,,,C0118,multicast forwarding table,Component,multicast forwarding tables,,,KEEP
+CONCEPT,,,,C0120,routing tree,Concept,trees,,,KEEP
+CONCEPT,,,,C0121,multicast distribution tree,Concept,multicast distribution trees|trees|tree,,,EDITED: identity/boundary review
+CONCEPT,,,,C0123,unicast routing,Mechanism,,,,KEEP
+CONCEPT,,,,C0124,multicast routing protocol,Protocol,multicast routing protocols|protocols|multicast protocols,,,EDITED: identity/boundary review
+CONCEPT,,,,C0125,routing protocol,Protocol,,,,KEEP
+CONCEPT,,,,C0127,distance-vector routing,Mechanism,distance-vector algorithm|algorithm,,,EDITED: identity/boundary review
+CONCEPT,,,,C0129,distance-vector routing table,Component,"table of Destination, Cost, NextHop tuples",,,KEEP
+CONCEPT,,,,C0130,destination-cost-next-hop tuple,DataUnit,"Destination, Cost, NextHop tuples",,,KEEP
+CONCEPT,,,,C0131,destination,Identifier,,,,KEEP
+CONCEPT,,,,C0132,cost,Parameter,,,,KEEP
+CONCEPT,,,,C0133,next hop,Identifier,NextHop,,,KEEP
+CONCEPT,,,,C0134,distance-vector update,DataUnit,"list of (Destination, Cost) pairs",,,KEEP
+CONCEPT,,,,C0135,destination-cost pair,DataUnit,"(Destination, Cost) pairs",,,KEEP
+CONCEPT,,,,C0136,directly connected neighbor,Component,directly connected neighbors,,,KEEP
+CONCEPT,,,,C0138,pruning,Mechanism,prunes back|prune,,,KEEP
+CONCEPT,,,,C0139,flood-and-prune protocol,Protocol,flood-and-prune protocols,,,KEEP
+CONCEPT,,,,C0140,unicast routing table,Component,,,,KEEP
+CONCEPT,,,,C0141,routing table,Component,routing tables,,,KEEP
+CONCEPT,,,,C0142,shortest path,Concept,shortest-path|shortest possible path|shortest paths,,,KEEP
+CONCEPT,,,,C0143,source network,Component,source|S,,,EDITED: identity/boundary review
+CONCEPT,,,,C0144,outgoing link,Component,outgoing links,,,KEEP
+CONCEPT,,,,C0145,flooding,Mechanism,floods,,,KEEP
+CONCEPT,,,,C0146,routing loop,Event,loop,,,KEEP
+CONCEPT,,,,C0147,forwarding strategy,Mechanism,,,,KEEP
+CONCEPT,,,,C0148,shortest-path tree,Concept,shortest path trees,,,EDITED: identity/boundary review
+CONCEPT,,,,C0149,duplicate broadcast packet,DataUnit,duplicate broadcast packets,,,KEEP
+CONCEPT,,,,C0150,broadcast packet,DataUnit,broadcast packets,,,KEEP
+CONCEPT,,,,C0151,parent router,Component,parent,,,KEEP
+CONCEPT,,,,C0152,router address,Identifier,address,,,KEEP
+CONCEPT,,,,C0153,distance-vector message,DataUnit,distance-vector messages,,,KEEP
+CONCEPT,,,,C0154,neighbor,Component,neighbors,,,KEEP
+CONCEPT,,,,C0155,incident link,Component,incident links,,,KEEP
+CONCEPT,,,,C0156,source-link pair,Concept,source/link pair,,,KEEP
+CONCEPT,,,,C0158,forwarding,Mechanism,forward,,,KEEP
+CONCEPT,,,,C0159,reverse path broadcast,Mechanism,RPB|Reverse Path Forwarding|RPF|Reverse Path Broadcast algorithm,,,KEEP
+CONCEPT,,,,C0160,path,Concept,paths,,,EDITED: identity/boundary review
+CONCEPT,,,,C0161,routing,Mechanism,,,,KEEP
+CONCEPT,,,,C0162,shortest-path broadcast,Mechanism,,,,KEEP
+CONCEPT,,,,C0164,leaf network,Component,leaf,,,KEEP
+CONCEPT,,,,C0165,link-state multicast,Mechanism,,,,KEEP
+CONCEPT,,,,C0166,routing update,DataUnit,routing updates,,,KEEP
+CONCEPT,,,,C0167,overhead,Property,,,,KEEP
+CONCEPT,,,,C0168,address,Identifier,,,,KEEP
+CONCEPT,,,,C0170,Protocol Independent Multicast sparse mode,Protocol,PIM-SM|sparse mode|PIM sparse mode|PIM-SM protocol,,,EDITED: identity/boundary review
+CONCEPT,,,,C0173,pim dense mode,Protocol,dense mode|PIM-DM,,,KEEP
+CONCEPT,,,,C0174,flood-and-prune algorithm,Mechanism,,,,KEEP
+CONCEPT,,,,C0176,unicast-routing-protocol independence,Property,protocol independent|unicast routing protocol independent,,,EDITED: identity/boundary review
+CONCEPT,,,,C0177,unicast routing protocol,Protocol,,,,KEEP
+CONCEPT,,,,C0179,distribution tree,Component,,,,KEEP
+CONCEPT,,,,C0180,pim protocol message,DataUnit,PIM protocol messages,,,KEEP
+CONCEPT,,,,C0181,protocol message,DataUnit,protocol messages,,,KEEP
+CONCEPT,,,,C0182,PIM Join message,DataUnit,Join messages|Join message|Join|message|Join\ s,,,EDITED: identity/boundary review
+CONCEPT,,,,C0183,broadcast tree,Component,,,,KEEP
+CONCEPT,,,,C0184,rendezvous point,Component,RP|RPs,,,KEEP
+CONCEPT,,,,C0185,candidate rendezvous point,Component,candidate RPs|candidate RP,,,KEEP
+CONCEPT,,,,C0186,candidate rendezvous point failure,Event,failure of a candidate RP,,,KEEP
+CONCEPT,,,,C0187,network partitioning,Event,partitioning of a domain,,,KEEP
+CONCEPT,,,,C0188,node failure,Event,node failures,,,KEEP
+CONCEPT,,,,C0189,multicast forwarding tree,Component,,,,KEEP
+CONCEPT,,,,C0190,forwarding tree,Component,,,,KEEP
+CONCEPT,,,,C0191,shared tree,Component,tree|shared-tree,,,KEEP
+CONCEPT,,,,C0192,source-specific tree,Component,source-specific trees,,,KEEP
+CONCEPT,,,,C0195,ip unicast transmission,Mechanism,,,,KEEP
+CONCEPT,,,,C0196,unicast transmission,Mechanism,,,,KEEP
+CONCEPT,,,,C0198,wildcarded Join,Property,“wildcarded”,,,EDITED: identity/boundary review
+CONCEPT,,,,C0200,forwarding table entry,DataUnit,,,,KEEP
+CONCEPT,,,,C0201,wildcard-group forwarding entry,DataUnit,"(\, G) entry",,,KEEP
+CONCEPT,,,,C0202,wildcard-group identifier,Identifier,"(\, G)",,,KEEP
+CONCEPT,,,,C0204,data packet,DataUnit,data packets,,,KEEP
+CONCEPT,,,,C0205,incoming packet,DataUnit,incoming packets,,,KEEP
+CONCEPT,,,,C0206,multicast tree branch,Concept,tree branch|branches|branch,,,EDITED: identity/boundary review
+CONCEPT,,,,C0209,outgoing interface,Component,,,,KEEP
+CONCEPT,,,,C0210,tree root,Concept,root,,,KEEP
+CONCEPT,,,,C0211,message,DataUnit,,,,KEEP
+CONCEPT,,,,C0212,packet destination,Concept,destination,,,KEEP
+CONCEPT,,,,C0213,local network,Component,,,,KEEP
+CONCEPT,,,,C0214,designated router,Component,DR,,,KEEP
+CONCEPT,,,,C0216,multicast forwarding state,State,state,,,EDITED: identity/boundary review
+CONCEPT,,,,C0217,pim register message,DataUnit,Register message,,,KEEP
+CONCEPT,,,,C0218,ip tunnel endpoint,Component,,,,KEEP
+CONCEPT,,,,C0219,ip tunnel,Mechanism,,,,KEEP
+CONCEPT,,,,C0220,payload,DataUnit,,,,KEEP
+CONCEPT,,,,C0221,ip packet,DataUnit,,,,KEEP
+CONCEPT,,,,C0223,packet delivery,Event,delivery,,,KEEP
+CONCEPT,,,,C0224,tunneled packet,DataUnit,,,,KEEP
+CONCEPT,,,,C0226,bandwidth inefficiency,Property,,,,KEEP
+CONCEPT,,,,C0227,processing cost,Parameter,,,,KEEP
+CONCEPT,,,,C0228,encapsulation,Mechanism,,,,KEEP
+CONCEPT,,,,C0229,decapsulation,Mechanism,,,,KEEP
+CONCEPT,,,,C0230,tunneling,Mechanism,tunneled,,,KEEP
+CONCEPT,,,,C0233,native multicast forwarding,Property,native,,,EDITED: identity/boundary review
+CONCEPT,,,,C0234,sender-specific state,State,"(S, G) state|source-specific state",,,EDITED: identity/boundary review
+CONCEPT,,,,C0236,group-shared state,State,"(\*, G) state",,,KEEP
+CONCEPT,,,,C0237,source-specific route,Concept,,,,KEEP
+CONCEPT,,,,C0238,route,Concept,routes,,,KEEP
+CONCEPT,,,,C0239,data rate,Parameter,,,,KEEP
+CONCEPT,,,,C0240,downstream end,Concept,,,,KEEP
+CONCEPT,,,,C0241,PIM source-specific Join message,DataUnit,source-specific Join|PIM-SM source-specific Join message,,,EDITED: identity/boundary review
+CONCEPT,,,,C0242,multicast tree construction,Mechanism,building|formation of trees,,,KEEP
+CONCEPT,,,,C0243,multicast tree maintenance,Mechanism,maintaining,,,KEEP
+CONCEPT,,,,C0245,network-layer protocol,Protocol,network-layer protocols,,,KEEP
+CONCEPT,,,,C0247,optimality,Property,,,,KEEP
+CONCEPT,,,,C0250,link bandwidth,Parameter,,,,KEEP
+CONCEPT,,,,C0251,interdomain multicast,Mechanism,,,,KEEP
+CONCEPT,,,,C0253,domain autonomy,Property,autonomous,,,KEEP
+CONCEPT,,,,C0255,MSDP peer rendezvous point,Component,MSDP peer RPs|peer RPs|MSDP peer RP,,,EDITED: identity/boundary review
+CONCEPT,,,,C0256,msdp peer,Component,MSDP peers|peers,,,KEEP
+CONCEPT,,,,C0257,tcp connection,Component,,,,KEEP
+CONCEPT,,,,C0258,transmission control protocol,Protocol,TCP,,,EDITED: identity/boundary review
+CONCEPT,,,,C0259,connection,Component,,,,KEEP
+CONCEPT,,,,C0260,mesh topology,Concept,mesh,,,KEEP
+CONCEPT,,,,C0261,broadcast network,Concept,,,,KEEP
+CONCEPT,,,,C0262,msdp message,DataUnit,MSDP messages,,,KEEP
+CONCEPT,,,,C0264,group membership information,Concept,,,,KEEP
+CONCEPT,,,,C0266,source active message,DataUnit,Source Active messages,,,KEEP
+CONCEPT,,,,C0267,originating rendezvous point,Component,originating RP,,,KEEP
+CONCEPT,,,,C0272,msdp network,Concept,,,,KEEP
+CONCEPT,,,,C0274,pim-ssm,Protocol,PIM Source-Specific Multicast,,,KEEP
+CONCEPT,,,,C0275,multicast service model,Concept,service model,,,KEEP
+CONCEPT,,,,C0279,multicast application,Concept,Internet multicast applications|multicast applications,,,EDITED: identity/boundary review
+CONCEPT,,,,C0281,source-specific shortest path tree,Concept,source-specific shortest path trees,,,KEEP
+CONCEPT,,,,C0286,source-specific routing,Mechanism,,,,KEEP
+CONCEPT,,,,C0287,ssm channel,Concept,channel,,,KEEP
+CONCEPT,,,,C0288,source address,Identifier,S,,,KEEP
+CONCEPT,,,,C0290,multicast address space,Concept,,,,KEEP
+CONCEPT,,,,C0291,IGMP Membership Report message,DataUnit,Membership Report message|IGMP Membership Report messages,,,EDITED: identity/boundary review
+CONCEPT,,,,C0294,shared-tree stage,State,,,,KEEP
+CONCEPT,,,,C0296,channel address,Identifier,address of a channel,,,KEEP
+CONCEPT,,,,C0297,ssm group,Component,,,,KEEP
+CONCEPT,,,,C0298,network attack,Event,attacks,,,KEEP
+CONCEPT,,,,C0299,malicious host,Component,malicious hosts,,,KEEP
+CONCEPT,,,,C0301,bidirectional tree,Mechanism,Bidirectional Trees|trees|Bidirectional trees,,,KEEP
+CONCEPT,,,,C0302,bidirectional pim,Protocol,BIDIR-PIM,,,KEEP
+CONCEPT,,,,C0303,multiparty videoconference,Concept,,,,KEEP
+CONCEPT,,,,C0304,source-specific,Property,source specific,,,KEEP
+CONCEPT,,,,C0306,unidirectional tree,Mechanism,,,,KEEP
+CONCEPT,,,,C0307,bidirectional,Property,,,,KEEP
+CONCEPT,,,,C0308,downstream branch,Component,,,,KEEP
+CONCEPT,,,,C0310,multicast route,Concept,,,,KEEP
+CONCEPT,,,,C0311,routable address,Identifier,,,,KEEP
+CONCEPT,,,,C0312,rp address,Identifier,,,,KEEP
+CONCEPT,,,,C0314,upstream forwarding,Mechanism,,,,KEEP
+CONCEPT,,,,C0315,source registration,Mechanism,source registration process,,,KEEP
+CONCEPT,,,,C0317,bottleneck,Concept,,,,KEEP
+CONCEPT,,,,C0318,bandwidth usage,Parameter,,,,KEEP
+CONCEPT,,,,C0319,router state,State,state of the router,,,KEEP
+CONCEPT,,,,C0320,path length,Parameter,,,,KEEP
+CONCEPT,,,,C0322,multicast mode,Concept,,,,KEEP
+CONCEPT,,,,C0323,resource allocation mechanism,Mechanism,,,,KEEP
+CONCEPT,,,,C0324,resource allocation,Mechanism,,,,KEEP
+CONCEPT,,,,C0325,queuing discipline,Mechanism,,,,KEEP
+CONCEPT,,,,C0326,queuing algorithm,Mechanism,queuing algorithms,,,KEEP
+CONCEPT,,,,C0327,buffer space,Parameter,,,,KEEP
+CONCEPT,,,,C0328,latency,Parameter,,,,KEEP
+CONCEPT,,,,C0329,FIFO queuing,Mechanism,"first-in, first-out|FIFO|first-come, first-served|FCFS",,,EDITED: identity/boundary review
+CONCEPT,,,,C0330,fair queuing,Mechanism,FQ|FQ mechanism|algorithm|Simple FQ,,,EDITED: identity/boundary review
+CONCEPT,,,,C0334,queue slot,Component,slots,,,KEEP
+CONCEPT,,,,C0335,queue,Component,queues,,,KEEP
+CONCEPT,,,,C0336,flow,Concept,flows,,,KEEP
+CONCEPT,,,,C0337,tail drop,Mechanism,,,,KEEP
+CONCEPT,,,,C0338,queue tail,Concept,tail end,,,KEEP
+CONCEPT,,,,C0339,scheduling discipline,Mechanism,scheduling disciplines|scheduling algorithm,,,EDITED: identity/boundary review
+CONCEPT,,,,C0340,drop policy,Mechanism,drop policies,,,KEEP
+CONCEPT,,,,C0341,fifo with tail drop,Mechanism,vanilla queuing implementation,,,KEEP
+CONCEPT,,,,C0343,buffer,Component,,,,KEEP
+CONCEPT,,,,C0344,queuing,Mechanism,,,,KEEP
+CONCEPT,,,,C0345,congestion control,Mechanism,congestion-control,,,KEEP
+CONCEPT,,,,C0346,network edge,Concept,edges of the network,,,KEEP
+CONCEPT,,,,C0348,congestion,State,,,,EDITED: identity/boundary review
+CONCEPT,,,,C0349,priority queuing,Mechanism,,,,KEEP
+CONCEPT,,,,C0350,priority,Parameter,,,,KEEP
+CONCEPT,,,,C0351,priority mark,Identifier,mark,,,KEEP
+CONCEPT,,,,C0352,fifo queue,Component,FIFO queues,,,KEEP
+CONCEPT,,,,C0353,priority class,Concept,,,,KEEP
+CONCEPT,,,,C0354,highest-priority queue,Component,,,,KEEP
+CONCEPT,,,,C0355,priority queue,Component,next priority queue,,,KEEP
+CONCEPT,,,,C0356,best-effort delivery model,Concept,,,,KEEP
+CONCEPT,,,,C0357,best-effort delivery,Mechanism,,,,KEEP
+CONCEPT,,,,C0358,high-priority packet,DataUnit,high-priority packets,,,KEEP
+CONCEPT,,,,C0359,high-priority queue,Component,,,,KEEP
+CONCEPT,,,,C0360,lower-priority queue,Component,lower-priority queues,,,KEEP
+CONCEPT,,,,C0361,high-priority traffic,Concept,,,,KEEP
+CONCEPT,,,,C0363,high priority,Property,,,,KEEP
+CONCEPT,,,,C0364,pushback,Mechanism,,,,KEEP
+CONCEPT,,,,C0365,low-priority packet,DataUnit,low-priority packets,,,KEEP
+CONCEPT,,,,C0367,topology change,Event,,,,KEEP
+CONCEPT,,,,C0368,network topology,Concept,topology,,,KEEP
+CONCEPT,,,,C0370,differentiated services code point,Identifier,,,,KEEP
+CONCEPT,,,,C0371,differentiated services,Mechanism,,,,KEEP
+CONCEPT,,,,C0372,code point,Identifier,,,,KEEP
+CONCEPT,,,,C0373,TOS field,Identifier,TOS,,,EDITED: identity/boundary review
+CONCEPT,,,,C0375,traffic source,Component,traffic sources|source|sources,,,KEEP
+CONCEPT,,,,C0376,congestion-control algorithm,Mechanism,,,,KEEP
+CONCEPT,,,,C0378,tcp congestion control,Mechanism,,,,KEEP
+CONCEPT,,,,C0379,congestion-control mechanism,Mechanism,mechanism,,,KEEP
+CONCEPT,,,,C0380,ill-behaved source,Component,,,,KEEP
+CONCEPT,,,,C0383,internet telephony,Concept,,,,KEEP
+CONCEPT,,,,C0386,round-robin scheduling,Mechanism,round-robin|round-robin servicing|round-robin mechanism,,,KEEP
+CONCEPT,,,,C0387,queue length,Parameter,length,,,KEEP
+CONCEPT,,,,C0388,end-to-end congestion control,Mechanism,end-to-end congestion-control mechanism|end-to-end algorithm,,,EDITED: identity/boundary review
+CONCEPT,,,,C0391,fairness,Property,,,,KEEP
+CONCEPT,,,,C0392,packet length,Parameter,length|P_i|length of packet i,,,EDITED: identity/boundary review
+CONCEPT,,,,C0393,fragmentation,Mechanism,,,,KEEP
+CONCEPT,,,,C0394,bit-by-bit round-robin scheduling,Mechanism,bit-by-bit round-robin|bit-by-bit round-robin scheme|perfect bit-by-bit fair queuing|bit-by-bit fair queuing,,,EDITED: identity/boundary review
+CONCEPT,,,,C0396,packet transmission,Event,transmitted|transmission,,,EDITED: identity/boundary review
+CONCEPT,,,,C0397,packet transmission finish time,Parameter,finishing time|F_i|F_{i-1}|finishing times,,,EDITED: identity/boundary review
+CONCEPT,,,,C0400,active flow,State,active flows,,,KEEP
+CONCEPT,,,,C0401,active flow state,State,active,,,KEEP
+CONCEPT,,,,C0403,packet transmission start time,Parameter,S_i,,,EDITED: identity/boundary review
+CONCEPT,,,,C0405,clock tick,Parameter,clock ticks|tick,,,KEEP
+CONCEPT,,,,C0406,service,Concept,,,,KEEP
+CONCEPT,,,,C0407,empty queue state,State,empty,,,KEEP
+CONCEPT,,,,C0408,packet arrival time,Parameter,A_i,,,EDITED: identity/boundary review
+CONCEPT,,,,C0410,wall clock,Component,,,,KEEP
+CONCEPT,,,,C0411,virtual clock,Mechanism,clock,,,EDITED: identity/boundary review
+CONCEPT,,,,C0412,timestamp,Parameter,timestamps,,,KEEP
+CONCEPT,,,,C0414,preemption,Mechanism,preempt,,,KEEP
+CONCEPT,,,,C0415,nonpreemptive scheduling,Property,lack of preemption,,,KEEP
+CONCEPT,,,,C0421,idle,State,,,,KEEP
+CONCEPT,,,,C0422,queuing scheme,Mechanism,,,,KEEP
+CONCEPT,,,,C0423,work conserving,Property,,,,KEEP
+CONCEPT,,,,C0424,link capacity,Parameter,,,,KEEP
+CONCEPT,,,,C0425,bandwidth share,Parameter,share|shares|percentage of the link’s bandwidth,,,EDITED: identity/boundary review
+CONCEPT,,,,C0426,fully loaded,State,,,,KEEP
+CONCEPT,,,,C0427,queue overflow,Event,overflow,,,KEEP
+CONCEPT,,,,C0429,available bandwidth,Parameter,,,,KEEP
+CONCEPT,,,,C0430,guaranteed minimum bandwidth share,Parameter,guaranteed minimum share of bandwidth|guarantee,,,KEEP
+CONCEPT,,,,C0431,weighted fair queuing,Mechanism,WFQ,,,KEEP
+CONCEPT,,,,C0432,queue weight,Parameter,weight|weights,,,EDITED: identity/boundary review
+CONCEPT,,,,C0434,traffic class,Concept,classes of traffic|classes|class,,,KEEP
+CONCEPT,,,,C0436,differentiated services architecture,Concept,,,,KEEP
+CONCEPT,,,,C0437,manual configuration,Mechanism,,,,KEEP
+CONCEPT,,,,C0438,signalling,Mechanism,,,,KEEP
+CONCEPT,,,,C0439,reservation-based model,Concept,,,,KEEP
+CONCEPT,,,,C0440,resource reservation,Mechanism,reservation,,,KEEP
+CONCEPT,,,,C0441,reservation-based resource allocation mechanism,Mechanism,,,,KEEP
+MENTION,4.3_s0000,Multi-access networks,1,C0001,,,,,,KEEP
+MENTION,4.3_s0000,Ethernet,1,C0002,,,,,,KEEP
+MENTION,4.3_s0000,multicast,1,C0003,,,,,,KEEP
+MENTION,4.3_s0000,hardware,1,C0004,,,,,,KEEP
+MENTION,4.3_s0001,applications,1,C0005,,,,,,KEEP
+MENTION,4.3_s0001,multicasting,1,C0003,,,,,,KEEP
+MENTION,4.3_s0001,Internet,1,C0006,,,,,,KEEP
+MENTION,4.3_s0002,radio station,1,C0007,,,,,,KEEP
+MENTION,4.3_s0002,broadcast,1,C0008,,,,,,KEEP
+MENTION,4.3_s0002,Internet,1,C0006,,,,,,KEEP
+MENTION,4.3_s0002,data,1,C0009,,,,,,KEEP
+MENTION,4.3_s0002,hosts,1,C0010,,,,,,KEEP
+MENTION,4.3_s0003,communication,1,C0011,,,,,,KEEP
+MENTION,4.3_s0003,one-to-many,1,C0012,,,,,,KEEP
+MENTION,4.3_s0004,one-to-many applications,1,C0013,,,,,,KEEP
+MENTION,4.3_s0004,one-to-many,1,C0012,,,,yes,,KEEP
+MENTION,4.3_s0004,applications,1,C0005,,,,yes,,KEEP
+MENTION,4.3_s0004,software updates,1,C0014,,,,,,KEEP
+MENTION,4.3_s0004,TV channels,1,C0015,,,,,,KEEP
+MENTION,4.3_s0004,hosts,1,C0010,,,,,,KEEP
+MENTION,4.3_s0005,IPTV,1,C0016,,,,,,KEEP
+MENTION,4.3_s0006,applications,1,C0005,,,,,,KEEP
+MENTION,4.3_s0006,communication,1,C0011,,,,,,KEEP
+MENTION,4.3_s0006,many-to-many,1,C0017,,,,,,KEEP
+MENTION,4.3_s0006,multimedia teleconferencing,1,C0018,,,,,,KEEP
+MENTION,4.3_s0006,online multiplayer gaming,1,C0019,,,,,,KEEP
+MENTION,4.3_s0006,distributed simulations,1,C0020,,,,,,KEEP
+MENTION,4.3_s0007,members,1,C0021,,,,,,KEEP
+MENTION,4.3_s0007,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0007,data,1,C0009,,,,,,KEEP
+MENTION,4.3_s0007,senders,1,C0023,,,,,,KEEP
+MENTION,4.3_s0008,sender,1,C0023,,,,,,KEEP
+MENTION,4.3_s0008,data,1,C0009,,,,,,KEEP
+MENTION,4.3_s0009,IP communication,1,C0038,,,,,,EDITED: identity→C0038; boundary:Normal IP communication→IP communication
+MENTION,4.3_s0009,IP,1,C0025,,,,yes,,KEEP
+MENTION,4.3_s0009,communication,1,C0011,,,,yes,,KEEP
+MENTION,4.3_s0009,packet,1,C0026,,,,,,KEEP
+MENTION,4.3_s0009,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0009,applications,1,C0005,,,,,,KEEP
+MENTION,4.3_s0010,application,1,C0005,,,,,,KEEP
+MENTION,4.3_s0010,data,1,C0009,,,,,,KEEP
+MENTION,4.3_s0010,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0010,packet,1,C0026,,,,,,KEEP
+MENTION,4.3_s0010,data,2,C0009,,,,,,KEEP
+MENTION,4.3_s0010,member,1,C0021,,,,,,KEEP
+MENTION,4.3_s0010,group,2,C0022,,,,,,KEEP
+MENTION,4.3_s0011,redundancy,1,C0027,,,,,,KEEP
+MENTION,4.3_s0011,bandwidth,1,C0028,,,,,,KEEP
+MENTION,4.3_s0012,redundant traffic,1,C0029,,,,,,KEEP
+MENTION,4.3_s0012,traffic,1,C0030,,,,yes,,KEEP
+MENTION,4.3_s0012,sending host,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0012,host,1,C0010,,,,yes,,KEEP
+MENTION,4.3_s0012,capacity,1,C0032,,,,,,KEEP
+MENTION,4.3_s0012,sending host,2,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0012,host,2,C0010,,,,yes,,KEEP
+MENTION,4.3_s0012,networks,1,C0033,,,,,,KEEP
+MENTION,4.3_s0012,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0013,many-to-many,1,C0017,,,,,,KEEP
+MENTION,4.3_s0013,one-to-many communication,1,C0012,,,,,,KEEP
+MENTION,4.3_s0013,communication,1,C0011,,,,yes,,KEEP
+MENTION,4.3_s0013,IP,1,C0025,,,,,,KEEP
+MENTION,4.3_s0013,IP-level multicast,1,C0035,,,,,,KEEP
+MENTION,4.3_s0013,multicast,1,C0003,,,,yes,,KEEP
+MENTION,4.3_s0013,link-level multicast,1,C0036,,,,,,KEEP
+MENTION,4.3_s0013,multicast,2,C0003,,,,yes,,KEEP
+MENTION,4.3_s0013,multi-access networks,1,C0001,,,,,,KEEP
+MENTION,4.3_s0013,Ethernet,1,C0002,,,,,,KEEP
+MENTION,4.3_s0014,multicast,1,C0003,,,,,,KEEP
+MENTION,4.3_s0014,IP,1,C0025,,,,,,KEEP
+MENTION,4.3_s0014,one-to-one service,1,C0038,,,,,,EDITED: identity→C0038
+MENTION,4.3_s0014,IP,2,C0025,,,,,,KEEP
+MENTION,4.3_s0014,unicast,1,C0038,,,,,,KEEP
+MENTION,4.3_s0015,IP multicast model,1,C0039,,,,,,KEEP
+MENTION,4.3_s0015,IP multicast,1,C0035,,,,yes,,KEEP
+MENTION,4.3_s0015,IP,1,C0025,,,,yes,,KEEP
+MENTION,4.3_s0015,multicast,1,C0003,,,,yes,,KEEP
+MENTION,4.3_s0015,many-to-many model,1,C0061,,,,,,EDITED: identity→C0061
+MENTION,4.3_s0015,many-to-many,1,C0017,,,,yes,,KEEP
+MENTION,4.3_s0015,multicast groups,1,C0022,,,,,,KEEP
+MENTION,4.3_s0015,group,1,C0022,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0015,IP multicast address,1,C0041,,,,,,KEEP
+MENTION,4.3_s0015,multicast address,1,C0042,,,,yes,,KEEP
+MENTION,4.3_s0016,hosts,1,C0010,,,,,,KEEP
+MENTION,4.3_s0016,members,1,C0021,,,,,,KEEP
+MENTION,4.3_s0016,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0016,packets,1,C0026,,,,,,KEEP
+MENTION,4.3_s0016,group’s multicast address,1,C0043,,,,,,KEEP
+MENTION,4.3_s0016,multicast address,1,C0042,,,,yes,,KEEP
+MENTION,4.3_s0017,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0017,groups,1,C0022,,,,,,KEEP
+MENTION,4.3_s0017,join,1,C0044,,,,,,KEEP
+MENTION,4.3_s0017,leave,1,C0045,,,,,,KEEP
+MENTION,4.3_s0017,groups,2,C0022,,,,,,KEEP
+MENTION,4.3_s0017,local router,1,C0046,,,,,,KEEP
+MENTION,4.3_s0017,router,1,C0034,,,,yes,,KEEP
+MENTION,4.3_s0017,protocol,1,C0047,,,,,,KEEP
+MENTION,4.3_s0018,unicast addresses,1,C0048,,,,,,KEEP
+MENTION,4.3_s0018,node,1,C0049,,,,,,KEEP
+MENTION,4.3_s0018,interface,1,C0050,,,,,,KEEP
+MENTION,4.3_s0018,multicast addresses,1,C0042,,,,,,KEEP
+MENTION,4.3_s0018,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0018,membership,1,C0051,,,,,,KEEP
+MENTION,4.3_s0019,IP multicast service model,1,C0039,,,,,,EDITED: identity→C0039
+MENTION,4.3_s0019,IP multicast,1,C0035,,,,yes,,KEEP
+MENTION,4.3_s0019,IP,1,C0025,,,,yes,,KEEP
+MENTION,4.3_s0019,multicast,1,C0003,,,,yes,,KEEP
+MENTION,4.3_s0019,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0019,multicast traffic,1,C0053,,,,,,KEEP
+MENTION,4.3_s0019,traffic,1,C0030,,,,yes,,KEEP
+MENTION,4.3_s0019,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0019,member,1,C0021,,,,,,KEEP
+MENTION,4.3_s0019,group,2,C0022,,,,,,KEEP
+MENTION,4.3_s0019,senders,1,C0023,,,,,,KEEP
+MENTION,4.3_s0019,group,3,C0022,,,,,,KEEP
+MENTION,4.3_s0020,IP multicast,1,C0035,,,,,,KEEP
+MENTION,4.3_s0020,IP,1,C0025,,,,yes,,KEEP
+MENTION,4.3_s0020,multicast,1,C0003,,,,yes,,KEEP
+MENTION,4.3_s0020,packet,1,C0026,,,,,,KEEP
+MENTION,4.3_s0020,member,1,C0021,,,,,,KEEP
+MENTION,4.3_s0020,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0020,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0020,packet,2,C0026,,,,,,KEEP
+MENTION,4.3_s0020,group,2,C0022,,,,,,KEEP
+MENTION,4.3_s0020,multicast address,1,C0042,,,,,,KEEP
+MENTION,4.3_s0021,sending host,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0021,host,1,C0010,,,,yes,,KEEP
+MENTION,4.3_s0021,unicast IP address,1,C0054,,,,,,KEEP
+MENTION,4.3_s0021,unicast,1,C0038,,,,yes,,KEEP
+MENTION,4.3_s0021,IP address,1,C0055,,,,yes,,KEEP
+MENTION,4.3_s0021,IP,1,C0025,,,,yes,,KEEP
+MENTION,4.3_s0021,member,1,C0021,,,,,,KEEP
+MENTION,4.3_s0021,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0021,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0021,internetwork,1,C0056,,,,,,KEEP
+MENTION,4.3_s0022,sending host,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0022,host,1,C0010,,,,yes,,KEEP
+MENTION,4.3_s0022,packet,1,C0026,,,,,,KEEP
+MENTION,4.3_s0022,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0022,packet,2,C0026,,,,,,KEEP
+MENTION,4.3_s0022,link,1,C0057,,,,,,KEEP
+MENTION,4.3_s0023,unicast IP,1,C0038,,,,,,EDITED: identity→C0038
+MENTION,4.3_s0023,unicast,1,C0038,,,,yes,,KEEP
+MENTION,4.3_s0023,IP,1,C0025,,,,yes,,KEEP
+MENTION,4.3_s0023,packets,1,C0026,,,,,,KEEP
+MENTION,4.3_s0023,receivers,1,C0059,,,,,,KEEP
+MENTION,4.3_s0023,IP multicast,1,C0035,,,,,,KEEP
+MENTION,4.3_s0023,IP,2,C0025,,,,yes,,KEEP
+MENTION,4.3_s0023,multicast,1,C0003,,,,yes,,KEEP
+MENTION,4.3_s0023,scalable,1,C0060,,,,,,KEEP
+MENTION,4.3_s0023,redundant traffic,1,C0029,,,,,,KEEP
+MENTION,4.3_s0023,traffic,1,C0030,,,,yes,,KEEP
+MENTION,4.3_s0023,packets,2,C0026,,,,,,KEEP
+MENTION,4.3_s0023,links,1,C0057,,,,,,KEEP
+MENTION,4.3_s0023,sending host,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0023,host,1,C0010,,,,yes,,KEEP
+MENTION,4.3_s0024,IP,1,C0025,,,,,,KEEP
+MENTION,4.3_s0024,many-to-many multicast,1,C0061,,,,,,KEEP
+MENTION,4.3_s0024,multicast,1,C0003,,,,yes,,KEEP
+MENTION,4.3_s0024,one-to-many multicast,1,C0062,,,,,,KEEP
+MENTION,4.3_s0024,multicast,2,C0003,,,,yes,,KEEP
+MENTION,4.3_s0025,one-to-many multicast,1,C0062,,,,,,KEEP
+MENTION,4.3_s0025,multicast,1,C0003,,,,yes,,KEEP
+MENTION,4.3_s0025,Source-Specific Multicast,1,C0063,,,,,,KEEP
+MENTION,4.3_s0025,SSM,1,C0063,,,,,,KEEP
+MENTION,4.3_s0025,receiving host,1,C0059,,,,,,EDITED: identity→C0059
+MENTION,4.3_s0025,host,1,C0010,,,,yes,,KEEP
+MENTION,4.3_s0025,multicast group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0025,sending host,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0025,host,2,C0010,,,,yes,,KEEP
+MENTION,4.3_s0026,receiving host,1,C0059,,,,,,EDITED: identity→C0059
+MENTION,4.3_s0026,host,1,C0010,,,,yes,,KEEP
+MENTION,4.3_s0026,multicasts,1,C0003,,,,,,KEEP
+MENTION,4.3_s0026,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0026,sender,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0027,Internet multicast applications,1,C0279,,,,,,EDITED: identity→C0279
+MENTION,4.3_s0027,Internet,1,C0006,,,,yes,,KEEP
+MENTION,4.3_s0027,multicast,1,C0003,,,,yes,,KEEP
+MENTION,4.3_s0027,radio broadcasts,1,C0066,,,,,,KEEP
+MENTION,4.3_s0027,SSM,1,C0063,,,,,,KEEP
+MENTION,4.3_s0028,SSM,1,C0063,,,,,,KEEP
+MENTION,4.3_s0028,IP,1,C0025,,,,,,KEEP
+MENTION,4.3_s0028,many-to-many model,1,C0061,,,,,,KEEP
+MENTION,4.3_s0028,Any Source Multicast,1,C0067,,,,,,KEEP
+MENTION,4.3_s0028,ASM,1,C0067,,,,,,KEEP
+MENTION,4.3_s0029,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0029,multicast group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0029,local router,1,C0046,,,,,,KEEP
+MENTION,4.3_s0029,router,1,C0034,,,,yes,,KEEP
+MENTION,4.3_s0029,protocol,1,C0047,,,,,,KEEP
+MENTION,4.3_s0030,IPv4,1,C0068,,,,,,KEEP
+MENTION,4.3_s0030,protocol,1,C0047,,,,,,KEEP
+MENTION,4.3_s0030,Internet Group Management Protocol,1,C0069,,,,,,KEEP
+MENTION,4.3_s0030,IGMP,1,C0069,,,,,,KEEP
+MENTION,4.3_s0030,IPv6,1,C0070,,,,,,KEEP
+MENTION,4.3_s0030,Multicast Listener Discovery,1,C0071,,,,,,KEEP
+MENTION,4.3_s0030,MLD,1,C0071,,,,,,KEEP
+MENTION,4.3_s0031,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0031,multicast,1,C0003,,,,,,KEEP
+MENTION,4.3_s0031,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0032,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0032,multicast group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0032,crash,1,C0072,,,,,,KEEP
+MENTION,4.3_s0032,failure,1,C0073,,,,,,KEEP
+MENTION,4.3_s0032,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0032,network,1,C0033,,,,,,KEEP
+MENTION,4.3_s0032,groups,1,C0022,,,,,,KEEP
+MENTION,4.3_s0032,hosts,1,C0010,,,,,,KEEP
+MENTION,4.3_s0033,Multicast Addresses,1,C0042,,,,,,KEEP
+MENTION,4.3_s0033,IP,1,C0025,,,,,,KEEP
+MENTION,4.3_s0033,address space,1,C0074,,,,,,KEEP
+MENTION,4.3_s0033,multicast addresses,1,C0042,,,,,,KEEP
+MENTION,4.3_s0034,IPv4,1,C0068,,,,,,KEEP
+MENTION,4.3_s0034,addresses,1,C0042,,,,,,KEEP
+MENTION,4.3_s0034,class D address space,1,C0076,,,,,,KEEP
+MENTION,4.3_s0034,class D,1,C0075,,,,yes,,KEEP
+MENTION,4.3_s0034,address space,1,C0074,,,,yes,,KEEP
+MENTION,4.3_s0034,IPv6,1,C0070,,,,,,KEEP
+MENTION,4.3_s0034,address space,2,C0074,,,,,,KEEP
+MENTION,4.3_s0034,multicast group addresses,1,C0043,,,,,,KEEP
+MENTION,4.3_s0034,multicast group,1,C0022,,,,yes,,KEEP
+MENTION,4.3_s0035,multicast ranges,1,C0077,,,,,,KEEP
+MENTION,4.3_s0035,multicast,1,C0003,,,,yes,,KEEP
+MENTION,4.3_s0035,intradomain multicast,1,C0078,,,,,,KEEP
+MENTION,4.3_s0035,domains,1,C0079,,,,,,KEEP
+MENTION,4.3_s0036,bits,1,C0080,,,,,,KEEP
+MENTION,4.3_s0036,multicast address,1,C0042,,,,,,KEEP
+MENTION,4.3_s0036,IPv4,1,C0068,,,,,,KEEP
+MENTION,4.3_s0036,prefix,1,C0081,,,,,,KEEP
+MENTION,4.3_s0036,multicast addresses,1,C0042,,,,,,KEEP
+MENTION,4.3_s0037,hardware multicasting,1,C0082,,,,,,KEEP
+MENTION,4.3_s0037,multicasting,1,C0003,,,,yes,,KEEP
+MENTION,4.3_s0037,local area network,1,C0083,,,,,,KEEP
+MENTION,4.3_s0037,LAN,1,C0083,,,,,,KEEP
+MENTION,4.3_s0038,Ethernet,1,C0002,,,,,,KEEP
+MENTION,4.3_s0039,Ethernet multicast addresses,1,C0084,,,,,,KEEP
+MENTION,4.3_s0039,Ethernet,1,C0002,,,,yes,,KEEP
+MENTION,4.3_s0039,multicast addresses,1,C0042,,,,yes,,KEEP
+MENTION,4.3_s0039,bits,1,C0080,,,,,,KEEP
+MENTION,4.3_s0039,shared prefix,1,C0085,,,,,,KEEP
+MENTION,4.3_s0039,prefix,1,C0081,,,,yes,,KEEP
+MENTION,4.3_s0040,Ethernet multicasting,1,C0086,,,,,,KEEP
+MENTION,4.3_s0040,Ethernet,1,C0002,,,,yes,,KEEP
+MENTION,4.3_s0040,multicasting,1,C0003,,,,yes,,EDITED: identity→C0003
+MENTION,4.3_s0040,IP,1,C0025,,,,,,KEEP
+MENTION,4.3_s0040,IP multicast addresses,1,C0041,,,,,,EDITED: nested_valid yes→blank
+MENTION,4.3_s0040,multicast addresses,1,C0042,,,,yes,,KEEP
+MENTION,4.3_s0040,Ethernet multicast addresses,1,C0084,,,,,,EDITED: nested_valid yes→blank
+MENTION,4.3_s0040,multicast addresses,2,C0042,,,,yes,,KEEP
+MENTION,4.3_s0041,IP multicast address,1,C0041,,,,,,KEEP
+MENTION,4.3_s0041,multicast address,1,C0042,,,,yes,,KEEP
+MENTION,4.3_s0041,Ethernet multicast address,1,C0084,,,,,,KEEP
+MENTION,4.3_s0041,multicast address,2,C0042,,,,yes,,KEEP
+MENTION,4.3_s0042,IP addresses,1,C0055,,,,,,KEEP
+MENTION,4.3_s0042,Ethernet addresses,1,C0092,,,,,,KEEP
+MENTION,4.3_s0043,Ethernet,1,C0002,,,,,,KEEP
+MENTION,4.3_s0043,networking technology,1,C0093,,,,,,KEEP
+MENTION,4.3_s0043,multicast,1,C0003,,,,,,KEEP
+MENTION,4.3_s0043,hardware,1,C0004,,,,,,KEEP
+MENTION,4.3_s0043,PON,1,C0094,,,,,,KEEP
+MENTION,4.3_s0043,Passive Optical Networks,1,C0094,,,,,,KEEP
+MENTION,4.3_s0043,access network technology,1,C0095,,,,,,KEEP
+MENTION,4.3_s0043,access network,1,C0096,,,,yes,,KEEP
+MENTION,4.3_s0043,fiber-to-the-home,1,C0097,,,,,,KEEP
+MENTION,4.3_s0044,IP Multicast over PON,1,C0098,,,,,,KEEP
+MENTION,4.3_s0044,IP Multicast,1,C0035,,,,yes,,KEEP
+MENTION,4.3_s0044,PON,1,C0094,,,,yes,,KEEP
+MENTION,4.3_s0044,IPTV,1,C0016,,,,,,EDITED: identity→C0016
+MENTION,4.3_s0045,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0045,Ethernet,1,C0002,,,,,,KEEP
+MENTION,4.3_s0045,IP multicast group,1,C0022,,,,,,EDITED: identity→C0022
+MENTION,4.3_s0045,multicast group,1,C0022,,,,yes,,KEEP
+MENTION,4.3_s0045,Ethernet interface,1,C0101,,,,,,KEEP
+MENTION,4.3_s0045,interface,1,C0050,,,,yes,,KEEP
+MENTION,4.3_s0045,packets,1,C0026,,,,,,KEEP
+MENTION,4.3_s0045,Ethernet multicast address,1,C0084,,,,,,KEEP
+MENTION,4.3_s0045,multicast address,1,C0042,,,,yes,,KEEP
+MENTION,4.3_s0046,receiving host,1,C0059,,,,,,EDITED: identity→C0059
+MENTION,4.3_s0046,host,1,C0010,,,,yes,,KEEP
+MENTION,4.3_s0046,multicast traffic,1,C0053,,,,,,KEEP
+MENTION,4.3_s0046,traffic,1,C0030,,,,yes,,KEEP
+MENTION,4.3_s0046,traffic,2,C0030,,,,,,KEEP
+MENTION,4.3_s0046,IP multicast groups,1,C0022,,,,,,EDITED: identity→C0022
+MENTION,4.3_s0046,multicast groups,1,C0022,,,,yes,,KEEP
+MENTION,4.3_s0046,Ethernet address,1,C0092,,,,,,KEEP
+MENTION,4.3_s0046,Ethernet,1,C0002,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0047,IP,1,C0025,,,,,,KEEP
+MENTION,4.3_s0047,receiving host,1,C0059,,,,,,EDITED: identity→C0059
+MENTION,4.3_s0047,host,1,C0010,,,,yes,,KEEP
+MENTION,4.3_s0047,IP header,1,C0102,,,,,,KEEP
+MENTION,4.3_s0047,header,1,C0103,,,,yes,,KEEP
+MENTION,4.3_s0047,multicast packet,1,C0104,,,,,,KEEP
+MENTION,4.3_s0047,packet,1,C0026,,,,yes,,KEEP
+MENTION,4.3_s0047,packet,2,C0026,,,,,,KEEP
+MENTION,4.3_s0047,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0048,multicast address sizes,1,C0105,,,,,,KEEP
+MENTION,4.3_s0048,multicast address,1,C0042,,,,yes,,KEEP
+MENTION,4.3_s0048,multicast traffic,1,C0053,,,,,,KEEP
+MENTION,4.3_s0048,traffic,1,C0030,,,,yes,,KEEP
+MENTION,4.3_s0048,hosts,1,C0010,,,,,,KEEP
+MENTION,4.3_s0048,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0048,traffic,2,C0030,,,,,,KEEP
+MENTION,4.3_s0049,switched networks,1,C0106,,,,,,KEEP
+MENTION,4.3_s0049,switched Ethernet,1,C0107,,,,,,KEEP
+MENTION,4.3_s0049,Ethernet,1,C0002,,,,yes,,KEEP
+MENTION,4.3_s0049,switches,1,C0108,,,,,,KEEP
+MENTION,4.3_s0049,packets,1,C0026,,,,,,EDITED: nested_valid yes→blank
+MENTION,4.3_s0050,senders,1,C0023,,,,,,KEEP
+MENTION,4.3_s0050,receivers,1,C0059,,,,,,KEEP
+MENTION,4.3_s0050,multicast addresses,1,C0042,,,,,,KEEP
+MENTION,4.3_s0051,out-of-band means,1,C0110,,,,,,KEEP
+MENTION,4.3_s0051,group addresses,1,C0043,,,,,,KEEP
+MENTION,4.3_s0051,Internet,1,C0006,,,,,,KEEP
+MENTION,4.3_s0052,Multicast Routing,1,C0111,,,,,,KEEP
+MENTION,4.3_s0052,DVMRP,1,C0112,,,,,,KEEP
+MENTION,4.3_s0052,PIM,1,C0113,,,,,,KEEP
+MENTION,4.3_s0052,MSDP,1,C0114,,,,,,KEEP
+MENTION,4.3_s0053,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0053,unicast forwarding tables,1,C0115,,,,,,KEEP
+MENTION,4.3_s0053,forwarding tables,1,C0116,,,,yes,,KEEP
+MENTION,4.3_s0053,IP address,1,C0055,,,,,,KEEP
+MENTION,4.3_s0053,link,1,C0057,,,,,,KEEP
+MENTION,4.3_s0053,unicast packet,1,C0117,,,,,,KEEP
+MENTION,4.3_s0053,packet,1,C0026,,,,yes,,KEEP
+MENTION,4.3_s0054,multicast,1,C0003,,,,,,KEEP
+MENTION,4.3_s0054,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0054,multicast forwarding tables,1,C0118,,,,,,KEEP
+MENTION,4.3_s0054,forwarding tables,1,C0116,,,,yes,,KEEP
+MENTION,4.3_s0054,multicast address,1,C0042,,,,,,KEEP
+MENTION,4.3_s0054,links,1,C0057,,,,,,KEEP
+MENTION,4.3_s0054,multicast packet,1,C0104,,,,,,KEEP
+MENTION,4.3_s0054,packet,1,C0026,,,,yes,,KEEP
+MENTION,4.3_s0054,router,2,C0034,,,,,,KEEP
+MENTION,4.3_s0054,packet,2,C0026,,,,,,KEEP
+MENTION,4.3_s0054,links,2,C0057,,,,,,KEEP
+MENTION,4.3_s0055,unicast forwarding tables,1,C0115,,,,,,KEEP
+MENTION,4.3_s0055,forwarding tables,1,C0116,,,,yes,,KEEP
+MENTION,4.3_s0055,paths,1,C0160,,,,,,EDITED: identity→C0160
+MENTION,4.3_s0055,multicast forwarding tables,1,C0118,,,,,,KEEP
+MENTION,4.3_s0055,forwarding tables,2,C0116,,,,yes,,KEEP
+MENTION,4.3_s0055,trees,1,C0120,,,,,,KEEP
+MENTION,4.3_s0055,multicast distribution trees,1,C0121,,,,,,KEEP
+MENTION,4.3_s0056,Source-Specific Multicast,1,C0063,,,,,,KEEP
+MENTION,4.3_s0056,Any Source Multicast,1,C0067,,,,,,KEEP
+MENTION,4.3_s0056,multicast forwarding tables,1,C0118,,,,,,KEEP
+MENTION,4.3_s0056,forwarding tables,1,C0116,,,,yes,,KEEP
+MENTION,4.3_s0056,links,1,C0057,,,,,,KEEP
+MENTION,4.3_s0056,multicast address,1,C0042,,,,,,KEEP
+MENTION,4.3_s0056,unicast,1,C0038,,,,,,KEEP
+MENTION,4.3_s0056,IP address,1,C0055,,,,,,KEEP
+MENTION,4.3_s0056,source,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0056,trees,1,C0120,,,,,,KEEP
+MENTION,4.3_s0057,Multicast routing,1,C0111,,,,,,KEEP
+MENTION,4.3_s0057,multicast distribution trees,1,C0121,,,,,,KEEP
+MENTION,4.3_s0057,multicast forwarding tables,1,C0118,,,,,,KEEP
+MENTION,4.3_s0057,forwarding tables,1,C0116,,,,yes,,KEEP
+MENTION,4.3_s0058,unicast routing,1,C0123,,,,,,KEEP
+MENTION,4.3_s0058,multicast routing protocol,1,C0124,,,,,,KEEP
+MENTION,4.3_s0058,multicast routing,1,C0111,,,,yes,,KEEP
+MENTION,4.3_s0058,routing protocol,1,C0125,,,,yes,,KEEP
+MENTION,4.3_s0058,network,1,C0033,,,,,,KEEP
+MENTION,4.3_s0058,routing domains,1,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0059,DVMRP,1,C0112,,,,,,KEEP
+MENTION,4.3_s0059,Distance-vector routing,1,C0127,,,,,,KEEP
+MENTION,4.3_s0059,unicast,1,C0038,,,,,,KEEP
+MENTION,4.3_s0059,multicast,1,C0003,,,,,,KEEP
+MENTION,4.3_s0060,Distance Vector Multicast Routing Protocol,1,C0112,,,,,,KEEP
+MENTION,4.3_s0060,DVMRP,1,C0112,,,,,,KEEP
+MENTION,4.3_s0061,DVMRP,1,C0112,,,,,,KEEP
+MENTION,4.3_s0061,multicast routing protocol,1,C0124,,,,,,KEEP
+MENTION,4.3_s0062,distance-vector algorithm,1,C0127,,,,,,EDITED: identity→C0127
+MENTION,4.3_s0062,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0062,"table of Destination, Cost, NextHop tuples",1,C0129,,,,,,KEEP
+MENTION,4.3_s0062,"Destination, Cost, NextHop tuples",1,C0130,,,,yes,,KEEP
+MENTION,4.3_s0062,Destination,1,C0131,,,,yes,,KEEP
+MENTION,4.3_s0062,Cost,1,C0132,,,,yes,,KEEP
+MENTION,4.3_s0062,NextHop,1,C0133,,,,yes,,KEEP
+MENTION,4.3_s0062,"list of (Destination, Cost) pairs",1,C0134,,,,,,KEEP
+MENTION,4.3_s0062,"(Destination, Cost) pairs",1,C0135,,,,yes,,KEEP
+MENTION,4.3_s0062,Destination,2,C0131,,,,yes,,KEEP
+MENTION,4.3_s0062,Cost,2,C0132,,,,yes,,KEEP
+MENTION,4.3_s0062,directly connected neighbors,1,C0136,,,,,,KEEP
+MENTION,4.3_s0063,algorithm,1,C0127,,,,,,EDITED: identity→C0127
+MENTION,4.3_s0063,multicast,1,C0003,,,,,,KEEP
+MENTION,4.3_s0064,broadcast mechanism,1,C0008,,,,,,EDITED: identity→C0008
+MENTION,4.3_s0064,broadcast,1,C0008,,,,yes,,KEEP
+MENTION,4.3_s0064,packet,1,C0026,,,,,,KEEP
+MENTION,4.3_s0064,networks,1,C0033,,,,,,KEEP
+MENTION,4.3_s0064,internet,1,C0006,,,,,,KEEP
+MENTION,4.3_s0065,mechanism,1,C0008,,,,,,EDITED: identity→C0008
+MENTION,4.3_s0065,prunes back,1,C0138,,,,,,KEEP
+MENTION,4.3_s0065,networks,1,C0033,,,,,,KEEP
+MENTION,4.3_s0065,hosts,1,C0010,,,,,,KEEP
+MENTION,4.3_s0065,multicast group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0066,DVMRP,1,C0112,,,,,,KEEP
+MENTION,4.3_s0066,multicast routing protocols,1,C0124,,,,,,KEEP
+MENTION,4.3_s0066,flood-and-prune protocols,1,C0139,,,,,,KEEP
+MENTION,4.3_s0067,unicast routing table,1,C0140,,,,,,KEEP
+MENTION,4.3_s0067,routing table,1,C0141,,,,yes,,KEEP
+MENTION,4.3_s0067,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0067,shortest path,1,C0142,,,,,,KEEP
+MENTION,4.3_s0067,destination,1,C0131,,,,,,KEEP
+MENTION,4.3_s0067,NextHop,1,C0133,,,,,,KEEP
+MENTION,4.3_s0068,multicast packet,1,C0104,,,,,,KEEP
+MENTION,4.3_s0068,packet,1,C0026,,,,yes,,KEEP
+MENTION,4.3_s0068,source,1,C0143,,,,,,EDITED: boundary:source S→source
+MENTION,4.3_s0068,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0068,packet,2,C0026,,,,,,KEEP
+MENTION,4.3_s0068,outgoing links,1,C0144,,,,,,KEEP
+MENTION,4.3_s0068,packet,3,C0026,,,,,,KEEP
+MENTION,4.3_s0069,packet,1,C0026,,,,,,KEEP
+MENTION,4.3_s0069,link,1,C0057,,,,,,KEEP
+MENTION,4.3_s0069,shortest path,1,C0142,,,,,,KEEP
+MENTION,4.3_s0069,S,1,C0143,,,,,,KEEP
+MENTION,4.3_s0069,packet,2,C0026,,,,,,KEEP
+MENTION,4.3_s0069,NextHop,1,C0133,,,,,,KEEP
+MENTION,4.3_s0069,S,2,C0143,,,,,,KEEP
+MENTION,4.3_s0069,routing table,1,C0141,,,,,,KEEP
+MENTION,4.3_s0070,floods,1,C0145,,,,,,KEEP
+MENTION,4.3_s0070,packets,1,C0026,,,,,,KEEP
+MENTION,4.3_s0070,S,1,C0143,,,,,,KEEP
+MENTION,4.3_s0070,loop,1,C0146,,,,,,KEEP
+MENTION,4.3_s0070,packets,2,C0026,,,,,,KEEP
+MENTION,4.3_s0070,S,2,C0143,,,,,,KEEP
+MENTION,4.3_s0071,floods,1,C0145,,,,,,KEEP
+MENTION,4.3_s0071,network,1,C0033,,,,,,KEEP
+MENTION,4.3_s0071,LANs,1,C0083,,,,,,KEEP
+MENTION,4.3_s0071,members,1,C0021,,,,,,KEEP
+MENTION,4.3_s0071,multicast group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0073,packet,1,C0026,,,,,,KEEP
+MENTION,4.3_s0073,LAN,1,C0083,,,,,,KEEP
+MENTION,4.3_s0073,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0073,LAN,2,C0083,,,,,,KEEP
+MENTION,4.3_s0074,forwarding strategy,1,C0147,,,,,,KEEP
+MENTION,4.3_s0074,flooding,1,C0145,,,,,,KEEP
+MENTION,4.3_s0074,packets,1,C0026,,,,,,KEEP
+MENTION,4.3_s0074,packet,1,C0026,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0074,links,1,C0057,,,,,,KEEP
+MENTION,4.3_s0074,links,2,C0057,,,,,,KEEP
+MENTION,4.3_s0074,shortest-path tree,1,C0148,,,,,,KEEP
+MENTION,4.3_s0074,shortest-path,1,C0142,,,,yes,,KEEP
+MENTION,4.3_s0074,source,1,C0143,,,,,,KEEP
+MENTION,4.3_s0075,duplicate broadcast packets,1,C0149,,,,,,KEEP
+MENTION,4.3_s0075,broadcast packets,1,C0150,,,,yes,,KEEP
+MENTION,4.3_s0075,packets,1,C0026,,,,yes,,KEEP
+MENTION,4.3_s0075,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0075,LAN,1,C0083,,,,,,KEEP
+MENTION,4.3_s0076,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0076,parent router,1,C0151,,,,,,KEEP
+MENTION,4.3_s0076,router,2,C0034,,,,yes,,KEEP
+MENTION,4.3_s0076,link,1,C0057,,,,,,KEEP
+MENTION,4.3_s0076,source,1,C0143,,,,,,KEEP
+MENTION,4.3_s0076,parent router,2,C0151,,,,,,KEEP
+MENTION,4.3_s0076,router,3,C0034,,,,yes,,KEEP
+MENTION,4.3_s0076,multicast packets,1,C0104,,,,,,KEEP
+MENTION,4.3_s0076,packets,1,C0026,,,,yes,,KEEP
+MENTION,4.3_s0076,source,2,C0143,,,,,,KEEP
+MENTION,4.3_s0076,LAN,1,C0083,,,,,,KEEP
+MENTION,4.3_s0077,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0077,shortest path,1,C0142,,,,,,KEEP
+MENTION,4.3_s0077,source,1,C0143,,,,,,EDITED: boundary:source S→source
+MENTION,4.3_s0077,parent,1,C0151,,,,,,KEEP
+MENTION,4.3_s0077,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0077,router,2,C0034,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0077,address,1,C0152,,,,,,KEEP
+MENTION,4.3_s0078,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0078,parent,1,C0151,,,,,,KEEP
+MENTION,4.3_s0078,LAN,1,C0083,,,,,,KEEP
+MENTION,4.3_s0078,source,1,C0143,,,,,,KEEP
+MENTION,4.3_s0078,distance-vector messages,1,C0153,,,,,,KEEP
+MENTION,4.3_s0078,neighbors,1,C0154,,,,,,KEEP
+MENTION,4.3_s0079,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0079,source,1,C0143,,,,,,KEEP
+MENTION,4.3_s0079,bit,1,C0080,,,,,,KEEP
+MENTION,4.3_s0079,incident links,1,C0155,,,,,,KEEP
+MENTION,4.3_s0079,links,1,C0057,,,,yes,,KEEP
+MENTION,4.3_s0079,parent,1,C0151,,,,,,KEEP
+MENTION,4.3_s0079,source/link pair,1,C0156,,,,,,KEEP
+MENTION,4.3_s0080,internet,1,C0006,,,,,,KEEP
+MENTION,4.3_s0080,source,1,C0143,,,,,,KEEP
+MENTION,4.3_s0080,network,1,C0033,,,,,,KEEP
+MENTION,4.3_s0080,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0080,internet router,1,C0034,,,,,,EDITED: identity→C0034
+MENTION,4.3_s0080,internet,2,C0006,,,,yes,,KEEP
+MENTION,4.3_s0080,router,1,C0034,,,,yes,,KEEP
+MENTION,4.3_s0080,forwarding,1,C0158,,,,,,KEEP
+MENTION,4.3_s0080,packets,1,C0026,,,,,,KEEP
+MENTION,4.3_s0080,networks,1,C0033,,,,,,KEEP
+MENTION,4.3_s0081,Reverse Path Broadcast,1,C0159,,,,,,KEEP
+MENTION,4.3_s0081,RPB,1,C0159,,,,,,KEEP
+MENTION,4.3_s0081,Reverse Path Forwarding,1,C0159,,,,,,KEEP
+MENTION,4.3_s0081,RPF,1,C0159,,,,,,KEEP
+MENTION,4.3_s0082,path,1,C0160,,,,,,KEEP
+MENTION,4.3_s0082,shortest path,1,C0142,,,,,,KEEP
+MENTION,4.3_s0082,source,1,C0143,,,,,,KEEP
+MENTION,4.3_s0082,forwarding,1,C0158,,,,,,KEEP
+MENTION,4.3_s0082,unicast routing,1,C0123,,,,,,KEEP
+MENTION,4.3_s0082,routing,1,C0161,,,,yes,,KEEP
+MENTION,4.3_s0082,shortest path,2,C0142,,,,,,KEEP
+MENTION,4.3_s0082,destination,1,C0131,,,,,,KEEP
+MENTION,4.3_s0083,RPB,1,C0159,,,,,,KEEP
+MENTION,4.3_s0083,shortest-path broadcast,1,C0162,,,,,,KEEP
+MENTION,4.3_s0083,broadcast,1,C0008,,,,yes,,KEEP
+MENTION,4.3_s0084,prune,1,C0138,,,,,,KEEP
+MENTION,4.3_s0084,networks,1,C0033,,,,,,KEEP
+MENTION,4.3_s0084,packet,1,C0026,,,,,,KEEP
+MENTION,4.3_s0084,group,1,C0022,,,,,,EDITED: boundary:group G→group
+MENTION,4.3_s0084,G,1,C0022,,,,,,EDITED: identity→C0022; nested_valid yes→blank
+MENTION,4.3_s0084,hosts,1,C0010,,,,,,KEEP
+MENTION,4.3_s0084,members,1,C0021,,,,,,KEEP
+MENTION,4.3_s0084,G,2,C0022,,,,,,EDITED: identity→C0022
+MENTION,4.3_s0086,leaf network,1,C0164,,,,,,KEEP
+MENTION,4.3_s0086,network,1,C0033,,,,yes,,KEEP
+MENTION,4.3_s0086,group members,1,C0021,,,,,,KEEP
+MENTION,4.3_s0086,group,1,C0022,,,,yes,,KEEP
+MENTION,4.3_s0087,network,1,C0033,,,,,,KEEP
+MENTION,4.3_s0087,leaf,1,C0164,,,,,,KEEP
+MENTION,4.3_s0087,parent router,1,C0151,,,,,,KEEP
+MENTION,4.3_s0087,router,1,C0034,,,,yes,,KEEP
+MENTION,4.3_s0087,router,2,C0034,,,,,,KEEP
+MENTION,4.3_s0087,network,2,C0033,,,,,,KEEP
+MENTION,4.3_s0087,network,3,C0033,,,,,,KEEP
+MENTION,4.3_s0087,leaf,2,C0164,,,,,,KEEP
+MENTION,4.3_s0088,group members,1,C0021,,,,,,KEEP
+MENTION,4.3_s0088,group,1,C0022,,,,yes,,KEEP
+MENTION,4.3_s0088,member,1,C0021,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0088,network,1,C0033,,,,,,KEEP
+MENTION,4.3_s0088,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0088,group,2,C0022,,,,,,EDITED: boundary:group G→group
+MENTION,4.3_s0088,G,1,C0022,,,,,,EDITED: identity→C0022; nested_valid yes→blank
+MENTION,4.3_s0088,network,2,C0033,,,,,,KEEP
+MENTION,4.3_s0088,link-state multicast,1,C0165,,,,,,KEEP
+MENTION,4.3_s0088,multicast,1,C0003,,,,yes,,KEEP
+MENTION,4.3_s0089,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0089,forward,1,C0158,,,,,,KEEP
+MENTION,4.3_s0089,multicast packet,1,C0104,,,,,,KEEP
+MENTION,4.3_s0089,packet,1,C0026,,,,yes,,KEEP
+MENTION,4.3_s0089,G,1,C0022,,,,,,EDITED: identity→C0022
+MENTION,4.3_s0089,LAN,1,C0083,,,,,,KEEP
+MENTION,4.3_s0090,G,1,C0022,,,,,,EDITED: identity→C0022
+MENTION,4.3_s0090,shortest-path tree,1,C0148,,,,,,KEEP
+MENTION,4.3_s0091,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0091,"(Destination, Cost) pairs",1,C0135,,,,,,KEEP
+MENTION,4.3_s0091,Destination,1,C0131,,,,yes,,KEEP
+MENTION,4.3_s0091,Cost,1,C0132,,,,yes,,KEEP
+MENTION,4.3_s0091,neighbors,1,C0154,,,,,,KEEP
+MENTION,4.3_s0091,groups,1,C0022,,,,,,KEEP
+MENTION,4.3_s0091,leaf network,1,C0164,,,,,,KEEP
+MENTION,4.3_s0091,network,1,C0033,,,,yes,,KEEP
+MENTION,4.3_s0091,multicast packets,1,C0104,,,,,,KEEP
+MENTION,4.3_s0091,packets,1,C0026,,,,yes,,KEEP
+MENTION,4.3_s0092,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0092,router,2,C0034,,,,,,KEEP
+MENTION,4.3_s0092,links,1,C0057,,,,,,KEEP
+MENTION,4.3_s0092,router,3,C0034,,,,,,KEEP
+MENTION,4.3_s0092,groups,1,C0022,,,,,,KEEP
+MENTION,4.3_s0092,forward,1,C0158,,,,,,KEEP
+MENTION,4.3_s0092,multicast packets,1,C0104,,,,,,KEEP
+MENTION,4.3_s0092,packets,1,C0026,,,,yes,,KEEP
+MENTION,4.3_s0093,routing update,1,C0166,,,,,,KEEP
+MENTION,4.3_s0093,routing,1,C0161,,,,yes,,KEEP
+MENTION,4.3_s0094,source,1,C0143,,,,,,KEEP
+MENTION,4.3_s0094,packets,1,C0026,,,,,,KEEP
+MENTION,4.3_s0094,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0095,RPB,1,C0159,,,,,,KEEP
+MENTION,4.3_s0095,overhead,1,C0167,,,,,,KEEP
+MENTION,4.3_s0095,distance-vector algorithm,1,C0127,,,,,,KEEP
+MENTION,4.3_s0095,multicast address,1,C0042,,,,,,KEEP
+MENTION,4.3_s0095,address,1,C0168,,,,yes,,KEEP
+MENTION,4.3_s0096,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0096,packets,1,C0026,,,,,,KEEP
+MENTION,4.3_s0096,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0096,routers,2,C0034,,,,,,KEEP
+MENTION,4.3_s0097,PIM-SM,1,C0170,,,,,,KEEP
+MENTION,4.3_s0097,PIM,1,C0113,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0097,Protocol Independent Multicast,1,C0113,,,,,,KEEP
+MENTION,4.3_s0097,scaling,1,C0060,,,,,,KEEP
+MENTION,4.3_s0097,multicast routing protocols,1,C0124,,,,,,KEEP
+MENTION,4.3_s0097,multicast routing,1,C0111,,,,yes,,KEEP
+MENTION,4.3_s0097,routing,1,C0161,,,,yes,,KEEP
+MENTION,4.3_s0098,protocols,1,C0124,,,,,,KEEP
+MENTION,4.3_s0098,scale,1,C0060,,,,,,KEEP
+MENTION,4.3_s0098,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0098,traffic,1,C0030,,,,,,KEEP
+MENTION,4.3_s0098,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0099,broadcasting,1,C0008,,,,,,KEEP
+MENTION,4.3_s0099,traffic,1,C0030,,,,,,KEEP
+MENTION,4.3_s0099,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0099,routers,2,C0034,,,,,,KEEP
+MENTION,4.3_s0099,traffic,2,C0030,,,,,,KEEP
+MENTION,4.3_s0100,PIM,1,C0113,,,,,,KEEP
+MENTION,4.3_s0100,sparse mode,1,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0100,dense mode,1,C0173,,,,,,KEEP
+MENTION,4.3_s0100,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0100,multicast,1,C0003,,,,,,KEEP
+MENTION,4.3_s0101,PIM dense mode,1,C0173,,,,,,KEEP
+MENTION,4.3_s0101,PIM,1,C0113,,,,yes,,KEEP
+MENTION,4.3_s0101,dense mode,1,C0173,,,,yes,,KEEP
+MENTION,4.3_s0101,PIM-DM,1,C0173,,,,,,KEEP
+MENTION,4.3_s0101,flood-and-prune algorithm,1,C0174,,,,,,KEEP
+MENTION,4.3_s0101,DVMRP,1,C0112,,,,,,KEEP
+MENTION,4.3_s0102,PIM sparse mode,1,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0102,PIM,1,C0113,,,,yes,,KEEP
+MENTION,4.3_s0102,sparse mode,1,C0170,,,,yes,,EDITED: identity→C0170
+MENTION,4.3_s0102,PIM-SM,1,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0102,multicast routing protocol,1,C0124,,,,,,KEEP
+MENTION,4.3_s0102,multicast routing,1,C0111,,,,yes,,KEEP
+MENTION,4.3_s0102,routing protocol,1,C0125,,,,yes,,KEEP
+MENTION,4.3_s0103,protocol independent,1,C0176,,,,,,EDITED: boundary:“protocol independent”→protocol independent
+MENTION,4.3_s0103,PIM,1,C0113,,,,,,KEEP
+MENTION,4.3_s0103,protocols,1,C0047,,,,,,KEEP
+MENTION,4.3_s0103,DVMRP,1,C0112,,,,,,KEEP
+MENTION,4.3_s0103,PIM,2,C0113,,,,,,KEEP
+MENTION,4.3_s0103,unicast routing,1,C0123,,,,,,KEEP
+MENTION,4.3_s0103,unicast routing protocol,1,C0177,,,,,,KEEP
+MENTION,4.3_s0103,unicast routing,2,C0123,,,,yes,,KEEP
+MENTION,4.3_s0103,routing protocol,1,C0125,,,,yes,,KEEP
+MENTION,4.3_s0104,PIM-SM,1,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0104,PIM,1,C0113,,,,yes,,KEEP
+MENTION,4.3_s0104,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0104,multicast distribution tree,1,C0121,,,,,,KEEP
+MENTION,4.3_s0104,distribution tree,1,C0179,,,,yes,,KEEP
+MENTION,4.3_s0104,PIM protocol messages,1,C0180,,,,,,KEEP
+MENTION,4.3_s0104,protocol messages,1,C0181,,,,yes,,KEEP
+MENTION,4.3_s0104,Join messages,1,C0182,,,,,,KEEP
+MENTION,4.3_s0105,DVMRP,1,C0112,,,,,,KEEP
+MENTION,4.3_s0105,broadcast tree,1,C0183,,,,,,KEEP
+MENTION,4.3_s0105,pruning,1,C0138,,,,,,KEEP
+MENTION,4.3_s0105,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0106,Join messages,1,C0182,,,,,,KEEP
+MENTION,4.3_s0106,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0106,hosts,1,C0010,,,,,,KEEP
+MENTION,4.3_s0106,multicast group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0107,PIM-SM,1,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0107,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0107,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0107,rendezvous point,1,C0184,,,,,,KEEP
+MENTION,4.3_s0107,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0108,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0108,router,1,C0034,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0108,domain,1,C0079,,,,,,KEEP
+MENTION,4.3_s0108,candidate RPs,1,C0185,,,,,,KEEP
+MENTION,4.3_s0108,RPs,1,C0184,,,,yes,,KEEP
+MENTION,4.3_s0108,RP,1,C0184,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0108,PIM-SM,1,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0108,routers,2,C0034,,,,,,KEEP
+MENTION,4.3_s0108,domain,2,C0079,,,,,,KEEP
+MENTION,4.3_s0108,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0109,failure of a candidate RP,1,C0186,,,,,,KEEP
+MENTION,4.3_s0109,candidate RP,1,C0185,,,,yes,,KEEP
+MENTION,4.3_s0109,RP,1,C0184,,,,yes,,KEEP
+MENTION,4.3_s0109,partitioning of a domain,1,C0187,,,,,,KEEP
+MENTION,4.3_s0109,domain,1,C0079,,,,yes,,KEEP
+MENTION,4.3_s0109,networks,1,C0033,,,,,,KEEP
+MENTION,4.3_s0109,link,1,C0057,,,,,,KEEP
+MENTION,4.3_s0109,node failures,1,C0188,,,,,,KEEP
+MENTION,4.3_s0109,node,1,C0049,,,,yes,,KEEP
+MENTION,4.3_s0110,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0110,domain,1,C0079,,,,,,KEEP
+MENTION,4.3_s0110,unicast IP address,1,C0054,,,,,,KEEP
+MENTION,4.3_s0110,IP address,1,C0055,,,,yes,,KEEP
+MENTION,4.3_s0110,IP,1,C0025,,,,yes,,KEEP
+MENTION,4.3_s0110,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0110,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0111,multicast forwarding tree,1,C0189,,,,,,KEEP
+MENTION,4.3_s0111,forwarding tree,1,C0190,,,,yes,,KEEP
+MENTION,4.3_s0111,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0111,Join messages,1,C0182,,,,,,KEEP
+MENTION,4.3_s0111,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0112,PIM-SM,1,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0112,trees,1,C0121,,,,,,KEEP
+MENTION,4.3_s0112,shared tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0112,senders,1,C0023,,,,,,KEEP
+MENTION,4.3_s0112,source-specific tree,1,C0192,,,,,,KEEP
+MENTION,4.3_s0112,sending host,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0112,host,1,C0010,,,,yes,,KEEP
+MENTION,4.3_s0113,shared tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0113,source-specific trees,1,C0192,,,,,,KEEP
+MENTION,4.3_s0113,traffic,1,C0030,,,,,,KEEP
+MENTION,4.3_s0114,trees,1,C0121,,,,,,KEEP
+MENTION,4.3_s0114,tree,1,C0121,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0114,state,1,C0216,,,,,,EDITED: identity→C0216
+MENTION,4.3_s0114,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0114,tree,2,C0121,,,,,,KEEP
+MENTION,4.3_s0114,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0114,sender,1,C0023,,,,,,KEEP
+MENTION,4.3_s0114,group,2,C0022,,,,,,KEEP
+MENTION,4.3_s0115,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0115,Join message,1,C0182,,,,,,KEEP
+MENTION,4.3_s0115,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0115,group,1,C0022,,,,,,EDITED: boundary:group G→group
+MENTION,4.3_s0115,G,1,C0022,,,,,,EDITED: identity→C0022; nested_valid yes→blank
+MENTION,4.3_s0115,IP unicast transmission,1,C0195,,,,,,KEEP
+MENTION,4.3_s0115,IP,1,C0025,,,,yes,,KEEP
+MENTION,4.3_s0115,unicast transmission,1,C0196,,,,yes,,KEEP
+MENTION,4.3_s0116,router R4,1,C0034,,,,,,KEEP
+MENTION,4.3_s0116,Join,1,C0182,,,,,,KEEP
+MENTION,4.3_s0116,rendezvous point,1,C0184,,,,,,KEEP
+MENTION,4.3_s0116,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0117,Join message,1,C0182,,,,,,KEEP
+MENTION,4.3_s0117,“wildcarded”,1,C0198,,,,,,KEEP
+MENTION,4.3_s0117,senders,1,C0023,,,,,,KEEP
+MENTION,4.3_s0118,Join message,1,C0182,,,,,,KEEP
+MENTION,4.3_s0118,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0118,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0119,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0119,path,1,C0160,,,,,,EDITED: identity→C0160
+MENTION,4.3_s0119,Join,1,C0182,,,,,,KEEP
+MENTION,4.3_s0119,forwarding table entry,1,C0200,,,,,,KEEP
+MENTION,4.3_s0119,forwarding table,1,C0116,,,,yes,,KEEP
+MENTION,4.3_s0119,shared tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0119,"(\, G) entry",1,C0201,,,,,,KEEP
+MENTION,4.3_s0119,"(\, G)",1,C0202,,,,yes,,KEEP
+MENTION,4.3_s0119,G,1,C0022,,,,yes,,EDITED: identity→C0022; nested_valid blank→yes
+MENTION,4.3_s0119,senders,1,C0023,,,,,,KEEP
+MENTION,4.3_s0120,forwarding table entry,1,C0200,,,,,,KEEP
+MENTION,4.3_s0120,forwarding table,1,C0116,,,,yes,,KEEP
+MENTION,4.3_s0120,interface,1,C0050,,,,,,KEEP
+MENTION,4.3_s0120,Join,1,C0182,,,,,,KEEP
+MENTION,4.3_s0120,interface,2,C0050,,,,,,KEEP
+MENTION,4.3_s0120,data packets,1,C0204,,,,,,KEEP
+MENTION,4.3_s0120,packets,1,C0026,,,,yes,,KEEP
+MENTION,4.3_s0120,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0121,interface,1,C0050,,,,,,KEEP
+MENTION,4.3_s0121,Join,1,C0182,,,,,,KEEP
+MENTION,4.3_s0121,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0122,interface,1,C0050,,,,,,KEEP
+MENTION,4.3_s0122,incoming packets,1,C0205,,,,,,KEEP
+MENTION,4.3_s0122,packets,1,C0026,,,,yes,,KEEP
+MENTION,4.3_s0122,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0123,Join,1,C0182,,,,,,KEEP
+MENTION,4.3_s0123,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0124,message,1,C0182,,,,,,KEEP
+MENTION,4.3_s0124,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0124,tree branch,1,C0206,,,,,,KEEP
+MENTION,4.3_s0124,tree,1,C0191,,,,yes,,KEEP
+MENTION,4.3_s0125,shared tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0125,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0126,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0126,Join\ s,1,C0182,,,,,,KEEP
+MENTION,4.3_s0126,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0126,branches,1,C0206,,,,,,KEEP
+MENTION,4.3_s0126,tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0127,Join,1,C0182,,,,,,KEEP
+MENTION,4.3_s0127,branch,1,C0206,,,,,,KEEP
+MENTION,4.3_s0127,tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0127,outgoing interface,1,C0209,,,,,,KEEP
+MENTION,4.3_s0127,interface,1,C0050,,,,yes,,KEEP
+MENTION,4.3_s0127,forwarding table entry,1,C0200,,,,,,KEEP
+MENTION,4.3_s0127,forwarding table,1,C0116,,,,yes,,KEEP
+MENTION,4.3_s0127,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0128,Join,1,C0182,,,,,,KEEP
+MENTION,4.3_s0128,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0129,tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0129,root,1,C0210,,,,,,KEEP
+MENTION,4.3_s0129,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0130,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0130,message,1,C0211,,,,,,KEEP
+MENTION,4.3_s0130,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0131,packet,1,C0026,,,,,,KEEP
+MENTION,4.3_s0131,multicast group address,1,C0043,,,,,,KEEP
+MENTION,4.3_s0131,multicast group,1,C0022,,,,yes,,KEEP
+MENTION,4.3_s0131,destination,1,C0212,,,,,,KEEP
+MENTION,4.3_s0131,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0131,local network,1,C0213,,,,,,KEEP
+MENTION,4.3_s0131,designated router,1,C0214,,,,,,KEEP
+MENTION,4.3_s0131,DR,1,C0214,,,,,,KEEP
+MENTION,4.3_s0132,DR,1,C0214,,,,,,KEEP
+MENTION,4.3_s0133,state,1,C0216,,,,,,KEEP
+MENTION,4.3_s0133,multicast group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0133,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0133,multicast packet,1,C0104,,,,,,KEEP
+MENTION,4.3_s0133,packet,1,C0026,,,,yes,,KEEP
+MENTION,4.3_s0133,RP,2,C0184,,,,,,KEEP
+MENTION,4.3_s0134,multicast packet,1,C0104,,,,,,KEEP
+MENTION,4.3_s0134,packet,1,C0026,,,,yes,,KEEP
+MENTION,4.3_s0134,PIM Register message,1,C0217,,,,,,KEEP
+MENTION,4.3_s0134,PIM,1,C0113,,,,yes,,KEEP
+MENTION,4.3_s0134,unicast IP address,1,C0054,,,,,,KEEP
+MENTION,4.3_s0134,IP address,1,C0055,,,,yes,,KEEP
+MENTION,4.3_s0134,IP,1,C0025,,,,yes,,KEEP
+MENTION,4.3_s0134,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0135,IP tunnel endpoint,1,C0218,,,,,,KEEP
+MENTION,4.3_s0135,IP tunnel,1,C0219,,,,yes,,KEEP
+MENTION,4.3_s0135,IP,1,C0025,,,,yes,,KEEP
+MENTION,4.3_s0135,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0135,packet,1,C0026,,,,,,KEEP
+MENTION,4.3_s0135,payload,1,C0220,,,,,,KEEP
+MENTION,4.3_s0135,Register message,1,C0217,,,,,,KEEP
+MENTION,4.3_s0135,IP packet,1,C0221,,,,,,KEEP
+MENTION,4.3_s0135,IP,2,C0025,,,,yes,,KEEP
+MENTION,4.3_s0135,packet,2,C0026,,,,yes,,KEEP
+MENTION,4.3_s0135,multicast address,1,C0042,,,,,,KEEP
+MENTION,4.3_s0135,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0136,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0136,packet,1,C0104,,,,,,KEEP
+MENTION,4.3_s0136,shared tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0136,RP,2,C0184,,,,,,KEEP
+MENTION,4.3_s0136,root,1,C0210,,,,,,KEEP
+MENTION,4.3_s0137,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0137,packet,1,C0104,,,,,,KEEP
+MENTION,4.3_s0138,delivery,1,C0223,,,,,,KEEP
+MENTION,4.3_s0138,packet,1,C0026,,,,,,KEEP
+MENTION,4.3_s0139,tunneled packet,1,C0224,,,,,,KEEP
+MENTION,4.3_s0139,packet,1,C0026,,,,yes,,KEEP
+MENTION,4.3_s0139,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0139,IP header,1,C0102,,,,,,KEEP
+MENTION,4.3_s0139,IP,1,C0025,,,,yes,,KEEP
+MENTION,4.3_s0139,header,1,C0103,,,,yes,,KEEP
+MENTION,4.3_s0139,unicast address,1,C0048,,,,,,KEEP
+MENTION,4.3_s0139,RP,2,C0184,,,,,,KEEP
+MENTION,4.3_s0139,multicast packet,1,C0104,,,,,,KEEP
+MENTION,4.3_s0139,packet,2,C0026,,,,yes,,KEEP
+MENTION,4.3_s0139,G,1,C0022,,,,,,EDITED: identity→C0022
+MENTION,4.3_s0139,shared tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0140,hosts,1,C0010,,,,,,KEEP
+MENTION,4.3_s0140,receivers,1,C0059,,,,,,KEEP
+MENTION,4.3_s0141,bandwidth inefficiency,1,C0226,,,,,,KEEP
+MENTION,4.3_s0141,bandwidth,1,C0028,,,,yes,,KEEP
+MENTION,4.3_s0141,processing cost,1,C0227,,,,,,KEEP
+MENTION,4.3_s0141,encapsulation,1,C0228,,,,,,KEEP
+MENTION,4.3_s0141,decapsulation,1,C0229,,,,,,KEEP
+MENTION,4.3_s0141,packets,1,C0026,,,,,,KEEP
+MENTION,4.3_s0141,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0141,RP,2,C0184,,,,,,KEEP
+MENTION,4.3_s0141,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0141,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0141,tunneling,1,C0230,,,,,,KEEP
+MENTION,4.3_s0142,Join message,1,C0182,,,,,,EDITED: identity→C0182
+MENTION,4.3_s0142,Join,1,C0182,,,,yes,,EDITED: identity→C0182
+MENTION,4.3_s0142,sending host,1,C0023,,,,,,KEEP
+MENTION,4.3_s0142,host,1,C0010,,,,yes,,KEEP
+MENTION,4.3_s0143,Join,1,C0182,,,,,,EDITED: identity→C0182
+MENTION,4.3_s0143,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0143,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0143,path,1,C0160,,,,,,KEEP
+MENTION,4.3_s0143,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0143,DR,1,C0214,,,,,,KEEP
+MENTION,4.3_s0143,packet,1,C0026,,,,,,KEEP
+MENTION,4.3_s0143,group,2,C0022,,,,,,KEEP
+MENTION,4.3_s0143,native,1,C0233,,,,,,KEEP
+MENTION,4.3_s0143,tunneled,1,C0230,,,,,,KEEP
+MENTION,4.3_s0143,multicast packets,1,C0104,,,,,,KEEP
+MENTION,4.3_s0143,packets,1,C0026,,,,yes,,KEEP
+MENTION,4.3_s0144,Join message,1,C0182,,,,,,EDITED: identity→C0182
+MENTION,4.3_s0144,Join,1,C0182,,,,yes,,EDITED: identity→C0182
+MENTION,4.3_s0144,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0144,sending host,1,C0023,,,,,,KEEP
+MENTION,4.3_s0144,host,1,C0010,,,,yes,,KEEP
+MENTION,4.3_s0144,sender,1,C0023,,,,,,KEEP
+MENTION,4.3_s0144,senders,1,C0023,,,,,,KEEP
+MENTION,4.3_s0145,Join,1,C0182,,,,,,EDITED: identity→C0182
+MENTION,4.3_s0145,sender-specific state,1,C0234,,,,,,KEEP
+MENTION,4.3_s0145,state,1,C0216,,,,yes,,EDITED: identity→C0216
+MENTION,4.3_s0145,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0145,source,1,C0023,,,,,,EDITED: boundary:identified source→source
+MENTION,4.3_s0145,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0146,"(S, G) state",1,C0234,,,,,,KEEP
+MENTION,4.3_s0146,state,1,C0216,,,,yes,,EDITED: identity→C0216
+MENTION,4.3_s0146,sender,1,C0023,,,,,,KEEP
+MENTION,4.3_s0146,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0146,"(\*, G) state",1,C0236,,,,,,KEEP
+MENTION,4.3_s0146,state,2,C0216,,,,yes,,EDITED: identity→C0216
+MENTION,4.3_s0146,receivers,1,C0059,,,,,,KEEP
+MENTION,4.3_s0146,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0146,senders,1,C0023,,,,,,KEEP
+MENTION,4.3_s0147,source-specific route,1,C0237,,,,,,KEEP
+MENTION,4.3_s0147,route,1,C0238,,,,yes,,KEEP
+MENTION,4.3_s0147,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0147,tree,1,C0121,,,,,,KEEP
+MENTION,4.3_s0147,senders,1,C0023,,,,,,KEEP
+MENTION,4.3_s0147,RP,2,C0184,,,,,,KEEP
+MENTION,4.3_s0147,receivers,1,C0059,,,,,,KEEP
+MENTION,4.3_s0148,shared tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0148,tree,1,C0121,,,,yes,,KEEP
+MENTION,4.3_s0148,source-specific tree,1,C0192,,,,,,KEEP
+MENTION,4.3_s0148,tree,2,C0121,,,,yes,,KEEP
+MENTION,4.3_s0149,path,1,C0160,,,,,,KEEP
+MENTION,4.3_s0149,sender,1,C0023,,,,,,KEEP
+MENTION,4.3_s0149,receiver,1,C0059,,,,,,KEEP
+MENTION,4.3_s0149,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0149,shortest possible path,1,C0142,,,,,,KEEP
+MENTION,4.3_s0149,path,2,C0160,,,,yes,,KEEP
+MENTION,4.3_s0150,data rate,1,C0239,,,,,,KEEP
+MENTION,4.3_s0150,sender,1,C0023,,,,,,KEEP
+MENTION,4.3_s0151,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0151,downstream end,1,C0240,,,,,,KEEP
+MENTION,4.3_s0151,tree,1,C0121,,,,,,KEEP
+MENTION,4.3_s0151,source-specific Join,1,C0241,,,,,,KEEP
+MENTION,4.3_s0151,source,1,C0023,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0151,Join,1,C0182,,,,yes,,EDITED: identity→C0182
+MENTION,4.3_s0152,shortest path,1,C0142,,,,,,KEEP
+MENTION,4.3_s0152,path,1,C0160,,,,yes,,KEEP
+MENTION,4.3_s0152,source,1,C0023,,,,,,KEEP
+MENTION,4.3_s0152,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0152,"(S, G) state",1,C0234,,,,,,KEEP
+MENTION,4.3_s0152,state,1,C0216,,,,yes,,EDITED: identity→C0216
+MENTION,4.3_s0152,tree,1,C0121,,,,,,KEEP
+MENTION,4.3_s0152,tree,2,C0121,,,,,,KEEP
+MENTION,4.3_s0152,root,1,C0210,,,,,,KEEP
+MENTION,4.3_s0152,source,2,C0023,,,,,,KEEP
+MENTION,4.3_s0152,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0153,source-specific tree,1,C0192,,,,,,KEEP
+MENTION,4.3_s0153,tree,1,C0121,,,,yes,,KEEP
+MENTION,4.3_s0153,tree,2,C0121,,,,,,KEEP
+MENTION,4.3_s0154,tree,1,C0121,,,,,,KEEP
+MENTION,4.3_s0154,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0155,shared tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0155,tree,1,C0121,,,,yes,,KEEP
+MENTION,4.3_s0155,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0155,receivers,1,C0059,,,,,,KEEP
+MENTION,4.3_s0155,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0155,shared tree,2,C0191,,,,,,KEEP
+MENTION,4.3_s0155,tree,2,C0121,,,,yes,,KEEP
+MENTION,4.3_s0155,senders,1,C0023,,,,,,KEEP
+MENTION,4.3_s0156,PIM,1,C0113,,,,,,KEEP
+MENTION,4.3_s0156,protocol independent,1,C0176,,,,,,KEEP
+MENTION,4.3_s0157,building,1,C0242,,,,,,KEEP
+MENTION,4.3_s0157,maintaining,1,C0243,,,,,,KEEP
+MENTION,4.3_s0157,trees,1,C0121,,,,,,KEEP
+MENTION,4.3_s0157,unicast routing,1,C0123,,,,,,KEEP
+MENTION,4.3_s0157,unicast routing protocol,1,C0177,,,,,,KEEP
+MENTION,4.3_s0157,unicast routing,2,C0123,,,,yes,,KEEP
+MENTION,4.3_s0158,formation of trees,1,C0242,,,,,,KEEP
+MENTION,4.3_s0158,trees,1,C0121,,,,yes,,KEEP
+MENTION,4.3_s0158,paths,1,C0160,,,,,,KEEP
+MENTION,4.3_s0158,Join messages,1,C0182,,,,,,EDITED: identity→C0182
+MENTION,4.3_s0158,Join,1,C0182,,,,yes,,EDITED: identity→C0182
+MENTION,4.3_s0158,shortest paths,1,C0142,,,,,,KEEP
+MENTION,4.3_s0158,paths,2,C0160,,,,yes,,KEEP
+MENTION,4.3_s0158,unicast routing,1,C0123,,,,,,KEEP
+MENTION,4.3_s0159,PIM,1,C0113,,,,,,KEEP
+MENTION,4.3_s0159,unicast routing protocol independent,1,C0176,,,,,,EDITED: identity→C0176
+MENTION,4.3_s0159,unicast routing protocol,1,C0177,,,,yes,,KEEP
+MENTION,4.3_s0159,unicast routing,1,C0123,,,,yes,,KEEP
+MENTION,4.3_s0159,DVMRP,1,C0112,,,,,,KEEP
+MENTION,4.3_s0160,PIM,1,C0113,,,,,,KEEP
+MENTION,4.3_s0160,Internet Protocol,1,C0025,,,,,,KEEP
+MENTION,4.3_s0160,protocol independent,1,C0176,,,,,,KEEP
+MENTION,4.3_s0160,network-layer protocols,1,C0245,,,,,,KEEP
+MENTION,4.3_s0161,PIM-SM,1,C0170,,,,,,KEEP
+MENTION,4.3_s0161,scalability,1,C0060,,,,,,KEEP
+MENTION,4.3_s0161,optimality,1,C0247,,,,,,KEEP
+MENTION,4.3_s0162,shared tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0162,scalable,1,C0060,,,,,,KEEP
+MENTION,4.3_s0162,source-specific tree,1,C0192,,,,,,KEEP
+MENTION,4.3_s0162,state,1,C0216,,,,,,EDITED: identity→C0216
+MENTION,4.3_s0162,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0162,groups,1,C0022,,,,,,KEEP
+MENTION,4.3_s0162,senders,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0162,groups,2,C0022,,,,,,KEEP
+MENTION,4.3_s0163,source-specific tree,1,C0192,,,,,,KEEP
+MENTION,4.3_s0163,routing,1,C0161,,,,,,EDITED: nested_valid yes→blank
+MENTION,4.3_s0163,link bandwidth,1,C0250,,,,,,KEEP
+MENTION,4.3_s0163,bandwidth,1,C0028,,,,yes,,KEEP
+MENTION,4.3_s0164,Interdomain Multicast,1,C0251,,,,,,KEEP
+MENTION,4.3_s0164,MSDP,1,C0114,,,,,,KEEP
+MENTION,4.3_s0164,PIM-SM,1,C0170,,,,,,KEEP
+MENTION,4.3_s0164,interdomain multicast,1,C0251,,,,,,KEEP
+MENTION,4.3_s0165,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0165,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0165,domains,1,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0165,autonomous,1,C0253,,,,,,KEEP
+MENTION,4.3_s0166,multicast group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0166,domains,1,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0166,domain,1,C0079,,,,yes,,EDITED: identity→C0079; nested_valid blank→yes
+MENTION,4.3_s0166,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0167,multicast group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0167,sender,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0167,receivers,1,C0059,,,,,,EDITED: identity→C0059
+MENTION,4.3_s0167,domain,1,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0167,multicast traffic,1,C0053,,,,,,KEEP
+MENTION,4.3_s0167,sender,2,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0167,receivers,2,C0059,,,,,,EDITED: identity→C0059
+MENTION,4.3_s0167,domain,2,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0167,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0167,multicast group,2,C0022,,,,,,KEEP
+MENTION,4.3_s0168,PIM-SM protocol,1,C0170,,,,,,KEEP
+MENTION,4.3_s0168,PIM-SM,1,C0170,,,,yes,,KEEP
+MENTION,4.3_s0168,domains,1,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0168,domain,1,C0079,,,,yes,,EDITED: identity→C0079; nested_valid blank→yes
+MENTION,4.3_s0169,multicast,1,C0003,,,,,,KEEP
+MENTION,4.3_s0169,domains,1,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0169,PIM-SM,1,C0170,,,,,,KEEP
+MENTION,4.3_s0169,Multicast Source Discovery Protocol,1,C0114,,,,,,KEEP
+MENTION,4.3_s0169,MSDP,1,C0114,,,,,,KEEP
+MENTION,4.3_s0170,MSDP,1,C0114,,,,,,KEEP
+MENTION,4.3_s0170,domains,1,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0170,PIM-SM,1,C0170,,,,,,KEEP
+MENTION,4.3_s0170,RPs,1,C0184,,,,,,KEEP
+MENTION,4.3_s0170,RPs,2,C0184,,,,,,KEEP
+MENTION,4.3_s0170,domains,2,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0171,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0171,MSDP peer RPs,1,C0255,,,,,,KEEP
+MENTION,4.3_s0171,MSDP,1,C0114,,,,yes,,KEEP
+MENTION,4.3_s0171,RPs,1,C0184,,,,yes,,KEEP
+MENTION,4.3_s0171,domains,1,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0172,MSDP peers,1,C0256,,,,,,KEEP
+MENTION,4.3_s0172,MSDP,1,C0114,,,,yes,,KEEP
+MENTION,4.3_s0172,TCP connection,1,C0257,,,,,,KEEP
+MENTION,4.3_s0172,TCP,1,C0258,,,,yes,,KEEP
+MENTION,4.3_s0172,connection,1,C0259,,,,yes,,KEEP
+MENTION,4.3_s0172,MSDP protocol,1,C0114,,,,,,KEEP
+MENTION,4.3_s0172,MSDP,2,C0114,,,,yes,,KEEP
+MENTION,4.3_s0173,MSDP peers,1,C0256,,,,,,KEEP
+MENTION,4.3_s0173,MSDP,1,C0114,,,,yes,,KEEP
+MENTION,4.3_s0173,multicast group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0173,mesh,1,C0260,,,,,,EDITED: boundary:loose mesh→mesh
+MENTION,4.3_s0173,broadcast network,1,C0261,,,,,,KEEP
+MENTION,4.3_s0173,broadcast,1,C0008,,,,yes,,KEEP
+MENTION,4.3_s0174,MSDP messages,1,C0262,,,,,,KEEP
+MENTION,4.3_s0174,MSDP,1,C0114,,,,yes,,KEEP
+MENTION,4.3_s0174,broadcast,1,C0008,,,,,,KEEP
+MENTION,4.3_s0174,mesh,1,C0260,,,,,,KEEP
+MENTION,4.3_s0174,peer RPs,1,C0255,,,,,,EDITED: identity→C0255
+MENTION,4.3_s0174,RPs,1,C0184,,,,yes,,KEEP
+MENTION,4.3_s0174,Reverse Path Broadcast algorithm,1,C0159,,,,,,KEEP
+MENTION,4.3_s0174,DVMRP,1,C0112,,,,,,KEEP
+MENTION,4.3_s0175,MSDP,1,C0114,,,,,,KEEP
+MENTION,4.3_s0175,broadcast,1,C0008,,,,,,KEEP
+MENTION,4.3_s0175,mesh,1,C0260,,,,,,KEEP
+MENTION,4.3_s0175,RPs,1,C0184,,,,,,KEEP
+MENTION,4.3_s0176,group membership information,1,C0264,,,,,,KEEP
+MENTION,4.3_s0176,group membership,1,C0051,,,,yes,,EDITED: identity→C0051
+MENTION,4.3_s0176,group,1,C0022,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0176,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0176,domain’s,1,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0176,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0177,source,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0177,multicast sender,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0178,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0178,sources,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0178,source,1,C0023,,,,yes,,EDITED: identity→C0023; nested_valid blank→yes
+MENTION,4.3_s0178,domain,1,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0178,Register message,1,C0217,,,,,,KEEP
+MENTION,4.3_s0179,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0179,MSDP,1,C0114,,,,,,KEEP
+MENTION,4.3_s0179,broadcast,1,C0008,,,,,,KEEP
+MENTION,4.3_s0179,Source Active messages,1,C0266,,,,,,KEEP
+MENTION,4.3_s0179,peers,1,C0256,,,,,,KEEP
+MENTION,4.3_s0179,IP address,1,C0055,,,,,,KEEP
+MENTION,4.3_s0179,IP,1,C0025,,,,yes,,KEEP
+MENTION,4.3_s0179,source,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0179,multicast group address,1,C0043,,,,,,KEEP
+MENTION,4.3_s0179,multicast group,1,C0022,,,,yes,,KEEP
+MENTION,4.3_s0179,IP address,2,C0055,,,,,,KEEP
+MENTION,4.3_s0179,IP,2,C0025,,,,yes,,KEEP
+MENTION,4.3_s0179,originating RP,1,C0267,,,,,,KEEP
+MENTION,4.3_s0179,RP,2,C0184,,,,yes,,KEEP
+MENTION,4.3_s0180,MSDP peer RP,1,C0255,,,,,,EDITED: identity→C0255
+MENTION,4.3_s0180,RP,1,C0184,,,,yes,,KEEP
+MENTION,4.3_s0180,broadcasts,1,C0008,,,,,,KEEP
+MENTION,4.3_s0180,receivers,1,C0059,,,,,,KEEP
+MENTION,4.3_s0180,multicast group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0180,source-specific Join,1,C0241,,,,,,EDITED: identity→C0241
+MENTION,4.3_s0180,source,1,C0023,,,,yes,,EDITED: identity→C0023
+MENTION,4.3_s0180,Join,1,C0182,,,,yes,,EDITED: identity→C0182
+MENTION,4.3_s0180,RP,2,C0184,,,,,,KEEP
+MENTION,4.3_s0180,source host,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0181,Join message,1,C0182,,,,,,EDITED: identity→C0182
+MENTION,4.3_s0181,Join,1,C0182,,,,yes,,EDITED: identity→C0182
+MENTION,4.3_s0181,branch,1,C0206,,,,,,KEEP
+MENTION,4.3_s0181,source-specific tree,1,C0192,,,,,,KEEP
+MENTION,4.3_s0181,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0182,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0182,MSDP network,1,C0272,,,,,,KEEP
+MENTION,4.3_s0182,MSDP,1,C0114,,,,yes,,KEEP
+MENTION,4.3_s0182,receivers,1,C0059,,,,,,KEEP
+MENTION,4.3_s0182,multicast group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0182,source-specific tree,1,C0192,,,,,,KEEP
+MENTION,4.3_s0182,source,1,C0023,,,,yes,,EDITED: identity→C0023; nested_valid blank→yes
+MENTION,4.3_s0183,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0183,multicast,1,C0104,,,,,,KEEP
+MENTION,4.3_s0183,source,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0183,RP,2,C0184,,,,,,KEEP
+MENTION,4.3_s0183,shared tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0183,multicast,2,C0104,,,,,,KEEP
+MENTION,4.3_s0183,receivers,1,C0059,,,,,,KEEP
+MENTION,4.3_s0183,domain,1,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0184,Source-Specific Multicast,1,C0063,,,,,,KEEP
+MENTION,4.3_s0184,PIM-SSM,1,C0274,,,,,,KEEP
+MENTION,4.3_s0185,service model,1,C0275,,,,,,KEEP
+MENTION,4.3_s0185,PIM,1,C0113,,,,,,KEEP
+MENTION,4.3_s0185,multicast protocols,1,C0124,,,,,,EDITED: identity→C0124
+MENTION,4.3_s0185,many-to-many model,1,C0061,,,,,,EDITED: identity→C0061
+MENTION,4.3_s0186,Receivers,1,C0059,,,,,,KEEP
+MENTION,4.3_s0186,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0186,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0186,group,2,C0022,,,,,,KEEP
+MENTION,4.3_s0187,one-to-many model,1,C0062,,,,,,EDITED: identity→C0062
+MENTION,4.3_s0188,multicast applications,1,C0279,,,,,,KEEP
+MENTION,4.3_s0188,sender,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0188,Internet,1,C0006,,,,,,KEEP
+MENTION,4.3_s0189,PIM-SM,1,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0189,source-specific shortest path trees,1,C0281,,,,,,KEEP
+MENTION,4.3_s0189,shortest path trees,1,C0148,,,,yes,,EDITED: identity→C0148
+MENTION,4.3_s0189,shared tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0190,PIM,1,C0113,,,,,,EDITED: nested_valid yes→blank
+MENTION,4.3_s0190,hosts,1,C0010,,,,,,KEEP
+MENTION,4.3_s0190,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0190,source-specific trees,1,C0192,,,,,,KEEP
+MENTION,4.3_s0191,one-to-many service model,1,C0062,,,,,,EDITED: identity→C0062
+MENTION,4.3_s0191,service model,1,C0275,,,,yes,,KEEP
+MENTION,4.3_s0191,source-specific routing,1,C0286,,,,,,EDITED: nested_valid yes→blank
+MENTION,4.3_s0191,PIM-SM,1,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0191,hosts,1,C0010,,,,,,KEEP
+MENTION,4.3_s0192,IGMP,1,C0069,,,,,,KEEP
+MENTION,4.3_s0192,IPv6,1,C0070,,,,,,KEEP
+MENTION,4.3_s0192,MLD,1,C0071,,,,,,KEEP
+MENTION,4.3_s0192,PIM,1,C0113,,,,,,KEEP
+MENTION,4.3_s0193,PIM-SSM,1,C0274,,,,,,KEEP
+MENTION,4.3_s0193,PIM Source-Specific Multicast,1,C0274,,,,,,KEEP
+MENTION,4.3_s0194,PIM-SSM,1,C0274,,,,,,KEEP
+MENTION,4.3_s0194,S,1,C0288,,,,yes,,KEEP
+MENTION,4.3_s0194,channel,1,C0287,,,,,,KEEP
+MENTION,4.3_s0194,source address,1,C0288,,,,,,EDITED: boundary:source address S→source address
+MENTION,4.3_s0194,group address,1,C0043,,,,,,EDITED: identity→C0043; boundary:group address G→group address
+MENTION,4.3_s0194,G,1,C0043,,,,,,EDITED: identity→C0043; nested_valid yes→blank
+MENTION,4.3_s0195,group address,1,C0043,,,,,,EDITED: identity→C0043; boundary:group address G→group address
+MENTION,4.3_s0195,G,1,C0043,,,,,,EDITED: identity→C0043; nested_valid yes→blank
+MENTION,4.3_s0195,IP multicast address,1,C0041,,,,,,KEEP
+MENTION,4.3_s0195,IP,1,C0025,,,,yes,,KEEP
+MENTION,4.3_s0195,multicast address,1,C0042,,,,yes,,KEEP
+MENTION,4.3_s0195,IPv4,1,C0068,,,,,,KEEP
+MENTION,4.3_s0195,IPv6,1,C0070,,,,,,KEEP
+MENTION,4.3_s0195,multicast address space,1,C0290,,,,,,KEEP
+MENTION,4.3_s0195,multicast address,2,C0042,,,,yes,,KEEP
+MENTION,4.3_s0195,SSM,1,C0063,,,,,,KEEP
+MENTION,4.3_s0196,PIM-SSM,1,C0274,,,,,,KEEP
+MENTION,4.3_s0196,host,1,C0010,,,,,,KEEP
+MENTION,4.3_s0196,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0196,source,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0196,IGMP Membership Report message,1,C0291,,,,,,KEEP
+MENTION,4.3_s0196,IGMP,1,C0069,,,,yes,,KEEP
+MENTION,4.3_s0196,Membership Report message,1,C0291,,,,yes,,EDITED: identity→C0291
+MENTION,4.3_s0196,local router,1,C0046,,,,,,KEEP
+MENTION,4.3_s0196,router,1,C0034,,,,yes,,KEEP
+MENTION,4.3_s0197,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0197,PIM-SM source-specific Join message,1,C0241,,,,,,EDITED: identity→C0241
+MENTION,4.3_s0197,PIM-SM,1,C0170,,,,yes,,EDITED: identity→C0170
+MENTION,4.3_s0197,source-specific Join,1,C0241,,,,yes,,EDITED: identity→C0241
+MENTION,4.3_s0197,source,1,C0023,,,,yes,,EDITED: identity→C0023; nested_valid blank→yes
+MENTION,4.3_s0197,Join message,1,C0182,,,,yes,,EDITED: identity→C0182
+MENTION,4.3_s0197,Join,1,C0182,,,,yes,,EDITED: identity→C0182
+MENTION,4.3_s0197,branch,1,C0206,,,,,,KEEP
+MENTION,4.3_s0197,source-specific tree,1,C0192,,,,,,KEEP
+MENTION,4.3_s0197,PIM-SM,2,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0197,shared-tree stage,1,C0294,,,,,,KEEP
+MENTION,4.3_s0197,shared-tree,1,C0191,,,,yes,,KEEP
+MENTION,4.3_s0198,tree,1,C0121,,,,,,KEEP
+MENTION,4.3_s0198,source,1,C0023,,,,,,EDITED: identity→C0023
+MENTION,4.3_s0198,packets,1,C0026,,,,,,KEEP
+MENTION,4.3_s0198,tree,2,C0121,,,,,,KEEP
+MENTION,4.3_s0199,PIM-SSM,1,C0274,,,,,,KEEP
+MENTION,4.3_s0199,one-to-many multicasting,1,C0062,,,,,,EDITED: identity→C0062
+MENTION,4.3_s0199,multicasting,1,C0003,,,,yes,,EDITED: identity→C0003
+MENTION,4.3_s0199,Multicasts,1,C0104,,,,,,KEEP
+MENTION,4.3_s0199,receivers,1,C0059,,,,,,KEEP
+MENTION,4.3_s0199,address of a channel,1,C0296,,,,,,KEEP
+MENTION,4.3_s0199,channel,1,C0287,,,,yes,,KEEP
+MENTION,4.3_s0199,multicast group address,1,C0043,,,,,,KEEP
+MENTION,4.3_s0199,multicast group,1,C0022,,,,yes,,KEEP
+MENTION,4.3_s0199,group address,1,C0043,,,,yes,,EDITED: identity→C0043
+MENTION,4.3_s0199,source address,1,C0288,,,,,,KEEP
+MENTION,4.3_s0200,multicast group addresses,1,C0043,,,,,,KEEP
+MENTION,4.3_s0200,multicast group address,1,C0043,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0200,multicast group,1,C0022,,,,yes,,KEEP
+MENTION,4.3_s0200,SSM,1,C0063,,,,,,KEEP
+MENTION,4.3_s0200,domains,1,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0200,domain,1,C0079,,,,yes,,EDITED: identity→C0079; nested_valid blank→yes
+MENTION,4.3_s0200,multicast group,2,C0022,,,,,,EDITED: nested_valid yes→blank
+MENTION,4.3_s0200,sources,1,C0023,,,,,,EDITED: identity→C0023; sense-split
+MENTION,4.3_s0200,source,1,C0023,,,,yes,,EDITED: identity→C0023; sense-split; nested_valid blank→yes
+MENTION,4.3_s0200,domains,2,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0200,SSM group,1,C0297,,,,,,KEEP
+MENTION,4.3_s0200,attacks,1,C0298,,,,,,KEEP
+MENTION,4.3_s0200,malicious hosts,1,C0299,,,,,,KEEP
+MENTION,4.3_s0200,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0200,receivers,1,C0059,,,,,,KEEP
+MENTION,4.3_s0200,multicast traffic,1,C0053,,,,,,EDITED: nested_valid yes→blank
+MENTION,4.3_s0200,PIM-SSM,1,C0274,,,,,,KEEP
+MENTION,4.3_s0200,domains,3,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0200,MSDP,1,C0114,,,,,,KEEP
+MENTION,4.3_s0201,SSM,1,C0063,,,,,,KEEP
+MENTION,4.3_s0201,multicast service model,1,C0275,,,,,,KEEP
+MENTION,4.3_s0202,Bidirectional Trees,1,C0301,,,,,,KEEP
+MENTION,4.3_s0202,BIDIR-PIM,1,C0302,,,,,,KEEP
+MENTION,4.3_s0202,PIM,1,C0113,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0202,multicast,1,C0003,,,,,,KEEP
+MENTION,4.3_s0202,Bidirectional PIM,1,C0302,,,,,,KEEP
+MENTION,4.3_s0203,BIDIR-PIM,1,C0302,,,,,,KEEP
+MENTION,4.3_s0203,PIM-SM,1,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0203,many-to-many multicasting,1,C0061,,,,,,KEEP
+MENTION,4.3_s0203,domain,1,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0203,senders,1,C0023,,,,,,KEEP
+MENTION,4.3_s0203,receivers,1,C0059,,,,,,KEEP
+MENTION,4.3_s0203,group,1,C0022,,,,,,KEEP
+MENTION,4.3_s0203,multiparty videoconference,1,C0303,,,,,,KEEP
+MENTION,4.3_s0204,PIM-SM,1,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0204,receivers,1,C0059,,,,,,KEEP
+MENTION,4.3_s0204,groups,1,C0022,,,,,,KEEP
+MENTION,4.3_s0204,IGMP Membership Report messages,1,C0291,,,,,,KEEP
+MENTION,4.3_s0204,IGMP,1,C0069,,,,yes,,KEEP
+MENTION,4.3_s0204,source specific,1,C0304,,,,,,KEEP
+MENTION,4.3_s0204,shared tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0204,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0204,multicast packets,1,C0104,,,,,,KEEP
+MENTION,4.3_s0204,receivers,2,C0059,,,,,,KEEP
+MENTION,4.3_s0205,PIM-SM,1,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0205,shared tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0205,branches,1,C0206,,,,,,EDITED: identity→C0206
+MENTION,4.3_s0205,sources,1,C0023,,,,,,EDITED: identity→C0023; sense-split
+MENTION,4.3_s0206,PIM-SM,1,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0206,unidirectional tree,1,C0306,,,,,,KEEP
+MENTION,4.3_s0206,tree,1,C0121,,,,yes,,EDITED: identity→C0121; nested_valid blank→yes
+MENTION,4.3_s0206,BIDIR-PIM,1,C0302,,,,,,KEEP
+MENTION,4.3_s0206,trees,1,C0301,,,,,,KEEP
+MENTION,4.3_s0206,bidirectional,1,C0307,,,,,,KEEP
+MENTION,4.3_s0206,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0206,multicast packet,1,C0104,,,,,,KEEP
+MENTION,4.3_s0206,downstream branch,1,C0308,,,,,,KEEP
+MENTION,4.3_s0206,branches,1,C0206,,,,,,EDITED: identity→C0206
+MENTION,4.3_s0207,route,1,C0238,,,,,,KEEP
+MENTION,4.3_s0207,packet,1,C0026,,,,,,KEEP
+MENTION,4.3_s0207,receiver,1,C0059,,,,,,KEEP
+MENTION,4.3_s0207,tree,1,C0121,,,,,,EDITED: identity→C0121
+MENTION,4.3_s0207,branch,1,C0206,,,,,,EDITED: identity→C0206
+MENTION,4.3_s0207,receiver,2,C0059,,,,,,KEEP
+MENTION,4.3_s0208,multicast route,1,C0310,,,,,,KEEP
+MENTION,4.3_s0208,route,1,C0238,,,,yes,,KEEP
+MENTION,4.3_s0209,multicast packet,1,C0104,,,,,,KEEP
+MENTION,4.3_s0209,packet,1,C0026,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0210,BIDIR-PIM,1,C0302,,,,,,KEEP
+MENTION,4.3_s0210,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0211,routable address,1,C0311,,,,,,KEEP
+MENTION,4.3_s0211,address,1,C0168,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0211,RP address,1,C0312,,,,,,KEEP
+MENTION,4.3_s0211,RP,1,C0184,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0213,Join,1,C0182,,,,,,KEEP
+MENTION,4.3_s0213,receiver,1,C0059,,,,,,KEEP
+MENTION,4.3_s0213,RP address,1,C0312,,,,,,KEEP
+MENTION,4.3_s0213,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0213,interface,1,C0050,,,,,,KEEP
+MENTION,4.3_s0213,link,1,C0057,,,,,,KEEP
+MENTION,4.3_s0213,RP address,2,C0312,,,,,,KEEP
+MENTION,4.3_s0213,Join,2,C0182,,,,,,KEEP
+MENTION,4.3_s0214,Join,1,C0182,,,,,,KEEP
+MENTION,4.3_s0214,Join,2,C0182,,,,,,KEEP
+MENTION,4.3_s0215,upstream forwarding,1,C0314,,,,,,KEEP
+MENTION,4.3_s0215,multicast packet,1,C0104,,,,,,KEEP
+MENTION,4.3_s0215,packet,1,C0026,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,4.3_s0215,RP address,1,C0312,,,,,,KEEP
+MENTION,4.3_s0215,router,1,C0034,,,,,,KEEP
+MENTION,4.3_s0215,interface,1,C0050,,,,,,KEEP
+MENTION,4.3_s0215,link,1,C0057,,,,,,KEEP
+MENTION,4.3_s0215,RP address,2,C0312,,,,,,KEEP
+MENTION,4.3_s0215,router,2,C0034,,,,,,KEEP
+MENTION,4.3_s0215,multicast packet,2,C0104,,,,,,KEEP
+MENTION,4.3_s0215,link,2,C0057,,,,,,KEEP
+MENTION,4.3_s0215,upstream forwarding,2,C0314,,,,,,KEEP
+MENTION,4.3_s0215,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0215,link,3,C0057,,,,,,KEEP
+MENTION,4.3_s0216,multicast traffic,1,C0053,,,,,,KEEP
+MENTION,4.3_s0217,BIDIR-PIM,1,C0302,,,,,,KEEP
+MENTION,4.3_s0217,domains,1,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0218,PIM-SM,1,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0218,many-to-many multicast,1,C0061,,,,,,KEEP
+MENTION,4.3_s0218,domain,1,C0079,,,,,,EDITED: identity→C0079
+MENTION,4.3_s0218,source registration process,1,C0315,,,,,,KEEP
+MENTION,4.3_s0218,routers,1,C0034,,,,,,KEEP
+MENTION,4.3_s0218,multicast packet,1,C0104,,,,,,KEEP
+MENTION,4.3_s0218,RP address,1,C0312,,,,,,KEEP
+MENTION,4.3_s0219,routes,1,C0238,,,,,,KEEP
+MENTION,4.3_s0219,PIM-SM,1,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0219,shared tree,1,C0191,,,,,,KEEP
+MENTION,4.3_s0219,tree,1,C0121,,,,yes,,EDITED: identity→C0121; nested_valid blank→yes
+MENTION,4.3_s0219,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0219,Bidirectional trees,1,C0301,,,,,,KEEP
+MENTION,4.3_s0219,state,1,C0216,,,,,,EDITED: identity→C0216
+MENTION,4.3_s0219,source-specific trees,1,C0192,,,,,,KEEP
+MENTION,4.3_s0219,PIM-SM,2,C0170,,,,,,EDITED: identity→C0170
+MENTION,4.3_s0219,source-specific state,1,C0234,,,,,,EDITED: identity→C0234
+MENTION,4.3_s0219,state,2,C0216,,,,yes,,EDITED: identity→C0216
+MENTION,4.3_s0220,routes,1,C0238,,,,,,KEEP
+MENTION,4.3_s0220,source-specific trees,1,C0192,,,,,,KEEP
+MENTION,4.3_s0220,RP,1,C0184,,,,,,KEEP
+MENTION,4.3_s0220,bottleneck,1,C0317,,,,,,KEEP
+MENTION,4.3_s0220,RP,2,C0184,,,,,,KEEP
+MENTION,4.3_s0221,multicast,1,C0003,,,,,,KEEP
+MENTION,4.3_s0221,PIM,1,C0113,,,,,,KEEP
+MENTION,4.3_s0221,multicast,2,C0003,,,,,,KEEP
+MENTION,4.3_s0222,bandwidth usage,1,C0318,,,,,,KEEP
+MENTION,4.3_s0222,bandwidth,1,C0028,,,,yes,,KEEP
+MENTION,4.3_s0222,router state,1,C0319,,,,,,KEEP
+MENTION,4.3_s0222,router,1,C0034,,,,yes,,KEEP
+MENTION,4.3_s0222,path length,1,C0320,,,,,,KEEP
+MENTION,4.3_s0222,path,1,C0160,,,,yes,,KEEP
+MENTION,4.3_s0222,application,1,C0005,,,,,,EDITED: identity→C0005
+MENTION,4.3_s0222,one-to-many,1,C0012,,,,,,KEEP
+MENTION,4.3_s0222,many-to-many,1,C0017,,,,,,KEEP
+MENTION,4.3_s0223,multicast mode,1,C0322,,,,,,KEEP
+MENTION,4.3_s0223,multicast,1,C0003,,,,yes,,KEEP
+MENTION,6.2_s0000,resource allocation mechanism,1,C0323,,,,,,KEEP
+MENTION,6.2_s0000,resource allocation,1,C0324,,,,yes,,KEEP
+MENTION,6.2_s0000,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0000,queuing discipline,1,C0325,,,,,,KEEP
+MENTION,6.2_s0000,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0001,queuing algorithm,1,C0326,,,,,,KEEP
+MENTION,6.2_s0001,bandwidth,1,C0028,,,,,,KEEP
+MENTION,6.2_s0001,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0001,buffer space,1,C0327,,,,,,KEEP
+MENTION,6.2_s0001,packets,2,C0026,,,,,,KEEP
+MENTION,6.2_s0002,latency,1,C0328,,,,,,KEEP
+MENTION,6.2_s0002,packet,1,C0026,,,,,,KEEP
+MENTION,6.2_s0002,packet,2,C0026,,,,,,KEEP
+MENTION,6.2_s0003,queuing algorithms,1,C0326,,,,,,KEEP
+MENTION,6.2_s0003,"first-in, first-out",1,C0329,,,,,,KEEP
+MENTION,6.2_s0003,FIFO,1,C0329,,,,,,KEEP
+MENTION,6.2_s0003,fair queuing,1,C0330,,,,,,KEEP
+MENTION,6.2_s0003,FQ,1,C0330,,,,,,KEEP
+MENTION,6.2_s0004,FIFO,1,C0329,,,,,,KEEP
+MENTION,6.2_s0004,FIFO queuing,1,C0329,,,,,,EDITED: identity→C0329
+MENTION,6.2_s0004,FIFO,2,C0329,,,,yes,,KEEP
+MENTION,6.2_s0004,"first-come, first-served",1,C0329,,,,,,EDITED: identity→C0329
+MENTION,6.2_s0004,FCFS,1,C0329,,,,,,EDITED: identity→C0329; boundary:FCFS) queuing→FCFS
+MENTION,6.2_s0004,packet,1,C0026,,,,,,KEEP
+MENTION,6.2_s0004,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0004,packet,2,C0026,,,,,,KEEP
+MENTION,6.2_s0005,FIFO,1,C0329,,,,,,KEEP
+MENTION,6.2_s0005,slots,1,C0334,,,,,,KEEP
+MENTION,6.2_s0005,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0006,buffer space,1,C0327,,,,,,KEEP
+MENTION,6.2_s0006,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0006,packet,1,C0026,,,,,,KEEP
+MENTION,6.2_s0006,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0006,buffer space,2,C0327,,,,,,KEEP
+MENTION,6.2_s0006,router,2,C0034,,,,,,KEEP
+MENTION,6.2_s0006,packet,2,C0026,,,,,,KEEP
+MENTION,6.2_s0007,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0007,packet,1,C0026,,,,,,KEEP
+MENTION,6.2_s0007,packet,2,C0026,,,,,,KEEP
+MENTION,6.2_s0008,tail drop,1,C0337,,,,,,KEEP
+MENTION,6.2_s0008,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0008,tail end,1,C0338,,,,,,KEEP
+MENTION,6.2_s0008,FIFO,1,C0329,,,,,,KEEP
+MENTION,6.2_s0009,tail drop,1,C0337,,,,,,KEEP
+MENTION,6.2_s0009,FIFO,1,C0329,,,,,,KEEP
+MENTION,6.2_s0010,FIFO,1,C0329,,,,,,KEEP
+MENTION,6.2_s0010,scheduling discipline,1,C0339,,,,,,KEEP
+MENTION,6.2_s0010,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0011,Tail drop,1,C0337,,,,,,KEEP
+MENTION,6.2_s0011,drop policy,1,C0340,,,,,,KEEP
+MENTION,6.2_s0011,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0012,FIFO,1,C0329,,,,,,KEEP
+MENTION,6.2_s0012,tail drop,1,C0337,,,,,,KEEP
+MENTION,6.2_s0012,scheduling discipline,1,C0339,,,,,,KEEP
+MENTION,6.2_s0012,drop policy,1,C0340,,,,,,KEEP
+MENTION,6.2_s0012,vanilla queuing implementation,1,C0341,,,,,,KEEP
+MENTION,6.2_s0013,FIFO queuing,1,C0329,,,,,,EDITED: identity→C0329
+MENTION,6.2_s0013,FIFO,1,C0329,,,,yes,,KEEP
+MENTION,6.2_s0013,FIFO with tail drop,1,C0341,,,,,,KEEP
+MENTION,6.2_s0013,FIFO,2,C0329,,,,yes,,KEEP
+MENTION,6.2_s0013,tail drop,1,C0337,,,,yes,,KEEP
+MENTION,6.2_s0014,drop policy,1,C0340,,,,,,KEEP
+MENTION,6.2_s0014,buffer,1,C0343,,,,,,KEEP
+MENTION,6.2_s0014,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0015,drop policy,1,C0340,,,,,,KEEP
+MENTION,6.2_s0015,FIFO,1,C0329,,,,,,KEEP
+MENTION,6.2_s0015,scheduling disciplines,1,C0339,,,,,,KEEP
+MENTION,6.2_s0016,FIFO with tail drop,1,C0341,,,,,,KEEP
+MENTION,6.2_s0016,FIFO,1,C0329,,,,yes,,KEEP
+MENTION,6.2_s0016,tail drop,1,C0337,,,,yes,,KEEP
+MENTION,6.2_s0016,queuing algorithms,1,C0326,,,,,,KEEP
+MENTION,6.2_s0016,Internet routers,1,C0034,,,,,,EDITED: identity→C0034
+MENTION,6.2_s0016,Internet,1,C0006,,,,yes,,KEEP
+MENTION,6.2_s0016,routers,1,C0034,,,,yes,,KEEP
+MENTION,6.2_s0017,queuing,1,C0344,,,,,,KEEP
+MENTION,6.2_s0017,congestion control,1,C0345,,,,,,KEEP
+MENTION,6.2_s0017,resource allocation,1,C0324,,,,,,KEEP
+MENTION,6.2_s0017,edges of the network,1,C0346,,,,,,KEEP
+MENTION,6.2_s0017,network,1,C0033,,,,yes,,KEEP
+MENTION,6.2_s0018,congestion control,1,C0345,,,,,,KEEP
+MENTION,6.2_s0018,congestion,1,C0348,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0018,Internet,1,C0006,,,,,,KEEP
+MENTION,6.2_s0018,routers,1,C0034,,,,,,KEEP
+MENTION,6.2_s0018,TCP,1,C0258,,,,,,EDITED: identity→C0258
+MENTION,6.2_s0020,FIFO queuing,1,C0329,,,,,,EDITED: identity→C0329
+MENTION,6.2_s0020,FIFO,1,C0329,,,,yes,,KEEP
+MENTION,6.2_s0020,priority queuing,1,C0349,,,,,,KEEP
+MENTION,6.2_s0021,mark,1,C0351,,,,,,KEEP
+MENTION,6.2_s0021,packet,1,C0026,,,,,,KEEP
+MENTION,6.2_s0021,priority,1,C0350,,,,,,KEEP
+MENTION,6.2_s0021,IP header,1,C0102,,,,,,KEEP
+MENTION,6.2_s0021,IP,1,C0025,,,,yes,,KEEP
+MENTION,6.2_s0021,header,1,C0103,,,,yes,,KEEP
+MENTION,6.2_s0022,routers,1,C0034,,,,,,KEEP
+MENTION,6.2_s0022,FIFO queues,1,C0352,,,,,,KEEP
+MENTION,6.2_s0022,FIFO,1,C0329,,,,yes,,KEEP
+MENTION,6.2_s0022,queues,1,C0335,,,,yes,,KEEP
+MENTION,6.2_s0022,priority class,1,C0353,,,,,,KEEP
+MENTION,6.2_s0022,priority,1,C0350,,,,yes,,KEEP
+MENTION,6.2_s0023,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0023,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0023,highest-priority queue,1,C0354,,,,,,KEEP
+MENTION,6.2_s0023,priority,1,C0350,,,,yes,,KEEP
+MENTION,6.2_s0023,queue,1,C0335,,,,yes,,KEEP
+MENTION,6.2_s0023,queue,2,C0335,,,,,,KEEP
+MENTION,6.2_s0023,next priority queue,1,C0355,,,,,,KEEP
+MENTION,6.2_s0023,queue,3,C0335,,,,yes,,KEEP
+MENTION,6.2_s0024,priority,1,C0350,,,,,,KEEP
+MENTION,6.2_s0024,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0024,FIFO,1,C0329,,,,,,KEEP
+MENTION,6.2_s0025,best-effort delivery model,1,C0356,,,,,,KEEP
+MENTION,6.2_s0025,best-effort delivery,1,C0357,,,,yes,,KEEP
+MENTION,6.2_s0025,priority class,1,C0353,,,,,,KEEP
+MENTION,6.2_s0025,priority,1,C0350,,,,yes,,KEEP
+MENTION,6.2_s0026,high-priority packets,1,C0358,,,,,,KEEP
+MENTION,6.2_s0026,packets,1,C0026,,,,yes,,KEEP
+MENTION,6.2_s0027,priority queuing,1,C0349,,,,,,KEEP
+MENTION,6.2_s0027,high-priority queue,1,C0359,,,,,,KEEP
+MENTION,6.2_s0027,queue,1,C0335,,,,yes,,KEEP
+MENTION,6.2_s0027,queues,1,C0335,,,,,,KEEP
+MENTION,6.2_s0027,queue,2,C0335,,,,yes,,KEEP
+MENTION,6.2_s0027,high-priority packet,1,C0358,,,,,,KEEP
+MENTION,6.2_s0027,packet,1,C0026,,,,yes,,KEEP
+MENTION,6.2_s0027,high-priority queue,2,C0359,,,,,,KEEP
+MENTION,6.2_s0027,lower-priority queues,1,C0360,,,,,,KEEP
+MENTION,6.2_s0027,queues,2,C0335,,,,yes,,KEEP
+MENTION,6.2_s0028,high-priority traffic,1,C0361,,,,,,KEEP
+MENTION,6.2_s0028,traffic,1,C0030,,,,yes,,KEEP
+MENTION,6.2_s0028,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0029,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0029,high priority,1,C0363,,,,,,KEEP
+MENTION,6.2_s0029,pushback,1,C0364,,,,,,KEEP
+MENTION,6.2_s0030,network,1,C0033,,,,,,KEEP
+MENTION,6.2_s0030,high-priority packets,1,C0358,,,,,,KEEP
+MENTION,6.2_s0030,packets,1,C0026,,,,yes,,KEEP
+MENTION,6.2_s0030,low-priority packets,1,C0365,,,,,,KEEP
+MENTION,6.2_s0030,packets,2,C0026,,,,yes,,KEEP
+MENTION,6.2_s0031,Internet,1,C0006,,,,,,KEEP
+MENTION,6.2_s0032,priority queuing,1,C0349,,,,,,KEEP
+MENTION,6.2_s0032,Internet,1,C0006,,,,,,KEEP
+MENTION,6.2_s0032,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0032,routing updates,1,C0166,,,,,,KEEP
+MENTION,6.2_s0032,routing tables,1,C0141,,,,,,KEEP
+MENTION,6.2_s0032,topology change,1,C0367,,,,,,KEEP
+MENTION,6.2_s0032,topology,1,C0368,,,,yes,,KEEP
+MENTION,6.2_s0033,queue,1,C0335,,,,,,EDITED: nested_valid yes→blank
+MENTION,6.2_s0033,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0033,Differentiated Services Code Point,1,C0370,,,,,,KEEP
+MENTION,6.2_s0033,Differentiated Services,1,C0371,,,,yes,,KEEP
+MENTION,6.2_s0033,Code Point,1,C0372,,,,yes,,KEEP
+MENTION,6.2_s0033,TOS field,1,C0373,,,,,,KEEP
+MENTION,6.2_s0033,TOS,1,C0373,,,,yes,,EDITED: identity→C0373
+MENTION,6.2_s0033,IP header,1,C0102,,,,,,KEEP
+MENTION,6.2_s0033,IP,1,C0025,,,,yes,,KEEP
+MENTION,6.2_s0033,header,1,C0103,,,,yes,,KEEP
+MENTION,6.2_s0034,Differentiated Services,1,C0371,,,,,,KEEP
+MENTION,6.2_s0034,Fair Queuing,1,C0330,,,,,,KEEP
+MENTION,6.2_s0034,FIFO queuing,1,C0329,,,,,,EDITED: identity→C0329
+MENTION,6.2_s0034,FIFO,1,C0329,,,,yes,,KEEP
+MENTION,6.2_s0034,traffic sources,1,C0375,,,,,,KEEP
+MENTION,6.2_s0034,traffic,1,C0030,,,,yes,,KEEP
+MENTION,6.2_s0034,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0034,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0036,congestion-control algorithm,1,C0376,,,,,,KEEP
+MENTION,6.2_s0036,congestion-control,1,C0345,,,,yes,,KEEP
+MENTION,6.2_s0036,congestion,1,C0348,,,,yes,,EDITED: identity→C0348; nested_valid blank→yes
+MENTION,6.2_s0036,source,1,C0375,,,,,,EDITED: identity→C0375; sense-split
+MENTION,6.2_s0036,routers,1,C0034,,,,,,KEEP
+MENTION,6.2_s0037,TCP congestion control,1,C0378,,,,,,KEEP
+MENTION,6.2_s0037,TCP,1,C0258,,,,yes,,KEEP
+MENTION,6.2_s0037,congestion control,1,C0345,,,,yes,,KEEP
+MENTION,6.2_s0038,congestion-control mechanism,1,C0379,,,,,,KEEP
+MENTION,6.2_s0038,congestion-control,1,C0345,,,,yes,,KEEP
+MENTION,6.2_s0038,mechanism,1,C0379,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0038,sources,1,C0375,,,,,,EDITED: identity→C0375; sense-split
+MENTION,6.2_s0038,source,1,C0375,,,,yes,,EDITED: identity→C0375; sense-split
+MENTION,6.2_s0038,FIFO queuing,1,C0329,,,,,,EDITED: identity→C0329
+MENTION,6.2_s0038,FIFO,1,C0329,,,,yes,,KEEP
+MENTION,6.2_s0038,sources,2,C0375,,,,,,EDITED: identity→C0375; sense-split
+MENTION,6.2_s0038,ill-behaved source,1,C0380,,,,,,KEEP
+MENTION,6.2_s0038,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0038,network capacity,1,C0032,,,,,,EDITED: identity→C0032
+MENTION,6.2_s0038,capacity,1,C0032,,,,yes,,KEEP
+MENTION,6.2_s0039,Internet,1,C0006,,,,,,KEEP
+MENTION,6.2_s0039,application,1,C0005,,,,,,KEEP
+MENTION,6.2_s0039,TCP,1,C0258,,,,,,KEEP
+MENTION,6.2_s0039,end-to-end congestion-control mechanism,1,C0388,,,,,,EDITED: identity→C0388
+MENTION,6.2_s0039,congestion-control mechanism,1,C0379,,,,yes,,KEEP
+MENTION,6.2_s0039,congestion-control,1,C0345,,,,yes,,KEEP
+MENTION,6.2_s0040,Applications,1,C0005,,,,,,EDITED: identity→C0005
+MENTION,6.2_s0040,Internet telephony,1,C0383,,,,,,KEEP
+MENTION,6.2_s0040,Internet,1,C0006,,,,yes,,KEEP
+MENTION,6.2_s0041,application,1,C0005,,,,,,EDITED: identity→C0005
+MENTION,6.2_s0041,Internet,1,C0006,,,,,,KEEP
+MENTION,6.2_s0041,routers,1,C0034,,,,,,KEEP
+MENTION,6.2_s0041,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0041,applications,1,C0005,,,,,,EDITED: identity→C0005
+MENTION,6.2_s0041,packets,2,C0026,,,,,,KEEP
+MENTION,6.2_s0042,Fair queuing,1,C0330,,,,,,KEEP
+MENTION,6.2_s0042,FQ,1,C0330,,,,,,KEEP
+MENTION,6.2_s0043,FQ,1,C0330,,,,,,KEEP
+MENTION,6.2_s0043,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0043,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0043,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0044,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0044,queues,1,C0335,,,,,,KEEP
+MENTION,6.2_s0044,round-robin,1,C0386,,,,,,KEEP
+MENTION,6.2_s0045,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0045,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0045,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0046,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0046,length,1,C0387,,,,,,KEEP
+MENTION,6.2_s0046,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0046,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0046,queue,2,C0335,,,,,,KEEP
+MENTION,6.2_s0047,source,1,C0375,,,,,,KEEP
+MENTION,6.2_s0047,network,1,C0033,,,,,,KEEP
+MENTION,6.2_s0047,capacity,1,C0032,,,,,,EDITED: identity→C0032
+MENTION,6.2_s0047,flows,1,C0336,,,,,,KEEP
+MENTION,6.2_s0048,FQ,1,C0330,,,,,,KEEP
+MENTION,6.2_s0048,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0048,traffic sources,1,C0375,,,,,,KEEP
+MENTION,6.2_s0048,source,1,C0375,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0048,state of the router,1,C0319,,,,,,KEEP
+MENTION,6.2_s0048,router,2,C0034,,,,yes,,KEEP
+MENTION,6.2_s0048,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0049,FQ,1,C0330,,,,,,KEEP
+MENTION,6.2_s0049,end-to-end congestion-control mechanism,1,C0388,,,,,,KEEP
+MENTION,6.2_s0049,congestion-control,1,C0345,,,,yes,,KEEP
+MENTION,6.2_s0050,traffic,1,C0030,,,,,,EDITED: identity→C0030; nested_valid yes→blank
+MENTION,6.2_s0050,traffic sources,1,C0375,,,,,,KEEP
+MENTION,6.2_s0050,end-to-end algorithm,1,C0388,,,,,,KEEP
+MENTION,6.2_s0051,FQ,1,C0330,,,,,,KEEP
+MENTION,6.2_s0051,fairness,1,C0391,,,,,,KEEP
+MENTION,6.2_s0051,flows,1,C0336,,,,,,KEEP
+MENTION,6.2_s0051,congestion-control algorithm,1,C0376,,,,,,KEEP
+MENTION,6.2_s0051,congestion-control,1,C0345,,,,yes,,KEEP
+MENTION,6.2_s0053,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0053,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0053,length,1,C0392,,,,,,KEEP
+MENTION,6.2_s0054,bandwidth,1,C0028,,,,,,KEEP
+MENTION,6.2_s0054,outgoing link,1,C0144,,,,,,KEEP
+MENTION,6.2_s0054,link,1,C0057,,,,yes,,KEEP
+MENTION,6.2_s0054,packet length,1,C0392,,,,,,KEEP
+MENTION,6.2_s0054,packet,1,C0026,,,,yes,,KEEP
+MENTION,6.2_s0055,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0055,flows,1,C0336,,,,,,KEEP
+MENTION,6.2_s0055,flow,1,C0336,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0055,packets,1,C0026,,,,,,EDITED: boundary:1000-byte packets→packets
+MENTION,6.2_s0055,packets,2,C0026,,,,,,EDITED: boundary:500-byte packets→packets
+MENTION,6.2_s0055,fragmentation,1,C0393,,,,,,KEEP
+MENTION,6.2_s0055,router,2,C0034,,,,,,KEEP
+MENTION,6.2_s0055,round-robin servicing,1,C0386,,,,,,KEEP
+MENTION,6.2_s0055,flow,2,C0336,,,,,,KEEP
+MENTION,6.2_s0055,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0055,flow,3,C0336,,,,,,KEEP
+MENTION,6.2_s0055,link,1,C0057,,,,,,KEEP
+MENTION,6.2_s0055,bandwidth,1,C0028,,,,,,KEEP
+MENTION,6.2_s0055,bandwidth,2,C0028,,,,,,KEEP
+MENTION,6.2_s0056,bit-by-bit round-robin,1,C0394,,,,,,KEEP
+MENTION,6.2_s0056,bit,1,C0080,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0056,bit,2,C0080,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0056,round-robin,1,C0386,,,,yes,,KEEP
+MENTION,6.2_s0056,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0056,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0056,flow,2,C0336,,,,,,KEEP
+MENTION,6.2_s0057,bits,1,C0080,,,,,,KEEP
+MENTION,6.2_s0057,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0058,FQ mechanism,1,C0330,,,,,,KEEP
+MENTION,6.2_s0058,FQ,1,C0330,,,,yes,,KEEP
+MENTION,6.2_s0058,packet,1,C0026,,,,,,KEEP
+MENTION,6.2_s0058,transmitted,1,C0396,,,,,,KEEP
+MENTION,6.2_s0058,bit-by-bit round-robin,1,C0394,,,,,,KEEP
+MENTION,6.2_s0058,round-robin,1,C0386,,,,yes,,KEEP
+MENTION,6.2_s0058,finishing time,1,C0397,,,,,,KEEP
+MENTION,6.2_s0058,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0058,transmission,1,C0396,,,,,,KEEP
+MENTION,6.2_s0059,bit-by-bit round-robin,1,C0394,,,,,,KEEP
+MENTION,6.2_s0059,bit,1,C0080,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0059,round-robin,1,C0386,,,,yes,,KEEP
+MENTION,6.2_s0059,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0059,clock,1,C0411,,,,,,EDITED: identity→C0411
+MENTION,6.2_s0059,active flows,1,C0400,,,,,,KEEP
+MENTION,6.2_s0059,flows,1,C0336,,,,yes,,KEEP
+MENTION,6.2_s0060,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0060,active,1,C0401,,,,,,KEEP
+MENTION,6.2_s0060,data,1,C0009,,,,,,KEEP
+MENTION,6.2_s0060,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0061,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0061,P_i,1,C0392,,,,,,EDITED: identity→C0392
+MENTION,6.2_s0061,length of packet i,1,C0392,,,,,,KEEP
+MENTION,6.2_s0061,packet,1,C0026,,,,yes,,EDITED: boundary:packet i→packet; nested_valid blank→yes
+MENTION,6.2_s0061,S_i,1,C0403,,,,,,KEEP
+MENTION,6.2_s0061,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0061,packet,2,C0026,,,,,,EDITED: boundary:packet i→packet
+MENTION,6.2_s0061,F_i,1,C0397,,,,,,EDITED: identity→C0397
+MENTION,6.2_s0061,router,2,C0034,,,,,,KEEP
+MENTION,6.2_s0061,packet,3,C0026,,,,,,EDITED: boundary:packet i→packet
+MENTION,6.2_s0062,P_i,1,C0392,,,,,,EDITED: identity→C0392
+MENTION,6.2_s0062,clock ticks,1,C0405,,,,,,KEEP
+MENTION,6.2_s0062,tick,1,C0405,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0062,packet,1,C0026,,,,,,EDITED: boundary:packet i→packet
+MENTION,6.2_s0062,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0062,bit,1,C0080,,,,,,KEEP
+MENTION,6.2_s0062,service,1,C0406,,,,,,KEEP
+MENTION,6.2_s0062,F_i,1,C0397,,,,,,EDITED: identity→C0397
+MENTION,6.2_s0062,S_i,1,C0403,,,,,,KEEP
+MENTION,6.2_s0062,P_i,2,C0392,,,,,,EDITED: identity→C0392
+MENTION,6.2_s0063,packet,1,C0026,,,,,,EDITED: boundary:packet i→packet
+MENTION,6.2_s0064,packet,1,C0026,,,,,,EDITED: boundary:packet i→packet
+MENTION,6.2_s0064,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0064,packet,2,C0026,,,,,,EDITED: boundary:packet i-1→packet
+MENTION,6.2_s0064,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0065,bit,1,C0080,,,,,,EDITED: boundary:first bit→bit
+MENTION,6.2_s0065,packet,1,C0026,,,,,,EDITED: boundary:packet i→packet
+MENTION,6.2_s0065,bit,2,C0080,,,,,,EDITED: boundary:last bit→bit
+MENTION,6.2_s0065,packet,2,C0026,,,,,,EDITED: boundary:packet i-1→packet
+MENTION,6.2_s0066,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0066,packet,1,C0026,,,,,,EDITED: boundary:packet i-1→packet
+MENTION,6.2_s0066,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0066,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0066,empty,1,C0407,,,,,,KEEP
+MENTION,6.2_s0066,round-robin mechanism,1,C0386,,,,,,KEEP
+MENTION,6.2_s0066,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0066,flow,2,C0336,,,,,,KEEP
+MENTION,6.2_s0067,A_i,1,C0408,,,,,,KEEP
+MENTION,6.2_s0067,packet,1,C0026,,,,,,EDITED: boundary:packet i→packet
+MENTION,6.2_s0067,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0067,S_i,1,C0403,,,,,,KEEP
+MENTION,6.2_s0067,F_{i-1},1,C0397,,,,,,EDITED: identity→C0397
+MENTION,6.2_s0067,A_i,2,C0408,,,,,,KEEP
+MENTION,6.2_s0068,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0068,A_i,1,C0408,,,,,,KEEP
+MENTION,6.2_s0069,wall clock,1,C0410,,,,,,KEEP
+MENTION,6.2_s0069,packet,1,C0026,,,,,,KEEP
+MENTION,6.2_s0070,tick,1,C0405,,,,,,KEEP
+MENTION,6.2_s0070,active flows,1,C0400,,,,,,KEEP
+MENTION,6.2_s0070,flows,1,C0336,,,,yes,,KEEP
+MENTION,6.2_s0070,bit,1,C0080,,,,,,KEEP
+MENTION,6.2_s0070,service,1,C0406,,,,,,KEEP
+MENTION,6.2_s0070,bit-by-bit round-robin,1,C0394,,,,,,KEEP
+MENTION,6.2_s0070,round-robin,1,C0386,,,,yes,,KEEP
+MENTION,6.2_s0070,clock,1,C0411,,,,,,KEEP
+MENTION,6.2_s0070,flows,2,C0336,,,,,,KEEP
+MENTION,6.2_s0071,clock,1,C0411,,,,,,KEEP
+MENTION,6.2_s0071,tick,1,C0405,,,,,,KEEP
+MENTION,6.2_s0071,bits,1,C0080,,,,,,KEEP
+MENTION,6.2_s0071,active flows,1,C0400,,,,,,KEEP
+MENTION,6.2_s0071,flows,1,C0336,,,,yes,,KEEP
+MENTION,6.2_s0072,clock,1,C0411,,,,,,KEEP
+MENTION,6.2_s0072,A_i,1,C0408,,,,,,KEEP
+MENTION,6.2_s0073,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0073,F_i,1,C0397,,,,,,EDITED: identity→C0397
+MENTION,6.2_s0073,packet,1,C0026,,,,,,KEEP
+MENTION,6.2_s0074,F_i,1,C0397,,,,,,EDITED: identity→C0397
+MENTION,6.2_s0074,timestamps,1,C0412,,,,,,KEEP
+MENTION,6.2_s0074,timestamp,1,C0412,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0074,packet,1,C0026,,,,,,KEEP
+MENTION,6.2_s0074,packet,2,C0026,,,,,,KEEP
+MENTION,6.2_s0074,packet,3,C0026,,,,,,KEEP
+MENTION,6.2_s0074,transmission,1,C0396,,,,,,EDITED: identity→C0396
+MENTION,6.2_s0075,packet,1,C0026,,,,,,KEEP
+MENTION,6.2_s0075,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0075,packet,2,C0026,,,,,,KEEP
+MENTION,6.2_s0075,flow,2,C0336,,,,,,KEEP
+MENTION,6.2_s0075,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0075,queue,2,C0335,,,,,,KEEP
+MENTION,6.2_s0075,packet,3,C0026,,,,,,EDITED: boundary:longer packet→packet
+MENTION,6.2_s0076,packet,1,C0026,,,,,,EDITED: boundary:newly arriving packet→packet
+MENTION,6.2_s0076,preempt,1,C0414,,,,,,KEEP
+MENTION,6.2_s0076,packet,2,C0026,,,,,,KEEP
+MENTION,6.2_s0077,lack of preemption,1,C0415,,,,,,KEEP
+MENTION,6.2_s0077,preemption,1,C0414,,,,yes,,KEEP
+MENTION,6.2_s0077,FQ,1,C0330,,,,,,EDITED: nested_valid yes→blank
+MENTION,6.2_s0077,bit-by-bit round-robin scheme,1,C0394,,,,,,KEEP
+MENTION,6.2_s0077,round-robin,1,C0386,,,,yes,,KEEP
+MENTION,6.2_s0078,fair queuing,1,C0330,,,,,,EDITED: nested_valid yes→blank
+MENTION,6.2_s0079,queues,1,C0335,,,,,,KEEP
+MENTION,6.2_s0079,queue,1,C0335,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0079,flows,1,C0336,,,,,,KEEP
+MENTION,6.2_s0079,algorithm,1,C0330,,,,,,EDITED: identity→C0330
+MENTION,6.2_s0079,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0079,packet,1,C0026,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0079,flow,2,C0336,,,,,,EDITED: boundary:flow 1→flow
+MENTION,6.2_s0079,flow,3,C0336,,,,,,EDITED: boundary:flow 2→flow
+MENTION,6.2_s0079,finishing times,1,C0397,,,,,,EDITED: identity→C0397
+MENTION,6.2_s0080,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0080,packet,1,C0026,,,,,,KEEP
+MENTION,6.2_s0080,flow,1,C0336,,,,,,EDITED: boundary:flow 2→flow
+MENTION,6.2_s0080,packet,2,C0026,,,,,,KEEP
+MENTION,6.2_s0080,flow,2,C0336,,,,,,EDITED: boundary:flow 1→flow
+MENTION,6.2_s0081,packet,1,C0026,,,,,,KEEP
+MENTION,6.2_s0081,flow,1,C0336,,,,,,EDITED: boundary:flow 1→flow
+MENTION,6.2_s0081,flow,2,C0336,,,,,,EDITED: boundary:flow 2→flow
+MENTION,6.2_s0081,perfect bit-by-bit fair queuing,1,C0394,,,,,,EDITED: identity→C0394
+MENTION,6.2_s0081,bit-by-bit fair queuing,1,C0394,,,,yes,,EDITED: identity→C0394
+MENTION,6.2_s0081,fair queuing,1,C0330,,,,yes,,KEEP
+MENTION,6.2_s0081,flow,3,C0336,,,,,,EDITED: boundary:flow 2→flow
+MENTION,6.2_s0081,packet,2,C0026,,,,,,KEEP
+MENTION,6.2_s0082,fair queuing,1,C0330,,,,,,KEEP
+MENTION,6.2_s0083,link,1,C0057,,,,,,KEEP
+MENTION,6.2_s0083,idle,1,C0421,,,,,,KEEP
+MENTION,6.2_s0083,packet,1,C0026,,,,,,KEEP
+MENTION,6.2_s0083,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0084,queuing scheme,1,C0422,,,,,,KEEP
+MENTION,6.2_s0084,work conserving,1,C0423,,,,,,KEEP
+MENTION,6.2_s0085,work conserving,1,C0423,,,,,,KEEP
+MENTION,6.2_s0085,link,1,C0057,,,,,,KEEP
+MENTION,6.2_s0085,flows,1,C0336,,,,,,KEEP
+MENTION,6.2_s0085,flow,1,C0336,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0085,data,1,C0009,,,,,,KEEP
+MENTION,6.2_s0085,link capacity,1,C0424,,,,,,EDITED: boundary:full link capacity→link capacity
+MENTION,6.2_s0085,link,2,C0057,,,,yes,,KEEP
+MENTION,6.2_s0085,capacity,1,C0032,,,,yes,,KEEP
+MENTION,6.2_s0086,flows,1,C0336,,,,,,KEEP
+MENTION,6.2_s0086,flow,1,C0336,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0086,share,1,C0425,,,,,,KEEP
+MENTION,6.2_s0086,capacity,1,C0032,,,,,,KEEP
+MENTION,6.2_s0087,link,1,C0057,,,,,,KEEP
+MENTION,6.2_s0087,fully loaded,1,C0426,,,,,,KEEP
+MENTION,6.2_s0087,flows,1,C0336,,,,,,KEEP
+MENTION,6.2_s0087,data,1,C0009,,,,,,KEEP
+MENTION,6.2_s0087,link bandwidth,1,C0250,,,,,,KEEP
+MENTION,6.2_s0087,link,2,C0057,,,,yes,,KEEP
+MENTION,6.2_s0087,bandwidth,1,C0028,,,,yes,,KEEP
+MENTION,6.2_s0088,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0088,timestamps,1,C0412,,,,,,KEEP
+MENTION,6.2_s0088,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0088,transmission,1,C0396,,,,,,EDITED: identity→C0396
+MENTION,6.2_s0089,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0089,overflow,1,C0427,,,,,,KEEP
+MENTION,6.2_s0089,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0089,fair queuing,1,C0330,,,,,,KEEP
+MENTION,6.2_s0090,drop policy,1,C0340,,,,,,KEEP
+MENTION,6.2_s0090,FQ,1,C0330,,,,,,KEEP
+MENTION,6.2_s0090,scheduling algorithm,1,C0339,,,,,,EDITED: identity→C0339
+MENTION,6.2_s0090,FIFO,1,C0329,,,,,,KEEP
+MENTION,6.2_s0090,drop policies,1,C0340,,,,,,KEEP
+MENTION,6.2_s0091,FQ,1,C0330,,,,,,KEEP
+MENTION,6.2_s0091,work conserving,1,C0423,,,,,,KEEP
+MENTION,6.2_s0091,bandwidth,1,C0028,,,,,,KEEP
+MENTION,6.2_s0091,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0091,flows,1,C0336,,,,,,KEEP
+MENTION,6.2_s0092,flows,1,C0336,,,,,,KEEP
+MENTION,6.2_s0092,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0092,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0092,bandwidth,1,C0028,,,,,,KEEP
+MENTION,6.2_s0093,idle,1,C0421,,,,,,KEEP
+MENTION,6.2_s0093,packets,1,C0026,,,,,,KEEP
+MENTION,6.2_s0093,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0093,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0093,available bandwidth,1,C0429,,,,,,KEEP
+MENTION,6.2_s0093,bandwidth,1,C0028,,,,yes,,KEEP
+MENTION,6.2_s0093,flows,1,C0336,,,,,,KEEP
+MENTION,6.2_s0093,bandwidth,2,C0028,,,,,,KEEP
+MENTION,6.2_s0094,FQ,1,C0330,,,,,,KEEP
+MENTION,6.2_s0094,guaranteed minimum share of bandwidth,1,C0430,,,,,,KEEP
+MENTION,6.2_s0094,guarantee,1,C0430,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0094,bandwidth,1,C0028,,,,yes,,KEEP
+MENTION,6.2_s0094,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0094,flows,1,C0336,,,,,,KEEP
+MENTION,6.2_s0094,shares,1,C0425,,,,,,KEEP
+MENTION,6.2_s0095,FQ,1,C0330,,,,,,KEEP
+MENTION,6.2_s0095,weighted fair queuing,1,C0431,,,,,,KEEP
+MENTION,6.2_s0095,weight,1,C0432,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0095,fair queuing,1,C0330,,,,yes,,KEEP
+MENTION,6.2_s0095,WFQ,1,C0431,,,,,,KEEP
+MENTION,6.2_s0095,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0095,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0096,weight,1,C0432,,,,,,KEEP
+MENTION,6.2_s0096,bits,1,C0080,,,,,,KEEP
+MENTION,6.2_s0096,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0096,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0096,percentage of the link’s bandwidth,1,C0425,,,,,,EDITED: identity→C0425
+MENTION,6.2_s0096,link,1,C0057,,,,yes,,KEEP
+MENTION,6.2_s0096,bandwidth,1,C0028,,,,yes,,KEEP
+MENTION,6.2_s0096,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0097,Simple FQ,1,C0330,,,,,,KEEP
+MENTION,6.2_s0097,FQ,1,C0330,,,,yes,,KEEP
+MENTION,6.2_s0097,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0097,weight,1,C0432,,,,,,KEEP
+MENTION,6.2_s0097,bit,1,C0080,,,,,,KEEP
+MENTION,6.2_s0097,queue,2,C0335,,,,,,KEEP
+MENTION,6.2_s0098,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0098,bandwidth,1,C0028,,,,,,KEEP
+MENTION,6.2_s0098,flows,1,C0336,,,,,,KEEP
+MENTION,6.2_s0099,WFQ,1,C0431,,,,,,KEEP
+MENTION,6.2_s0099,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0099,weight,1,C0432,,,,,,KEEP
+MENTION,6.2_s0099,queue,2,C0335,,,,,,KEEP
+MENTION,6.2_s0099,weight,2,C0432,,,,,,KEEP
+MENTION,6.2_s0099,queue,3,C0335,,,,,,KEEP
+MENTION,6.2_s0099,weight,3,C0432,,,,,,KEEP
+MENTION,6.2_s0100,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0100,packet,1,C0026,,,,,,KEEP
+MENTION,6.2_s0100,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0100,available bandwidth,1,C0429,,,,,,KEEP
+MENTION,6.2_s0100,bandwidth,1,C0028,,,,yes,,KEEP
+MENTION,6.2_s0100,available bandwidth,2,C0429,,,,,,KEEP
+MENTION,6.2_s0100,bandwidth,2,C0028,,,,yes,,KEEP
+MENTION,6.2_s0100,available bandwidth,3,C0429,,,,,,KEEP
+MENTION,6.2_s0100,bandwidth,3,C0028,,,,yes,,KEEP
+MENTION,6.2_s0101,WFQ,1,C0431,,,,,,KEEP
+MENTION,6.2_s0101,flows,1,C0336,,,,,,KEEP
+MENTION,6.2_s0101,classes of traffic,1,C0434,,,,,,KEEP
+MENTION,6.2_s0101,classes,1,C0434,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0101,traffic,1,C0030,,,,yes,,EDITED: identity→C0030
+MENTION,6.2_s0101,flows,2,C0336,,,,,,KEEP
+MENTION,6.2_s0102,bits,1,C0080,,,,,,KEEP
+MENTION,6.2_s0102,IP header,1,C0102,,,,,,KEEP
+MENTION,6.2_s0102,IP,1,C0025,,,,yes,,KEEP
+MENTION,6.2_s0102,header,1,C0103,,,,yes,,KEEP
+MENTION,6.2_s0102,classes,1,C0434,,,,,,KEEP
+MENTION,6.2_s0102,class,1,C0434,,,,yes,,EDITED: nested_valid blank→yes
+MENTION,6.2_s0102,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0102,weight,1,C0432,,,,,,EDITED: identity→C0432
+MENTION,6.2_s0103,Differentiated Services architecture,1,C0436,,,,,,KEEP
+MENTION,6.2_s0103,Differentiated Services,1,C0371,,,,yes,,KEEP
+MENTION,6.2_s0104,router,1,C0034,,,,,,KEEP
+MENTION,6.2_s0104,WFQ,1,C0431,,,,,,KEEP
+MENTION,6.2_s0104,weights,1,C0432,,,,,,EDITED: identity→C0432
+MENTION,6.2_s0104,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0104,manual configuration,1,C0437,,,,,,KEEP
+MENTION,6.2_s0104,signalling,1,C0438,,,,,,KEEP
+MENTION,6.2_s0104,sources,1,C0375,,,,,,EDITED: identity→C0375; sense-split
+MENTION,6.2_s0105,reservation-based model,1,C0439,,,,,,KEEP
+MENTION,6.2_s0105,reservation,1,C0440,,,,yes,,KEEP
+MENTION,6.2_s0106,weight,1,C0432,,,,,,EDITED: identity→C0432
+MENTION,6.2_s0106,queue,1,C0335,,,,,,KEEP
+MENTION,6.2_s0106,reservation,1,C0440,,,,,,KEEP
+MENTION,6.2_s0106,weights,1,C0432,,,,,,EDITED: identity→C0432
+MENTION,6.2_s0106,bandwidth,1,C0028,,,,,,KEEP
+MENTION,6.2_s0106,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0107,bandwidth,1,C0028,,,,,,KEEP
+MENTION,6.2_s0107,flow,1,C0336,,,,,,KEEP
+MENTION,6.2_s0107,flows,1,C0336,,,,,,KEEP
+MENTION,6.2_s0107,link,1,C0057,,,,,,KEEP
+MENTION,6.2_s0108,WFQ,1,C0431,,,,,,KEEP
+MENTION,6.2_s0108,reservation-based resource allocation mechanism,1,C0441,,,,,,KEEP
+MENTION,6.2_s0108,resource allocation,1,C0324,,,,yes,,KEEP
