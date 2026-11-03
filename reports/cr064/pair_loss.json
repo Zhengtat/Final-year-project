@@ -1,0 +1,20 @@
+{
+ "sources": {
+  "first": "cr055ballp",
+  "rest": "cr057rest"
+ },
+ "variant": "IDXR1-P1",
+ "papers": 57,
+ "budget_saturated_papers": 0,
+ "candidate_pairs": 4977,
+ "classified_pairs": 4977,
+ "endpoints_present": 737,
+ "reached": 590,
+ "lost": 147,
+ "causes": {
+  "splitter_abbreviation": 72,
+  "same_concept": 64,
+  "splitter_other": 4,
+  "distinct_concepts_not_built": 7
+ }
+}
