@@ -212,6 +212,15 @@
   "classes": 11,
   "population": 478
  },
+ "hierarchy_direction_H2": {
+  "tp": 12,
+  "fp": 60,
+  "fn": 70,
+  "precision": 0.16666666666666666,
+  "recall": 0.14634146341463414,
+  "f1": 0.15584415584415584,
+  "f2": 0.15
+ },
  "hierarchy_direct_H2": {
   "tp": 11,
   "fp": 61,

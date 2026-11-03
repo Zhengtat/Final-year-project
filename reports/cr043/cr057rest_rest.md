@@ -6,7 +6,7 @@ Graphs: 2277 concepts, 3137 candidate pairs, 3137 classified, 759 edges; 856 gol
 
 ## Relation P / R / F1 and concept P / R / F2: headline overlap `IDXR1OV-P1`, strict `IDXR1-P1` beside (CR-063)
 
-Overlap: a predicted mention that shares a token with a gold mention counts as it (one-to-one, closest first; relation endpoints the same). Strict `IDXR1-P1` (exact spans) is the secondary number and the adoption metric.
+Overlap: a predicted mention that shares a token with a gold mention counts as it (one-to-one, closest first; relation endpoints the same). Overlap is also the adoption metric; strict `IDXR1-P1` (exact spans) is the secondary number, reported beside every decision.
 
 | grounding | all papers | dev papers | train papers | concept P / R / F2 (F1 beside) |
 |---|---|---|---|---|
@@ -30,7 +30,8 @@ Overlap: a predicted mention that shares a token with a gold mention counts as i
 |---|---|
 | Pair recall (analogue) | 370 / 479 = **0.772** |
 | Relation macro F1 (A3) | **0.336** (11 classes, 478 relations) |
-| Hierarchy, direct H2 (A1) | 0.153 / 0.134 / **0.143** (tp 11, fp 61, fn 71) |
+| **Hierarchy F1** (A1-DIR: H2 relations only, direction scored, subclassOf = subtaskOf) | 0.167 / 0.146 / **0.156** (tp 12, fp 60, fn 70) |
+| Hierarchy, direct H2, label-strict (A1) | 0.153 / 0.134 / **0.143** (tp 11, fp 61, fn 71) |
 | Hierarchy, surface ancestor H2 (A2, identity from strings) | 0.186 / 0.157 / **0.170** (tp 13, fp 57, fn 70) |
 | Fact F1 (`FACT-C1-SURF-R1`, identity from strings) | 0.162 / 0.171 / **0.166** (tp 124, fp 641, fn 603) |
 
