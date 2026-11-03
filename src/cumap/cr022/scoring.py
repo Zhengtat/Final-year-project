@@ -100,6 +100,21 @@ def direct_relation_prf(
     return PRF(res.tp, res.fp + extra, res.fn)
 
 
+def hierarchy_direction_prf(gold: UnitGold, p: Placed, variant: str, labels: frozenset[str]) -> PRF:
+    """A1-DIR (CR-064, owner): hierarchy F1 over the hierarchy relations only, scored on the directed (child, parent) span pair.
+    The labels in `labels` are one class: a predicted subtaskOf on a gold subclassOf pair with the same direction is a hit; the
+    reversed direction is a miss (one FP, one FN). Gold relations outside `labels` are not scored; unplaced predicted hierarchy
+    edges are FPs (rule 35) except under FROZEN."""
+    g = {(r.src_span, r.tgt_span) for r in gold.relations if r.relation in labels}
+    pr = {(r[0], r[1]) for r in p.rels if r[2] in labels}
+    extra = (
+        0
+        if variant == "FROZEN"
+        else sum(n for lab, n in p.unplaced_by_label.items() if lab in labels)
+    )
+    return PRF(len(g & pr), len(pr - g) + extra, len(g - pr))
+
+
 # ---------------------------------------------------------------- A2
 def _surf(doc, sp: Span) -> str:
     a, b = doc.span_to_chars(sp)

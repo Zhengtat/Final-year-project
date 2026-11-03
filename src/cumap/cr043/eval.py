@@ -101,7 +101,7 @@ def score(papers: list[tuple[str, str]], tag: str) -> dict:
     by_split = {v: {"dev": [], "train": []} for v in REPORTED}
     codes_all: Counter = Counter()
     p0: Counter = Counter()
-    a1, a2, rows, facts = [], [], [], {}
+    a1, a1d, a2, rows, facts = [], [], [], [], {}
     graph: Counter = Counter()
     per_paper = {}
     views: dict = {}
@@ -149,6 +149,7 @@ def score(papers: list[tuple[str, str]], tag: str) -> dict:
             views[view]["rel"].append(vr["rel"])
         p = C.place(doc, cp, PRIMARY)
         a1.append(C.direct_relation_prf(g, p, sym, PRIMARY, H2))
+        a1d.append(C.hierarchy_direction_prf(g, p, PRIMARY, H2))
         a2.append(C.surface_hierarchy(doc, g, p, PRIMARY, H2)["prf"])
         rows += C.relation_rows(doc, g, p, sym)
         ident, _ = ST.r1_identity(doc, acfg)
@@ -178,6 +179,7 @@ def score(papers: list[tuple[str, str]], tag: str) -> dict:
             "classes": m["classes_in_macro"],
             "population": m["population"],
         },
+        "hierarchy_direction_H2": prf_d(pool(a1d)),
         "hierarchy_direct_H2": prf_d(pool(a1)),
         "hierarchy_surface_ancestor_H2": prf_d(pool(a2)),
         "fact_f1_surf_r1": {**fp, "prf": prf_d(fp["prf"])} if fp else None,
@@ -253,7 +255,14 @@ def markdown(r: dict) -> str:
         "|---|---|",
         f"| Pair recall (analogue) | {pr['reached']} / {pr['endpoints_present']} = **{(pr['rate'] or 0):.3f}** |",
         f"| Relation macro F1 (A3) | **{(mf['macro_f1'] or 0):.3f}** ({mf['classes']} classes, {mf['population']} relations) |",
-        f"| Hierarchy, direct H2 (A1) | {f3(r['hierarchy_direct_H2'])} |",
+        *(
+            [
+                f"| **Hierarchy F1** (A1-DIR: H2 relations only, direction scored, subclassOf = subtaskOf) | {f3(r['hierarchy_direction_H2'])} |"
+            ]
+            if "hierarchy_direction_H2" in r
+            else []
+        ),
+        f"| Hierarchy, direct H2, label-strict (A1) | {f3(r['hierarchy_direct_H2'])} |",
         f"| Hierarchy, surface ancestor H2 (A2, identity from strings) | {f3(r['hierarchy_surface_ancestor_H2'])} |",
     ]
     if r["fact_f1_surf_r1"]:

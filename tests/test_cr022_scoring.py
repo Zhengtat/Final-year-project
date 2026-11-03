@@ -50,6 +50,19 @@ def test_hierarchy_set_filtering_changes_both_gold_and_prediction():
     assert C.direct_relation_prf(g, p, SYM, "IDX-P1", None).tp == 3
 
 
+def test_hierarchy_direction_ignores_the_label_but_not_the_direction():
+    g = gold([(A, B, "subclassOf"), (B, Cc, "subtaskOf"), (Cc, D, "subclassOf"), (A, D, "UsedFor")],
+             [A, B, Cc, D])  # fmt: skip
+    # label swapped (hit), reversed (miss), non-hierarchy gold pair and prediction not scored
+    p = placed([(A, B, "subtaskOf"), (Cc, B, "subtaskOf"), (A, D, "UsedFor")], {"subclassOf": 1})
+    h2 = C.HIER_SETS["H2 {subclassOf, subtaskOf}"]
+    r = C.hierarchy_direction_prf(g, p, "IDX-P1", h2)
+    assert (r.tp, r.fp, r.fn) == (1, 2, 2)  # fp = the reversed edge + one unplaced subclassOf
+    assert C.hierarchy_direction_prf(g, p, "FROZEN", h2).fp == 1
+    strict = C.direct_relation_prf(g, p, SYM, "IDX-P1", h2)
+    assert (strict.tp, strict.fn) == (0, 3)
+
+
 def test_unplaced_edges_are_false_positives_by_label_except_in_frozen():
     g = gold([(A, B, "subclassOf")], [A, B])
     p = placed([(A, B, "subclassOf")], {"subclassOf": 2, "UsedFor": 1})

@@ -77,13 +77,14 @@ def _docs(ad: SciNLPAdapter, splits: set[str]) -> tuple[dict, dict]:
 
 
 def downstream(doc, g, cp: dict, sym: set[str]) -> tuple[dict, list[dict]]:
-    """Per-paper hierarchy (direct H2), fact F1 (FACT-C1-SURF-R1) and the relation macro rows, exactly as `cr043.eval.score`."""
+    """Per-paper hierarchy (A1-DIR headline, label-strict A1 beside), fact F1 (FACT-C1-SURF-R1) and the relation macro rows, exactly as `cr043.eval.score`."""
     p = C.place(doc, cp, PRIMARY)
     ident, _ = ST.r1_identity(doc)
     fact = F.fact_score(g, p.rels, sum(p.unplaced_by_label.values()), PRIMARY, ident, sym)
     p3 = V.sc_score(doc, g, cp, sym, "IDXR1-P3")["scores"]["rel"]
     return (
-        {"hierarchy_H2": _prf(C.direct_relation_prf(g, p, sym, PRIMARY, H2)), "fact": _prf(fact["prf"]),
+        {"hierarchy_dir": _prf(C.hierarchy_direction_prf(g, p, PRIMARY, H2)),
+         "hierarchy_H2": _prf(C.direct_relation_prf(g, p, sym, PRIMARY, H2)), "fact": _prf(fact["prf"]),
          "relation_P3": _prf(p3)},
         C.relation_rows(doc, g, p, sym),
     )  # fmt: skip
@@ -205,11 +206,14 @@ def gates(papers: dict, meta: dict, test: dict) -> dict:
             "hierarchy_H2": sc["hierarchy_direct_H2"],
             "fact": sc["fact_f1_surf_r1"]["prf"],
         }
+        if "hierarchy_direction_H2" in sc:  # cards scored before A1-DIR have no reference for it
+            want["hierarchy_dir"] = sc["hierarchy_direction_H2"]
         got = {
             "concept": _sum(recs, ("concept", "stages", "consolidation")),
             "relation": _sum(recs, ("relation_strict",)),
             "hierarchy_H2": _sum(recs, ("downstream", "hierarchy_H2")),
             "fact": _sum(recs, ("downstream", "fact")),
+            "hierarchy_dir": _sum(recs, ("downstream", "hierarchy_dir")),
         }
         for k in want:
             out[f"{set_name}/{k}"] = all(got[k][x] == want[k][x] for x in ("tp", "fp", "fn"))

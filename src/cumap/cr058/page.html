@@ -185,7 +185,7 @@ function kpis(o){
     ["Pair recall",pairR,`${pr.pair_selected} of ${pr.endpoints_placed} gold relations with both endpoints placed`],
     ["Gold relations credited",pr.gold?pr.credited/pr.gold:NaN,`${pr.credited} of ${pr.gold}`],
   ];
-  if(o.downstream){items.push(["Hierarchy F1 (direct H2)",F(o.downstream.hierarchy_H2),`P ${f3(P(o.downstream.hierarchy_H2))} · R ${f3(R(o.downstream.hierarchy_H2))}`]);
+  if(o.downstream){items.push(["Hierarchy F1 (direction, H2 only)",F(o.downstream.hierarchy_dir),`P ${f3(P(o.downstream.hierarchy_dir))} · R ${f3(R(o.downstream.hierarchy_dir))}`]);
     items.push(["Fact F1 (FACT-C1-SURF-R1)",F(o.downstream.fact),"identity inferred from strings"]);}
   return `<div class="kpis">${items.map(([l,v,s])=>`<div class="kpi"><div class="l">${l}</div><div class="v">${f3(v)}</div><div class="l">${s}</div></div>`).join("")}</div>`;
 }
@@ -430,11 +430,12 @@ function results(){
    <tr><td>Concept F1, strict (entity strict; F2 ${f3(F2(o.concept_strict))})</td>${prfCells(o.concept_strict)}</tr>
    <tr><td>Strict end-to-end relation F1 (IDXR1-P1, secondary)</td>${prfCells(o.relation_strict)}</tr>`;
   if(o.downstream){h+=`<tr><td>Relation F1, lenient upper reading (IDXR1-P3)</td>${prfCells(o.downstream.relation_P3)}</tr>
-   <tr><td><b>Hierarchy F1</b> (direct, H2 = subclassOf + subtaskOf)</td>${prfCells(o.downstream.hierarchy_H2)}</tr>
+   <tr><td><b>Hierarchy F1</b> (A1-DIR: gold subclassOf / subtaskOf relations only; a hit is the right child-to-parent direction, either label)</td>${prfCells(o.downstream.hierarchy_dir)}</tr>
+   <tr><td>Hierarchy F1, label-strict (A1: the label must also match)</td>${prfCells(o.downstream.hierarchy_H2)}</tr>
    <tr><td>Fact F1 (FACT-C1-SURF-R1, identity from strings)</td>${prfCells(o.downstream.fact)}</tr>`;}
   h+=`</tbody></table>`;
   if(S.panel==="dev"&&!S.paper)h+=`<p class="note">Relation macro F1 (A3, pooled rows): <b>${f3(D.meta.macro_f1[S.set])}</b>.</p>`;
-  h+=`<p class="note">Hierarchy F1 needs both hierarchy endpoints found (stage 1), the pair classified (stage 3) and the relation chosen as subclassOf / subtaskOf with the right direction. ${S.panel==="test"?"Hierarchy and fact F1 are shown for the development papers.":""}</p></div></div>`;
+  h+=`<p class="note">Hierarchy F1 is scored on the hierarchy relations alone (not on all gold relations): recall is over the gold subclassOf / subtaskOf relations, precision over the predicted ones. subclassOf and subtaskOf count as one class, so only the endpoints and the direction are scored; the chain on the left is over all gold relations. ${S.panel==="test"?"Hierarchy and fact F1 are shown for the development papers.":""}</p></div></div>`;
   h+=`<div class="card"><h3>Earliest failure codes (frozen CR-012 attribution)</h3><p class="note">N0 endpoint concept not extracted · N1 wrong span · P0 pair never classified · R0 classifier chose no relation · R1 wrong relation · R2 wrong direction · recovered = the pair has the right relation (credited, or right fact on another sentence).</p>
    <table><tbody>${Object.entries(o.codes||{}).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<tr><td class="mono">${k}</td><td class="n">${v}</td></tr>`).join("")}</tbody></table></div>`;
   $("#tab-results").innerHTML=h;
