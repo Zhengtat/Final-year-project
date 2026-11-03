@@ -75,13 +75,13 @@
   "choice_right": 20,
   "pair_selected": 10,
   "endpoints_placed": 90,
-  "credited": 20,
+  "assembled_edge": 20,
   "family_right": 4,
   "checks_passed": 2
  },
  "funnel_not_reached_all": {
   "endpoints_placed": 681,
-  "credited": 248,
+  "assembled_edge": 248,
   "choice_right": 214,
   "pair_selected": 83,
   "family_right": 106,

@@ -36,7 +36,7 @@ H2 = C.HIER_SETS["H2 {subclassOf, subtaskOf}"]
 DECLINED = "none/declined"
 SHOWN = {
     "hit_needs_label_merge": "of the hits: label differs (hit only because the two labels are one class)",
-    "credited": "credited (reached every stage)",
+    "assembled_edge": "assembled: a correct edge is in the graph (the mention-level scorer may still not credit it)",
 }
 
 
@@ -128,6 +128,11 @@ def choice_at_gold_pairs(doc, gold: UnitGold, cp: dict, sym: set[str]) -> Counte
     return out
 
 
+def not_reached(stage: str) -> str:
+    """`lost_at` names the first stage not reached, and "credited" for both a relation that reached it and one that was credited."""
+    return "assembled_edge" if stage == "credited" else stage
+
+
 def collect() -> dict:
     ad = SciNLPAdapter()
     sym = ad.symmetric_relations()
@@ -152,8 +157,10 @@ def collect() -> dict:
             fls.update(false_links(g, p))
             choice.update(choice_at_gold_pairs(doc, g, cp, sym))
             lost = FN.relation_funnel(doc, g, cp, sym)["lost_at"]
-            lost_all.update(lost)
-            lost_h.update(at for r, at in zip(g.relations, lost, strict=True) if r.relation in H2)
+            lost_all.update(not_reached(x) for x in lost)
+            lost_h.update(
+                not_reached(at) for r, at in zip(g.relations, lost, strict=True) if r.relation in H2
+            )
     h, lo_hi = pool(hier), bootstrap_f1(hier)
     return {
         "sources": dict(SOURCES),

@@ -72,7 +72,7 @@ Hierarchy F1 95% interval (paper bootstrap, 10,000 resamples, seed 0): **0.082 t
 |---|---|---|
 | endpoints_placed | 90 | 62% |
 | choice_right | 20 | 14% |
-| credited (reached every stage) | 20 | 14% |
+| assembled: a correct edge is in the graph (the mention-level scorer may still not credit it) | 20 | 14% |
 | pair_selected | 10 | 7% |
 | family_right | 4 | 3% |
 | checks_passed | 2 | 1% |
@@ -82,7 +82,7 @@ Hierarchy F1 95% interval (paper bootstrap, 10,000 resamples, seed 0): **0.082 t
 | | n | share |
 |---|---|---|
 | endpoints_placed | 681 | 50% |
-| credited (reached every stage) | 248 | 18% |
+| assembled: a correct edge is in the graph (the mention-level scorer may still not credit it) | 248 | 18% |
 | choice_right | 214 | 16% |
 | family_right | 106 | 8% |
 | pair_selected | 83 | 6% |
